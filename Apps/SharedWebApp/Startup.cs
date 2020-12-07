@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using XTI_App;
 using XTI_WebApp.Extensions;
 
 namespace SharedWebApp
@@ -21,10 +22,10 @@ namespace SharedWebApp
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddWebAppServices(Configuration);
+            services.AddSingleton(_ => new AppKey("Shared", AppType.Values.WebApp));
             services
                 .AddMvc()
                 .AddJsonOptions(options =>
@@ -38,7 +39,6 @@ namespace SharedWebApp
                 });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

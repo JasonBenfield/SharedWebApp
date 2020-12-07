@@ -21,7 +21,7 @@ namespace SharedWebApp
             Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration
                 (
-                    (hostingContext, config) => config.UseXtiConfiguration(hostingContext.HostingEnvironment.EnvironmentName, args)
+                    (hostingContext, config) => config.UseXtiConfiguration(hostingContext.HostingEnvironment, args)
                 )
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,14 +14,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.0.3">
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.1.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="XTI_App.DB.SqlServer" Version="1.6.2" />
-    <PackageReference Include="XTI_WebApp.Extensions" Version="1.5.3-dev201019065303638" />
-    <PackageReference Include="XTI_WebApp.TagHelpers" Version="1.5.3-dev201019065303638" />
-    <PackageReference Include="XTI_Configuration.Extensions" Version="1.6.2" />
+    <PackageReference Include="XTI_WebApp.Extensions" Version="1.6.0" />
+    <PackageReference Include="XTI_WebApp.TagHelpers" Version="1.6.0" />
+    <PackageReference Include="XTI_Configuration.Extensions" Version="1.7.3" />
   </ItemGroup>
 
   <ItemGroup>
