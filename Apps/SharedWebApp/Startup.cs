@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,6 +27,7 @@ namespace SharedWebApp
         {
             services.AddWebAppServices(Configuration);
             services.AddSingleton(_ => new AppKey("Shared", AppType.Values.WebApp));
+            services.AddResponseCaching();
             services
                 .AddMvc()
                 .AddJsonOptions(options =>
@@ -36,6 +38,12 @@ namespace SharedWebApp
                 })
                 .AddMvcOptions(options =>
                 {
+                    options.CacheProfiles.Add("Default", new Microsoft.AspNetCore.Mvc.CacheProfile
+                    {
+                        Duration = 2592000,
+                        Location = Microsoft.AspNetCore.Mvc.ResponseCacheLocation.Any,
+                        NoStore = false
+                    });
                 });
         }
 
@@ -54,10 +62,24 @@ namespace SharedWebApp
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseResponseCaching();
 
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.Use(async (context, next) =>
+            {
+                context.Response.GetTypedHeaders().CacheControl =
+                    new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
+                    {
+                        Public = true,
+                        MaxAge = TimeSpan.FromDays(30)
+                    };
+                context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.Vary] =
+                    new string[] { "Accept-Encoding" };
+                await next();
+            });
 
             app.UseEndpoints(endpoints =>
             {
