@@ -5,15 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Scripts\Main\LogoutUrl.ts" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="Scripts\Main\Home\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.1.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -22,10 +13,6 @@
     <PackageReference Include="XTI_WebApp.Extensions" Version="1.6.0" />
     <PackageReference Include="XTI_WebApp.TagHelpers" Version="1.6.0" />
     <PackageReference Include="XTI_Configuration.Extensions" Version="1.7.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <TypeScriptCompile Include="Scripts\Main\LogoutUrl.ts" />
   </ItemGroup>
 
 </Project>
