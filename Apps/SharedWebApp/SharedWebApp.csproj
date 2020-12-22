@@ -4,6 +4,11 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <JavaScriptTestRoot>Scripts\Tests\</JavaScriptTestRoot>
+    <JavaScriptTestFramework>mocha</JavaScriptTestFramework>
+  </PropertyGroup>
+  
   <ItemGroup>
     <None Remove="Scripts\Main\LogoutUrl.ts" />
   </ItemGroup>
