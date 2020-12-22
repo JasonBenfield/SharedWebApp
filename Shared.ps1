@@ -54,16 +54,6 @@ function Shared-Xti-Merge {
     $script:sharedConfig | Xti-Merge @PsBoundParameters
 }
 
-function Shared-Xti-Merge {
-    $branchName = Get-CurrentBranchname
-    $releaseBranch = Parse-ReleaseBranch $branchName
-    if($releaseBranch.IsValid) {
-        Xti-BeginPublish -BranchName $branch
-        Xti-EndPublish -BranchName $branch
-    }
-    $script:sharedConfig | Xti-Merge
-}
-
 function Shared-New-XtiPullRequest {
     param(
         [Parameter(Position=0)]
