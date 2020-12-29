@@ -2,8 +2,8 @@
 import { ComponentTemplateAsync } from '../../Shared/ComponentTemplateAsync';
 export class AccountViewModel {
     constructor() {
-        new ComponentTemplateAsync(this.template(), '/Shared/Current/Home/Account').register();
+        new ComponentTemplateAsync(this.componentName(), '/Shared/Current/Home/Account').register();
     }
 
-    readonly template = ko.observable('account');
+    readonly componentName = ko.observable('account');
 }

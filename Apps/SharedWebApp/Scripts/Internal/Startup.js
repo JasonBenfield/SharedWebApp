@@ -7,6 +7,7 @@ var ConsoleLog_1 = require("../Shared/ConsoleLog");
 var ModalErrorComponent_1 = require("../Shared/Error/ModalErrorComponent");
 var tsyringe_1 = require("tsyringe");
 var LogoutUrl_1 = require("./LogoutUrl");
+var PageFrameViewModel_1 = require("../Shared/PageFrameViewModel");
 function startup(pageVM, page) {
     tsyringe_1.container.register('PageVM', { useFactory: function (c) { return c.resolve(pageVM); } });
     tsyringe_1.container.register('Page', { useFactory: function (c) { return c.resolve(page); } });
@@ -20,6 +21,19 @@ function startup(pageVM, page) {
         useToken: LogoutUrl_1.LogoutUrl
     });
     new PageLoader_1.PageLoader().load();
+    var pageFrameVM = tsyringe_1.container.resolve(PageFrameViewModel_1.PageFrameViewModel);
+    pageFrameVM.appTitle('App');
+    pageFrameVM.pageTitle('Page');
+    pageFrameVM.userName('Jason.Benfield');
+    pageFrameVM.isAuthenticated(true);
+    //_.delay(() => {
+    //    var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
+    //    var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+    //        let dropdown = new Dropdown(dropdownToggleEl);
+    //        $(dropdownToggleEl).data('bs.dropdown', dropdown);
+    //        return dropdown;
+    //    })
+    //}, 1000);
 }
 exports.startup = startup;
 //# sourceMappingURL=Startup.js.map
