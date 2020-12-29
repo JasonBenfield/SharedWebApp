@@ -1,6 +1,6 @@
 ﻿import 'mocha';
 import { expect } from 'chai';
-import { EmployeeType } from '../Main/EmployeeType';
+import { EmployeeType } from '../Internal/EmployeeType';
 
 describe('Numeric Values', () => {
     it('Numeric value from numeric value', function () {

@@ -4,6 +4,10 @@ import { ConsoleLog } from '../Shared/ConsoleLog';
 import { ModalErrorComponent } from '../Shared/Error/ModalErrorComponent';
 import { container } from 'tsyringe';
 import { LogoutUrl } from './LogoutUrl';
+import { PageFrameViewModel } from '../Shared/PageFrameViewModel';
+import { Dropdown } from 'bootstrap';
+import _ = require('lodash');
+import $ = require('jquery');
 
 export function startup(pageVM: any, page: any) {
     container.register('PageVM', { useFactory: c => c.resolve(pageVM) });
@@ -24,4 +28,17 @@ export function startup(pageVM: any, page: any) {
         }
     );
     new PageLoader().load();
+    let pageFrameVM = container.resolve(PageFrameViewModel);
+    pageFrameVM.appTitle('App');
+    pageFrameVM.pageTitle('Page');
+    pageFrameVM.userName('Jason.Benfield');
+    pageFrameVM.isAuthenticated(true);
+    //_.delay(() => {
+    //    var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
+    //    var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+    //        let dropdown = new Dropdown(dropdownToggleEl);
+    //        $(dropdownToggleEl).data('bs.dropdown', dropdown);
+    //        return dropdown;
+    //    })
+    //}, 1000);
 }

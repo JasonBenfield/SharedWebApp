@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 require("mocha");
 var chai_1 = require("chai");
-var EmployeeType_1 = require("../Main/EmployeeType");
+var EmployeeType_1 = require("../Internal/EmployeeType");
 describe('Numeric Values', function () {
     it('Numeric value from numeric value', function () {
         var employeeType = EmployeeType_1.EmployeeType.values.value(1);
