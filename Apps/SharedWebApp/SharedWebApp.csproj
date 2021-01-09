@@ -18,14 +18,14 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="MainDB.EF.SqlServer" Version="1.9.3" />
+    <PackageReference Include="MainDB.EF.SqlServer" Version="1.9.4" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.1.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="XTI_App.Api" Version="1.6.6-dev210107070051326" />
-    <PackageReference Include="XTI_WebApp.Extensions" Version="1.6.4-dev210107070151513" />
-    <PackageReference Include="XTI_Configuration.Extensions" Version="1.8.8" />
+    <PackageReference Include="XTI_App.Api" Version="1.6.6-dev210109075801535" />
+    <PackageReference Include="XTI_WebApp.Extensions" Version="1.6.4-dev210109075849925" />
+    <PackageReference Include="XTI_Configuration.Extensions" Version="1.8.9" />
   </ItemGroup>
   
   <ItemGroup>

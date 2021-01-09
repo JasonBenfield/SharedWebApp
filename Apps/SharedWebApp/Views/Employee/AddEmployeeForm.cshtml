@@ -2,16 +2,12 @@
     var form = new AddEmployeeForm();
 }
 <form class="pt-3">
-    <!-- ko with: @form.Name.Name -->
-    <!-- ko component: { name: componentName, params: $data } --><!-- /ko -->
-    <!-- /ko -->
-    <!-- ko with: @form.BirthDate.Name -->
-    <!-- ko component: { name: componentName, params: $data } --><!-- /ko -->
-    <!-- /ko -->
-    <!-- ko with: @form.Department.Name -->
-    <!-- ko component: { name: componentName, params: $data } --><!-- /ko -->
-    <!-- /ko -->
-    <!-- ko with: @form.Address.Key.Name -->
-    <!-- ko component: { name: componentName, params: $data } --><!-- /ko -->
-    <!-- /ko -->
+    <xti-field field="form.Name"></xti-field>
+    <xti-field field="form.BirthDate"></xti-field>
+    <xti-field field="form.Department"></xti-field>
+    <xti-field field="form.Address"></xti-field>
+    <ko-with value="@form.Department.Name">
+        <div>Testing ko with</div>
+        <div data-bind="text: value.value"></div>
+    </ko-with>
 </form>
