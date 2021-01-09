@@ -26,14 +26,6 @@ function startup(pageVM, page) {
     pageFrameVM.pageTitle('Page');
     pageFrameVM.userName('Jason.Benfield');
     pageFrameVM.isAuthenticated(true);
-    //_.delay(() => {
-    //    var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'))
-    //    var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
-    //        let dropdown = new Dropdown(dropdownToggleEl);
-    //        $(dropdownToggleEl).data('bs.dropdown', dropdown);
-    //        return dropdown;
-    //    })
-    //}, 1000);
 }
 exports.startup = startup;
 //# sourceMappingURL=Startup.js.map

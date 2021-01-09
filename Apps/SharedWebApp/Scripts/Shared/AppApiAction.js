@@ -34,28 +34,30 @@ var AppApiAction = /** @class */ (function () {
                             errors = [];
                             if (result) {
                                 rawErrors = result;
-                                errors = new Enumerable_1.MappedArray(rawErrors, function (e) { return new ErrorModel_1.ErrorModel(e.Message, e.Source); }).value();
+                                errors = new Enumerable_1.MappedArray(rawErrors, function (e) { return new ErrorModel_1.ErrorModel(e.Message, e.Caption, e.Source); }).value();
                             }
                             else if (postResult.status === 404) {
-                                errors = [new ErrorModel_1.ErrorModel('Not Found', '', this)];
+                                errors = [new ErrorModel_1.ErrorModel('Not Found', '', '', this)];
                             }
                             else if (postResult.status === 401) {
-                                errors = [new ErrorModel_1.ErrorModel('Not Authenticated', '', this)];
+                                errors = [new ErrorModel_1.ErrorModel('Not Authenticated', '', '', this)];
                             }
                             else if (postResult.status === 403) {
-                                errors = [new ErrorModel_1.ErrorModel('Not Authorized', '', this)];
+                                errors = [new ErrorModel_1.ErrorModel('Not Authorized', '', '', this)];
                             }
                             else {
                                 message = 'An error occurred';
                                 if (postResult.status !== 500) {
                                     message += " (" + postResult.status + ")";
                                 }
-                                errors = [new ErrorModel_1.ErrorModel(message, '', this)];
+                                errors = [new ErrorModel_1.ErrorModel(message, '', '', this)];
                             }
                             apiError = new AppApiError_1.AppApiError(errors, postResult.status, this.friendlyName, errorOptions.caption || '');
                         }
-                        if (apiError && !errorOptions.preventDefault) {
-                            this.events.handleError(apiError);
+                        if (apiError) {
+                            if (!errorOptions.preventDefault) {
+                                this.events.handleError(apiError);
+                            }
                             throw new Error(apiError.getCaption());
                         }
                         return [2 /*return*/, result];

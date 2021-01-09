@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using XTI_App.Api;
+using XTI_Core;
 
 namespace SharedWebApp.Api
 {
@@ -7,10 +8,6 @@ namespace SharedWebApp.Api
     {
         public Task Validate(ErrorList errors, AddEmployeeForm model)
         {
-            if (string.IsNullOrWhiteSpace(model.Name))
-            {
-                errors.Add("Name is required");
-            }
             return Task.CompletedTask;
         }
     }

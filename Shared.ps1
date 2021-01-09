@@ -5,7 +5,7 @@ $script:sharedConfig = [PSCustomObject]@{
     RepoName = "SharedWebApp"
     AppName = "Shared"
     AppType = "WebApp"
-    ProjectDir = "C:\XTI\src\SharedWebApp\Apps\SharedWebApp"
+    ProjectDir = "Apps\SharedWebApp"
 }
 
 function Shared-New-XtiIssue {
@@ -70,4 +70,29 @@ function Shared-Xti-PostMerge {
         Xti-EndPublish -BranchName $branchName
     }
     $script:sharedConfig | Xti-PostMerge
+}
+
+function Shared-ExportWeb {
+    param(
+        [switch] $Prod
+    )
+    $script:sharedConfig | Xti-ExportWeb @PsBoundParameters
+}
+
+function Shared-Publish {
+    param(
+        [switch] $Prod
+    )
+    if($EnvName -eq "Production") {
+        $branch = Get-CurrentBranchname
+        Xti-BeginPublish -BranchName $branch
+        $script:sharedConfig | Xti-PublishPackage -DisableUpdateVersion -Prod
+        Xti-EndPublish -BranchName $branch
+        Shared-ExportWeb -Prod
+        $script:sharedConfig | Xti-Merge
+    }
+    else{
+        $script:sharedConfig | Xti-PublishPackage -DisableUpdateVersion
+        Shared-ExportWeb
+    }
 }

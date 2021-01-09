@@ -11,14 +11,14 @@
     "sourceMap": true,
     "target": "es5",
     "importHelpers": true,
+    "outDir": "../../Exports/Scripts/",
+    "declaration": true,
     "typeRoots": [
       "../../node_modules/@types"
     ]
   },
-  "include": [
-    "./**/*.ts"
-  ],
   "exclude": [
+    "Imports",
     "node_modules",
     "wwwroot"
   ]

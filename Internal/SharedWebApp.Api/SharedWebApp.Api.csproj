@@ -5,11 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="XTI_WebApp.Api" Version="1.6.4-dev201229090218322" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\Lib\XTI_Forms\XTI_Forms.csproj" />
+    <PackageReference Include="XTI_Forms" Version="1.6.6-dev210108063916009" />
+    <PackageReference Include="XTI_WebApp.Api" Version="1.6.4-dev210107070151513" />
   </ItemGroup>
 
 </Project>

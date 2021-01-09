@@ -1,5 +1,10 @@
 ﻿export class ErrorModel implements IErrorModel {
-    constructor(public readonly Message: string, public readonly Source: string = '', public readonly context?: any) {
+    constructor(
+        public readonly Message: string,
+        public readonly Caption: string = '',
+        public readonly Source: string = '',
+        public readonly context?: any
+    ) {
     }
 
     toString() {

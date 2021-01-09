@@ -6,6 +6,9 @@ var ModalErrorComponentViewModel_1 = require("./ModalErrorComponentViewModel");
 var Command_1 = require("../Command");
 var ModalErrorViewModel_1 = require("./ModalErrorViewModel");
 var tsyringe_1 = require("tsyringe");
+var ModalErrorItemViewModel_1 = require("./ModalErrorItemViewModel");
+var Enumerable_1 = require("../Enumerable");
+var CssClass_1 = require("../CssClass");
 var ModalErrorComponent = /** @class */ (function () {
     function ModalErrorComponent(vm) {
         this.vm = vm;
@@ -19,7 +22,27 @@ var ModalErrorComponent = /** @class */ (function () {
     };
     ModalErrorComponent.prototype.show = function (errors, caption) {
         if (caption === void 0) { caption = ''; }
-        this.vm.errors.splice(0, 0, new ModalErrorViewModel_1.ModalErrorViewModel(errors, caption));
+        var errorVM = new ModalErrorViewModel_1.ModalErrorViewModel();
+        errorVM.caption(caption);
+        var anyCaptions = new Enumerable_1.Any(new Enumerable_1.FilteredArray(errors, function (e) { return Boolean(e.Caption); })).value();
+        var captionCss = new CssClass_1.CssClass();
+        var messageCss = new CssClass_1.CssClass();
+        if (anyCaptions) {
+            captionCss.addName('col-3');
+            messageCss.addName('col');
+        }
+        var itemVMs = [];
+        for (var _i = 0, errors_1 = errors; _i < errors_1.length; _i++) {
+            var error = errors_1[_i];
+            var itemVM = new ModalErrorItemViewModel_1.ModalErrorItemViewModel();
+            itemVM.captionCss(captionCss.toString());
+            itemVM.caption(error.Caption);
+            itemVM.messageCss(messageCss.toString());
+            itemVM.message(error.Message);
+            itemVMs.push(itemVM);
+        }
+        errorVM.errors(itemVMs);
+        this.vm.errors.splice(0, 0, errorVM);
         if (this.vm.errors().length === 1) {
             this.vm.title('An error occurred');
         }

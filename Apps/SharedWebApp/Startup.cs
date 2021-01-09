@@ -9,7 +9,10 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SharedWebApp.Api;
+using SharedWebApp.Lib;
 using XTI_App;
+using XTI_App.Api;
 using XTI_WebApp.Extensions;
 
 namespace SharedWebApp
@@ -26,7 +29,8 @@ namespace SharedWebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddWebAppServices(Configuration);
-            services.AddSingleton(_ => new AppKey("Shared", AppType.Values.WebApp));
+            services.AddSingleton(_ => SharedAppKey.AppKey);
+            services.AddSingleton<AppApiFactory, SharedAppApiFactory>();
             services.AddResponseCaching();
             services
                 .AddMvc()
@@ -44,6 +48,7 @@ namespace SharedWebApp
                         Location = Microsoft.AspNetCore.Mvc.ResponseCacheLocation.Any,
                         NoStore = false
                     });
+                    options.ModelBinderProviders.Insert(0, new FormModelBinderProvider());
                 });
         }
 

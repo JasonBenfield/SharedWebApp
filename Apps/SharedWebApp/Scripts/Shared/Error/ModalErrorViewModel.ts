@@ -1,12 +1,7 @@
 ﻿import * as ko from 'knockout';
-import { ErrorModel } from '../ErrorModel';
+import { ModalErrorItemViewModel } from './ModalErrorItemViewModel';
 
 export class ModalErrorViewModel {
-    constructor(errors: ErrorModel[], caption: string) {
-        this.errors(errors);
-        this.caption(caption);
-    }
-
-    readonly errors = ko.observableArray([]);
+    readonly errors = ko.observableArray<ModalErrorItemViewModel>([]);
     readonly caption = ko.observable('');
 }
