@@ -55,6 +55,7 @@ interface IActionErrorOptions {
 
 interface IErrorModel {
     Message: string;
+    Caption: string;
     Source: string;
 }
 
@@ -74,4 +75,53 @@ interface IUserGroup {
 
 interface ILogoutUrl {
     value(): string;
+}
+
+interface IErrorList {
+    add(error: IErrorModel);
+    merge(errors: IErrorList);
+    hasErrors(): boolean;
+    values(): IErrorModel[];
+}
+
+interface IField {
+    getName(): string;
+    getCaption(): string;
+    getValue(): any;
+    clearErrors();
+    validate(errors: IErrorList);
+    import(values: Record<string, any>);
+    export(values: Record<string, any>);
+}
+
+interface IConstraintResult {
+    readonly isValid: boolean;
+    readonly errorMessage: string;
+}
+
+interface IConstraint {
+    test(value: any): IConstraintResult;
+}
+
+interface IFieldCaptionViewModel {
+    readonly caption: ko.Observable<string>;
+    readonly css: ko.Observable<string>;
+    readonly isVisible: ko.Observable<boolean>;
+}
+
+interface IFieldValueViewModel {
+    readonly name: ko.Observable<string>;
+    readonly value: ko.Observable<any>;
+    readonly changed: IEventHandler<any>;
+    readonly css: ko.Observable<string>;
+    readonly isVisible: ko.Observable<boolean>;
+    readonly isEnabled: ko.Observable<boolean>;
+    readonly errors: ko.ObservableArray<IErrorModel>;
+    readonly hasError: ko.Observable<boolean>;
+}
+
+interface IFieldViewModel {
+    readonly caption: IFieldCaptionViewModel;
+    readonly value: IFieldValueViewModel;
+    readonly isVisible: ko.Observable<boolean>;
 }

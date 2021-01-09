@@ -1,0 +1,17 @@
+﻿@{
+    var form = new AddEmployeeForm();
+}
+<form class="pt-3">
+    <!-- ko with: @form.Name.Name -->
+    <!-- ko component: { name: componentName, params: $data } --><!-- /ko -->
+    <!-- /ko -->
+    <!-- ko with: @form.BirthDate.Name -->
+    <!-- ko component: { name: componentName, params: $data } --><!-- /ko -->
+    <!-- /ko -->
+    <!-- ko with: @form.Department.Name -->
+    <!-- ko component: { name: componentName, params: $data } --><!-- /ko -->
+    <!-- /ko -->
+    <!-- ko with: @form.Address.Key.Name -->
+    <!-- ko component: { name: componentName, params: $data } --><!-- /ko -->
+    <!-- /ko -->
+</form>

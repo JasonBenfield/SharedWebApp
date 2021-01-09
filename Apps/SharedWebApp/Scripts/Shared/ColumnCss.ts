@@ -10,7 +10,7 @@ export interface ColumnCssOptions {
 }
 
 export class ColumnCss {
-    constructor(options: ColumnCssOptions | number) {
+    constructor(options?: ColumnCssOptions | number) {
         if (typeof options === 'number') {
             if (options >= 0) {
                 this.cssClass.addName(this.getCssClass('xs', options));

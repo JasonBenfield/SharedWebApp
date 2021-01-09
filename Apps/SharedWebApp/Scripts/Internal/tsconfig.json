@@ -19,6 +19,7 @@
     "./**/*.ts"
   ],
   "exclude": [
+    "Imports",
     "node_modules",
     "wwwroot"
   ]

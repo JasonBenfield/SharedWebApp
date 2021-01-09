@@ -85,6 +85,30 @@ export class AsyncCommand {
         ContextualClass.primary(this.vm.commands[name].contextualClass);
     }
 
+    makeSecondary() {
+        this.forEachCommand(c => ContextualClass.secondary(c.contextualClass));
+    }
+
+    makeSecondaryFor(name: string) {
+        ContextualClass.secondary(this.vm.commands[name].contextualClass);
+    }
+
+    makeLight() {
+        this.forEachCommand(c => ContextualClass.light(c.contextualClass));
+    }
+
+    makeLightFor(name: string) {
+        ContextualClass.light(this.vm.commands[name].contextualClass);
+    }
+
+    makeDark() {
+        this.forEachCommand(c => ContextualClass.dark(c.contextualClass));
+    }
+
+    makeDarkFor(name: string) {
+        ContextualClass.dark(this.vm.commands[name].contextualClass);
+    }
+
     makeDanger() {
         this.forEachCommand(c => ContextualClass.danger(c.contextualClass));
     }

@@ -2,9 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ErrorModel = void 0;
 var ErrorModel = /** @class */ (function () {
-    function ErrorModel(Message, Source, context) {
+    function ErrorModel(Message, Caption, Source, context) {
+        if (Caption === void 0) { Caption = ''; }
         if (Source === void 0) { Source = ''; }
         this.Message = Message;
+        this.Caption = Caption;
         this.Source = Source;
         this.context = context;
     }
