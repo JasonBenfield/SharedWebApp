@@ -32,7 +32,7 @@ namespace SharedWebApp.Api
                 "Get Employee Information"
             );
         }
-        public AppApiAction<EmptyRequest, AppActionViewResult> Index { get; }
+        public AppApiAction<EmptyRequest, WebViewResult> Index { get; }
         public AppApiAction<AddEmployeeForm, int> AddEmployee { get; }
         public AppApiAction<int, Employee> Employee { get; }
     }

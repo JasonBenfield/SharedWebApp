@@ -21,6 +21,10 @@ export class NumberInputField extends SimpleField {
 
     readonly constraints: NumberConstraintCollection;
 
+    setFocus() { this.inputVM.value.hasFocus(true); }
+
+    blur() { this.inputVM.value.hasFocus(false); }
+
     setValue(value: number) { super.setValue(value); }
 
     getValue() { return <number>super.getValue(); }

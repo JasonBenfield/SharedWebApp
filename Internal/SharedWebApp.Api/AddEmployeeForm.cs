@@ -7,9 +7,9 @@ namespace SharedWebApp.Api
     {
         public AddEmployeeForm() : base("AddEmployeeForm")
         {
-            Name = AddTextInput(nameof(Name));
-            Name.MaxLength = 100;
-            Name.SetValue("");
+            EmployeeName = AddTextInput(nameof(EmployeeName));
+            EmployeeName.MaxLength = 100;
+            EmployeeName.SetValue("");
             BirthDate = AddDateInput(nameof(BirthDate));
             Department = AddInt32DropDown
             (
@@ -19,10 +19,10 @@ namespace SharedWebApp.Api
             );
             Department.ItemCaption = "Select...";
             Department.MustNotBeNull();
-            Address = AddComplex(nameof(Address), (p, n) => new AddressInput(p, n, null));
+            Address = AddComplex(nameof(Address), (p, n) => new AddressInput(p, n));
         }
 
-        public InputField<string> Name { get; }
+        public InputField<string> EmployeeName { get; }
         public InputField<DateTimeOffset?> BirthDate { get; }
         public DropDownField<int?> Department { get; }
         public AddressInput Address { get; }

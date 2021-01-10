@@ -4,8 +4,8 @@ namespace SharedWebApp.Api
 {
     public sealed class AddressInput : ComplexField
     {
-        public AddressInput(string prefix, string name, string caption = null)
-            : base(prefix, name, caption)
+        public AddressInput(string prefix, string name)
+            : base(prefix, name)
         {
             Line1 = AddTextInput(nameof(Line1));
             Line1.MaxLength = 30;

@@ -22,6 +22,7 @@ var InputFieldValueViewModel = /** @class */ (function (_super) {
     function InputFieldValueViewModel() {
         var _this = _super.call(this) || this;
         _this.type = ko.observable('');
+        _this.hasFocus = ko.observable(false);
         _this.maxLength = ko.observable(null);
         _this.inputComponentName('input-field');
         new ComponentTemplate_1.ComponentTemplate(_this.inputComponentName(), template).register();

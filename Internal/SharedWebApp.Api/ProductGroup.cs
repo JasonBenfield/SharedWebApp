@@ -37,7 +37,7 @@ namespace SharedWebApp.Api
                 "Get Product Information"
             );
         }
-        public AppApiAction<EmptyRequest, AppActionViewResult> Index { get; }
+        public AppApiAction<EmptyRequest, WebViewResult> Index { get; }
         public AppApiAction<EmptyRequest, string> GetInfo { get; }
         public AppApiAction<AddProductModel, int> AddProduct { get; }
         public AppApiAction<int, Product> Product { get; }

@@ -22,6 +22,8 @@ var NumberInputField = /** @class */ (function (_super) {
         return field;
     };
     ;
+    NumberInputField.prototype.setFocus = function () { this.inputVM.value.hasFocus(true); };
+    NumberInputField.prototype.blur = function () { this.inputVM.value.hasFocus(false); };
     NumberInputField.prototype.setValue = function (value) { _super.prototype.setValue.call(this, value); };
     NumberInputField.prototype.getValue = function () { return _super.prototype.getValue.call(this); };
     NumberInputField.prototype.protect = function () {
