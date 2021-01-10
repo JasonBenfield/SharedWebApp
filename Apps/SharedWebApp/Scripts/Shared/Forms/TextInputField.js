@@ -25,6 +25,8 @@ var TextInputField = /** @class */ (function (_super) {
     TextInputField.prototype.protect = function () {
         this.inputVM.value.type('password');
     };
+    TextInputField.prototype.setFocus = function () { this.inputVM.value.hasFocus(true); };
+    TextInputField.prototype.blur = function () { this.inputVM.value.hasFocus(false); };
     TextInputField.prototype.setValue = function (value) { _super.prototype.setValue.call(this, value); };
     TextInputField.prototype.getValue = function () { return _super.prototype.getValue.call(this); };
     TextInputField.prototype.setMaxLength = function (maxLength) {

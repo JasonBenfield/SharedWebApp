@@ -26,5 +26,6 @@ export class InputFieldValueViewModel extends FieldValueViewModel {
     }
 
     readonly type = ko.observable('');
+    readonly hasFocus = ko.observable(false);
     readonly maxLength = ko.observable<number>(null);
 }

@@ -25,6 +25,10 @@ export class TextInputField extends SimpleField {
         this.inputVM.value.type('password');
     }
 
+    setFocus() { this.inputVM.value.hasFocus(true); }
+
+    blur() { this.inputVM.value.hasFocus(false); }
+
     setValue(value: string) { super.setValue(value); }
 
     getValue() { return <string>super.getValue(); }

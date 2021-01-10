@@ -23,8 +23,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="XTI_App.Api" Version="1.6.6-dev210109075801535" />
-    <PackageReference Include="XTI_WebApp.Extensions" Version="1.6.4-dev210109075849925" />
+    <PackageReference Include="XTI_App.Api" Version="1.6.6-dev210109145413496" />
+    <PackageReference Include="XTI_WebApp.Extensions" Version="1.6.4-dev210109145701609" />
     <PackageReference Include="XTI_Configuration.Extensions" Version="1.8.9" />
   </ItemGroup>
   
