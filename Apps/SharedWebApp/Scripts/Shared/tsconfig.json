@@ -15,10 +15,8 @@
       "../../node_modules/@types"
     ]
   },
-  "include": [
-    "./**/*.ts"
-  ],
   "exclude": [
+    "Imports",
     "node_modules",
     "wwwroot"
   ]

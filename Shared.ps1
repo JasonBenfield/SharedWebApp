@@ -3,12 +3,12 @@ Import-Module PowershellForXti -Force
 $script:sharedConfig = [PSCustomObject]@{
     RepoOwner = "JasonBenfield"
     RepoName = "SharedWebApp"
-    AppKey = "Shared"
+    AppName = "Shared"
     AppType = "WebApp"
-    ProjectDir = "C:\XTI\src\SharedWebApp\Apps\SharedWebApp"
+    ProjectDir = "Apps\SharedWebApp"
 }
 
-function WebApp-New-XtiIssue {
+function Shared-New-XtiIssue {
     param(
         [Parameter(Mandatory, Position=0)]
         [string] $IssueTitle,
@@ -40,6 +40,20 @@ function Shared-New-XtiVersion {
     $script:sharedConfig | New-XtiVersion @PsBoundParameters
 }
 
+function Shared-Xti-Merge {
+    param(
+        [Parameter(Position=0)]
+        [string] $CommitMessage
+    )
+    $branchName = Get-CurrentBranchname
+    $releaseBranch = Parse-ReleaseBranch $branchName
+    if($releaseBranch.IsValid) {
+        Xti-BeginPublish -BranchName $branchName
+        Xti-EndPublish -BranchName $branchName
+    }
+    $script:sharedConfig | Xti-Merge @PsBoundParameters
+}
+
 function Shared-New-XtiPullRequest {
     param(
         [Parameter(Position=0)]
@@ -49,5 +63,36 @@ function Shared-New-XtiPullRequest {
 }
 
 function Shared-Xti-PostMerge {
-    $script:sharedConfig | Xti-PostMerge -DisablePublishCheck
+    $branchName = Get-CurrentBranchname
+    $releaseBranch = Parse-ReleaseBranch $branchName
+    if($releaseBranch.IsValid) {
+        Xti-BeginPublish -BranchName $branchName
+        Xti-EndPublish -BranchName $branchName
+    }
+    $script:sharedConfig | Xti-PostMerge
+}
+
+function Shared-ExportWeb {
+    param(
+        [switch] $Prod
+    )
+    $script:sharedConfig | Xti-ExportWeb @PsBoundParameters
+}
+
+function Shared-Publish {
+    param(
+        [switch] $Prod
+    )
+    if($Prod) {
+        $branch = Get-CurrentBranchname
+        Xti-BeginPublish -BranchName $branch
+        $script:sharedConfig | Xti-PublishPackage -DisableUpdateVersion -Prod
+        Xti-EndPublish -BranchName $branch
+        Shared-ExportWeb -Prod
+        $script:sharedConfig | Xti-Merge
+    }
+    else{
+        $script:sharedConfig | Xti-PublishPackage -DisableUpdateVersion
+        Shared-ExportWeb
+    }
 }

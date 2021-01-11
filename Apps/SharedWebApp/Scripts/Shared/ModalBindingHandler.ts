@@ -1,26 +1,44 @@
 ﻿import * as ko from 'knockout';
 import * as $ from 'jquery';
 import { ModalOptionsViewModel } from './ModalOptionsViewModel';
-import 'bootstrap';
+import { Modal } from 'bootstrap';
 
 export class ModalBindingHandler implements ko.BindingHandler<ModalOptionsViewModel> {
-    constructor() {
-    }
-
     init(element: any, valueAccessor: () => ModalOptionsViewModel) {
-        $(element).on('hidden.bs.modal', function (e) {
+        let modal = new Modal(element);
+        $(element).data('bs.modal', modal);
+        element.addEventListener('hidden.bs.modal', function () {
             let options = ko.unwrap(valueAccessor());
-            options.handleClose();
-        })
-    }
-
-    update(element: any, valueAccessor: () => ModalOptionsViewModel) {
-        let modal: any = $(element);
-        let options = ko.unwrap(valueAccessor());
-        let command = options.command();
-        if (command) {
-            modal.modal(command);
-            options.command('');
-        }
+            if (options) {
+                options.handleClose();
+            }
+        });
+        let computed = ko.computed(() => {
+            let options = ko.unwrap(valueAccessor());
+            if (options) {
+                let command = options.command();
+                if (command) {
+                    if (command === 'show') {
+                        modal.show();
+                    }
+                    else if (command === 'hide') {
+                        modal.hide();
+                    }
+                    options.command('');
+                }
+            }
+        });
+        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+            let m = modal;
+            if (m) {
+                m.dispose();
+            }
+            modal = null;
+            let c = computed;
+            if (c) {
+                c.dispose();
+            }
+            computed = null;
+        });
     }
 }

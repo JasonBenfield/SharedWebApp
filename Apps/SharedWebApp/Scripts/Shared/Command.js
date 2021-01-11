@@ -8,7 +8,7 @@ var FaIcon_1 = require("./FaIcon");
 var ContextualClass_1 = require("./ContextualClass");
 var CommandViewModel = /** @class */ (function () {
     function CommandViewModel() {
-        this.template = ko.observable('');
+        this.componentName = ko.observable('');
         this.isVisible = ko.observable(true);
         this.isEnabled = ko.observable(true);
         this.icon = new FaIcon_1.FaIconViewModel();
@@ -78,6 +78,24 @@ var AsyncCommand = /** @class */ (function () {
     };
     AsyncCommand.prototype.makePrimaryFor = function (name) {
         ContextualClass_1.ContextualClass.primary(this.vm.commands[name].contextualClass);
+    };
+    AsyncCommand.prototype.makeSecondary = function () {
+        this.forEachCommand(function (c) { return ContextualClass_1.ContextualClass.secondary(c.contextualClass); });
+    };
+    AsyncCommand.prototype.makeSecondaryFor = function (name) {
+        ContextualClass_1.ContextualClass.secondary(this.vm.commands[name].contextualClass);
+    };
+    AsyncCommand.prototype.makeLight = function () {
+        this.forEachCommand(function (c) { return ContextualClass_1.ContextualClass.light(c.contextualClass); });
+    };
+    AsyncCommand.prototype.makeLightFor = function (name) {
+        ContextualClass_1.ContextualClass.light(this.vm.commands[name].contextualClass);
+    };
+    AsyncCommand.prototype.makeDark = function () {
+        this.forEachCommand(function (c) { return ContextualClass_1.ContextualClass.dark(c.contextualClass); });
+    };
+    AsyncCommand.prototype.makeDarkFor = function (name) {
+        ContextualClass_1.ContextualClass.dark(this.vm.commands[name].contextualClass);
     };
     AsyncCommand.prototype.makeDanger = function () {
         this.forEachCommand(function (c) { return ContextualClass_1.ContextualClass.danger(c.contextualClass); });

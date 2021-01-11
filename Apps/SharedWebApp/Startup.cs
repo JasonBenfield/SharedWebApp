@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using XTI_App;
+using SharedWebApp.Api;
+using XTI_App.Api;
 using XTI_WebApp.Extensions;
 
 namespace SharedWebApp
@@ -25,17 +21,18 @@ namespace SharedWebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddWebAppServices(Configuration);
-            services.AddSingleton(_ => new AppKey("Shared", AppType.Values.WebApp));
+            services.AddSingleton(_ => SharedAppKey.AppKey);
+            services.AddSingleton<AppApiFactory, SharedAppApiFactory>();
+            services.AddResponseCaching();
             services
                 .AddMvc()
                 .AddJsonOptions(options =>
                 {
-                    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
-                    options.JsonSerializerOptions.PropertyNamingPolicy = null;
-                    options.JsonSerializerOptions.IgnoreNullValues = true;
+                    options.SetDefaultJsonOptions();
                 })
                 .AddMvcOptions(options =>
                 {
+                    options.SetDefaultMvcOptions();
                 });
         }
 
@@ -54,10 +51,13 @@ namespace SharedWebApp
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseResponseCaching();
 
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseDefaultResponseCaching();
 
             app.UseEndpoints(endpoints =>
             {

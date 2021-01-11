@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FilteredArray = exports.MappedArray = exports.EnumerableArray = void 0;
+exports.Any = exports.First = exports.FilteredArray = exports.MappedArray = exports.EnumerableArray = void 0;
 var _ = require("lodash");
 var EnumerableArray = /** @class */ (function () {
     function EnumerableArray(source) {
@@ -40,4 +40,20 @@ var FilteredArray = /** @class */ (function () {
     return FilteredArray;
 }());
 exports.FilteredArray = FilteredArray;
+var First = /** @class */ (function () {
+    function First(source) {
+        this.source = EnumerableArray.create(source);
+    }
+    First.prototype.value = function () { return this.source.value()[0]; };
+    return First;
+}());
+exports.First = First;
+var Any = /** @class */ (function () {
+    function Any(source) {
+        this.source = EnumerableArray.create(source);
+    }
+    Any.prototype.value = function () { return this.source.value().length > 0; };
+    return Any;
+}());
+exports.Any = Any;
 //# sourceMappingURL=Enumerable.js.map

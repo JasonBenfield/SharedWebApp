@@ -51,3 +51,27 @@ export class FilteredArray<T> implements IEnumerable<T> {
 
     value() { return _.filter(this.source.value(), this.isMatch); }
 }
+
+export class First<T> {
+    constructor(
+        source: T[] | IEnumerable<T>
+    ) {
+        this.source = EnumerableArray.create(source);
+    }
+
+    private readonly source: IEnumerable<T>;
+
+    value() { return this.source.value()[0]; }
+}
+
+export class Any<T> {
+    constructor(
+        source: T[] | IEnumerable<T>
+    ) {
+        this.source = EnumerableArray.create(source);
+    }
+
+    private readonly source: IEnumerable<T>;
+
+    value() { return this.source.value().length > 0; }
+}

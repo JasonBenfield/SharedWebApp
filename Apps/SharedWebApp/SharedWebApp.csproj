@@ -4,28 +4,37 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <JavaScriptTestRoot>Scripts\Tests\</JavaScriptTestRoot>
+    <JavaScriptTestFramework>mocha</JavaScriptTestFramework>
+  </PropertyGroup>
+
   <ItemGroup>
-    <None Remove="Scripts\Main\LogoutUrl.ts" />
+    <Compile Remove="Exports\**" />
+    <Content Remove="Exports\**" />
+    <EmbeddedResource Remove="Exports\**" />
+    <None Remove="Exports\**" />
+    <TypeScriptCompile Remove="Exports\**" />
   </ItemGroup>
-
-
+  
   <ItemGroup>
-    <Folder Include="Scripts\Main\Home\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="MainDB.EF.SqlServer" Version="1.9.4" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.1.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="XTI_App.DB.SqlServer" Version="1.6.2" />
-    <PackageReference Include="XTI_WebApp.Extensions" Version="1.6.0" />
-    <PackageReference Include="XTI_WebApp.TagHelpers" Version="1.6.0" />
-    <PackageReference Include="XTI_Configuration.Extensions" Version="1.7.3" />
+    <PackageReference Include="XTI_App.Api" Version="1.6.6-dev210109231311244" />
+    <PackageReference Include="XTI_WebApp.Extensions" Version="1.6.4-dev210109232550237" />
+    <PackageReference Include="XTI_Configuration.Extensions" Version="1.8.9" />
   </ItemGroup>
-
+  
   <ItemGroup>
-    <TypeScriptCompile Include="Scripts\Main\LogoutUrl.ts" />
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\Internal\SharedWebApp.Api\SharedWebApp.Api.csproj" />
+    <ProjectReference Include="..\..\Lib\XTI_WebApp.TagHelpers\XTI_WebApp.TagHelpers.csproj" />
   </ItemGroup>
 
 </Project>

@@ -49,9 +49,16 @@ var FaIcon = /** @class */ (function () {
         }
         return css;
     };
-    FaIcon.prototype.changeName = function (name) {
+    FaIcon.prototype.setPrefix = function (prefix) {
+        this.cssClass.removeName(this.prefixCss(this.prefix));
+        this.prefix = prefix;
+        this.cssClass.addName(this.prefixCss(this.prefix));
+        this.updateVmCssClass();
+    };
+    FaIcon.prototype.setName = function (name) {
         this.cssClass.removeName(this.name);
-        this.cssClass.addName(name);
+        this.name = name;
+        this.cssClass.addName(this.name);
         this.updateVmCssClass();
     };
     FaIcon.prototype.updateVmCssClass = function () {

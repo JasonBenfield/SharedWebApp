@@ -4,7 +4,7 @@ import { FaIconViewModel, FaIcon } from './FaIcon';
 import { ContextualClass, ContextualClassViewModel } from './ContextualClass';
 
 export class CommandViewModel {
-    readonly template = ko.observable('');
+    readonly componentName = ko.observable('');
     readonly isVisible = ko.observable(true);
     readonly isEnabled = ko.observable(true);
     readonly icon = new FaIconViewModel();
@@ -83,6 +83,30 @@ export class AsyncCommand {
 
     makePrimaryFor(name: string) {
         ContextualClass.primary(this.vm.commands[name].contextualClass);
+    }
+
+    makeSecondary() {
+        this.forEachCommand(c => ContextualClass.secondary(c.contextualClass));
+    }
+
+    makeSecondaryFor(name: string) {
+        ContextualClass.secondary(this.vm.commands[name].contextualClass);
+    }
+
+    makeLight() {
+        this.forEachCommand(c => ContextualClass.light(c.contextualClass));
+    }
+
+    makeLightFor(name: string) {
+        ContextualClass.light(this.vm.commands[name].contextualClass);
+    }
+
+    makeDark() {
+        this.forEachCommand(c => ContextualClass.dark(c.contextualClass));
+    }
+
+    makeDarkFor(name: string) {
+        ContextualClass.dark(this.vm.commands[name].contextualClass);
     }
 
     makeDanger() {

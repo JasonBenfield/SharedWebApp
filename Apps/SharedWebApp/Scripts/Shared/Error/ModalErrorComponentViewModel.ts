@@ -2,22 +2,36 @@
 import * as template from './ModalErrorComponent.html';
 import { ComponentTemplate } from '../ComponentTemplate';
 import { ModalOptionsViewModel } from '../ModalOptionsViewModel';
-import { CommandViewModel } from '../Command';
 import { ModalErrorViewModel } from './ModalErrorViewModel';
-import { CommandButtonTemplate } from "../Templates/CommandButtonTemplate";
+import { createCommandButtonViewModel } from "../Templates/CommandButtonTemplate";
 import { singleton } from 'tsyringe';
+import { ArrayItemEventCollection, DefaultEvent, DefaultEventHandler } from '../Events';
+import { ErrorModel } from '../ErrorModel';
 
 @singleton()
 export class ModalErrorComponentViewModel {
     constructor() {
-        new ComponentTemplate(this.template(), template).register();
-        new CommandButtonTemplate().register();
+        new ComponentTemplate(this.componentName(), template).register();
+        this.errorSelectedEvents.register(
+            (e: ModalErrorViewModel) => e.errorSelected,
+            this.onErrorSelected.bind(this)
+        );
     }
 
-    readonly template = ko.observable('modal-error-component');
+    readonly componentName = ko.observable('modal-error-component');
     readonly title = ko.observable('');
     readonly isVisible = ko.observable(false);
     readonly modalOptions = new ModalOptionsViewModel();
     readonly errors = ko.observableArray<ModalErrorViewModel>([]);
-    readonly okCommand = new CommandViewModel();
+
+    private readonly errorSelectedEvents = new ArrayItemEventCollection(this.errors);
+
+    readonly okCommand = createCommandButtonViewModel();
+
+    private readonly _errorSelected = new DefaultEvent<ErrorModel>(this);
+    readonly errorSelected = new DefaultEventHandler<ErrorModel>(this._errorSelected);
+
+    private onErrorSelected(error: ErrorModel) {
+        this._errorSelected.invoke(error);
+    }
 }
