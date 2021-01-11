@@ -32,6 +32,13 @@ export class ComplexField implements IField {
         return this.caption.getCaption();
     }
 
+    getField(name: string) {
+        if (this.getName() === name) {
+            return this;
+        }
+        return this.fields.getField(name);
+    }
+
     setValue(value: any) { this.value.setValue(value); }
 
     getValue() {

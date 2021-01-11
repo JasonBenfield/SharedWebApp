@@ -64,7 +64,7 @@ export class AppApiAction<TArgs,TResult> {
             if (!errorOptions.preventDefault) {
                 this.events.handleError(apiError);
             }
-            throw new Error(apiError.getCaption());
+            throw apiError;
         }
         return result;
     }

@@ -83,7 +83,7 @@ function Shared-Publish {
     param(
         [switch] $Prod
     )
-    if($EnvName -eq "Production") {
+    if($Prod) {
         $branch = Get-CurrentBranchname
         Xti-BeginPublish -BranchName $branch
         $script:sharedConfig | Xti-PublishPackage -DisableUpdateVersion -Prod

@@ -22,4 +22,9 @@ export class DropDownField<T> extends SimpleField {
     setValue(value: T) { super.setValue(value); }
 
     getValue() { return <T>super.getValue(); }
+
+    setFocus() { this.dropDownVM.value.hasFocus(true); }
+
+    blur() { this.dropDownVM.value.hasFocus(false); }
+
 }

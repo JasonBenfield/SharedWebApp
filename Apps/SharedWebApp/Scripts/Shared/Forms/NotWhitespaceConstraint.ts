@@ -5,7 +5,7 @@ export class NotWhitespaceConstraint implements IConstraint {
     }
 
     test(value: string) {
-        if (/^\s+$/.test(value)) {
+        if (/^\s*$/.test(value)) {
             return ConstraintResult.failed(this.failureMessage);
         }
         return ConstraintResult.passed();

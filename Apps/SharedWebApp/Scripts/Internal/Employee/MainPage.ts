@@ -13,7 +13,7 @@ import { ColumnCss } from '../../Shared/ColumnCss';
 @singleton()
 class MainPage {
     constructor(private readonly vm: MainPageViewModel) {
-        this.addEmployeeForm.Name.setColumns(new ColumnCss(4), new ColumnCss());
+        this.addEmployeeForm.EmployeeName.setColumns(new ColumnCss(4), new ColumnCss());
         this.addEmployeeForm.BirthDate.setColumns(new ColumnCss(4), new ColumnCss());
         this.addEmployeeForm.Department.setColumns(new ColumnCss(4), new ColumnCss());
         this.addEmployeeForm.Address.setColumns(new ColumnCss(4), new ColumnCss());

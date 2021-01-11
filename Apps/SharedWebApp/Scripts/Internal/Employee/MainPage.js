@@ -18,7 +18,7 @@ var MainPage = /** @class */ (function () {
         this.alert = new Alert_1.Alert(this.vm.alert);
         this.addEmployeeForm = new AddEmployeeForm_1.AddEmployeeForm(this.vm.addEmployeeForm);
         this.saveCommand = new Command_1.AsyncCommand(this.vm.saveCommand, this.save.bind(this));
-        this.addEmployeeForm.Name.setColumns(new ColumnCss_1.ColumnCss(4), new ColumnCss_1.ColumnCss());
+        this.addEmployeeForm.EmployeeName.setColumns(new ColumnCss_1.ColumnCss(4), new ColumnCss_1.ColumnCss());
         this.addEmployeeForm.BirthDate.setColumns(new ColumnCss_1.ColumnCss(4), new ColumnCss_1.ColumnCss());
         this.addEmployeeForm.Department.setColumns(new ColumnCss_1.ColumnCss(4), new ColumnCss_1.ColumnCss());
         this.addEmployeeForm.Address.setColumns(new ColumnCss_1.ColumnCss(4), new ColumnCss_1.ColumnCss());

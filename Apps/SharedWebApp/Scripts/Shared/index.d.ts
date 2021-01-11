@@ -32,6 +32,12 @@ interface EventCallback<TArgs> {
     (args: TArgs, source?: any): void;
 }
 
+interface IArrayItemEvent<TArgs> {
+    handlerAccessor: (item: any) => IEventHandler<TArgs>;
+    callback: EventCallback<TArgs>;
+    isEnabled?: () => boolean;
+}
+
 interface IEventHandler<TArgs> {
     register(callback: EventCallback<TArgs>, identifier?: any, isEnabled?: () => boolean): IEventHandler<TArgs>;
     unregister(identifier: any);
@@ -46,6 +52,12 @@ interface RegisteredEventCallback {
     callback: EventCallback<any>;
     identifier: string;
     isEnabled: () => boolean;
+}
+
+interface DelegatedEvent {
+    event: string;
+    selector: string;
+    callback: (any, string) => boolean;
 }
 
 interface IActionErrorOptions {
@@ -88,6 +100,7 @@ interface IField {
     getName(): string;
     getCaption(): string;
     getValue(): any;
+    getField(name: string): IField;
     clearErrors();
     validate(errors: IErrorList);
     import(values: Record<string, any>);

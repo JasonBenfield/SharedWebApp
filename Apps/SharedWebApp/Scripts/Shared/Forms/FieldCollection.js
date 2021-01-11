@@ -6,6 +6,18 @@ var FieldCollection = /** @class */ (function () {
         this.fields = [];
     }
     FieldCollection.prototype.values = function () { return this.fields; };
+    FieldCollection.prototype.getField = function (name) {
+        var match = null;
+        for (var _i = 0, _a = this.fields; _i < _a.length; _i++) {
+            var field = _a[_i];
+            var testField = field.getField(name);
+            if (testField) {
+                match = testField;
+                break;
+            }
+        }
+        return match;
+    };
     FieldCollection.prototype.addField = function (field) {
         this.fields.push(field);
         return field;

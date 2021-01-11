@@ -11,7 +11,6 @@
     "sourceMap": true,
     "target": "es5",
     "importHelpers": true,
-    "declaration": true,
     "typeRoots": [
       "../../node_modules/@types"
     ]

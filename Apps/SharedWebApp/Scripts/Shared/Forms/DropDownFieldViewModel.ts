@@ -30,4 +30,5 @@ export class DropDownFieldValueViewModel extends FieldValueViewModel {
     readonly itemsText = ko.observable('displayText');
     readonly itemsValue = ko.observable('value');
     readonly itemsCaption = ko.observable('');
+    readonly hasFocus = ko.observable(false);
 }

@@ -13,7 +13,7 @@ export class AddEmployeeFormViewModel {
     }
 
     readonly componentName = ko.observable('add-employee-form');
-    readonly Name = new InputFieldViewModel();
+    readonly EmployeeName = new InputFieldViewModel();
     readonly BirthDate = new InputFieldViewModel();
     readonly Department = new DropDownFieldViewModel();
     readonly Address = new AddressInputFieldViewModel();

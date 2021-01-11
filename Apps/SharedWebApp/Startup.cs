@@ -1,17 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SharedWebApp.Api;
-using SharedWebApp.Lib;
-using XTI_App;
 using XTI_App.Api;
 using XTI_WebApp.Extensions;
 
@@ -36,19 +28,11 @@ namespace SharedWebApp
                 .AddMvc()
                 .AddJsonOptions(options =>
                 {
-                    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
-                    options.JsonSerializerOptions.PropertyNamingPolicy = null;
-                    options.JsonSerializerOptions.IgnoreNullValues = true;
+                    options.SetDefaultJsonOptions();
                 })
                 .AddMvcOptions(options =>
                 {
-                    options.CacheProfiles.Add("Default", new Microsoft.AspNetCore.Mvc.CacheProfile
-                    {
-                        Duration = 2592000,
-                        Location = Microsoft.AspNetCore.Mvc.ResponseCacheLocation.Any,
-                        NoStore = false
-                    });
-                    options.ModelBinderProviders.Insert(0, new FormModelBinderProvider());
+                    options.SetDefaultMvcOptions();
                 });
         }
 
@@ -73,18 +57,7 @@ namespace SharedWebApp
 
             app.UseAuthorization();
 
-            app.Use(async (context, next) =>
-            {
-                context.Response.GetTypedHeaders().CacheControl =
-                    new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
-                    {
-                        Public = true,
-                        MaxAge = TimeSpan.FromDays(30)
-                    };
-                context.Response.Headers[Microsoft.Net.Http.Headers.HeaderNames.Vary] =
-                    new string[] { "Accept-Encoding" };
-                await next();
-            });
+            app.UseDefaultResponseCaching();
 
             app.UseEndpoints(endpoints =>
             {

@@ -17,7 +17,6 @@ export class SimpleField implements IField {
         this.value = new FieldValue(prefix, name, vm.value, fieldValue);
     }
 
-    readonly 
     readonly caption: FieldCaption;
     readonly value: FieldValue;
 
@@ -28,6 +27,8 @@ export class SimpleField implements IField {
     getCaption() {
         return this.caption.getCaption();
     }
+
+    getField(name: string) { return this.getName() === name ? this : null; }
 
     setValue(value: any) { this.value.setValue(value); }
 

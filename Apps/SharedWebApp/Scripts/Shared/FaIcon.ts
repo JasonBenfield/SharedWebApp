@@ -27,8 +27,9 @@ export class FaIconNames {
 export class FaIcon {
     constructor(
         private readonly vm: FaIconViewModel,
-        private readonly name: string,
-        private readonly prefix: FaIconPrefix = FaIconPrefix.solid) {
+        private name: string,
+        private prefix: FaIconPrefix = FaIconPrefix.solid
+    ) {
         this.cssClass.addNames(this.prefixCss(this.prefix), this.name);
         this.updateVmCssClass();
     }
@@ -46,13 +47,21 @@ export class FaIcon {
 
     private readonly cssClass = new CssClass();
 
-    changeName(name: string) {
-        this.cssClass.removeName(this.name);
-        this.cssClass.addName(name);
+    setPrefix(prefix: FaIconPrefix) {
+        this.cssClass.removeName(this.prefixCss(this.prefix));
+        this.prefix = prefix;
+        this.cssClass.addName(this.prefixCss(this.prefix));
         this.updateVmCssClass();
     }
 
-    updateVmCssClass() {
+    setName(name: string) {
+        this.cssClass.removeName(this.name);
+        this.name = name;
+        this.cssClass.addName(this.name);
+        this.updateVmCssClass();
+    }
+
+    private updateVmCssClass() {
         this.vm.cssClass(this.cssClass.toString());
         this.vm.isVisible(Boolean(this.name));
     }

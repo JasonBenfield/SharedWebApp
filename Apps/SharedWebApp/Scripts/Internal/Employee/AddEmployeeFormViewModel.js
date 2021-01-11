@@ -9,7 +9,7 @@ var AddressInputFieldViewModel_1 = require("./AddressInputFieldViewModel");
 var AddEmployeeFormViewModel = /** @class */ (function () {
     function AddEmployeeFormViewModel() {
         this.componentName = ko.observable('add-employee-form');
-        this.Name = new InputFieldViewModel_1.InputFieldViewModel();
+        this.EmployeeName = new InputFieldViewModel_1.InputFieldViewModel();
         this.BirthDate = new InputFieldViewModel_1.InputFieldViewModel();
         this.Department = new DropDownFieldViewModel_1.DropDownFieldViewModel();
         this.Address = new AddressInputFieldViewModel_1.AddressInputFieldViewModel();

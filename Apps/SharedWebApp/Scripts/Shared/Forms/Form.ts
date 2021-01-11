@@ -1,5 +1,7 @@
 ﻿import { container } from "tsyringe";
+import instance from "tsyringe/dist/typings/dependency-container";
 import { AppApiAction } from "../AppApiAction";
+import { AppApiError } from "../AppApiError";
 import { ConsoleLog } from "../ConsoleLog";
 import { ModalErrorComponent } from "../Error/ModalErrorComponent";
 import { ErrorModel } from "../ErrorModel";
@@ -15,11 +17,34 @@ import { TextInputField } from "./TextInputField";
 
 export class Form {
     constructor(private readonly name: string) {
+        this.modalError = container.resolve(ModalErrorComponent);
+        this.modalError.errorSelected.register(this.onErrorSelected.bind(this));
+    }
+
+    private async onErrorSelected(error: ErrorModel) {
+        await this.modalError.okCommand.execute();
+        let field: any = this.getField(error.Source);
+        if (field) {
+            if (field.setFocus) {
+                field.setFocus();
+            }
+        }
     }
 
     private readonly fields = new FieldCollection();
+    private readonly modalError: ModalErrorComponent;
 
     getName() { return this.name; }
+
+    getField(name: string) {
+        if (name) {
+            if (this.getName() === name) {
+                return this;
+            }
+            return this.fields.getField(name);
+        }
+        return null;
+    }
 
     protected addHiddenTextField(name: string, vm: InputFieldViewModel) {
         return this.addField(TextInputField.hidden(this.name, name, vm));
@@ -67,10 +92,17 @@ export class Form {
             result = await action.execute(model, { preventDefault: true });
         }
         catch (ex) {
-            let error = new ErrorModel(ex.message, '', '');
-            errors.push(error);
-            new ConsoleLog().error(ex.message);
-            container.resolve(ModalErrorComponent).show([error], '');
+            let caption = '';
+            if (ex instanceof AppApiError) {
+                errors.push(...ex.getErrors());
+                caption = ex.getCaption();
+            }
+            else {
+                let error = new ErrorModel(ex.message, '', '');
+                errors.push(error);
+                new ConsoleLog().error(ex.message);
+            }
+            this.modalError.show(errors, caption);
         }
         return new FormSaveResult(result, errors);
     }

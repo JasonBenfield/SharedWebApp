@@ -21,6 +21,12 @@ var ComplexField = /** @class */ (function () {
     ComplexField.prototype.getCaption = function () {
         return this.caption.getCaption();
     };
+    ComplexField.prototype.getField = function (name) {
+        if (this.getName() === name) {
+            return this;
+        }
+        return this.fields.getField(name);
+    };
     ComplexField.prototype.setValue = function (value) { this.value.setValue(value); };
     ComplexField.prototype.getValue = function () {
         return this.value.getValue();

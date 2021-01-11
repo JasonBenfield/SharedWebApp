@@ -11,10 +11,11 @@ var DropdownBindingHandler = /** @class */ (function () {
         var dropdown = new bootstrap_1.Dropdown(element);
         $(element).data('bs.dropdown', dropdown);
         ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
-            if (dropdown) {
-                dropdown.dispose();
-                dropdown = null;
+            var d = dropdown;
+            if (d) {
+                d.dispose();
             }
+            dropdown = null;
         });
     };
     return DropdownBindingHandler;

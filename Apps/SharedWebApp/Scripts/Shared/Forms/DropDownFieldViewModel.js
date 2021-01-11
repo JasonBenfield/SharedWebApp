@@ -25,6 +25,7 @@ var DropDownFieldValueViewModel = /** @class */ (function (_super) {
         _this.itemsText = ko.observable('displayText');
         _this.itemsValue = ko.observable('value');
         _this.itemsCaption = ko.observable('');
+        _this.hasFocus = ko.observable(false);
         _this.inputComponentName('drop-down-field');
         new ComponentTemplate_1.ComponentTemplate(_this.inputComponentName(), template).register();
         _this.value.subscribe(_this.onValueChanged.bind(_this));

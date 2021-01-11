@@ -14,10 +14,17 @@ export class DateInputField extends SimpleField {
     constructor(prefix: string, name: string, vm: InputFieldViewModel, viewValue = null) {
         super(prefix, name, vm, viewValue || new TextToDateViewValue());
         this.constraints = new DateConstraintCollection();
-        vm.value.type('date');
+        this.inputVM = vm;
+        this.inputVM.value.type('date');
     }
 
+    private readonly inputVM: InputFieldViewModel;
+
     readonly constraints: DateConstraintCollection;
+
+    setFocus() { this.inputVM.value.hasFocus(true); }
+
+    blur() { this.inputVM.value.hasFocus(false); }
 
     setValue(value: Date) { super.setValue(value); }
 

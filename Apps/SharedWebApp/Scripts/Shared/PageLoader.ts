@@ -1,7 +1,7 @@
 ﻿import * as ko from 'knockout';
 import * as template from './Templates/PageFrame.html';
 import './Styles/default.scss';
-import "../../node_modules/@fortawesome/fontawesome-free/css/all.css";
+import "@fortawesome/fontawesome-free/css/all.css";
 import "@fortawesome/fontawesome-free/webfonts/fa-brands-400.eot";
 import "@fortawesome/fontawesome-free/webfonts/fa-brands-400.svg";
 import "@fortawesome/fontawesome-free/webfonts/fa-brands-400.ttf";
@@ -27,6 +27,7 @@ import { UrlBuilder } from './UrlBuilder';
 import { ConsoleLog } from './ConsoleLog';
 import { Dropdown } from 'bootstrap';
 import { DropdownBindingHandler } from './DropdownBindingHandler';
+import { DelegatedEventBindingHandler } from './DelegatedEventBindingHandler';
 
 export class PageLoader {
     load() {
@@ -72,6 +73,7 @@ export class PageLoader {
         ko.bindingHandlers.submit = new SubmitBindingHandler();
         ko.bindingHandlers.modal = new ModalBindingHandler();
         ko.bindingHandlers.dropdown = new DropdownBindingHandler();
+        ko.bindingHandlers.delegatedEvent = new DelegatedEventBindingHandler();
         let page = container.resolve('Page');
         let pageFrameVM = container.resolve(PageFrameViewModel);
         ko.applyBindings(pageFrameVM);

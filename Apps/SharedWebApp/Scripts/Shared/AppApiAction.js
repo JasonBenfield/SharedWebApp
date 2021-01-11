@@ -58,7 +58,7 @@ var AppApiAction = /** @class */ (function () {
                             if (!errorOptions.preventDefault) {
                                 this.events.handleError(apiError);
                             }
-                            throw new Error(apiError.getCaption());
+                            throw apiError;
                         }
                         return [2 /*return*/, result];
                 }

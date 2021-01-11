@@ -17,6 +17,8 @@ export class ModalErrorComponent {
         this.vm.modalOptions.closed.register(this.onClosed.bind(this));
     }
 
+    readonly errorSelected = this.vm.errorSelected;
+
     private onClosed() {
         this.vm.errors([]);
     }
@@ -38,11 +40,9 @@ export class ModalErrorComponent {
         }
         let itemVMs: ModalErrorItemViewModel[] = [];
         for (let error of errors) {
-            let itemVM = new ModalErrorItemViewModel();
+            let itemVM = new ModalErrorItemViewModel(error);
             itemVM.captionCss(captionCss.toString());
-            itemVM.caption(error.Caption);
             itemVM.messageCss(messageCss.toString());
-            itemVM.message(error.Message);
             itemVMs.push(itemVM);
         }
         errorVM.errors(itemVMs);

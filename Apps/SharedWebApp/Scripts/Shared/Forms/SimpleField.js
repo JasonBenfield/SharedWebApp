@@ -18,6 +18,7 @@ var SimpleField = /** @class */ (function () {
     SimpleField.prototype.getCaption = function () {
         return this.caption.getCaption();
     };
+    SimpleField.prototype.getField = function (name) { return this.getName() === name ? this : null; };
     SimpleField.prototype.setValue = function (value) { this.value.setValue(value); };
     SimpleField.prototype.getValue = function () {
         return this.value.getValue();

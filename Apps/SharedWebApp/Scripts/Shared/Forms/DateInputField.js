@@ -11,7 +11,8 @@ var DateInputField = /** @class */ (function (_super) {
         if (viewValue === void 0) { viewValue = null; }
         var _this = _super.call(this, prefix, name, vm, viewValue || new TextToDateViewValue_1.TextToDateViewValue()) || this;
         _this.constraints = new ConstraintCollection_1.DateConstraintCollection();
-        vm.value.type('date');
+        _this.inputVM = vm;
+        _this.inputVM.value.type('date');
         return _this;
     }
     DateInputField.hidden = function (prefix, name, vm, viewValue) {
@@ -21,6 +22,8 @@ var DateInputField = /** @class */ (function (_super) {
         return field;
     };
     ;
+    DateInputField.prototype.setFocus = function () { this.inputVM.value.hasFocus(true); };
+    DateInputField.prototype.blur = function () { this.inputVM.value.hasFocus(false); };
     DateInputField.prototype.setValue = function (value) { _super.prototype.setValue.call(this, value); };
     DateInputField.prototype.getValue = function () { return _super.prototype.getValue.call(this); };
     return DateInputField;

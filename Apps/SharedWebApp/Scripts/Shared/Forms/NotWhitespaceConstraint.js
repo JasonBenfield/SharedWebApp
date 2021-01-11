@@ -7,7 +7,7 @@ var NotWhitespaceConstraint = /** @class */ (function () {
         this.failureMessage = failureMessage;
     }
     NotWhitespaceConstraint.prototype.test = function (value) {
-        if (/^\s+$/.test(value)) {
+        if (/^\s*$/.test(value)) {
             return ConstraintResult_1.ConstraintResult.failed(this.failureMessage);
         }
         return ConstraintResult_1.ConstraintResult.passed();

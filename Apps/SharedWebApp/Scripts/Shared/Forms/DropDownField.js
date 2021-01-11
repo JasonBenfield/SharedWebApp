@@ -23,6 +23,8 @@ var DropDownField = /** @class */ (function (_super) {
     };
     DropDownField.prototype.setValue = function (value) { _super.prototype.setValue.call(this, value); };
     DropDownField.prototype.getValue = function () { return _super.prototype.getValue.call(this); };
+    DropDownField.prototype.setFocus = function () { this.dropDownVM.value.hasFocus(true); };
+    DropDownField.prototype.blur = function () { this.dropDownVM.value.hasFocus(false); };
     return DropDownField;
 }(SimpleField_1.SimpleField));
 exports.DropDownField = DropDownField;

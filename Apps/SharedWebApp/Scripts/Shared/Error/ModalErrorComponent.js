@@ -12,6 +12,7 @@ var CssClass_1 = require("../CssClass");
 var ModalErrorComponent = /** @class */ (function () {
     function ModalErrorComponent(vm) {
         this.vm = vm;
+        this.errorSelected = this.vm.errorSelected;
         this.okCommand = new Command_1.Command(this.vm.okCommand, this.ok.bind(this));
         this.okCommand.setText('OK');
         this.okCommand.makeDanger();
@@ -34,11 +35,9 @@ var ModalErrorComponent = /** @class */ (function () {
         var itemVMs = [];
         for (var _i = 0, errors_1 = errors; _i < errors_1.length; _i++) {
             var error = errors_1[_i];
-            var itemVM = new ModalErrorItemViewModel_1.ModalErrorItemViewModel();
+            var itemVM = new ModalErrorItemViewModel_1.ModalErrorItemViewModel(error);
             itemVM.captionCss(captionCss.toString());
-            itemVM.caption(error.Caption);
             itemVM.messageCss(messageCss.toString());
-            itemVM.message(error.Message);
             itemVMs.push(itemVM);
         }
         errorVM.errors(itemVMs);
