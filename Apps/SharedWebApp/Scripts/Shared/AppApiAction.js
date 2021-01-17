@@ -30,7 +30,17 @@ var AppApiAction = /** @class */ (function () {
                     case 1:
                         postResult = _a.sent();
                         result = postResult && postResult.result && postResult.result.Data;
-                        if (!postResult.isSuccessful()) {
+                        if (postResult.isSuccessful()) {
+                            if (typeof result === 'string') {
+                                if (AppApiAction.dateRegex.test(result)) {
+                                    result = new Date(Date.parse(result));
+                                }
+                            }
+                            else {
+                                this.parseDates(result);
+                            }
+                        }
+                        else {
                             errors = [];
                             if (result) {
                                 rawErrors = result;
@@ -65,9 +75,43 @@ var AppApiAction = /** @class */ (function () {
             });
         });
     };
+    AppApiAction.prototype.parseDates = function (obj) {
+        if (obj) {
+            if (Object.prototype.toString.call(obj) === '[object Array]') {
+                for (var i = 0; i < obj.length; i++) {
+                    var el = obj[i];
+                    if (typeof el === 'string') {
+                        if (AppApiAction.dateRegex.test(el)) {
+                            obj[i] = new Date(Date.parse(el));
+                        }
+                    }
+                    else {
+                        this.parseDates(el);
+                    }
+                }
+            }
+            else if (typeof (obj) !== 'string' && typeof (obj) !== 'boolean' && typeof (obj) !== 'number') {
+                for (var prop in obj) {
+                    if (prop) {
+                        var value = obj[prop];
+                        if (typeof value === 'string') {
+                            if (AppApiAction.dateRegex.test(value)) {
+                                obj[prop] = new Date(Date.parse(value));
+                            }
+                        }
+                        else {
+                            this.parseDates(value);
+                        }
+                    }
+                }
+            }
+        }
+        return obj;
+    };
     AppApiAction.prototype.toString = function () {
         return "AppApiAction " + this.resourceUrl;
     };
+    AppApiAction.dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{7}\+\d{2}:\d{2}$/;
     return AppApiAction;
 }());
 exports.AppApiAction = AppApiAction;
