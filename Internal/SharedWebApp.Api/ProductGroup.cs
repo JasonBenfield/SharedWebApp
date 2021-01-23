@@ -1,40 +1,40 @@
-﻿using XTI_App;
-using XTI_App.Api;
+﻿using XTI_App.Api;
 using XTI_WebApp.Api;
 
 namespace SharedWebApp.Api
 {
-    public sealed class ProductGroup : AppApiGroup
+    public sealed class ProductGroup : AppApiGroupWrapper
     {
-        public ProductGroup(AppApi api, IAppApiUser user)
-            : base
-            (
-                api,
-                new NameFromGroupClassName(nameof(ProductGroup)).Value,
-                ModifierCategoryName.Default,
-                api.Access,
-                user,
-                (n, a, u) => new WebAppApiActionCollection(n, a, u)
-            )
+        public ProductGroup(AppApiGroup source)
+            : base(source)
         {
-            var actions = Actions<WebAppApiActionCollection>();
-            Index = actions.AddDefaultView();
-            GetInfo = actions.AddAction
+            var actions = new WebAppApiActionFactory(source);
+            Index = source.AddAction(actions.DefaultView());
+            GetInfo = source.AddAction
             (
-                "GetInfo",
-                () => new GetInfoAction()
+                actions.Action
+                (
+                    nameof(GetInfo),
+                    () => new GetInfoAction()
+                )
             );
-            AddProduct = actions.AddAction
+            AddProduct = source.AddAction
             (
-                "AddProduct",
-                () => new AddProductValidation(),
-                () => new AddProductAction()
+                actions.Action
+                (
+                    nameof(AddProduct),
+                    () => new AddProductValidation(),
+                    () => new AddProductAction()
+                )
             );
-            Product = actions.AddAction
+            Product = source.AddAction
             (
-                "Product",
-                () => new ProductAction(),
-                "Get Product Information"
+                actions.Action
+                (
+                    nameof(Product),
+                    () => new ProductAction(),
+                    "Get Product Information"
+                )
             );
         }
         public AppApiAction<EmptyRequest, WebViewResult> Index { get; }

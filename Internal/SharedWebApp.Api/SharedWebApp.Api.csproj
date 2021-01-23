@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="XTI_Forms" Version="1.6.6-dev210109231311244" />
-    <PackageReference Include="XTI_WebApp.Api" Version="1.6.4-dev210109232550237" />
+    <PackageReference Include="XTI_Forms" Version="1.7.1" />
+    <PackageReference Include="XTI_WebApp.Api" Version="1.7.1" />
   </ItemGroup>
 
 </Project>

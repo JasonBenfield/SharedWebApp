@@ -5,7 +5,7 @@
     ) {
     }
 
-    equalsAny(other: NumericValue[] | number[] | string[]) {
+    equalsAny(...other: NumericValue[] | number[] | string[]) {
         for (let item of other) {
             if (this.equals(item)) {
                 return true;

@@ -1,35 +1,32 @@
-﻿using XTI_App;
-using XTI_App.Api;
+﻿using XTI_App.Api;
 using XTI_WebApp.Api;
 
 namespace SharedWebApp.Api
 {
-    public sealed class EmployeeGroup : AppApiGroup
+    public sealed class EmployeeGroup : AppApiGroupWrapper
     {
-        public EmployeeGroup(AppApi api, IAppApiUser user)
-            : base
-            (
-                  api,
-                  new NameFromGroupClassName(nameof(EmployeeGroup)).Value,
-                  ModifierCategoryName.Default,
-                  api.Access,
-                  user,
-                  (n, a, u) => new WebAppApiActionCollection(n, a, u)
-            )
+        public EmployeeGroup(AppApiGroup source)
+            : base(source)
         {
-            var actions = Actions<WebAppApiActionCollection>();
-            Index = actions.AddDefaultView();
-            AddEmployee = actions.AddAction
+            var actions = new WebAppApiActionFactory(source);
+            Index = source.AddAction(actions.DefaultView());
+            AddEmployee = source.AddAction
             (
-                "AddEmployee",
-                () => new AddEmployeeValidation(),
-                () => new AddEmployeeAction()
+                actions.Action
+                (
+                    nameof(AddEmployee),
+                    () => new AddEmployeeValidation(),
+                    () => new AddEmployeeAction()
+                )
             );
-            Employee = actions.AddAction
+            Employee = source.AddAction
             (
-                "Employee",
-                () => new EmployeeAction(),
-                "Get Employee Information"
+                actions.Action
+                (
+                    nameof(Employee),
+                    () => new EmployeeAction(),
+                    "Get Employee Information"
+                )
             );
         }
         public AppApiAction<EmptyRequest, WebViewResult> Index { get; }

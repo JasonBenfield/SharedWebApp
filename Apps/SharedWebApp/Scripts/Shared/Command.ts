@@ -3,12 +3,14 @@ import { DefaultEvent, DefaultEventHandler } from './Events';
 import { FaIconViewModel, FaIcon } from './FaIcon';
 import { ContextualClass, ContextualClassViewModel } from './ContextualClass';
 
-export class CommandViewModel {
+export class CommandViewModel implements IComponentViewModel {
     readonly componentName = ko.observable('');
     readonly isVisible = ko.observable(true);
     readonly isEnabled = ko.observable(true);
     readonly icon = new FaIconViewModel();
     readonly text = ko.observable('');
+    readonly textCss = ko.observable('');
+    readonly title = ko.observable('');
     readonly isActive = ko.observable(false);
     readonly contextualClass = new ContextualClassViewModel();
 
@@ -49,7 +51,10 @@ export class AsyncCommand {
             this.vm = vm;
         }
         this.vm.executeRequested.register(context => this.execute(context));
-        this.forEachCommand(c => ContextualClass.default(c.contextualClass));
+        this.forEachCommand(c => {
+            ContextualClass.default(c.contextualClass);
+            c.textCss('ms-1');
+        });
         for (let prop in this.vm.commands) {
             if (this.vm.commands.hasOwnProperty(prop)) {
                 this.icons[prop] = new FaIcon(this.vm.commands[prop].icon, '');
@@ -69,12 +74,28 @@ export class AsyncCommand {
         return this.icons[name];
     }
 
+    positionIconRight() {
+        this.forEachCommand(c => c.textCss('me-1 float-start'));
+    }
+
+    positionIconRightFor(name: string) {
+        this.vm.commands[name].textCss('me-1 float-start');
+    }
+
     setText(text: string) {
         this.forEachCommand(c => c.text(text));
     }
 
     setTextFor(name: string, text: string) {
         this.vm.commands[name].text(text);
+    }
+
+    setTitle(text: string) {
+        this.forEachCommand(c => c.title(text));
+    }
+
+    setTitleFor(name: string, title: string) {
+        this.vm.commands[name].title(title);
     }
 
     makePrimary() {

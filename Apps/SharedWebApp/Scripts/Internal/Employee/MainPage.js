@@ -24,7 +24,24 @@ var MainPage = /** @class */ (function () {
         this.addEmployeeForm.Address.setColumns(new ColumnCss_1.ColumnCss(4), new ColumnCss_1.ColumnCss());
         this.saveCommand.setText('Save');
         this.saveCommand.makeLight();
+        this.test();
     }
+    MainPage.prototype.test = function () {
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
+            var action, result;
+            return tslib_1.__generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        action = new AppApiAction_1.AppApiAction(new AppApiEvents_1.AppApiEvents(function () { }), AppResourceUrl_1.AppResourceUrl.app(location.protocol + "//" + location.host, 'Shared', 'Current', '', '').withGroup('Employee'), 'Test', 'Test');
+                        return [4 /*yield*/, action.execute(5, {})];
+                    case 1:
+                        result = _a.sent();
+                        alert("result: " + result);
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
     MainPage.prototype.save = function () {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             var _this = this;

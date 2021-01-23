@@ -3,13 +3,12 @@ import * as _ from 'lodash';
 import { ContextualClass, ContextualClassViewModel } from './ContextualClass';
 import * as template from './Templates/Alert.html';
 import { ComponentTemplate } from './ComponentTemplate';
+import { ComponentViewModel } from './ComponentViewModel';
 
-export class AlertViewModel {
+export class AlertViewModel extends ComponentViewModel {
     constructor() {
-        new ComponentTemplate(this.componentName(), template).register();
+        super(new ComponentTemplate('alert', template));
     }
-
-    readonly componentName = ko.observable('alert');
 
     readonly contextualClass = new ContextualClassViewModel();
 

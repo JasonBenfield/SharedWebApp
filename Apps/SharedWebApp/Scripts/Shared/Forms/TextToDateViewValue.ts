@@ -1,5 +1,4 @@
-﻿import { FormattedDate } from "../FormattedDate";
-import { TypedFieldViewValue } from "./TypedFieldViewValue";
+﻿import { TypedFieldViewValue } from "./TypedFieldViewValue";
 
 export class TextToDateViewValue extends TypedFieldViewValue<string, Date> {
     protected _fromView(value: string) {
@@ -7,6 +6,6 @@ export class TextToDateViewValue extends TypedFieldViewValue<string, Date> {
     }
 
     protected _toView(value: Date) {
-        return value ? new FormattedDate(value, 'yyyy-MM-dd') : '';
+        return value ? value.toISOString().substring(0, 10) : '';
     }
 }

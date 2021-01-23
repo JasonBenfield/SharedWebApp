@@ -1,8 +1,8 @@
 ﻿import * as ko from 'knockout';
 import { UrlBuilder } from './UrlBuilder';
 
-export class ComponentTemplateAsync {
-    constructor(private readonly name: string, url: UrlBuilder | string) {
+export class ComponentTemplateAsync implements IComponentTemplate {
+    constructor(readonly name: string, url: UrlBuilder | string) {
         if (url instanceof UrlBuilder) {
             this.url = url.getUrl();
         }

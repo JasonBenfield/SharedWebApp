@@ -3,13 +3,25 @@ using XTI_WebApp.Api;
 
 namespace SharedWebApp.Api
 {
-    public sealed class SharedAppApi : WebAppApi
+    public sealed class SharedAppApi : WebAppApiWrapper
     {
         public SharedAppApi(IAppApiUser user, ResourceAccess access = null)
-            : base(SharedAppKey.AppKey, user, access)
+            : base
+            (
+                new AppApi
+                (
+                    SharedAppKey.AppKey, user, access
+                )
+            )
         {
-            Employee = AddGroup(u => new EmployeeGroup(this, u));
-            Product = AddGroup(u => new ProductGroup(this, u));
+            Employee = new EmployeeGroup
+            (
+                source.AddGroup(nameof(Employee))
+            );
+            Product = new ProductGroup
+            (
+                source.AddGroup(nameof(Product))
+            );
         }
         public EmployeeGroup Employee { get; }
         public ProductGroup Product { get; }
