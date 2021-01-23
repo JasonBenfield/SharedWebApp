@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UrlQuery = void 0;
 var NamedValue_1 = require("./NamedValue");
 var _ = require("lodash");
-var FormattedDate_1 = require("./FormattedDate");
 var JoinedStrings_1 = require("./JoinedStrings");
 var UrlQuery = /** @class */ (function () {
     function UrlQuery(query) {
@@ -59,7 +58,7 @@ var UrlQuery = /** @class */ (function () {
             if (value instanceof Date) {
                 var queryValue = value === undefined || value === null
                     ? null
-                    : new FormattedDate_1.FormattedDate(value, 'MM/dd/yyyy HH:mm:ss?').toString();
+                    : value.toISOString();
                 this.queryValues.push(new NamedValue_1.NamedValue(name, queryValue));
             }
             else if (typeof value === 'string') {

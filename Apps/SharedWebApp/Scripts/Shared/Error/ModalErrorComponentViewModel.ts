@@ -7,18 +7,18 @@ import { createCommandButtonViewModel } from "../Templates/CommandButtonTemplate
 import { singleton } from 'tsyringe';
 import { ArrayItemEventCollection, DefaultEvent, DefaultEventHandler } from '../Events';
 import { ErrorModel } from '../ErrorModel';
+import { ComponentViewModel } from '../ComponentViewModel';
 
 @singleton()
-export class ModalErrorComponentViewModel {
+export class ModalErrorComponentViewModel extends ComponentViewModel {
     constructor() {
-        new ComponentTemplate(this.componentName(), template).register();
+        super(new ComponentTemplate('modal-error-component', template));
         this.errorSelectedEvents.register(
             (e: ModalErrorViewModel) => e.errorSelected,
             this.onErrorSelected.bind(this)
         );
     }
 
-    readonly componentName = ko.observable('modal-error-component');
     readonly title = ko.observable('');
     readonly isVisible = ko.observable(false);
     readonly modalOptions = new ModalOptionsViewModel();

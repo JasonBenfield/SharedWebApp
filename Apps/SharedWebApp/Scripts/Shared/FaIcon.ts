@@ -5,10 +5,10 @@ import * as template from './Templates/FaIcon.html';
 
 export class FaIconViewModel {
     constructor() {
-        new ComponentTemplate(this.templateName, template).register();
+        new ComponentTemplate(this.componentName(), template).register();
     }
 
-    readonly templateName = 'fa-icon';
+    readonly componentName = ko.observable('fa-icon');
     readonly cssClass = ko.observable('');
     readonly isVisible = ko.observable(true);
 }

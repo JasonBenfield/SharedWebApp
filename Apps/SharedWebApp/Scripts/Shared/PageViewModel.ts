@@ -1,10 +1,9 @@
 ﻿import { ComponentTemplate } from './ComponentTemplate';
 import * as ko from 'knockout';
+import { ComponentViewModel } from './ComponentViewModel';
 
-export class PageViewModel {
+export class PageViewModel extends ComponentViewModel {
     constructor(template: any) {
-        new ComponentTemplate(this.componentName(), template).register();
+        super(new ComponentTemplate('page-body', template));
     }
-
-    readonly componentName = ko.observable('page-body');
 }

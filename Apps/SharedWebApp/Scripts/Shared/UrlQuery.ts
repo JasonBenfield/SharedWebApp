@@ -1,6 +1,5 @@
 ﻿import { NamedValue } from "./NamedValue";
 import * as _ from 'lodash';
-import { FormattedDate } from "./FormattedDate";
 import { JoinedStrings } from "./JoinedStrings";
 
 export class UrlQuery {
@@ -72,7 +71,7 @@ export class UrlQuery {
             if (value instanceof Date) {
                 let queryValue = value === undefined || value === null
                     ? null
-                    : new FormattedDate(value, 'MM/dd/yyyy HH:mm:ss?').toString();
+                    : value.toISOString();
                 this.queryValues.push(new NamedValue(name, queryValue));
             }
             else if (typeof value === 'string') {

@@ -111,6 +111,10 @@ export class DefaultEvent<TArgs> implements IEvent<TArgs> {
     dispose() {
         this._callbacks.splice(0, this._callbacks.length);
     }
+
+    handler() {
+        return new DefaultEventHandler<TArgs>(this);
+    }
 }
 
 export class DefaultEventHandler<TArgs> implements IEventHandler<TArgs> {

@@ -57,8 +57,6 @@ namespace SharedWebApp
 
             app.UseAuthorization();
 
-            app.UseDefaultResponseCaching();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

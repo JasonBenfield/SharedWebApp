@@ -45,12 +45,6 @@ function Shared-Xti-Merge {
         [Parameter(Position=0)]
         [string] $CommitMessage
     )
-    $branchName = Get-CurrentBranchname
-    $releaseBranch = Parse-ReleaseBranch $branchName
-    if($releaseBranch.IsValid) {
-        Xti-BeginPublish -BranchName $branchName
-        Xti-EndPublish -BranchName $branchName
-    }
     $script:sharedConfig | Xti-Merge @PsBoundParameters
 }
 
@@ -63,12 +57,6 @@ function Shared-New-XtiPullRequest {
 }
 
 function Shared-Xti-PostMerge {
-    $branchName = Get-CurrentBranchname
-    $releaseBranch = Parse-ReleaseBranch $branchName
-    if($releaseBranch.IsValid) {
-        Xti-BeginPublish -BranchName $branchName
-        Xti-EndPublish -BranchName $branchName
-    }
     $script:sharedConfig | Xti-PostMerge
 }
 
@@ -83,16 +71,28 @@ function Shared-Publish {
     param(
         [switch] $Prod
     )
+    Shared-Webpack
+    dotnet build 
     if($Prod) {
         $branch = Get-CurrentBranchname
         Xti-BeginPublish -BranchName $branch
         $script:sharedConfig | Xti-PublishPackage -DisableUpdateVersion -Prod
-        Xti-EndPublish -BranchName $branch
         Shared-ExportWeb -Prod
+        Xti-EndPublish -BranchName $branch
         $script:sharedConfig | Xti-Merge
     }
     else{
         $script:sharedConfig | Xti-PublishPackage -DisableUpdateVersion
         Shared-ExportWeb
     }
+}
+
+function Shared-Webpack {
+    param(
+    )
+    $ProjectDir = $script:sharedConfig.ProjectDir
+    $currentDir = (Get-Item .).FullName
+    Set-Location $ProjectDir
+    webpack
+    Set-Location $currentDir
 }

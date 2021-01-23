@@ -19,11 +19,23 @@ class MainPage {
         this.addEmployeeForm.Address.setColumns(new ColumnCss(4), new ColumnCss());
         this.saveCommand.setText('Save');
         this.saveCommand.makeLight();
+        this.test();
     }
 
     readonly alert = new Alert(this.vm.alert);
     private readonly addEmployeeForm = new AddEmployeeForm(this.vm.addEmployeeForm);
     private readonly saveCommand = new AsyncCommand(this.vm.saveCommand, this.save.bind(this));
+
+    private async test() {
+        let action = new AppApiAction<number, number>(
+            new AppApiEvents(() => { }),
+            AppResourceUrl.app(`${location.protocol}//${location.host}`, 'Shared', 'Current', '', '').withGroup('Employee'),
+            'Test',
+            'Test'
+        );
+        let result = await action.execute(5, {});
+        alert(`result: ${result}`);
+    }
 
     private async save() {
         await this.alert.infoAction(

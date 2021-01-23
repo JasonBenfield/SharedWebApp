@@ -1,7 +1,7 @@
 ﻿import * as ko from 'knockout';
 
-export class ComponentTemplate {
-    constructor(private readonly name: string, private readonly html: any) {
+export class ComponentTemplate implements IComponentTemplate {
+    constructor(readonly name: string, private readonly html: any) {
     }
 
     register() {

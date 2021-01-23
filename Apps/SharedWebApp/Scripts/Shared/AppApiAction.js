@@ -15,17 +15,11 @@ var AppApiAction = /** @class */ (function () {
     }
     AppApiAction.prototype.execute = function (data, errorOptions) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
-            var model, jsonText, postResult, result, apiError, errors, rawErrors, message;
+            var jsonText, postResult, result, apiError, errors, rawErrors, message;
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        if (typeof data === 'string' || typeof data === 'number' || data instanceof Date) {
-                            model = { model: data };
-                        }
-                        else {
-                            model = data;
-                        }
-                        jsonText = new JsonText_1.JsonText(model).toString();
+                        jsonText = new JsonText_1.JsonText(data).toString();
                         return [4 /*yield*/, new HttpClient_1.HttpClient().post(this.resourceUrl.url.getUrl(), jsonText)];
                     case 1:
                         postResult = _a.sent();
@@ -111,7 +105,7 @@ var AppApiAction = /** @class */ (function () {
     AppApiAction.prototype.toString = function () {
         return "AppApiAction " + this.resourceUrl;
     };
-    AppApiAction.dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{7}\+\d{2}:\d{2}$/;
+    AppApiAction.dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{1,7}\+\d{2}:\d{2}$/;
     return AppApiAction;
 }());
 exports.AppApiAction = AppApiAction;
