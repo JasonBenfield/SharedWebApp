@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Any = exports.First = exports.FilteredArray = exports.MappedArray = exports.EnumerableArray = void 0;
 var _ = require("lodash");
 var EnumerableArray = /** @class */ (function () {
     function EnumerableArray(source) {
@@ -56,4 +55,15 @@ var Any = /** @class */ (function () {
     return Any;
 }());
 exports.Any = Any;
+var EnumerableRange = /** @class */ (function () {
+    function EnumerableRange(start, count) {
+        this.source = [];
+        for (var i = start; i < start + count; i++) {
+            this.source.push(i);
+        }
+    }
+    EnumerableRange.prototype.value = function () { return this.source; };
+    return EnumerableRange;
+}());
+exports.EnumerableRange = EnumerableRange;
 //# sourceMappingURL=Enumerable.js.map

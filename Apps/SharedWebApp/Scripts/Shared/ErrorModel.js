@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ErrorModel = void 0;
 var ErrorModel = /** @class */ (function () {
     function ErrorModel(Message, Caption, Source, context) {
         if (Caption === void 0) { Caption = ''; }

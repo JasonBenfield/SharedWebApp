@@ -1,5 +1,4 @@
 ﻿import * as ko from 'knockout';
-import * as template from './Templates/PageFrame.html';
 import './Styles/default.scss';
 import "@fortawesome/fontawesome-free/css/all.css";
 import "@fortawesome/fontawesome-free/webfonts/fa-brands-400.eot";
@@ -17,24 +16,17 @@ import "@fortawesome/fontawesome-free/webfonts/fa-solid-900.svg";
 import "@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf";
 import "@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff";
 import "@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2";
-import { ComponentTemplate } from './ComponentTemplate';
 import 'tslib';
 import { SubmitBindingHandler } from './SubmitBindingHandler';
 import { ModalBindingHandler } from './ModalBindingHandler';
-import { container } from 'tsyringe';
-import { PageFrameViewModel } from './PageFrameViewModel';
 import { UrlBuilder } from './UrlBuilder';
 import { ConsoleLog } from './ConsoleLog';
-import { Dropdown } from 'bootstrap';
 import { DropdownBindingHandler } from './DropdownBindingHandler';
 import { DelegatedEventBindingHandler } from './DelegatedEventBindingHandler';
+import { PageViewModel } from './PageViewModel';
 
 export class PageLoader {
-    load() {
-        let dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
-        dropdownElementList.map((dropdownToggleEl) => {
-            return new Dropdown(dropdownToggleEl);
-        });
+    loadPage(pageVM: PageViewModel) {
         let defaultConfigLoader = {
             getConfig: (name: string, callback) => {
                 if (name.indexOf('/') > -1) {
@@ -68,17 +60,13 @@ export class PageLoader {
         };
         ko.components.loaders.unshift(defaultConfigLoader);
         ko.components.loaders.unshift(defaultComponentLoader);
-        new ComponentTemplate('page-frame', template).register();
         ko.options.deferUpdates = true;
         ko.bindingHandlers.submit = new SubmitBindingHandler();
         ko.bindingHandlers.modal = new ModalBindingHandler();
         ko.bindingHandlers.dropdown = new DropdownBindingHandler();
         ko.bindingHandlers.delegatedEvent = new DelegatedEventBindingHandler();
-        let page = container.resolve('Page');
-        let pageFrameVM = container.resolve(PageFrameViewModel);
-        ko.applyBindings(pageFrameVM);
+        ko.applyBindings(pageVM);
     }
-
 
     private createViewModel(params, componentInf) {
         return params;
@@ -89,7 +77,7 @@ export class PageLoader {
         if (!urlBuilder.hasQuery('cacheBust')) {
             urlBuilder.addQuery('cacheBust', pageContext.CacheBust);
         }
-        let url = urlBuilder.getUrl();
+        let url = urlBuilder.value();
         function reqListener() {
             console.log(this.responseText);
         }

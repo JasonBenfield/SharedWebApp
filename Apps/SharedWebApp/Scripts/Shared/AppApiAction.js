@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AppApiAction = void 0;
 var tslib_1 = require("tslib");
 var HttpClient_1 = require("./HttpClient");
 var JsonText_1 = require("./JsonText");
@@ -20,7 +19,7 @@ var AppApiAction = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         jsonText = new JsonText_1.JsonText(data).toString();
-                        return [4 /*yield*/, new HttpClient_1.HttpClient().post(this.resourceUrl.url.getUrl(), jsonText)];
+                        return [4 /*yield*/, new HttpClient_1.HttpClient().post(this.resourceUrl.url.value(), jsonText)];
                     case 1:
                         postResult = _a.sent();
                         result = postResult && postResult.result && postResult.result.Data;

@@ -3,13 +3,11 @@ import * as template from './ModalErrorComponent.html';
 import { ComponentTemplate } from '../ComponentTemplate';
 import { ModalOptionsViewModel } from '../ModalOptionsViewModel';
 import { ModalErrorViewModel } from './ModalErrorViewModel';
-import { createCommandButtonViewModel } from "../Templates/CommandButtonTemplate";
-import { singleton } from 'tsyringe';
 import { ArrayItemEventCollection, DefaultEvent, DefaultEventHandler } from '../Events';
 import { ErrorModel } from '../ErrorModel';
 import { ComponentViewModel } from '../ComponentViewModel';
+import { ButtonViewModel } from '../Html/ButtonViewModel';
 
-@singleton()
 export class ModalErrorComponentViewModel extends ComponentViewModel {
     constructor() {
         super(new ComponentTemplate('modal-error-component', template));
@@ -26,7 +24,7 @@ export class ModalErrorComponentViewModel extends ComponentViewModel {
 
     private readonly errorSelectedEvents = new ArrayItemEventCollection(this.errors);
 
-    readonly okCommand = createCommandButtonViewModel();
+    readonly okCommand = new ButtonViewModel();
 
     private readonly _errorSelected = new DefaultEvent<ErrorModel>(this);
     readonly errorSelected = new DefaultEventHandler<ErrorModel>(this._errorSelected);

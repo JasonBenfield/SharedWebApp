@@ -36,5 +36,350 @@
     <ProjectReference Include="..\..\Internal\SharedWebApp.Api\SharedWebApp.Api.csproj" />
     <ProjectReference Include="..\..\Lib\XTI_WebApp.TagHelpers\XTI_WebApp.TagHelpers.csproj" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <None Update="Scripts\Shared\Html\BlockViewModel - Copy %282%29 - Copy.js">
+      <DependentUpon>BlockViewModel - Copy (2).js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\BlockViewModel - Copy %282%29 - Copy.js.map">
+      <DependentUpon>BlockViewModel - Copy (2).js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\BlockViewModel - Copy %282%29.js">
+      <DependentUpon>BlockViewModel.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\BlockViewModel - Copy %282%29.js.map">
+      <DependentUpon>BlockViewModel.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\BlockViewModel - Copy %283%29.js">
+      <DependentUpon>BlockViewModel.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\BlockViewModel - Copy %283%29.js.map">
+      <DependentUpon>BlockViewModel.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\BlockViewModel - Copy.js">
+      <DependentUpon>TextBlockViewModel.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\BlockViewModel - Copy.js.map">
+      <DependentUpon>TextBlockViewModel.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\Button - Copy %282%29 - Copy.js">
+      <DependentUpon>Button - Copy (2).js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\Button - Copy %282%29 - Copy.js.map">
+      <DependentUpon>Button - Copy (2).js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\Button - Copy %282%29.js">
+      <DependentUpon>Button.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\Button - Copy %282%29.js.map">
+      <DependentUpon>Button.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\Button - Copy %283%29.js">
+      <DependentUpon>Button.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\Button - Copy %283%29.js.map">
+      <DependentUpon>Button.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\Button - Copy - Copy %282%29.js">
+      <DependentUpon>Button - Copy.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\Button - Copy - Copy %282%29.js.map">
+      <DependentUpon>Button - Copy.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\Button - Copy - Copy - Copy.js">
+      <DependentUpon>Button - Copy - Copy.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\Button - Copy - Copy - Copy.js.map">
+      <DependentUpon>Button - Copy - Copy.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\Button - Copy - Copy.js">
+      <DependentUpon>Button - Copy.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\Button - Copy - Copy.js.map">
+      <DependentUpon>Button - Copy.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\Button - Copy.js">
+      <DependentUpon>Button.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\Button - Copy.js.map">
+      <DependentUpon>Button.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\ButtonViewModel - Copy %282%29.js">
+      <DependentUpon>ButtonViewModel.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\ButtonViewModel - Copy %282%29.js.map">
+      <DependentUpon>ButtonViewModel.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\ButtonViewModel - Copy - Copy.js">
+      <DependentUpon>ButtonViewModel - Copy.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\ButtonViewModel - Copy - Copy.js.map">
+      <DependentUpon>ButtonViewModel - Copy.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\ButtonViewModel - Copy.js">
+      <DependentUpon>ButtonViewModel.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\ButtonViewModel - Copy.js.map">
+      <DependentUpon>ButtonViewModel.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\DivViewModel - Copy - Copy %282%29.js">
+      <DependentUpon>DivViewModel - Copy.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\DivViewModel - Copy - Copy %282%29.js.map">
+      <DependentUpon>DivViewModel - Copy.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\DivViewModel - Copy - Copy - Copy.js">
+      <DependentUpon>DivViewModel - Copy - Copy.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\DivViewModel - Copy - Copy - Copy.js.map">
+      <DependentUpon>DivViewModel - Copy - Copy.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\DivViewModel - Copy - Copy.js">
+      <DependentUpon>DivViewModel - Copy.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\DivViewModel - Copy - Copy.js.map">
+      <DependentUpon>DivViewModel - Copy.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\DivViewModel - Copy.js">
+      <DependentUpon>BlockViewModel.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\DivViewModel - Copy.js.map">
+      <DependentUpon>BlockViewModel.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\FlexColumn - Copy %282%29.js">
+      <DependentUpon>FlexColumn.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\FlexColumn - Copy %282%29.js.map">
+      <DependentUpon>FlexColumn.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\FlexColumn - Copy - Copy.js">
+      <DependentUpon>FlexColumn - Copy.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\FlexColumn - Copy - Copy.js.map">
+      <DependentUpon>FlexColumn - Copy.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\FlexColumn - Copy.js">
+      <DependentUpon>FlexColumn.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\FlexColumn - Copy.js.map">
+      <DependentUpon>FlexColumn.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\Heading1 - Copy.js">
+      <DependentUpon>Heading1.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\Heading1 - Copy.js.map">
+      <DependentUpon>Heading1.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\Heading1ViewModel - Copy.js">
+      <DependentUpon>Heading1ViewModel.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\Heading1ViewModel - Copy.js.map">
+      <DependentUpon>Heading1ViewModel.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\HtmlComponent - Copy %282%29 - Copy.js">
+      <DependentUpon>HtmlComponent.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\HtmlComponent - Copy %282%29 - Copy.js.map">
+      <DependentUpon>HtmlComponent.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\HtmlComponent - Copy %282%29.js">
+      <DependentUpon>HtmlComponent.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\HtmlComponent - Copy %282%29.js.map">
+      <DependentUpon>HtmlComponent.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\HtmlComponent - Copy - Copy %282%29.js">
+      <DependentUpon>HtmlComponent.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\HtmlComponent - Copy - Copy %282%29.js.map">
+      <DependentUpon>HtmlComponent.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\HtmlComponent - Copy - Copy - Copy.js">
+      <DependentUpon>HtmlComponent - Copy.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\HtmlComponent - Copy - Copy - Copy.js.map">
+      <DependentUpon>HtmlComponent - Copy.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\HtmlComponent - Copy - Copy.js">
+      <DependentUpon>HtmlComponent - Copy.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\HtmlComponent - Copy - Copy.js.map">
+      <DependentUpon>HtmlComponent - Copy.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\HtmlComponent - Copy.js">
+      <DependentUpon>HtmlComponent.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\HtmlComponent - Copy.js.map">
+      <DependentUpon>HtmlComponent.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\Input - Copy.js">
+      <DependentUpon>Input.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\Input - Copy.js.map">
+      <DependentUpon>Input.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\LabelViewModel - Copy.js">
+      <DependentUpon>LabelViewModel.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\LabelViewModel - Copy.js.map">
+      <DependentUpon>LabelViewModel.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\LinkViewModel - Copy.js">
+      <DependentUpon>LinkViewModel.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\LinkViewModel - Copy.js.map">
+      <DependentUpon>LinkViewModel.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\ListItemViewModel - Copy %282%29 - Copy.js">
+      <DependentUpon>ListItemViewModel - Copy (2).js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\ListItemViewModel - Copy %282%29 - Copy.js.map">
+      <DependentUpon>ListItemViewModel - Copy (2).js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\ListItemViewModel - Copy %282%29.js">
+      <DependentUpon>ListItemViewModel.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\ListItemViewModel - Copy %282%29.js.map">
+      <DependentUpon>ListItemViewModel.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\ListItemViewModel - Copy %283%29.js.map">
+      <DependentUpon>ListItemViewModel.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\ListItemViewModel - Copy - Copy %282%29.js.map">
+      <DependentUpon>ListItemViewModel - Copy.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\ListItemViewModel - Copy - Copy - Copy.js.map">
+      <DependentUpon>ListItemViewModel - Copy - Copy.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\ListItemViewModel - Copy - Copy.js.map">
+      <DependentUpon>ListItemViewModel - Copy.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\ListItemViewModel - Copy.js">
+      <DependentUpon>ListItemViewModel.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\ListItemViewModel - Copy.js.map">
+      <DependentUpon>ListItemViewModel.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\Span - Copy %282%29.js">
+      <DependentUpon>Span.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\Span - Copy %282%29.js.map">
+      <DependentUpon>Span.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\Span - Copy - Copy.js">
+      <DependentUpon>Span - Copy.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\Span - Copy - Copy.js.map">
+      <DependentUpon>Span - Copy.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\Span - Copy.js">
+      <DependentUpon>Span.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\Span - Copy.js.map">
+      <DependentUpon>Span.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\SpanViewModel - Copy.js">
+      <DependentUpon>SpanViewModel.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\SpanViewModel - Copy.js.map">
+      <DependentUpon>SpanViewModel.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\TextBlock - Copy.js">
+      <DependentUpon>TextBlock.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\TextBlock - Copy.js.map">
+      <DependentUpon>TextBlock.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\TextSmall - Copy.js">
+      <DependentUpon>TextSmall.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\TextSmall - Copy.js.map">
+      <DependentUpon>TextSmall.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\UnorderedList - Copy %282%29.js">
+      <DependentUpon>UnorderedList.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\UnorderedList - Copy %282%29.js.map">
+      <DependentUpon>UnorderedList.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\UnorderedList - Copy - Copy.js">
+      <DependentUpon>UnorderedList - Copy.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\UnorderedList - Copy - Copy.js.map">
+      <DependentUpon>UnorderedList - Copy.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\UnorderedList - Copy.js">
+      <DependentUpon>UnorderedList.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\UnorderedList - Copy.js.map">
+      <DependentUpon>UnorderedList.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\UnorderListViewModel - Copy %282%29.js.map">
+      <DependentUpon>UnorderedListViewModel.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\Html\UnorderListViewModel - Copy.js.map">
+      <DependentUpon>UnorderedListViewModel.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\ListGroup\BaseListGroup - Copy.js">
+      <DependentUpon>BaseListGroup.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\ListGroup\BaseListGroup - Copy.js.map">
+      <DependentUpon>BaseListGroup.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\ListGroup\ButtonListGroup - Copy.js">
+      <DependentUpon>ButtonListGroup.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\ListGroup\ButtonListGroup - Copy.js.map">
+      <DependentUpon>ButtonListGroup.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\ListGroup\ButtonListItemViewModel - Copy.js">
+      <DependentUpon>ButtonListItemViewModel.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\ListGroup\ButtonListItemViewModel - Copy.js.map">
+      <DependentUpon>ButtonListItemViewModel.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\ListGroup\LinkListGroupItem - Copy.js">
+      <DependentUpon>LinkListGroupItem.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\ListGroup\LinkListGroupItem - Copy.js.map">
+      <DependentUpon>LinkListGroupItem.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\ListGroup\ListGroup - Copy %282%29.js">
+      <DependentUpon>ListGroup.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\ListGroup\ListGroup - Copy %282%29.js.map">
+      <DependentUpon>ListGroup.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\ListGroup\ListGroup - Copy - Copy.js">
+      <DependentUpon>ListGroup - Copy.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\ListGroup\ListGroup - Copy - Copy.js.map">
+      <DependentUpon>ListGroup - Copy.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\ListGroup\ListGroup - Copy.js">
+      <DependentUpon>ListGroup.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\ListGroup\ListGroup - Copy.js.map">
+      <DependentUpon>ListGroup.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\ListGroup\ListGroupItem - Copy.js">
+      <DependentUpon>ListGroupItem.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\ListGroup\ListGroupItem - Copy.js.map">
+      <DependentUpon>ListGroupItem.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\UrlQuery - Copy.js">
+      <DependentUpon>UrlQuery.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Shared\UrlQuery - Copy.js.map">
+      <DependentUpon>UrlQuery.js.map</DependentUpon>
+    </None>
+    <None Update="Scripts\Tests\DelayedActionTest - Copy.js">
+      <DependentUpon>DelayedActionTest.js</DependentUpon>
+    </None>
+    <None Update="Scripts\Tests\DelayedActionTest - Copy.js.map">
+      <DependentUpon>DelayedActionTest.js.map</DependentUpon>
+    </None>
+  </ItemGroup>
 
 </Project>

@@ -1,65 +1,96 @@
 ﻿import { CssClass } from "./CssClass";
 
-export interface ColumnCssOptions {
-    xs?: number;
-    sm?: number;
-    md?: number;
-    lg?: number;
-    xl?: number;
-    autosize?: boolean;
-}
-
-export class ColumnCss {
-    constructor(options?: ColumnCssOptions | number) {
-        if (typeof options === 'number') {
-            if (options >= 0) {
-                this.cssClass.addName(this.getCssClass('xs', options));
-            }
-        }
-        else {
-            if (!options) {
-                options = {};
-            }
-            if (options.xs >= 0) {
-                this.cssClass.addName(this.getCssClass('xs', options.xs));
-            }
-            if (options.sm >= 0) {
-                this.cssClass.addName(this.getCssClass('sm', options.xs));
-            }
-            if (options.md >= 0) {
-                this.cssClass.addName(this.getCssClass('md', options.xs));
-            }
-            if (options.lg >= 0) {
-                this.cssClass.addName(this.getCssClass('lg', options.xs));
-            }
-            if (options.xl >= 0) {
-                this.cssClass.addName(this.getCssClass('xl', options.xs));
-            }
-            if (!options.xs && !options.sm && !options.md && !options.lg && !options.xl) {
-                if (options && options.autosize) {
-                    this.cssClass.addName('col-auto');
-                }
-                else {
-                    this.cssClass.addName('col');
-                }
-            }
-        }
+export class ColumnCssForBreakpoint {
+    constructor(private readonly breakpoint: string, private readonly size: ColumnCssSize) {
     }
 
-    private getCssClass(size: string, columns: number) {
+    cssClassName() {
         let css = 'col';
-        if (size && size !== 'xs') {
-            css += `-${size}`;
+        if (this.breakpoint && this.breakpoint !== 'xs') {
+            css += `-${this.breakpoint}`;
         }
-        if (columns > 0) {
-            css += `-${columns}`;
+        if (this.size === 'auto') {
+            css += '-auto';
+        }
+        else if (this.size && this.size !== 'fill') {
+            css += `-${this.size}`;
         }
         return css;
     }
 
-    private readonly cssClass = new CssClass();
+    toString() {
+        return this.cssClassName();
+    }
+}
+
+export class ColumnCss implements IColumnCss {
+    static xs(columnSize: ColumnCssSize = 'fill') {
+        return new ColumnCss().xs(columnSize);
+    }
+    static sm(columnSize: ColumnCssSize = 'fill') {
+        return new ColumnCss().sm(columnSize);
+    }
+    static lg(columnSize: ColumnCssSize = 'fill') {
+        return new ColumnCss().lg(columnSize);
+    }
+
+    static xl(columnSize: ColumnCssSize = 'fill') {
+        return new ColumnCss().xl(columnSize);
+    }
+
+    static xxl(columnSize: ColumnCssSize = 'fill') {
+        return new ColumnCss().xxl(columnSize);
+    }
+
+    private constructor() {
+    }
+
+    private breakpoints: {
+        xs?: ColumnCssForBreakpoint,
+        sm?: ColumnCssForBreakpoint,
+        md?: ColumnCssForBreakpoint,
+        lg?: ColumnCssForBreakpoint,
+        xl?: ColumnCssForBreakpoint,
+        xxl?: ColumnCssForBreakpoint
+    } = {};
+
+    xs(columnSize: ColumnCssSize = 'fill') {
+        this.breakpoints.xs = new ColumnCssForBreakpoint('xs', columnSize);
+        return this;
+    }
+
+    sm(columnSize: ColumnCssSize = 'fill') {
+        this.breakpoints.sm = new ColumnCssForBreakpoint('sm', columnSize);
+    }
+
+    md(columnSize: ColumnCssSize = 'fill') {
+        this.breakpoints.md = new ColumnCssForBreakpoint('md', columnSize);
+    }
+
+    lg(columnSize: ColumnCssSize = 'fill') {
+        this.breakpoints.lg = new ColumnCssForBreakpoint('lg', columnSize);
+    }
+
+    xl(columnSize: ColumnCssSize = 'fill') {
+        this.breakpoints.xl = new ColumnCssForBreakpoint('xl', columnSize);
+    }
+
+    xxl(columnSize: ColumnCssSize = 'fill') {
+        this.breakpoints.xxl = new ColumnCssForBreakpoint('xxl', columnSize);
+    }
+
+    cssClass() {
+        let css = new CssClass();
+        css.addName(this.breakpoints.xs && this.breakpoints.xs.cssClassName());
+        css.addName(this.breakpoints.sm && this.breakpoints.sm.cssClassName());
+        css.addName(this.breakpoints.md && this.breakpoints.md.cssClassName());
+        css.addName(this.breakpoints.lg && this.breakpoints.lg.cssClassName());
+        css.addName(this.breakpoints.xl && this.breakpoints.xl.cssClassName());
+        css.addName(this.breakpoints.xxl && this.breakpoints.xxl.cssClassName());
+        return css;
+    }
 
     toString() {
-        return this.cssClass.toString();
+        return this.cssClass().toString();
     }
 }

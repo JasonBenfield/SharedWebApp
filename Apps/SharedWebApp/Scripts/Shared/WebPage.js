@@ -1,11 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.WebPage = void 0;
+var Url_1 = require("./Url");
 var UrlBuilder_1 = require("./UrlBuilder");
 var WebPage = /** @class */ (function () {
     function WebPage(url) {
         if (url instanceof UrlBuilder_1.UrlBuilder) {
-            this.url = url.getUrl();
+            this.url = url.value();
+        }
+        else if (url instanceof Url_1.Url) {
+            this.url = url.value();
         }
         else {
             this.url = url;
