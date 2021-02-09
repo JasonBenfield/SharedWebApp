@@ -1,90 +1,19 @@
-﻿import * as ko from 'knockout';
-import * as _ from 'lodash';
-import { ContextualClass, ContextualClassViewModel } from './ContextualClass';
-import * as template from './Templates/Alert.html';
-import { ComponentTemplate } from './ComponentTemplate';
-import { ComponentViewModel } from './ComponentViewModel';
+﻿import * as _ from 'lodash';
+import { ContextualClass } from './ContextualClass';
+import { BlockViewModel } from './Html/BlockViewModel';
+import { Block } from './Html/Block';
 
-export class AlertViewModel extends ComponentViewModel {
-    constructor() {
-        super(new ComponentTemplate('alert', template));
+export class Alert extends Block {
+    constructor(vm: BlockViewModel = new BlockViewModel()) {
+        super(vm);
+        this.addCssName('alert');
     }
 
-    readonly contextualClass = new ContextualClassViewModel();
+    private context = ContextualClass.info;
 
-    readonly message = ko.observable('');
-
-    readonly hasMessage = ko.pureComputed(() => Boolean(this.message()));
-
-    readonly hasSuccessMessage = ko.pureComputed(() => {
-        let hasMessage = this.hasMessage();
-        let isSuccess = this.contextualClass.isSuccess();
-        return hasMessage && isSuccess;
-    });
-    readonly hasInfoMessage = ko.pureComputed(() => {
-        let hasMessage = this.hasMessage();
-        let isInfo = this.contextualClass.isInfo();
-        return hasMessage && isInfo;
-    });
-    readonly hasWarningMessage = ko.pureComputed(() => {
-        let hasMessage = this.hasMessage();
-        let isWarning = this.contextualClass.isWarning();
-        return hasMessage && isWarning;
-    });
-    readonly hasDangerMessage = ko.pureComputed(() => {
-        let hasMessage = this.hasMessage();
-        let isDanger = this.contextualClass.isDanger();
-        return hasMessage && isDanger;
-    });
-}
-
-export class Alert {
-    constructor(private readonly vm: AlertViewModel) {
+    setContext(context: ContextualClass) {
+        let css = this.context.append('alert');
+        this.replaceCssName(css, context.append('alert'));
+        this.context = context;
     }
-
-    clear() {
-        this.setMessage('');
-    }
-
-    success(message: string) {
-        ContextualClass.success(this.vm.contextualClass);
-        this.setMessage(message);
-    }
-
-    info(message: string) {
-        ContextualClass.info(this.vm.contextualClass);
-        this.setMessage(message);
-    }
-
-    async infoAction(message: string, a: () => Promise<any>) {
-        this.info(message);
-        try {
-            await a();
-        }
-        finally {
-            this.clear();
-        }
-    }
-
-    warning(message: string) {
-        ContextualClass.warning(this.vm.contextualClass);
-        this.setMessage(message);
-    }
-
-    danger(message: string) {
-        ContextualClass.danger(this.vm.contextualClass);
-        this.setMessage(message);
-    }
-
-    private setMessage(message: string) {
-        message = _.trim(message);
-        if (message) {
-            this.vm.message(message);
-        }
-        this.debouncedSetMessage(message);
-    }
-
-    private debouncedSetMessage = _.debounce((message: string) => {
-        this.vm.message(message);
-    }, 500);
 }

@@ -1,13 +1,17 @@
-﻿import { ComplexField } from '../../Shared/Forms/ComplexField';
-import { AddressInputFieldViewModel } from './AddressInputFieldViewModel';
+﻿import { ComplexFieldFormGroup } from '../../Shared/Forms/ComplexFieldFormGroup';
+import { BlockViewModel } from '../../Shared/Html/BlockViewModel';
 
-export class AddressInputField extends ComplexField {
-    constructor(prefix: string, name: string, private readonly vm: AddressInputFieldViewModel) {
-        super(prefix, name, vm.caption, vm.value);
+export class AddressInputField extends ComplexFieldFormGroup {
+    constructor(
+        prefix: string,
+        name: string,
+        vm: BlockViewModel = new BlockViewModel()
+    ) {
+        super(prefix, name, vm);
     }
 
-    readonly Line1 = this.addTextInputField('Line1', this.vm.value.Line1);
-    readonly City = this.addTextInputField('City', this.vm.value.City);
-    readonly State = this.addTextInputField('State', this.vm.value.State);
-    readonly Zip = this.addTextInputField('Zip', this.vm.value.Zip);
+    readonly Line1 = this.addTextInputFormGroup('Line1');
+    readonly City = this.addTextInputFormGroup('City');
+    readonly State = this.addTextInputFormGroup('State');
+    readonly Zip = this.addNumberInputFormGroup('Zip');
 }

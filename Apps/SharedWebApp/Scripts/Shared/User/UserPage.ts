@@ -1,15 +1,11 @@
-﻿import 'reflect-metadata';
-import { UserPageViewModel } from "./UserPageViewModel";
-import { Alert } from '../Alert';
-import { UrlBuilder } from '../UrlBuilder';
-import { startup } from 'xtistart';
+﻿import { UrlBuilder } from '../UrlBuilder';
+import { Startup } from 'xtistart';
 import { WebPage } from '../WebPage';
-import { singleton, container } from 'tsyringe';
-import { AppApi } from '../AppApi';
+import { MessageAlert } from '../MessageAlert';
+import { PageFrame } from '../PageFrame';
 
-@singleton()
-class UserPage {
-    constructor(private readonly vm: UserPageViewModel) {
+export class UserPage {
+    constructor(protected readonly page: PageFrame) {
         this.goToReturnUrl();
     }
 
@@ -20,10 +16,11 @@ class UserPage {
         if (returnUrl) {
             returnUrl = decodeURIComponent(returnUrl);
         }
-        returnUrl = container.resolve(AppApi).url.addPart(returnUrl).getUrl();
+        let defaultApi = this.page.defaultApi();
+        returnUrl = defaultApi ? defaultApi.url.addPart(returnUrl).value() : '/';
         new WebPage(returnUrl).open();
     }
 
-    private readonly alert = new Alert(this.vm.alert);
+    private readonly alert = this.page.addContent(new MessageAlert());
 }
-startup(UserPageViewModel, UserPage);
+new UserPage(new Startup().build());

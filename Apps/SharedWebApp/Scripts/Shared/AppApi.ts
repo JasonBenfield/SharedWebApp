@@ -3,6 +3,10 @@ import { AppApiEvents } from "./AppApiEvents";
 import { AppResourceUrl } from "./AppResourceUrl";
 import { XtiUrl } from './XtiUrl';
 
+export type apiConstructor<T extends AppApi> = {
+    new(events: AppApiEvents, baseUrl: string, version: string): T;
+};
+
 export class AppApi {
     constructor(
         private readonly events: AppApiEvents,
@@ -10,7 +14,13 @@ export class AppApi {
         app: string,
         version: string
     ) {
-        this.resourceUrl = AppResourceUrl.app(baseUrl, app, version, XtiUrl.current.path.modifier, pageContext.CacheBust);
+        this.resourceUrl = AppResourceUrl.app(
+            baseUrl,
+            app,
+            version,
+            XtiUrl.current.path.modifier,
+            pageContext.CacheBust
+        );
     }
 
     private readonly resourceUrl: AppResourceUrl;

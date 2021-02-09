@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ErrorList = void 0;
 var ErrorList = /** @class */ (function () {
     function ErrorList() {
         this.errors = [];

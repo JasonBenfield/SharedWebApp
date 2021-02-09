@@ -1,9 +1,8 @@
-﻿import * as ko from 'knockout';
-import { ComponentTemplateAsync } from '../../Shared/ComponentTemplateAsync';
-export class AccountViewModel {
-    constructor() {
-        new ComponentTemplateAsync(this.componentName(), '/Shared/Current/Home/Account').register();
-    }
+﻿import { ComponentTemplateAsync } from '../../Shared/ComponentTemplateAsync';
+import { HtmlComponentViewModel } from '../../Shared/Html/HtmlComponentViewModel';
 
-    readonly componentName = ko.observable('account');
+export class AccountViewModel extends HtmlComponentViewModel {
+    constructor() {
+        super(new ComponentTemplateAsync('account', '/Shared/Current/Home/Account'));
+    }
 }

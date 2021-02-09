@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Awaitable = void 0;
 var Awaitable = /** @class */ (function () {
     function Awaitable() {
         this._resolve = null;

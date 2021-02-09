@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AppResourceUrl = void 0;
 var XtiPath_1 = require("./XtiPath");
 var UrlBuilder_1 = require("./UrlBuilder");
 var AppResourceUrl = /** @class */ (function () {
@@ -9,8 +8,9 @@ var AppResourceUrl = /** @class */ (function () {
         this.path = path;
         this.cacheBust = cacheBust;
         this.url = new UrlBuilder_1.UrlBuilder(baseUrl)
-            .addPart(path.format());
-        this.url.addQuery('cacheBust', cacheBust);
+            .addPart(path.format())
+            .addQuery('cacheBust', cacheBust)
+            .url;
     }
     AppResourceUrl.app = function (baseUrl, appKey, version, modifier, cacheBust) {
         return new AppResourceUrl(baseUrl, XtiPath_1.XtiPath.app(appKey, version, modifier), cacheBust);
@@ -19,7 +19,7 @@ var AppResourceUrl = /** @class */ (function () {
         get: function () {
             return new UrlBuilder_1.UrlBuilder("/" + this.path.format());
         },
-        enumerable: false,
+        enumerable: true,
         configurable: true
     });
     AppResourceUrl.prototype.withGroup = function (group) {
@@ -29,7 +29,7 @@ var AppResourceUrl = /** @class */ (function () {
         return new AppResourceUrl(this.baseUrl, this.path.withAction(action), this.cacheBust);
     };
     AppResourceUrl.prototype.toString = function () {
-        return this.url.getUrl();
+        return this.url.value();
     };
     return AppResourceUrl;
 }());

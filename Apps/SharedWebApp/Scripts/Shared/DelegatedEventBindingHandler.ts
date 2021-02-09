@@ -10,14 +10,18 @@ export class DelegatedEventBindingHandler implements ko.BindingHandler<any> {
         }
         let eventsToHandle: DelegatedEvent[] = value;
         for (let eventOptions of eventsToHandle) {
-            $element.on(`${eventOptions.event}.delegatedEvent`, eventOptions.selector, function (event) {
-                let context = ko.dataFor(this);
-                let result = eventOptions.callback.call(viewModel, context, event.originalEvent || event);
-                if (result !== true) {
-                    event.preventDefault();
-                }
-                return result === undefined ? false : result;
-            });
+            if (eventOptions.callback) {
+                $element.on(`${eventOptions.event}.delegatedEvent`, eventOptions.selector, function (event) {
+                    let context = ko.dataFor(this);
+                    let result = eventOptions.callback.call(
+                        viewModel, context, event.originalEvent || event
+                    );
+                    if (result !== true) {
+                        event.preventDefault();
+                    }
+                    return result === undefined ? false : result;
+                });
+            }
         }
         ko.utils.domNodeDisposal.addDisposeCallback(element, () => {
             let $el = $element;

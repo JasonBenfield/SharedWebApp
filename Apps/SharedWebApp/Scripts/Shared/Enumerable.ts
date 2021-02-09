@@ -75,3 +75,15 @@ export class Any<T> {
 
     value() { return this.source.value().length > 0; }
 }
+
+export class EnumerableRange implements IEnumerable<number> {
+    constructor(start: number, count: number) {
+        for (let i = start; i < start + count; i++) {
+            this.source.push(i);
+        }
+    }
+
+    private readonly source: number[] = [];
+
+    value() { return this.source; }
+}

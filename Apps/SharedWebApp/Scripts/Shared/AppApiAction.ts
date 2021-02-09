@@ -20,7 +20,7 @@ export class AppApiAction<TArgs,TResult> {
 
     async execute(data: TArgs, errorOptions: IActionErrorOptions) {
         let jsonText = new JsonText(data).toString();
-        let postResult = await new HttpClient().post(this.resourceUrl.url.getUrl(), jsonText);
+        let postResult = await new HttpClient().post(this.resourceUrl.url.value(), jsonText);
         let result: TResult;
         let apiError: AppApiError;
         result = postResult && postResult.result && postResult.result.Data;

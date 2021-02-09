@@ -64,6 +64,8 @@ function Shared-ExportWeb {
     param(
         [switch] $Prod
     )
+    tsc -p "$($script:sharedConfig.ProjectDir)\Scripts\$($script:sharedConfig.AppName)\tsconfig.json"
+    
     $script:sharedConfig | Xti-ExportWeb @PsBoundParameters
 }
 
