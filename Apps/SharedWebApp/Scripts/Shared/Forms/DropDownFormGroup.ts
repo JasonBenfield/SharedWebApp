@@ -21,6 +21,8 @@ export class DropDownFormGroup<TValue> extends SimpleFieldFormGroup<TValue> {
             select.addCssName('form-control');
         });
 
+    readonly valueChanged = this.select.changed;
+
     getValue() {
         return this.select.getValue();
     }

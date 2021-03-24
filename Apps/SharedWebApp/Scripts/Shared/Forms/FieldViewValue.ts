@@ -9,8 +9,10 @@
         this.value = value;
     }
 
-    setValueFromView(value: any) {
-        this.value = this._fromView(value);
+    setValueFromView(viewValue: any) {
+        let value = this._fromView(viewValue);
+        this.value = value;
+        return value;
     }
 
     protected _fromView(value: any) {

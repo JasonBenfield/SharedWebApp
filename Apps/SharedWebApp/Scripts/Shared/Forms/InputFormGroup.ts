@@ -1,4 +1,5 @@
-﻿import { BlockViewModel } from "../Html/BlockViewModel";
+﻿import { DefaultEvent } from "../Events";
+import { BlockViewModel } from "../Html/BlockViewModel";
 import { Input } from "../Html/Input";
 import { SimpleFieldFormGroup } from "./SimpleFieldFormGroup";
 import { TypedFieldViewValue } from "./TypedFieldViewValue";
@@ -17,8 +18,12 @@ export abstract class InputFormGroup<TValue> extends SimpleFieldFormGroup<TValue
         this.input.changed.register(this.onInputValueChanged.bind(this));
     }
 
-    private onInputValueChanged(value: string) {
-        this.viewValue.setValueFromView(value);
+    private readonly _valueChanged = new DefaultEvent<TValue>(this);
+    readonly valueChanged = this._valueChanged.handler();
+
+    private onInputValueChanged(viewValue: string) {
+        let value = this.viewValue.setValueFromView(viewValue);
+        this._valueChanged.invoke(value);
     }
 
     readonly input = this.inputGroup.insertContent(0, new Input())
