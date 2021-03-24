@@ -1,9 +1,13 @@
-﻿import { UrlBuilder } from "./UrlBuilder";
+﻿import { Url } from "./Url";
+import { UrlBuilder } from "./UrlBuilder";
 
 export class WebPage {
-    constructor(url: string | UrlBuilder) {
+    constructor(url: string | UrlBuilder | Url) {
         if (url instanceof UrlBuilder) {
-            this.url = url.getUrl();
+            this.url = url.value();
+        }
+        else if (url instanceof Url) {
+            this.url = url.value();
         }
         else {
             this.url = url;

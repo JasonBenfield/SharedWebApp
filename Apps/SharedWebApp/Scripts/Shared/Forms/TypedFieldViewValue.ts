@@ -1,15 +1,9 @@
 ﻿import { FieldViewValue } from "./FieldViewValue";
 
 export class TypedFieldViewValue<TView, TActual> extends FieldViewValue {
-    getValue() {
-        return <TActual>super.getValue();
-    }
+    getValue: () => TActual;
 
-    setValue(value: TActual) {
-        super.setValue(value);
-    }
+    setValue: (value: TActual) => void;
 
-    setValueFromView(value: TView) {
-        super.setValueFromView(value);
-    }
+    setValueFromView: (value: TView) => TActual;
 }

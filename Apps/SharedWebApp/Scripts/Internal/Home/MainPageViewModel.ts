@@ -5,8 +5,8 @@ import { AccountViewModel } from './AccountViewModel';
 
 @singleton()
 export class MainPageViewModel extends PageViewModel {
-    constructor() {
-        super(template);
-    }
+    //constructor() {
+    //    super(template);
+    //}
     readonly account = new AccountViewModel();
 }

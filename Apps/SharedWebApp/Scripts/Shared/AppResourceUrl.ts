@@ -1,5 +1,6 @@
 ﻿import { XtiPath } from "./XtiPath";
 import { UrlBuilder } from "./UrlBuilder";
+import { Url } from "./Url";
 
 export class AppResourceUrl {
     static app(baseUrl: string, appKey: string, version: string, modifier: string, cacheBust: string) {
@@ -12,11 +13,12 @@ export class AppResourceUrl {
         private readonly cacheBust: string
     ) {
         this.url = new UrlBuilder(baseUrl)
-            .addPart(path.format());
-        this.url.addQuery('cacheBust', cacheBust);
+            .addPart(path.format())
+            .addQuery('cacheBust', cacheBust)
+            .url;
     }
 
-    readonly url: UrlBuilder;
+    readonly url: Url;
 
     get relativeUrl() {
         return new UrlBuilder(`/${this.path.format()}`);
@@ -31,6 +33,6 @@ export class AppResourceUrl {
     }
 
     toString() {
-        return this.url.getUrl();
+        return this.url.value();
     }
 }

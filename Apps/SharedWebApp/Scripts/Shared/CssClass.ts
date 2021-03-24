@@ -10,19 +10,33 @@ export class CssClass {
     private value: string | null = null;
     private readonly names: string[] = [];
 
+    clear() {
+        this.names.splice(0, this.names.length);
+        return this;
+    }
+
+    addFrom(cssClass: CssClass) {
+        if (cssClass) {
+            this.addName(cssClass.value);
+        }
+        return this;
+    }
+
     addName(name: string) {
         return this.addNames(name);
     }
 
     addNames(...names: string[]) {
-        let added = false;
-        for (let name of names) {
-            if (this._addName(name)) {
-                added = true;
+        if (names) {
+            let added = false;
+            for (let name of names) {
+                if (this._addName(name)) {
+                    added = true;
+                }
             }
-        }
-        if (added) {
-            this.updateValue();
+            if (added) {
+                this.updateValue();
+            }
         }
         return this;
     }
@@ -54,14 +68,16 @@ export class CssClass {
     }
 
     removeNames(...names: string[]) {
-        let removed = false;
-        for (let name of names) {
-            if (this._removeName(name)) {
-                removed = true;
+        if (names) {
+            let removed = false;
+            for (let name of names) {
+                if (this._removeName(name)) {
+                    removed = true;
+                }
             }
-        }
-        if (removed) {
-            this.updateValue();
+            if (removed) {
+                this.updateValue();
+            }
         }
         return this;
     }
@@ -79,7 +95,7 @@ export class CssClass {
             }
             else {
                 let index = this.names.indexOf(nameParts[0]);
-                if (index < 0) {
+                if (index >= 0) {
                     this.names.splice(index, 1);
                     removed = true;
                 }

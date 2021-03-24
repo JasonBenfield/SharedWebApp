@@ -1,20 +1,29 @@
 ﻿import { ModalErrorComponentViewModel } from './ModalErrorComponentViewModel';
-import { Command } from '../Command';
+import { Command } from '../Command/Command';
 import { ModalErrorViewModel } from './ModalErrorViewModel';
 import { ErrorModel } from '../ErrorModel';
-import { singleton } from 'tsyringe';
 import { ModalErrorItemViewModel } from './ModalErrorItemViewModel';
 import { Any, FilteredArray } from '../Enumerable';
 import { CssClass } from '../CssClass';
+import { ContextualClass } from '../ContextualClass';
 
-@singleton()
-export class ModalErrorComponent {
+export class ModalErrorComponent implements IComponent {
     constructor(
-        private readonly vm: ModalErrorComponentViewModel
+        private readonly vm: ModalErrorComponentViewModel = new ModalErrorComponentViewModel()
     ) {
-        this.okCommand.setText('OK');
-        this.okCommand.makeDanger();
         this.vm.modalOptions.closed.register(this.onClosed.bind(this));
+    }
+
+    addToContainer(container: IAggregateComponent) {
+        return container.addItem(this.vm, this);
+    }
+
+    insertIntoContainer(container: IAggregateComponent, index: number) {
+        return container.insertItem(index, this.vm, this);
+    }
+
+    removeFromContainer(container: IAggregateComponent) {
+        return container.removeItem(this);
     }
 
     readonly errorSelected = this.vm.errorSelected;
@@ -56,7 +65,14 @@ export class ModalErrorComponent {
         this.vm.modalOptions.command('show');
     }
 
-    readonly okCommand = new Command(this.vm.okCommand, this.ok.bind(this));
+    readonly okCommand = new Command(this.ok.bind(this))
+        .configure(c => {
+            c.addButton(this.vm.okCommand)
+                .configure(b => {
+                    b.setText('OK');
+                    b.setContext(ContextualClass.danger);
+                });
+        });
 
     private ok() {
         this.vm.errors([]);

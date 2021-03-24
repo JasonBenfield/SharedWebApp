@@ -7,7 +7,7 @@ export class AppApiView<TArgs> {
         resourceUrl: AppResourceUrl,
         actionName: string
     ) {
-        this.url = resourceUrl.withAction(actionName).url.getUrl();
+        this.url = resourceUrl.withAction(actionName).url.value();
     }
 
     private readonly url: string;

@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FormattedDate = void 0;
 var FormattedDate = /** @class */ (function () {
     function FormattedDate(value, options) {
         this.value = value;

@@ -1,7 +1,4 @@
-﻿import { singleton } from 'tsyringe';
-
-@singleton()
-export class HostEnvironment {
+﻿export class HostEnvironment {
     constructor() {
         this.isTest = pageContext.EnvironmentName === 'Test';
         this.isDevelopment = pageContext.EnvironmentName === 'Development';

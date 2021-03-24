@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FieldViewValue = void 0;
 var FieldViewValue = /** @class */ (function () {
     function FieldViewValue() {
     }
@@ -10,8 +9,10 @@ var FieldViewValue = /** @class */ (function () {
     FieldViewValue.prototype.setValue = function (value) {
         this.value = value;
     };
-    FieldViewValue.prototype.setValueFromView = function (value) {
-        this.value = this._fromView(value);
+    FieldViewValue.prototype.setValueFromView = function (viewValue) {
+        var value = this._fromView(viewValue);
+        this.value = value;
+        return value;
     };
     FieldViewValue.prototype._fromView = function (value) {
         return value;
