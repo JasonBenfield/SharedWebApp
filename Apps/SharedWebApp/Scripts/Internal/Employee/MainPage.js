@@ -53,9 +53,9 @@ var MainPage = /** @class */ (function () {
         this.saveCommand.execute();
     };
     MainPage.prototype.test = function () {
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function () {
             var action, result;
-            return tslib_1.__generator(this, function (_a) {
+            return (0, tslib_1.__generator)(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         action = new AppApiAction_1.AppApiAction(new AppApiEvents_1.AppApiEvents(function () { }), AppResourceUrl_1.AppResourceUrl.app(location.protocol + "//" + location.host, 'Shared', 'Current', '', '')
@@ -71,9 +71,9 @@ var MainPage = /** @class */ (function () {
     };
     MainPage.prototype.save = function () {
         var _this = this;
-        return this.alert.infoAction('Saving...', function () { return tslib_1.__awaiter(_this, void 0, void 0, function () {
+        return this.alert.infoAction('Saving...', function () { return (0, tslib_1.__awaiter)(_this, void 0, void 0, function () {
             var action, result;
-            return tslib_1.__generator(this, function (_a) {
+            return (0, tslib_1.__generator)(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         action = new AppApiAction_1.AppApiAction(new AppApiEvents_1.AppApiEvents(function () { }), AppResourceUrl_1.AppResourceUrl.app(location.protocol + "//" + location.host, 'Shared', 'Current', '', '').withGroup('Employee'), 'AddEmployee', 'Add Employee');

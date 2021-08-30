@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.FormGroup = void 0;
 var tslib_1 = require("tslib");
 var Column_1 = require("../Grid/Column");
 var LabelColumn_1 = require("../Grid/LabelColumn");
@@ -9,7 +10,7 @@ var InputGroup_1 = require("../Html/InputGroup");
 var TextSpan_1 = require("../Html/TextSpan");
 var MarginCss_1 = require("../MarginCss");
 var FormGroup = /** @class */ (function (_super) {
-    tslib_1.__extends(FormGroup, _super);
+    (0, tslib_1.__extends)(FormGroup, _super);
     function FormGroup(vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         var _this = _super.call(this, vm) || this;

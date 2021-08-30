@@ -11,6 +11,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using XTI_App;
+using XTI_App.Abstractions;
+using XTI_App.Api;
+using XTI_App.Fakes;
 using XTI_WebApp.Fakes;
 using XTI_WebApp.TagHelpers;
 
@@ -110,14 +113,17 @@ namespace XTI_WebApp.AspTests
                         services.AddSingleton(sp => SharedAppKey.AppKey);
                         services.AddSingleton<IUrlHelperFactory, UrlHelperFactory>();
                         services.AddScoped<CacheBust>();
-                        services.AddSingleton(sp => XtiPath.Parse(path));
+                        services.AddSingleton<IXtiPathAccessor, FakeXtiPathAccessor>();
                         services.AddScoped<MainScriptTagHelper>();
+                        services.AddScoped<AppApiFactory, SharedAppApiFactory>();
                         services.AddScoped<SharedAppSetup>();
                     }
                 )
                 .Build();
             var scope = host.Services.CreateScope();
             var sp = scope.ServiceProvider;
+            var pathAccessor = (FakeXtiPathAccessor)sp.GetService<IXtiPathAccessor>();
+            pathAccessor.SetPath(XtiPath.Parse(path));
             var setup = sp.GetService<SharedAppSetup>();
             await setup.Run();
             var factory = sp.GetService<AppFactory>();

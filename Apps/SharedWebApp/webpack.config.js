@@ -33,11 +33,11 @@ const exportModule = {
                     loader: 'file-loader',
                     options: {
                         name: (resourcePath, resourceQuery) => {
-                                if (/@fortawesome[\\\/]fontawesome-free/.test(resourcePath)) {
-                                    return '../../styles/css/fontawesome/[name].css';
-                                }
-                                return '../../styles/css/[name].css';
+                            if (/@fortawesome[\\\/]fontawesome-free/.test(resourcePath)) {
+                                return '../../styles/css/fontawesome/[name].css';
                             }
+                            return '../../styles/css/[name].css';
+                        }
                     }
                 }
             ]
@@ -49,7 +49,8 @@ const exportModule = {
                 options: {
                     minimize: {
                         removeComments: false
-                    }
+                    },
+                    esModule: false
                 }
             }]
         },

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ModalErrorComponentViewModel = void 0;
 var tslib_1 = require("tslib");
 var ko = require("knockout");
 var template = require("./ModalErrorComponent.html");
@@ -9,7 +10,7 @@ var Events_1 = require("../Events");
 var ComponentViewModel_1 = require("../ComponentViewModel");
 var ButtonViewModel_1 = require("../Html/ButtonViewModel");
 var ModalErrorComponentViewModel = /** @class */ (function (_super) {
-    tslib_1.__extends(ModalErrorComponentViewModel, _super);
+    (0, tslib_1.__extends)(ModalErrorComponentViewModel, _super);
     function ModalErrorComponentViewModel() {
         var _this = _super.call(this, new ComponentTemplate_1.ComponentTemplate('modal-error-component', template)) || this;
         _this.title = ko.observable('');

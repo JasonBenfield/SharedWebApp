@@ -19,6 +19,16 @@ export class FormComponent extends HtmlContainerComponent {
 
     readonly content = new AggregateComponent(this.vm.content);
 
+    clearAutocomplete() { this.setAutocomplete(null); }
+
+    setAutocompleteOff() { this.setAutocomplete('off'); }
+
+    setAutocompleteNewPassword() { this.setAutocomplete('new-password'); }
+
+    private setAutocomplete(autocomplete: string) {
+        this.vm.autocomplete(autocomplete);
+    }
+
     setAction(action: string) { this.vm.action(action); }
 
     setMethod(method: string) { this.vm.method(method); }

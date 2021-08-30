@@ -1,11 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.InputFormGroup = void 0;
 var tslib_1 = require("tslib");
 var Events_1 = require("../Events");
 var Input_1 = require("../Html/Input");
 var SimpleFieldFormGroup_1 = require("./SimpleFieldFormGroup");
 var InputFormGroup = /** @class */ (function (_super) {
-    tslib_1.__extends(InputFormGroup, _super);
+    (0, tslib_1.__extends)(InputFormGroup, _super);
     function InputFormGroup(prefix, name, vm, viewValue) {
         var _this = _super.call(this, prefix, name, vm) || this;
         _this.viewValue = viewValue;

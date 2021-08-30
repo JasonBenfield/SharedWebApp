@@ -5,31 +5,10 @@ $script:sharedConfig = [PSCustomObject]@{
     RepoName = "SharedWebApp"
     AppName = "Shared"
     AppType = "WebApp"
-    ProjectDir = "Apps\SharedWebApp"
+    AppsToImport = ""
 }
 
-function Shared-New-XtiIssue {
-    param(
-        [Parameter(Mandatory, Position=0)]
-        [string] $IssueTitle,
-        $Labels = @(),
-        [string] $Body = "",
-        [switch] $Start
-    )
-    $script:sharedConfig | New-XtiIssue @PsBoundParameters
-}
-
-function Shared-Xti-StartIssue {
-    param(
-        [Parameter(Position=0)]
-        [long]$IssueNumber = 0,
-        $IssueBranchTitle = "",
-        $AssignTo = ""
-    )
-    $script:sharedConfig | Xti-StartIssue @PsBoundParameters
-}
-
-function Shared-New-XtiVersion {
+function Shared-NewVersion {
     param(
         [Parameter(Position=0)]
         [ValidateSet("major", "minor", "patch")]
@@ -40,61 +19,71 @@ function Shared-New-XtiVersion {
     $script:sharedConfig | New-XtiVersion @PsBoundParameters
 }
 
-function Shared-Xti-Merge {
+function Shared-NewIssue {
+    param(
+        [Parameter(Mandatory, Position=0)]
+        [string] $IssueTitle,
+        [switch] $Start
+    )
+    $script:sharedConfig | New-XtiIssue @PsBoundParameters
+}
+
+function Shared-StartIssue {
     param(
         [Parameter(Position=0)]
-        [string] $CommitMessage
+        [long]$IssueNumber = 0
     )
-    $script:sharedConfig | Xti-Merge @PsBoundParameters
+    $script:sharedConfig | Xti-StartIssue @PsBoundParameters
 }
 
-function Shared-New-XtiPullRequest {
+function Shared-CompleteIssue {
     param(
-        [Parameter(Position=0)]
-        [string] $CommitMessage
+        [ValidateSet("Development", "Production", "Staging", "Test")]
+        $EnvName = "Production"
     )
-    $script:sharedConfig | New-XtiPullRequest @PsBoundParameters
+    $script:sharedConfig | Xti-CompleteIssue @PsBoundParameters
 }
 
-function Shared-Xti-PostMerge {
-    $script:sharedConfig | Xti-PostMerge
-}
-
-function Shared-ExportWeb {
+function Shared-Build {
     param(
-        [switch] $Prod
+        [ValidateSet("Development", "Production", "Staging", "Test")]
+        $EnvName = "Development"
     )
-    tsc -p "$($script:sharedConfig.ProjectDir)\Scripts\$($script:sharedConfig.AppName)\tsconfig.json"
-    
-    $script:sharedConfig | Xti-ExportWeb @PsBoundParameters
+    $script:sharedConfig | Xti-BuildWebApp @PsBoundParameters
 }
 
 function Shared-Publish {
     param(
-        [switch] $Prod
+        [ValidateSet("Development", "Production", "Staging", "Test")]
+        $EnvName = "Development",
+        [switch] $NoInstall
     )
-    Shared-Webpack
-    dotnet build 
-    if($Prod) {
-        $branch = Get-CurrentBranchname
-        Xti-BeginPublish -BranchName $branch
-        $script:sharedConfig | Xti-PublishPackage -DisableUpdateVersion -Prod
-        Shared-ExportWeb -Prod
-        Xti-EndPublish -BranchName $branch
-        $script:sharedConfig | Xti-Merge
-    }
-    else{
-        $script:sharedConfig | Xti-PublishPackage -DisableUpdateVersion
-        Shared-ExportWeb
-    }
+    $DestinationMachine = Get-DestinationMachine --EnvName $EnvName
+    $PsBoundParameters.Add("DestinationMachine", $DestinationMachine)
+    $script:sharedConfig | Xti-Publish @PsBoundParameters
 }
 
-function Shared-Webpack {
+function Shared-Install {
     param(
+        [ValidateSet("Development", "Production", "Staging", "Test")]
+        $EnvName = "Development"
     )
-    $ProjectDir = $script:sharedConfig.ProjectDir
-    $currentDir = (Get-Item .).FullName
-    Set-Location $ProjectDir
-    webpack
-    Set-Location $currentDir
+    $DestinationMachine = Get-DestinationMachine --EnvName $EnvName
+    $PsBoundParameters.Add("DestinationMachine", $DestinationMachine)
+    $script:sharedConfig | Xti-Install @PsBoundParameters
+}
+
+function Get-DestinationMachine {
+    param(
+        $EnvName
+    )
+    if($EnvName -eq "Development")
+    {
+        $DestinationMachine = ""
+    }
+    else
+    {
+        $DestinationMachine = "finduilas.xartogg.com"
+    }
+    return $DestinationMachine
 }

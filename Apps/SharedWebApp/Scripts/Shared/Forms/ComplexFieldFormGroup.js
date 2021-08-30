@@ -1,12 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ComplexFieldFormGroup = void 0;
 var tslib_1 = require("tslib");
 var BlockViewModel_1 = require("../Html/BlockViewModel");
 var FormGroup_1 = require("../Html/FormGroup");
 var ComplexFieldLayout_1 = require("./ComplexFieldLayout");
 var FormGroupCollection_1 = require("./FormGroupCollection");
 var ComplexFieldFormGroup = /** @class */ (function (_super) {
-    tslib_1.__extends(ComplexFieldFormGroup, _super);
+    (0, tslib_1.__extends)(ComplexFieldFormGroup, _super);
     function ComplexFieldFormGroup(prefix, name, vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         var _this = _super.call(this, vm) || this;

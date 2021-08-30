@@ -12,4 +12,5 @@ export class InputViewModel extends HtmlComponentViewModel {
     readonly maxLength = ko.observable<number>(null);
     readonly isEnabled = ko.observable(true);
     readonly hasFocus = ko.observable(false);
+    readonly autocomplete = ko.observable<string>(null);
 }

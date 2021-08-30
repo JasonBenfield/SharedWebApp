@@ -1,6 +1,5 @@
 ﻿import * as ko from 'knockout';
 import * as _ from 'lodash';
-import { delay } from 'tsyringe';
 import { DelayedAction } from './DelayedAction';
 
 export class SubmitBindingHandler implements ko.BindingHandler {

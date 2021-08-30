@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.FlexColumn = void 0;
 var tslib_1 = require("tslib");
 var Block_1 = require("./Block");
 var BlockViewModel_1 = require("./BlockViewModel");
 var FlexColumn = /** @class */ (function (_super) {
-    tslib_1.__extends(FlexColumn, _super);
+    (0, tslib_1.__extends)(FlexColumn, _super);
     function FlexColumn(vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         var _this = _super.call(this, vm) || this;
