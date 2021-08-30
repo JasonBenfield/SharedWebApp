@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.UpperRangeConstraint = exports.LowerRangeConstraint = exports.NumberConstraintCollection = exports.DateConstraintCollection = exports.TextConstraintCollection = exports.ConstraintCollection = void 0;
 var tslib_1 = require("tslib");
 var ErrorModel_1 = require("../../Shared/ErrorModel");
 var ConstraintResult_1 = require("./ConstraintResult");
@@ -42,7 +43,7 @@ var ConstraintCollection = /** @class */ (function () {
 }());
 exports.ConstraintCollection = ConstraintCollection;
 var TextConstraintCollection = /** @class */ (function (_super) {
-    tslib_1.__extends(TextConstraintCollection, _super);
+    (0, tslib_1.__extends)(TextConstraintCollection, _super);
     function TextConstraintCollection() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
@@ -53,7 +54,7 @@ var TextConstraintCollection = /** @class */ (function (_super) {
 }(ConstraintCollection));
 exports.TextConstraintCollection = TextConstraintCollection;
 var DateConstraintCollection = /** @class */ (function (_super) {
-    tslib_1.__extends(DateConstraintCollection, _super);
+    (0, tslib_1.__extends)(DateConstraintCollection, _super);
     function DateConstraintCollection() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
@@ -73,7 +74,7 @@ var DateConstraintCollection = /** @class */ (function (_super) {
 }(ConstraintCollection));
 exports.DateConstraintCollection = DateConstraintCollection;
 var NumberConstraintCollection = /** @class */ (function (_super) {
-    tslib_1.__extends(NumberConstraintCollection, _super);
+    (0, tslib_1.__extends)(NumberConstraintCollection, _super);
     function NumberConstraintCollection() {
         return _super !== null && _super.apply(this, arguments) || this;
     }

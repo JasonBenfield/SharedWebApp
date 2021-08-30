@@ -1,9 +1,17 @@
-﻿using XTI_App.Api;
+﻿using System;
+using XTI_App.Api;
 
 namespace SharedWebApp.Api
 {
     public sealed class SharedAppApiFactory : AppApiFactory
     {
-        protected override IAppApi _Create(IAppApiUser user) => new SharedAppApi(user);
+        private readonly IServiceProvider services;
+
+        public SharedAppApiFactory(IServiceProvider services)
+        {
+            this.services = services;
+        }
+
+        protected override IAppApi _Create(IAppApiUser user) => new SharedAppApi(user, services);
     }
 }

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Row = void 0;
 var tslib_1 = require("tslib");
 var FaIcon_1 = require("../FaIcon");
 var Block_1 = require("../Html/Block");
@@ -9,7 +10,7 @@ var TextBlock_1 = require("../Html/TextBlock");
 var Column_1 = require("./Column");
 var LabelColumn_1 = require("./LabelColumn");
 var Row = /** @class */ (function (_super) {
-    tslib_1.__extends(Row, _super);
+    (0, tslib_1.__extends)(Row, _super);
     function Row(vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         var _this = _super.call(this, vm) || this;

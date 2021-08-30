@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.HtmlContainerComponent = void 0;
 var tslib_1 = require("tslib");
 var AggregateComponent_1 = require("./AggregateComponent");
 var HtmlComponent_1 = require("./HtmlComponent");
 var HtmlContainerComponent = /** @class */ (function (_super) {
-    tslib_1.__extends(HtmlContainerComponent, _super);
+    (0, tslib_1.__extends)(HtmlContainerComponent, _super);
     function HtmlContainerComponent(vm, content) {
         if (content === void 0) { content = new AggregateComponent_1.AggregateComponent(vm.content); }
         var _this = _super.call(this, vm) || this;

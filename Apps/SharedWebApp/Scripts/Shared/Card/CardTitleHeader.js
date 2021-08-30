@@ -1,11 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.CardTitleHeader = void 0;
 var tslib_1 = require("tslib");
 var CardHeader_1 = require("./CardHeader");
 var BlockViewModel_1 = require("../Html/BlockViewModel");
 var TextBlock_1 = require("../Html/TextBlock");
 var CardTitleHeader = /** @class */ (function (_super) {
-    tslib_1.__extends(CardTitleHeader, _super);
+    (0, tslib_1.__extends)(CardTitleHeader, _super);
     function CardTitleHeader(title, vm) {
         if (title === void 0) { title = ''; }
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }

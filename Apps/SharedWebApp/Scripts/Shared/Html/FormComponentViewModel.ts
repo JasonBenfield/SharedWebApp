@@ -13,6 +13,7 @@ export class FormComponentViewModel extends HtmlComponentViewModel {
 
     readonly action = ko.observable<string>(null);
     readonly method = ko.observable<string>(null);
+    readonly autocomplete = ko.observable<string>(null);
 
     private readonly _submitted = new SimpleEvent(this);
     readonly submitted = this._submitted.handler();

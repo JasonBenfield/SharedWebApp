@@ -1,12 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Link = void 0;
 var tslib_1 = require("tslib");
 var WebPage_1 = require("../WebPage");
 var AggregateComponent_1 = require("./AggregateComponent");
 var HtmlContainerComponent_1 = require("./HtmlContainerComponent");
 var LinkViewModel_1 = require("./LinkViewModel");
 var Link = /** @class */ (function (_super) {
-    tslib_1.__extends(Link, _super);
+    (0, tslib_1.__extends)(Link, _super);
     function Link(vm) {
         if (vm === void 0) { vm = new LinkViewModel_1.LinkViewModel(); }
         var _this = _super.call(this, vm, new AggregateComponent_1.AggregateComponent(vm.content)) || this;

@@ -1,12 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.UnorderedList = void 0;
 var tslib_1 = require("tslib");
 var BaseList_1 = require("./BaseList");
 var ListItem_1 = require("./ListItem");
 var ListItemViewModel_1 = require("./ListItemViewModel");
 var UnorderedListViewModel_1 = require("./UnorderedListViewModel");
 var UnorderedList = /** @class */ (function (_super) {
-    tslib_1.__extends(UnorderedList, _super);
+    (0, tslib_1.__extends)(UnorderedList, _super);
     function UnorderedList(createItem, createItemVM, vm) {
         if (createItem === void 0) { createItem = null; }
         if (createItemVM === void 0) { createItemVM = null; }

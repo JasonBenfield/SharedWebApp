@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.DropdownBlock = void 0;
 var tslib_1 = require("tslib");
 var Block_1 = require("../Html/Block");
 var DropdownButton_1 = require("./DropdownButton");
@@ -8,7 +9,7 @@ var DropdownMenu_1 = require("./DropdownMenu");
 var DropdownLinkItem_1 = require("./DropdownLinkItem");
 var DropdownBlockViewModel_1 = require("./DropdownBlockViewModel");
 var DropdownBlock = /** @class */ (function (_super) {
-    tslib_1.__extends(DropdownBlock, _super);
+    (0, tslib_1.__extends)(DropdownBlock, _super);
     function DropdownBlock(vm) {
         if (vm === void 0) { vm = new DropdownBlockViewModel_1.DropdownBlockViewModel(); }
         var _this = _super.call(this, vm) || this;

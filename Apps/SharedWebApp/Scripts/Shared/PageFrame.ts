@@ -23,20 +23,24 @@ export type pageConstructor<TPage extends PageFrame> = {
 };
 
 export class PageFrame implements IPageFrame {
+    public readonly toolbar: Toolbar;
+    public readonly appTitle: TextSpan;
+    public readonly pageTitle: TextSmall;
+
     constructor(private readonly vm: PageViewModel = new PageViewModel()) {
         let frame = this.outerContent.addContent(new FlexColumn());
         frame.setName('PageFrame');
         frame.flexFill();
-        let toolbar = frame.addContent(new Toolbar());
-        toolbar.setName('PageFrame_MainToolbar');
-        toolbar.setBackgroundContext(ContextualClass.primary);
-        toolbar.setPadding(PaddingCss.xs(3));
-        toolbar.columnStart.setTextCss(new TextCss().context(ContextualClass.light));
-        let heading = toolbar.columnStart.addContent(new Heading1());
-        heading.addContent(new TextSpan(pageContext.AppTitle));
-        heading.addContent(new TextSmall(pageContext.PageTitle));
-        toolbar.columnEnd.addCssFrom(new AlignCss().self(a => a.xs('center')).cssClass());
-        let dropdown = toolbar.columnEnd.addContent(new DropdownBlock());
+        this.toolbar = frame.addContent(new Toolbar());
+        this.toolbar.setName('PageFrame_MainToolbar');
+        this.toolbar.setBackgroundContext(ContextualClass.primary);
+        this.toolbar.setPadding(PaddingCss.xs(3));
+        this.toolbar.columnStart.setTextCss(new TextCss().context(ContextualClass.light));
+        let heading = this.toolbar.columnStart.addContent(new Heading1());
+        this.appTitle = heading.addContent(new TextSpan(pageContext.AppTitle));
+        this.pageTitle = heading.addContent(new TextSmall(pageContext.PageTitle));
+        this.toolbar.columnEnd.addCssFrom(new AlignCss().self(a => a.xs('center')).cssClass());
+        let dropdown = this.toolbar.columnEnd.addContent(new DropdownBlock());
         if (!pageContext.IsAuthenticated) {
             dropdown.hide();
         }
@@ -49,7 +53,7 @@ export class PageFrame implements IPageFrame {
             .addContent(new TextSpan(pageContext.UserName));
         this.logoutMenuItem = dropdown.addLinkItem();
         this.logoutMenuItem.link.addContent(new TextSpan('Logout'));
-        this.logoutMenuItem.link.setHref(`${pageContext.BaseUrl}/Authenticator/Current/Auth/Logout`);
+        this.logoutMenuItem.link.setHref(`${pageContext.BaseUrl}/Hub/Current/Auth/Logout`);
         this.content = frame.addContent(new Block());
         this.content.flexFill();
         this.content.addCssName('h-100');

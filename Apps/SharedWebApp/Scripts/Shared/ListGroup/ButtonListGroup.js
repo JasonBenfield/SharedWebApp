@@ -1,12 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ButtonListGroup = void 0;
 var tslib_1 = require("tslib");
 var ListBlockViewModel_1 = require("../Html/ListBlockViewModel");
 var BaseListGroup_1 = require("./BaseListGroup");
 var ButtonListGroupItem_1 = require("./ButtonListGroupItem");
 var ButtonListItemViewModel_1 = require("./ButtonListItemViewModel");
 var ButtonListGroup = /** @class */ (function (_super) {
-    tslib_1.__extends(ButtonListGroup, _super);
+    (0, tslib_1.__extends)(ButtonListGroup, _super);
     function ButtonListGroup(createItem, createItemVM, vm) {
         if (createItem === void 0) { createItem = null; }
         if (createItemVM === void 0) { createItemVM = null; }

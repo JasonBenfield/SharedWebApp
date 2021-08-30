@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.AsyncCommand = void 0;
 var tslib_1 = require("tslib");
 var ButtonCommandItem_1 = require("./ButtonCommandItem");
 var AsyncCommand = /** @class */ (function () {
@@ -70,10 +71,10 @@ var AsyncCommand = /** @class */ (function () {
         }
     };
     AsyncCommand.prototype.execute = function (context) {
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function () {
             var canExecute;
             var _this = this;
-            return tslib_1.__generator(this, function (_a) {
+            return (0, tslib_1.__generator)(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         canExecute = this.canExecute();

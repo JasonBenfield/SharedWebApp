@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.MessageAlert = void 0;
 var tslib_1 = require("tslib");
 var _ = require("lodash");
 var ContextualClass_1 = require("./ContextualClass");
@@ -9,7 +10,7 @@ var HtmlComponent_1 = require("./Html/HtmlComponent");
 var TextBlock_1 = require("./Html/TextBlock");
 var Alert_1 = require("./Alert");
 var MessageAlert = /** @class */ (function (_super) {
-    tslib_1.__extends(MessageAlert, _super);
+    (0, tslib_1.__extends)(MessageAlert, _super);
     function MessageAlert(vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         var _this = _super.call(this, vm) || this;
@@ -27,14 +28,14 @@ var MessageAlert = /** @class */ (function (_super) {
         get: function () {
             return this._message;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(MessageAlert.prototype, "hasMessage", {
         get: function () {
             return Boolean(this._message);
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     MessageAlert.prototype.clear = function () {
@@ -49,8 +50,8 @@ var MessageAlert = /** @class */ (function (_super) {
         this.setMessage(message);
     };
     MessageAlert.prototype.infoAction = function (message, a) {
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
-            return tslib_1.__generator(this, function (_a) {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function () {
+            return (0, tslib_1.__generator)(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         this.info(message);

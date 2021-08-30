@@ -1,11 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Alert = void 0;
 var tslib_1 = require("tslib");
 var ContextualClass_1 = require("./ContextualClass");
 var BlockViewModel_1 = require("./Html/BlockViewModel");
 var Block_1 = require("./Html/Block");
 var Alert = /** @class */ (function (_super) {
-    tslib_1.__extends(Alert, _super);
+    (0, tslib_1.__extends)(Alert, _super);
     function Alert(vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         var _this = _super.call(this, vm) || this;

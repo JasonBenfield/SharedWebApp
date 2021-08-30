@@ -1,11 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.TextHeading1 = void 0;
 var tslib_1 = require("tslib");
 var Heading1_1 = require("./Heading1");
 var Heading1ViewModel_1 = require("./Heading1ViewModel");
 var TextSpan_1 = require("./TextSpan");
 var TextHeading1 = /** @class */ (function (_super) {
-    tslib_1.__extends(TextHeading1, _super);
+    (0, tslib_1.__extends)(TextHeading1, _super);
     function TextHeading1(text, vm) {
         if (text === void 0) { text = ''; }
         if (vm === void 0) { vm = new Heading1ViewModel_1.Heading1ViewModel(); }

@@ -23,6 +23,16 @@ export class Input extends HtmlComponent {
 
     disable() { this.vm.isEnabled(false); }
 
+    clearAutocomplete() { this.setAutocomplete(null); }
+
+    setAutocompleteOff() { this.setAutocomplete('off'); }
+
+    setAutocompleteNewPassword() { this.setAutocomplete('new-password'); }
+
+    private setAutocomplete(autocomplete: string) {
+        this.vm.autocomplete(autocomplete);
+    }
+
     private value: string;
 
     getValue() {

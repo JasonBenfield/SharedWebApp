@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Toolbar = void 0;
 var tslib_1 = require("tslib");
 var ColumnCss_1 = require("../ColumnCss");
 var Row_1 = require("../Grid/Row");
@@ -8,7 +9,7 @@ var BlockViewModel_1 = require("./BlockViewModel");
 var Container_1 = require("./Container");
 var HtmlComponent_1 = require("./HtmlComponent");
 var Toolbar = /** @class */ (function (_super) {
-    tslib_1.__extends(Toolbar, _super);
+    (0, tslib_1.__extends)(Toolbar, _super);
     function Toolbar(vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         var _this = _super.call(this, vm) || this;

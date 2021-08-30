@@ -1,17 +1,19 @@
-﻿using XTI_App.Api;
+﻿using System;
+using XTI_App.Api;
 using XTI_WebApp.Api;
 
 namespace SharedWebApp.Api
 {
     public sealed class SharedAppApi : WebAppApiWrapper
     {
-        public SharedAppApi(IAppApiUser user, ResourceAccess access = null)
+        public SharedAppApi(IAppApiUser user, IServiceProvider sp, ResourceAccess access = null)
             : base
             (
                 new AppApi
                 (
                     SharedAppKey.AppKey, user, access
-                )
+                ),
+                sp
             )
         {
             Employee = new EmployeeGroup

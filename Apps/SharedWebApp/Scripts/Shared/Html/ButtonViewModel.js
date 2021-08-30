@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ButtonViewModel = void 0;
 var tslib_1 = require("tslib");
 var ComponentTemplate_1 = require("../ComponentTemplate");
 var ko = require("knockout");
@@ -8,7 +9,7 @@ var HtmlComponentViewModel_1 = require("./HtmlComponentViewModel");
 var Events_1 = require("../Events");
 var AggregateComponentViewModel_1 = require("./AggregateComponentViewModel");
 var ButtonViewModel = /** @class */ (function (_super) {
-    tslib_1.__extends(ButtonViewModel, _super);
+    (0, tslib_1.__extends)(ButtonViewModel, _super);
     function ButtonViewModel() {
         var _this = _super.call(this, new ComponentTemplate_1.ComponentTemplate('button', template)) || this;
         _this.content = new AggregateComponentViewModel_1.AggregateComponentViewModel();

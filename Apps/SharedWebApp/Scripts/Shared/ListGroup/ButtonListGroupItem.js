@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ButtonListGroupItem = void 0;
 var tslib_1 = require("tslib");
 var Button_1 = require("../Html/Button");
 var ListGroupItem_1 = require("./ListGroupItem");
 var ButtonListGroupItem = /** @class */ (function (_super) {
-    tslib_1.__extends(ButtonListGroupItem, _super);
+    (0, tslib_1.__extends)(ButtonListGroupItem, _super);
     function ButtonListGroupItem(vm) {
         var _this = _super.call(this, vm) || this;
         var css = vm.css();

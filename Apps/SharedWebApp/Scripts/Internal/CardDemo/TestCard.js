@@ -11,7 +11,7 @@ var ColumnCss_1 = require("../../Shared/ColumnCss");
 var BlockViewModel_1 = require("../../Shared/Html/BlockViewModel");
 var TextBlock_1 = require("../../Shared/Html/TextBlock");
 var TestCard = /** @class */ (function (_super) {
-    tslib_1.__extends(TestCard, _super);
+    (0, tslib_1.__extends)(TestCard, _super);
     function TestCard(vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         var _this = _super.call(this, vm) || this;

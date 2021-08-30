@@ -7,16 +7,25 @@ export class UrlBuilder {
     static current() { return new UrlBuilder(location.href); }
 
     constructor(baseUrl: string) {
-        this._url = new Url(baseUrl);
-        this._query = new UrlQueryBuilder(this._url.query);
-        this._hash = new UrlHashBuilder(this._url.hash);
+        let url = baseUrl;
+        let hashIndex = url.indexOf('#');
+        this._hash = new UrlHashBuilder(hashIndex > -1 ? url.substr(hashIndex + 1) : '');
+        if (hashIndex > -1) {
+            url = url.substr(0, hashIndex);
+        }
+        let queryIndex = url.indexOf('?');
+        this._query = new UrlQueryBuilder(queryIndex > -1 ? url.substr(queryIndex + 1) : '');
+        if (queryIndex > -1) {
+            url = url.substr(0, queryIndex);
+        }
+        this._url = new Url(url);
     }
 
     private _url: Url;
     private readonly _query: UrlQueryBuilder;
     private readonly _hash: UrlHashBuilder;
 
-    get url() { return this._url; }
+    get url() { return new Url(this.value()); }
 
     addPart(part: string) {
         if (part) {
@@ -148,7 +157,16 @@ export class UrlBuilder {
     }
 
     value() {
-        return this._url.value();
+        let url = this._url.value();
+        let query = this._query.toString();
+        if (query) {
+            url += `?${query}`;
+        }
+        let hash = this._hash.toString();
+        if (hash) {
+            url += `#${hash}`;
+        }
+        return url;
     }
 
     withoutQueryAndHash() {

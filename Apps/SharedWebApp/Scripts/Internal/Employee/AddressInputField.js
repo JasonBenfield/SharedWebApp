@@ -5,7 +5,7 @@ var tslib_1 = require("tslib");
 var ComplexFieldFormGroup_1 = require("../../Shared/Forms/ComplexFieldFormGroup");
 var BlockViewModel_1 = require("../../Shared/Html/BlockViewModel");
 var AddressInputField = /** @class */ (function (_super) {
-    tslib_1.__extends(AddressInputField, _super);
+    (0, tslib_1.__extends)(AddressInputField, _super);
     function AddressInputField(prefix, name, vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         var _this = _super.call(this, prefix, name, vm) || this;
