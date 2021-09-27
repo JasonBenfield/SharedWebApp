@@ -7,7 +7,7 @@ var HtmlComponentViewModel_1 = require("./HtmlComponentViewModel");
 var template = require("./Select.html");
 var ko = require("knockout");
 var SelectViewModel = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(SelectViewModel, _super);
+    tslib_1.__extends(SelectViewModel, _super);
     function SelectViewModel() {
         var _this = _super.call(this, new ComponentTemplate_1.ComponentTemplate('select', template)) || this;
         _this.isEnabled = ko.observable(true);

@@ -46,16 +46,16 @@ var MainPage = /** @class */ (function () {
         });
         this.test();
         this.addEmployeeForm.Address.useLayout(function (fg) { return new AddressInputLayout_1.AddressInputLayout(fg); });
-        this.addEmployeeForm.submitted.register(this.onFormSubmit.bind(this));
+        //this.addEmployeeForm.submitted.register(this.onFormSubmit.bind(this));
         this.addEmployeeForm.executeLayout();
     }
     MainPage.prototype.onFormSubmit = function () {
         this.saveCommand.execute();
     };
     MainPage.prototype.test = function () {
-        return (0, tslib_1.__awaiter)(this, void 0, void 0, function () {
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
             var action, result;
-            return (0, tslib_1.__generator)(this, function (_a) {
+            return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         action = new AppApiAction_1.AppApiAction(new AppApiEvents_1.AppApiEvents(function () { }), AppResourceUrl_1.AppResourceUrl.app(location.protocol + "//" + location.host, 'Shared', 'Current', '', '')
@@ -71,9 +71,9 @@ var MainPage = /** @class */ (function () {
     };
     MainPage.prototype.save = function () {
         var _this = this;
-        return this.alert.infoAction('Saving...', function () { return (0, tslib_1.__awaiter)(_this, void 0, void 0, function () {
+        return this.alert.infoAction('Saving...', function () { return tslib_1.__awaiter(_this, void 0, void 0, function () {
             var action, result;
-            return (0, tslib_1.__generator)(this, function (_a) {
+            return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         action = new AppApiAction_1.AppApiAction(new AppApiEvents_1.AppApiEvents(function () { }), AppResourceUrl_1.AppResourceUrl.app(location.protocol + "//" + location.host, 'Shared', 'Current', '', '').withGroup('Employee'), 'AddEmployee', 'Add Employee');

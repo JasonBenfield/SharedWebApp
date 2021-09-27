@@ -7,7 +7,7 @@ var ListItem_1 = require("./ListItem");
 var ListItemViewModel_1 = require("./ListItemViewModel");
 var UnorderedListViewModel_1 = require("./UnorderedListViewModel");
 var UnorderedList = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(UnorderedList, _super);
+    tslib_1.__extends(UnorderedList, _super);
     function UnorderedList(createItem, createItemVM, vm) {
         if (createItem === void 0) { createItem = null; }
         if (createItemVM === void 0) { createItemVM = null; }

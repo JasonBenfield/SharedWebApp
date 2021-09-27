@@ -5,7 +5,7 @@ var tslib_1 = require("tslib");
 var ListBlockViewModel_1 = require("../Html/ListBlockViewModel");
 var LinkListGroup_1 = require("../ListGroup/LinkListGroup");
 var CardLinkListGroup = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(CardLinkListGroup, _super);
+    tslib_1.__extends(CardLinkListGroup, _super);
     function CardLinkListGroup(createItem, createItemVM, vm) {
         if (createItem === void 0) { createItem = null; }
         if (createItemVM === void 0) { createItemVM = null; }

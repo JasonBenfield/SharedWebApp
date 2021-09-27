@@ -4,7 +4,7 @@ exports.TextToDateViewValue = void 0;
 var tslib_1 = require("tslib");
 var TypedFieldViewValue_1 = require("./TypedFieldViewValue");
 var TextToDateViewValue = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(TextToDateViewValue, _super);
+    tslib_1.__extends(TextToDateViewValue, _super);
     function TextToDateViewValue() {
         return _super !== null && _super.apply(this, arguments) || this;
     }

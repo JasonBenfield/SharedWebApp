@@ -7,7 +7,7 @@ var BaseListGroup_1 = require("./BaseListGroup");
 var ButtonListGroupItem_1 = require("./ButtonListGroupItem");
 var ButtonListItemViewModel_1 = require("./ButtonListItemViewModel");
 var ButtonListGroup = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(ButtonListGroup, _super);
+    tslib_1.__extends(ButtonListGroup, _super);
     function ButtonListGroup(createItem, createItemVM, vm) {
         if (createItem === void 0) { createItem = null; }
         if (createItemVM === void 0) { createItemVM = null; }

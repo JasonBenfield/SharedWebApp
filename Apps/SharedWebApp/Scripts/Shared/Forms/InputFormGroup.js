@@ -6,7 +6,7 @@ var Events_1 = require("../Events");
 var Input_1 = require("../Html/Input");
 var SimpleFieldFormGroup_1 = require("./SimpleFieldFormGroup");
 var InputFormGroup = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(InputFormGroup, _super);
+    tslib_1.__extends(InputFormGroup, _super);
     function InputFormGroup(prefix, name, vm, viewValue) {
         var _this = _super.call(this, prefix, name, vm) || this;
         _this.viewValue = viewValue;

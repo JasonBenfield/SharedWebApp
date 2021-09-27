@@ -7,7 +7,7 @@ var ConstraintCollection_1 = require("./ConstraintCollection");
 var InputFormGroup_1 = require("./InputFormGroup");
 var TextToNumberViewValue_1 = require("./TextToNumberViewValue");
 var NumberInputFormGroup = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(NumberInputFormGroup, _super);
+    tslib_1.__extends(NumberInputFormGroup, _super);
     function NumberInputFormGroup(prefix, name, vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         var _this = _super.call(this, prefix, name, vm, new TextToNumberViewValue_1.TextToNumberViewValue()) || this;

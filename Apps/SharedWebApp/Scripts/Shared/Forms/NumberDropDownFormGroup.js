@@ -6,7 +6,7 @@ var BlockViewModel_1 = require("../Html/BlockViewModel");
 var ConstraintCollection_1 = require("./ConstraintCollection");
 var DropDownFormGroup_1 = require("./DropDownFormGroup");
 var NumberDropDownFormGroup = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(NumberDropDownFormGroup, _super);
+    tslib_1.__extends(NumberDropDownFormGroup, _super);
     function NumberDropDownFormGroup(prefix, name, vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         var _this = _super.call(this, prefix, name, vm) || this;

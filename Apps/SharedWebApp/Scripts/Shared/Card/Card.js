@@ -12,7 +12,7 @@ var CardLinkListGroup_1 = require("./CardLinkListGroup");
 var CardListGroup_1 = require("./CardListGroup");
 var CardTitleHeader_1 = require("./CardTitleHeader");
 var Card = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(Card, _super);
+    tslib_1.__extends(Card, _super);
     function Card(vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         var _this = _super.call(this, vm) || this;

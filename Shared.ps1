@@ -54,7 +54,7 @@ function Shared-Build {
 
 function Shared-Publish {
     param(
-        [ValidateSet("Development", "Production", "Staging", "Test")]
+        [ValidateSet("Development", "Production")]
         $EnvName = "Development",
         [switch] $NoInstall
     )

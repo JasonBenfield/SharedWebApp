@@ -8,7 +8,7 @@ var template = require("./Label.html");
 var HtmlComponentViewModel_1 = require("./HtmlComponentViewModel");
 var AggregateComponentViewModel_1 = require("./AggregateComponentViewModel");
 var LabelViewModel = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(LabelViewModel, _super);
+    tslib_1.__extends(LabelViewModel, _super);
     function LabelViewModel() {
         var _this = _super.call(this, new ComponentTemplate_1.ComponentTemplate('label', template)) || this;
         _this.content = new AggregateComponentViewModel_1.AggregateComponentViewModel();

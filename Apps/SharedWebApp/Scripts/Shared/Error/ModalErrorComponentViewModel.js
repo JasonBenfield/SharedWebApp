@@ -10,7 +10,7 @@ var Events_1 = require("../Events");
 var ComponentViewModel_1 = require("../ComponentViewModel");
 var ButtonViewModel_1 = require("../Html/ButtonViewModel");
 var ModalErrorComponentViewModel = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(ModalErrorComponentViewModel, _super);
+    tslib_1.__extends(ModalErrorComponentViewModel, _super);
     function ModalErrorComponentViewModel() {
         var _this = _super.call(this, new ComponentTemplate_1.ComponentTemplate('modal-error-component', template)) || this;
         _this.title = ko.observable('');

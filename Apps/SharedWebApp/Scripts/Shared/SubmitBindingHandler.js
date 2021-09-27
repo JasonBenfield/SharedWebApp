@@ -11,9 +11,9 @@ var SubmitBindingHandler = /** @class */ (function () {
     }
     SubmitBindingHandler.prototype.init = function (element, valueAccessor) {
         var _this = this;
-        ko.utils.registerEventHandler(element, "submit", function (event) { return (0, tslib_1.__awaiter)(_this, void 0, void 0, function () {
+        ko.utils.registerEventHandler(element, "submit", function (event) { return tslib_1.__awaiter(_this, void 0, void 0, function () {
             var unwrapped, model, result;
-            return (0, tslib_1.__generator)(this, function (_a) {
+            return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         unwrapped = ko.utils.unwrapObservable(valueAccessor());

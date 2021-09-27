@@ -67,21 +67,6 @@ const exportModule = {
     ]
 };
 const outputFilename = '[name].js';
-//    (pathData) => {
-//        var cache = [];
-//        let json = JSON.stringify(pathData, (key, value) => {
-//            if (typeof value === 'object' && value !== null) {
-//                // Duplicate reference found, discard key
-//                if (cache.includes(value)) return;
-
-//                // Store value in our collection
-//                cache.push(value);
-//            }
-//            return value;
-//        });
-//        console.log('pathData:\r\n' + json);
-//        return pathData.chunk.name;
-//};
 const resolve = {
     alias: {
         xtistart: path.resolve(__dirname, 'Scripts/Internal/Startup.js')
@@ -89,8 +74,6 @@ const resolve = {
 };
 const plugins = [
     new MiniCssExtractPlugin({
-        // Options similar to the same options in webpackOptions.output
-        // both options are optional
         filename: '[name].css',
         chunkFilename: '[id].css',
     })
@@ -98,6 +81,7 @@ const plugins = [
 module.exports = [
     {
         mode: 'production',
+        context: __dirname,
         entry: entry,
         module: exportModule,
         plugins: plugins,
@@ -109,6 +93,7 @@ module.exports = [
     },
     {
         mode: 'development',
+        context: __dirname,
         entry: entry,
         module: exportModule,
         plugins: plugins,

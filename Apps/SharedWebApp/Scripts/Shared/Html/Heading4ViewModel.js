@@ -7,7 +7,7 @@ var template = require("./Heading4.html");
 var ComponentTemplate_1 = require("../ComponentTemplate");
 var AggregateComponentViewModel_1 = require("./AggregateComponentViewModel");
 var Heading4ViewModel = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(Heading4ViewModel, _super);
+    tslib_1.__extends(Heading4ViewModel, _super);
     function Heading4ViewModel() {
         var _this = _super.call(this, new ComponentTemplate_1.ComponentTemplate('heading4', template)) || this;
         _this.content = new AggregateComponentViewModel_1.AggregateComponentViewModel();

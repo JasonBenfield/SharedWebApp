@@ -9,7 +9,7 @@ var BlockViewModel_1 = require("./BlockViewModel");
 var Container_1 = require("./Container");
 var HtmlComponent_1 = require("./HtmlComponent");
 var Toolbar = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(Toolbar, _super);
+    tslib_1.__extends(Toolbar, _super);
     function Toolbar(vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         var _this = _super.call(this, vm) || this;
