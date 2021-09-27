@@ -5,7 +5,7 @@ var tslib_1 = require("tslib");
 var Block_1 = require("./Block");
 var BlockViewModel_1 = require("./BlockViewModel");
 var Container = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(Container, _super);
+    tslib_1.__extends(Container, _super);
     function Container(vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         var _this = _super.call(this, vm) || this;

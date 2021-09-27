@@ -8,7 +8,7 @@ var ComponentTemplate_1 = require("../ComponentTemplate");
 var Events_1 = require("../Events");
 var HtmlComponentViewModel_1 = require("./HtmlComponentViewModel");
 var UnorderedListViewModel = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(UnorderedListViewModel, _super);
+    tslib_1.__extends(UnorderedListViewModel, _super);
     function UnorderedListViewModel() {
         var _this = _super.call(this, new ComponentTemplate_1.ComponentTemplate('unordered-list', template)) || this;
         _this.items = ko.observableArray([]);

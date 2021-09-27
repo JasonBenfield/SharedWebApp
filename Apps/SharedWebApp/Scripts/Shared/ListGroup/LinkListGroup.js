@@ -7,7 +7,7 @@ var BaseListGroup_1 = require("./BaseListGroup");
 var LinkListGroupItem_1 = require("./LinkListGroupItem");
 var LinkListItemViewModel_1 = require("./LinkListItemViewModel");
 var LinkListGroup = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(LinkListGroup, _super);
+    tslib_1.__extends(LinkListGroup, _super);
     function LinkListGroup(createItem, createItemVM, vm) {
         if (createItem === void 0) { createItem = null; }
         if (createItemVM === void 0) { createItemVM = null; }

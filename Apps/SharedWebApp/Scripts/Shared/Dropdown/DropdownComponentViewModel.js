@@ -9,7 +9,7 @@ var UnorderedListViewModel_1 = require("../Html/UnorderedListViewModel");
 var template = require("./DropdownComponent.html");
 var ko = require("knockout");
 var DropdownComponentViewModel = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(DropdownComponentViewModel, _super);
+    tslib_1.__extends(DropdownComponentViewModel, _super);
     function DropdownComponentViewModel() {
         var _this = _super.call(this, new ComponentTemplate_1.ComponentTemplate('dropdown-component', template)) || this;
         _this.isVisible = ko.observable(true);

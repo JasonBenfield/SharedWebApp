@@ -6,7 +6,7 @@ var Small_1 = require("./Small");
 var SmallViewModel_1 = require("./SmallViewModel");
 var TextSpan_1 = require("./TextSpan");
 var TextSmall = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(TextSmall, _super);
+    tslib_1.__extends(TextSmall, _super);
     function TextSmall(text, vm) {
         if (text === void 0) { text = ''; }
         if (vm === void 0) { vm = new SmallViewModel_1.SmallViewModel(); }

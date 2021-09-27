@@ -18,10 +18,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.4.2">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="XTI_App.Fakes" Version="1.7.34" />
     <PackageReference Include="XTI_WebApp.Extensions" Version="1.7.31" />
     <PackageReference Include="XTI_Configuration.Extensions" Version="1.9.2" />

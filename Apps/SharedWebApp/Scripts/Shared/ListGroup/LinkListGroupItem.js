@@ -5,7 +5,7 @@ var tslib_1 = require("tslib");
 var Link_1 = require("../Html/Link");
 var ListGroupItem_1 = require("./ListGroupItem");
 var LinkListGroupItem = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(LinkListGroupItem, _super);
+    tslib_1.__extends(LinkListGroupItem, _super);
     function LinkListGroupItem(vm) {
         var _this = _super.call(this, vm) || this;
         _this.link = new Link_1.Link(vm);

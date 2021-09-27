@@ -13,7 +13,7 @@ var FormComponentViewModel_1 = require("../Html/FormComponentViewModel");
 var FormComponent_1 = require("../Html/FormComponent");
 var ComplexFieldLayout_1 = require("./ComplexFieldLayout");
 var BaseForm = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(BaseForm, _super);
+    tslib_1.__extends(BaseForm, _super);
     function BaseForm(name, vm) {
         if (vm === void 0) { vm = new FormComponentViewModel_1.FormComponentViewModel(); }
         var _this = _super.call(this, vm) || this;
@@ -25,9 +25,9 @@ var BaseForm = /** @class */ (function (_super) {
         return _this;
     }
     BaseForm.prototype.onErrorSelected = function (error) {
-        return (0, tslib_1.__awaiter)(this, void 0, void 0, function () {
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
             var field;
-            return (0, tslib_1.__generator)(this, function (_a) {
+            return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.modalError.okCommand.execute()];
                     case 1:
@@ -100,9 +100,9 @@ var BaseForm = /** @class */ (function (_super) {
         return this.formGroups.addFormGroup(formGroup);
     };
     BaseForm.prototype.save = function (action) {
-        return (0, tslib_1.__awaiter)(this, void 0, void 0, function () {
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
             var validationResult, errors_1, result, errors, model, ex_1, caption, error;
-            return (0, tslib_1.__generator)(this, function (_a) {
+            return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         validationResult = this.validate();

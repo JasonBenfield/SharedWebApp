@@ -124,7 +124,7 @@ var DefaultEventHandler = /** @class */ (function () {
 }());
 exports.DefaultEventHandler = DefaultEventHandler;
 var SimpleEvent = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(SimpleEvent, _super);
+    tslib_1.__extends(SimpleEvent, _super);
     function SimpleEvent(source) {
         return _super.call(this, source) || this;
     }

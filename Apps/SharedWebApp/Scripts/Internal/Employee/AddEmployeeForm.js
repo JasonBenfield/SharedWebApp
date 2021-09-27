@@ -7,7 +7,7 @@ var DropDownFieldItem_1 = require("../../Shared/Forms/DropDownFieldItem");
 var FormComponentViewModel_1 = require("../../Shared/Html/FormComponentViewModel");
 var AddressInputField_1 = require("./AddressInputField");
 var AddEmployeeForm = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(AddEmployeeForm, _super);
+    tslib_1.__extends(AddEmployeeForm, _super);
     function AddEmployeeForm(vm) {
         if (vm === void 0) { vm = new FormComponentViewModel_1.FormComponentViewModel(); }
         var _this = _super.call(this, 'AddEmployeeForm', vm) || this;

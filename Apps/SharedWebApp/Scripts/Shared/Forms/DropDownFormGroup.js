@@ -7,7 +7,7 @@ var Select_1 = require("../Html/Select");
 var ConstraintCollection_1 = require("./ConstraintCollection");
 var SimpleFieldFormGroup_1 = require("./SimpleFieldFormGroup");
 var DropDownFormGroup = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(DropDownFormGroup, _super);
+    tslib_1.__extends(DropDownFormGroup, _super);
     function DropDownFormGroup(prefix, name, vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         var _this = _super.call(this, prefix, name, vm) || this;

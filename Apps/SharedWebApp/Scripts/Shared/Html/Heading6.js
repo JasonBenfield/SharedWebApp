@@ -6,7 +6,7 @@ var AggregateComponent_1 = require("./AggregateComponent");
 var Heading6ViewModel_1 = require("./Heading6ViewModel");
 var HtmlContainerComponent_1 = require("./HtmlContainerComponent");
 var Heading6 = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(Heading6, _super);
+    tslib_1.__extends(Heading6, _super);
     function Heading6(vm) {
         if (vm === void 0) { vm = new Heading6ViewModel_1.Heading6ViewModel(); }
         return _super.call(this, vm, new AggregateComponent_1.AggregateComponent(vm.content)) || this;

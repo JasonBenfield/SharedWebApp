@@ -7,7 +7,7 @@ var ConstraintCollection_1 = require("./ConstraintCollection");
 var InputFormGroup_1 = require("./InputFormGroup");
 var TextToDateViewValue_1 = require("./TextToDateViewValue");
 var DateInputFormGroup = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(DateInputFormGroup, _super);
+    tslib_1.__extends(DateInputFormGroup, _super);
     function DateInputFormGroup(prefix, name, vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         var _this = _super.call(this, prefix, name, vm, new TextToDateViewValue_1.TextToDateViewValue()) || this;

@@ -5,9 +5,9 @@ require("mocha");
 var chai_1 = require("chai");
 var DelayedAction_1 = require("../Shared/DelayedAction");
 describe('Delayed Action', function () {
-    it('Delay action', function () { return (0, tslib_1.__awaiter)(void 0, void 0, void 0, function () {
+    it('Delay action', function () { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
         var delayedAction, startTime, result, endTime, ts;
-        return (0, tslib_1.__generator)(this, function (_a) {
+        return tslib_1.__generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     delayedAction = new DelayedAction_1.DelayedAction(function () {
@@ -19,15 +19,15 @@ describe('Delayed Action', function () {
                     result = _a.sent();
                     endTime = new Date();
                     ts = endTime.getTime() - startTime.getTime();
-                    (0, chai_1.expect)(ts).to.be.at.least(100);
-                    (0, chai_1.expect)(result).to.equal(2);
+                    chai_1.expect(ts).to.be.at.least(100);
+                    chai_1.expect(result).to.equal(2);
                     return [2 /*return*/];
             }
         });
     }); });
-    it('Delay action with args', function () { return (0, tslib_1.__awaiter)(void 0, void 0, void 0, function () {
+    it('Delay action with args', function () { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
         var delayedAction, result;
-        return (0, tslib_1.__generator)(this, function (_a) {
+        return tslib_1.__generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     delayedAction = new DelayedAction_1.DelayedAction(function (x, y) {
@@ -36,14 +36,14 @@ describe('Delayed Action', function () {
                     return [4 /*yield*/, delayedAction.execute(1, 2)];
                 case 1:
                     result = _a.sent();
-                    (0, chai_1.expect)(result).to.equal(3);
+                    chai_1.expect(result).to.equal(3);
                     return [2 /*return*/];
             }
         });
     }); });
-    it('Delay action with Promise', function () { return (0, tslib_1.__awaiter)(void 0, void 0, void 0, function () {
+    it('Delay action with Promise', function () { return tslib_1.__awaiter(void 0, void 0, void 0, function () {
         var delayedAction, result;
-        return (0, tslib_1.__generator)(this, function (_a) {
+        return tslib_1.__generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     delayedAction = new DelayedAction_1.DelayedAction(function (x, y) {
@@ -56,7 +56,7 @@ describe('Delayed Action', function () {
                     return [4 /*yield*/, delayedAction.execute(3, 4)];
                 case 1:
                     result = _a.sent();
-                    (0, chai_1.expect)(result).to.equal(7);
+                    chai_1.expect(result).to.equal(7);
                     return [2 /*return*/];
             }
         });

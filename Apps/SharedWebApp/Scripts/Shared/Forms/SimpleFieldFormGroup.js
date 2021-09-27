@@ -14,7 +14,7 @@ var ErrorList_1 = require("./ErrorList");
 var FormGroup_1 = require("../Html/FormGroup");
 var PaddingCss_1 = require("../PaddingCss");
 var SimpleFieldFormGroup = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(SimpleFieldFormGroup, _super);
+    tslib_1.__extends(SimpleFieldFormGroup, _super);
     function SimpleFieldFormGroup(prefix, name, vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         var _this = _super.call(this, vm) || this;

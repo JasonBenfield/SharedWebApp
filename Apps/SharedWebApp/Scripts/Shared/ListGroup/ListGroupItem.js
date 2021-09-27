@@ -6,7 +6,7 @@ var ContextualClass_1 = require("../ContextualClass");
 var AggregateComponent_1 = require("../Html/AggregateComponent");
 var HtmlComponent_1 = require("../Html/HtmlComponent");
 var ListGroupItem = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(ListGroupItem, _super);
+    tslib_1.__extends(ListGroupItem, _super);
     function ListGroupItem(vm) {
         var _this = _super.call(this, vm) || this;
         _this.content = new AggregateComponent_1.AggregateComponent(_this.vm.content);

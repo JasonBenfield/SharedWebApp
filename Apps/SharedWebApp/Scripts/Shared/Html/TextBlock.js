@@ -5,7 +5,7 @@ var tslib_1 = require("tslib");
 var HtmlComponent_1 = require("./HtmlComponent");
 var TextBlockViewModel_1 = require("./TextBlockViewModel");
 var TextBlock = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(TextBlock, _super);
+    tslib_1.__extends(TextBlock, _super);
     function TextBlock(text, vm) {
         if (text === void 0) { text = ''; }
         if (vm === void 0) { vm = new TextBlockViewModel_1.TextBlockViewModel(); }
