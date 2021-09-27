@@ -9,8 +9,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="XTI_Forms" Version="1.7.9" />
-    <PackageReference Include="XTI_WebApp" Version="1.7.8" />
+    <PackageReference Include="XTI_Forms" Version="1.7.34" />
+    <PackageReference Include="XTI_WebApp" Version="1.7.31" />
   </ItemGroup>
   
 </Project>

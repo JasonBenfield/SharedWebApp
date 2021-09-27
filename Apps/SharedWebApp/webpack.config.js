@@ -98,6 +98,7 @@ const plugins = [
 module.exports = [
     {
         mode: 'production',
+        context: __dirname,
         entry: entry,
         module: exportModule,
         plugins: plugins,
@@ -109,6 +110,7 @@ module.exports = [
     },
     {
         mode: 'development',
+        context: __dirname,
         entry: entry,
         module: exportModule,
         plugins: plugins,

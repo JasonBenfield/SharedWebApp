@@ -4,15 +4,20 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SharedWebApp.Api;
+using XTI_App.Abstractions;
 using XTI_App.Api;
+using XTI_App.Fakes;
 using XTI_WebApp.Extensions;
 
 namespace SharedWebApp
 {
-    public class Startup
+    public sealed class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IHostEnvironment hostEnv;
+
+        public Startup(IHostEnvironment hostEnv, IConfiguration configuration)
         {
+            this.hostEnv = hostEnv;
             Configuration = configuration;
         }
 
@@ -20,7 +25,22 @@ namespace SharedWebApp
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddWebAppServices(Configuration);
+            services.AddWebAppServices(hostEnv, Configuration);
+            services.AddScoped(_ =>
+            {
+                var appContext = new FakeAppContext();
+                var app = appContext.AddApp("Shared");
+                appContext.SetCurrentApp(app);
+                return appContext;
+            });
+            services.AddScoped<ISourceAppContext>(sp => sp.GetService<FakeAppContext>());
+            services.AddScoped<ISourceUserContext>(sp =>
+            {
+                var appContext = sp.GetService<FakeAppContext>();
+                var userContext = new FakeUserContext(appContext);
+                userContext.SetCurrentUser(AppUserName.Anon);
+                return userContext;
+            });
             services.AddSingleton(_ => SharedAppKey.AppKey);
             services.AddSingleton<AppApiFactory, SharedAppApiFactory>();
             services.AddResponseCaching();

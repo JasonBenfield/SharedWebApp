@@ -44,7 +44,7 @@ class MainPage {
         });
         this.test();
         this.addEmployeeForm.Address.useLayout((fg) => new AddressInputLayout(fg));
-        this.addEmployeeForm.submitted.register(this.onFormSubmit.bind(this));
+        //this.addEmployeeForm.submitted.register(this.onFormSubmit.bind(this));
         this.addEmployeeForm.executeLayout();
     }
 

@@ -18,14 +18,13 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="MainDB.EF.SqlServer" Version="1.10.12" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.4.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="XTI_App.Api" Version="1.7.9" />
-    <PackageReference Include="XTI_WebApp.Extensions" Version="1.7.8" />
-    <PackageReference Include="XTI_Configuration.Extensions" Version="1.8.14" />
+    <PackageReference Include="XTI_App.Fakes" Version="1.7.34" />
+    <PackageReference Include="XTI_WebApp.Extensions" Version="1.7.31" />
+    <PackageReference Include="XTI_Configuration.Extensions" Version="1.9.2" />
   </ItemGroup>
   
   <ItemGroup>
@@ -34,6 +33,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\..\Internal\SharedWebApp.Api\SharedWebApp.Api.csproj" />
+    <ProjectReference Include="..\..\Lib\XTI_WebApp.RCL\XTI_WebApp.RCL.csproj" />
     <ProjectReference Include="..\..\Lib\XTI_WebApp.TagHelpers\XTI_WebApp.TagHelpers.csproj" />
   </ItemGroup>
   
