@@ -1,17 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DropdownComponent = void 0;
+var ListItem_1 = require("../Html/ListItem");
+var UnorderedList_1 = require("../Html/UnorderedList");
 var DropdownButton_1 = require("./DropdownButton");
-var DropdownSpanItem_1 = require("./DropdownSpanItem");
-var DropdownMenu_1 = require("./DropdownMenu");
-var DropdownLinkItem_1 = require("./DropdownLinkItem");
 var DropdownComponentViewModel_1 = require("./DropdownComponentViewModel");
+var DropdownLinkItem_1 = require("./DropdownLinkItem");
+var DropdownSpanItem_1 = require("./DropdownSpanItem");
 var DropdownComponent = /** @class */ (function () {
-    function DropdownComponent(vm) {
+    function DropdownComponent(createItemView, vm) {
+        if (createItemView === void 0) { createItemView = (function () { return new ListItem_1.ListItem(); }); }
         if (vm === void 0) { vm = new DropdownComponentViewModel_1.DropdownComponentViewModel(); }
+        this.createItemView = createItemView;
         this.vm = vm;
         this.button = new DropdownButton_1.DropdownButton(this.vm.button);
-        this.menu = new DropdownMenu_1.DropdownMenu(null, null, this.vm.menu);
+        this.menu = new UnorderedList_1.UnorderedList(this.createItemView, this.vm.menu);
+        this.menu.addCssName('dropdown-menu dropdown-menu-right');
     }
     DropdownComponent.prototype.addToContainer = function (container) {
         return container.addItem(this.vm, this);

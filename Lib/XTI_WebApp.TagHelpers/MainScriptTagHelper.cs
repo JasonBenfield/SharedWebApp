@@ -5,60 +5,61 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Hosting;
-using System.Threading.Tasks;
 
-namespace XTI_WebApp.TagHelpers
+namespace XTI_WebApp.TagHelpers;
+
+[HtmlTargetElement("xti-main-script", TagStructure = TagStructure.WithoutEndTag)]
+public sealed class MainScriptTagHelper : TagHelper
 {
-    [HtmlTargetElement("xti-main-script", TagStructure = TagStructure.WithoutEndTag)]
-    public class MainScriptTagHelper : TagHelper
+    private readonly IHostEnvironment host;
+    private readonly IUrlHelperFactory urlHelperFactory;
+    private readonly CacheBust cacheBust;
+
+    public MainScriptTagHelper(IHostEnvironment host, IUrlHelperFactory urlHelperFactory, CacheBust cacheBust)
     {
-        public MainScriptTagHelper(IHostEnvironment host, IUrlHelperFactory urlHelperFactory, CacheBust cacheBust)
+        this.host = host;
+        this.urlHelperFactory = urlHelperFactory;
+        this.cacheBust = cacheBust;
+    }
+
+    public string PageName { get; set; } = "";
+
+    [ViewContext]
+    [HtmlAttributeNotBound]
+    public ViewContext? ViewContext { get; set; }
+
+    public override void Process(TagHelperContext context, TagHelperOutput output)
+    {
+    }
+
+    public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+    {
+        output.TagName = "script";
+        string path;
+        if (host.IsDevelopment() || host.IsEnvironment("Test"))
         {
-            this.host = host;
-            this.urlHelperFactory = urlHelperFactory;
-            this.cacheBust = cacheBust;
+            path = "~/js/dev/";
         }
-
-        private readonly IHostEnvironment host;
-        private readonly IUrlHelperFactory urlHelperFactory;
-        private readonly CacheBust cacheBust;
-
-        public string PageName { get; set; }
-
-        [ViewContext]
-        [HtmlAttributeNotBound]
-        public ViewContext ViewContext { get; set; }
-
-        public override void Process(TagHelperContext context, TagHelperOutput output)
+        else
         {
+            path = "~/js/dist/";
         }
+        var urlHelper = urlHelperFactory.GetUrlHelper
+        (
+            ViewContext ?? throw new ArgumentNullException(nameof(ViewContext))
+        );
+        var pageUrl = await getPageUrl(urlHelper, path);
+        output.Attributes.Add("src", pageUrl);
+        output.TagMode = TagMode.StartTagAndEndTag;
+    }
 
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+    private async Task<string> getPageUrl(IUrlHelper urlHelper, string path)
+    {
+        var query = await cacheBust.Query();
+        if (!string.IsNullOrWhiteSpace(query))
         {
-            output.TagName = "script";
-            string path;
-            if (host.IsDevelopment() || host.IsEnvironment("Test"))
-            {
-                path = "~/js/dev/";
-            }
-            else
-            {
-                path = "~/js/dist/";
-            }
-            var urlHelper = urlHelperFactory.GetUrlHelper(ViewContext);
-            var pageUrl = await getPageUrl(urlHelper, path);
-            output.Attributes.Add("src", pageUrl);
-            output.TagMode = TagMode.StartTagAndEndTag;
+            query = $"?{query}";
         }
-
-        private async Task<string> getPageUrl(IUrlHelper urlHelper, string path)
-        {
-            var query = await cacheBust.Query();
-            if (!string.IsNullOrWhiteSpace(query))
-            {
-                query = $"?{query}";
-            }
-            return urlHelper.Content($"{path}{PageName}.js{query}");
-        }
+        return urlHelper.Content($"{path}{PageName}.js{query}");
     }
 }

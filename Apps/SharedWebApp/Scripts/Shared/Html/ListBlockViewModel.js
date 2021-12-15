@@ -8,7 +8,7 @@ var HtmlComponentViewModel_1 = require("../Html/HtmlComponentViewModel");
 var ComponentTemplate_1 = require("../ComponentTemplate");
 var template = require("./ListBlock.html");
 var ListBlockViewModel = /** @class */ (function (_super) {
-    tslib_1.__extends(ListBlockViewModel, _super);
+    (0, tslib_1.__extends)(ListBlockViewModel, _super);
     function ListBlockViewModel() {
         var _this = _super.call(this, new ComponentTemplate_1.ComponentTemplate('list-block', template)) || this;
         _this._itemClicked = new Events_1.DefaultEvent(_this);

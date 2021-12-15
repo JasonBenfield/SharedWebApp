@@ -2,14 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TextDropDownFormGroup = void 0;
 var tslib_1 = require("tslib");
-var BlockViewModel_1 = require("../Html/BlockViewModel");
 var ConstraintCollection_1 = require("./ConstraintCollection");
 var DropDownFormGroup_1 = require("./DropDownFormGroup");
 var TextDropDownFormGroup = /** @class */ (function (_super) {
-    tslib_1.__extends(TextDropDownFormGroup, _super);
-    function TextDropDownFormGroup(prefix, name, vm) {
-        if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
-        var _this = _super.call(this, prefix, name, vm) || this;
+    (0, tslib_1.__extends)(TextDropDownFormGroup, _super);
+    function TextDropDownFormGroup(prefix, name, view) {
+        var _this = _super.call(this, prefix, name, view) || this;
         _this.constraints = new ConstraintCollection_1.TextConstraintCollection();
         return _this;
     }

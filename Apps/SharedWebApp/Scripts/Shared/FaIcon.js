@@ -8,7 +8,7 @@ var ContextualClass_1 = require("./ContextualClass");
 var HtmlComponent_1 = require("./Html/HtmlComponent");
 var HtmlComponentViewModel_1 = require("./Html/HtmlComponentViewModel");
 var FaIconViewModel = /** @class */ (function (_super) {
-    tslib_1.__extends(FaIconViewModel, _super);
+    (0, tslib_1.__extends)(FaIconViewModel, _super);
     function FaIconViewModel() {
         return _super.call(this, new ComponentTemplate_1.ComponentTemplate('fa-icon', template)) || this;
     }
@@ -25,7 +25,7 @@ var FaIconNames = /** @class */ (function () {
 }());
 exports.FaIconNames = FaIconNames;
 var FaIcon = /** @class */ (function (_super) {
-    tslib_1.__extends(FaIcon, _super);
+    (0, tslib_1.__extends)(FaIcon, _super);
     function FaIcon(name, vm) {
         if (name === void 0) { name = ''; }
         if (vm === void 0) { vm = new FaIconViewModel(); }

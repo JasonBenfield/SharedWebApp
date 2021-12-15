@@ -5,7 +5,7 @@ var tslib_1 = require("tslib");
 var HtmlContainerComponent_1 = require("./HtmlContainerComponent");
 var ListItemViewModel_1 = require("./ListItemViewModel");
 var ListItem = /** @class */ (function (_super) {
-    tslib_1.__extends(ListItem, _super);
+    (0, tslib_1.__extends)(ListItem, _super);
     function ListItem(vm) {
         if (vm === void 0) { vm = new ListItemViewModel_1.ListItemViewModel(); }
         return _super.call(this, vm) || this;
@@ -13,7 +13,11 @@ var ListItem = /** @class */ (function (_super) {
     ListItem.prototype.getData = function () { return this.data; };
     ListItem.prototype.setData = function (data) { this.data = data; };
     ListItem.prototype.addToList = function (list) {
-        list.addListItem(this.vm, this);
+        list.addFromListItem(this.vm, this);
+        return this;
+    };
+    ListItem.prototype.removeFromList = function (list) {
+        list.removeFromListItem(this.vm, this);
         return this;
     };
     return ListItem;

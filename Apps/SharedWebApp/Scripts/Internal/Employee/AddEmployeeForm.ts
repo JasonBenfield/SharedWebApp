@@ -1,11 +1,11 @@
 ﻿import { BaseForm } from '../../Shared/Forms/BaseForm';
+import { BaseFormView } from '../../Shared/Forms/BaseFormView';
 import { DropDownFieldItem } from "../../Shared/Forms/DropDownFieldItem";
-import { FormComponentViewModel } from '../../Shared/Html/FormComponentViewModel';
 import { AddressInputField } from './AddressInputField';
 
 export class AddEmployeeForm extends BaseForm {
-    constructor(vm: FormComponentViewModel = new FormComponentViewModel()) {
-        super('AddEmployeeForm', vm);
+    constructor() {
+        super('AddEmployeeForm', new BaseFormView());
         this.EmployeeName.setCaption("Name");
         this.EmployeeName.setValue('Paul Atreides')
         this.EmployeeName.constraints.mustNotBeNull();

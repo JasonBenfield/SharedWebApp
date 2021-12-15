@@ -11,55 +11,57 @@ var NumberInputFormGroup_1 = require("./NumberInputFormGroup");
 var TextDropDownFormGroup_1 = require("./TextDropDownFormGroup");
 var TextInputFormGroup_1 = require("./TextInputFormGroup");
 var FormGroupCollection = /** @class */ (function () {
-    function FormGroupCollection(name) {
+    function FormGroupCollection(name, views) {
         this.name = name;
+        this.views = views;
         this.values = [];
     }
     FormGroupCollection.prototype.formGroups = function () {
         return this.values;
     };
     FormGroupCollection.prototype.addHiddenTextFormGroup = function (name) {
-        var formGroup = this.addTextInputFormGroup(name);
-        this.hideFormGroup(formGroup);
-        return formGroup;
+        var view = this.views.addHiddenInputFormGroup();
+        return this.addFormGroup(new TextInputFormGroup_1.TextInputFormGroup(this.name, name, view));
     };
     FormGroupCollection.prototype.addHiddenNumberFormGroup = function (name) {
-        var formGroup = this.addNumberInputFormGroup(name);
-        this.hideFormGroup(formGroup);
-        return formGroup;
+        var view = this.views.addHiddenInputFormGroup();
+        return this.addFormGroup(new NumberInputFormGroup_1.NumberInputFormGroup(this.name, name, view));
     };
     FormGroupCollection.prototype.addHiddenDateFormGroup = function (name) {
-        var formGroup = this.addDateInputFormGroup(name);
-        this.hideFormGroup(formGroup);
-        return formGroup;
-    };
-    FormGroupCollection.prototype.hideFormGroup = function (formGroup) {
-        formGroup.input.setType('hidden');
-        formGroup.hide();
+        var view = this.views.addHiddenInputFormGroup();
+        return this.addFormGroup(new DateInputFormGroup_1.DateInputFormGroup(this.name, name, view));
     };
     FormGroupCollection.prototype.addTextInputFormGroup = function (name) {
-        return this.addFormGroup(new TextInputFormGroup_1.TextInputFormGroup(this.name, name));
+        var view = this.views.addInputFormGroup();
+        return this.addFormGroup(new TextInputFormGroup_1.TextInputFormGroup(this.name, name, view));
     };
     FormGroupCollection.prototype.addNumberInputFormGroup = function (name) {
-        return this.addFormGroup(new NumberInputFormGroup_1.NumberInputFormGroup(this.name, name));
+        var view = this.views.addInputFormGroup();
+        return this.addFormGroup(new NumberInputFormGroup_1.NumberInputFormGroup(this.name, name, view));
     };
     FormGroupCollection.prototype.addDateInputFormGroup = function (name) {
-        return this.addFormGroup(new DateInputFormGroup_1.DateInputFormGroup(this.name, name));
+        var view = this.views.addInputFormGroup();
+        return this.addFormGroup(new DateInputFormGroup_1.DateInputFormGroup(this.name, name, view));
     };
     FormGroupCollection.prototype.addTextDropDownFormGroup = function (name) {
-        return this.addFormGroup(new TextDropDownFormGroup_1.TextDropDownFormGroup(this.name, name));
+        var view = this.views.addDropDownFormGroup();
+        return this.addFormGroup(new TextDropDownFormGroup_1.TextDropDownFormGroup(this.name, name, view));
     };
     FormGroupCollection.prototype.addNumberDropDownFormGroup = function (name) {
-        return this.addFormGroup(new NumberDropDownFormGroup_1.NumberDropDownFormGroup(this.name, name));
+        var view = this.views.addDropDownFormGroup();
+        return this.addFormGroup(new NumberDropDownFormGroup_1.NumberDropDownFormGroup(this.name, name, view));
     };
     FormGroupCollection.prototype.addDateDropDownFormGroup = function (name) {
-        return this.addFormGroup(new DateDropDownFormGroup_1.DateDropDownFormGroup(this.name, name));
+        var view = this.views.addDropDownFormGroup();
+        return this.addFormGroup(new DateDropDownFormGroup_1.DateDropDownFormGroup(this.name, name, view));
     };
     FormGroupCollection.prototype.addBooleanDropDownFormGroup = function (name) {
-        return this.addFormGroup(new BooleanDropDownFormGroup_1.BooleanDropDownFormGroup(this.name, name));
+        var view = this.views.addDropDownFormGroup();
+        return this.addFormGroup(new BooleanDropDownFormGroup_1.BooleanDropDownFormGroup(this.name, name, view));
     };
     FormGroupCollection.prototype.addDropDownFormGroup = function (name) {
-        return this.addFormGroup(new DropDownFormGroup_1.DropDownFormGroup(this.name, name));
+        var view = this.views.addDropDownFormGroup();
+        return this.addFormGroup(new DropDownFormGroup_1.DropDownFormGroup(this.name, name, view));
     };
     FormGroupCollection.prototype.addFormGroup = function (formGroup) {
         this.values.push(formGroup);

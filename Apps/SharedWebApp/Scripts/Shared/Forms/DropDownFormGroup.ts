@@ -1,41 +1,35 @@
-﻿import { BlockViewModel } from "../Html/BlockViewModel";
-import { Select } from "../Html/Select";
-import { SelectOption } from "../Html/SelectOption";
+﻿import { SelectOption } from "../Html/SelectOption";
 import { ConstraintCollection } from "./ConstraintCollection";
+import { DropDownFormGroupView } from "./DropDownFormGroupView";
 import { ErrorList } from "./ErrorList";
 import { SimpleFieldFormGroup } from "./SimpleFieldFormGroup";
 
 export class DropDownFormGroup<TValue> extends SimpleFieldFormGroup<TValue> {
-    constructor(prefix: string, name: string, vm: BlockViewModel = new BlockViewModel()) {
-        super(prefix, name, vm);
-    }
-
+    protected readonly view: DropDownFormGroupView<TValue>;
     readonly constraints = new ConstraintCollection();
+    readonly valueChanged = this.view.select.changed;
+
+    constructor(prefix: string, name: string, view: DropDownFormGroupView<TValue>) {
+        super(prefix, name, view);
+    }
 
     protected validateConstraints(fieldErrors: ErrorList) {
         this.constraints.validate(fieldErrors, this);
     }
 
-    readonly select = this.inputGroup.insertContent(0, new Select<TValue>())
-        .configure(select => {
-            select.addCssName('form-control');
-        });
-
-    readonly valueChanged = this.select.changed;
-
     getValue() {
-        return this.select.getValue();
+        return this.view.select.getValue();
     }
 
     setValue(value: TValue) {
-        this.select.setValue(value);
+        this.view.select.setValue(value);
     }
 
     setItems(...items: SelectOption<TValue>[]) {
-        this.select.setItems(items);
+        this.view.select.setItems(items);
     }
 
     setItemCaption(itemCaption: string) {
-        this.select.setItemCaption(itemCaption);
+        this.view.select.setItemCaption(itemCaption);
     }
 }

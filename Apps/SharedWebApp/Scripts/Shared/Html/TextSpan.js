@@ -5,7 +5,7 @@ var tslib_1 = require("tslib");
 var TextSpanViewModel_1 = require("./TextSpanViewModel");
 var HtmlComponent_1 = require("./HtmlComponent");
 var TextSpan = /** @class */ (function (_super) {
-    tslib_1.__extends(TextSpan, _super);
+    (0, tslib_1.__extends)(TextSpan, _super);
     function TextSpan(text, vm) {
         if (text === void 0) { text = ''; }
         if (vm === void 0) { vm = new TextSpanViewModel_1.TextSpanViewModel(); }

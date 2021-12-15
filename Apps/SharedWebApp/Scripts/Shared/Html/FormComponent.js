@@ -7,7 +7,7 @@ var AggregateComponent_1 = require("./AggregateComponent");
 var FormComponentViewModel_1 = require("./FormComponentViewModel");
 var HtmlContainerComponent_1 = require("./HtmlContainerComponent");
 var FormComponent = /** @class */ (function (_super) {
-    tslib_1.__extends(FormComponent, _super);
+    (0, tslib_1.__extends)(FormComponent, _super);
     function FormComponent(vm) {
         if (vm === void 0) { vm = new FormComponentViewModel_1.FormComponentViewModel(); }
         var _this = _super.call(this, vm) || this;

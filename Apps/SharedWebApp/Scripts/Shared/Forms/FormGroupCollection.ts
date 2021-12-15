@@ -3,78 +3,81 @@ import { ComplexFieldFormGroup } from "./ComplexFieldFormGroup";
 import { DateDropDownFormGroup } from "./DateDropDownFormGroup";
 import { DateInputFormGroup } from "./DateInputFormGroup";
 import { DropDownFormGroup } from "./DropDownFormGroup";
-import { InputFormGroup } from "./InputFormGroup";
+import { FormGroupViewCollection } from "./FormGroupViewCollection";
+import { InputFormGroupView } from "./InputFormGroupView";
 import { NumberDropDownFormGroup } from "./NumberDropDownFormGroup";
 import { NumberInputFormGroup } from "./NumberInputFormGroup";
 import { TextDropDownFormGroup } from "./TextDropDownFormGroup";
 import { TextInputFormGroup } from "./TextInputFormGroup";
 
 export class FormGroupCollection {
-    constructor(private readonly name: string) {
-    }
+    readonly values: IField[] = [];
 
-    readonly values: IFormGroupField[] = [];
+    constructor(
+        private readonly name: string,
+        private readonly views: FormGroupViewCollection) {
+    }
 
     formGroups() {
         return this.values;
     }
 
     addHiddenTextFormGroup(name: string) {
-        let formGroup = this.addTextInputFormGroup(name);
-        this.hideFormGroup(formGroup);
-        return formGroup;
+        let view = this.views.addHiddenInputFormGroup();
+        return this.addFormGroup(new TextInputFormGroup(this.name, name, view));
     }
 
     addHiddenNumberFormGroup(name: string) {
-        let formGroup = this.addNumberInputFormGroup(name);
-        this.hideFormGroup(formGroup);
-        return formGroup;
+        let view = this.views.addHiddenInputFormGroup();
+        return this.addFormGroup(new NumberInputFormGroup(this.name, name, view));
     }
 
     addHiddenDateFormGroup(name: string) {
-        let formGroup = this.addDateInputFormGroup(name);
-        this.hideFormGroup(formGroup);
-        return formGroup;
-    }
-
-    private hideFormGroup(formGroup: InputFormGroup<any>) {
-        formGroup.input.setType('hidden');
-        formGroup.hide();
+        let view = this.views.addHiddenInputFormGroup();
+        return this.addFormGroup(new DateInputFormGroup(this.name, name, view));
     }
 
     addTextInputFormGroup(name: string) {
-        return this.addFormGroup(new TextInputFormGroup(this.name, name));
+        let view = this.views.addInputFormGroup();
+        return this.addFormGroup(new TextInputFormGroup(this.name, name, view));
     }
 
     addNumberInputFormGroup(name: string) {
-        return this.addFormGroup(new NumberInputFormGroup(this.name, name));
+        let view = this.views.addInputFormGroup();
+        return this.addFormGroup(new NumberInputFormGroup(this.name, name, view));
     }
 
     addDateInputFormGroup(name: string) {
-        return this.addFormGroup(new DateInputFormGroup(this.name, name));
+        let view = this.views.addInputFormGroup();
+        return this.addFormGroup(new DateInputFormGroup(this.name, name, view));
     }
 
     addTextDropDownFormGroup(name: string) {
-        return this.addFormGroup(new TextDropDownFormGroup(this.name, name));
+        let view = this.views.addDropDownFormGroup<string>();
+        return this.addFormGroup(new TextDropDownFormGroup(this.name, name, view));
     }
 
     addNumberDropDownFormGroup(name: string) {
-        return this.addFormGroup(new NumberDropDownFormGroup(this.name, name));
+        let view = this.views.addDropDownFormGroup<number>();
+        return this.addFormGroup(new NumberDropDownFormGroup(this.name, name, view));
     }
 
     addDateDropDownFormGroup(name: string) {
-        return this.addFormGroup(new DateDropDownFormGroup(this.name, name));
+        let view = this.views.addDropDownFormGroup<Date>();
+        return this.addFormGroup(new DateDropDownFormGroup(this.name, name, view));
     }
 
     addBooleanDropDownFormGroup(name: string) {
-        return this.addFormGroup(new BooleanDropDownFormGroup(this.name, name));
+        let view = this.views.addDropDownFormGroup<boolean>();
+        return this.addFormGroup(new BooleanDropDownFormGroup(this.name, name, view));
     }
 
     addDropDownFormGroup<T>(name: string) {
-        return this.addFormGroup(new DropDownFormGroup<T>(this.name, name));
+        let view = this.views.addDropDownFormGroup<T>();
+        return this.addFormGroup(new DropDownFormGroup<T>(this.name, name, view));
     }
 
-    addFormGroup<TFormGroup extends IFormGroupField>(formGroup: TFormGroup) {
+    addFormGroup<TFormGroup extends IField>(formGroup: TFormGroup) {
         this.values.push(formGroup);
         return formGroup;
     }
@@ -87,7 +90,7 @@ export class FormGroupCollection {
         });
     }
 
-    forEach(action: (field: IFormGroupField) => void) {
+    forEach(action: (field: IField) => void) {
         for (let formGroup of this.formGroups()) {
             action(formGroup);
         }

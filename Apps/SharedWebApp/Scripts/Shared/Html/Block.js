@@ -5,7 +5,7 @@ var tslib_1 = require("tslib");
 var BlockViewModel_1 = require("./BlockViewModel");
 var HtmlContainerComponent_1 = require("./HtmlContainerComponent");
 var Block = /** @class */ (function (_super) {
-    tslib_1.__extends(Block, _super);
+    (0, tslib_1.__extends)(Block, _super);
     function Block(vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         return _super.call(this, vm) || this;
@@ -24,6 +24,9 @@ var Block = /** @class */ (function (_super) {
     };
     Block.prototype.scrollable = function () {
         this.addCssName('overflow-auto');
+    };
+    Block.prototype.setRole = function (role) {
+        this.vm.role(role);
     };
     return Block;
 }(HtmlContainerComponent_1.HtmlContainerComponent));

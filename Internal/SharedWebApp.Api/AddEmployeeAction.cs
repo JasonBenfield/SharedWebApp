@@ -1,14 +1,11 @@
-﻿using System.Threading.Tasks;
-using XTI_App.Api;
+﻿using XTI_App.Api;
 
-namespace SharedWebApp.Api
+namespace SharedWebApp.Api;
+
+public sealed class AddEmployeeAction : AppAction<AddEmployeeForm, int>
 {
-    public sealed class AddEmployeeAction : AppAction<AddEmployeeForm, int>
+    public Task<int> Execute(AddEmployeeForm model)
     {
-        public Task<int> Execute(AddEmployeeForm model)
-        {
-            return Task.FromResult(1);
-        }
+        return Task.FromResult(1);
     }
-
 }

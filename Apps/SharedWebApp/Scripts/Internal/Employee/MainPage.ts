@@ -18,15 +18,21 @@ import { AddressInputLayout } from './AddressInputLayout';
 import { ConsoleLog } from '../../Shared/ConsoleLog';
 import { PageFrame } from '../../Shared/PageFrame';
 import { Startup } from 'xtistart';
+import { MessageAlertView } from '../../Shared/MessageAlertView';
 
 class MainPage {
+    private readonly alert: MessageAlert;
+    private readonly addEmployeeForm: AddEmployeeForm;
+    private readonly saveCommand: AsyncCommand;
+
     constructor(private readonly page: PageFrame) {
         let flexColumn = this.page.addContent(new FlexColumn());
         let headerRow = flexColumn.addContent(new Block());
         headerRow.addContent(new Container());
         headerRow.addContent(new TextHeading1('Add Employee'));
         let flexFill = flexColumn.addContent(new FlexColumnFill());
-        this.alert = flexFill.addContent(new MessageAlert());
+        let alertView = flexFill.addContent(new MessageAlertView());
+        this.alert = new MessageAlert(alertView);
         this.addEmployeeForm = flexFill.container.addContent(new AddEmployeeForm());
         let toolbar = flexColumn.addContent(new Toolbar());
         toolbar.setPadding(PaddingCss.xs(3));
@@ -51,10 +57,6 @@ class MainPage {
     private onFormSubmit() {
         this.saveCommand.execute();
     }
-
-    private readonly alert: MessageAlert;
-    private readonly addEmployeeForm: AddEmployeeForm;
-    private readonly saveCommand: AsyncCommand;
 
     private async test() {
         let action = new AppApiAction<number, number>(

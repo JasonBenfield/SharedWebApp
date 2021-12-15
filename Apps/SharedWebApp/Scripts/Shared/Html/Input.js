@@ -7,7 +7,7 @@ var ContextualClass_1 = require("../ContextualClass");
 var InputViewModel_1 = require("./InputViewModel");
 var Events_1 = require("../Events");
 var Input = /** @class */ (function (_super) {
-    tslib_1.__extends(Input, _super);
+    (0, tslib_1.__extends)(Input, _super);
     function Input(vm) {
         if (vm === void 0) { vm = new InputViewModel_1.InputViewModel(); }
         var _this = _super.call(this, vm) || this;
@@ -29,11 +29,8 @@ var Input = /** @class */ (function (_super) {
     Input.prototype.setAutocomplete = function (autocomplete) {
         this.vm.autocomplete(autocomplete);
     };
-    Input.prototype.getValue = function () {
-        return this.value;
-    };
+    Input.prototype.getValue = function () { return this.vm.value(); };
     Input.prototype.setValue = function (value) {
-        this.value = value;
         this.vm.value(value);
     };
     Input.prototype.setBorder = function (border) {
@@ -50,6 +47,7 @@ var Input = /** @class */ (function (_super) {
     Input.prototype.setType = function (type) {
         this.vm.type(type);
     };
+    Input.prototype.hasFocus = function () { return this.vm.hasFocus(); };
     Input.prototype.setFocus = function () { this.vm.hasFocus(true); };
     Input.prototype.blur = function () { this.vm.hasFocus(false); };
     return Input;

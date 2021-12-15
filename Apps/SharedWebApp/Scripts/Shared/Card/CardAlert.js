@@ -1,29 +1,23 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CardAlert = void 0;
-var tslib_1 = require("tslib");
-var BlockViewModel_1 = require("../Html/BlockViewModel");
 var MessageAlert_1 = require("../MessageAlert");
-var CardBody_1 = require("./CardBody");
-var CardAlert = /** @class */ (function (_super) {
-    tslib_1.__extends(CardAlert, _super);
-    function CardAlert(vm) {
-        if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
-        var _this = _super.call(this, vm) || this;
-        _this.alert = _this.addContent(new MessageAlert_1.MessageAlert());
-        _this.hide();
-        _this.alert.messageChanged.register(_this.onMessageChanged.bind(_this));
-        return _this;
+var CardAlert = /** @class */ (function () {
+    function CardAlert(view) {
+        this.view = view;
+        this.alert = new MessageAlert_1.MessageAlert(this.view.alert);
+        this.view.hide();
+        this.alert.messageChanged.register(this.onMessageChanged.bind(this));
     }
     CardAlert.prototype.onMessageChanged = function (message) {
         if (message) {
-            this.show();
+            this.view.show();
         }
         else {
-            this.hide();
+            this.view.hide();
         }
     };
     return CardAlert;
-}(CardBody_1.CardBody));
+}());
 exports.CardAlert = CardAlert;
 //# sourceMappingURL=CardAlert.js.map

@@ -1,49 +1,54 @@
-﻿import { Card } from "../../Shared/Card/Card";
+﻿import { CardTitleHeader } from "../../Shared/Card/CardTitleHeader";
 import { DelayedAction } from '../../Shared/DelayedAction';
-import { Row } from "../../Shared/Grid/Row";
-import { ContextualClass } from "../../Shared/ContextualClass";
 import { EnumerableRange } from "../../Shared/Enumerable";
-import { ColumnCss } from "../../Shared/ColumnCss";
-import { BlockViewModel } from "../../Shared/Html/BlockViewModel";
-import { TextBlock } from "../../Shared/Html/TextBlock";
+import { ListGroup } from "../../Shared/ListGroup/ListGroup";
+import { MessageAlert } from "../../Shared/MessageAlert";
+import { TestCardView } from "./TestCardView";
+import { TestClickableListItem } from "./TestClickableItem";
+import { TestClickableListItemView } from "./TestClickableItemView";
+import { TestListItem } from "./TestListItem";
+import { TestListItemView } from "./TestListItemView";
 
-export class TestCard extends Card {
-    constructor(vm: BlockViewModel = new BlockViewModel()) {
-        super(vm);
+export class TestCard {
+    private readonly cardTitleHeader = new CardTitleHeader('Original Title', this.view.cardTitleHeader);
+    private readonly alert = new MessageAlert(this.view.alert);
+    private readonly testItems: ListGroup;
+    private readonly clickableItems: ListGroup;
+
+    constructor(private readonly view: TestCardView) {
         this.cardTitleHeader.setText('This is the Title');
+        this.testItems = new ListGroup(this.view.testItems);
+        this.clickableItems = new ListGroup(this.view.clickableItems);
         this.testItems.setItems(
             new EnumerableRange(1, 5).value(),
-            (i, listItem) => {
-                let textBlock = listItem.addContent(new TextBlock());
-                textBlock.setText(`Test ${i}`);
-            }
+            (i: number, listItem: TestListItemView) => new TestListItem(i, listItem)
         );
+        this.testItems.addItem(6, (i: number, listItem: TestListItemView) => new TestListItem(i, listItem));
         this.clickableItems.setItems(
             new EnumerableRange(1, 5).value(),
-            (i, listItem) => {
-                let row = listItem.addContent(new Row(vm));
-                let iconColumn = row.addIconColumn(
-                    'thumbs-up',
-                    icon => {
-                        icon.makeFixedWidth();
-                        icon.setColor(ContextualClass.success);
-                    }
-                );
-                iconColumn.setColumnCss(ColumnCss.xs('auto'));
-                row.addTextColumn(`Clickable ${i}`);
-            }
+            (i: number, listItem: TestClickableListItemView) => new TestClickableListItem(i, listItem)
         );
+        this.clickableItems.itemClicked.register(this.onClick.bind(this));
     }
 
-    private readonly cardTitleHeader = this.addCardTitleHeader('Original Title');
-    private readonly alert = this.addCardAlert().alert;
-    private readonly testItems = this.addListGroup();
-    private readonly clickableItems = this.addButtonListGroup();
+    private onClick(listItem: TestClickableListItem) {
+        alert(`You clicked ${listItem.i}`);
+    }
 
     refresh() {
         return this.alert.infoAction(
             'Loading...',
-            () => new DelayedAction(() => { }, 5000).execute()
+            () => {
+                this.testItems.setItems(
+                    new EnumerableRange(6, 4).value(),
+                    (i: number, listItem: TestListItemView) => new TestListItem(i, listItem)
+                );
+                this.clickableItems.setItems(
+                    new EnumerableRange(10, 6).value(),
+                    (i: number, listItem: TestClickableListItemView) => new TestClickableListItem(i, listItem)
+                );
+                return new DelayedAction(() => { }, 5000).execute();
+            }
         );
     }
 }

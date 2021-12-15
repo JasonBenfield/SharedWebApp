@@ -3,24 +3,27 @@ import { AppApiError } from "../AppApiError";
 import { ConsoleLog } from "../ConsoleLog";
 import { ModalErrorComponent } from "../Error/ModalErrorComponent";
 import { ErrorModel } from "../ErrorModel";
+import { BaseFormView } from "./BaseFormView";
+import { ComplexFieldLayout } from "./ComplexFieldLayout";
 import { ErrorList } from "./ErrorList";
 import { FormGroupCollection } from "./FormGroupCollection";
 import { FormSaveResult } from "./FormSaveResult";
-import { FormComponentViewModel } from "../Html/FormComponentViewModel";
-import { FormComponent } from "../Html/FormComponent";
-import { ComplexFieldLayout } from "./ComplexFieldLayout";
 
-export class BaseForm extends FormComponent {
+export class BaseForm {
+    private layout = new ComplexFieldLayout(this);
+    private readonly formGroups: FormGroupCollection;
+    private readonly modalError: ModalErrorComponent;
+
     constructor(
         private readonly name: string,
-        vm: FormComponentViewModel = new FormComponentViewModel()
+        private readonly view: BaseFormView
     ) {
-        super(vm);
+        this.formGroups = new FormGroupCollection(name, this.view.formGroups);
         this.modalError.errorSelected.register(this.onErrorSelected.bind(this));
     }
 
     private async onErrorSelected(error: ErrorModel) {
-        await this.modalError.okCommand.execute();
+        this.modalError.hide();
         let field: any = this.getField(error.Source);
         if (field) {
             if (field.setFocus) {
@@ -28,8 +31,6 @@ export class BaseForm extends FormComponent {
             }
         }
     }
-
-    private layout= new ComplexFieldLayout(this);
 
     useLayout(layout: ComplexFieldLayout) {
         this.layout = layout;
@@ -39,9 +40,6 @@ export class BaseForm extends FormComponent {
         this.layout.execute();
         this.formGroups.executeLayout();
     }
-
-    private readonly formGroups = new FormGroupCollection(this.name);
-    private readonly modalError = new ModalErrorComponent().addToContainer(this.content);
 
     forEachFormGroup(action: (field: IFormGroupField) => void) {
         this.formGroups.forEach(action);

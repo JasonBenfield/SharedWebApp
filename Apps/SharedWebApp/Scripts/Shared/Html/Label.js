@@ -6,7 +6,7 @@ var HtmlComponent_1 = require("./HtmlComponent");
 var AggregateComponent_1 = require("./AggregateComponent");
 var LabelViewModel_1 = require("./LabelViewModel");
 var Label = /** @class */ (function (_super) {
-    tslib_1.__extends(Label, _super);
+    (0, tslib_1.__extends)(Label, _super);
     function Label(vm) {
         if (vm === void 0) { vm = new LabelViewModel_1.LabelViewModel(); }
         var _this = _super.call(this, vm) || this;

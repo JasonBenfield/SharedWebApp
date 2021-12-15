@@ -7,7 +7,7 @@ var ContextualClass_1 = require("../ContextualClass");
 var SelectViewModel_1 = require("./SelectViewModel");
 var Events_1 = require("../Events");
 var Select = /** @class */ (function (_super) {
-    tslib_1.__extends(Select, _super);
+    (0, tslib_1.__extends)(Select, _super);
     function Select(vm) {
         if (vm === void 0) { vm = new SelectViewModel_1.SelectViewModel(); }
         var _this = _super.call(this, vm) || this;

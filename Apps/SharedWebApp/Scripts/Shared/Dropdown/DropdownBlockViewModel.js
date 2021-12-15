@@ -8,7 +8,7 @@ var ButtonViewModel_1 = require("../Html/ButtonViewModel");
 var UnorderedListViewModel_1 = require("../Html/UnorderedListViewModel");
 var template = require("./DropdownBlock.html");
 var DropdownBlockViewModel = /** @class */ (function (_super) {
-    tslib_1.__extends(DropdownBlockViewModel, _super);
+    (0, tslib_1.__extends)(DropdownBlockViewModel, _super);
     function DropdownBlockViewModel() {
         var _this = _super.call(this) || this;
         _this.button = new ButtonViewModel_1.ButtonViewModel();

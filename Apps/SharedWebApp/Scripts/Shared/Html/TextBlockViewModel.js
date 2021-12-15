@@ -7,7 +7,7 @@ var template = require("./TextBlock.html");
 var ComponentTemplate_1 = require("../ComponentTemplate");
 var ko = require("knockout");
 var TextBlockViewModel = /** @class */ (function (_super) {
-    tslib_1.__extends(TextBlockViewModel, _super);
+    (0, tslib_1.__extends)(TextBlockViewModel, _super);
     function TextBlockViewModel() {
         var _this = _super.call(this, new ComponentTemplate_1.ComponentTemplate('text-block', template)) || this;
         _this.text = ko.observable('');

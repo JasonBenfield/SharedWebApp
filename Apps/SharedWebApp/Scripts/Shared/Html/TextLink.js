@@ -6,7 +6,7 @@ var Link_1 = require("./Link");
 var LinkViewModel_1 = require("./LinkViewModel");
 var TextSpan_1 = require("./TextSpan");
 var TextLink = /** @class */ (function (_super) {
-    tslib_1.__extends(TextLink, _super);
+    (0, tslib_1.__extends)(TextLink, _super);
     function TextLink(text, vm) {
         if (text === void 0) { text = ''; }
         if (vm === void 0) { vm = new LinkViewModel_1.LinkViewModel(); }

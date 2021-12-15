@@ -7,7 +7,7 @@ var ComponentViewModel_1 = require("../ComponentViewModel");
 var template = require("./AggregateComponent.html");
 var ko = require("knockout");
 var AggregateComponentViewModel = /** @class */ (function (_super) {
-    tslib_1.__extends(AggregateComponentViewModel, _super);
+    (0, tslib_1.__extends)(AggregateComponentViewModel, _super);
     function AggregateComponentViewModel() {
         var _this = _super.call(this, new ComponentTemplate_1.ComponentTemplate('aggregate-component', template)) || this;
         _this.name = ko.observable('');

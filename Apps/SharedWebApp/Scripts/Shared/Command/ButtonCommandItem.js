@@ -9,7 +9,7 @@ var FaIcon_1 = require("../FaIcon");
 var MarginCss_1 = require("../MarginCss");
 var TextSpan_1 = require("../Html/TextSpan");
 var ButtonCommandItem = /** @class */ (function (_super) {
-    tslib_1.__extends(ButtonCommandItem, _super);
+    (0, tslib_1.__extends)(ButtonCommandItem, _super);
     function ButtonCommandItem(vm) {
         if (vm === void 0) { vm = new ButtonViewModel_1.ButtonViewModel(); }
         var _this = _super.call(this, vm) || this;

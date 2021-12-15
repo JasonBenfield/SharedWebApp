@@ -91,7 +91,7 @@ var UrlQueryBuilder = /** @class */ (function () {
                 if (obj.hasOwnProperty(prop)) {
                     var k = prefix ? prefix + "[" + prop + "]" : prop;
                     var propValue = obj[prop];
-                    if (propValue !== null && typeof propValue === "object") {
+                    if (propValue !== null && typeof propValue === "object" && !(propValue instanceof Date)) {
                         this._addQueryFromObject(propValue, k);
                     }
                     else {

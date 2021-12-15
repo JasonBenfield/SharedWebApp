@@ -1,22 +1,20 @@
-﻿import { BlockViewModel } from "../Html/BlockViewModel";
-import { MessageAlert } from "../MessageAlert";
-import { CardBody } from "./CardBody";
+﻿import { MessageAlert } from "../MessageAlert";
+import { CardAlertView } from "./CardAlertView";
 
-export class CardAlert extends CardBody {
-    constructor(vm: BlockViewModel = new BlockViewModel()) {
-        super(vm);
-        this.hide();
+export class CardAlert {
+    readonly alert = new MessageAlert(this.view.alert);
+
+    constructor(private readonly view: CardAlertView) {
+        this.view.hide();
         this.alert.messageChanged.register(this.onMessageChanged.bind(this));
     }
 
-    readonly alert = this.addContent(new MessageAlert());
-
     private onMessageChanged(message: string) {
         if (message) {
-            this.show();
+            this.view.show();
         }
         else {
-            this.hide();
+            this.view.hide();
         }
     }
 }

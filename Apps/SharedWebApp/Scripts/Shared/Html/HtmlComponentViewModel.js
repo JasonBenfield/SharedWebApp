@@ -5,7 +5,7 @@ var tslib_1 = require("tslib");
 var ComponentViewModel_1 = require("../ComponentViewModel");
 var ko = require("knockout");
 var HtmlComponentViewModel = /** @class */ (function (_super) {
-    tslib_1.__extends(HtmlComponentViewModel, _super);
+    (0, tslib_1.__extends)(HtmlComponentViewModel, _super);
     function HtmlComponentViewModel(template) {
         var _this = _super.call(this, template) || this;
         _this.id = ko.observable(null);

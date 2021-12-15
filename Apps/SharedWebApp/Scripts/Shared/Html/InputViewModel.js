@@ -7,7 +7,7 @@ var ko = require("knockout");
 var template = require("./Input.html");
 var HtmlComponentViewModel_1 = require("./HtmlComponentViewModel");
 var InputViewModel = /** @class */ (function (_super) {
-    tslib_1.__extends(InputViewModel, _super);
+    (0, tslib_1.__extends)(InputViewModel, _super);
     function InputViewModel() {
         var _this = _super.call(this, new ComponentTemplate_1.ComponentTemplate('input', template)) || this;
         _this.type = ko.observable('text');

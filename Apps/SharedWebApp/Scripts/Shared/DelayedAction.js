@@ -20,7 +20,7 @@ var DelayedAction = /** @class */ (function () {
         return new Promise(function (resolve) {
             setTimeout(function () {
                 var _a;
-                result = (_a = _this.func).call.apply(_a, tslib_1.__spreadArray([_this.func], args));
+                result = (_a = _this.func).call.apply(_a, (0, tslib_1.__spreadArray)([_this.func], args, false));
                 resolve(result);
             }, _this.wait);
         });

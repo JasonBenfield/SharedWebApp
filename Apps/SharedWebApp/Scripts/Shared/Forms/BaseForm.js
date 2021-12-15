@@ -4,42 +4,31 @@ exports.BaseForm = void 0;
 var tslib_1 = require("tslib");
 var AppApiError_1 = require("../AppApiError");
 var ConsoleLog_1 = require("../ConsoleLog");
-var ModalErrorComponent_1 = require("../Error/ModalErrorComponent");
 var ErrorModel_1 = require("../ErrorModel");
+var ComplexFieldLayout_1 = require("./ComplexFieldLayout");
 var ErrorList_1 = require("./ErrorList");
 var FormGroupCollection_1 = require("./FormGroupCollection");
 var FormSaveResult_1 = require("./FormSaveResult");
-var FormComponentViewModel_1 = require("../Html/FormComponentViewModel");
-var FormComponent_1 = require("../Html/FormComponent");
-var ComplexFieldLayout_1 = require("./ComplexFieldLayout");
-var BaseForm = /** @class */ (function (_super) {
-    tslib_1.__extends(BaseForm, _super);
-    function BaseForm(name, vm) {
-        if (vm === void 0) { vm = new FormComponentViewModel_1.FormComponentViewModel(); }
-        var _this = _super.call(this, vm) || this;
-        _this.name = name;
-        _this.layout = new ComplexFieldLayout_1.ComplexFieldLayout(_this);
-        _this.formGroups = new FormGroupCollection_1.FormGroupCollection(_this.name);
-        _this.modalError = new ModalErrorComponent_1.ModalErrorComponent().addToContainer(_this.content);
-        _this.modalError.errorSelected.register(_this.onErrorSelected.bind(_this));
-        return _this;
+var BaseForm = /** @class */ (function () {
+    function BaseForm(name, view) {
+        this.name = name;
+        this.view = view;
+        this.layout = new ComplexFieldLayout_1.ComplexFieldLayout(this);
+        this.formGroups = new FormGroupCollection_1.FormGroupCollection(name, this.view.formGroups);
+        this.modalError.errorSelected.register(this.onErrorSelected.bind(this));
     }
     BaseForm.prototype.onErrorSelected = function (error) {
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function () {
             var field;
-            return tslib_1.__generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.modalError.okCommand.execute()];
-                    case 1:
-                        _a.sent();
-                        field = this.getField(error.Source);
-                        if (field) {
-                            if (field.setFocus) {
-                                field.setFocus();
-                            }
-                        }
-                        return [2 /*return*/];
+            return (0, tslib_1.__generator)(this, function (_a) {
+                this.modalError.hide();
+                field = this.getField(error.Source);
+                if (field) {
+                    if (field.setFocus) {
+                        field.setFocus();
+                    }
                 }
+                return [2 /*return*/];
             });
         });
     };
@@ -100,9 +89,9 @@ var BaseForm = /** @class */ (function (_super) {
         return this.formGroups.addFormGroup(formGroup);
     };
     BaseForm.prototype.save = function (action) {
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function () {
             var validationResult, errors_1, result, errors, model, ex_1, caption, error;
-            return tslib_1.__generator(this, function (_a) {
+            return (0, tslib_1.__generator)(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         validationResult = this.validate();
@@ -153,6 +142,6 @@ var BaseForm = /** @class */ (function (_super) {
         return values;
     };
     return BaseForm;
-}(FormComponent_1.FormComponent));
+}());
 exports.BaseForm = BaseForm;
 //# sourceMappingURL=BaseForm.js.map

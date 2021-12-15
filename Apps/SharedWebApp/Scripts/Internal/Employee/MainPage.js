@@ -20,6 +20,7 @@ var PaddingCss_1 = require("../../Shared/PaddingCss");
 var AddressInputLayout_1 = require("./AddressInputLayout");
 var ConsoleLog_1 = require("../../Shared/ConsoleLog");
 var xtistart_1 = require("xtistart");
+var MessageAlertView_1 = require("../../Shared/MessageAlertView");
 var MainPage = /** @class */ (function () {
     function MainPage(page) {
         this.page = page;
@@ -28,7 +29,8 @@ var MainPage = /** @class */ (function () {
         headerRow.addContent(new Container_1.Container());
         headerRow.addContent(new TextHeading1_1.TextHeading1('Add Employee'));
         var flexFill = flexColumn.addContent(new FlexColumnFill_1.FlexColumnFill());
-        this.alert = flexFill.addContent(new MessageAlert_1.MessageAlert());
+        var alertView = flexFill.addContent(new MessageAlertView_1.MessageAlertView());
+        this.alert = new MessageAlert_1.MessageAlert(alertView);
         this.addEmployeeForm = flexFill.container.addContent(new AddEmployeeForm_1.AddEmployeeForm());
         var toolbar = flexColumn.addContent(new Toolbar_1.Toolbar());
         toolbar.setPadding(PaddingCss_1.PaddingCss.xs(3));
@@ -53,9 +55,9 @@ var MainPage = /** @class */ (function () {
         this.saveCommand.execute();
     };
     MainPage.prototype.test = function () {
-        return tslib_1.__awaiter(this, void 0, void 0, function () {
+        return (0, tslib_1.__awaiter)(this, void 0, void 0, function () {
             var action, result;
-            return tslib_1.__generator(this, function (_a) {
+            return (0, tslib_1.__generator)(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         action = new AppApiAction_1.AppApiAction(new AppApiEvents_1.AppApiEvents(function () { }), AppResourceUrl_1.AppResourceUrl.app(location.protocol + "//" + location.host, 'Shared', 'Current', '', '')
@@ -71,9 +73,9 @@ var MainPage = /** @class */ (function () {
     };
     MainPage.prototype.save = function () {
         var _this = this;
-        return this.alert.infoAction('Saving...', function () { return tslib_1.__awaiter(_this, void 0, void 0, function () {
+        return this.alert.infoAction('Saving...', function () { return (0, tslib_1.__awaiter)(_this, void 0, void 0, function () {
             var action, result;
-            return tslib_1.__generator(this, function (_a) {
+            return (0, tslib_1.__generator)(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         action = new AppApiAction_1.AppApiAction(new AppApiEvents_1.AppApiEvents(function () { }), AppResourceUrl_1.AppResourceUrl.app(location.protocol + "//" + location.host, 'Shared', 'Current', '', '').withGroup('Employee'), 'AddEmployee', 'Add Employee');

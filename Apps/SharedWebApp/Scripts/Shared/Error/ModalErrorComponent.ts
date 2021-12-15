@@ -1,81 +1,50 @@
-﻿import { ModalErrorComponentViewModel } from './ModalErrorComponentViewModel';
-import { Command } from '../Command/Command';
-import { ModalErrorViewModel } from './ModalErrorViewModel';
+﻿import { Command } from '../Command/Command';
 import { ErrorModel } from '../ErrorModel';
-import { ModalErrorItemViewModel } from './ModalErrorItemViewModel';
-import { Any, FilteredArray } from '../Enumerable';
-import { CssClass } from '../CssClass';
-import { ContextualClass } from '../ContextualClass';
+import { DefaultEvent } from '../Events';
+import { ModalErrorComponentView } from './ModalErrorComponentView';
+import { ModalErrorGroupComponent } from './ModalErrorGroupComponent';
+import { ModalErrorListItem } from './ModalErrorListItem';
 
-export class ModalErrorComponent implements IComponent {
-    constructor(
-        private readonly vm: ModalErrorComponentViewModel = new ModalErrorComponentViewModel()
-    ) {
-        this.vm.modalOptions.closed.register(this.onClosed.bind(this));
+export class ModalErrorComponent {
+    private readonly errorGroups: ModalErrorGroupComponent[] = [];
+
+    private readonly _errorSelected = new DefaultEvent<ErrorModel>(this);
+    readonly errorSelected = this._errorSelected.handler();
+
+    constructor(private readonly view: ModalErrorComponentView) {
+        this.view.closed.register(this.onClosed.bind(this));
+        new Command(this.hide.bind(this)).add(this.view.okButton);
     }
-
-    addToContainer(container: IAggregateComponent) {
-        return container.addItem(this.vm, this);
-    }
-
-    insertIntoContainer(container: IAggregateComponent, index: number) {
-        return container.insertItem(index, this.vm, this);
-    }
-
-    removeFromContainer(container: IAggregateComponent) {
-        return container.removeItem(this);
-    }
-
-    readonly errorSelected = this.vm.errorSelected;
 
     private onClosed() {
-        this.vm.errors([]);
+        this.clearErrors();
     }
 
     show(errors: ErrorModel[], caption: string = '') {
-        let errorVM = new ModalErrorViewModel();
-        errorVM.caption(caption);
-        let anyCaptions = new Any(
-            new FilteredArray(
-                errors,
-                e => Boolean(e.Caption)
-            )
-        ).value();
-        let captionCss = new CssClass();
-        let messageCss = new CssClass();
-        if (anyCaptions) {
-            captionCss.addName('col-3');
-            messageCss.addName('col');
-        }
-        let itemVMs: ModalErrorItemViewModel[] = [];
-        for (let error of errors) {
-            let itemVM = new ModalErrorItemViewModel(error);
-            itemVM.captionCss(captionCss.toString());
-            itemVM.messageCss(messageCss.toString());
-            itemVMs.push(itemVM);
-        }
-        errorVM.errors(itemVMs);
-        this.vm.errors.splice(0, 0, errorVM);
-        if (this.vm.errors().length === 1) {
-            this.vm.title('An error occurred');
+        let group = new ModalErrorGroupComponent(this.view.errorGroup());
+        group.errorSelected.register(this.onErrorSelected.bind(this));
+        group.load(caption, errors, this.errorGroups.length === 0);
+        this.errorGroups.push(group);
+        if (errors.length === 1) {
+            this.view.setTitle('An error occurred');
         }
         else {
-            this.vm.title('Errors occurred');
+            this.view.setTitle('Errors occurred');
         }
-        this.vm.modalOptions.command('show');
+        this.view.showModal();
     }
 
-    readonly okCommand = new Command(this.ok.bind(this))
-        .configure(c => {
-            c.addButton(this.vm.okCommand)
-                .configure(b => {
-                    b.setText('OK');
-                    b.setContext(ContextualClass.danger);
-                });
-        });
+    hide() {
+        this.clearErrors();
+        this.view.hideModal();
+    }
 
-    private ok() {
-        this.vm.errors([]);
-        this.vm.modalOptions.command('hide');
+    private onErrorSelected(errorListItem: ModalErrorListItem) {
+        this._errorSelected.invoke(errorListItem.error);
+    }
+
+    private clearErrors() {
+        this.errorGroups.splice(0, this.errorGroups.length);
+        this.view.clearErrorGroups();
     }
 }

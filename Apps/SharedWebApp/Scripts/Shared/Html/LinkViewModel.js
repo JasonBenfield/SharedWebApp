@@ -9,7 +9,7 @@ var HtmlComponentViewModel_1 = require("./HtmlComponentViewModel");
 var Events_1 = require("../Events");
 var AggregateComponentViewModel_1 = require("./AggregateComponentViewModel");
 var LinkViewModel = /** @class */ (function (_super) {
-    tslib_1.__extends(LinkViewModel, _super);
+    (0, tslib_1.__extends)(LinkViewModel, _super);
     function LinkViewModel() {
         var _this = _super.call(this, new ComponentTemplate_1.ComponentTemplate('link', template)) || this;
         _this.content = new AggregateComponentViewModel_1.AggregateComponentViewModel();

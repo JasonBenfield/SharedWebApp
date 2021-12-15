@@ -7,7 +7,7 @@ var template = require("./TextSpan.html");
 var ComponentTemplate_1 = require("../ComponentTemplate");
 var ko = require("knockout");
 var TextSpanViewModel = /** @class */ (function (_super) {
-    tslib_1.__extends(TextSpanViewModel, _super);
+    (0, tslib_1.__extends)(TextSpanViewModel, _super);
     function TextSpanViewModel() {
         var _this = _super.call(this, new ComponentTemplate_1.ComponentTemplate('text-span', template)) || this;
         _this.text = ko.observable('');

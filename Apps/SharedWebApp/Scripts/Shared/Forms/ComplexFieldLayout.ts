@@ -1,9 +1,9 @@
-﻿import { BaseForm } from "./BaseForm";
-import { ComplexFieldFormGroup } from "./ComplexFieldFormGroup";
+﻿import { BaseFormView } from "./BaseFormView";
+import { ComplexFieldFormGroupView } from "./ComplexFieldFormGroupView";
 
 export class ComplexFieldLayout {
     constructor(
-        private readonly complexField: ComplexFieldFormGroup | BaseForm
+        private readonly complexField: ComplexFieldFormGroupView | BaseFormView
     ) {
     }
 
@@ -11,8 +11,8 @@ export class ComplexFieldLayout {
         this.executeLayout(this.complexField);
     }
 
-    protected executeLayout(complexField: ComplexFieldFormGroup | BaseForm) {
-        if (complexField instanceof BaseForm) {
+    protected executeLayout(complexField: ComplexFieldFormGroupView | BaseFormView) {
+        if (complexField instanceof BaseFormView) {
             complexField.forEachFormGroup(fg => {
                 fg.addToContainer(complexField);
             });

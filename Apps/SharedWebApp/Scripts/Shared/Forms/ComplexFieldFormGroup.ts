@@ -1,20 +1,25 @@
 ﻿import { BlockViewModel } from "../Html/BlockViewModel";
 import { FormGroup } from "../Html/FormGroup";
+import { ComplexFieldFormGroupView } from "./ComplexFieldFormGroupView";
 import { ComplexFieldLayout } from "./ComplexFieldLayout";
 import { FormGroupCollection } from "./FormGroupCollection";
 
 export class ComplexFieldFormGroup extends FormGroup implements IField {
+    private layout = new ComplexFieldLayout(this);
+
+    private readonly name: string;
+
+    private readonly formGroups: FormGroupCollection;
+
     constructor(
         prefix: string,
         name: string,
-        vm: BlockViewModel = new BlockViewModel()
+        view: ComplexFieldFormGroupView
     ) {
-        super(vm);
+        super(view);
         this.name = prefix ? `${prefix}_${name}` : name;
-        this.formGroups = new FormGroupCollection(this.name);
+        this.formGroups = new FormGroupCollection(this.name, view.formGroups);
     }
-
-    private layout = new ComplexFieldLayout(this);
 
     useLayout(createLayout: (fg: this) => ComplexFieldLayout) {
         this.layout = createLayout(this);
@@ -24,8 +29,6 @@ export class ComplexFieldFormGroup extends FormGroup implements IField {
         this.layout.execute();
         this.formGroups.executeLayout();
     }
-
-    private readonly name: string;
 
     getName() {
         return this.name;
@@ -44,8 +47,6 @@ export class ComplexFieldFormGroup extends FormGroup implements IField {
         }
         return this.formGroups.getField(name);
     }
-
-    private readonly formGroups: FormGroupCollection;
 
     forEachFormGroup(action: (field: IFormGroupField) => void) {
         this.formGroups.forEach(action);

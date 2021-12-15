@@ -1,13 +1,12 @@
 ﻿import { ComplexFieldFormGroup } from '../../Shared/Forms/ComplexFieldFormGroup';
-import { BlockViewModel } from '../../Shared/Html/BlockViewModel';
+import { ComplexFieldFormGroupView } from '../../Shared/Forms/ComplexFieldFormGroupView';
 
 export class AddressInputField extends ComplexFieldFormGroup {
     constructor(
         prefix: string,
-        name: string,
-        vm: BlockViewModel = new BlockViewModel()
+        name: string
     ) {
-        super(prefix, name, vm);
+        super(prefix, name, new ComplexFieldFormGroupView());
     }
 
     readonly Line1 = this.addTextInputFormGroup('Line1');

@@ -6,7 +6,7 @@ var SpanViewModel_1 = require("./SpanViewModel");
 var AggregateComponent_1 = require("./AggregateComponent");
 var HtmlContainerComponent_1 = require("./HtmlContainerComponent");
 var Span = /** @class */ (function (_super) {
-    tslib_1.__extends(Span, _super);
+    (0, tslib_1.__extends)(Span, _super);
     function Span(vm) {
         if (vm === void 0) { vm = new SpanViewModel_1.SpanViewModel(); }
         return _super.call(this, vm, new AggregateComponent_1.AggregateComponent(vm.content)) || this;

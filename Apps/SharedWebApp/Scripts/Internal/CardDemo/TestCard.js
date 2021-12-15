@@ -1,44 +1,38 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TestCard = void 0;
-var tslib_1 = require("tslib");
-var Card_1 = require("../../Shared/Card/Card");
+var CardTitleHeader_1 = require("../../Shared/Card/CardTitleHeader");
 var DelayedAction_1 = require("../../Shared/DelayedAction");
-var Row_1 = require("../../Shared/Grid/Row");
-var ContextualClass_1 = require("../../Shared/ContextualClass");
 var Enumerable_1 = require("../../Shared/Enumerable");
-var ColumnCss_1 = require("../../Shared/ColumnCss");
-var BlockViewModel_1 = require("../../Shared/Html/BlockViewModel");
-var TextBlock_1 = require("../../Shared/Html/TextBlock");
-var TestCard = /** @class */ (function (_super) {
-    tslib_1.__extends(TestCard, _super);
-    function TestCard(vm) {
-        if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
-        var _this = _super.call(this, vm) || this;
-        _this.cardTitleHeader = _this.addCardTitleHeader('Original Title');
-        _this.alert = _this.addCardAlert().alert;
-        _this.testItems = _this.addListGroup();
-        _this.clickableItems = _this.addButtonListGroup();
-        _this.cardTitleHeader.setText('This is the Title');
-        _this.testItems.setItems(new Enumerable_1.EnumerableRange(1, 5).value(), function (i, listItem) {
-            var textBlock = listItem.addContent(new TextBlock_1.TextBlock());
-            textBlock.setText("Test " + i);
-        });
-        _this.clickableItems.setItems(new Enumerable_1.EnumerableRange(1, 5).value(), function (i, listItem) {
-            var row = listItem.addContent(new Row_1.Row(vm));
-            var iconColumn = row.addIconColumn('thumbs-up', function (icon) {
-                icon.makeFixedWidth();
-                icon.setColor(ContextualClass_1.ContextualClass.success);
-            });
-            iconColumn.setColumnCss(ColumnCss_1.ColumnCss.xs('auto'));
-            row.addTextColumn("Clickable " + i);
-        });
-        return _this;
+var ListGroup_1 = require("../../Shared/ListGroup/ListGroup");
+var MessageAlert_1 = require("../../Shared/MessageAlert");
+var TestClickableItem_1 = require("./TestClickableItem");
+var TestListItem_1 = require("./TestListItem");
+var TestCard = /** @class */ (function () {
+    function TestCard(view) {
+        this.view = view;
+        this.cardTitleHeader = new CardTitleHeader_1.CardTitleHeader('Original Title', this.view.cardTitleHeader);
+        this.alert = new MessageAlert_1.MessageAlert(this.view.alert);
+        this.cardTitleHeader.setText('This is the Title');
+        this.testItems = new ListGroup_1.ListGroup(this.view.testItems);
+        this.clickableItems = new ListGroup_1.ListGroup(this.view.clickableItems);
+        this.testItems.setItems(new Enumerable_1.EnumerableRange(1, 5).value(), function (i, listItem) { return new TestListItem_1.TestListItem(i, listItem); });
+        this.testItems.addItem(6, function (i, listItem) { return new TestListItem_1.TestListItem(i, listItem); });
+        this.clickableItems.setItems(new Enumerable_1.EnumerableRange(1, 5).value(), function (i, listItem) { return new TestClickableItem_1.TestClickableListItem(i, listItem); });
+        this.clickableItems.itemClicked.register(this.onClick.bind(this));
     }
+    TestCard.prototype.onClick = function (listItem) {
+        alert("You clicked " + listItem.i);
+    };
     TestCard.prototype.refresh = function () {
-        return this.alert.infoAction('Loading...', function () { return new DelayedAction_1.DelayedAction(function () { }, 5000).execute(); });
+        var _this = this;
+        return this.alert.infoAction('Loading...', function () {
+            _this.testItems.setItems(new Enumerable_1.EnumerableRange(6, 4).value(), function (i, listItem) { return new TestListItem_1.TestListItem(i, listItem); });
+            _this.clickableItems.setItems(new Enumerable_1.EnumerableRange(10, 6).value(), function (i, listItem) { return new TestClickableItem_1.TestClickableListItem(i, listItem); });
+            return new DelayedAction_1.DelayedAction(function () { }, 5000).execute();
+        });
     };
     return TestCard;
-}(Card_1.Card));
+}());
 exports.TestCard = TestCard;
 //# sourceMappingURL=TestCard.js.map

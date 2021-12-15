@@ -168,9 +168,10 @@ interface IAggregateComponentViewModel extends IComponentViewModel {
     readonly isVisible: ko.Observable<boolean>;
 }
 
-interface IList {
-    readonly itemClicked: IEventHandler<IListItem>;
-    addListItem<TListItem extends IListItem>(itemVM: IListItemViewModel, item: TListItem): TListItem;
+interface IListView {
+    readonly itemClicked: IEventHandler<IListItemView>;
+    removeFromListItem(itemVM: IListItemViewModel, item: IListItemView);
+    addFromListItem(itemVM: IListItemViewModel, item: IListItemView);
 }
 
 interface IListViewModel extends IHtmlComponentViewModel {
@@ -184,7 +185,7 @@ interface IListItemViewModel extends IHtmlComponentViewModel {
     readonly isClickable: boolean;
 }
 
-interface IListItem {
+interface IListItemView {
     readonly content: IAggregateComponent;
 
     getData<T>(): T;
@@ -195,7 +196,9 @@ interface IListItem {
 
     addContent<TItem extends IComponent>(item: TItem): TItem;
 
-    addToList(list: IList): this;
+    addToList(list: IListView): this;
+
+    removeFromList(list: IListView): this;
 
     show();
 
