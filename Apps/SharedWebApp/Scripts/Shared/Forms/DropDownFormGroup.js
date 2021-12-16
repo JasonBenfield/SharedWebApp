@@ -5,7 +5,7 @@ var tslib_1 = require("tslib");
 var ConstraintCollection_1 = require("./ConstraintCollection");
 var SimpleFieldFormGroup_1 = require("./SimpleFieldFormGroup");
 var DropDownFormGroup = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(DropDownFormGroup, _super);
+    tslib_1.__extends(DropDownFormGroup, _super);
     function DropDownFormGroup(prefix, name, view) {
         var _this = _super.call(this, prefix, name, view) || this;
         _this.constraints = new ConstraintCollection_1.ConstraintCollection();

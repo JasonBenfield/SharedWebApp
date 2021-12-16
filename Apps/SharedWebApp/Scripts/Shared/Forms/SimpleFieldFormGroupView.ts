@@ -12,7 +12,7 @@ import { ErrorListItemView } from "./ErrorListItemView";
 
 export class SimpleFieldFormGroupView extends FormGroupView {
     readonly alertList: ListGroupView;
-    readonly dropdown: DropdownComponent;
+    private readonly dropdown: DropdownComponent;
 
     constructor(vm: BlockViewModel = new BlockViewModel()) {
         super(vm);
@@ -32,4 +32,8 @@ export class SimpleFieldFormGroupView extends FormGroupView {
         alert.setContext(ContextualClass.danger);
         this.alertList = alert.addContent(new ListGroupView(() => new ErrorListItemView()));
     }
+
+    showDropDown() { this.dropdown.show(); }
+
+    hideDropDown() { this.dropdown.hide(); }
 }

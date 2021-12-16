@@ -8,7 +8,7 @@ import { Heading1 } from '../../Shared/Html/Heading1';
 import { TextSpan } from '../../Shared/Html/TextSpan';
 import { Toolbar } from '../../Shared/Html/Toolbar';
 import { PaddingCss } from '../../Shared/PaddingCss';
-import { PageFrame } from '../../Shared/PageFrame';
+import { PageFrameView } from '../../Shared/PageFrameView';
 import { TestCardView } from './TestCardView';
 
 export class MainPageView {
@@ -17,7 +17,7 @@ export class MainPageView {
     readonly cancelButton: ButtonCommandItem;
     readonly saveButton: ButtonCommandItem;
 
-    constructor(private readonly page: PageFrame) {
+    constructor(private readonly page: PageFrameView) {
         let flexColumn = this.page.addContent(new FlexColumn());
         flexColumn.addContent(new Block())
             .configure(b => {

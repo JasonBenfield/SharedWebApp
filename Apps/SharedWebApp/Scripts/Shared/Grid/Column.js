@@ -6,7 +6,7 @@ var ColumnCss_1 = require("../ColumnCss");
 var Block_1 = require("../Html/Block");
 var BlockViewModel_1 = require("../Html/BlockViewModel");
 var Column = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(Column, _super);
+    tslib_1.__extends(Column, _super);
     function Column(vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         var _this = _super.call(this, vm) || this;

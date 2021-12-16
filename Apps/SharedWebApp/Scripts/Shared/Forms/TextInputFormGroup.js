@@ -6,7 +6,7 @@ var ConstraintCollection_1 = require("./ConstraintCollection");
 var InputFormGroup_1 = require("./InputFormGroup");
 var TextToTextViewValue_1 = require("./TextToTextViewValue");
 var TextInputFormGroup = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(TextInputFormGroup, _super);
+    tslib_1.__extends(TextInputFormGroup, _super);
     function TextInputFormGroup(prefix, name, view) {
         var _this = _super.call(this, prefix, name, view, new TextToTextViewValue_1.TextToTextViewValue()) || this;
         _this.constraints = new ConstraintCollection_1.TextConstraintCollection();

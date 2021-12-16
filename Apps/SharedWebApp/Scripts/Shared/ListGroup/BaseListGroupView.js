@@ -4,7 +4,7 @@ exports.BaseListGroupView = void 0;
 var tslib_1 = require("tslib");
 var BaseListView_1 = require("./BaseListView");
 var BaseListGroupView = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(BaseListGroupView, _super);
+    tslib_1.__extends(BaseListGroupView, _super);
     function BaseListGroupView(createItemView, vm) {
         var _this = _super.call(this, createItemView, vm) || this;
         _this.addCssName('list-group');

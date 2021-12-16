@@ -6,7 +6,7 @@ var Block_1 = require("../Html/Block");
 var HtmlContainerComponent_1 = require("../Html/HtmlContainerComponent");
 var ModalComponentViewModel_1 = require("./ModalComponentViewModel");
 var ModalComponentView = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(ModalComponentView, _super);
+    tslib_1.__extends(ModalComponentView, _super);
     function ModalComponentView(vm) {
         if (vm === void 0) { vm = new ModalComponentViewModel_1.ModalComponentViewModel(); }
         var _this = _super.call(this, vm) || this;

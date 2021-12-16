@@ -1,17 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FormComponentViewModel = void 0;
+exports.FormViewModel = void 0;
 var tslib_1 = require("tslib");
-var HtmlComponentViewModel_1 = require("./HtmlComponentViewModel");
-var template = require("./FormComponent.html");
-var ComponentTemplate_1 = require("../ComponentTemplate");
-var AggregateComponentViewModel_1 = require("./AggregateComponentViewModel");
 var ko = require("knockout");
-var Events_1 = require("../Events");
+var ComponentTemplate_1 = require("../ComponentTemplate");
 var DelayedAction_1 = require("../DelayedAction");
-var FormComponentViewModel = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(FormComponentViewModel, _super);
-    function FormComponentViewModel(content) {
+var Events_1 = require("../Events");
+var AggregateComponentViewModel_1 = require("./AggregateComponentViewModel");
+var template = require("./Form.html");
+var HtmlComponentViewModel_1 = require("./HtmlComponentViewModel");
+var FormViewModel = /** @class */ (function (_super) {
+    tslib_1.__extends(FormViewModel, _super);
+    function FormViewModel(content) {
         if (content === void 0) { content = new AggregateComponentViewModel_1.AggregateComponentViewModel(); }
         var _this = _super.call(this, new ComponentTemplate_1.ComponentTemplate('form-component', template)) || this;
         _this.content = content;
@@ -23,12 +23,12 @@ var FormComponentViewModel = /** @class */ (function (_super) {
         _this.isDefaultSubmit = false;
         return _this;
     }
-    FormComponentViewModel.prototype.useDefaultSubmit = function () {
+    FormViewModel.prototype.useDefaultSubmit = function () {
         this.isDefaultSubmit = true;
     };
-    FormComponentViewModel.prototype.submit = function (_, event) {
-        return (0, tslib_1.__awaiter)(this, void 0, void 0, function () {
-            return (0, tslib_1.__generator)(this, function (_a) {
+    FormViewModel.prototype.submit = function (_, event) {
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
+            return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         if (document.activeElement instanceof HTMLElement) {
@@ -43,7 +43,7 @@ var FormComponentViewModel = /** @class */ (function (_super) {
             });
         });
     };
-    return FormComponentViewModel;
+    return FormViewModel;
 }(HtmlComponentViewModel_1.HtmlComponentViewModel));
-exports.FormComponentViewModel = FormComponentViewModel;
-//# sourceMappingURL=FormComponentViewModel.js.map
+exports.FormViewModel = FormViewModel;
+//# sourceMappingURL=FormViewModel.js.map

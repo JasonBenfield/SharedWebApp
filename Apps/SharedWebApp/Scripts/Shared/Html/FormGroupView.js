@@ -10,7 +10,7 @@ var InputGroup_1 = require("../Html/InputGroup");
 var TextSpan_1 = require("../Html/TextSpan");
 var MarginCss_1 = require("../MarginCss");
 var FormGroupView = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(FormGroupView, _super);
+    tslib_1.__extends(FormGroupView, _super);
     function FormGroupView(vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         var _this = _super.call(this, vm) || this;

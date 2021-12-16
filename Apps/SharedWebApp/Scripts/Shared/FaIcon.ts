@@ -1,6 +1,6 @@
 ﻿import { ComponentTemplate } from './ComponentTemplate';
-import * as template from './Templates/FaIcon.html';
 import { ContextualClass } from './ContextualClass';
+import * as template from './FaIcon.html';
 import { HtmlComponent } from './Html/HtmlComponent';
 import { HtmlComponentViewModel } from './Html/HtmlComponentViewModel';
 

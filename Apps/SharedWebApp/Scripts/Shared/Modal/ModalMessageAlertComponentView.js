@@ -10,14 +10,14 @@ var HtmlComponent_1 = require("../Html/HtmlComponent");
 var MarginCss_1 = require("../MarginCss");
 var MessageAlertView_1 = require("../MessageAlertView");
 var TextCss_1 = require("../TextCss");
-var ModalComponent_1 = require("./ModalComponent");
+var ModalComponentView_1 = require("./ModalComponentView");
 var ModalComponentViewModel_1 = require("./ModalComponentViewModel");
 var ModalMessageAlertComponentView = /** @class */ (function (_super) {
     tslib_1.__extends(ModalMessageAlertComponentView, _super);
     function ModalMessageAlertComponentView(vm) {
         if (vm === void 0) { vm = new ModalComponentViewModel_1.ModalComponentViewModel(); }
         var _this = _super.call(this, vm) || this;
-        _this.modal = new ModalComponent_1.ModalComponent(vm);
+        _this.modal = new ModalComponentView_1.ModalComponentView(vm);
         _this.modal.header.hide();
         _this.modal.body.setName(ModalMessageAlertComponentView.name);
         _this.alert = _this.modal.body.addContent(new MessageAlertView_1.MessageAlertView());

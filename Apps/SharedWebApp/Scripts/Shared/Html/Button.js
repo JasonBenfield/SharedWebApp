@@ -5,7 +5,7 @@ var tslib_1 = require("tslib");
 var ButtonViewModel_1 = require("./ButtonViewModel");
 var HtmlContainerComponent_1 = require("./HtmlContainerComponent");
 var Button = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(Button, _super);
+    tslib_1.__extends(Button, _super);
     function Button(vm) {
         if (vm === void 0) { vm = new ButtonViewModel_1.ButtonViewModel(); }
         var _this = _super.call(this, vm) || this;

@@ -97,9 +97,9 @@ var AggregateComponent = /** @class */ (function () {
             itemsToAdd[_i - 2] = arguments[_i];
         }
         var itemVMs = new Enumerable_1.MappedArray(itemsToAdd, function (aggItem) { return aggItem.vm; }).value();
-        (_a = this.vm.items).splice.apply(_a, (0, tslib_1.__spreadArray)([index, deleteCount], itemVMs, false));
+        (_a = this.vm.items).splice.apply(_a, tslib_1.__spreadArray([index, deleteCount], itemVMs));
         var items = new Enumerable_1.MappedArray(itemsToAdd, function (aggItem) { return aggItem.component; }).value();
-        (_b = this.items).splice.apply(_b, (0, tslib_1.__spreadArray)([index, deleteCount], items, false));
+        (_b = this.items).splice.apply(_b, tslib_1.__spreadArray([index, deleteCount], items));
     };
     AggregateComponent.prototype.show = function () { this.vm.isVisible(true); };
     AggregateComponent.prototype.hide = function () { this.vm.isVisible(false); };

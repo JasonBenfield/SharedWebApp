@@ -7,7 +7,7 @@ var FormGroupView_1 = require("../Html/FormGroupView");
 var ComplexFieldLayout_1 = require("./ComplexFieldLayout");
 var FormGroupViewCollection_1 = require("./FormGroupViewCollection");
 var ComplexFieldFormGroupView = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(ComplexFieldFormGroupView, _super);
+    tslib_1.__extends(ComplexFieldFormGroupView, _super);
     function ComplexFieldFormGroupView(vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         var _this = _super.call(this, vm) || this;

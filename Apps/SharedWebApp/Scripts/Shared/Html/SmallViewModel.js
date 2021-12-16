@@ -7,7 +7,7 @@ var ComponentTemplate_1 = require("../ComponentTemplate");
 var HtmlComponentViewModel_1 = require("./HtmlComponentViewModel");
 var AggregateComponentViewModel_1 = require("./AggregateComponentViewModel");
 var SmallViewModel = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(SmallViewModel, _super);
+    tslib_1.__extends(SmallViewModel, _super);
     function SmallViewModel() {
         var _this = _super.call(this, new ComponentTemplate_1.ComponentTemplate('small', template)) || this;
         _this.content = new AggregateComponentViewModel_1.AggregateComponentViewModel();

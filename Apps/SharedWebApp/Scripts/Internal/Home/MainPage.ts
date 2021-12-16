@@ -1,9 +1,9 @@
 ﻿import { Startup } from 'xtistart';
 import { TextBlock } from '../../Shared/Html/TextBlock';
-import { PageFrame } from '../../Shared/PageFrame';
+import { PageFrameView } from '../../Shared/PageFrameView';
 
 class MainPage {
-    constructor(page: PageFrame) {
+    constructor(page: PageFrameView) {
         page.addContent(new TextBlock('Shared Home Page'));
     }
 }

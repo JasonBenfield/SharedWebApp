@@ -1,11 +1,13 @@
 ﻿import { BaseForm } from '../../Shared/Forms/BaseForm';
-import { BaseFormView } from '../../Shared/Forms/BaseFormView';
 import { DropDownFieldItem } from "../../Shared/Forms/DropDownFieldItem";
+import { AddEmployeeFormView } from './AddEmployeeFormView';
 import { AddressInputField } from './AddressInputField';
 
 export class AddEmployeeForm extends BaseForm {
-    constructor() {
-        super('AddEmployeeForm', new BaseFormView());
+    protected readonly view: AddEmployeeFormView;
+
+    constructor(view: AddEmployeeFormView) {
+        super('AddEmployeeForm', view);
         this.EmployeeName.setCaption("Name");
         this.EmployeeName.setValue('Paul Atreides')
         this.EmployeeName.constraints.mustNotBeNull();
@@ -24,8 +26,10 @@ export class AddEmployeeForm extends BaseForm {
         this.Address.setCaption('Address');
     }
 
-    readonly EmployeeName = this.addTextInputFormGroup('Name');
-    readonly BirthDate = this.addDateInputFormGroup('BirthDate');
-    readonly Department = this.addNumberDropDownFormGroup('Department');
-    readonly Address = this.addFormGroup(new AddressInputField(this.getName(), 'Address'));
+    readonly EmployeeName = this.addTextInputFormGroup('Name', this.view.EmployeeName);
+    readonly BirthDate = this.addDateInputFormGroup('BirthDate', this.view.BirthDate);
+    readonly Department = this.addNumberDropDownFormGroup('Department', this.view.Department);
+    readonly Address = this.addFormGroup(
+        new AddressInputField(this.getName(), 'Address', this.view.Address)
+    );
 }

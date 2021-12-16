@@ -6,7 +6,7 @@ var Events_1 = require("../Events");
 var HtmlComponent_1 = require("../Html/HtmlComponent");
 var UnorderedListViewModel_1 = require("../Html/UnorderedListViewModel");
 var BaseListView = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(BaseListView, _super);
+    tslib_1.__extends(BaseListView, _super);
     function BaseListView(createItemView, vm) {
         if (vm === void 0) { vm = new UnorderedListViewModel_1.UnorderedListViewModel(); }
         var _this = _super.call(this, vm) || this;

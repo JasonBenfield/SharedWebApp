@@ -1,13 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BaseStartup = exports.defaultApi = void 0;
-var PageFrame_1 = require("./PageFrame");
+exports.BaseStartup = void 0;
+var PageFrameView_1 = require("./PageFrameView");
 var BaseStartup = /** @class */ (function () {
     function BaseStartup() {
     }
     BaseStartup.prototype.build = function () {
-        var pageFrame = new PageFrame_1.PageFrame();
-        pageFrame.setDefaultApiType(this.getDefaultApi());
+        var pageFrame = new PageFrameView_1.PageFrameView();
         pageFrame.load();
         return pageFrame;
     };

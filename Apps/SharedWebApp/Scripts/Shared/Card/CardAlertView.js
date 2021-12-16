@@ -6,7 +6,7 @@ var Block_1 = require("../Html/Block");
 var BlockViewModel_1 = require("../Html/BlockViewModel");
 var MessageAlertView_1 = require("../MessageAlertView");
 var CardAlertView = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(CardAlertView, _super);
+    tslib_1.__extends(CardAlertView, _super);
     function CardAlertView(vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         var _this = _super.call(this, vm) || this;

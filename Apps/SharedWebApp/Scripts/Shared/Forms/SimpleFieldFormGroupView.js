@@ -14,7 +14,7 @@ var MarginCss_1 = require("../MarginCss");
 var PaddingCss_1 = require("../PaddingCss");
 var ErrorListItemView_1 = require("./ErrorListItemView");
 var SimpleFieldFormGroupView = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(SimpleFieldFormGroupView, _super);
+    tslib_1.__extends(SimpleFieldFormGroupView, _super);
     function SimpleFieldFormGroupView(vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         var _this = _super.call(this, vm) || this;
@@ -35,6 +35,8 @@ var SimpleFieldFormGroupView = /** @class */ (function (_super) {
         _this.alertList = alert.addContent(new ListGroupView_1.ListGroupView(function () { return new ErrorListItemView_1.ErrorListItemView(); }));
         return _this;
     }
+    SimpleFieldFormGroupView.prototype.showDropDown = function () { this.dropdown.show(); };
+    SimpleFieldFormGroupView.prototype.hideDropDown = function () { this.dropdown.hide(); };
     return SimpleFieldFormGroupView;
 }(FormGroupView_1.FormGroupView));
 exports.SimpleFieldFormGroupView = SimpleFieldFormGroupView;

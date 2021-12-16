@@ -1,16 +1,12 @@
-﻿import { HtmlComponentViewModel } from "./HtmlComponentViewModel";
-import * as template from './FormComponent.html';
+﻿import * as ko from 'knockout';
 import { ComponentTemplate } from "../ComponentTemplate";
-import { AggregateComponentViewModel } from "./AggregateComponentViewModel";
-import * as ko from 'knockout';
-import { SimpleEvent } from "../Events";
 import { DelayedAction } from "../DelayedAction";
+import { SimpleEvent } from "../Events";
+import { AggregateComponentViewModel } from "./AggregateComponentViewModel";
+import * as template from './Form.html';
+import { HtmlComponentViewModel } from "./HtmlComponentViewModel";
 
-export class FormComponentViewModel extends HtmlComponentViewModel {
-    constructor(public readonly content = new AggregateComponentViewModel()) {
-        super(new ComponentTemplate('form-component', template));
-    }
-
+export class FormViewModel extends HtmlComponentViewModel {
     readonly action = ko.observable<string>(null);
     readonly method = ko.observable<string>(null);
     readonly autocomplete = ko.observable<string>(null);
@@ -19,6 +15,10 @@ export class FormComponentViewModel extends HtmlComponentViewModel {
     readonly submitted = this._submitted.handler();
 
     private isDefaultSubmit = false;
+
+    constructor(public readonly content = new AggregateComponentViewModel()) {
+        super(new ComponentTemplate('form-component', template));
+    }
 
     useDefaultSubmit() {
         this.isDefaultSubmit = true;

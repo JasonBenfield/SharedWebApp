@@ -14,9 +14,9 @@ var AppApiAction = /** @class */ (function () {
         this.resourceUrl = resourceUrl.withAction(actionName);
     }
     AppApiAction.prototype.execute = function (data, errorOptions) {
-        return (0, tslib_1.__awaiter)(this, void 0, void 0, function () {
+        return tslib_1.__awaiter(this, void 0, void 0, function () {
             var jsonText, postResult, result, apiError, errors, rawErrors, message;
-            return (0, tslib_1.__generator)(this, function (_a) {
+            return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         jsonText = new JsonText_1.JsonText(data).toString();

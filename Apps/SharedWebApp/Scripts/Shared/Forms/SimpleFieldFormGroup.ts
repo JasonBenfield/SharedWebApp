@@ -9,6 +9,7 @@ import { SimpleFieldFormGroupView } from "./SimpleFieldFormGroupView";
 export abstract class SimpleFieldFormGroup<TValue> implements IField {
     private readonly name: string;
     private readonly caption: string;
+    private readonly alertList: ListGroup;
 
     constructor(prefix: string, name: string, protected readonly view: SimpleFieldFormGroupView) {
         this.name = prefix ? `${prefix}_${name}` : name;
@@ -31,10 +32,6 @@ export abstract class SimpleFieldFormGroup<TValue> implements IField {
         this.view.setCaption(caption);
     }
 
-    private readonly dropdown: DropdownComponent;
-
-    private readonly alertList: ListGroup;
-
     getField(name: string) { return this.getName() === name ? this : null; }
 
     setErrors(errors: ErrorModel[]) {
@@ -43,10 +40,10 @@ export abstract class SimpleFieldFormGroup<TValue> implements IField {
             (e: ErrorModel, li: ErrorListItemView) => new ErrorListItem(e, li)
         );
         if (errors.length > 0) {
-            this.dropdown.show();
+            this.view.showDropDown();
         }
         else {
-            this.dropdown.hide();
+            this.view.hideDropDown();
         }
     }
 

@@ -6,18 +6,18 @@ import { HtmlComponent } from "../Html/HtmlComponent";
 import { MarginCss } from "../MarginCss";
 import { MessageAlertView } from "../MessageAlertView";
 import { TextCss } from "../TextCss";
-import { ModalComponent } from "./ModalComponent";
+import { ModalComponentView } from "./ModalComponentView";
 import { ModalComponentViewModel } from "./ModalComponentViewModel";
 
 export class ModalMessageAlertComponentView extends HtmlComponent {
-    private readonly modal: ModalComponent;
+    private readonly modal: ModalComponentView;
     readonly alert: MessageAlertView;
     readonly okButton: ButtonCommandItem;
     readonly closed: IEventHandler<any>;
 
     constructor(vm: ModalComponentViewModel = new ModalComponentViewModel()) {
         super(vm);
-        this.modal = new ModalComponent(vm);
+        this.modal = new ModalComponentView(vm);
         this.modal.header.hide();
         this.modal.body.setName(ModalMessageAlertComponentView.name);
         this.alert = this.modal.body.addContent(new MessageAlertView());

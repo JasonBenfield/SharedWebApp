@@ -4,7 +4,7 @@ exports.TextToNumberViewValue = void 0;
 var tslib_1 = require("tslib");
 var TypedFieldViewValue_1 = require("./TypedFieldViewValue");
 var TextToNumberViewValue = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(TextToNumberViewValue, _super);
+    tslib_1.__extends(TextToNumberViewValue, _super);
     function TextToNumberViewValue() {
         return _super !== null && _super.apply(this, arguments) || this;
     }

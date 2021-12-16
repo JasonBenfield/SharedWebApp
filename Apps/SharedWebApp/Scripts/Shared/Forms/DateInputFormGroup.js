@@ -6,7 +6,7 @@ var ConstraintCollection_1 = require("./ConstraintCollection");
 var InputFormGroup_1 = require("./InputFormGroup");
 var TextToDateViewValue_1 = require("./TextToDateViewValue");
 var DateInputFormGroup = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(DateInputFormGroup, _super);
+    tslib_1.__extends(DateInputFormGroup, _super);
     function DateInputFormGroup(prefix, name, view) {
         var _this = _super.call(this, prefix, name, view, new TextToDateViewValue_1.TextToDateViewValue()) || this;
         _this.constraints = new ConstraintCollection_1.DateConstraintCollection();

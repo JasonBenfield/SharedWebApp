@@ -7,7 +7,7 @@ var ContextualClass_1 = require("../ContextualClass");
 var InputViewModel_1 = require("./InputViewModel");
 var Events_1 = require("../Events");
 var Input = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(Input, _super);
+    tslib_1.__extends(Input, _super);
     function Input(vm) {
         if (vm === void 0) { vm = new InputViewModel_1.InputViewModel(); }
         var _this = _super.call(this, vm) || this;

@@ -3,7 +3,7 @@
 export class FormGroup {
     private caption: string;
 
-    constructor(private readonly view: FormGroupView) {
+    constructor(protected readonly view: FormGroupView) {
     }
 
     getCaption() {

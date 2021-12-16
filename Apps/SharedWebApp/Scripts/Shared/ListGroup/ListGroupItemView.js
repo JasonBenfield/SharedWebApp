@@ -7,7 +7,7 @@ var AggregateComponent_1 = require("../Html/AggregateComponent");
 var HtmlComponent_1 = require("../Html/HtmlComponent");
 var ListItemViewModel_1 = require("../Html/ListItemViewModel");
 var ListGroupItemView = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(ListGroupItemView, _super);
+    tslib_1.__extends(ListGroupItemView, _super);
     function ListGroupItemView(vm) {
         if (vm === void 0) { vm = new ListItemViewModel_1.ListItemViewModel(); }
         var _this = _super.call(this, vm) || this;

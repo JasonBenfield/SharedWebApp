@@ -1,16 +1,19 @@
 ﻿import { ComplexFieldFormGroup } from '../../Shared/Forms/ComplexFieldFormGroup';
-import { ComplexFieldFormGroupView } from '../../Shared/Forms/ComplexFieldFormGroupView';
+import { AddressInputFieldView } from './AddressInputFieldView';
 
 export class AddressInputField extends ComplexFieldFormGroup {
+    protected readonly view: AddressInputFieldView;
+
     constructor(
         prefix: string,
-        name: string
+        name: string,
+        view: AddressInputFieldView
     ) {
-        super(prefix, name, new ComplexFieldFormGroupView());
+        super(prefix, name, view);
     }
 
-    readonly Line1 = this.addTextInputFormGroup('Line1');
-    readonly City = this.addTextInputFormGroup('City');
-    readonly State = this.addTextInputFormGroup('State');
-    readonly Zip = this.addNumberInputFormGroup('Zip');
+    readonly Line1 = this.addTextInputFormGroup('Line1', this.view.Line1);
+    readonly City = this.addTextInputFormGroup('City', this.view.City);
+    readonly State = this.addTextInputFormGroup('State', this.view.State);
+    readonly Zip = this.addNumberInputFormGroup('Zip', this.view.Zip);
 }

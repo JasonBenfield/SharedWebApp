@@ -1,15 +1,9 @@
-﻿import { apiConstructor, AppApi } from "./AppApi";
-import { PageFrame } from "./PageFrame";
-
-export let defaultApi: apiConstructor<AppApi>;
+﻿import { PageFrameView } from "./PageFrameView";
 
 export abstract class BaseStartup {
     build() {
-        let pageFrame = new PageFrame();
-        pageFrame.setDefaultApiType(this.getDefaultApi());
+        let pageFrame = new PageFrameView();
         pageFrame.load();
         return pageFrame;
     }
-
-    protected abstract getDefaultApi();
 }

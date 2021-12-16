@@ -6,7 +6,7 @@ var Button_1 = require("../Html/Button");
 var ButtonListItemViewModel_1 = require("./ButtonListItemViewModel");
 var ListGroupItemView_1 = require("./ListGroupItemView");
 var ButtonListGroupItemView = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(ButtonListGroupItemView, _super);
+    tslib_1.__extends(ButtonListGroupItemView, _super);
     function ButtonListGroupItemView(vm) {
         if (vm === void 0) { vm = new ButtonListItemViewModel_1.ButtonListItemViewModel(); }
         var _this = _super.call(this, vm) || this;

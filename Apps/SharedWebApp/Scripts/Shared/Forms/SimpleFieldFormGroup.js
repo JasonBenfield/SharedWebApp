@@ -23,10 +23,10 @@ var SimpleFieldFormGroup = /** @class */ (function () {
     SimpleFieldFormGroup.prototype.setErrors = function (errors) {
         this.alertList.setItems(errors, function (e, li) { return new ErrorListItem_1.ErrorListItem(e, li); });
         if (errors.length > 0) {
-            this.dropdown.show();
+            this.view.showDropDown();
         }
         else {
-            this.dropdown.hide();
+            this.view.hideDropDown();
         }
     };
     SimpleFieldFormGroup.prototype.clearErrors = function () {

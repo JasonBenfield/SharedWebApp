@@ -1,61 +1,28 @@
-﻿import { AsyncCommand } from '../../Shared/Command/AsyncCommand';
+﻿import { Startup } from 'xtistart';
 import { AppApiAction } from '../../Shared/AppApiAction';
 import { AppApiEvents } from '../../Shared/AppApiEvents';
 import { AppResourceUrl } from '../../Shared/AppResourceUrl';
-import { ColumnCss } from '../../Shared/ColumnCss';
-import { ContextualClass } from '../../Shared/ContextualClass';
-import { MessageAlert } from '../../Shared/MessageAlert';
-import { AddEmployeeForm } from './AddEmployeeForm';
-import { FlexColumn } from '../../Shared/Html/FlexColumn';
-import { Block } from '../../Shared/Html/Block';
-import { Container } from '../../Shared/Html/Container';
-import { TextHeading1 } from '../../Shared/Html/TextHeading1';
-import { FlexColumnFill } from '../../Shared/Html/FlexColumnFill';
-import { Toolbar } from '../../Shared/Html/Toolbar';
-import { ButtonCommandItem } from '../../Shared/Command/ButtonCommandItem';
-import { PaddingCss } from '../../Shared/PaddingCss';
-import { AddressInputLayout } from './AddressInputLayout';
+import { AsyncCommand } from '../../Shared/Command/AsyncCommand';
 import { ConsoleLog } from '../../Shared/ConsoleLog';
-import { PageFrame } from '../../Shared/PageFrame';
-import { Startup } from 'xtistart';
-import { MessageAlertView } from '../../Shared/MessageAlertView';
+import { MessageAlert } from '../../Shared/MessageAlert';
+import { PageFrameView } from '../../Shared/PageFrameView';
+import { AddEmployeeForm } from './AddEmployeeForm';
+import { MainPageView } from './MainPageView';
 
 class MainPage {
+    private readonly view: MainPageView;
     private readonly alert: MessageAlert;
     private readonly addEmployeeForm: AddEmployeeForm;
     private readonly saveCommand: AsyncCommand;
 
-    constructor(private readonly page: PageFrame) {
-        let flexColumn = this.page.addContent(new FlexColumn());
-        let headerRow = flexColumn.addContent(new Block());
-        headerRow.addContent(new Container());
-        headerRow.addContent(new TextHeading1('Add Employee'));
-        let flexFill = flexColumn.addContent(new FlexColumnFill());
-        let alertView = flexFill.addContent(new MessageAlertView());
-        this.alert = new MessageAlert(alertView);
-        this.addEmployeeForm = flexFill.container.addContent(new AddEmployeeForm());
-        let toolbar = flexColumn.addContent(new Toolbar());
-        toolbar.setPadding(PaddingCss.xs(3));
-        toolbar.setBackgroundContext(ContextualClass.secondary);
-        let saveCommandItem = toolbar.columnEnd.addContent(new ButtonCommandItem());
-        saveCommandItem.icon.solidStyle();
-        saveCommandItem.icon.setName('check');
-        saveCommandItem.setText('Save');
-        saveCommandItem.setContext(ContextualClass.light);
+    constructor(page: PageFrameView) {
+        this.view = new MainPageView(page);
+        this.alert = new MessageAlert(this.view.alert);
+        this.addEmployeeForm = new AddEmployeeForm( this.view.addEmployeeForm);
         this.saveCommand = new AsyncCommand(this.save.bind(this));
-        this.saveCommand.add(saveCommandItem);
-        this.saveCommand.add(this.addEmployeeForm.addOffscreenSubmit());
-        this.addEmployeeForm.forEachFormGroup(fg => {
-            fg.captionColumn.setColumnCss(ColumnCss.xs(4));
-        });
+        this.saveCommand.add(this.view.saveButton);
+        this.saveCommand.add(this.view.submitButton);
         this.test();
-        this.addEmployeeForm.Address.useLayout((fg) => new AddressInputLayout(fg));
-        //this.addEmployeeForm.submitted.register(this.onFormSubmit.bind(this));
-        this.addEmployeeForm.executeLayout();
-    }
-
-    private onFormSubmit() {
-        this.saveCommand.execute();
     }
 
     private async test() {

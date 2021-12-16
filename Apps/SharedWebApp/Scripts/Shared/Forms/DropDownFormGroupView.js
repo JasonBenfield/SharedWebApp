@@ -6,7 +6,7 @@ var BlockViewModel_1 = require("../Html/BlockViewModel");
 var Select_1 = require("../Html/Select");
 var SimpleFieldFormGroupView_1 = require("./SimpleFieldFormGroupView");
 var DropDownFormGroupView = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(DropDownFormGroupView, _super);
+    tslib_1.__extends(DropDownFormGroupView, _super);
     function DropDownFormGroupView(vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         var _this = _super.call(this, vm) || this;

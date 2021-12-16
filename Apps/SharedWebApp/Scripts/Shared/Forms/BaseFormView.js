@@ -3,14 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.BaseFormView = void 0;
 var tslib_1 = require("tslib");
 var ModalErrorComponentView_1 = require("../Error/ModalErrorComponentView");
-var FormComponent_1 = require("../Html/FormComponent");
-var FormComponentViewModel_1 = require("../Html/FormComponentViewModel");
+var FormView_1 = require("../Html/FormView");
+var FormViewModel_1 = require("../Html/FormViewModel");
 var ComplexFieldLayout_1 = require("./ComplexFieldLayout");
 var FormGroupViewCollection_1 = require("./FormGroupViewCollection");
 var BaseFormView = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(BaseFormView, _super);
+    tslib_1.__extends(BaseFormView, _super);
     function BaseFormView(vm) {
-        if (vm === void 0) { vm = new FormComponentViewModel_1.FormComponentViewModel(); }
+        if (vm === void 0) { vm = new FormViewModel_1.FormViewModel(); }
         var _this = _super.call(this, vm) || this;
         _this.layout = new ComplexFieldLayout_1.ComplexFieldLayout(_this);
         _this.formGroups = new FormGroupViewCollection_1.FormGroupViewCollection();
@@ -40,6 +40,6 @@ var BaseFormView = /** @class */ (function (_super) {
         return this.formGroups.addFormGroup(formGroup);
     };
     return BaseFormView;
-}(FormComponent_1.FormComponent));
+}(FormView_1.FormView));
 exports.BaseFormView = BaseFormView;
 //# sourceMappingURL=BaseFormView.js.map

@@ -6,7 +6,7 @@ var ColumnCss_1 = require("../ColumnCss");
 var Label_1 = require("../Html/Label");
 var LabelViewModel_1 = require("../Html/LabelViewModel");
 var LabelColumn = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(LabelColumn, _super);
+    tslib_1.__extends(LabelColumn, _super);
     function LabelColumn(vm) {
         if (vm === void 0) { vm = new LabelViewModel_1.LabelViewModel(); }
         var _this = _super.call(this, vm) || this;

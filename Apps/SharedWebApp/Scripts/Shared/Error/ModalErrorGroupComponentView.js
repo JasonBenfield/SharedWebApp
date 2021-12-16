@@ -9,7 +9,7 @@ var TextHeading4_1 = require("../Html/TextHeading4");
 var ListGroupView_1 = require("../ListGroup/ListGroupView");
 var ModalErrorListItemView_1 = require("./ModalErrorListItemView");
 var ModalErrorGroupComponentView = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(ModalErrorGroupComponentView, _super);
+    tslib_1.__extends(ModalErrorGroupComponentView, _super);
     function ModalErrorGroupComponentView() {
         var _this = _super.call(this, new BlockViewModel_1.BlockViewModel()) || this;
         _this.hr = _this.addContent(new HorizontalRule_1.HorizontalRule());

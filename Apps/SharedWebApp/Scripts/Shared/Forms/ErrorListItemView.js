@@ -6,7 +6,7 @@ var ContextualClass_1 = require("../ContextualClass");
 var TextSpan_1 = require("../Html/TextSpan");
 var ListGroupItemView_1 = require("../ListGroup/ListGroupItemView");
 var ErrorListItemView = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(ErrorListItemView, _super);
+    tslib_1.__extends(ErrorListItemView, _super);
     function ErrorListItemView() {
         var _this = _super.call(this) || this;
         _this.addCssName('dropdown-item-text');

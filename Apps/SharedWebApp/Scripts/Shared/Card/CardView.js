@@ -10,7 +10,7 @@ var CardAlertView_1 = require("./CardAlertView");
 var CardHeader_1 = require("./CardHeader");
 var CardTitleHeaderView_1 = require("./CardTitleHeaderView");
 var CardView = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(CardView, _super);
+    tslib_1.__extends(CardView, _super);
     function CardView(vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         var _this = _super.call(this, vm) || this;

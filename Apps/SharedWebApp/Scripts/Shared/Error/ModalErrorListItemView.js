@@ -8,7 +8,7 @@ var TextBlock_1 = require("../Html/TextBlock");
 var LinkListGroupItemView_1 = require("../ListGroup/LinkListGroupItemView");
 var LinkListItemViewModel_1 = require("../ListGroup/LinkListItemViewModel");
 var ModalErrorListItemView = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(ModalErrorListItemView, _super);
+    tslib_1.__extends(ModalErrorListItemView, _super);
     function ModalErrorListItemView() {
         var _this = _super.call(this, new LinkListItemViewModel_1.LinkListItemViewModel()) || this;
         var row = _this.addContent(new Row_1.Row());

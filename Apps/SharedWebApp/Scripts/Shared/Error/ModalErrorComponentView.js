@@ -10,17 +10,19 @@ var Row_1 = require("../Grid/Row");
 var HorizontalRule_1 = require("../Html/HorizontalRule");
 var HtmlComponent_1 = require("../Html/HtmlComponent");
 var TextHeading5_1 = require("../Html/TextHeading5");
+var ModalComponentView_1 = require("../Modal/ModalComponentView");
 var ModalComponentViewModel_1 = require("../Modal/ModalComponentViewModel");
 var TextCss_1 = require("../TextCss");
 var ModalErrorGroupComponentView_1 = require("./ModalErrorGroupComponentView");
 var ModalErrorComponentView = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(ModalErrorComponentView, _super);
+    tslib_1.__extends(ModalErrorComponentView, _super);
     function ModalErrorComponentView(vm) {
         if (vm === void 0) { vm = new ModalComponentViewModel_1.ModalComponentViewModel(); }
         var _this = _super.call(this, vm) || this;
         _this._errorSelected = new Events_1.DefaultEvent(_this);
         _this.errorSelected = _this._errorSelected.handler();
         _this.errorGroups = [];
+        _this.modal = new ModalComponentView_1.ModalComponentView(vm);
         _this.modal.body.setName(ModalErrorComponentView.name);
         _this.title = _this.modal.header.addContent(new TextHeading5_1.TextHeading5(''));
         _this.hr = _this.modal.body.addContent(new HorizontalRule_1.HorizontalRule());

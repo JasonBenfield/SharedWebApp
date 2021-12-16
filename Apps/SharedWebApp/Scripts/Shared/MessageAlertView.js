@@ -7,7 +7,7 @@ var Block_1 = require("./Html/Block");
 var BlockViewModel_1 = require("./Html/BlockViewModel");
 var TextBlock_1 = require("./Html/TextBlock");
 var MessageAlertView = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(MessageAlertView, _super);
+    tslib_1.__extends(MessageAlertView, _super);
     function MessageAlertView(vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         var _this = _super.call(this, vm) || this;

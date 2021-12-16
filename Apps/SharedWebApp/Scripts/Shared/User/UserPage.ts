@@ -1,19 +1,18 @@
-﻿import { UrlBuilder } from '../UrlBuilder';
-import { Startup } from 'xtistart';
-import { WebPage } from '../WebPage';
+﻿import { AppApi } from '../AppApi';
 import { MessageAlert } from '../MessageAlert';
-import { PageFrame } from '../PageFrame';
+import { PageFrameView } from '../PageFrameView';
+import { UrlBuilder } from '../UrlBuilder';
+import { WebPage } from '../WebPage';
 import { UserPageView } from './UserPageView';
-import { AppApi } from '../AppApi';
 
 export class UserPage {
     private readonly view: UserPageView;
     private readonly api: AppApi;
     private readonly alert: MessageAlert;
 
-    constructor(page: PageFrame) {
+    constructor(page: PageFrameView, api: AppApi) {
         this.view = new UserPageView(page);
-        this.api = page.defaultApi();
+        this.api = api;
         this.alert = new MessageAlert(this.view.alert);
         this.goToReturnUrl();
     }
@@ -28,6 +27,4 @@ export class UserPage {
         returnUrl = this.api ? this.api.url.addPart(returnUrl).value() : '/';
         new WebPage(returnUrl).open();
     }
-
 }
-new UserPage(new Startup().build());

@@ -8,7 +8,7 @@ var AggregateComponentViewModel_1 = require("./Html/AggregateComponentViewModel"
 var ModalComponentViewModel_1 = require("./Modal/ModalComponentViewModel");
 var template = require("./Page.html");
 var PageViewModel = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(PageViewModel, _super);
+    tslib_1.__extends(PageViewModel, _super);
     function PageViewModel() {
         var _this = _super.call(this, new ComponentTemplate_1.ComponentTemplate('page-body', template)) || this;
         _this.content = new AggregateComponentViewModel_1.AggregateComponentViewModel();

@@ -1,59 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = require("tslib");
-var AsyncCommand_1 = require("../../Shared/Command/AsyncCommand");
+var xtistart_1 = require("xtistart");
 var AppApiAction_1 = require("../../Shared/AppApiAction");
 var AppApiEvents_1 = require("../../Shared/AppApiEvents");
 var AppResourceUrl_1 = require("../../Shared/AppResourceUrl");
-var ColumnCss_1 = require("../../Shared/ColumnCss");
-var ContextualClass_1 = require("../../Shared/ContextualClass");
+var AsyncCommand_1 = require("../../Shared/Command/AsyncCommand");
+var ConsoleLog_1 = require("../../Shared/ConsoleLog");
 var MessageAlert_1 = require("../../Shared/MessageAlert");
 var AddEmployeeForm_1 = require("./AddEmployeeForm");
-var FlexColumn_1 = require("../../Shared/Html/FlexColumn");
-var Block_1 = require("../../Shared/Html/Block");
-var Container_1 = require("../../Shared/Html/Container");
-var TextHeading1_1 = require("../../Shared/Html/TextHeading1");
-var FlexColumnFill_1 = require("../../Shared/Html/FlexColumnFill");
-var Toolbar_1 = require("../../Shared/Html/Toolbar");
-var ButtonCommandItem_1 = require("../../Shared/Command/ButtonCommandItem");
-var PaddingCss_1 = require("../../Shared/PaddingCss");
-var AddressInputLayout_1 = require("./AddressInputLayout");
-var ConsoleLog_1 = require("../../Shared/ConsoleLog");
-var xtistart_1 = require("xtistart");
-var MessageAlertView_1 = require("../../Shared/MessageAlertView");
+var MainPageView_1 = require("./MainPageView");
 var MainPage = /** @class */ (function () {
     function MainPage(page) {
-        this.page = page;
-        var flexColumn = this.page.addContent(new FlexColumn_1.FlexColumn());
-        var headerRow = flexColumn.addContent(new Block_1.Block());
-        headerRow.addContent(new Container_1.Container());
-        headerRow.addContent(new TextHeading1_1.TextHeading1('Add Employee'));
-        var flexFill = flexColumn.addContent(new FlexColumnFill_1.FlexColumnFill());
-        var alertView = flexFill.addContent(new MessageAlertView_1.MessageAlertView());
-        this.alert = new MessageAlert_1.MessageAlert(alertView);
-        this.addEmployeeForm = flexFill.container.addContent(new AddEmployeeForm_1.AddEmployeeForm());
-        var toolbar = flexColumn.addContent(new Toolbar_1.Toolbar());
-        toolbar.setPadding(PaddingCss_1.PaddingCss.xs(3));
-        toolbar.setBackgroundContext(ContextualClass_1.ContextualClass.secondary);
-        var saveCommandItem = toolbar.columnEnd.addContent(new ButtonCommandItem_1.ButtonCommandItem());
-        saveCommandItem.icon.solidStyle();
-        saveCommandItem.icon.setName('check');
-        saveCommandItem.setText('Save');
-        saveCommandItem.setContext(ContextualClass_1.ContextualClass.light);
+        this.view = new MainPageView_1.MainPageView(page);
+        this.alert = new MessageAlert_1.MessageAlert(this.view.alert);
+        this.addEmployeeForm = new AddEmployeeForm_1.AddEmployeeForm(this.view.addEmployeeForm);
         this.saveCommand = new AsyncCommand_1.AsyncCommand(this.save.bind(this));
-        this.saveCommand.add(saveCommandItem);
-        this.saveCommand.add(this.addEmployeeForm.addOffscreenSubmit());
-        this.addEmployeeForm.forEachFormGroup(function (fg) {
-            fg.captionColumn.setColumnCss(ColumnCss_1.ColumnCss.xs(4));
-        });
+        this.saveCommand.add(this.view.saveButton);
+        this.saveCommand.add(this.view.submitButton);
         this.test();
-        this.addEmployeeForm.Address.useLayout(function (fg) { return new AddressInputLayout_1.AddressInputLayout(fg); });
-        //this.addEmployeeForm.submitted.register(this.onFormSubmit.bind(this));
-        this.addEmployeeForm.executeLayout();
     }
-    MainPage.prototype.onFormSubmit = function () {
-        this.saveCommand.execute();
-    };
     MainPage.prototype.test = function () {
         return (0, tslib_1.__awaiter)(this, void 0, void 0, function () {
             var action, result;

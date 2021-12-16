@@ -10,7 +10,7 @@ var DropdownButton_1 = require("./DropdownButton");
 var DropdownLinkItem_1 = require("./DropdownLinkItem");
 var DropdownSpanItem_1 = require("./DropdownSpanItem");
 var DropdownBlock = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(DropdownBlock, _super);
+    tslib_1.__extends(DropdownBlock, _super);
     function DropdownBlock(createItemView, vm) {
         if (createItemView === void 0) { createItemView = (function () { return new ListItem_1.ListItem(); }); }
         if (vm === void 0) { vm = new DropdownBlockViewModel_1.DropdownBlockViewModel(); }

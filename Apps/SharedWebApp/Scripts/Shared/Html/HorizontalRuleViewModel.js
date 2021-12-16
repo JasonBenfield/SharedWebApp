@@ -7,7 +7,7 @@ var ComponentTemplate_1 = require("../ComponentTemplate");
 var ComponentViewModel_1 = require("../ComponentViewModel");
 var template = require("./HorizontalRule.html");
 var HorizontalRuleViewModel = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(HorizontalRuleViewModel, _super);
+    tslib_1.__extends(HorizontalRuleViewModel, _super);
     function HorizontalRuleViewModel() {
         var _this = _super.call(this, new ComponentTemplate_1.ComponentTemplate('hr', template)) || this;
         _this.isVisible = ko.observable(true);

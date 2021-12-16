@@ -1,23 +1,23 @@
 ﻿import { ButtonCommandItem } from "../Command/ButtonCommandItem";
 import { AggregateComponent } from "./AggregateComponent";
-import { FormComponentViewModel } from "./FormComponentViewModel";
+import { FormViewModel } from "./FormViewModel";
 import { HtmlContainerComponent } from "./HtmlContainerComponent";
 
-export class FormComponent extends HtmlContainerComponent {
-    constructor(vm: FormComponentViewModel = new FormComponentViewModel()) {
+export class FormView extends HtmlContainerComponent {
+    readonly vm: FormViewModel;
+
+    readonly submitted = this.vm.submitted;
+
+    readonly content = new AggregateComponent(this.vm.content);
+
+    constructor(vm: FormViewModel = new FormViewModel()) {
         super(vm);
         this.setAction("#");
     }
 
-    readonly vm: FormComponentViewModel;
-
-    readonly submitted = this.vm.submitted;
-
     useDefaultSubmit() {
         this.vm.useDefaultSubmit();
     }
-
-    readonly content = new AggregateComponent(this.vm.content);
 
     clearAutocomplete() { this.setAutocomplete(null); }
 

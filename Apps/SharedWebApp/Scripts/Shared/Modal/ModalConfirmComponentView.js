@@ -14,7 +14,7 @@ var TextCss_1 = require("../TextCss");
 var ModalComponentView_1 = require("./ModalComponentView");
 var ModalComponentViewModel_1 = require("./ModalComponentViewModel");
 var ModalConfirmComponentView = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(ModalConfirmComponentView, _super);
+    tslib_1.__extends(ModalConfirmComponentView, _super);
     function ModalConfirmComponentView(vm) {
         if (vm === void 0) { vm = new ModalComponentViewModel_1.ModalComponentViewModel(); }
         var _this = _super.call(this, vm) || this;

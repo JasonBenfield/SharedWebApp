@@ -27,6 +27,7 @@ export class ModalErrorComponentView extends HtmlComponent {
 
     constructor(vm: ModalComponentViewModel = new ModalComponentViewModel()) {
         super(vm);
+        this.modal = new ModalComponentView(vm);
         this.modal.body.setName(ModalErrorComponentView.name);
         this.title = this.modal.header.addContent(new TextHeading5(''));
         this.hr = this.modal.body.addContent(new HorizontalRule());

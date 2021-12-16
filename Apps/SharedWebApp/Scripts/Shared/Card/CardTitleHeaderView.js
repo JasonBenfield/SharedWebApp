@@ -6,7 +6,7 @@ var CardHeader_1 = require("./CardHeader");
 var BlockViewModel_1 = require("../Html/BlockViewModel");
 var TextBlock_1 = require("../Html/TextBlock");
 var CardTitleHeaderView = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(CardTitleHeaderView, _super);
+    tslib_1.__extends(CardTitleHeaderView, _super);
     function CardTitleHeaderView(vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         var _this = _super.call(this, vm) || this;

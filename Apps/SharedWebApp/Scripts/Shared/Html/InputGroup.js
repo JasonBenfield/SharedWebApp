@@ -7,7 +7,7 @@ var BlockViewModel_1 = require("./BlockViewModel");
 var Input_1 = require("./Input");
 var InputViewModel_1 = require("./InputViewModel");
 var InputGroup = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(InputGroup, _super);
+    tslib_1.__extends(InputGroup, _super);
     function InputGroup(vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         var _this = _super.call(this, vm) || this;

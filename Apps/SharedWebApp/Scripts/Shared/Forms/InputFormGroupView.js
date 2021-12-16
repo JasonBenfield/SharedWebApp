@@ -6,7 +6,7 @@ var BlockViewModel_1 = require("../Html/BlockViewModel");
 var Input_1 = require("../Html/Input");
 var SimpleFieldFormGroupView_1 = require("./SimpleFieldFormGroupView");
 var InputFormGroupView = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(InputFormGroupView, _super);
+    tslib_1.__extends(InputFormGroupView, _super);
     function InputFormGroupView(vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         var _this = _super.call(this, vm) || this;

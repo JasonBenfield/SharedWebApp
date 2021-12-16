@@ -1,17 +1,17 @@
 ﻿import { ModalErrorComponentView } from "../Error/ModalErrorComponentView";
-import { FormComponent } from "../Html/FormComponent";
-import { FormComponentViewModel } from "../Html/FormComponentViewModel";
 import { FormGroupView } from "../Html/FormGroupView";
+import { FormView } from "../Html/FormView";
+import { FormViewModel } from "../Html/FormViewModel";
 import { ComplexFieldLayout } from "./ComplexFieldLayout";
 import { FormGroupViewCollection } from "./FormGroupViewCollection";
 
-export class BaseFormView extends FormComponent {
+export class BaseFormView extends FormView {
     private layout = new ComplexFieldLayout(this);
 
-    readonly formGroups = new FormGroupViewCollection();
+    private readonly formGroups = new FormGroupViewCollection();
     readonly modalError: ModalErrorComponentView;
 
-    constructor(vm: FormComponentViewModel = new FormComponentViewModel()) {
+    constructor(vm: FormViewModel = new FormViewModel()) {
         super(vm);
         this.modalError = this.addContent(new ModalErrorComponentView());
     }
@@ -37,8 +37,8 @@ export class BaseFormView extends FormComponent {
         return this.formGroups.addInputFormGroup();
     }
 
-    addDropDownFormGroup() {
-        return this.formGroups.addDropDownFormGroup();
+    addDropDownFormGroup<TValue>() {
+        return this.formGroups.addDropDownFormGroup<TValue>();
     }
 
     addFormGroup<TFormGroupView extends FormGroupView>(formGroup: TFormGroupView) {

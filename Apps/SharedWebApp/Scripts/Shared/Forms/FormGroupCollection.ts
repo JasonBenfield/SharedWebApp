@@ -3,6 +3,7 @@ import { ComplexFieldFormGroup } from "./ComplexFieldFormGroup";
 import { DateDropDownFormGroup } from "./DateDropDownFormGroup";
 import { DateInputFormGroup } from "./DateInputFormGroup";
 import { DropDownFormGroup } from "./DropDownFormGroup";
+import { DropDownFormGroupView } from "./DropDownFormGroupView";
 import { FormGroupViewCollection } from "./FormGroupViewCollection";
 import { InputFormGroupView } from "./InputFormGroupView";
 import { NumberDropDownFormGroup } from "./NumberDropDownFormGroup";
@@ -13,81 +14,60 @@ import { TextInputFormGroup } from "./TextInputFormGroup";
 export class FormGroupCollection {
     readonly values: IField[] = [];
 
-    constructor(
-        private readonly name: string,
-        private readonly views: FormGroupViewCollection) {
+    constructor(private readonly name: string) {
     }
 
     formGroups() {
         return this.values;
     }
 
-    addHiddenTextFormGroup(name: string) {
-        let view = this.views.addHiddenInputFormGroup();
+    addHiddenTextFormGroup(name: string, view: InputFormGroupView) {
         return this.addFormGroup(new TextInputFormGroup(this.name, name, view));
     }
 
-    addHiddenNumberFormGroup(name: string) {
-        let view = this.views.addHiddenInputFormGroup();
+    addHiddenNumberFormGroup(name: string, view: InputFormGroupView) {
         return this.addFormGroup(new NumberInputFormGroup(this.name, name, view));
     }
 
-    addHiddenDateFormGroup(name: string) {
-        let view = this.views.addHiddenInputFormGroup();
+    addHiddenDateFormGroup(name: string, view: InputFormGroupView) {
         return this.addFormGroup(new DateInputFormGroup(this.name, name, view));
     }
 
-    addTextInputFormGroup(name: string) {
-        let view = this.views.addInputFormGroup();
+    addTextInputFormGroup(name: string, view: InputFormGroupView) {
         return this.addFormGroup(new TextInputFormGroup(this.name, name, view));
     }
 
-    addNumberInputFormGroup(name: string) {
-        let view = this.views.addInputFormGroup();
+    addNumberInputFormGroup(name: string, view: InputFormGroupView) {
         return this.addFormGroup(new NumberInputFormGroup(this.name, name, view));
     }
 
-    addDateInputFormGroup(name: string) {
-        let view = this.views.addInputFormGroup();
+    addDateInputFormGroup(name: string, view: InputFormGroupView) {
         return this.addFormGroup(new DateInputFormGroup(this.name, name, view));
     }
 
-    addTextDropDownFormGroup(name: string) {
-        let view = this.views.addDropDownFormGroup<string>();
+    addTextDropDownFormGroup(name: string, view: DropDownFormGroupView<string>) {
         return this.addFormGroup(new TextDropDownFormGroup(this.name, name, view));
     }
 
-    addNumberDropDownFormGroup(name: string) {
-        let view = this.views.addDropDownFormGroup<number>();
+    addNumberDropDownFormGroup(name: string, view: DropDownFormGroupView<number>) {
         return this.addFormGroup(new NumberDropDownFormGroup(this.name, name, view));
     }
 
-    addDateDropDownFormGroup(name: string) {
-        let view = this.views.addDropDownFormGroup<Date>();
+    addDateDropDownFormGroup(name: string, view: DropDownFormGroupView<Date>) {
         return this.addFormGroup(new DateDropDownFormGroup(this.name, name, view));
     }
 
-    addBooleanDropDownFormGroup(name: string) {
-        let view = this.views.addDropDownFormGroup<boolean>();
+    addBooleanDropDownFormGroup(name: string, view: DropDownFormGroupView<boolean>) {
         return this.addFormGroup(new BooleanDropDownFormGroup(this.name, name, view));
     }
 
-    addDropDownFormGroup<T>(name: string) {
-        let view = this.views.addDropDownFormGroup<T>();
+    addDropDownFormGroup<T>(name: string, view: DropDownFormGroupView<T>) {
         return this.addFormGroup(new DropDownFormGroup<T>(this.name, name, view));
     }
 
-    addFormGroup<TFormGroup extends IField>(formGroup: TFormGroup) {
+    addFormGroup<TField extends IField>(formGroup: TField) {
         this.values.push(formGroup);
         return formGroup;
-    }
-
-    executeLayout() {
-        this.forEach(fg => {
-            if (fg instanceof ComplexFieldFormGroup) {
-                fg.executeLayout();
-            }
-        });
     }
 
     forEach(action: (field: IField) => void) {
