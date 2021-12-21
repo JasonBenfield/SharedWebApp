@@ -1,9 +1,11 @@
-﻿import { Startup } from 'xtistart';
+﻿import { Startup } from '../../Shared/Startup';
 import { TextBlock } from '../../Shared/Html/TextBlock';
-import { PageFrame } from '../../Shared/PageFrame';
+import { PageFrameView } from '../../Shared/PageFrameView';
+import { DefaultPageContext } from '../DefaultPageContext';
 
 class MainPage {
-    constructor(page: PageFrame) {
+    constructor(page: PageFrameView) {
+        new DefaultPageContext().load();
         page.addContent(new TextBlock('Shared Home Page'));
     }
 }

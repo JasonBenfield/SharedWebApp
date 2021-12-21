@@ -3,24 +3,29 @@ import { AppApiError } from "../AppApiError";
 import { ConsoleLog } from "../ConsoleLog";
 import { ModalErrorComponent } from "../Error/ModalErrorComponent";
 import { ErrorModel } from "../ErrorModel";
+import { BaseFormView } from "./BaseFormView";
+import { ComplexFieldLayout } from "./ComplexFieldLayout";
+import { DropDownFormGroupView } from "./DropDownFormGroupView";
 import { ErrorList } from "./ErrorList";
 import { FormGroupCollection } from "./FormGroupCollection";
 import { FormSaveResult } from "./FormSaveResult";
-import { FormComponentViewModel } from "../Html/FormComponentViewModel";
-import { FormComponent } from "../Html/FormComponent";
-import { ComplexFieldLayout } from "./ComplexFieldLayout";
+import { InputFormGroupView } from "./InputFormGroupView";
 
-export class BaseForm extends FormComponent {
+export class BaseForm {
+    private readonly formGroups: FormGroupCollection;
+    private readonly modalError: ModalErrorComponent;
+
     constructor(
         private readonly name: string,
-        vm: FormComponentViewModel = new FormComponentViewModel()
+        protected readonly view: BaseFormView
     ) {
-        super(vm);
+        this.formGroups = new FormGroupCollection(name);
+        this.modalError = new ModalErrorComponent(this.view.modalError);
         this.modalError.errorSelected.register(this.onErrorSelected.bind(this));
     }
 
     private async onErrorSelected(error: ErrorModel) {
-        await this.modalError.okCommand.execute();
+        this.modalError.hide();
         let field: any = this.getField(error.Source);
         if (field) {
             if (field.setFocus) {
@@ -29,21 +34,7 @@ export class BaseForm extends FormComponent {
         }
     }
 
-    private layout= new ComplexFieldLayout(this);
-
-    useLayout(layout: ComplexFieldLayout) {
-        this.layout = layout;
-    }
-
-    executeLayout() {
-        this.layout.execute();
-        this.formGroups.executeLayout();
-    }
-
-    private readonly formGroups = new FormGroupCollection(this.name);
-    private readonly modalError = new ModalErrorComponent().addToContainer(this.content);
-
-    forEachFormGroup(action: (field: IFormGroupField) => void) {
+    forEachFormGroup(action: (field: IField) => void) {
         this.formGroups.forEach(action);
     }
 
@@ -59,51 +50,51 @@ export class BaseForm extends FormComponent {
         return null;
     }
 
-    protected addHiddenTextFormGroup(name: string) {
-        return this.formGroups.addHiddenTextFormGroup(name);
+    protected addHiddenTextFormGroup(name: string, view: InputFormGroupView) {
+        return this.formGroups.addHiddenTextFormGroup(name, view);
     }
 
-    protected addHiddenNumberFormGroup(name: string) {
-        return this.formGroups.addHiddenNumberFormGroup(name);
+    protected addHiddenNumberFormGroup(name: string, view: InputFormGroupView) {
+        return this.formGroups.addHiddenNumberFormGroup(name, view);
     }
 
-    protected addHiddenDateFormGroup(name: string) {
-        return this.formGroups.addHiddenDateFormGroup(name);
+    protected addHiddenDateFormGroup(name: string, view: InputFormGroupView) {
+        return this.formGroups.addHiddenDateFormGroup(name, view);
     }
 
-    protected addTextInputFormGroup(name: string) {
-        return this.formGroups.addTextInputFormGroup(name);
+    protected addTextInputFormGroup(name: string, view: InputFormGroupView) {
+        return this.formGroups.addTextInputFormGroup(name, view);
     }
 
-    protected addNumberInputFormGroup(name: string) {
-        return this.formGroups.addNumberInputFormGroup(name);
+    protected addNumberInputFormGroup(name: string, view: InputFormGroupView) {
+        return this.formGroups.addNumberInputFormGroup(name, view);
     }
 
-    protected addDateInputFormGroup(name: string) {
-        return this.formGroups.addDateInputFormGroup(name);
+    protected addDateInputFormGroup(name: string, view: InputFormGroupView) {
+        return this.formGroups.addDateInputFormGroup(name, view);
     }
 
-    protected addTextDropDownFormGroup(name: string) {
-        return this.formGroups.addTextDropDownFormGroup(name);
+    protected addTextDropDownFormGroup(name: string, view: DropDownFormGroupView<string>) {
+        return this.formGroups.addTextDropDownFormGroup(name, view);
     }
 
-    protected addNumberDropDownFormGroup(name: string) {
-        return this.formGroups.addNumberDropDownFormGroup(name);
+    protected addNumberDropDownFormGroup(name: string, view: DropDownFormGroupView<number>) {
+        return this.formGroups.addNumberDropDownFormGroup(name, view);
     }
 
-    protected addDateDropDownFormGroup(name: string) {
-        return this.formGroups.addDateDropDownFormGroup(name);
+    protected addDateDropDownFormGroup(name: string, view: DropDownFormGroupView<Date>) {
+        return this.formGroups.addDateDropDownFormGroup(name, view);
     }
 
-    protected addBooleanDropDownFormGroup(name: string) {
-        return this.formGroups.addBooleanDropDownFormGroup(name);
+    protected addBooleanDropDownFormGroup(name: string, view: DropDownFormGroupView<boolean>) {
+        return this.formGroups.addBooleanDropDownFormGroup(name, view);
     }
 
-    protected addDropDownFormGroup<T>(name: string) {
-        return this.formGroups.addDropDownFormGroup<T>(name);
+    protected addDropDownFormGroup<T>(name: string, view: DropDownFormGroupView<T>) {
+        return this.formGroups.addDropDownFormGroup<T>(name, view);
     }
 
-    protected addFormGroup<TField extends IFormGroupField>(formGroup: TField) {
+    protected addFormGroup<TField extends IField>(formGroup: TField) {
         return this.formGroups.addFormGroup(formGroup);
     }
 

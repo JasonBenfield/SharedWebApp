@@ -104,7 +104,7 @@ export class UrlQueryBuilder {
                 if (obj.hasOwnProperty(prop)) {
                     let k = prefix ? `${prefix}[${prop}]` : prop;
                     let propValue = obj[prop];
-                    if (propValue !== null && typeof propValue === "object") {
+                    if (propValue !== null && typeof propValue === "object" && !(propValue instanceof Date)) {
                         this._addQueryFromObject(propValue, k)
                     }
                     else {

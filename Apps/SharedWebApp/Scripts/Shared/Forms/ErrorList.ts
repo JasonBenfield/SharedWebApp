@@ -1,4 +1,4 @@
-﻿import { ErrorModel } from "../../Shared/ErrorModel";
+﻿import { ErrorModel } from "../ErrorModel";
 
 export class ErrorList implements IErrorList {
     private readonly errors: ErrorModel[] = [];

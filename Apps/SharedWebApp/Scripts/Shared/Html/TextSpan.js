@@ -16,9 +16,16 @@ var TextSpan = /** @class */ (function (_super) {
     TextSpan.prototype.setText = function (text) {
         this.text = text;
         this.vm.text(text);
+        this.updateTitleFromText();
     };
-    TextSpan.prototype.setTitleFromText = function () {
-        this.vm.title(this.text);
+    TextSpan.prototype.syncTitleWithText = function (format) {
+        this.formatTitle = format || (function (text) { return text; });
+        this.updateTitleFromText();
+    };
+    TextSpan.prototype.updateTitleFromText = function () {
+        if (this.formatTitle) {
+            this.vm.title(this.formatTitle(this.text));
+        }
     };
     return TextSpan;
 }(HtmlComponent_1.HtmlComponent));

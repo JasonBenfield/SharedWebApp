@@ -1,21 +1,13 @@
 ﻿import * as _ from 'lodash';
 import { ContextualClass } from './ContextualClass';
 import { DefaultEvent } from './Events';
-import { BlockViewModel } from './Html/BlockViewModel';
-import { HtmlComponent } from './Html/HtmlComponent';
-import { TextBlock } from './Html/TextBlock';
-import { Alert } from './Alert';
+import { MessageAlertView } from './MessageAlertView';
 
-export class MessageAlert extends HtmlComponent {
-    constructor(vm: BlockViewModel = new BlockViewModel()) {
-        super(vm);
-        this.addCssName('alert');
-    }
-
-    protected readonly vm: BlockViewModel;
-    private readonly alert = new Alert(this.vm);
-    private readonly textBlock = new TextBlock().addToContainer(this.alert.content);
+export class MessageAlert {
     private _message: string;
+
+    constructor(private readonly view: MessageAlertView) {
+    }
 
     get message() {
         return this._message;
@@ -33,12 +25,12 @@ export class MessageAlert extends HtmlComponent {
     }
 
     success(message: string) {
-        this.alert.setContext(ContextualClass.success);
+        this.view.setContext(ContextualClass.success);
         this.setMessage(message);
     }
 
     info(message: string) {
-        this.alert.setContext(ContextualClass.info);
+        this.view.setContext(ContextualClass.info);
         this.setMessage(message);
     }
 
@@ -53,12 +45,12 @@ export class MessageAlert extends HtmlComponent {
     }
 
     warning(message: string) {
-        this.alert.setContext(ContextualClass.warning);
+        this.view.setContext(ContextualClass.warning);
         this.setMessage(message);
     }
 
     danger(message: string) {
-        this.alert.setContext(ContextualClass.danger);
+        this.view.setContext(ContextualClass.danger);
         this.setMessage(message);
     }
 
@@ -76,12 +68,12 @@ export class MessageAlert extends HtmlComponent {
     }, 500);
 
     private updateVmMessage(message: string) {
-        this.textBlock.setText(message);
+        this.view.setMessage(message);
         if (message) {
-            this.show();
+            this.view.show();
         }
         else {
-            this.hide();
+            this.view.hide();
         }
     }
 }

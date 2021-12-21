@@ -1,4 +1,4 @@
-﻿import { ErrorModel } from "../../Shared/ErrorModel";
+﻿import { ErrorModel } from "../ErrorModel";
 import { ConstraintResult } from "./ConstraintResult";
 import { NotWhitespaceConstraint } from "./NotWhitespaceConstraint";
 

@@ -5,24 +5,15 @@ var tslib_1 = require("tslib");
 var _ = require("lodash");
 var ContextualClass_1 = require("./ContextualClass");
 var Events_1 = require("./Events");
-var BlockViewModel_1 = require("./Html/BlockViewModel");
-var HtmlComponent_1 = require("./Html/HtmlComponent");
-var TextBlock_1 = require("./Html/TextBlock");
-var Alert_1 = require("./Alert");
-var MessageAlert = /** @class */ (function (_super) {
-    tslib_1.__extends(MessageAlert, _super);
-    function MessageAlert(vm) {
-        if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
-        var _this = _super.call(this, vm) || this;
-        _this.alert = new Alert_1.Alert(_this.vm);
-        _this.textBlock = new TextBlock_1.TextBlock().addToContainer(_this.alert.content);
-        _this._messageChanged = new Events_1.DefaultEvent(_this);
-        _this.messageChanged = _this._messageChanged.handler();
-        _this.debouncedSetMessage = _.debounce(function (message) {
+var MessageAlert = /** @class */ (function () {
+    function MessageAlert(view) {
+        var _this = this;
+        this.view = view;
+        this._messageChanged = new Events_1.DefaultEvent(this);
+        this.messageChanged = this._messageChanged.handler();
+        this.debouncedSetMessage = _.debounce(function (message) {
             _this.updateVmMessage(message);
         }, 500);
-        _this.addCssName('alert');
-        return _this;
     }
     Object.defineProperty(MessageAlert.prototype, "message", {
         get: function () {
@@ -42,11 +33,11 @@ var MessageAlert = /** @class */ (function (_super) {
         this.setMessage('');
     };
     MessageAlert.prototype.success = function (message) {
-        this.alert.setContext(ContextualClass_1.ContextualClass.success);
+        this.view.setContext(ContextualClass_1.ContextualClass.success);
         this.setMessage(message);
     };
     MessageAlert.prototype.info = function (message) {
-        this.alert.setContext(ContextualClass_1.ContextualClass.info);
+        this.view.setContext(ContextualClass_1.ContextualClass.info);
         this.setMessage(message);
     };
     MessageAlert.prototype.infoAction = function (message, a) {
@@ -71,11 +62,11 @@ var MessageAlert = /** @class */ (function (_super) {
         });
     };
     MessageAlert.prototype.warning = function (message) {
-        this.alert.setContext(ContextualClass_1.ContextualClass.warning);
+        this.view.setContext(ContextualClass_1.ContextualClass.warning);
         this.setMessage(message);
     };
     MessageAlert.prototype.danger = function (message) {
-        this.alert.setContext(ContextualClass_1.ContextualClass.danger);
+        this.view.setContext(ContextualClass_1.ContextualClass.danger);
         this.setMessage(message);
     };
     MessageAlert.prototype.setMessage = function (message) {
@@ -87,15 +78,15 @@ var MessageAlert = /** @class */ (function (_super) {
         this.debouncedSetMessage(this._message);
     };
     MessageAlert.prototype.updateVmMessage = function (message) {
-        this.textBlock.setText(message);
+        this.view.setMessage(message);
         if (message) {
-            this.show();
+            this.view.show();
         }
         else {
-            this.hide();
+            this.view.hide();
         }
     };
     return MessageAlert;
-}(HtmlComponent_1.HtmlComponent));
+}());
 exports.MessageAlert = MessageAlert;
 //# sourceMappingURL=MessageAlert.js.map

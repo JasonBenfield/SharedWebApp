@@ -4,17 +4,15 @@ exports.AddEmployeeForm = void 0;
 var tslib_1 = require("tslib");
 var BaseForm_1 = require("../../Shared/Forms/BaseForm");
 var DropDownFieldItem_1 = require("../../Shared/Forms/DropDownFieldItem");
-var FormComponentViewModel_1 = require("../../Shared/Html/FormComponentViewModel");
 var AddressInputField_1 = require("./AddressInputField");
 var AddEmployeeForm = /** @class */ (function (_super) {
-    tslib_1.__extends(AddEmployeeForm, _super);
-    function AddEmployeeForm(vm) {
-        if (vm === void 0) { vm = new FormComponentViewModel_1.FormComponentViewModel(); }
-        var _this = _super.call(this, 'AddEmployeeForm', vm) || this;
-        _this.EmployeeName = _this.addTextInputFormGroup('Name');
-        _this.BirthDate = _this.addDateInputFormGroup('BirthDate');
-        _this.Department = _this.addNumberDropDownFormGroup('Department');
-        _this.Address = _this.addFormGroup(new AddressInputField_1.AddressInputField(_this.getName(), 'Address'));
+    (0, tslib_1.__extends)(AddEmployeeForm, _super);
+    function AddEmployeeForm(view) {
+        var _this = _super.call(this, 'AddEmployeeForm', view) || this;
+        _this.EmployeeName = _this.addTextInputFormGroup('Name', _this.view.EmployeeName);
+        _this.BirthDate = _this.addDateInputFormGroup('BirthDate', _this.view.BirthDate);
+        _this.Department = _this.addNumberDropDownFormGroup('Department', _this.view.Department);
+        _this.Address = _this.addFormGroup(new AddressInputField_1.AddressInputField(_this.getName(), 'Address', _this.view.Address));
         _this.EmployeeName.setCaption("Name");
         _this.EmployeeName.setValue('Paul Atreides');
         _this.EmployeeName.constraints.mustNotBeNull();

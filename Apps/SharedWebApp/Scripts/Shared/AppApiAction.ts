@@ -7,6 +7,10 @@ import { AppResourceUrl } from "./AppResourceUrl";
 import { MappedArray } from './Enumerable';
 
 export class AppApiAction<TArgs,TResult> {
+    private readonly resourceUrl: AppResourceUrl;
+
+    private static dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.?\d{0,7}[\+\-]\d{2}:\d{2})?$/;
+
     constructor(
         private readonly events: AppApiEvents,
         resourceUrl: AppResourceUrl,
@@ -15,8 +19,6 @@ export class AppApiAction<TArgs,TResult> {
     ) {
         this.resourceUrl = resourceUrl.withAction(actionName);
     }
-
-    private readonly resourceUrl: AppResourceUrl;
 
     async execute(data: TArgs, errorOptions: IActionErrorOptions) {
         let jsonText = new JsonText(data).toString();
@@ -74,8 +76,6 @@ export class AppApiAction<TArgs,TResult> {
         }
         return result;
     }
-
-    private static dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{1,7}\+\d{2}:\d{2}$/;
 
     private parseDates(obj: any) {
         if (obj) {

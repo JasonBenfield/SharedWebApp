@@ -5,22 +5,16 @@ import { ModalErrorComponent } from "./Error/ModalErrorComponent";
 import { HostEnvironment } from "./HostEnvironment";
 
 export class AppApiFactory {
-
-    private _defaultApiType: apiConstructor<AppApi>;
-
-    set defaultApiType(defaultApi: apiConstructor<AppApi>) {
-        this._defaultApiType = defaultApi;
+    constructor(
+        private readonly _defaultApiType: apiConstructor<AppApi>,
+        private readonly modalError: ModalErrorComponent) {
     }
 
-    defaultApi(modalError: ModalErrorComponent) {
-        return this.api<AppApi>(this._defaultApiType, modalError);
-    }
-
-    api<TApi extends AppApi>(apiCtor: apiConstructor<TApi>, modalError: ModalErrorComponent): TApi {
+    api<TApi extends AppApi>(apiCtor: apiConstructor<TApi>): TApi {
         let api: TApi;
         let events = new AppApiEvents((err) => {
             new ConsoleLog().error(err.toString());
-            modalError.show(err.getErrors(), err.getCaption());
+            this.modalError.show(err.getErrors(), err.getCaption());
         });
         if (apiCtor === this._defaultApiType) {
             api = new apiCtor(events, `${location.protocol}//${location.host}`, 'Current');

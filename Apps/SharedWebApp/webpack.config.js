@@ -1,7 +1,7 @@
 ﻿const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const entry = {
-    user: './Scripts/Shared/User/UserPage.ts',
+    user: './Scripts/Internal/User/MainPage.ts',
     home: './Scripts/Internal/Home/MainPage.ts',
     employee: './Scripts/Internal/Employee/MainPage.ts',
     cardDemo: './Scripts/Internal/CardDemo/MainPage.ts'

@@ -13,7 +13,11 @@ var ListItem = /** @class */ (function (_super) {
     ListItem.prototype.getData = function () { return this.data; };
     ListItem.prototype.setData = function (data) { this.data = data; };
     ListItem.prototype.addToList = function (list) {
-        list.addListItem(this.vm, this);
+        list.addFromListItem(this.vm, this);
+        return this;
+    };
+    ListItem.prototype.removeFromList = function (list) {
+        list.removeFromListItem(this.vm, this);
         return this;
     };
     return ListItem;

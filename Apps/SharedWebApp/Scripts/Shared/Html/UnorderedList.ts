@@ -1,17 +1,16 @@
-﻿import { BaseList } from "./BaseList";
+﻿import { BaseListView } from "../ListGroup/BaseListView";
 import { ListItem } from "./ListItem";
 import { ListItemViewModel } from "./ListItemViewModel";
 import { UnorderedListViewModel } from "./UnorderedListViewModel";
 
-export class UnorderedList extends BaseList {
+export class UnorderedList extends BaseListView {
     constructor(
-        createItem: (itemVM: ListItemViewModel) => ListItem = null,
-        createItemVM: () => ListItemViewModel = null,
+        createItemView: (source?: any) => IListItemView =
+            ((itemVM: ListItemViewModel) => new ListItem(itemVM)),
         vm: UnorderedListViewModel = new UnorderedListViewModel()
     ) {
         super(
-            createItem || ((itemVM: ListItemViewModel) => new ListItem(itemVM)),
-            createItemVM || (() => new ListItemViewModel()),
+            createItemView,
             vm
         );
     }
