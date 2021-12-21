@@ -18,7 +18,7 @@ import "@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff";
 import "@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2";
 import 'tslib';
 import { SubmitBindingHandler } from './SubmitBindingHandler';
-import { ModalBindingHandler } from './ModalBindingHandler';
+import { ModalBindingHandler } from './Modal/ModalBindingHandler';
 import { UrlBuilder } from './UrlBuilder';
 import { ConsoleLog } from './ConsoleLog';
 import { DropdownBindingHandler } from './DropdownBindingHandler';

@@ -4,14 +4,14 @@ import { Row } from "../../Shared/Grid/Row";
 import { TextSpan } from "../../Shared/Html/TextSpan";
 import { MarginCss } from "../../Shared/MarginCss";
 import { PaddingCss } from "../../Shared/PaddingCss";
-import { AddressInputField } from "./AddressInputField";
+import { AddressInputFieldView } from "./AddressInputFieldView";
 
 export class AddressInputLayout extends ComplexFieldLayout {
-    constructor(complexField: AddressInputField) {
+    constructor(complexField: AddressInputFieldView) {
         super(complexField);
     }
 
-    protected executeLayout(addressInput: AddressInputField) {
+    protected executeLayout(addressInput: AddressInputFieldView) {
         let streetRow = addressInput.valueColumn.addContent(new Row());
         streetRow.setMargin(MarginCss.bottom(3));
         let streetColumn = streetRow.addColumn();

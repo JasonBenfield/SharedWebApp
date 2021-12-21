@@ -9,46 +9,28 @@ var ErrorModel_1 = require("../ErrorModel");
 var ErrorList_1 = require("./ErrorList");
 var FormGroupCollection_1 = require("./FormGroupCollection");
 var FormSaveResult_1 = require("./FormSaveResult");
-var FormComponentViewModel_1 = require("../Html/FormComponentViewModel");
-var FormComponent_1 = require("../Html/FormComponent");
-var ComplexFieldLayout_1 = require("./ComplexFieldLayout");
-var BaseForm = /** @class */ (function (_super) {
-    tslib_1.__extends(BaseForm, _super);
-    function BaseForm(name, vm) {
-        if (vm === void 0) { vm = new FormComponentViewModel_1.FormComponentViewModel(); }
-        var _this = _super.call(this, vm) || this;
-        _this.name = name;
-        _this.layout = new ComplexFieldLayout_1.ComplexFieldLayout(_this);
-        _this.formGroups = new FormGroupCollection_1.FormGroupCollection(_this.name);
-        _this.modalError = new ModalErrorComponent_1.ModalErrorComponent().addToContainer(_this.content);
-        _this.modalError.errorSelected.register(_this.onErrorSelected.bind(_this));
-        return _this;
+var BaseForm = /** @class */ (function () {
+    function BaseForm(name, view) {
+        this.name = name;
+        this.view = view;
+        this.formGroups = new FormGroupCollection_1.FormGroupCollection(name);
+        this.modalError = new ModalErrorComponent_1.ModalErrorComponent(this.view.modalError);
+        this.modalError.errorSelected.register(this.onErrorSelected.bind(this));
     }
     BaseForm.prototype.onErrorSelected = function (error) {
         return tslib_1.__awaiter(this, void 0, void 0, function () {
             var field;
             return tslib_1.__generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.modalError.okCommand.execute()];
-                    case 1:
-                        _a.sent();
-                        field = this.getField(error.Source);
-                        if (field) {
-                            if (field.setFocus) {
-                                field.setFocus();
-                            }
-                        }
-                        return [2 /*return*/];
+                this.modalError.hide();
+                field = this.getField(error.Source);
+                if (field) {
+                    if (field.setFocus) {
+                        field.setFocus();
+                    }
                 }
+                return [2 /*return*/];
             });
         });
-    };
-    BaseForm.prototype.useLayout = function (layout) {
-        this.layout = layout;
-    };
-    BaseForm.prototype.executeLayout = function () {
-        this.layout.execute();
-        this.formGroups.executeLayout();
     };
     BaseForm.prototype.forEachFormGroup = function (action) {
         this.formGroups.forEach(action);
@@ -63,38 +45,38 @@ var BaseForm = /** @class */ (function (_super) {
         }
         return null;
     };
-    BaseForm.prototype.addHiddenTextFormGroup = function (name) {
-        return this.formGroups.addHiddenTextFormGroup(name);
+    BaseForm.prototype.addHiddenTextFormGroup = function (name, view) {
+        return this.formGroups.addHiddenTextFormGroup(name, view);
     };
-    BaseForm.prototype.addHiddenNumberFormGroup = function (name) {
-        return this.formGroups.addHiddenNumberFormGroup(name);
+    BaseForm.prototype.addHiddenNumberFormGroup = function (name, view) {
+        return this.formGroups.addHiddenNumberFormGroup(name, view);
     };
-    BaseForm.prototype.addHiddenDateFormGroup = function (name) {
-        return this.formGroups.addHiddenDateFormGroup(name);
+    BaseForm.prototype.addHiddenDateFormGroup = function (name, view) {
+        return this.formGroups.addHiddenDateFormGroup(name, view);
     };
-    BaseForm.prototype.addTextInputFormGroup = function (name) {
-        return this.formGroups.addTextInputFormGroup(name);
+    BaseForm.prototype.addTextInputFormGroup = function (name, view) {
+        return this.formGroups.addTextInputFormGroup(name, view);
     };
-    BaseForm.prototype.addNumberInputFormGroup = function (name) {
-        return this.formGroups.addNumberInputFormGroup(name);
+    BaseForm.prototype.addNumberInputFormGroup = function (name, view) {
+        return this.formGroups.addNumberInputFormGroup(name, view);
     };
-    BaseForm.prototype.addDateInputFormGroup = function (name) {
-        return this.formGroups.addDateInputFormGroup(name);
+    BaseForm.prototype.addDateInputFormGroup = function (name, view) {
+        return this.formGroups.addDateInputFormGroup(name, view);
     };
-    BaseForm.prototype.addTextDropDownFormGroup = function (name) {
-        return this.formGroups.addTextDropDownFormGroup(name);
+    BaseForm.prototype.addTextDropDownFormGroup = function (name, view) {
+        return this.formGroups.addTextDropDownFormGroup(name, view);
     };
-    BaseForm.prototype.addNumberDropDownFormGroup = function (name) {
-        return this.formGroups.addNumberDropDownFormGroup(name);
+    BaseForm.prototype.addNumberDropDownFormGroup = function (name, view) {
+        return this.formGroups.addNumberDropDownFormGroup(name, view);
     };
-    BaseForm.prototype.addDateDropDownFormGroup = function (name) {
-        return this.formGroups.addDateDropDownFormGroup(name);
+    BaseForm.prototype.addDateDropDownFormGroup = function (name, view) {
+        return this.formGroups.addDateDropDownFormGroup(name, view);
     };
-    BaseForm.prototype.addBooleanDropDownFormGroup = function (name) {
-        return this.formGroups.addBooleanDropDownFormGroup(name);
+    BaseForm.prototype.addBooleanDropDownFormGroup = function (name, view) {
+        return this.formGroups.addBooleanDropDownFormGroup(name, view);
     };
-    BaseForm.prototype.addDropDownFormGroup = function (name) {
-        return this.formGroups.addDropDownFormGroup(name);
+    BaseForm.prototype.addDropDownFormGroup = function (name, view) {
+        return this.formGroups.addDropDownFormGroup(name, view);
     };
     BaseForm.prototype.addFormGroup = function (formGroup) {
         return this.formGroups.addFormGroup(formGroup);
@@ -153,6 +135,6 @@ var BaseForm = /** @class */ (function (_super) {
         return values;
     };
     return BaseForm;
-}(FormComponent_1.FormComponent));
+}());
 exports.BaseForm = BaseForm;
 //# sourceMappingURL=BaseForm.js.map

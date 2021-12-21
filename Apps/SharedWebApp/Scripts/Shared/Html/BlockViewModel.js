@@ -6,11 +6,13 @@ var HtmlComponentViewModel_1 = require("./HtmlComponentViewModel");
 var template = require("./Block.html");
 var ComponentTemplate_1 = require("../ComponentTemplate");
 var AggregateComponentViewModel_1 = require("./AggregateComponentViewModel");
+var ko = require("knockout");
 var BlockViewModel = /** @class */ (function (_super) {
     tslib_1.__extends(BlockViewModel, _super);
     function BlockViewModel() {
         var _this = _super.call(this, new ComponentTemplate_1.ComponentTemplate('block', template)) || this;
         _this.content = new AggregateComponentViewModel_1.AggregateComponentViewModel();
+        _this.role = ko.observable(null);
         return _this;
     }
     return BlockViewModel;

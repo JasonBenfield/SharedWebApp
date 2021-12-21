@@ -105,7 +105,7 @@ var AppApiAction = /** @class */ (function () {
     AppApiAction.prototype.toString = function () {
         return "AppApiAction " + this.resourceUrl;
     };
-    AppApiAction.dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{1,7}\+\d{2}:\d{2}$/;
+    AppApiAction.dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.?\d{0,7}[\+\-]\d{2}:\d{2})?$/;
     return AppApiAction;
 }());
 exports.AppApiAction = AppApiAction;

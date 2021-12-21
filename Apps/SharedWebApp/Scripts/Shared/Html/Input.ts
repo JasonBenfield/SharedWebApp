@@ -4,20 +4,22 @@ import { InputViewModel } from "./InputViewModel";
 import { DefaultEvent } from "../Events";
 
 export class Input extends HtmlComponent {
+    private readonly _changed = new DefaultEvent<string>(this);
+    readonly changed = this._changed.handler();
+
+    protected readonly vm: InputViewModel;
+
+    private border = ContextualClass.default;
+
     constructor(vm: InputViewModel = new InputViewModel()) {
         super(vm);
         vm.type('text');
         vm.value.subscribe(this.onValueChanged.bind(this));
     }
 
-    private readonly _changed = new DefaultEvent<string>(this);
-    readonly changed = this._changed.handler();
-
     private onValueChanged(value: string) {
-        this._changed.invoke(value);   
+        this._changed.invoke(value);
     }
-
-    protected readonly vm: InputViewModel;
 
     enable() { this.vm.isEnabled(true); }
 
@@ -33,18 +35,11 @@ export class Input extends HtmlComponent {
         this.vm.autocomplete(autocomplete);
     }
 
-    private value: string;
-
-    getValue() {
-        return this.value;
-    }
+    getValue() { return this.vm.value(); }
 
     setValue(value: string) {
-        this.value = value;
         this.vm.value(value);
     }
-
-    private border = ContextualClass.default;
 
     setBorder(border: ContextualClass) {
         let borderCss = this.getBorderCss(border);
@@ -60,9 +55,11 @@ export class Input extends HtmlComponent {
         this.vm.maxLength(maxLength);
     }
 
-    setType(type: 'text' | 'hidden' | 'password' | 'date' | 'number') {
+    setType(type: 'text' | 'hidden' | 'password' | 'date' | 'number' | 'time') {
         this.vm.type(type);
     }
+
+    hasFocus() { return this.vm.hasFocus(); }
 
     setFocus() { this.vm.hasFocus(true); }
 

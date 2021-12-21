@@ -21,7 +21,7 @@ require("@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff");
 require("@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2");
 require("tslib");
 var SubmitBindingHandler_1 = require("./SubmitBindingHandler");
-var ModalBindingHandler_1 = require("./ModalBindingHandler");
+var ModalBindingHandler_1 = require("./Modal/ModalBindingHandler");
 var UrlBuilder_1 = require("./UrlBuilder");
 var ConsoleLog_1 = require("./ConsoleLog");
 var DropdownBindingHandler_1 = require("./DropdownBindingHandler");

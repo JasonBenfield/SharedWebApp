@@ -1,15 +1,15 @@
-﻿import { BlockViewModel } from "../Html/BlockViewModel";
-import { TextConstraintCollection } from "./ConstraintCollection";
+﻿import { TextConstraintCollection } from "./ConstraintCollection";
 import { ErrorList } from "./ErrorList";
 import { InputFormGroup } from "./InputFormGroup";
+import { InputFormGroupView } from "./InputFormGroupView";
 import { TextToTextViewValue } from "./TextToTextViewValue";
 
 export class TextInputFormGroup extends InputFormGroup<string> {
-    constructor(prefix: string, name: string, vm: BlockViewModel = new BlockViewModel()) {
-        super(prefix, name, vm, new TextToTextViewValue());
-    }
-
     readonly constraints = new TextConstraintCollection();
+
+    constructor(prefix: string, name: string, view: InputFormGroupView) {
+        super(prefix, name, view, new TextToTextViewValue());
+    }
 
     protected validateConstraints(fieldErrors: ErrorList) {
         this.constraints.validate(fieldErrors, this);

@@ -17,8 +17,14 @@ var TextBlock = /** @class */ (function (_super) {
         this.text = text;
         this.vm.text(text);
     };
-    TextBlock.prototype.setTitleFromText = function () {
-        this.vm.title(this.text);
+    TextBlock.prototype.syncTitleWithText = function (format) {
+        this.formatTitle = format || (function (text) { return text; });
+        this.updateTitleFromText();
+    };
+    TextBlock.prototype.updateTitleFromText = function () {
+        if (this.formatTitle) {
+            this.vm.title(this.formatTitle(this.text));
+        }
     };
     return TextBlock;
 }(HtmlComponent_1.HtmlComponent));

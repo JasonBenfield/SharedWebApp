@@ -9,6 +9,10 @@ var TextToDateViewValue = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     TextToDateViewValue.prototype._fromView = function (value) {
+        if (value) {
+            var match = /^(?<Year>\d{4})-(?<Month>\d{2})-(?<Day>\d{2})$/.exec(value);
+            return new Date(Number(match.groups.Year), Number(match.groups.Month) - 1, Number(match.groups.Day));
+        }
         return value ? new Date(value) : null;
     };
     TextToDateViewValue.prototype._toView = function (value) {

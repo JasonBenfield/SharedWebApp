@@ -1,11 +1,19 @@
-﻿import { UrlBuilder } from '../UrlBuilder';
-import { Startup } from 'xtistart';
-import { WebPage } from '../WebPage';
+﻿import { AppApi } from '../AppApi';
 import { MessageAlert } from '../MessageAlert';
-import { PageFrame } from '../PageFrame';
+import { PageFrameView } from '../PageFrameView';
+import { UrlBuilder } from '../UrlBuilder';
+import { WebPage } from '../WebPage';
+import { UserPageView } from './UserPageView';
 
 export class UserPage {
-    constructor(protected readonly page: PageFrame) {
+    private readonly view: UserPageView;
+    private readonly api: AppApi;
+    private readonly alert: MessageAlert;
+
+    constructor(page: PageFrameView, api: AppApi) {
+        this.view = new UserPageView(page);
+        this.api = api;
+        this.alert = new MessageAlert(this.view.alert);
         this.goToReturnUrl();
     }
 
@@ -16,11 +24,7 @@ export class UserPage {
         if (returnUrl) {
             returnUrl = decodeURIComponent(returnUrl);
         }
-        let defaultApi = this.page.defaultApi();
-        returnUrl = defaultApi ? defaultApi.url.addPart(returnUrl).value() : '/';
+        returnUrl = this.api ? this.api.url.addPart(returnUrl).value() : '/';
         new WebPage(returnUrl).open();
     }
-
-    private readonly alert = this.page.addContent(new MessageAlert());
 }
-new UserPage(new Startup().build());

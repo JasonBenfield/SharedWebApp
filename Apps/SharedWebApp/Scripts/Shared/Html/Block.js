@@ -25,6 +25,9 @@ var Block = /** @class */ (function (_super) {
     Block.prototype.scrollable = function () {
         this.addCssName('overflow-auto');
     };
+    Block.prototype.setRole = function (role) {
+        this.vm.role(role);
+    };
     return Block;
 }(HtmlContainerComponent_1.HtmlContainerComponent));
 exports.Block = Block;

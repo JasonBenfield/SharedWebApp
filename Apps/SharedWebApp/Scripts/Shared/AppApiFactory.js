@@ -5,23 +5,16 @@ var AppApiEvents_1 = require("./AppApiEvents");
 var ConsoleLog_1 = require("./ConsoleLog");
 var HostEnvironment_1 = require("./HostEnvironment");
 var AppApiFactory = /** @class */ (function () {
-    function AppApiFactory() {
+    function AppApiFactory(_defaultApiType, modalError) {
+        this._defaultApiType = _defaultApiType;
+        this.modalError = modalError;
     }
-    Object.defineProperty(AppApiFactory.prototype, "defaultApiType", {
-        set: function (defaultApi) {
-            this._defaultApiType = defaultApi;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    AppApiFactory.prototype.defaultApi = function (modalError) {
-        return this.api(this._defaultApiType, modalError);
-    };
-    AppApiFactory.prototype.api = function (apiCtor, modalError) {
+    AppApiFactory.prototype.api = function (apiCtor) {
+        var _this = this;
         var api;
         var events = new AppApiEvents_1.AppApiEvents(function (err) {
             new ConsoleLog_1.ConsoleLog().error(err.toString());
-            modalError.show(err.getErrors(), err.getCaption());
+            _this.modalError.show(err.getErrors(), err.getCaption());
         });
         if (apiCtor === this._defaultApiType) {
             api = new apiCtor(events, location.protocol + "//" + location.host, 'Current');

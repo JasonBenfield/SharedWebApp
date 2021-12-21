@@ -2,11 +2,11 @@
 import { HtmlContainerComponent } from './HtmlContainerComponent';
 
 export class Block extends HtmlContainerComponent {
+    protected readonly vm: BlockViewModel;
+
     constructor(vm: BlockViewModel = new BlockViewModel()) {
         super(vm);
     }
-
-    protected readonly vm: BlockViewModel;
 
     height100() {
         this.addCssName('h-100');
@@ -26,5 +26,9 @@ export class Block extends HtmlContainerComponent {
 
     scrollable() {
         this.addCssName('overflow-auto');
+    }
+
+    setRole(role: string) {
+        this.vm.role(role);
     }
 }

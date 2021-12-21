@@ -29,11 +29,8 @@ var Input = /** @class */ (function (_super) {
     Input.prototype.setAutocomplete = function (autocomplete) {
         this.vm.autocomplete(autocomplete);
     };
-    Input.prototype.getValue = function () {
-        return this.value;
-    };
+    Input.prototype.getValue = function () { return this.vm.value(); };
     Input.prototype.setValue = function (value) {
-        this.value = value;
         this.vm.value(value);
     };
     Input.prototype.setBorder = function (border) {
@@ -50,6 +47,7 @@ var Input = /** @class */ (function (_super) {
     Input.prototype.setType = function (type) {
         this.vm.type(type);
     };
+    Input.prototype.hasFocus = function () { return this.vm.hasFocus(); };
     Input.prototype.setFocus = function () { this.vm.hasFocus(true); };
     Input.prototype.blur = function () { this.vm.hasFocus(false); };
     return Input;

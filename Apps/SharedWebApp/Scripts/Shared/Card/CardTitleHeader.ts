@@ -1,16 +1,11 @@
-﻿import { CardHeader } from './CardHeader';
-import { BlockViewModel } from '../Html/BlockViewModel';
-import { TextBlock } from '../Html/TextBlock';
+﻿import { CardTitleHeaderView } from './CardTitleHeaderView';
 
-export class CardTitleHeader extends CardHeader {
-    constructor(title: string = '', vm: BlockViewModel = new BlockViewModel()) {
-        super(vm);
-        this.setText(title);
-        
+export class CardTitleHeader {
+    constructor(title: string = '', private readonly view: CardTitleHeaderView) {
+        this.view.setText(title);
     }
-    private readonly textBlock = this.addContent(new TextBlock());
 
     setText(text: string) {
-        this.textBlock.setText(text);
+        this.view.setText(text);
     }
 }
