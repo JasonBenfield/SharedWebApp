@@ -6,7 +6,7 @@ import { InputGroup } from "../Html/InputGroup";
 import { TextSpan } from "../Html/TextSpan";
 import { MarginCss } from "../MarginCss";
 
-export class FormGroupView extends Block implements IFormGroup {
+export class FormGroupView extends Block {
     readonly captionColumn = this.addContent(new LabelColumn());
     private readonly labelTextSpan = this.captionColumn.addContent(new TextSpan());
     readonly inputGroup: InputGroup;

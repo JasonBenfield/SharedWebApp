@@ -1,17 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = require("tslib");
-var xtistart_1 = require("xtistart");
+var Startup_1 = require("../../Shared/Startup");
 var AppApiAction_1 = require("../../Shared/AppApiAction");
 var AppApiEvents_1 = require("../../Shared/AppApiEvents");
 var AppResourceUrl_1 = require("../../Shared/AppResourceUrl");
 var AsyncCommand_1 = require("../../Shared/Command/AsyncCommand");
 var ConsoleLog_1 = require("../../Shared/ConsoleLog");
 var MessageAlert_1 = require("../../Shared/MessageAlert");
+var DefaultPageContext_1 = require("../DefaultPageContext");
 var AddEmployeeForm_1 = require("./AddEmployeeForm");
 var MainPageView_1 = require("./MainPageView");
 var MainPage = /** @class */ (function () {
     function MainPage(page) {
+        new DefaultPageContext_1.DefaultPageContext().load();
         this.view = new MainPageView_1.MainPageView(page);
         this.alert = new MessageAlert_1.MessageAlert(this.view.alert);
         this.addEmployeeForm = new AddEmployeeForm_1.AddEmployeeForm(this.view.addEmployeeForm);
@@ -26,7 +28,7 @@ var MainPage = /** @class */ (function () {
             return (0, tslib_1.__generator)(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        action = new AppApiAction_1.AppApiAction(new AppApiEvents_1.AppApiEvents(function () { }), AppResourceUrl_1.AppResourceUrl.app(location.protocol + "//" + location.host, 'Shared', 'Current', '', '')
+                        action = new AppApiAction_1.AppApiAction(new AppApiEvents_1.AppApiEvents(function () { }), AppResourceUrl_1.AppResourceUrl.app("".concat(location.protocol, "//").concat(location.host), 'Shared', 'Current', '', '')
                             .withGroup('Employee'), 'Test', 'Test');
                         return [4 /*yield*/, action.execute(5, {})];
                     case 1:
@@ -44,12 +46,12 @@ var MainPage = /** @class */ (function () {
             return (0, tslib_1.__generator)(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        action = new AppApiAction_1.AppApiAction(new AppApiEvents_1.AppApiEvents(function () { }), AppResourceUrl_1.AppResourceUrl.app(location.protocol + "//" + location.host, 'Shared', 'Current', '', '').withGroup('Employee'), 'AddEmployee', 'Add Employee');
+                        action = new AppApiAction_1.AppApiAction(new AppApiEvents_1.AppApiEvents(function () { }), AppResourceUrl_1.AppResourceUrl.app("".concat(location.protocol, "//").concat(location.host), 'Shared', 'Current', '', '').withGroup('Employee'), 'AddEmployee', 'Add Employee');
                         return [4 /*yield*/, this.addEmployeeForm.save(action)];
                     case 1:
                         result = _a.sent();
                         if (result.succeeded()) {
-                            alert("Success: " + result.value);
+                            alert("Success: ".concat(result.value));
                         }
                         return [2 /*return*/];
                 }
@@ -58,5 +60,5 @@ var MainPage = /** @class */ (function () {
     };
     return MainPage;
 }());
-new MainPage(new xtistart_1.Startup().build());
+new MainPage(new Startup_1.Startup().build());
 //# sourceMappingURL=MainPage.js.map

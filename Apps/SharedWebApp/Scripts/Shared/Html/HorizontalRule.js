@@ -5,6 +5,7 @@ var HorizontalRuleViewModel_1 = require("./HorizontalRuleViewModel");
 var HorizontalRule = /** @class */ (function () {
     function HorizontalRule(vm) {
         if (vm === void 0) { vm = new HorizontalRuleViewModel_1.HorizontalRuleViewModel(); }
+        this.vm = vm;
     }
     HorizontalRule.prototype.addToContainer = function (container) {
         return container.addItem(this.vm, this);

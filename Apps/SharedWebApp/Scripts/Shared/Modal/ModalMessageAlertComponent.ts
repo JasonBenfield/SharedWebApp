@@ -1,12 +1,25 @@
 ﻿import { Awaitable } from "../Awaitable";
 import { Command } from "../Command/Command";
 import { MessageAlert } from "../MessageAlert";
-import { Result } from "../Result";
 import { ModalMessageAlertComponentView } from "./ModalMessageAlertComponentView";
+
+interface Results {
+    ok?: {};
+}
+
+export class ModalMessageAlertComponentResult {
+    static get ok() { return new ModalMessageAlertComponentResult({ ok: {} }); }
+
+    private constructor(private readonly results: Results) {
+    }
+
+    get ok() { return this.results.ok; }
+}
 
 export class ModalMessageAlertComponent {
     private readonly _alert: MessageAlert;
-    private readonly awaitable = new Awaitable();
+    private readonly awaitable = new Awaitable<ModalMessageAlertComponentResult>();
+    readonly okCommand = new Command(this.ok.bind(this));
 
     constructor(private readonly view: ModalMessageAlertComponentView) {
         this._alert = new MessageAlert(this.view.alert);
@@ -16,9 +29,7 @@ export class ModalMessageAlertComponent {
 
     private onClosed() {
         if (this.awaitable.isInProgress()) {
-            this.awaitable.resolve(
-                new Result('ok')
-            );
+            this.awaitable.resolve(ModalMessageAlertComponentResult.ok);
         }
     }
 
@@ -32,12 +43,8 @@ export class ModalMessageAlertComponent {
         await this.awaitable.start();
     }
 
-    readonly okCommand = new Command(this.ok.bind(this));
-
     private ok() {
-        this.awaitable.resolve(
-            new Result('ok')
-        );
+        this.awaitable.resolve(ModalMessageAlertComponentResult.ok);
         this.view.hideModal();
     }
 }

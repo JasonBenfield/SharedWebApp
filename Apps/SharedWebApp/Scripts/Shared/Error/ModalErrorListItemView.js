@@ -12,18 +12,18 @@ var ModalErrorListItemView = /** @class */ (function (_super) {
     function ModalErrorListItemView() {
         var _this = _super.call(this, new LinkListItemViewModel_1.LinkListItemViewModel()) || this;
         var row = _this.addContent(new Row_1.Row());
-        var col1 = row.addColumn();
-        col1.setColumnCss(ColumnCss_1.ColumnCss.xs(3));
-        _this.caption = col1.addContent(new TextBlock_1.TextBlock());
+        _this.captionCol = row.addColumn();
+        _this.captionCol.setColumnCss(ColumnCss_1.ColumnCss.xs(3));
+        _this.caption = _this.captionCol.addContent(new TextBlock_1.TextBlock());
         var col2 = row.addColumn();
         _this.message = col2.addContent(new TextBlock_1.TextBlock());
         return _this;
     }
-    ModalErrorListItemView.prototype.hideCaption = function () { this.caption.hide(); };
-    ModalErrorListItemView.prototype.showCaption = function () { this.caption.show(); };
+    ModalErrorListItemView.prototype.hideCaption = function () { this.captionCol.hide(); };
+    ModalErrorListItemView.prototype.showCaption = function () { this.captionCol.show(); };
     ModalErrorListItemView.prototype.setCaption = function (caption) { this.caption.setText(caption); };
     ModalErrorListItemView.prototype.setMessage = function (message) { this.message.setText(message); };
     return ModalErrorListItemView;
-}(LinkListGroupItemView_1.LinkListGroupItem));
+}(LinkListGroupItemView_1.LinkListGroupItemView));
 exports.ModalErrorListItemView = ModalErrorListItemView;
 //# sourceMappingURL=ModalErrorListItemView.js.map

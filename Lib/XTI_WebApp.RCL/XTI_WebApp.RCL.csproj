@@ -5,6 +5,7 @@
 	  <Nullable>enable</Nullable>
 	  <ImplicitUsings>enable</ImplicitUsings>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+	  <RepositoryUrl>https://github.com/JasonBenfield/SharedWebApp</RepositoryUrl>
   </PropertyGroup>
 
   

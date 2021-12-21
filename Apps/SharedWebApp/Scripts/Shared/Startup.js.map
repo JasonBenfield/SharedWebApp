@@ -1,1 +1,1 @@
-{"version":3,"file":"Startup.js","sourceRoot":"","sources":["Startup.ts"],"names":[],"mappings":";;;;AAAA,6CAA4C;AAE5C;IAA6B,mCAAW;IAAxC;;IACA,CAAC;IAAD,cAAC;AAAD,CAAC,AADD,CAA6B,yBAAW,GACvC;AADY,0BAAO"}
+{"version":3,"file":"Startup.js","sourceRoot":"","sources":["Startup.ts"],"names":[],"mappings":";;;AAAA,iDAAgD;AAEhD;IAAA;IAMA,CAAC;IALG,uBAAK,GAAL;QACI,IAAI,SAAS,GAAG,IAAI,6BAAa,EAAE,CAAC;QACpC,SAAS,CAAC,IAAI,EAAE,CAAC;QACjB,OAAO,SAAS,CAAC;IACrB,CAAC;IACL,cAAC;AAAD,CAAC,AAND,IAMC;AANY,0BAAO"}

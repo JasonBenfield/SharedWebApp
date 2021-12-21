@@ -16,10 +16,10 @@ import { PageLoader } from "./PageLoader";
 import { PageViewModel } from "./PageViewModel";
 import { TextCss } from "./TextCss";
 
-export class PageFrameView implements IPageFrame {
-    public readonly toolbar: Toolbar;
-    public readonly appTitle: TextSpan;
-    public readonly pageTitle: TextSmall;
+export class PageFrameView {
+    readonly toolbar: Toolbar;
+    readonly appTitle: TextSpan;
+    readonly pageTitle: TextSmall;
 
     private readonly outerContent = new AggregateComponent(this.vm.content);
     readonly content: Block;

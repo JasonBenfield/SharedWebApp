@@ -1,11 +1,27 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ModalMessageAlertComponent = void 0;
+exports.ModalMessageAlertComponent = exports.ModalMessageAlertComponentResult = void 0;
 var tslib_1 = require("tslib");
 var Awaitable_1 = require("../Awaitable");
 var Command_1 = require("../Command/Command");
 var MessageAlert_1 = require("../MessageAlert");
-var Result_1 = require("../Result");
+var ModalMessageAlertComponentResult = /** @class */ (function () {
+    function ModalMessageAlertComponentResult(results) {
+        this.results = results;
+    }
+    Object.defineProperty(ModalMessageAlertComponentResult, "ok", {
+        get: function () { return new ModalMessageAlertComponentResult({ ok: {} }); },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(ModalMessageAlertComponentResult.prototype, "ok", {
+        get: function () { return this.results.ok; },
+        enumerable: false,
+        configurable: true
+    });
+    return ModalMessageAlertComponentResult;
+}());
+exports.ModalMessageAlertComponentResult = ModalMessageAlertComponentResult;
 var ModalMessageAlertComponent = /** @class */ (function () {
     function ModalMessageAlertComponent(view) {
         this.view = view;
@@ -17,7 +33,7 @@ var ModalMessageAlertComponent = /** @class */ (function () {
     }
     ModalMessageAlertComponent.prototype.onClosed = function () {
         if (this.awaitable.isInProgress()) {
-            this.awaitable.resolve(new Result_1.Result('ok'));
+            this.awaitable.resolve(ModalMessageAlertComponentResult.ok);
         }
     };
     ModalMessageAlertComponent.prototype.setBackdrop = function (backdrop) {
@@ -39,7 +55,7 @@ var ModalMessageAlertComponent = /** @class */ (function () {
         });
     };
     ModalMessageAlertComponent.prototype.ok = function () {
-        this.awaitable.resolve(new Result_1.Result('ok'));
+        this.awaitable.resolve(ModalMessageAlertComponentResult.ok);
         this.view.hideModal();
     };
     return ModalMessageAlertComponent;

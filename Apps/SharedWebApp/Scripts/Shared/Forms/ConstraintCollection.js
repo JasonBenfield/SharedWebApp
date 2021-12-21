@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpperRangeConstraint = exports.LowerRangeConstraint = exports.NumberConstraintCollection = exports.DateConstraintCollection = exports.TextConstraintCollection = exports.ConstraintCollection = void 0;
 var tslib_1 = require("tslib");
-var ErrorModel_1 = require("../../Shared/ErrorModel");
+var ErrorModel_1 = require("../ErrorModel");
 var ConstraintResult_1 = require("./ConstraintResult");
 var NotWhitespaceConstraint_1 = require("./NotWhitespaceConstraint");
 var ConstraintCollection = /** @class */ (function () {

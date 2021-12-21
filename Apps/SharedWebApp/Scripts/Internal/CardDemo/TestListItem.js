@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TestListItem = void 0;
 var TestListItem = /** @class */ (function () {
     function TestListItem(i, view) {
-        view.setText("Clickable " + i);
+        view.setText("Clickable ".concat(i));
     }
     return TestListItem;
 }());

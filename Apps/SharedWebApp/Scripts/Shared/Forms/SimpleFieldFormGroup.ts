@@ -1,5 +1,4 @@
-﻿import { DropdownComponent } from "../Dropdown/DropdownComponent";
-import { ErrorModel } from "../ErrorModel";
+﻿import { ErrorModel } from "../ErrorModel";
 import { ListGroup } from "../ListGroup/ListGroup";
 import { ErrorList } from "./ErrorList";
 import { ErrorListItem } from "./ErrorListItem";
@@ -8,7 +7,7 @@ import { SimpleFieldFormGroupView } from "./SimpleFieldFormGroupView";
 
 export abstract class SimpleFieldFormGroup<TValue> implements IField {
     private readonly name: string;
-    private readonly caption: string;
+    private caption: string;
     private readonly alertList: ListGroup;
 
     constructor(prefix: string, name: string, protected readonly view: SimpleFieldFormGroupView) {
@@ -29,6 +28,7 @@ export abstract class SimpleFieldFormGroup<TValue> implements IField {
     }
 
     setCaption(caption: string) {
+        this.caption = caption;
         this.view.setCaption(caption);
     }
 

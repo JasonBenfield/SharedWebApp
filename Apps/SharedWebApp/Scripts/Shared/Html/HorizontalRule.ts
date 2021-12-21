@@ -4,6 +4,7 @@ export class HorizontalRule implements IComponent {
     protected readonly vm: HorizontalRuleViewModel;
 
     constructor(vm: HorizontalRuleViewModel = new HorizontalRuleViewModel()) {
+        this.vm = vm;
     }
 
     addToContainer(container: IAggregateComponent): this {

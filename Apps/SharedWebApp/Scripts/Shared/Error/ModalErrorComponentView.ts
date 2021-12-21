@@ -3,6 +3,7 @@ import { ButtonCommandItem } from '../Command/ButtonCommandItem';
 import { ContextualClass } from '../ContextualClass';
 import { DefaultEvent } from '../Events';
 import { Row } from '../Grid/Row';
+import { Block } from '../Html/Block';
 import { HorizontalRule } from '../Html/HorizontalRule';
 import { HtmlComponent } from '../Html/HtmlComponent';
 import { TextHeading5 } from '../Html/TextHeading5';
@@ -15,13 +16,13 @@ import { ModalErrorListItem } from './ModalErrorListItem';
 export class ModalErrorComponentView extends HtmlComponent {
     private readonly modal: ModalComponentView;
     private readonly title: TextHeading5;
+    private readonly body: Block;
 
     private readonly _errorSelected = new DefaultEvent<ModalErrorListItem>(this);
     readonly errorSelected = this._errorSelected.handler();
 
     readonly closed: IEventHandler<any>;
     readonly okButton: ButtonCommandItem;
-    readonly hr: HorizontalRule;
 
     private readonly errorGroups: ModalErrorGroupComponentView[] = [];
 
@@ -29,8 +30,9 @@ export class ModalErrorComponentView extends HtmlComponent {
         super(vm);
         this.modal = new ModalComponentView(vm);
         this.modal.body.setName(ModalErrorComponentView.name);
+        this.body = this.modal.body.addContent(new Block());
+        this.body.addCssName('alert alert-danger m-0 rounded-0 border-danger border-left-0 border-right-0');
         this.title = this.modal.header.addContent(new TextHeading5(''));
-        this.hr = this.modal.body.addContent(new HorizontalRule());
         let row = this.modal.footer.addContent(new Row());
         row.addColumn();
         let buttonColumn = row.addColumn();
@@ -45,13 +47,13 @@ export class ModalErrorComponentView extends HtmlComponent {
     errorGroup() {
         let errorGroup = new ModalErrorGroupComponentView();
         this.errorGroups.push(errorGroup);
-        this.modal.body.addContent(errorGroup);
+        this.body.addContent(errorGroup);
         return errorGroup;
     }
 
     clearErrorGroups() {
         for (let errorGroup of this.errorGroups) {
-            this.modal.body.removeItem(errorGroup);
+            this.body.removeItem(errorGroup);
         }
     }
 

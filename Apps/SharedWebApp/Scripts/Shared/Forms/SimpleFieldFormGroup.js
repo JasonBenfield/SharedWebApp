@@ -17,6 +17,7 @@ var SimpleFieldFormGroup = /** @class */ (function () {
         return this.caption;
     };
     SimpleFieldFormGroup.prototype.setCaption = function (caption) {
+        this.caption = caption;
         this.view.setCaption(caption);
     };
     SimpleFieldFormGroup.prototype.getField = function (name) { return this.getName() === name ? this : null; };

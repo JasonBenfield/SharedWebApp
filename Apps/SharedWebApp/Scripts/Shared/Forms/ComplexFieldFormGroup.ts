@@ -5,9 +5,7 @@ import { FormGroupCollection } from "./FormGroupCollection";
 import { InputFormGroupView } from "./InputFormGroupView";
 
 export class ComplexFieldFormGroup extends FormGroup implements IField {
-
     private readonly name: string;
-
     private readonly formGroups: FormGroupCollection;
 
     constructor(
@@ -33,7 +31,7 @@ export class ComplexFieldFormGroup extends FormGroup implements IField {
         return this.formGroups.getField(name);
     }
 
-    forEachFormGroup(action: (field: IFormGroupField) => void) {
+    forEachFormGroup(action: (field: IField) => void) {
         this.formGroups.forEach(action);
     }
 
@@ -81,7 +79,7 @@ export class ComplexFieldFormGroup extends FormGroup implements IField {
         return this.formGroups.addDropDownFormGroup<T>(name, view);
     }
 
-    protected addFormGroup<TFormGroup extends IFormGroupField>(name: string, formGroup: TFormGroup) {
+    protected addFormGroup<TFormGroup extends IField>(name: string, formGroup: TFormGroup) {
         return this.formGroups.addFormGroup(formGroup);
     }
 

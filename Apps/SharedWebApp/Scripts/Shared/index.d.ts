@@ -26,19 +26,6 @@ interface PageContext {
 
 declare let pageContext: PageContext;
 
-interface IPageViewModel {
-}
-
-interface IPageFrame extends IAggregateComponent {
-    load();
-}
-
-declare module 'xtistart' {
-    export class Startup {
-        build();
-    }
-}
-
 interface EventCallback<TArgs> {
     (args: TArgs, source?: any): void;
 }
@@ -222,14 +209,6 @@ interface ITextCss {
 interface IColumn {
     setColumnCss(columnCss: IColumnCss);
     setTextCss(textCss: ITextCss);
-}
-
-interface IFormGroup extends IComponent {
-    readonly captionColumn: IColumn;
-    readonly valueColumn: IColumn;
-}
-
-interface IFormGroupField extends IFormGroup, IField {
 }
 
 interface IComponent {

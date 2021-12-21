@@ -1,10 +1,36 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ModalConfirmComponent = void 0;
+exports.ModalConfirmComponent = exports.ModalConfirmComponentResult = void 0;
 var tslib_1 = require("tslib");
 var Awaitable_1 = require("../Awaitable");
 var Command_1 = require("../Command/Command");
-var Result_1 = require("../Result");
+var ModalConfirmComponentResult = /** @class */ (function () {
+    function ModalConfirmComponentResult(results) {
+        this.results = results;
+    }
+    Object.defineProperty(ModalConfirmComponentResult, "confirmed", {
+        get: function () { return new ModalConfirmComponentResult({ confirmed: {} }); },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(ModalConfirmComponentResult, "rejected", {
+        get: function () { return new ModalConfirmComponentResult({ rejected: {} }); },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(ModalConfirmComponentResult.prototype, "confirmed", {
+        get: function () { return this.results.confirmed; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(ModalConfirmComponentResult.prototype, "rejected", {
+        get: function () { return this.results.rejected; },
+        enumerable: false,
+        configurable: true
+    });
+    return ModalConfirmComponentResult;
+}());
+exports.ModalConfirmComponentResult = ModalConfirmComponentResult;
 var ModalConfirmComponent = /** @class */ (function () {
     function ModalConfirmComponent(view) {
         this.view = view;
@@ -17,7 +43,7 @@ var ModalConfirmComponent = /** @class */ (function () {
     }
     ModalConfirmComponent.prototype.onClosed = function () {
         if (this.awaitable.isInProgress()) {
-            this.awaitable.resolve(new Result_1.Result('confirm', false));
+            this.awaitable.resolve(ModalConfirmComponentResult.rejected);
         }
     };
     ModalConfirmComponent.prototype.confirm = function (message, title) {
@@ -39,17 +65,17 @@ var ModalConfirmComponent = /** @class */ (function () {
                         return [4 /*yield*/, this.awaitable.start()];
                     case 1:
                         result = _a.sent();
-                        return [2 /*return*/, result.data];
+                        return [2 /*return*/, Boolean(result.confirmed)];
                 }
             });
         });
     };
     ModalConfirmComponent.prototype.yes = function () {
-        this.awaitable.resolve(new Result_1.Result('confirm', true));
+        this.awaitable.resolve(ModalConfirmComponentResult.confirmed);
         this.view.hideModal();
     };
     ModalConfirmComponent.prototype.no = function () {
-        this.awaitable.resolve(new Result_1.Result('confirm', false));
+        this.awaitable.resolve(ModalConfirmComponentResult.rejected);
         this.view.hideModal();
     };
     return ModalConfirmComponent;

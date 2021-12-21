@@ -2,10 +2,10 @@
 import { LinkListItemViewModel } from "./LinkListItemViewModel";
 import { ListGroupItemView } from "./ListGroupItemView";
 
-export class LinkListGroupItem extends ListGroupItemView {
+export class LinkListGroupItemView extends ListGroupItemView {
     private readonly link: Link;
 
-    constructor(vm: LinkListItemViewModel) {
+    constructor(vm: LinkListItemViewModel = new LinkListItemViewModel()) {
         super(vm);
         this.link = new Link(vm);
     }

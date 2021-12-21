@@ -7,7 +7,7 @@ var ButtonCommandItem_1 = require("../Command/ButtonCommandItem");
 var ContextualClass_1 = require("../ContextualClass");
 var Events_1 = require("../Events");
 var Row_1 = require("../Grid/Row");
-var HorizontalRule_1 = require("../Html/HorizontalRule");
+var Block_1 = require("../Html/Block");
 var HtmlComponent_1 = require("../Html/HtmlComponent");
 var TextHeading5_1 = require("../Html/TextHeading5");
 var ModalComponentView_1 = require("../Modal/ModalComponentView");
@@ -24,8 +24,9 @@ var ModalErrorComponentView = /** @class */ (function (_super) {
         _this.errorGroups = [];
         _this.modal = new ModalComponentView_1.ModalComponentView(vm);
         _this.modal.body.setName(ModalErrorComponentView.name);
+        _this.body = _this.modal.body.addContent(new Block_1.Block());
+        _this.body.addCssName('alert alert-danger m-0 rounded-0 border-danger border-left-0 border-right-0');
         _this.title = _this.modal.header.addContent(new TextHeading5_1.TextHeading5(''));
-        _this.hr = _this.modal.body.addContent(new HorizontalRule_1.HorizontalRule());
         var row = _this.modal.footer.addContent(new Row_1.Row());
         row.addColumn();
         var buttonColumn = row.addColumn();
@@ -40,13 +41,13 @@ var ModalErrorComponentView = /** @class */ (function (_super) {
     ModalErrorComponentView.prototype.errorGroup = function () {
         var errorGroup = new ModalErrorGroupComponentView_1.ModalErrorGroupComponentView();
         this.errorGroups.push(errorGroup);
-        this.modal.body.addContent(errorGroup);
+        this.body.addContent(errorGroup);
         return errorGroup;
     };
     ModalErrorComponentView.prototype.clearErrorGroups = function () {
         for (var _i = 0, _a = this.errorGroups; _i < _a.length; _i++) {
             var errorGroup = _a[_i];
-            this.modal.body.removeItem(errorGroup);
+            this.body.removeItem(errorGroup);
         }
     };
     ModalErrorComponentView.prototype.setTitle = function (title) {

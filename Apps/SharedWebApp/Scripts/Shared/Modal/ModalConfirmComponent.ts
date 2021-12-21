@@ -1,10 +1,27 @@
 ﻿import { Awaitable } from "../Awaitable";
 import { Command } from "../Command/Command";
-import { Result } from "../Result";
 import { ModalConfirmComponentView } from "./ModalConfirmComponentView";
 
+interface Results {
+    confirmed?: {};
+    rejected?: {};
+}
+
+export class ModalConfirmComponentResult {
+    static get confirmed() { return new ModalConfirmComponentResult({ confirmed: {} }); }
+
+    static get rejected() { return new ModalConfirmComponentResult({ rejected: {} }); }
+
+    private constructor(private readonly results: Results) {
+    }
+
+    get confirmed() { return this.results.confirmed; }
+
+    get rejected() { return this.results.rejected; }
+}
+
 export class ModalConfirmComponent {
-    private readonly awaitable = new Awaitable();
+    private readonly awaitable = new Awaitable<ModalConfirmComponentResult>();
     private readonly yesCommand = new Command(this.yes.bind(this));
     private readonly noCommand = new Command(this.no.bind(this));
 
@@ -16,9 +33,7 @@ export class ModalConfirmComponent {
 
     private onClosed() {
         if (this.awaitable.isInProgress()) {
-            this.awaitable.resolve(
-                new Result('confirm', false)
-            );
+            this.awaitable.resolve(ModalConfirmComponentResult.rejected);
         }
     }
 
@@ -33,20 +48,16 @@ export class ModalConfirmComponent {
         this.view.setTitle(title);
         this.view.showModal();
         let result = await this.awaitable.start();
-        return <boolean>result.data;
+        return Boolean(result.confirmed);
     }
 
     private yes() {
-        this.awaitable.resolve(
-            new Result('confirm', true)
-        );
+        this.awaitable.resolve(ModalConfirmComponentResult.confirmed);
         this.view.hideModal();
     }
 
     private no() {
-        this.awaitable.resolve(
-            new Result('confirm', false)
-        );
+        this.awaitable.resolve(ModalConfirmComponentResult.rejected);
         this.view.hideModal();
     }
 }

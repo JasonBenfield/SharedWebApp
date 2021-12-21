@@ -22,7 +22,7 @@ var TestCard = /** @class */ (function () {
         this.clickableItems.itemClicked.register(this.onClick.bind(this));
     }
     TestCard.prototype.onClick = function (listItem) {
-        alert("You clicked " + listItem.i);
+        alert("You clicked ".concat(listItem.i));
     };
     TestCard.prototype.refresh = function () {
         var _this = this;
