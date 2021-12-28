@@ -8,8 +8,8 @@ import { AggregateComponent } from "./Html/AggregateComponent";
 import { Block } from "./Html/Block";
 import { FlexColumn } from "./Html/FlexColumn";
 import { Heading1 } from "./Html/Heading1";
-import { TextSmall } from "./Html/TextSmall";
-import { TextSpan } from "./Html/TextSpan";
+import { TextSmallView } from "./Html/TextSmallView";
+import { TextSpanView } from "./Html/TextSpanView";
 import { Toolbar } from "./Html/Toolbar";
 import { PaddingCss } from "./PaddingCss";
 import { PageLoader } from "./PageLoader";
@@ -18,8 +18,8 @@ import { TextCss } from "./TextCss";
 
 export class PageFrameView {
     readonly toolbar: Toolbar;
-    readonly appTitle: TextSpan;
-    readonly pageTitle: TextSmall;
+    readonly appTitle: TextSpanView;
+    readonly pageTitle: TextSmallView;
 
     private readonly outerContent = new AggregateComponent(this.vm.content);
     readonly content: Block;
@@ -37,8 +37,10 @@ export class PageFrameView {
         this.toolbar.setPadding(PaddingCss.xs(3));
         this.toolbar.columnStart.setTextCss(new TextCss().context(ContextualClass.light));
         let heading = this.toolbar.columnStart.addContent(new Heading1());
-        this.appTitle = heading.addContent(new TextSpan(pageContext.AppTitle));
-        this.pageTitle = heading.addContent(new TextSmall(pageContext.PageTitle));
+        this.appTitle = heading.addContent(new TextSpanView());
+        this.appTitle.setText(pageContext.AppTitle);
+        this.pageTitle = heading.addContent(new TextSmallView());
+        this.pageTitle.setText(pageContext.PageTitle);
         this.toolbar.columnEnd.addCssFrom(new AlignCss().self(a => a.xs('center')).cssClass());
         let dropdown = this.toolbar.columnEnd.addContent(new DropdownBlock());
         if (!pageContext.IsAuthenticated) {
@@ -47,12 +49,14 @@ export class PageFrameView {
         dropdown.button.setContext(ContextualClass.light);
         dropdown.button.useOutlineStyle();
         dropdown.button.addContent(new FaIcon('user'));
-        dropdown
+        let userName = dropdown
             .addSpanItem()
             .span
-            .addContent(new TextSpan(pageContext.UserName));
+            .addContent(new TextSpanView());
+        userName.setText(pageContext.UserName);
         this.logoutMenuItem = dropdown.addLinkItem();
-        this.logoutMenuItem.link.addContent(new TextSpan('Logout'));
+        let logoutTextSpan = this.logoutMenuItem.link.addContent(new TextSpanView());
+        logoutTextSpan.setText('Logout');
         this.logoutMenuItem.link.setHref(`${pageContext.BaseUrl}/Hub/Current/Auth/Logout`);
         this.content = frame.addContent(new Block());
         this.content.flexFill();

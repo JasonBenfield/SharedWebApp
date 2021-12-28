@@ -28,8 +28,11 @@
     <None Remove="Scripts\Shared\Error\ModalErrorGroupComponent.ts" />
     <None Remove="Scripts\Shared\Error\ModalErrorListItem.ts" />
     <None Remove="Scripts\Shared\Error\ModalErrorListItemView.ts" />
+    <None Remove="Scripts\Shared\FlexCss.ts" />
     <None Remove="Scripts\Shared\Forms\ErrorListItem.ts" />
     <None Remove="Scripts\Shared\Forms\ErrorListItemView.ts" />
+    <None Remove="Scripts\Shared\Html\NavView.ts" />
+    <None Remove="Scripts\Shared\JustifyContentCss.ts" />
   </ItemGroup>
   
   <ItemGroup>
@@ -61,8 +64,11 @@
     <TypeScriptCompile Include="Scripts\Shared\Error\ModalErrorGroupComponent.ts" />
     <TypeScriptCompile Include="Scripts\Shared\Error\ModalErrorListItem.ts" />
     <TypeScriptCompile Include="Scripts\Shared\Error\ModalErrorListItemView.ts" />
+    <TypeScriptCompile Include="Scripts\Shared\FlexCss.ts" />
     <TypeScriptCompile Include="Scripts\Shared\Forms\ErrorListItem.ts" />
     <TypeScriptCompile Include="Scripts\Shared\Forms\ErrorListItemView.ts" />
+    <TypeScriptCompile Include="Scripts\Shared\Html\NavView.ts" />
+    <TypeScriptCompile Include="Scripts\Shared\JustifyContentCss.ts" />
   </ItemGroup>
   
 </Project>

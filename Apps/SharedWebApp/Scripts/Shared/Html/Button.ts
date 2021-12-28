@@ -3,15 +3,16 @@ import { ContextualClass } from "../ContextualClass";
 import { HtmlContainerComponent } from "./HtmlContainerComponent";
 
 export class Button extends HtmlContainerComponent {
+    protected readonly vm: ButtonViewModel;
+    private context: ContextualClass;
+    private isOutline = false;
+    readonly clicked = this.vm.clicked;
+
     constructor(vm: ButtonViewModel = new ButtonViewModel()) {
         super(vm);
         vm.type('button');
         this.addCssName('btn');
     }
-
-    protected readonly vm: ButtonViewModel;
-
-    readonly clicked = this.vm.clicked;
 
     changeTypeToSubmit() {
         this.vm.type('submit');
@@ -20,8 +21,6 @@ export class Button extends HtmlContainerComponent {
     enable() { this.vm.isEnabled(true); }
 
     disable() { this.vm.isEnabled(false); }
-
-    private context: ContextualClass;
 
     setContext(context: ContextualClass) {
         let contextCss = this.getContextCss(context, this.isOutline);
@@ -32,8 +31,6 @@ export class Button extends HtmlContainerComponent {
     private getContextCss(context: ContextualClass, isOutline: boolean) {
         return context ? context.append(isOutline ? 'btn-outline' : 'btn') : '';
     }
-
-    private isOutline = false;
 
     useOutlineStyle() {
         let contextCss = this.getContextCss(this.context, true);

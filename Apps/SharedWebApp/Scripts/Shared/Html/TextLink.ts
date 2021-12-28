@@ -1,16 +1,22 @@
 ﻿import { Link } from "./Link";
-import { LinkViewModel } from "./LinkViewModel";
-import { TextSpan } from "./TextSpan";
+import { TextBlock } from "./TextBlock";
+import { TextLinkView } from "./TextLinkView";
 
 export class TextLink extends Link {
-    readonly textSpan = this.addContent(new TextSpan());
+    private readonly text: TextBlock;
 
-    constructor(text: string = '', vm: LinkViewModel = new LinkViewModel()) {
-        super(vm);
-        this.setText(text);
+    constructor(text: string, view: TextLinkView) {
+        super(view);
+        this.text = new TextBlock(text, view.textSpan);
     }
 
     setText(text: string) {
-        this.textSpan.setText(text);
+        this.text.setText(text);
+    }
+
+    setTitle(title: string) { this.text.setTitle(title); }
+
+    syncTitleWithText(format?: (text: string) => string) {
+        this.text.syncTitleWithText(format);
     }
 }

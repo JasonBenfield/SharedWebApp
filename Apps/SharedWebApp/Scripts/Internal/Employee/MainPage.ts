@@ -9,21 +9,21 @@ import { PageFrameView } from '../../Shared/PageFrameView';
 import { DefaultPageContext } from '../DefaultPageContext';
 import { AddEmployeeForm } from './AddEmployeeForm';
 import { MainPageView } from './MainPageView';
+import { TextBlock } from '../../Shared/Html/TextBlock';
 
 class MainPage {
-    private readonly view: MainPageView;
     private readonly alert: MessageAlert;
     private readonly addEmployeeForm: AddEmployeeForm;
     private readonly saveCommand: AsyncCommand;
 
     constructor(page: PageFrameView) {
-        new DefaultPageContext().load();
-        this.view = new MainPageView(page);
-        this.alert = new MessageAlert(this.view.alert);
-        this.addEmployeeForm = new AddEmployeeForm( this.view.addEmployeeForm);
+        let view = new MainPageView(page);
+        new TextBlock('Add Employee', view.heading);
+        this.alert = new MessageAlert(view.alert);
+        this.addEmployeeForm = new AddEmployeeForm(view.addEmployeeForm);
         this.saveCommand = new AsyncCommand(this.save.bind(this));
-        this.saveCommand.add(this.view.saveButton);
-        this.saveCommand.add(this.view.submitButton);
+        this.saveCommand.add(view.saveButton);
+        this.saveCommand.add(view.submitButton);
         this.test();
     }
 
@@ -59,4 +59,5 @@ class MainPage {
         );
     }
 }
+new DefaultPageContext().load();
 new MainPage(new Startup().build());

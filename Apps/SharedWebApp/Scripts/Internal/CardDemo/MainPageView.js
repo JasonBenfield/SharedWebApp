@@ -3,12 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MainPageView = void 0;
 var ButtonCommandItem_1 = require("../../Shared/Command/ButtonCommandItem");
 var ContextualClass_1 = require("../../Shared/ContextualClass");
-var Block_1 = require("../../Shared/Html/Block");
 var Container_1 = require("../../Shared/Html/Container");
 var FlexColumn_1 = require("../../Shared/Html/FlexColumn");
 var FlexColumnFill_1 = require("../../Shared/Html/FlexColumnFill");
-var Heading1_1 = require("../../Shared/Html/Heading1");
-var TextSpan_1 = require("../../Shared/Html/TextSpan");
+var TextHeading1View_1 = require("../../Shared/Html/TextHeading1View");
 var Toolbar_1 = require("../../Shared/Html/Toolbar");
 var PaddingCss_1 = require("../../Shared/PaddingCss");
 var TestCardView_1 = require("./TestCardView");
@@ -16,12 +14,9 @@ var MainPageView = /** @class */ (function () {
     function MainPageView(page) {
         this.page = page;
         var flexColumn = this.page.addContent(new FlexColumn_1.FlexColumn());
-        flexColumn.addContent(new Block_1.Block())
-            .configure(function (b) {
-            var container = b.addContent(new Container_1.Container());
-            var heading1 = container.addContent(new Heading1_1.Heading1());
-            heading1.addContent(new TextSpan_1.TextSpan('Card Demo'));
-        });
+        this.heading = flexColumn
+            .addContent(new Container_1.Container())
+            .addContent(new TextHeading1View_1.TextHeading1View());
         var fillRow = flexColumn.addContent(new FlexColumnFill_1.FlexColumnFill());
         this.testCard = fillRow.container.addContent(new TestCardView_1.TestCardView());
         var toolbar = flexColumn.addContent(new Toolbar_1.Toolbar());

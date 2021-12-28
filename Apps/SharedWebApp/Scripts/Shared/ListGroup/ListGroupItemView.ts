@@ -4,25 +4,19 @@ import { HtmlComponent } from "../Html/HtmlComponent";
 import { ListItemViewModel } from "../Html/ListItemViewModel";
 
 export class ListGroupItemView extends HtmlComponent implements IListItemView {
-    private data: any;
-
-    readonly content = new AggregateComponent(this.vm.content);
     protected readonly vm: IListItemViewModel;
+    readonly content: AggregateComponent;
     private contextClass = ContextualClass.default;
-
     private active = '';
 
     constructor(vm: IListItemViewModel = new ListItemViewModel()) {
         super(vm);
+        this.content = new AggregateComponent(this.vm.content);
         this.addCssName('list-group-item');
         if (vm.isClickable) {
             this.addCssName('list-group-item-action');
         }
     }
-
-    getData<T>(): T { return this.data; }
-
-    setData(data: any) { this.data = data; }
 
     addToList(list: IListView) {
         list.addFromListItem(this.vm, this);
@@ -39,14 +33,14 @@ export class ListGroupItemView extends HtmlComponent implements IListItemView {
     }
 
     setContext(contextClass: ContextualClass) {
-        let newCss = this.getCss(contextClass);
-        this.replaceCssName(this.getCss(this.contextClass), newCss);
+        let newCss = this.getListGroupItemContextCss(contextClass);
+        this.replaceCssName(this.getListGroupItemContextCss(this.contextClass), newCss);
         this.contextClass = contextClass;
     }
 
-    private getCss(contextClass: ContextualClass) {
+    private getListGroupItemContextCss(contextClass: ContextualClass) {
         return contextClass && !contextClass.equals(ContextualClass.default) ?
-            contextClass.toString() : '';
+            contextClass.append('list-group-item').toString() : '';
     }
 
     activate() {

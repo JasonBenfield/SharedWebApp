@@ -1,12 +1,19 @@
 ﻿import * as _ from 'lodash';
 import { ContextualClass } from './ContextualClass';
+import { DebouncedAction } from './DebouncedAction';
 import { DefaultEvent } from './Events';
+import { TextBlock } from './Html/TextBlock';
 import { MessageAlertView } from './MessageAlertView';
 
 export class MessageAlert {
     private _message: string;
+    private readonly textBlock: TextBlock;
+
+    private readonly _messageChanged = new DefaultEvent<string>(this);
+    readonly messageChanged = this._messageChanged.handler();
 
     constructor(private readonly view: MessageAlertView) {
+        this.textBlock = new TextBlock('', view.textBlock);
     }
 
     get message() {
@@ -16,9 +23,6 @@ export class MessageAlert {
     get hasMessage() {
         return Boolean(this._message);
     }
-
-    private readonly _messageChanged = new DefaultEvent<string>(this);
-    readonly messageChanged = this._messageChanged.handler();
 
     clear() {
         this.setMessage('');
@@ -34,14 +38,16 @@ export class MessageAlert {
         this.setMessage(message);
     }
 
-    async infoAction(message: string, a: () => Promise<any>) {
+    async infoAction<TResult>(message: string, a: () => Promise<TResult>) {
+        let result: TResult;
         this.info(message);
         try {
-            await a();
+            result = await a();
         }
         finally {
             this.clear();
         }
+        return result;
     }
 
     warning(message: string) {
@@ -60,15 +66,15 @@ export class MessageAlert {
         if (this._message) {
             this.updateVmMessage(this._message);
         }
-        this.debouncedSetMessage(this._message);
+        this.debouncedSetMessage.execute(this._message);
     }
 
-    private debouncedSetMessage = _.debounce((message: string) => {
+    private debouncedSetMessage = new DebouncedAction((message: string) => {
         this.updateVmMessage(message);
     }, 500);
 
     private updateVmMessage(message: string) {
-        this.view.setMessage(message);
+        this.textBlock.setText(message);
         if (message) {
             this.view.show();
         }

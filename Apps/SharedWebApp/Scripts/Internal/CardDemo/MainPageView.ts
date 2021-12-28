@@ -1,17 +1,16 @@
 ﻿import { ButtonCommandItem } from '../../Shared/Command/ButtonCommandItem';
 import { ContextualClass } from '../../Shared/ContextualClass';
-import { Block } from '../../Shared/Html/Block';
 import { Container } from '../../Shared/Html/Container';
 import { FlexColumn } from '../../Shared/Html/FlexColumn';
 import { FlexColumnFill } from '../../Shared/Html/FlexColumnFill';
-import { Heading1 } from '../../Shared/Html/Heading1';
-import { TextSpan } from '../../Shared/Html/TextSpan';
+import { TextHeading1View } from '../../Shared/Html/TextHeading1View';
 import { Toolbar } from '../../Shared/Html/Toolbar';
 import { PaddingCss } from '../../Shared/PaddingCss';
 import { PageFrameView } from '../../Shared/PageFrameView';
 import { TestCardView } from './TestCardView';
 
 export class MainPageView {
+    readonly heading: TextHeading1View;
     readonly testCard: TestCardView;
     readonly refreshButton: ButtonCommandItem;
     readonly cancelButton: ButtonCommandItem;
@@ -19,12 +18,9 @@ export class MainPageView {
 
     constructor(private readonly page: PageFrameView) {
         let flexColumn = this.page.addContent(new FlexColumn());
-        flexColumn.addContent(new Block())
-            .configure(b => {
-                let container = b.addContent(new Container());
-                let heading1 = container.addContent(new Heading1());
-                heading1.addContent(new TextSpan('Card Demo'));
-            });
+        this.heading = flexColumn
+            .addContent(new Container())
+            .addContent(new TextHeading1View());
         let fillRow = flexColumn.addContent(new FlexColumnFill());
         this.testCard = fillRow.container.addContent(new TestCardView());
         let toolbar = flexColumn.addContent(new Toolbar());

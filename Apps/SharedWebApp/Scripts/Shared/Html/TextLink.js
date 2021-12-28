@@ -3,20 +3,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TextLink = void 0;
 var tslib_1 = require("tslib");
 var Link_1 = require("./Link");
-var LinkViewModel_1 = require("./LinkViewModel");
-var TextSpan_1 = require("./TextSpan");
+var TextBlock_1 = require("./TextBlock");
 var TextLink = /** @class */ (function (_super) {
     tslib_1.__extends(TextLink, _super);
-    function TextLink(text, vm) {
-        if (text === void 0) { text = ''; }
-        if (vm === void 0) { vm = new LinkViewModel_1.LinkViewModel(); }
-        var _this = _super.call(this, vm) || this;
-        _this.textSpan = _this.addContent(new TextSpan_1.TextSpan());
-        _this.setText(text);
+    function TextLink(text, view) {
+        var _this = _super.call(this, view) || this;
+        _this.text = new TextBlock_1.TextBlock(text, view.textSpan);
         return _this;
     }
     TextLink.prototype.setText = function (text) {
-        this.textSpan.setText(text);
+        this.text.setText(text);
+    };
+    TextLink.prototype.setTitle = function (title) { this.text.setTitle(title); };
+    TextLink.prototype.syncTitleWithText = function (format) {
+        this.text.syncTitleWithText(format);
     };
     return TextLink;
 }(Link_1.Link));

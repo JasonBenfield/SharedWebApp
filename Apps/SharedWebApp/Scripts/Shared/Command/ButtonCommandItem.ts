@@ -3,7 +3,7 @@ import { Button } from "../Html/Button";
 import { ContextualClass } from "../ContextualClass";
 import { FaIcon } from "../FaIcon";
 import { MarginCss } from "../MarginCss";
-import { TextSpan } from "../Html/TextSpan";
+import { TextSpanView } from "../Html/TextSpanView";
 import { ICommandItem } from "./CommandItem";
 
 export class ButtonCommandItem extends Button implements ICommandItem {
@@ -13,19 +13,21 @@ export class ButtonCommandItem extends Button implements ICommandItem {
         return item;
     }
 
+    readonly executeRequested = this.clicked;
+    readonly icon: FaIcon;
+    private readonly textSpan: TextSpanView;
+    private active = '';
+    protected readonly vm: ButtonViewModel;
+
     constructor(vm: ButtonViewModel = new ButtonViewModel()) {
         super(vm);
+        this.icon = new FaIcon().addToContainer(this);
+        this.icon.setMargin(MarginCss.end(1));
+        this.textSpan = new TextSpanView().addToContainer(this);
         vm.type('button');
         this.addCssName('btn');
         this.setContext(ContextualClass.default);
     }
-
-    readonly executeRequested = this.clicked;
-    readonly icon = new FaIcon().addToContainer(this)
-        .configure(icon => {
-            icon.setMargin(MarginCss.end(1));
-        });
-    private readonly textSpan = new TextSpan().addToContainer(this);
 
     positionIconRight() {
         this.icon.pullRight();
@@ -35,8 +37,6 @@ export class ButtonCommandItem extends Button implements ICommandItem {
     setText(text: string) {
         this.textSpan.setText(text);
     }
-
-    private active = '';
 
     setActive() {
         this.updateActiveCss('active');
@@ -51,8 +51,6 @@ export class ButtonCommandItem extends Button implements ICommandItem {
         this.active = active;
     }
 
-    protected readonly vm: ButtonViewModel;
-
     changeTypeToSubmit() {
         this.vm.type('submit');
     }
@@ -61,5 +59,4 @@ export class ButtonCommandItem extends Button implements ICommandItem {
         this.addCssName('offscreen');
         this.changeTypeToSubmit();
     }
-
 }

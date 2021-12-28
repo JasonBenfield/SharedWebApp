@@ -1,7 +1,7 @@
 ﻿import { ContextualClass } from "./ContextualClass";
 import { CssClass } from "./CssClass";
 
-export class TextCss {
+export class TextCss implements ICssBuilder {
 
     private aligns: {
         xs?: 'text-start' | 'text-end' | 'text-center'

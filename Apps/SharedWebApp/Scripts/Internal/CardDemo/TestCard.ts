@@ -1,6 +1,6 @@
-﻿import { CardTitleHeader } from "../../Shared/Card/CardTitleHeader";
-import { DelayedAction } from '../../Shared/DelayedAction';
+﻿import { DelayedAction } from '../../Shared/DelayedAction';
 import { EnumerableRange } from "../../Shared/Enumerable";
+import { TextBlock } from "../../Shared/Html/TextBlock";
 import { ListGroup } from "../../Shared/ListGroup/ListGroup";
 import { MessageAlert } from "../../Shared/MessageAlert";
 import { TestCardView } from "./TestCardView";
@@ -10,7 +10,7 @@ import { TestListItem } from "./TestListItem";
 import { TestListItemView } from "./TestListItemView";
 
 export class TestCard {
-    private readonly cardTitleHeader = new CardTitleHeader('Original Title', this.view.cardTitleHeader);
+    private readonly cardTitleHeader = new TextBlock('Original Title', this.view.cardTitleHeader);
     private readonly alert = new MessageAlert(this.view.alert);
     private readonly testItems: ListGroup;
     private readonly clickableItems: ListGroup;

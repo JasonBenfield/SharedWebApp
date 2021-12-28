@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ModalErrorComponent = void 0;
 var Command_1 = require("../Command/Command");
 var Events_1 = require("../Events");
+var TextBlock_1 = require("../Html/TextBlock");
 var ModalErrorGroupComponent_1 = require("./ModalErrorGroupComponent");
 var ModalErrorComponent = /** @class */ (function () {
     function ModalErrorComponent(view) {
@@ -10,6 +11,7 @@ var ModalErrorComponent = /** @class */ (function () {
         this.errorGroups = [];
         this._errorSelected = new Events_1.DefaultEvent(this);
         this.errorSelected = this._errorSelected.handler();
+        this.title = new TextBlock_1.TextBlock('', view.title);
         this.view.closed.register(this.onClosed.bind(this));
         new Command_1.Command(this.hide.bind(this)).add(this.view.okButton);
     }
@@ -23,10 +25,10 @@ var ModalErrorComponent = /** @class */ (function () {
         group.load(caption, errors, this.errorGroups.length === 0);
         this.errorGroups.push(group);
         if (errors.length === 1) {
-            this.view.setTitle('An error occurred');
+            this.title.setText('An error occurred');
         }
         else {
-            this.view.setTitle('Errors occurred');
+            this.title.setText('Errors occurred');
         }
         this.view.showModal();
     };
@@ -34,8 +36,8 @@ var ModalErrorComponent = /** @class */ (function () {
         this.clearErrors();
         this.view.hideModal();
     };
-    ModalErrorComponent.prototype.onErrorSelected = function (errorListItem) {
-        this._errorSelected.invoke(errorListItem.error);
+    ModalErrorComponent.prototype.onErrorSelected = function (error) {
+        this._errorSelected.invoke(error);
     };
     ModalErrorComponent.prototype.clearErrors = function () {
         this.errorGroups.splice(0, this.errorGroups.length);

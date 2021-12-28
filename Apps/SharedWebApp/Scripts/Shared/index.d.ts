@@ -11,6 +11,20 @@ declare module '*.html' {
 
 declare type LayoutBreakpoint = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
+declare type FlexDirections = 'row' | 'column';
+
+declare type FlexWraps = 'wrap' | 'nowrap' | 'wrap-reverse';
+
+declare type ContentJustifications = 'start' | 'end' | 'center' | 'between' | 'around' | 'evenly';
+
+interface ICssClass {
+    toString(): string;
+}
+
+interface ICssBuilder {
+    cssClass(): ICssClass;
+}
+
 interface IEmptyRequest {
 }
 
@@ -25,6 +39,11 @@ interface PageContext {
 }
 
 declare let pageContext: PageContext;
+
+interface ITextComponentView {
+    setText(text: string);
+    setTitle(title: string);
+}
 
 interface EventCallback<TArgs> {
     (args: TArgs, source?: any): void;
@@ -174,10 +193,6 @@ interface IListItemViewModel extends IHtmlComponentViewModel {
 
 interface IListItemView {
     readonly content: IAggregateComponent;
-
-    getData<T>(): T;
-
-    setData(data: any);
 
     addCssName(name: string);
 

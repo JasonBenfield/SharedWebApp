@@ -11,6 +11,5 @@ export class TestCardView extends CardView {
 
     constructor(vm: BlockViewModel = new BlockViewModel()) {
         super(vm);
-        this.cardTitleHeader.setText('This is the Title');
     }
 }

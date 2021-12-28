@@ -4,7 +4,7 @@ exports.ModalErrorListItemView = void 0;
 var tslib_1 = require("tslib");
 var ColumnCss_1 = require("../ColumnCss");
 var Row_1 = require("../Grid/Row");
-var TextBlock_1 = require("../Html/TextBlock");
+var TextBlockView_1 = require("../Html/TextBlockView");
 var LinkListGroupItemView_1 = require("../ListGroup/LinkListGroupItemView");
 var LinkListItemViewModel_1 = require("../ListGroup/LinkListItemViewModel");
 var ModalErrorListItemView = /** @class */ (function (_super) {
@@ -14,15 +14,13 @@ var ModalErrorListItemView = /** @class */ (function (_super) {
         var row = _this.addContent(new Row_1.Row());
         _this.captionCol = row.addColumn();
         _this.captionCol.setColumnCss(ColumnCss_1.ColumnCss.xs(3));
-        _this.caption = _this.captionCol.addContent(new TextBlock_1.TextBlock());
+        _this.caption = _this.captionCol.addContent(new TextBlockView_1.TextBlockView());
         var col2 = row.addColumn();
-        _this.message = col2.addContent(new TextBlock_1.TextBlock());
+        _this.message = col2.addContent(new TextBlockView_1.TextBlockView());
         return _this;
     }
     ModalErrorListItemView.prototype.hideCaption = function () { this.captionCol.hide(); };
     ModalErrorListItemView.prototype.showCaption = function () { this.captionCol.show(); };
-    ModalErrorListItemView.prototype.setCaption = function (caption) { this.caption.setText(caption); };
-    ModalErrorListItemView.prototype.setMessage = function (message) { this.message.setText(message); };
     return ModalErrorListItemView;
 }(LinkListGroupItemView_1.LinkListGroupItemView));
 exports.ModalErrorListItemView = ModalErrorListItemView;

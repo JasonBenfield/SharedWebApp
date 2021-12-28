@@ -7,7 +7,7 @@ var BlockViewModel_1 = require("../Html/BlockViewModel");
 var ListBlockViewModel_1 = require("../Html/ListBlockViewModel");
 var ListGroupView_1 = require("../ListGroup/ListGroupView");
 var CardAlertView_1 = require("./CardAlertView");
-var CardHeader_1 = require("./CardHeader");
+var CardHeaderView_1 = require("./CardHeaderView");
 var CardTitleHeaderView_1 = require("./CardTitleHeaderView");
 var CardView = /** @class */ (function (_super) {
     tslib_1.__extends(CardView, _super);
@@ -21,7 +21,7 @@ var CardView = /** @class */ (function (_super) {
         return this.addContent(new CardTitleHeaderView_1.CardTitleHeaderView());
     };
     CardView.prototype.addCardHeader = function () {
-        return this.addContent(new CardHeader_1.CardHeader());
+        return this.addContent(new CardHeaderView_1.CardHeaderView());
     };
     CardView.prototype.addCardAlert = function () {
         return this.addContent(new CardAlertView_1.CardAlertView());

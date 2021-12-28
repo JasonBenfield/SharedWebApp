@@ -1,23 +1,28 @@
 ﻿import { JoinedStrings } from "./JoinedStrings";
 
-export class CssClass {
+export class CssClass implements ICssClass {
+    private value: string | null = null;
+    private readonly names: string[] = [];
+
     constructor(...initialNames: string[]) {
         if (initialNames) {
             this.addNames(...initialNames);
         }
     }
 
-    private value: string | null = null;
-    private readonly names: string[] = [];
-
     clear() {
         this.names.splice(0, this.names.length);
         return this;
     }
 
-    addFrom(cssClass: CssClass) {
+    addFrom(cssClass: CssClass | ICssBuilder) {
         if (cssClass) {
-            this.addName(cssClass.value);
+            if (cssClass instanceof CssClass) {
+                this.addName(cssClass.value);
+            }
+            else {
+                this.addName(cssClass.cssClass().toString());
+            }
         }
         return this;
     }

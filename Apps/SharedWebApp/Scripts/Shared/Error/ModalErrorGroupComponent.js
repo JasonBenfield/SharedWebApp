@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ModalErrorGroupComponent = void 0;
 var Enumerable_1 = require("../Enumerable");
 var Events_1 = require("../Events");
+var TextBlock_1 = require("../Html/TextBlock");
 var ListGroup_1 = require("../ListGroup/ListGroup");
 var ModalErrorListItem_1 = require("./ModalErrorListItem");
 var ModalErrorGroupComponent = /** @class */ (function () {
@@ -10,6 +11,7 @@ var ModalErrorGroupComponent = /** @class */ (function () {
         this.view = view;
         this._errorSelected = new Events_1.DefaultEvent(this);
         this.errorSelected = this._errorSelected.handler();
+        this.caption = new TextBlock_1.TextBlock('', view.caption);
         this.errors = new ListGroup_1.ListGroup(this.view.errors);
         this.errors.itemClicked.register(this.onErrorClicked.bind(this));
     }
@@ -23,7 +25,7 @@ var ModalErrorGroupComponent = /** @class */ (function () {
         else {
             this.view.showHR();
         }
-        this.view.setCaption(caption);
+        this.caption.setText(caption);
         var anyCaptions = new Enumerable_1.Any(new Enumerable_1.FilteredArray(errors, function (e) { return Boolean(e.Caption); })).value();
         this.errors.setItems(errors, function (e, itemView) {
             return new ModalErrorListItem_1.ModalErrorListItem(e, itemView, anyCaptions);

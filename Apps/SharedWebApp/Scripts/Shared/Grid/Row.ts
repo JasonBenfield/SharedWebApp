@@ -2,22 +2,19 @@
 import { Block } from "../Html/Block";
 import { BlockViewModel } from "../Html/BlockViewModel";
 import { HtmlComponent } from "../Html/HtmlComponent";
-import { LabelViewModel } from "../Html/LabelViewModel";
-import { TextBlock } from "../Html/TextBlock";
 import { Column } from "./Column";
 import { LabelColumn } from "./LabelColumn";
+import { TextColumn } from "./TextColumn";
 
 export class Row extends HtmlComponent {
+    protected readonly vm: BlockViewModel;
+    private readonly block = new Block(this.vm);
+    readonly columns: IColumn[] = [];
+
     constructor(vm: BlockViewModel = new BlockViewModel()) {
         super(vm);
         this.addCssName('row');
     }
-
-    protected readonly vm: BlockViewModel;
-
-    private readonly block = new Block(this.vm);
-
-    readonly columns: IColumn[] = [];
 
     addIconColumn(name: string, config?: (icon: FaIcon) => void) {
         let column = this.addColumn();
@@ -26,9 +23,9 @@ export class Row extends HtmlComponent {
         return column;
     }
 
-    addTextColumn(text: string = '') {
+    addTextColumn() {
         let column = this.addColumn();
-        column.addContent(new TextBlock(text));
+        column.addContent(new TextColumn());
         return column;
     }
 

@@ -6,7 +6,7 @@ import { Row } from '../Grid/Row';
 import { Block } from '../Html/Block';
 import { HorizontalRule } from '../Html/HorizontalRule';
 import { HtmlComponent } from '../Html/HtmlComponent';
-import { TextHeading5 } from '../Html/TextHeading5';
+import { TextHeading5View } from '../Html/TextHeading5View';
 import { ModalComponentView } from '../Modal/ModalComponentView';
 import { ModalComponentViewModel } from '../Modal/ModalComponentViewModel';
 import { TextCss } from '../TextCss';
@@ -15,7 +15,7 @@ import { ModalErrorListItem } from './ModalErrorListItem';
 
 export class ModalErrorComponentView extends HtmlComponent {
     private readonly modal: ModalComponentView;
-    private readonly title: TextHeading5;
+    readonly title: TextHeading5View;
     private readonly body: Block;
 
     private readonly _errorSelected = new DefaultEvent<ModalErrorListItem>(this);
@@ -32,7 +32,7 @@ export class ModalErrorComponentView extends HtmlComponent {
         this.modal.body.setName(ModalErrorComponentView.name);
         this.body = this.modal.body.addContent(new Block());
         this.body.addCssName('alert alert-danger m-0 rounded-0 border-danger border-left-0 border-right-0');
-        this.title = this.modal.header.addContent(new TextHeading5(''));
+        this.title = this.modal.header.addContent(new TextHeading5View());
         let row = this.modal.footer.addContent(new Row());
         row.addColumn();
         let buttonColumn = row.addColumn();
@@ -55,10 +55,6 @@ export class ModalErrorComponentView extends HtmlComponent {
         for (let errorGroup of this.errorGroups) {
             this.body.removeItem(errorGroup);
         }
-    }
-
-    setTitle(title: string) {
-        this.title.setText(title);
     }
 
     showModal() {

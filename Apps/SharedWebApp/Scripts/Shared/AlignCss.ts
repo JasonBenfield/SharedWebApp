@@ -3,7 +3,7 @@
 type AlignType = 'auto' | 'start' | 'end' | 'center' | 'baseline' | 'stretch';
 type AlignContentType = 'start' | 'end' | 'center' | 'between' | 'around' | 'stretch';
 
-export class AlignCssType {
+export class AlignCssType implements ICssBuilder {
     private readonly breakpoints: {
         xs?: AlignType;
         sm?: AlignType;
@@ -73,7 +73,7 @@ export class AlignCssType {
     }
 }
 
-export class AlignContentCssType {
+export class AlignContentCssType implements ICssBuilder {
     private readonly breakpoints: {
         xs?: AlignContentType;
         sm?: AlignContentType;
@@ -141,7 +141,7 @@ export class AlignContentCssType {
     }
 }
 
-export class AlignCss {
+export class AlignCss implements ICssBuilder {
     private readonly types: {
         items?: AlignCssType;
         content?: AlignContentCssType;

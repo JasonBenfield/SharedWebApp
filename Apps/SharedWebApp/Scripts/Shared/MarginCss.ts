@@ -9,7 +9,7 @@ export interface MarginAmounts {
     end?: MarginAmount;
 }
 
-export class MarginCss {
+export class MarginCss implements ICssBuilder {
     static bottom(amount: MarginAmount) {
         return MarginCss.xs({ bottom: amount });
     }

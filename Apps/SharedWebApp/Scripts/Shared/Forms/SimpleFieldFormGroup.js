@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SimpleFieldFormGroup = void 0;
+var TextBlock_1 = require("../Html/TextBlock");
 var ListGroup_1 = require("../ListGroup/ListGroup");
 var ErrorList_1 = require("./ErrorList");
 var ErrorListItem_1 = require("./ErrorListItem");
@@ -8,6 +9,7 @@ var SimpleFieldFormGroup = /** @class */ (function () {
     function SimpleFieldFormGroup(prefix, name, view) {
         this.view = view;
         this.name = prefix ? prefix + "_" + name : name;
+        this.captionBlock = new TextBlock_1.TextBlock('', this.view.caption);
         this.alertList = new ListGroup_1.ListGroup(this.view.alertList);
     }
     SimpleFieldFormGroup.prototype.getName = function () {
@@ -18,7 +20,7 @@ var SimpleFieldFormGroup = /** @class */ (function () {
     };
     SimpleFieldFormGroup.prototype.setCaption = function (caption) {
         this.caption = caption;
-        this.view.setCaption(caption);
+        this.captionBlock.setText(caption);
     };
     SimpleFieldFormGroup.prototype.getField = function (name) { return this.getName() === name ? this : null; };
     SimpleFieldFormGroup.prototype.setErrors = function (errors) {

@@ -11,6 +11,6 @@ export class DebouncedAction<TResult> {
     }
 
     execute(...args: any[]) {
-        return this.debounced(args);
+        return this.debounced(...args);
     }
 }

@@ -2,10 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Block = void 0;
 var tslib_1 = require("tslib");
+var FlexCss_1 = require("../FlexCss");
 var BlockViewModel_1 = require("./BlockViewModel");
 var HtmlContainerComponent_1 = require("./HtmlContainerComponent");
 var Block = /** @class */ (function (_super) {
-    tslib_1.__extends(Block, _super);
+    (0, tslib_1.__extends)(Block, _super);
     function Block(vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         return _super.call(this, vm) || this;
@@ -14,7 +15,7 @@ var Block = /** @class */ (function (_super) {
         this.addCssName('h-100');
     };
     Block.prototype.flexFill = function () {
-        this.addCssName('flex-fill');
+        this.addCssFrom(new FlexCss_1.FlexCss().fill());
     };
     Block.prototype.positionRelative = function () {
         this.addCssName('position-relative');

@@ -1,4 +1,4 @@
-﻿import { Link } from "../Html/Link";
+﻿import { LinkView } from "../Html/LinkView";
 import { ListItem } from "../Html/ListItem";
 import { ListItemViewModel } from "../Html/ListItemViewModel";
 
@@ -7,7 +7,7 @@ export class DropdownLinkItem extends ListItem {
         super(vm);
     }
 
-    readonly link = new Link().addToContainer(this)
+    readonly link = new LinkView().addToContainer(this)
         .configure(l => {
             l.addCssName('dropdown-item')
         });

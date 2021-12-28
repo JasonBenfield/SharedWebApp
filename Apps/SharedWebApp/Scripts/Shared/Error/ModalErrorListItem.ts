@@ -1,10 +1,11 @@
 ﻿import { ErrorModel } from "../ErrorModel";
+import { TextBlock } from "../Html/TextBlock";
 import { ModalErrorListItemView } from "./ModalErrorListItemView";
 
 export class ModalErrorListItem {
     constructor(readonly error: ErrorModel, view: ModalErrorListItemView, isCaptionVisible: boolean) {
-        view.setCaption(error.Caption);
-        view.setMessage(error.Message);
+        new TextBlock(error.Caption, view.caption);
+        new TextBlock(error.Message, view.message);
         if (isCaptionVisible) {
             view.showCaption();
         }

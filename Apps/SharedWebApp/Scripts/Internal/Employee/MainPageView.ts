@@ -5,7 +5,7 @@ import { Block } from '../../Shared/Html/Block';
 import { Container } from '../../Shared/Html/Container';
 import { FlexColumn } from '../../Shared/Html/FlexColumn';
 import { FlexColumnFill } from '../../Shared/Html/FlexColumnFill';
-import { TextHeading1 } from '../../Shared/Html/TextHeading1';
+import { TextHeading1View } from '../../Shared/Html/TextHeading1View';
 import { Toolbar } from '../../Shared/Html/Toolbar';
 import { MessageAlertView } from '../../Shared/MessageAlertView';
 import { PaddingCss } from '../../Shared/PaddingCss';
@@ -14,6 +14,7 @@ import { AddEmployeeFormView } from './AddEmployeeFormView';
 import { AddressInputLayout } from './AddressInputLayout';
 
 export class MainPageView {
+    readonly heading: TextHeading1View;
     readonly alert: MessageAlertView;
     readonly addEmployeeForm: AddEmployeeFormView;
     readonly saveButton: ButtonCommandItem;
@@ -23,7 +24,7 @@ export class MainPageView {
         let flexColumn = this.page.addContent(new FlexColumn());
         let headerRow = flexColumn.addContent(new Block());
         headerRow.addContent(new Container());
-        headerRow.addContent(new TextHeading1('Add Employee'));
+        this.heading = headerRow.addContent(new TextHeading1View());
         let flexFill = flexColumn.addContent(new FlexColumnFill());
         this.alert = flexFill.addContent(new MessageAlertView());
         this.addEmployeeForm = flexFill.container.addContent(new AddEmployeeFormView());

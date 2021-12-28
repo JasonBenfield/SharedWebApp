@@ -4,6 +4,7 @@ import { DropdownComponent } from "../Dropdown/DropdownComponent";
 import { FaIcon } from "../FaIcon";
 import { BlockViewModel } from "../Html/BlockViewModel";
 import { FormGroupView } from "../Html/FormGroupView";
+import { InputGroup } from "../Html/InputGroup";
 import { ListItem } from "../Html/ListItem";
 import { ListGroupView } from "../ListGroup/ListGroupView";
 import { MarginCss } from "../MarginCss";
@@ -13,9 +14,11 @@ import { ErrorListItemView } from "./ErrorListItemView";
 export class SimpleFieldFormGroupView extends FormGroupView {
     readonly alertList: ListGroupView;
     private readonly dropdown: DropdownComponent;
+    readonly inputGroup: InputGroup;
 
     constructor(vm: BlockViewModel = new BlockViewModel()) {
         super(vm);
+        this.inputGroup = this.valueColumn.addContent(new InputGroup());
         this.dropdown = this.inputGroup.addContent(new DropdownComponent());
         this.dropdown.hide();
         this.dropdown.button.setContext(ContextualClass.danger);

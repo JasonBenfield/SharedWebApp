@@ -1,4 +1,5 @@
 ﻿import { ErrorModel } from "../ErrorModel";
+import { TextBlock } from "../Html/TextBlock";
 import { ListGroup } from "../ListGroup/ListGroup";
 import { ErrorList } from "./ErrorList";
 import { ErrorListItem } from "./ErrorListItem";
@@ -8,10 +9,12 @@ import { SimpleFieldFormGroupView } from "./SimpleFieldFormGroupView";
 export abstract class SimpleFieldFormGroup<TValue> implements IField {
     private readonly name: string;
     private caption: string;
+    private readonly captionBlock: TextBlock;
     private readonly alertList: ListGroup;
 
     constructor(prefix: string, name: string, protected readonly view: SimpleFieldFormGroupView) {
         this.name = prefix ? `${prefix}_${name}` : name;
+        this.captionBlock = new TextBlock('', this.view.caption);
         this.alertList = new ListGroup(this.view.alertList);
     }
 
@@ -29,7 +32,7 @@ export abstract class SimpleFieldFormGroup<TValue> implements IField {
 
     setCaption(caption: string) {
         this.caption = caption;
-        this.view.setCaption(caption);
+        this.captionBlock.setText(caption);
     }
 
     getField(name: string) { return this.getName() === name ? this : null; }

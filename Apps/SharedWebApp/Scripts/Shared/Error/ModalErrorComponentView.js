@@ -9,7 +9,7 @@ var Events_1 = require("../Events");
 var Row_1 = require("../Grid/Row");
 var Block_1 = require("../Html/Block");
 var HtmlComponent_1 = require("../Html/HtmlComponent");
-var TextHeading5_1 = require("../Html/TextHeading5");
+var TextHeading5View_1 = require("../Html/TextHeading5View");
 var ModalComponentView_1 = require("../Modal/ModalComponentView");
 var ModalComponentViewModel_1 = require("../Modal/ModalComponentViewModel");
 var TextCss_1 = require("../TextCss");
@@ -26,7 +26,7 @@ var ModalErrorComponentView = /** @class */ (function (_super) {
         _this.modal.body.setName(ModalErrorComponentView.name);
         _this.body = _this.modal.body.addContent(new Block_1.Block());
         _this.body.addCssName('alert alert-danger m-0 rounded-0 border-danger border-left-0 border-right-0');
-        _this.title = _this.modal.header.addContent(new TextHeading5_1.TextHeading5(''));
+        _this.title = _this.modal.header.addContent(new TextHeading5View_1.TextHeading5View());
         var row = _this.modal.footer.addContent(new Row_1.Row());
         row.addColumn();
         var buttonColumn = row.addColumn();
@@ -49,9 +49,6 @@ var ModalErrorComponentView = /** @class */ (function (_super) {
             var errorGroup = _a[_i];
             this.body.removeItem(errorGroup);
         }
-    };
-    ModalErrorComponentView.prototype.setTitle = function (title) {
-        this.title.setText(title);
     };
     ModalErrorComponentView.prototype.showModal = function () {
         this.modal.showModal();

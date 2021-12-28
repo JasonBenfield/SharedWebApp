@@ -1,11 +1,11 @@
 ﻿import { WebPage } from "../WebPage";
-import { AggregateComponent } from "./AggregateComponent";
-import { HtmlContainerComponent } from "./HtmlContainerComponent";
-import { LinkViewModel } from "./LinkViewModel";
+import { LinkView } from "./LinkView";
 
-export class Link extends HtmlContainerComponent {
-    constructor(vm: LinkViewModel = new LinkViewModel()) {
-        super(vm, new AggregateComponent(vm.content));
+export class Link {
+    readonly clicked = this.view.clicked;
+    private href: string;
+
+    constructor(private readonly view: LinkView) {
         this.setHref('javascript:;');
         this.clicked.register(this.onClick.bind(this));  
     }
@@ -16,22 +16,8 @@ export class Link extends HtmlContainerComponent {
         }
     }
 
-    protected readonly vm: LinkViewModel;
-
-    readonly clicked = this.vm.clicked;
-
-    private href: string;
-
     setHref(href: string) {
         this.href = href;
-        this.vm.href(href);
-    }
-
-    enable() {
-        this.vm.isEnabled(true);
-    }
-
-    disable() {
-        this.vm.isEnabled(false);
+        this.view.setHref(href);
     }
 }

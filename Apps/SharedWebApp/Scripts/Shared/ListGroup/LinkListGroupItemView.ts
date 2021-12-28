@@ -1,13 +1,13 @@
-﻿import { Link } from "../Html/Link";
+﻿import { LinkView } from "../Html/LinkView";
 import { LinkListItemViewModel } from "./LinkListItemViewModel";
 import { ListGroupItemView } from "./ListGroupItemView";
 
 export class LinkListGroupItemView extends ListGroupItemView {
-    private readonly link: Link;
+    private readonly link: LinkView;
 
     constructor(vm: LinkListItemViewModel = new LinkListItemViewModel()) {
         super(vm);
-        this.link = new Link(vm);
+        this.link = new LinkView(vm);
     }
 
     setHref(href: string) {

@@ -3,7 +3,7 @@ import { BlockViewModel } from "../Html/BlockViewModel";
 import { ListBlockViewModel } from "../Html/ListBlockViewModel";
 import { ListGroupView } from "../ListGroup/ListGroupView";
 import { CardAlertView } from "./CardAlertView";
-import { CardHeader } from "./CardHeader";
+import { CardHeaderView } from "./CardHeaderView";
 import { CardTitleHeaderView } from "./CardTitleHeaderView";
 
 export class CardView extends Block {
@@ -17,7 +17,7 @@ export class CardView extends Block {
     }
 
     addCardHeader() {
-        return this.addContent(new CardHeader());
+        return this.addContent(new CardHeaderView());
     }
 
     addCardAlert() {

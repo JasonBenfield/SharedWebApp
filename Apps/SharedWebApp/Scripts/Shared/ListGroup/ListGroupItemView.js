@@ -11,17 +11,15 @@ var ListGroupItemView = /** @class */ (function (_super) {
     function ListGroupItemView(vm) {
         if (vm === void 0) { vm = new ListItemViewModel_1.ListItemViewModel(); }
         var _this = _super.call(this, vm) || this;
-        _this.content = new AggregateComponent_1.AggregateComponent(_this.vm.content);
         _this.contextClass = ContextualClass_1.ContextualClass.default;
         _this.active = '';
+        _this.content = new AggregateComponent_1.AggregateComponent(_this.vm.content);
         _this.addCssName('list-group-item');
         if (vm.isClickable) {
             _this.addCssName('list-group-item-action');
         }
         return _this;
     }
-    ListGroupItemView.prototype.getData = function () { return this.data; };
-    ListGroupItemView.prototype.setData = function (data) { this.data = data; };
     ListGroupItemView.prototype.addToList = function (list) {
         list.addFromListItem(this.vm, this);
         return this;
@@ -34,13 +32,13 @@ var ListGroupItemView = /** @class */ (function (_super) {
         return item.addToContainer(this.content);
     };
     ListGroupItemView.prototype.setContext = function (contextClass) {
-        var newCss = this.getCss(contextClass);
-        this.replaceCssName(this.getCss(this.contextClass), newCss);
+        var newCss = this.getListGroupItemContextCss(contextClass);
+        this.replaceCssName(this.getListGroupItemContextCss(this.contextClass), newCss);
         this.contextClass = contextClass;
     };
-    ListGroupItemView.prototype.getCss = function (contextClass) {
+    ListGroupItemView.prototype.getListGroupItemContextCss = function (contextClass) {
         return contextClass && !contextClass.equals(ContextualClass_1.ContextualClass.default) ?
-            contextClass.toString() : '';
+            contextClass.append('list-group-item').toString() : '';
     };
     ListGroupItemView.prototype.activate = function () {
         this.setActive('active');

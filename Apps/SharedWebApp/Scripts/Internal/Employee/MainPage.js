@@ -11,15 +11,16 @@ var MessageAlert_1 = require("../../Shared/MessageAlert");
 var DefaultPageContext_1 = require("../DefaultPageContext");
 var AddEmployeeForm_1 = require("./AddEmployeeForm");
 var MainPageView_1 = require("./MainPageView");
+var TextBlock_1 = require("../../Shared/Html/TextBlock");
 var MainPage = /** @class */ (function () {
     function MainPage(page) {
-        new DefaultPageContext_1.DefaultPageContext().load();
-        this.view = new MainPageView_1.MainPageView(page);
-        this.alert = new MessageAlert_1.MessageAlert(this.view.alert);
-        this.addEmployeeForm = new AddEmployeeForm_1.AddEmployeeForm(this.view.addEmployeeForm);
+        var view = new MainPageView_1.MainPageView(page);
+        new TextBlock_1.TextBlock('Add Employee', view.heading);
+        this.alert = new MessageAlert_1.MessageAlert(view.alert);
+        this.addEmployeeForm = new AddEmployeeForm_1.AddEmployeeForm(view.addEmployeeForm);
         this.saveCommand = new AsyncCommand_1.AsyncCommand(this.save.bind(this));
-        this.saveCommand.add(this.view.saveButton);
-        this.saveCommand.add(this.view.submitButton);
+        this.saveCommand.add(view.saveButton);
+        this.saveCommand.add(view.submitButton);
         this.test();
     }
     MainPage.prototype.test = function () {
@@ -60,5 +61,6 @@ var MainPage = /** @class */ (function () {
     };
     return MainPage;
 }());
+new DefaultPageContext_1.DefaultPageContext().load();
 new MainPage(new Startup_1.Startup().build());
 //# sourceMappingURL=MainPage.js.map

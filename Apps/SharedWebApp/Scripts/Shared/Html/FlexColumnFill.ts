@@ -5,6 +5,8 @@ import { Container } from "./Container";
 import { HtmlComponent } from "./HtmlComponent";
 
 export class FlexColumnFill extends HtmlComponent {
+    readonly container: Container;
+
     constructor(vm: BlockViewModel = new BlockViewModel()) {
         super(vm);
         let block = new Block(vm);
@@ -16,8 +18,6 @@ export class FlexColumnFill extends HtmlComponent {
         absFillBlock.scrollable();
         this.container = absFillBlock.addContent(new Container());
     }
-
-    readonly container: Container;
 
     addContent<TItem extends IComponent>(item: TItem) {
         item.addToContainer(this.container);

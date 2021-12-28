@@ -1,4 +1,5 @@
-﻿import { BlockViewModel } from './BlockViewModel';
+﻿import { FlexCss } from '../FlexCss';
+import { BlockViewModel } from './BlockViewModel';
 import { HtmlContainerComponent } from './HtmlContainerComponent';
 
 export class Block extends HtmlContainerComponent {
@@ -13,7 +14,7 @@ export class Block extends HtmlContainerComponent {
     }
 
     flexFill() {
-        this.addCssName('flex-fill');
+        this.addCssFrom(new FlexCss().fill());
     }
 
     positionRelative() {

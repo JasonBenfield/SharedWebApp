@@ -9,7 +9,7 @@ export interface PaddingAmounts {
     end?: PaddingAmount;
 }
 
-export class PaddingCss {
+export class PaddingCss implements ICssBuilder {
     static bottom(amount: PaddingAmount) {
         return PaddingCss.xs({ bottom: amount });
     }

@@ -1,32 +1,26 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TextBlock = void 0;
-var tslib_1 = require("tslib");
-var HtmlComponent_1 = require("./HtmlComponent");
-var TextBlockViewModel_1 = require("./TextBlockViewModel");
-var TextBlock = /** @class */ (function (_super) {
-    tslib_1.__extends(TextBlock, _super);
-    function TextBlock(text, vm) {
-        if (text === void 0) { text = ''; }
-        if (vm === void 0) { vm = new TextBlockViewModel_1.TextBlockViewModel(); }
-        var _this = _super.call(this, vm) || this;
-        _this.setText(text);
-        return _this;
+var TextBlock = /** @class */ (function () {
+    function TextBlock(text, view) {
+        this.view = view;
+        this.setText(text);
     }
     TextBlock.prototype.setText = function (text) {
         this.text = text;
-        this.vm.text(text);
+        this.view.setText(text);
     };
+    TextBlock.prototype.setTitle = function (title) { this.view.setTitle(title); };
     TextBlock.prototype.syncTitleWithText = function (format) {
         this.formatTitle = format || (function (text) { return text; });
         this.updateTitleFromText();
     };
     TextBlock.prototype.updateTitleFromText = function () {
         if (this.formatTitle) {
-            this.vm.title(this.formatTitle(this.text));
+            this.setTitle(this.formatTitle(this.text));
         }
     };
     return TextBlock;
-}(HtmlComponent_1.HtmlComponent));
+}());
 exports.TextBlock = TextBlock;
 //# sourceMappingURL=TextBlock.js.map

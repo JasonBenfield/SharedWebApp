@@ -1,18 +1,21 @@
 ﻿import { Any, FilteredArray } from "../Enumerable";
 import { ErrorModel } from "../ErrorModel";
 import { DefaultEvent } from "../Events";
+import { TextBlock } from "../Html/TextBlock";
 import { ListGroup } from "../ListGroup/ListGroup";
 import { ModalErrorGroupComponentView } from "./ModalErrorGroupComponentView";
 import { ModalErrorListItem } from "./ModalErrorListItem";
 import { ModalErrorListItemView } from "./ModalErrorListItemView";
 
 export class ModalErrorGroupComponent {
+    private readonly caption: TextBlock;
     private readonly errors: ListGroup;
 
     private readonly _errorSelected = new DefaultEvent<ErrorModel>(this);
     readonly errorSelected = this._errorSelected.handler();
 
     constructor(private readonly view: ModalErrorGroupComponentView) {
+        this.caption = new TextBlock('', view.caption);
         this.errors = new ListGroup(this.view.errors);
         this.errors.itemClicked.register(this.onErrorClicked.bind(this));
     }
@@ -28,7 +31,7 @@ export class ModalErrorGroupComponent {
         else {
             this.view.showHR();
         }
-        this.view.setCaption(caption);
+        this.caption.setText(caption);
         let anyCaptions = new Any(
             new FilteredArray(
                 errors,

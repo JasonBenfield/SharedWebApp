@@ -5,7 +5,7 @@ var tslib_1 = require("tslib");
 var ColumnCss_1 = require("../../Shared/ColumnCss");
 var ContextualClass_1 = require("../../Shared/ContextualClass");
 var Row_1 = require("../../Shared/Grid/Row");
-var TextBlock_1 = require("../../Shared/Html/TextBlock");
+var TextBlockView_1 = require("../../Shared/Html/TextBlockView");
 var ButtonListGroupItemView_1 = require("../../Shared/ListGroup/ButtonListGroupItemView");
 var ButtonListItemViewModel_1 = require("../../Shared/ListGroup/ButtonListItemViewModel");
 var TestClickableListItemView = /** @class */ (function (_super) {
@@ -19,12 +19,9 @@ var TestClickableListItemView = /** @class */ (function (_super) {
         });
         iconColumn.setColumnCss(ColumnCss_1.ColumnCss.xs('auto'));
         _this.text = row.addColumn()
-            .addContent(new TextBlock_1.TextBlock());
+            .addContent(new TextBlockView_1.TextBlockView());
         return _this;
     }
-    TestClickableListItemView.prototype.setText = function (text) {
-        this.text.setText(text);
-    };
     return TestClickableListItemView;
 }(ButtonListGroupItemView_1.ButtonListGroupItemView));
 exports.TestClickableListItemView = TestClickableListItemView;

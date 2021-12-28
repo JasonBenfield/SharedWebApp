@@ -7,19 +7,17 @@ var Button_1 = require("../Html/Button");
 var ContextualClass_1 = require("../ContextualClass");
 var FaIcon_1 = require("../FaIcon");
 var MarginCss_1 = require("../MarginCss");
-var TextSpan_1 = require("../Html/TextSpan");
+var TextSpanView_1 = require("../Html/TextSpanView");
 var ButtonCommandItem = /** @class */ (function (_super) {
     tslib_1.__extends(ButtonCommandItem, _super);
     function ButtonCommandItem(vm) {
         if (vm === void 0) { vm = new ButtonViewModel_1.ButtonViewModel(); }
         var _this = _super.call(this, vm) || this;
         _this.executeRequested = _this.clicked;
-        _this.icon = new FaIcon_1.FaIcon().addToContainer(_this)
-            .configure(function (icon) {
-            icon.setMargin(MarginCss_1.MarginCss.end(1));
-        });
-        _this.textSpan = new TextSpan_1.TextSpan().addToContainer(_this);
         _this.active = '';
+        _this.icon = new FaIcon_1.FaIcon().addToContainer(_this);
+        _this.icon.setMargin(MarginCss_1.MarginCss.end(1));
+        _this.textSpan = new TextSpanView_1.TextSpanView().addToContainer(_this);
         vm.type('button');
         _this.addCssName('btn');
         _this.setContext(ContextualClass_1.ContextualClass.default);

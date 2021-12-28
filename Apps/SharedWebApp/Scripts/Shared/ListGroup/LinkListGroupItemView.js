@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LinkListGroupItemView = void 0;
 var tslib_1 = require("tslib");
-var Link_1 = require("../Html/Link");
+var LinkView_1 = require("../Html/LinkView");
 var LinkListItemViewModel_1 = require("./LinkListItemViewModel");
 var ListGroupItemView_1 = require("./ListGroupItemView");
 var LinkListGroupItemView = /** @class */ (function (_super) {
@@ -10,7 +10,7 @@ var LinkListGroupItemView = /** @class */ (function (_super) {
     function LinkListGroupItemView(vm) {
         if (vm === void 0) { vm = new LinkListItemViewModel_1.LinkListItemViewModel(); }
         var _this = _super.call(this, vm) || this;
-        _this.link = new Link_1.Link(vm);
+        _this.link = new LinkView_1.LinkView(vm);
         return _this;
     }
     LinkListGroupItemView.prototype.setHref = function (href) {

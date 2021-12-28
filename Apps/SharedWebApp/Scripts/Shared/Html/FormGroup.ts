@@ -1,9 +1,12 @@
 ﻿import { FormGroupView } from "./FormGroupView";
+import { TextBlock } from "./TextBlock";
 
 export class FormGroup {
     private caption: string;
+    private readonly captionText: TextBlock;
 
-    constructor(protected readonly view: FormGroupView) {
+    constructor(view: FormGroupView) {
+        this.captionText = new TextBlock('', view.caption);
     }
 
     getCaption() {
@@ -12,6 +15,6 @@ export class FormGroup {
 
     setCaption(caption: string) {
         this.caption = caption;
-        this.view.setCaption(caption);
+        this.captionText.setText(caption);
     }
 }

@@ -9,8 +9,8 @@ var Button = /** @class */ (function (_super) {
     function Button(vm) {
         if (vm === void 0) { vm = new ButtonViewModel_1.ButtonViewModel(); }
         var _this = _super.call(this, vm) || this;
-        _this.clicked = _this.vm.clicked;
         _this.isOutline = false;
+        _this.clicked = _this.vm.clicked;
         vm.type('button');
         _this.addCssName('btn');
         return _this;

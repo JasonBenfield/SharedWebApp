@@ -4,6 +4,7 @@ exports.ModalConfirmComponent = exports.ModalConfirmComponentResult = void 0;
 var tslib_1 = require("tslib");
 var Awaitable_1 = require("../Awaitable");
 var Command_1 = require("../Command/Command");
+var TextBlock_1 = require("../Html/TextBlock");
 var ModalConfirmComponentResult = /** @class */ (function () {
     function ModalConfirmComponentResult(results) {
         this.results = results;
@@ -37,6 +38,8 @@ var ModalConfirmComponent = /** @class */ (function () {
         this.awaitable = new Awaitable_1.Awaitable();
         this.yesCommand = new Command_1.Command(this.yes.bind(this));
         this.noCommand = new Command_1.Command(this.no.bind(this));
+        this.message = new TextBlock_1.TextBlock('', this.view.message);
+        this.title = new TextBlock_1.TextBlock('', this.view.title);
         this.noCommand.add(this.view.noButton);
         this.yesCommand.add(this.view.yesButton);
         this.view.closed.register(this.onClosed.bind(this));
@@ -53,14 +56,14 @@ var ModalConfirmComponent = /** @class */ (function () {
             return tslib_1.__generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        this.view.setMessage(message);
+                        this.message.setText(message);
                         if (title) {
                             this.view.showTitle();
                         }
                         else {
                             this.view.hideTitle();
                         }
-                        this.view.setTitle(title);
+                        this.title.setText(title);
                         this.view.showModal();
                         return [4 /*yield*/, this.awaitable.start()];
                     case 1:

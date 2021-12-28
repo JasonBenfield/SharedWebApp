@@ -1,7 +1,8 @@
-﻿import { TestListItemView } from "./TestListItemView";
+﻿import { TextBlock } from "../../Shared/Html/TextBlock";
+import { TestListItemView } from "./TestListItemView";
 
 export class TestListItem {
     constructor(i: number, view: TestListItemView) {
-        view.setText(`Clickable ${i}`);
+        new TextBlock(`Item ${i}`, view.text);
     }
 }

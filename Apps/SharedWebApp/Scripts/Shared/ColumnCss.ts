@@ -23,7 +23,7 @@ export class ColumnCssForBreakpoint {
     }
 }
 
-export class ColumnCss implements IColumnCss {
+export class ColumnCss implements IColumnCss, ICssBuilder {
     static xs(columnSize: ColumnCssSize = 'fill') {
         return new ColumnCss().xs(columnSize);
     }

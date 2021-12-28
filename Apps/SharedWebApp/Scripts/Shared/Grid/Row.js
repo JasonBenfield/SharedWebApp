@@ -6,9 +6,9 @@ var FaIcon_1 = require("../FaIcon");
 var Block_1 = require("../Html/Block");
 var BlockViewModel_1 = require("../Html/BlockViewModel");
 var HtmlComponent_1 = require("../Html/HtmlComponent");
-var TextBlock_1 = require("../Html/TextBlock");
 var Column_1 = require("./Column");
 var LabelColumn_1 = require("./LabelColumn");
+var TextColumn_1 = require("./TextColumn");
 var Row = /** @class */ (function (_super) {
     tslib_1.__extends(Row, _super);
     function Row(vm) {
@@ -25,10 +25,9 @@ var Row = /** @class */ (function (_super) {
         config && config(icon);
         return column;
     };
-    Row.prototype.addTextColumn = function (text) {
-        if (text === void 0) { text = ''; }
+    Row.prototype.addTextColumn = function () {
         var column = this.addColumn();
-        column.addContent(new TextBlock_1.TextBlock(text));
+        column.addContent(new TextColumn_1.TextColumn());
         return column;
     };
     Row.prototype.addColumn = function () {

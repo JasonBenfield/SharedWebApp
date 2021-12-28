@@ -7,8 +7,8 @@ var ButtonCommandItem_1 = require("../Command/ButtonCommandItem");
 var ContextualClass_1 = require("../ContextualClass");
 var Row_1 = require("../Grid/Row");
 var HtmlComponent_1 = require("../Html/HtmlComponent");
-var TextBlock_1 = require("../Html/TextBlock");
-var TextHeading5_1 = require("../Html/TextHeading5");
+var TextBlockView_1 = require("../Html/TextBlockView");
+var TextHeading5View_1 = require("../Html/TextHeading5View");
 var MarginCss_1 = require("../MarginCss");
 var TextCss_1 = require("../TextCss");
 var ModalComponentView_1 = require("./ModalComponentView");
@@ -21,8 +21,8 @@ var ModalConfirmComponentView = /** @class */ (function (_super) {
         _this.modal = new ModalComponentView_1.ModalComponentView(vm);
         _this.modal.setBackdrop('static');
         _this.modal.body.setName(ModalConfirmComponentView.name);
-        _this.title = _this.modal.header.addContent(new TextHeading5_1.TextHeading5(''));
-        _this.message = _this.modal.body.addContent(new TextBlock_1.TextBlock(''));
+        _this.title = _this.modal.header.addContent(new TextHeading5View_1.TextHeading5View());
+        _this.message = _this.modal.body.addContent(new TextBlockView_1.TextBlockView());
         var row = _this.modal.footer.addContent(new Row_1.Row());
         row.addColumn();
         var buttonColumn = row.addColumn()
@@ -42,14 +42,8 @@ var ModalConfirmComponentView = /** @class */ (function (_super) {
         _this.closed = _this.modal.closed;
         return _this;
     }
-    ModalConfirmComponentView.prototype.setTitle = function (title) {
-        this.title.setText(title);
-    };
     ModalConfirmComponentView.prototype.showTitle = function () { this.title.show(); };
     ModalConfirmComponentView.prototype.hideTitle = function () { this.title.hide(); };
-    ModalConfirmComponentView.prototype.setMessage = function (message) {
-        this.message.setText(message);
-    };
     ModalConfirmComponentView.prototype.showModal = function () {
         this.modal.showModal();
     };

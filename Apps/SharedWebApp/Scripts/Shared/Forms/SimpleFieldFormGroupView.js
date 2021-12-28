@@ -8,6 +8,7 @@ var DropdownComponent_1 = require("../Dropdown/DropdownComponent");
 var FaIcon_1 = require("../FaIcon");
 var BlockViewModel_1 = require("../Html/BlockViewModel");
 var FormGroupView_1 = require("../Html/FormGroupView");
+var InputGroup_1 = require("../Html/InputGroup");
 var ListItem_1 = require("../Html/ListItem");
 var ListGroupView_1 = require("../ListGroup/ListGroupView");
 var MarginCss_1 = require("../MarginCss");
@@ -18,6 +19,7 @@ var SimpleFieldFormGroupView = /** @class */ (function (_super) {
     function SimpleFieldFormGroupView(vm) {
         if (vm === void 0) { vm = new BlockViewModel_1.BlockViewModel(); }
         var _this = _super.call(this, vm) || this;
+        _this.inputGroup = _this.valueColumn.addContent(new InputGroup_1.InputGroup());
         _this.dropdown = _this.inputGroup.addContent(new DropdownComponent_1.DropdownComponent());
         _this.dropdown.hide();
         _this.dropdown.button.setContext(ContextualClass_1.ContextualClass.danger);

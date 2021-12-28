@@ -15,7 +15,6 @@ var TestCardView = /** @class */ (function (_super) {
         _this.alert = _this.addCardAlert().alert;
         _this.testItems = _this.addUnorderedListGroup(function () { return new TestListItemView_1.TestListItemView(); });
         _this.clickableItems = _this.addBlockListGroup(function () { return new TestClickableItemView_1.TestClickableListItemView(); });
-        _this.cardTitleHeader.setText('This is the Title');
         return _this;
     }
     return TestCardView;

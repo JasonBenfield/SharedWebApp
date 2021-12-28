@@ -10,8 +10,8 @@ var AggregateComponent_1 = require("./Html/AggregateComponent");
 var Block_1 = require("./Html/Block");
 var FlexColumn_1 = require("./Html/FlexColumn");
 var Heading1_1 = require("./Html/Heading1");
-var TextSmall_1 = require("./Html/TextSmall");
-var TextSpan_1 = require("./Html/TextSpan");
+var TextSmallView_1 = require("./Html/TextSmallView");
+var TextSpanView_1 = require("./Html/TextSpanView");
 var Toolbar_1 = require("./Html/Toolbar");
 var PaddingCss_1 = require("./PaddingCss");
 var PageLoader_1 = require("./PageLoader");
@@ -32,8 +32,10 @@ var PageFrameView = /** @class */ (function () {
         this.toolbar.setPadding(PaddingCss_1.PaddingCss.xs(3));
         this.toolbar.columnStart.setTextCss(new TextCss_1.TextCss().context(ContextualClass_1.ContextualClass.light));
         var heading = this.toolbar.columnStart.addContent(new Heading1_1.Heading1());
-        this.appTitle = heading.addContent(new TextSpan_1.TextSpan(pageContext.AppTitle));
-        this.pageTitle = heading.addContent(new TextSmall_1.TextSmall(pageContext.PageTitle));
+        this.appTitle = heading.addContent(new TextSpanView_1.TextSpanView());
+        this.appTitle.setText(pageContext.AppTitle);
+        this.pageTitle = heading.addContent(new TextSmallView_1.TextSmallView());
+        this.pageTitle.setText(pageContext.PageTitle);
         this.toolbar.columnEnd.addCssFrom(new AlignCss_1.AlignCss().self(function (a) { return a.xs('center'); }).cssClass());
         var dropdown = this.toolbar.columnEnd.addContent(new DropdownBlock_1.DropdownBlock());
         if (!pageContext.IsAuthenticated) {
@@ -42,12 +44,14 @@ var PageFrameView = /** @class */ (function () {
         dropdown.button.setContext(ContextualClass_1.ContextualClass.light);
         dropdown.button.useOutlineStyle();
         dropdown.button.addContent(new FaIcon_1.FaIcon('user'));
-        dropdown
+        var userName = dropdown
             .addSpanItem()
             .span
-            .addContent(new TextSpan_1.TextSpan(pageContext.UserName));
+            .addContent(new TextSpanView_1.TextSpanView());
+        userName.setText(pageContext.UserName);
         this.logoutMenuItem = dropdown.addLinkItem();
-        this.logoutMenuItem.link.addContent(new TextSpan_1.TextSpan('Logout'));
+        var logoutTextSpan = this.logoutMenuItem.link.addContent(new TextSpanView_1.TextSpanView());
+        logoutTextSpan.setText('Logout');
         this.logoutMenuItem.link.setHref(pageContext.BaseUrl + "/Hub/Current/Auth/Logout");
         this.content = frame.addContent(new Block_1.Block());
         this.content.flexFill();

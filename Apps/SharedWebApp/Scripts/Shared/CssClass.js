@@ -20,7 +20,12 @@ var CssClass = /** @class */ (function () {
     };
     CssClass.prototype.addFrom = function (cssClass) {
         if (cssClass) {
-            this.addName(cssClass.value);
+            if (cssClass instanceof CssClass) {
+                this.addName(cssClass.value);
+            }
+            else {
+                this.addName(cssClass.cssClass().toString());
+            }
         }
         return this;
     };

@@ -10,8 +10,6 @@ var ListItem = /** @class */ (function (_super) {
         if (vm === void 0) { vm = new ListItemViewModel_1.ListItemViewModel(); }
         return _super.call(this, vm) || this;
     }
-    ListItem.prototype.getData = function () { return this.data; };
-    ListItem.prototype.setData = function (data) { this.data = data; };
     ListItem.prototype.addToList = function (list) {
         list.addFromListItem(this.vm, this);
         return this;

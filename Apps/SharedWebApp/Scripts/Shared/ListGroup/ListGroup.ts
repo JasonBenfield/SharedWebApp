@@ -1,5 +1,6 @@
 ﻿import { FilteredArray, First } from "../Enumerable";
 import { DefaultEvent } from "../Events";
+import { ListItem } from "../Html/ListItem";
 import { BaseListView } from "./BaseListView";
 
 class ListItemWithView {
@@ -10,7 +11,7 @@ class ListItemWithView {
 export class ListGroup {
     private readonly itemsWithView: ListItemWithView[] = [];
 
-    private readonly _itemClicked = new DefaultEvent<IListItemView>(this);
+    private readonly _itemClicked = new DefaultEvent<any>(this);
     readonly itemClicked = this._itemClicked.handler()
 
     constructor(private readonly view: BaseListView) {
@@ -45,9 +46,9 @@ export class ListGroup {
         return item;
     }
 
-    setItems<TItem>(
-        sourceItems: any[],
-        createItem: (sourceItem: any, itemView: IListItemView) => TItem
+    setItems<TSourceItem, TItem>(
+        sourceItems: TSourceItem[],
+        createItem: (sourceItem: TSourceItem, itemView: IListItemView) => TItem
     ) {
         this.clearItems();
         let items: TItem[] = [];

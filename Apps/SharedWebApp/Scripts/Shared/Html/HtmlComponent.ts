@@ -5,6 +5,12 @@ import { PaddingCss } from "../PaddingCss";
 import { TextCss } from "../TextCss";
 
 export class HtmlComponent implements IComponent {
+    private bgContextCss = '';
+    private textCss: TextCss;
+    private margin: MarginCss = null;
+    private padding: PaddingCss = null;
+    private readonly css = new CssClass();
+
     constructor(protected readonly vm: IHtmlComponentViewModel) {
     }
 
@@ -33,15 +39,11 @@ export class HtmlComponent implements IComponent {
         this.vm.name(name);
     }
 
-    private bgContextCss = '';
-
     setBackgroundContext(contextClass: ContextualClass) {
         let css = contextClass.append('bg');
         this.replaceCssName(this.bgContextCss, css);
         this.bgContextCss = css;
     }
-
-    private textCss: TextCss;
 
     setTextCss(textCss: TextCss) {
         this.replaceCssName(
@@ -51,8 +53,6 @@ export class HtmlComponent implements IComponent {
         this.textCss = textCss;
     }
 
-    private margin: MarginCss = null;
-
     setMargin(margin: MarginCss) {
         this.replaceCssName(
             this.margin && this.margin.cssClass().toString(),
@@ -61,8 +61,6 @@ export class HtmlComponent implements IComponent {
         this.margin = margin;
     }
 
-    private padding: PaddingCss = null;
-
     setPadding(padding: PaddingCss) {
         this.replaceCssName(
             this.padding && this.padding.cssClass().toString(),
@@ -70,8 +68,6 @@ export class HtmlComponent implements IComponent {
         );
         this.padding = padding;
     }
-
-    private readonly css = new CssClass();
 
     replaceCss(css: CssClass) {
         this.clearCss();
@@ -83,7 +79,7 @@ export class HtmlComponent implements IComponent {
         this.updateVmCss();
     }
 
-    addCssFrom(css: CssClass) {
+    addCssFrom(css: CssClass | ICssBuilder) {
         this.css.addFrom(css);
         this.updateVmCss();
     }

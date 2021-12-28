@@ -4,7 +4,7 @@ $script:sharedConfig = [PSCustomObject]@{
     RepoOwner = "JasonBenfield"
     RepoName = "SharedWebApp"
     AppName = "Shared"
-    AppType = "WebApp"
+    AppType = "Package"
     AppsToImport = ""
 }
 
