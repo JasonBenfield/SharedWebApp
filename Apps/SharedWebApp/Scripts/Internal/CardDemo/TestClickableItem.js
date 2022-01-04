@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TestClickableListItem = void 0;
+var TextBlock_1 = require("../../Shared/Html/TextBlock");
 var TestClickableListItem = /** @class */ (function () {
     function TestClickableListItem(i, view) {
         this.i = i;
-        view.setText("Clickable ".concat(i));
+        new TextBlock_1.TextBlock("Clickable " + i, view.text);
     }
     return TestClickableListItem;
 }());

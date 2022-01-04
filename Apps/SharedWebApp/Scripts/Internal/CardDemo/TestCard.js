@@ -1,18 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TestCard = void 0;
-var CardTitleHeader_1 = require("../../Shared/Card/CardTitleHeader");
 var DelayedAction_1 = require("../../Shared/DelayedAction");
 var Enumerable_1 = require("../../Shared/Enumerable");
+var TextBlock_1 = require("../../Shared/Html/TextBlock");
 var ListGroup_1 = require("../../Shared/ListGroup/ListGroup");
-var MessageAlert_1 = require("../../Shared/MessageAlert");
+var CardAlert_1 = require("../../Shared/Card/CardAlert");
 var TestClickableItem_1 = require("./TestClickableItem");
 var TestListItem_1 = require("./TestListItem");
 var TestCard = /** @class */ (function () {
     function TestCard(view) {
         this.view = view;
-        this.cardTitleHeader = new CardTitleHeader_1.CardTitleHeader('Original Title', this.view.cardTitleHeader);
-        this.alert = new MessageAlert_1.MessageAlert(this.view.alert);
+        this.cardTitleHeader = new TextBlock_1.TextBlock('Original Title', this.view.cardTitleHeader);
+        this.alert = new CardAlert_1.CardAlert(this.view.alert).alert;
         this.cardTitleHeader.setText('This is the Title');
         this.testItems = new ListGroup_1.ListGroup(this.view.testItems);
         this.clickableItems = new ListGroup_1.ListGroup(this.view.clickableItems);
@@ -22,7 +22,7 @@ var TestCard = /** @class */ (function () {
         this.clickableItems.itemClicked.register(this.onClick.bind(this));
     }
     TestCard.prototype.onClick = function (listItem) {
-        alert("You clicked ".concat(listItem.i));
+        alert("You clicked " + listItem.i);
     };
     TestCard.prototype.refresh = function () {
         var _this = this;

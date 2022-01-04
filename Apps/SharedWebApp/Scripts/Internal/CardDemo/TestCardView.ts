@@ -5,12 +5,11 @@ import { TestListItemView } from "./TestListItemView";
 
 export class TestCardView extends CardView {
     readonly cardTitleHeader = this.addCardTitleHeader();
-    readonly alert = this.addCardAlert().alert;
+    readonly alert = this.addCardAlert();
     readonly testItems = this.addUnorderedListGroup(() => new TestListItemView());
     readonly clickableItems = this.addBlockListGroup(() => new TestClickableListItemView());
 
     constructor(vm: BlockViewModel = new BlockViewModel()) {
         super(vm);
-        this.cardTitleHeader.setText('This is the Title');
     }
 }

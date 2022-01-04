@@ -6,7 +6,7 @@ var BaseForm_1 = require("../../Shared/Forms/BaseForm");
 var DropDownFieldItem_1 = require("../../Shared/Forms/DropDownFieldItem");
 var AddressInputField_1 = require("./AddressInputField");
 var AddEmployeeForm = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(AddEmployeeForm, _super);
+    tslib_1.__extends(AddEmployeeForm, _super);
     function AddEmployeeForm(view) {
         var _this = _super.call(this, 'AddEmployeeForm', view) || this;
         _this.EmployeeName = _this.addTextInputFormGroup('Name', _this.view.EmployeeName);

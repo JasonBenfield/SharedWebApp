@@ -4,7 +4,7 @@ exports.AddressInputField = void 0;
 var tslib_1 = require("tslib");
 var ComplexFieldFormGroup_1 = require("../../Shared/Forms/ComplexFieldFormGroup");
 var AddressInputField = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(AddressInputField, _super);
+    tslib_1.__extends(AddressInputField, _super);
     function AddressInputField(prefix, name, view) {
         var _this = _super.call(this, prefix, name, view) || this;
         _this.Line1 = _this.addTextInputFormGroup('Line1', _this.view.Line1);

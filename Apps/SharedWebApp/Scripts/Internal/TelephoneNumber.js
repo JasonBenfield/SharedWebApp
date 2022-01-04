@@ -12,7 +12,7 @@ var TelephoneNumber = /** @class */ (function () {
         var formattedAreaCode = new FormattedNumber_1.FormattedNumber(this.areaCode, '000');
         var formattedPrefix = new FormattedNumber_1.FormattedNumber(this.prefix, '000');
         var formattedLineNumber = new FormattedNumber_1.FormattedNumber(this.lineNumber, '0000');
-        return "(".concat(formattedAreaCode, ") ").concat(formattedPrefix, "-").concat(formattedLineNumber);
+        return "(" + formattedAreaCode + ") " + formattedPrefix + "-" + formattedLineNumber;
     };
     return TelephoneNumber;
 }());

@@ -5,7 +5,7 @@ var tslib_1 = require("tslib");
 var BaseFormView_1 = require("../../Shared/Forms/BaseFormView");
 var AddressInputFieldView_1 = require("./AddressInputFieldView");
 var AddEmployeeFormView = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(AddEmployeeFormView, _super);
+    tslib_1.__extends(AddEmployeeFormView, _super);
     function AddEmployeeFormView() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.EmployeeName = _this.addInputFormGroup();

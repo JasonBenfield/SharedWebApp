@@ -1,17 +1,13 @@
 ﻿import { Row } from "../../Shared/Grid/Row";
-import { TextBlock } from "../../Shared/Html/TextBlock";
+import { TextBlockView } from "../../Shared/Html/TextBlockView";
 import { ListGroupItemView } from "../../Shared/ListGroup/ListGroupItemView";
 
 export class TestListItemView extends ListGroupItemView {
-    private readonly text: TextBlock;
+    readonly text: TextBlockView;
 
     constructor() {
         super();
         let row = this.addContent(new Row());
-        this.text = row.addColumn().addContent(new TextBlock());
-    }
-
-    setText(text: string) {
-        this.text.setText(text);
+        this.text = row.addColumn().addContent(new TextBlockView());
     }
 }

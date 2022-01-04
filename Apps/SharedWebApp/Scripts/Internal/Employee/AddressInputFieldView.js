@@ -4,7 +4,7 @@ exports.AddressInputFieldView = void 0;
 var tslib_1 = require("tslib");
 var ComplexFieldFormGroupView_1 = require("../../Shared/Forms/ComplexFieldFormGroupView");
 var AddressInputFieldView = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(AddressInputFieldView, _super);
+    tslib_1.__extends(AddressInputFieldView, _super);
     function AddressInputFieldView() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.Line1 = _this.addInputFormGroup();
