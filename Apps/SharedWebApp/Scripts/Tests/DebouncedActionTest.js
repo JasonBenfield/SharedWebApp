@@ -50,7 +50,7 @@ describe('Debounced Action', function () {
                         debouncedAction.execute();
                         timesExecuted++;
                     }
-                    return [4 /*yield*/, DelayedAction_1.DelayedAction.delay(11)];
+                    return [4 /*yield*/, DelayedAction_1.DelayedAction.delay(20)];
                 case 1:
                     _a.sent();
                     (0, chai_1.expect)(timesExecuted).to.be.at.least(2);
@@ -60,6 +60,26 @@ describe('Debounced Action', function () {
                 case 2:
                     _a.sent();
                     (0, chai_1.expect)(counter).to.equal(2);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('Debounce action with Argument', function () { return (0, tslib_1.__awaiter)(void 0, void 0, void 0, function () {
+        var counter, debouncedAction, result;
+        return (0, tslib_1.__generator)(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    counter = 0;
+                    debouncedAction = new DebouncedAction_1.DebouncedAction(function (x, y) {
+                        console.log("x: ".concat(x, ": ").concat(typeof x, ", y: ").concat(y, ": ").concat(typeof y));
+                        counter += x + y;
+                        return counter;
+                    }, 10);
+                    result = debouncedAction.execute(3, 1);
+                    return [4 /*yield*/, DelayedAction_1.DelayedAction.delay(20)];
+                case 1:
+                    _a.sent();
+                    (0, chai_1.expect)(counter).to.equal(4);
                     return [2 /*return*/];
             }
         });

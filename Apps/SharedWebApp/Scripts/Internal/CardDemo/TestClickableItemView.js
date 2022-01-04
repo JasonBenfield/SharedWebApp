@@ -9,7 +9,7 @@ var TextBlockView_1 = require("../../Shared/Html/TextBlockView");
 var ButtonListGroupItemView_1 = require("../../Shared/ListGroup/ButtonListGroupItemView");
 var ButtonListItemViewModel_1 = require("../../Shared/ListGroup/ButtonListItemViewModel");
 var TestClickableListItemView = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(TestClickableListItemView, _super);
+    tslib_1.__extends(TestClickableListItemView, _super);
     function TestClickableListItemView() {
         var _this = _super.call(this, new ButtonListItemViewModel_1.ButtonListItemViewModel()) || this;
         var row = _this.addContent(new Row_1.Row());

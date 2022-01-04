@@ -5,7 +5,7 @@ var tslib_1 = require("tslib");
 var NumericValue_1 = require("../Shared/NumericValue");
 var NumericValues_1 = require("../Shared/NumericValues");
 var EmployeeTypes = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(EmployeeTypes, _super);
+    tslib_1.__extends(EmployeeTypes, _super);
     function EmployeeTypes(none, temp, permanent) {
         var _this = _super.call(this, [none, temp, permanent]) || this;
         _this.none = none;
@@ -17,7 +17,7 @@ var EmployeeTypes = /** @class */ (function (_super) {
 }(NumericValues_1.NumericValues));
 exports.EmployeeTypes = EmployeeTypes;
 var EmployeeType = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(EmployeeType, _super);
+    tslib_1.__extends(EmployeeType, _super);
     function EmployeeType(Value, DisplayText) {
         return _super.call(this, Value, DisplayText) || this;
     }

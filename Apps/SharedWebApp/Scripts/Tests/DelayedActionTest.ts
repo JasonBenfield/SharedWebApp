@@ -27,7 +27,7 @@ describe('Delayed Action', () => {
         let result = await delayedAction.execute(1,2);
         expect(result).to.equal(3);
     });
-    it('Delay action with Promise', async () => {
+    it('Delay action with Argument', async () => {
         let delayedAction = new DelayedAction(
             (x, y) => {
                 return new Promise(

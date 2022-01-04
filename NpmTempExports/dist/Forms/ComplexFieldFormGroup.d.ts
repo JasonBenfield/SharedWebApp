@@ -1,0 +1,31 @@
+import { FormGroup } from "../Html/FormGroup";
+import { ComplexFieldFormGroupView } from "./ComplexFieldFormGroupView";
+import { DropDownFormGroupView } from "./DropDownFormGroupView";
+import { InputFormGroupView } from "./InputFormGroupView";
+export declare class ComplexFieldFormGroup extends FormGroup implements IField {
+    protected readonly view: ComplexFieldFormGroupView;
+    private readonly name;
+    private readonly formGroups;
+    constructor(prefix: string, name: string, view: ComplexFieldFormGroupView);
+    getName(): string;
+    setValue(_: any): void;
+    getValue(): {};
+    getField(name: string): any;
+    forEachFormGroup(action: (field: IField) => void): void;
+    protected addHiddenTextFormGroup(name: string, view: InputFormGroupView): import("./TextInputFormGroup").TextInputFormGroup;
+    protected addHiddenNumberFormGroup(name: string, view: InputFormGroupView): import("./NumberInputFormGroup").NumberInputFormGroup;
+    protected addHiddenDateFormGroup(name: string, view: InputFormGroupView): import("./DateInputFormGroup").DateInputFormGroup;
+    protected addTextInputFormGroup(name: string, view: InputFormGroupView): import("./TextInputFormGroup").TextInputFormGroup;
+    protected addNumberInputFormGroup(name: string, view: InputFormGroupView): import("./NumberInputFormGroup").NumberInputFormGroup;
+    protected addDateInputFormGroup(name: string, view: InputFormGroupView): import("./DateInputFormGroup").DateInputFormGroup;
+    protected addTextDropDownFormGroup(name: string, view: DropDownFormGroupView<string>): import("./TextDropDownFormGroup").TextDropDownFormGroup;
+    protected addNumberDropDownFormGroup(name: string, view: DropDownFormGroupView<number>): import("./NumberDropDownFormGroup").NumberDropDownFormGroup;
+    protected addDateDropDownFormGroup(name: string, view: DropDownFormGroupView<Date>): import("./DateDropDownFormGroup").DateDropDownFormGroup;
+    protected addBooleanDropDownFormGroup(name: string, view: DropDownFormGroupView<boolean>): import("./BooleanDropDownFormGroup").BooleanDropDownFormGroup;
+    protected addDropDownFormGroup<T>(name: string, view: DropDownFormGroupView<T>): import("./DropDownFormGroup").DropDownFormGroup<T>;
+    protected addFormGroup<TFormGroup extends IField>(name: string, formGroup: TFormGroup): TFormGroup;
+    clearErrors(): void;
+    validate(errors: IErrorList): void;
+    import(values: Record<string, any>): void;
+    export(values: Record<string, any>): void;
+}

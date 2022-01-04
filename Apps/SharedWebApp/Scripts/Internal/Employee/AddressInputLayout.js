@@ -10,7 +10,7 @@ var TextSpanView_1 = require("../../Shared/Html/TextSpanView");
 var MarginCss_1 = require("../../Shared/MarginCss");
 var PaddingCss_1 = require("../../Shared/PaddingCss");
 var AddressInputLayout = /** @class */ (function (_super) {
-    (0, tslib_1.__extends)(AddressInputLayout, _super);
+    tslib_1.__extends(AddressInputLayout, _super);
     function AddressInputLayout(complexField) {
         return _super.call(this, complexField) || this;
     }

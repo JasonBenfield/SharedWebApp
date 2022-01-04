@@ -1,7 +1,7 @@
 ﻿import { Startup } from '../../Shared/Startup';
-import { AppApiAction } from '../../Shared/AppApiAction';
-import { AppApiEvents } from '../../Shared/AppApiEvents';
-import { AppResourceUrl } from '../../Shared/AppResourceUrl';
+import { AppApiAction } from '../../Shared/Api/AppApiAction';
+import { AppApiEvents } from '../../Shared/Api/AppApiEvents';
+import { AppResourceUrl } from '../../Shared/Api/AppResourceUrl';
 import { AsyncCommand } from '../../Shared/Command/AsyncCommand';
 import { ConsoleLog } from '../../Shared/ConsoleLog';
 import { MessageAlert } from '../../Shared/MessageAlert';
@@ -31,7 +31,9 @@ class MainPage {
         let action = new AppApiAction<number, number>(
             new AppApiEvents(() => { }),
             AppResourceUrl.app(
-                `${location.protocol}//${location.host}`, 'Shared', 'Current', '', ''
+                'Shared',
+                '',
+                pageContext.CacheBust
             )
                 .withGroup('Employee'),
             'Test',
@@ -47,7 +49,11 @@ class MainPage {
             async () => {
                 let action = new AppApiAction<any, number>(
                     new AppApiEvents(() => { }),
-                    AppResourceUrl.app(`${location.protocol}//${location.host}`, 'Shared', 'Current', '', '').withGroup('Employee'),
+                    AppResourceUrl.app(
+                        'Shared',
+                        '',
+                        pageContext.CacheBust
+                    ).withGroup('Employee'),
                     'AddEmployee',
                     'Add Employee'
                 );

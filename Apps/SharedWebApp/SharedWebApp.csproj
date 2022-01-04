@@ -25,6 +25,7 @@
     <None Remove="Scripts\Internal\CardDemo\TestListItem.ts" />
     <None Remove="Scripts\Internal\CardDemo\TestListItemView.ts" />
     <None Remove="Scripts\Internal\DefaultPageContext.ts" />
+    <None Remove="Scripts\Shared\Api\AppVersionDomain.ts" />
     <None Remove="Scripts\Shared\Error\ModalErrorGroupComponent.ts" />
     <None Remove="Scripts\Shared\Error\ModalErrorListItem.ts" />
     <None Remove="Scripts\Shared\Error\ModalErrorListItemView.ts" />
@@ -36,8 +37,8 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="XTI_App.Fakes" Version="1.8.7" />
-    <PackageReference Include="XTI_WebApp.Extensions" Version="1.8.1" />
+    <PackageReference Include="XTI_App.Fakes" Version="1.8.12" />
+    <PackageReference Include="XTI_WebApp.Extensions" Version="1.8.7" />
     <PackageReference Include="XTI_Configuration.Extensions" Version="1.10.2" />
   </ItemGroup>
   
@@ -61,6 +62,7 @@
     <TypeScriptCompile Include="Scripts\Internal\CardDemo\TestClickableItem.ts" />
     <TypeScriptCompile Include="Scripts\Internal\CardDemo\TestClickableItemView.ts" />
     <TypeScriptCompile Include="Scripts\Internal\DefaultPageContext.ts" />
+    <TypeScriptCompile Include="Scripts\Shared\Api\AppVersionDomain.ts" />
     <TypeScriptCompile Include="Scripts\Shared\Error\ModalErrorGroupComponent.ts" />
     <TypeScriptCompile Include="Scripts\Shared\Error\ModalErrorListItem.ts" />
     <TypeScriptCompile Include="Scripts\Shared\Error\ModalErrorListItemView.ts" />

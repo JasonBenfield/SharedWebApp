@@ -11,9 +11,7 @@ builder.Configuration.UseXtiConfiguration(builder.Environment, new string[0]);
 builder.Services.AddWebAppServices(builder.Environment, builder.Configuration);
 builder.Services.AddScoped(_ =>
 {
-    var appContext = new FakeAppContext();
-    var app = appContext.AddApp("Shared");
-    appContext.SetCurrentApp(app);
+    var appContext = new FakeAppContext(SharedInfo.AppKey);
     return appContext;
 });
 builder.Services.AddScoped<ISourceAppContext>(sp => sp.GetRequiredService<FakeAppContext>());

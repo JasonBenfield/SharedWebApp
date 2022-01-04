@@ -2,7 +2,7 @@
 import { EnumerableRange } from "../../Shared/Enumerable";
 import { TextBlock } from "../../Shared/Html/TextBlock";
 import { ListGroup } from "../../Shared/ListGroup/ListGroup";
-import { MessageAlert } from "../../Shared/MessageAlert";
+import { CardAlert } from "../../Shared/Card/CardAlert";
 import { TestCardView } from "./TestCardView";
 import { TestClickableListItem } from "./TestClickableItem";
 import { TestClickableListItemView } from "./TestClickableItemView";
@@ -11,7 +11,7 @@ import { TestListItemView } from "./TestListItemView";
 
 export class TestCard {
     private readonly cardTitleHeader = new TextBlock('Original Title', this.view.cardTitleHeader);
-    private readonly alert = new MessageAlert(this.view.alert);
+    private readonly alert = new CardAlert(this.view.alert).alert;
     private readonly testItems: ListGroup;
     private readonly clickableItems: ListGroup;
 

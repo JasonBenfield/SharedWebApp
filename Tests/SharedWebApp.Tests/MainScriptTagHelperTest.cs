@@ -117,7 +117,7 @@ internal sealed class MainScriptTagHelperTest
         };
         httpContextAccessor.HttpContext.Request.Path = path;
         var appContext = sp.GetRequiredService<FakeAppContext>();
-        var app = appContext.AddApp(SharedInfo.AppKey.Name.DisplayText);
+        var app = appContext.AddApp(SharedInfo.AppKey);
         appContext.SetCurrentApp(app);
         var tagHelper = sp.GetRequiredService<MainScriptTagHelper>();
         tagHelper.PageName = "home";

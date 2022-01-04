@@ -5,7 +5,7 @@ var TextBlock_1 = require("../../Shared/Html/TextBlock");
 var TestClickableListItem = /** @class */ (function () {
     function TestClickableListItem(i, view) {
         this.i = i;
-        new TextBlock_1.TextBlock("Clickable ".concat(i), view.text);
+        new TextBlock_1.TextBlock("Clickable " + i, view.text);
     }
     return TestClickableListItem;
 }());
