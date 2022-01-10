@@ -14,6 +14,7 @@ var TestCard = /** @class */ (function () {
         this.cardTitleHeader = new TextBlock_1.TextBlock('Original Title', this.view.cardTitleHeader);
         this.alert = new CardAlert_1.CardAlert(this.view.alert).alert;
         this.cardTitleHeader.setText('This is the Title');
+        new TextBlock_1.TextBlock('Test List Item', view.manualItem);
         this.testItems = new ListGroup_1.ListGroup(this.view.testItems);
         this.clickableItems = new ListGroup_1.ListGroup(this.view.clickableItems);
         this.testItems.setItems(new Enumerable_1.EnumerableRange(1, 5).value(), function (i, listItem) { return new TestListItem_1.TestListItem(i, listItem); });

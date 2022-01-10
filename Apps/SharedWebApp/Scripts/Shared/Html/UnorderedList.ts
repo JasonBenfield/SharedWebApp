@@ -4,6 +4,8 @@ import { ListItemViewModel } from "./ListItemViewModel";
 import { UnorderedListViewModel } from "./UnorderedListViewModel";
 
 export class UnorderedList extends BaseListView {
+    protected readonly vm: UnorderedListViewModel;
+
     constructor(
         createItemView: (source?: any) => IListItemView =
             ((itemVM: ListItemViewModel) => new ListItem(itemVM)),
@@ -15,5 +17,8 @@ export class UnorderedList extends BaseListView {
         );
     }
 
-    protected readonly vm: UnorderedListViewModel;
+    addListItem() {
+        return this.addListItemView(new ListItem());
+    }
+
 }

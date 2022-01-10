@@ -1,4 +1,0 @@
-﻿interface IPanel {
-    activate();
-    deactivate();
-}

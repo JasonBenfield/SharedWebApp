@@ -23,8 +23,9 @@ var BaseListView = /** @class */ (function (_super) {
             this._itemClicked.invoke(this.items[index]);
         }
     };
-    BaseListView.prototype.addItem = function (itemView) {
+    BaseListView.prototype.addListItemView = function (itemView) {
         itemView.addToList(this);
+        return itemView;
     };
     BaseListView.prototype.removeFromListItem = function (itemVM, item) {
         var index = this.items.indexOf(item);

@@ -1,5 +1,6 @@
 ﻿import { DefaultEvent } from "../Events";
 import { HtmlComponent } from "../Html/HtmlComponent";
+import { ListItem } from "../Html/ListItem";
 import { UnorderedListViewModel } from "../Html/UnorderedListViewModel";
 
 export abstract class BaseListView extends HtmlComponent implements IListView {
@@ -24,8 +25,9 @@ export abstract class BaseListView extends HtmlComponent implements IListView {
         }
     }
 
-    addItem(itemView: IListItemView) {
+    addListItemView<T extends IListItemView>(itemView: T) {
         itemView.addToList(this);
+        return itemView;
     }
 
     removeFromListItem(itemVM: IListItemViewModel, item: IListItemView) {

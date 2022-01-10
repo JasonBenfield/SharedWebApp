@@ -4,6 +4,7 @@ exports.TestCardView = void 0;
 var tslib_1 = require("tslib");
 var CardView_1 = require("../../Shared/Card/CardView");
 var BlockViewModel_1 = require("../../Shared/Html/BlockViewModel");
+var TextBlockView_1 = require("../../Shared/Html/TextBlockView");
 var TestClickableItemView_1 = require("./TestClickableItemView");
 var TestListItemView_1 = require("./TestListItemView");
 var TestCardView = /** @class */ (function (_super) {
@@ -13,6 +14,9 @@ var TestCardView = /** @class */ (function (_super) {
         var _this = _super.call(this, vm) || this;
         _this.cardTitleHeader = _this.addCardTitleHeader();
         _this.alert = _this.addCardAlert();
+        var manualItems = _this.addUnorderedListGroup();
+        _this.manualItem = manualItems.addListGroupItem()
+            .addContent(new TextBlockView_1.TextBlockView());
         _this.testItems = _this.addUnorderedListGroup(function () { return new TestListItemView_1.TestListItemView(); });
         _this.clickableItems = _this.addBlockListGroup(function () { return new TestClickableItemView_1.TestClickableListItemView(); });
         return _this;
