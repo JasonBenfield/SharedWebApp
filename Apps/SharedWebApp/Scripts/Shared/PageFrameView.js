@@ -11,6 +11,7 @@ var AggregateComponent_1 = require("./Html/AggregateComponent");
 var Block_1 = require("./Html/Block");
 var FlexColumn_1 = require("./Html/FlexColumn");
 var Heading1_1 = require("./Html/Heading1");
+var Link_1 = require("./Html/Link");
 var TextSmallView_1 = require("./Html/TextSmallView");
 var TextSpanView_1 = require("./Html/TextSpanView");
 var Toolbar_1 = require("./Html/Toolbar");
@@ -54,7 +55,8 @@ var PageFrameView = /** @class */ (function () {
         var logoutTextSpan = this.logoutMenuItem.link.addContent(new TextSpanView_1.TextSpanView());
         logoutTextSpan.setText('Logout');
         var logoutUrl = AppResourceUrl_1.AppResourceUrl.app('Hub', '', pageContext.CacheBust).withGroup('Auth').withAction('Logout');
-        this.logoutMenuItem.link.setHref(logoutUrl.url.value());
+        var logoutLink = new Link_1.Link(this.logoutMenuItem.link);
+        logoutLink.setHref(logoutUrl.url.value());
         this.content = frame.addContent(new Block_1.Block());
         this.content.flexFill();
         this.content.addCssName('h-100');

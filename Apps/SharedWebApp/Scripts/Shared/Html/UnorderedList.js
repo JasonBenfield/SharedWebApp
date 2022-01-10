@@ -12,6 +12,9 @@ var UnorderedList = /** @class */ (function (_super) {
         if (vm === void 0) { vm = new UnorderedListViewModel_1.UnorderedListViewModel(); }
         return _super.call(this, createItemView, vm) || this;
     }
+    UnorderedList.prototype.addListItem = function () {
+        return this.addListItemView(new ListItem_1.ListItem());
+    };
     return UnorderedList;
 }(BaseListView_1.BaseListView));
 exports.UnorderedList = UnorderedList;

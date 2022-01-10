@@ -10,6 +10,7 @@ import { AggregateComponent } from "./Html/AggregateComponent";
 import { Block } from "./Html/Block";
 import { FlexColumn } from "./Html/FlexColumn";
 import { Heading1 } from "./Html/Heading1";
+import { Link } from "./Html/Link";
 import { TextSmallView } from "./Html/TextSmallView";
 import { TextSpanView } from "./Html/TextSpanView";
 import { Toolbar } from "./Html/Toolbar";
@@ -60,7 +61,8 @@ export class PageFrameView {
         let logoutTextSpan = this.logoutMenuItem.link.addContent(new TextSpanView());
         logoutTextSpan.setText('Logout');
         let logoutUrl = AppResourceUrl.app('Hub', '', pageContext.CacheBust).withGroup('Auth').withAction('Logout');
-        this.logoutMenuItem.link.setHref(logoutUrl.url.value());
+        let logoutLink = new Link(this.logoutMenuItem.link);
+        logoutLink.setHref(logoutUrl.url.value());
         this.content = frame.addContent(new Block());
         this.content.flexFill();
         this.content.addCssName('h-100');

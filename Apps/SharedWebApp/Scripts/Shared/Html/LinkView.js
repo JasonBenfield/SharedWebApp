@@ -13,6 +13,12 @@ var LinkView = /** @class */ (function (_super) {
         _this.clicked = _this.vm.clicked;
         return _this;
     }
+    LinkView.prototype.defaultClick = function () {
+        this.vm.defaultClick();
+    };
+    LinkView.prototype.overrideDefaultClick = function () {
+        this.vm.overrideDefaultClick();
+    };
     LinkView.prototype.setHref = function (href) {
         this.vm.href(href);
     };
