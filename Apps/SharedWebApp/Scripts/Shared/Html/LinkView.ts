@@ -10,6 +10,14 @@ export class LinkView extends HtmlContainerComponent {
         super(vm, new AggregateComponent(vm.content));
     }
 
+    defaultClick() {
+        this.vm.defaultClick();
+    }
+
+    overrideDefaultClick() {
+        this.vm.overrideDefaultClick();
+    }
+
     setHref(href: string) {
         this.vm.href(href);
     }

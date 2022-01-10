@@ -19,8 +19,20 @@ var LinkViewModel = /** @class */ (function (_super) {
         _this.clicked = _this._clicked.handler();
         return _this;
     }
+    LinkViewModel.prototype.defaultClick = function () {
+        this.clickResult = true;
+    };
+    LinkViewModel.prototype.overrideDefaultClick = function () {
+        this.clickResult = false;
+    };
     LinkViewModel.prototype.click = function () {
         this._clicked.invoke();
+        var clickResult = this.clickResult;
+        if (clickResult === undefined) {
+            var href = this.href();
+            clickResult = Boolean(href && href !== 'javascript:;');
+        }
+        return clickResult;
     };
     return LinkViewModel;
 }(HtmlComponentViewModel_1.HtmlComponentViewModel));

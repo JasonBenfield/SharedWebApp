@@ -17,6 +17,7 @@ export class TestCard {
 
     constructor(private readonly view: TestCardView) {
         this.cardTitleHeader.setText('This is the Title');
+        new TextBlock('Test List Item', view.manualItem);
         this.testItems = new ListGroup(this.view.testItems);
         this.clickableItems = new ListGroup(this.view.clickableItems);
         this.testItems.setItems(

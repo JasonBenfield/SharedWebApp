@@ -351,6 +351,8 @@ MigrationBackup/
 
 **/wwwroot/js/**/*.*
 **/wwwroot/styles/**/*.*
+**/Scripts/**/*.js
+**/Scripts/**/*.js.map
 **/*.private.*
 
 **/*.npmrc

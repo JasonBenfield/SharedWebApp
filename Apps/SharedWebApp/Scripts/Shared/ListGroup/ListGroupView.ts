@@ -1,5 +1,8 @@
 ﻿import { UnorderedListViewModel } from "../Html/UnorderedListViewModel";
 import { BaseListGroupView } from "./BaseListGroupView";
+import { ButtonListGroupItemView } from "./ButtonListGroupItemView";
+import { LinkListGroupItemView } from "./LinkListGroupItemView";
+import { ListGroupItemView } from "./ListGroupItemView";
 
 export class ListGroupView extends BaseListGroupView {
     constructor(
@@ -7,5 +10,17 @@ export class ListGroupView extends BaseListGroupView {
         vm: IListViewModel = new UnorderedListViewModel()
     ) {
         super(createItemView, vm);
+    }
+
+    addButtonListGroupItem() {
+        return this.addListItemView(new ButtonListGroupItemView());
+    }
+
+    addLinkListGroupItem() {
+        return this.addListItemView(new LinkListGroupItemView());
+    }
+
+    addListGroupItem() {
+        return this.addListItemView(new ListGroupItemView());
     }
 }
