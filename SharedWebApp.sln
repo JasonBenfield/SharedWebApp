@@ -14,8 +14,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		xti.ps1 = xti.ps1
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib", "Lib", "{482BA6D4-5A1C-4D4C-A091-512C08D3BA5B}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Internal", "Internal", "{EED6D32D-A151-4F22-8D07-A5D51A6667C6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedWebApp.Api", "Internal\SharedWebApp.Api\SharedWebApp.Api.csproj", "{884F5301-3265-42E4-932B-72A21653A6C7}"

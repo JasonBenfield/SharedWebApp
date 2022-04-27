@@ -1,12 +1,5 @@
 Import-Module PowershellForXti -Force
 
-$script:xtiConfig = [PSCustomObject]@{
-    RepoOwner = "JasonBenfield"
-    RepoName = "SharedWebApp"
-    AppName = "Shared"
-    AppType = "Package"
-}
-
 if(Test-Path ".\xti.private.ps1"){
 . .\xti.Private.ps1
 }
@@ -16,10 +9,10 @@ function Xti-NewVersion {
         [Parameter(Position=0)]
         [ValidateSet("major", "minor", "patch")]
         $VersionType = "minor",
-        [ValidateSet("Development", "Production", "Staging", "Test")]
-        $EnvName = "Production"
+        [ValidateSet("Default", "DB")]
+        $HubAdministrationType = "Default"
     )
-    $script:xtiConfig | New-BaseXtiVersion @PsBoundParameters
+    New-BaseXtiVersion @PsBoundParameters
 }
 
 function Xti-NewIssue {
@@ -28,7 +21,7 @@ function Xti-NewIssue {
         [string] $IssueTitle,
         [switch] $Start
     )
-    $script:xtiConfig | New-BaseXtiIssue @PsBoundParameters
+    New-BaseXtiIssue @PsBoundParameters
 }
 
 function Xti-StartIssue {
@@ -36,15 +29,13 @@ function Xti-StartIssue {
         [Parameter(Position=0)]
         [long]$IssueNumber = 0
     )
-    $script:xtiConfig | BaseXti-StartIssue @PsBoundParameters
+    BaseXti-StartIssue @PsBoundParameters
 }
 
 function Xti-CompleteIssue {
     param(
-        [ValidateSet("Development", "Production", "Staging", "Test")]
-        $EnvName = "Production"
     )
-    $script:xtiConfig | BaseXti-CompleteIssue @PsBoundParameters
+    BaseXti-CompleteIssue @PsBoundParameters
 }
 
 function Xti-Build {
@@ -52,14 +43,15 @@ function Xti-Build {
         [ValidateSet("Development", "Production", "Staging", "Test")]
         $EnvName = "Development"
     )
-    $script:xtiConfig | BaseXti-BuildWebApp @PsBoundParameters
+    BaseXti-BuildWebApp @PsBoundParameters
 }
 
 function Xti-Publish {
     param(
         [ValidateSet("Development", "Production")]
         $EnvName = "Development",
-        [switch] $NoInstall
+        [ValidateSet("Default", "DB")]
+        $HubAdministrationType = "Default"
     )
     $DestinationMachine = Get-DestinationMachine --EnvName $EnvName
     $PsBoundParameters.Add("DestinationMachine", $DestinationMachine)
@@ -67,7 +59,7 @@ function Xti-Publish {
     $PsBoundParameters.Add("Domain", $Domain)
     $SiteName = Get-SiteName -EnvName $EnvName
     $PsBoundParameters.Add("SiteName", $SiteName)
-    $script:xtiConfig | BaseXti-Publish @PsBoundParameters
+    BaseXti-Publish @PsBoundParameters
 }
 
 function Xti-Install {
@@ -81,5 +73,5 @@ function Xti-Install {
     $PsBoundParameters.Add("Domain", $Domain)
     $SiteName = Get-SiteName -EnvName $EnvName
     $PsBoundParameters.Add("SiteName", $SiteName)
-    $script:xtiConfig | BaseXti-Install @PsBoundParameters
+    BaseXti-Install @PsBoundParameters
 }

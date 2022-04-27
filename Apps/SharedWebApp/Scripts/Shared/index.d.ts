@@ -28,6 +28,10 @@ interface ICssBuilder {
 interface IEmptyRequest {
 }
 
+interface ILogoutRequest {
+    ReturnUrl: string;
+}
+
 interface PageContext {
     WebAppDomains: IAppVersionDomain[];
     CacheBust: string;
