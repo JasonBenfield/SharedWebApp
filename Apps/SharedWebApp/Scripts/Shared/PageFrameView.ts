@@ -18,6 +18,7 @@ import { PaddingCss } from "./PaddingCss";
 import { PageLoader } from "./PageLoader";
 import { PageViewModel } from "./PageViewModel";
 import { TextCss } from "./TextCss";
+import { UrlBuilder } from "./UrlBuilder";
 
 export class PageFrameView {
     readonly toolbar: Toolbar;
@@ -60,7 +61,9 @@ export class PageFrameView {
         this.logoutMenuItem = dropdown.addLinkItem();
         let logoutTextSpan = this.logoutMenuItem.link.addContent(new TextSpanView());
         logoutTextSpan.setText('Logout');
-        let logoutUrl = AppResourceUrl.app('Hub', '', pageContext.CacheBust).withGroup('Auth').withAction('Logout');
+        let logoutUrl = new UrlBuilder('./User/Logout')
+            .addQuery('cacheBust', pageContext.CacheBust)
+            .addQuery('returnUrl', encodeURIComponent(location.href));
         let logoutLink = new Link(this.logoutMenuItem.link);
         logoutLink.setHref(logoutUrl.url.value());
         this.content = frame.addContent(new Block());
