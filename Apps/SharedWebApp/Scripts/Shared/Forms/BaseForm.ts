@@ -123,7 +123,7 @@ export class BaseForm {
             }
             this.modalError.show(errors, caption);
         }
-        return new FormSaveResult(result, errors);
+        return new FormSaveResult<TResult>(result, errors);
     }
 
     private validate() {
