@@ -61,11 +61,8 @@ export class PageFrameView {
         this.logoutMenuItem = dropdown.addLinkItem();
         let logoutTextSpan = this.logoutMenuItem.link.addContent(new TextSpanView());
         logoutTextSpan.setText('Logout');
-        let logoutUrl = new UrlBuilder('./User/Logout')
-            .addQuery('cacheBust', pageContext.CacheBust)
-            .addQuery('returnUrl', encodeURIComponent(location.href));
         let logoutLink = new Link(this.logoutMenuItem.link);
-        logoutLink.setHref(logoutUrl.url.value());
+        logoutLink.setHref(this.getLogutUrl());
         this.content = frame.addContent(new Block());
         this.content.flexFill();
         this.content.addCssName('h-100');
@@ -75,6 +72,25 @@ export class PageFrameView {
             documentTitle = `${documentTitle} - ${pageContext.PageTitle}`;
         }
         document.title = documentTitle;
+        window.addEventListener('popstate', () => {
+            logoutLink.setHref(this.getLogutUrl());
+        });
+    }
+
+    private getLogutUrl() {
+        let returnUrl = location.href;
+        if (returnUrl.indexOf('#') > -1) {
+            if (returnUrl.indexOf('?') > -1) {
+                returnUrl.replace('#', '&');
+            }
+            else {
+                returnUrl.replace('#', '?');
+            }
+        }
+        let logoutUrl = new UrlBuilder('./User/Logout')
+            .addQuery('cacheBust', pageContext.CacheBust)
+            .addQuery('ReturnUrl', encodeURIComponent(returnUrl));
+        return logoutUrl.url.value();
     }
 
     setName(name: string) {
