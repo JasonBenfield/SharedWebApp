@@ -5,7 +5,7 @@ export class AppVersionDomain {
         let domain = new First(
             new FilteredArray(
                 pageContext.WebAppDomains,
-                d => d.App.toLowerCase() === app.toLowerCase()
+                d => d.App.replace(' ', '').toLowerCase() === app.toLowerCase()
             )
         ).value();
         return domain || { App: '', Version: '', Domain: '' };
