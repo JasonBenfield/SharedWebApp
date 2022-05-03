@@ -87,7 +87,17 @@ export class PageFrameView {
                 returnUrl.replace('#', '?');
             }
         }
-        let logoutUrl = new UrlBuilder('./User/Logout')
+        let slashIndex = location.pathname.indexOf('/', 1);
+        let appName = location.pathname.substring(1, slashIndex);
+        let nextSlashIndex = location.pathname.indexOf('/', slashIndex + 1);
+        let version: string;
+        if (nextSlashIndex > -1) {
+            version = location.pathname.substring(slashIndex + 1, nextSlashIndex);
+        }
+        else {
+            version = location.pathname.substring(slashIndex + 1);
+        }
+        let logoutUrl = new UrlBuilder(`${location.origin}/${appName}/${version}/User/Logout`)
             .addQuery('cacheBust', pageContext.CacheBust)
             .addQuery('ReturnUrl', encodeURIComponent(returnUrl));
         return logoutUrl.url.value();
