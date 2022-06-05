@@ -9,10 +9,12 @@ export class TextBlockView extends HtmlComponent implements ITextComponentView {
     }
 
     setText(text: string) {
+        this.vm.html(null);
         this.vm.text(text);
     }
 
     setHtml(html: string) {
+        this.vm.text(null);
         this.vm.html(html);
     }
 

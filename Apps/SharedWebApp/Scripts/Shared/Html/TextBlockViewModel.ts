@@ -8,5 +8,5 @@ export class TextBlockViewModel extends HtmlComponentViewModel {
         super(new ComponentTemplate('text-block', template));
     }
     readonly text = ko.observable('');
-    readonly html = ko.observable('');
+    readonly html = ko.observable<string>(null);
 }
