@@ -13,7 +13,22 @@ export class ListBlockViewModel extends HtmlComponentViewModel implements IListV
     readonly items = ko.observableArray<IListItemViewModel>([]);
     readonly hasItems = ko.observable(false);
 
+    private clickResult: boolean;
+
+    defaultClick() {
+        this.clickResult = true;
+    }
+
+    overrideDefaultClick() {
+        this.clickResult = false;
+    }
+
     click(item: IListItemViewModel) {
         this._itemClicked.invoke(item);
+        let clickResult = this.clickResult;
+        if (clickResult === undefined) {
+            clickResult = true;
+        }
+        return clickResult;
     }
 }

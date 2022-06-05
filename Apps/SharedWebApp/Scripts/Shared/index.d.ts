@@ -194,6 +194,9 @@ interface IListViewModel extends IHtmlComponentViewModel {
     readonly itemClicked: IEventHandler<IListItemViewModel>;
     readonly items: ko.ObservableArray<IListItemViewModel>;
     readonly hasItems: ko.Observable<boolean>;
+
+    defaultClick();
+    overrideDefaultClick();
 }
 
 interface IListItemViewModel extends IHtmlComponentViewModel {

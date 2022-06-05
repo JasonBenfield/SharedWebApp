@@ -1,6 +1,5 @@
 ﻿import { DefaultEvent } from "../Events";
 import { HtmlComponent } from "../Html/HtmlComponent";
-import { ListItem } from "../Html/ListItem";
 import { UnorderedListViewModel } from "../Html/UnorderedListViewModel";
 
 export abstract class BaseListView extends HtmlComponent implements IListView {
@@ -17,6 +16,10 @@ export abstract class BaseListView extends HtmlComponent implements IListView {
         super(vm);
         this.vm.itemClicked.register(this.onItemClicked.bind(this));
     }
+
+    defaultClick() { this.vm.defaultClick(); }
+
+    overrideDefaultClick() { this.vm.overrideDefaultClick(); }
 
     private onItemClicked(itemVM: IListItemViewModel) {
         let index = this.vm.items.indexOf(itemVM);

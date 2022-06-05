@@ -15,7 +15,22 @@ export class UnorderedListViewModel extends HtmlComponentViewModel implements IL
     private readonly _itemClicked = new DefaultEvent<ListItemViewModel>(this);
     readonly itemClicked = this._itemClicked.handler();
 
+    private clickResult: boolean;
+
+    defaultClick() {
+        this.clickResult = true;
+    }
+
+    overrideDefaultClick() {
+        this.clickResult = false;
+    }
+
     click(listItem: ListItemViewModel) {
         this._itemClicked.invoke(listItem);
+        let clickResult = this.clickResult;
+        if (clickResult === undefined) {
+            clickResult = true;
+        }
+        return clickResult;
     }
 }
