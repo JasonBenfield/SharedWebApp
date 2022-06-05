@@ -17,6 +17,14 @@ export class UnorderedList extends BaseListView {
         );
     }
 
+    defaultClick() {
+        this.vm.defaultClick();
+    }
+
+    overrideDefaultClick() {
+        this.vm.overrideDefaultClick();
+    }
+
     addListItem() {
         return this.addListItemView(new ListItem());
     }
