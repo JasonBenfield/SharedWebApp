@@ -8,4 +8,5 @@ export class TextSpanViewModel extends HtmlComponentViewModel {
         super(new ComponentTemplate('text-span', template));
     }
     readonly text = ko.observable('');
+    readonly html = ko.observable('');
 }
