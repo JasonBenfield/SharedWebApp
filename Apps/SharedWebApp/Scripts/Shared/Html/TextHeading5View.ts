@@ -12,7 +12,5 @@ export class TextHeading5View extends Heading5 implements ITextComponentView {
 
     setText(text: string) { this.textSpan.setText(text); }
 
-    setHtml(html: string) { this.textSpan.setHtml(html); }
-
     setTitle(title: string) { this.textSpan.setTitle(title); }
 }
