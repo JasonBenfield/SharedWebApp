@@ -8,17 +8,20 @@ using XTI_WebApp.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.UseXtiConfiguration(builder.Environment, new string[0]);
 
-builder.Services.AddWebAppServices(builder.Environment, builder.Configuration);
+builder.Services.AddWebAppServices();
 builder.Services.AddScoped(_ =>
 {
     var appContext = new FakeAppContext(SharedInfo.AppKey);
     return appContext;
 });
 builder.Services.AddScoped<ISourceAppContext>(sp => sp.GetRequiredService<FakeAppContext>());
+builder.Services.AddScoped<FakeCurrentUserName>();
+builder.Services.AddScoped<ICurrentUserName>(sp => sp.GetRequiredService<FakeCurrentUserName>());
 builder.Services.AddScoped<ISourceUserContext>(sp =>
 {
     var appContext = sp.GetRequiredService<FakeAppContext>();
-    var userContext = new FakeUserContext(appContext);
+    var currentUserName = sp.GetRequiredService<FakeCurrentUserName>();
+    var userContext = new FakeUserContext(appContext, currentUserName);
     userContext.SetCurrentUser(AppUserName.Anon);
     return userContext;
 });
