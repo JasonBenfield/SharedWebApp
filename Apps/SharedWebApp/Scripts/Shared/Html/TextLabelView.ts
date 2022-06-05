@@ -12,5 +12,7 @@ export class TextLabel extends Label implements ITextComponentView {
 
     setText(text: string) { this.textSpan.setText(text); }
 
+    setHtml(html: string) { this.textSpan.setHtml(html); }
+
     setTitle(title: string) { this.textSpan.setTitle(title); }
 }

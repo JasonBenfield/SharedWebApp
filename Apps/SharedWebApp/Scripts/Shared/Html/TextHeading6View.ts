@@ -12,5 +12,7 @@ export class TextHeading6View extends Heading6 implements ITextComponentView {
 
     setText(text: string) { this.textSpan.setText(text); }
 
+    setHtml(html: string) { this.textSpan.setHtml(html); }
+
     setTitle(title: string) { this.textSpan.setTitle(title); }
 }

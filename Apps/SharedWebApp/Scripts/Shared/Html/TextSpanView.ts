@@ -12,6 +12,10 @@ export class TextSpanView extends HtmlComponent implements ITextComponentView {
         this.vm.text(text);
     }
 
+    setHtml(html: string) {
+        this.vm.html(html);
+    }
+
     setTitle(title: string) {
         this.vm.title(title);
     }
