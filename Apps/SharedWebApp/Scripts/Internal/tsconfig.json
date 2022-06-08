@@ -16,7 +16,8 @@
     ]
   },
   "include": [
-    "./**/*.ts"
+    "./**/*.ts",
+    "../Shared/**/*.d.ts"
   ],
   "exclude": [
     "Imports",

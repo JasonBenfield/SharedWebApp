@@ -1,12 +1,13 @@
-﻿import { XtiPath } from './XtiPath';
+﻿import { UrlBuilder } from '../UrlBuilder';
+import { XtiPath } from './XtiPath';
 
 export class XtiUrl {
-    static current = new XtiUrl(location.href);
+    static current() { return XtiUrl.parse(location.href); }
 
-    constructor(url: string = location.href) {
+    static parse(url: string) {
         let protocolIndex = url.indexOf('//');
         let slashIndex = url.indexOf('/', protocolIndex + 2);
-        this.baseUrl = url.substring(0, slashIndex);
+        let baseUrl = url.substring(0, slashIndex);
         let endIndex = url.indexOf('?');
         if (endIndex < 0) {
             endIndex = url.indexOf('#');
@@ -19,9 +20,32 @@ export class XtiUrl {
         }
         let path = url.substring(slashIndex + 1, endIndex);
         let split = path.split('/');
-        this.path = new XtiPath(split[0], split[1], split[2], split[3], split[4]);
+        return new XtiUrl(
+            baseUrl,
+            new XtiPath(split[0], split[1], split[2], split[3], split[4])
+        );
+    }
+
+    private constructor(baseUrl: string, path: XtiPath) {
+        this.baseUrl = baseUrl;
+        this.path = path;
     }
 
     readonly baseUrl: string;
     readonly path: XtiPath;
+
+    url() {
+        return new UrlBuilder(this.baseUrl)
+            .addPart(this.path.app)
+            .addPart(this.path.version)
+            .addPart(this.path.group)
+            .addPart(this.path.action)
+            .addPart(this.path.modifier);
+    }
+
+    homeUrl() {
+        return new UrlBuilder(this.baseUrl)
+            .addPart(this.path.app)
+            .addPart(this.path.version);
+    }
 }

@@ -52,6 +52,10 @@ export class Url {
         if (queryString) {
             url += `?${queryString}`;
         }
+        let hashString = this._hash.toString();
+        if (hashString) {
+            url += `#${hashString}`;
+        }
         return url;
     }
 

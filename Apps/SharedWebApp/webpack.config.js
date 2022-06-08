@@ -4,7 +4,8 @@ const entry = {
     user: './Scripts/Internal/User/MainPage.ts',
     home: './Scripts/Internal/Home/MainPage.ts',
     employee: './Scripts/Internal/Employee/MainPage.ts',
-    cardDemo: './Scripts/Internal/CardDemo/MainPage.ts'
+    cardDemo: './Scripts/Internal/CardDemo/MainPage.ts',
+    gridDemo: './Scripts/Internal/GridDemo/MainPage.ts'
 };
 const exportModule = {
     rules: [

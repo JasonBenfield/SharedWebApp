@@ -1,0 +1,12 @@
+﻿<!-- ko if: isVisible -->
+<thead data-bind="attr: { 
+    'class': css, 
+    title: title, 
+    id: id, 
+    name: name
+}">
+    <!-- ko with: content -->
+    <!-- ko component: { name: componentName, params: $data } --><!-- /ko -->
+    <!-- /ko -->
+</thead>
+<!-- /ko -->

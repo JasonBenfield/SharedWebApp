@@ -1,0 +1,20 @@
+﻿<!-- ko if: isVisible -->
+<div data-bind="attr: { 
+         'class': css, 
+         title: title, 
+         id: id, name: name, 
+         role: role 
+     },
+     style: {
+        'grid-template-columns': templateColumns,
+        'grid-template-rows': templateRows,
+        'grid-auto-columns': autoColumns,
+        'grid-auto-rows': autoRows,
+        'column-gap': columnGap,
+        'row-gap': rowGap
+     }">
+    <!-- ko with: content -->
+    <!-- ko component: { name: componentName, params: $data } --><!-- /ko -->
+    <!-- /ko -->
+</div>
+<!-- /ko -->

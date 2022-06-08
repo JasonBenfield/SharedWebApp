@@ -20,7 +20,7 @@ export class AppApi {
     ) {
         this.resourceUrl = AppResourceUrl.app(
             app,
-            XtiUrl.current.path.modifier,
+            XtiUrl.current().path.modifier,
             pageContext.CacheBust
         );
     }

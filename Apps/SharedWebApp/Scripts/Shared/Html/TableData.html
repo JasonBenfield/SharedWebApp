@@ -1,0 +1,15 @@
+﻿<!-- ko if: isVisible -->
+<td data-bind="attr: { 
+    'class': css, 
+    title: title, 
+    id: id, 
+    name: name,
+    colspan: colspan,
+    rowspan: rowspan,
+    headers: headers
+}">
+    <!-- ko with: content -->
+    <!-- ko component: { name: componentName, params: $data } --><!-- /ko -->
+    <!-- /ko -->
+</td>
+<!-- /ko -->

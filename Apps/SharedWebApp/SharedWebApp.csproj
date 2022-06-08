@@ -25,6 +25,7 @@
     <None Remove="Scripts\Internal\CardDemo\TestListItem.ts" />
     <None Remove="Scripts\Internal\CardDemo\TestListItemView.ts" />
     <None Remove="Scripts\Internal\DefaultPageContext.ts" />
+    <None Remove="Scripts\Internal\GridDemo\DemoGrid.ts" />
     <None Remove="Scripts\Shared\Api\AppVersionDomain.ts" />
     <None Remove="Scripts\Shared\Error\ModalErrorGroupComponent.ts" />
     <None Remove="Scripts\Shared\Error\ModalErrorListItem.ts" />
@@ -32,14 +33,42 @@
     <None Remove="Scripts\Shared\FlexCss.ts" />
     <None Remove="Scripts\Shared\Forms\ErrorListItem.ts" />
     <None Remove="Scripts\Shared\Forms\ErrorListItemView.ts" />
+    <None Remove="Scripts\Shared\Html\ColGroupView.ts" />
+    <None Remove="Scripts\Shared\Html\ColGroupViewModel.ts" />
+    <None Remove="Scripts\Shared\Html\CssLengthUnit.ts" />
+    <None Remove="Scripts\Shared\Html\GridCellView.ts" />
+    <None Remove="Scripts\Shared\Html\GridCellViewModel.ts" />
+    <None Remove="Scripts\Shared\Html\GridRowView.ts" />
+    <None Remove="Scripts\Shared\Html\GridView.ts" />
+    <None Remove="Scripts\Shared\Html\GridViewModel.ts" />
     <None Remove="Scripts\Shared\Html\NavView.ts" />
+    <None Remove="Scripts\Shared\Html\TableBodyView.ts" />
+    <None Remove="Scripts\Shared\Html\TableBodyViewModel.ts" />
+    <None Remove="Scripts\Shared\Html\TableCaptionView.ts" />
+    <None Remove="Scripts\Shared\Html\TableCaptionViewModel.ts" />
+    <None Remove="Scripts\Shared\Html\TableDataHeaderView.ts" />
+    <None Remove="Scripts\Shared\Html\TableDataHeaderViewModel.ts" />
+    <None Remove="Scripts\Shared\Html\TableDataView.ts" />
+    <None Remove="Scripts\Shared\Html\TableDataViewModel.ts" />
+    <None Remove="Scripts\Shared\Html\TableFootView.ts" />
+    <None Remove="Scripts\Shared\Html\TableFootViewModel.ts" />
+    <None Remove="Scripts\Shared\Html\TableHeadView.ts" />
+    <None Remove="Scripts\Shared\Html\TableHeadViewModel.ts" />
+    <None Remove="Scripts\Shared\Html\TableRowView.ts" />
+    <None Remove="Scripts\Shared\Html\TableRowViewModel.ts" />
+    <None Remove="Scripts\Shared\Html\TableView.ts" />
+    <None Remove="Scripts\Shared\Html\TableViewModel.ts" />
     <None Remove="Scripts\Shared\JustifyContentCss.ts" />
   </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="XTI_App.Fakes" Version="1.8.19" />
+    <PackageReference Include="XTI_Core.Extensions" Version="1.10.10" />
+    <PackageReference Include="XTI_TempLog.Fakes" Version="1.2.27" />
     <PackageReference Include="XTI_WebApp.Extensions" Version="1.8.21" />
-    <PackageReference Include="XTI_Configuration.Extensions" Version="1.10.2" />
+    <PackageReference Include="XTI_WebApp.Fakes" Version="1.8.21" />
+    <PackageReference Include="XTI_WebApp.RCL" Version="1.8.21" />
+    <PackageReference Include="XTI_WebApp.TagHelpers" Version="1.8.21" />
   </ItemGroup>
   
   <ItemGroup>
@@ -60,6 +89,7 @@
     <TypeScriptCompile Include="Scripts\Internal\CardDemo\TestClickableItem.ts" />
     <TypeScriptCompile Include="Scripts\Internal\CardDemo\TestClickableItemView.ts" />
     <TypeScriptCompile Include="Scripts\Internal\DefaultPageContext.ts" />
+    <TypeScriptCompile Include="Scripts\Internal\GridDemo\DemoGrid.ts" />
     <TypeScriptCompile Include="Scripts\Shared\Api\AppVersionDomain.ts" />
     <TypeScriptCompile Include="Scripts\Shared\Error\ModalErrorGroupComponent.ts" />
     <TypeScriptCompile Include="Scripts\Shared\Error\ModalErrorListItem.ts" />
@@ -67,7 +97,69 @@
     <TypeScriptCompile Include="Scripts\Shared\FlexCss.ts" />
     <TypeScriptCompile Include="Scripts\Shared\Forms\ErrorListItem.ts" />
     <TypeScriptCompile Include="Scripts\Shared\Forms\ErrorListItemView.ts" />
+    <TypeScriptCompile Include="Scripts\Shared\Html\CssLengthUnit.ts" />
+    <TypeScriptCompile Include="Scripts\Shared\Html\GridCellView.ts" />
+    <TypeScriptCompile Include="Scripts\Shared\Html\GridRowView.ts" />
+    <TypeScriptCompile Include="Scripts\Shared\Html\GridCellViewModel.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Shared\Html\NavView.ts" />
+    <TypeScriptCompile Include="Scripts\Shared\Html\ColGroupViewModel.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Shared\Html\ColGroupView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Shared\Html\TableCaptionView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Shared\Html\TableCaptionViewModel.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Shared\Html\TableFootView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Shared\Html\TableFootViewModel.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Shared\Html\TableHeadView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Shared\Html\TableBodyView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Shared\Html\TableHeadViewModel.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Shared\Html\GridView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Shared\Html\TableView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Shared\Html\TableBodyViewModel.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Shared\Html\GridViewModel.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Shared\Html\TableViewModel.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Shared\Html\TableRowView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Shared\Html\TableDataHeaderView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Shared\Html\TableDataView.ts" />
+    <TypeScriptCompile Include="Scripts\Shared\Html\TableRowViewModel.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Shared\Html\TableDataHeaderViewModel.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Shared\Html\TableDataViewModel.ts" />
     <TypeScriptCompile Include="Scripts\Shared\JustifyContentCss.ts" />
   </ItemGroup>
   

@@ -1,6 +1,7 @@
 ﻿import { AlignCss } from "./AlignCss";
 import { AppResourceUrl } from "./Api/AppResourceUrl";
 import { AppVersionDomain } from "./Api/AppVersionDomain";
+import { XtiUrl } from "./Api/XtiUrl";
 import { ContextualClass } from "./ContextualClass";
 import { DropdownBlock } from "./Dropdown/DropdownBlock";
 import { DropdownLinkItem } from "./Dropdown/DropdownLinkItem";
@@ -29,7 +30,7 @@ export class PageFrameView {
     readonly content: Block;
     readonly modalError = new ModalErrorComponentView(this.vm.modalError);
 
-    private readonly logoutMenuItem: DropdownLinkItem;
+    readonly userDropdown: DropdownBlock;
 
     constructor(private readonly vm: PageViewModel = new PageViewModel()) {
         let frame = this.outerContent.addContent(new FlexColumn());
@@ -46,22 +47,31 @@ export class PageFrameView {
         this.pageTitle = heading.addContent(new TextSmallView());
         this.pageTitle.setText(pageContext.PageTitle);
         this.toolbar.columnEnd.addCssFrom(new AlignCss().self(a => a.xs('center')).cssClass());
-        let dropdown = this.toolbar.columnEnd.addContent(new DropdownBlock());
+        this.userDropdown = this.toolbar.columnEnd.addContent(new DropdownBlock());
         if (!pageContext.IsAuthenticated) {
-            dropdown.hide();
+            this.userDropdown.hide();
         }
-        dropdown.button.setContext(ContextualClass.light);
-        dropdown.button.useOutlineStyle();
-        dropdown.button.addContent(new FaIcon('user'));
-        let userName = dropdown
+        this.userDropdown.button.setContext(ContextualClass.light);
+        this.userDropdown.button.useOutlineStyle();
+        this.userDropdown.button.addContent(new FaIcon('user'));
+        let userName = this.userDropdown
             .addSpanItem()
             .span
             .addContent(new TextSpanView());
         userName.setText(pageContext.UserName);
-        this.logoutMenuItem = dropdown.addLinkItem();
-        let logoutTextSpan = this.logoutMenuItem.link.addContent(new TextSpanView());
+        let homeMenuItem = this.userDropdown.addLinkItem();
+        homeMenuItem.link.addContent(new FaIcon())
+            .configure(i => i.solidStyle('house'));
+        let homeTextSpan = homeMenuItem.link.addContent(new TextSpanView());
+        homeTextSpan.setText('Home');
+        let homeLink = new Link(homeMenuItem.link);
+        homeLink.setHref(XtiUrl.current().homeUrl());
+        let logoutMenuItem = this.userDropdown.addLinkItem();
+        logoutMenuItem.link.addContent(new FaIcon())
+            .configure(i => i.solidStyle('right-from-bracket'));
+        let logoutTextSpan = logoutMenuItem.link.addContent(new TextSpanView());
         logoutTextSpan.setText('Logout');
-        let logoutLink = new Link(this.logoutMenuItem.link);
+        let logoutLink = new Link(logoutMenuItem.link);
         logoutLink.setHref(this.getLogutUrl());
         this.content = frame.addContent(new Block());
         this.content.flexFill();
@@ -87,20 +97,12 @@ export class PageFrameView {
                 returnUrl.replace('#', '?');
             }
         }
-        let slashIndex = location.pathname.indexOf('/', 1);
-        let appName = location.pathname.substring(1, slashIndex);
-        let nextSlashIndex = location.pathname.indexOf('/', slashIndex + 1);
-        let version: string;
-        if (nextSlashIndex > -1) {
-            version = location.pathname.substring(slashIndex + 1, nextSlashIndex);
-        }
-        else {
-            version = location.pathname.substring(slashIndex + 1);
-        }
-        let logoutUrl = new UrlBuilder(`${location.origin}/${appName}/${version}/User/Logout`)
+        return XtiUrl.current()
+            .homeUrl()
+            .addPart('User')
+            .addPart('Logout')
             .addQuery('cacheBust', pageContext.CacheBust)
             .addQuery('ReturnUrl', encodeURIComponent(returnUrl));
-        return logoutUrl.url.value();
     }
 
     setName(name: string) {

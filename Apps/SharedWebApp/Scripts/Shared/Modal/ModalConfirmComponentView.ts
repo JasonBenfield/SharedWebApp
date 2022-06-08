@@ -39,7 +39,7 @@ export class ModalConfirmComponentView extends HtmlComponent {
         this.noButton.setText('No');
         this.noButton.setContext(ContextualClass.secondary);
         this.noButton.setMargin(MarginCss.end(1));
-        this.yesButton == buttonColumn.addContent(new ButtonCommandItem());
+        this.yesButton = buttonColumn.addContent(new ButtonCommandItem());
         this.yesButton.icon.setName('check');
         this.yesButton.setText('Yes');
         this.yesButton.setContext(ContextualClass.primary);

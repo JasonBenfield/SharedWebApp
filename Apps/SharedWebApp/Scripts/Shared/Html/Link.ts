@@ -1,4 +1,6 @@
 ﻿import { WebPage } from "../Api/WebPage";
+import { Url } from "../Url";
+import { UrlBuilder } from "../UrlBuilder";
 import { LinkView } from "./LinkView";
 
 export class Link {
@@ -16,8 +18,16 @@ export class Link {
         }
     }
 
-    setHref(href: string) {
-        this.href = href;
-        this.view.setHref(href);
+    setHref(href: string | Url | UrlBuilder) {
+        if (href instanceof Url) {
+            this.href = href.value();
+        }
+        else if (href instanceof UrlBuilder) {
+            this.href = href.value();
+        }
+        else {
+            this.href = href;
+        }
+        this.view.setHref(this.href);
     }
 }

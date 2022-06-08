@@ -41,12 +41,18 @@ export class FaIcon extends HtmlComponent {
 
     private prefix: string;
 
-    regularStyle() {
-        this.setPrefix('far');
+    regularStyle(name?: string) {
+        this.setPrefix('fa-regular');
+        if (name) {
+            this.setName(name);
+        }
     }
 
-    solidStyle() {
-        this.setPrefix('fas');
+    solidStyle(name?: string) {
+        this.setPrefix('fa-solid');
+        if (name) {
+            this.setName(name);
+        }
     }
 
     private setPrefix(prefix: string) {
