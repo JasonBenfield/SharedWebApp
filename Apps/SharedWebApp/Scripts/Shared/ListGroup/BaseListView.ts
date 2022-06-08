@@ -28,6 +28,16 @@ export abstract class BaseListView extends HtmlComponent implements IListView {
         }
     }
 
+    addListItemViews(howMany: number, create: () => IListItemView) {
+        let itemViews: IListItemView[];
+        for (let i = 0; i < howMany; i++) {
+            let itemView = create();
+            itemView.addToList(this);
+            itemViews.push(itemView);
+        }
+        return itemViews;
+    }
+
     addListItemView<T extends IListItemView>(itemView: T) {
         itemView.addToList(this);
         return itemView;
