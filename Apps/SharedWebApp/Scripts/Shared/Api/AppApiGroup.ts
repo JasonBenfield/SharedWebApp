@@ -2,6 +2,8 @@
 import { AppApiEvents } from "./AppApiEvents";
 import { AppResourceUrl } from "./AppResourceUrl";
 import { AppApiView } from "./AppApiView";
+import { AppApiQuery } from "./AppApiQuery";
+import { AppApiContent } from "./AppApiContent";
 
 export class AppApiGroup {
     constructor(
@@ -20,6 +22,10 @@ export class AppApiGroup {
 
     protected createAction<TModel, TResult>(name: string, friendlyName: string) {
         return new AppApiAction<TModel, TResult>(this.events, this.resourceUrl, name, friendlyName);
+    }
+
+    protected createContent<TModel, TResult>(name: string, friendlyName: string) {
+        return new AppApiContent<TModel, TResult>(this.events, this.resourceUrl, name, friendlyName);
     }
 
     toString() {

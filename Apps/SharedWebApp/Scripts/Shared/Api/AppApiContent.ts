@@ -1,14 +1,12 @@
-﻿import { HttpClient } from "./HttpClient";
-import { JsonText } from "./JsonText";
+﻿import { AppApiError } from "./AppApiError";
 import { AppApiEvents } from "./AppApiEvents";
-import { AppApiError } from "./AppApiError";
-import { ErrorModel } from "../ErrorModel";
 import { AppResourceUrl } from "./AppResourceUrl";
-import { MappedArray } from '../Enumerable';
-import { ParsedDateObject } from "./ParsedDateObject";
 import { ErrorFromHttpResult } from "./ErrorFromHttpResult";
+import { HttpClient } from "./HttpClient";
+import { JsonText } from "./JsonText";
+import { ParsedDateObject } from "./ParsedDateObject";
 
-export class AppApiAction<TArgs, TResult> {
+export class AppApiContent<TArgs,TResult> {
     private readonly resourceUrl: AppResourceUrl;
 
     constructor(
@@ -25,7 +23,7 @@ export class AppApiAction<TArgs, TResult> {
         let postResult = await new HttpClient().post(this.resourceUrl.url.value(), jsonText);
         let result: TResult;
         let apiError: AppApiError;
-        result = postResult && postResult.result && postResult.result.Data;
+        result = postResult && postResult.result;
         if (postResult.isSuccessful()) {
             if (typeof result === 'string') {
                 if (ParsedDateObject.isDateString(result)) {
@@ -49,6 +47,6 @@ export class AppApiAction<TArgs, TResult> {
     }
 
     toString() {
-        return `AppApiAction ${this.resourceUrl}`;
+        return `AppApiContent ${this.resourceUrl}`;
     }
 }

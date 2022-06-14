@@ -1,10 +1,7 @@
 ﻿import { AlignCss } from "./AlignCss";
-import { AppResourceUrl } from "./Api/AppResourceUrl";
-import { AppVersionDomain } from "./Api/AppVersionDomain";
 import { XtiUrl } from "./Api/XtiUrl";
 import { ContextualClass } from "./ContextualClass";
 import { DropdownBlock } from "./Dropdown/DropdownBlock";
-import { DropdownLinkItem } from "./Dropdown/DropdownLinkItem";
 import { ModalErrorComponentView } from "./Error/ModalErrorComponentView";
 import { FaIcon } from "./FaIcon";
 import { AggregateComponent } from "./Html/AggregateComponent";
@@ -19,7 +16,6 @@ import { PaddingCss } from "./PaddingCss";
 import { PageLoader } from "./PageLoader";
 import { PageViewModel } from "./PageViewModel";
 import { TextCss } from "./TextCss";
-import { UrlBuilder } from "./UrlBuilder";
 
 export class PageFrameView {
     readonly toolbar: Toolbar;

@@ -26,7 +26,11 @@
     <None Remove="Scripts\Internal\CardDemo\TestListItemView.ts" />
     <None Remove="Scripts\Internal\DefaultPageContext.ts" />
     <None Remove="Scripts\Internal\GridDemo\DemoGrid.ts" />
+    <None Remove="Scripts\Shared\Api\AppApiQuery.ts" />
     <None Remove="Scripts\Shared\Api\AppVersionDomain.ts" />
+    <None Remove="Scripts\Shared\Api\ErrorFromHttpResult.ts" />
+    <None Remove="Scripts\Shared\Api\ODataResult.ts" />
+    <None Remove="Scripts\Shared\Api\ParsedDateObject.ts" />
     <None Remove="Scripts\Shared\Error\ModalErrorGroupComponent.ts" />
     <None Remove="Scripts\Shared\Error\ModalErrorListItem.ts" />
     <None Remove="Scripts\Shared\Error\ModalErrorListItemView.ts" />
@@ -73,6 +77,7 @@
   
   <ItemGroup>
     <Folder Include="wwwroot\" />
+    <Folder Include="wwwroot\styles\css\webfonts\" />
   </ItemGroup>
   
   <ItemGroup>
@@ -90,7 +95,11 @@
     <TypeScriptCompile Include="Scripts\Internal\CardDemo\TestClickableItemView.ts" />
     <TypeScriptCompile Include="Scripts\Internal\DefaultPageContext.ts" />
     <TypeScriptCompile Include="Scripts\Internal\GridDemo\DemoGrid.ts" />
+    <TypeScriptCompile Include="Scripts\Shared\Api\AppApiQuery.ts" />
     <TypeScriptCompile Include="Scripts\Shared\Api\AppVersionDomain.ts" />
+    <TypeScriptCompile Include="Scripts\Shared\Api\ErrorFromHttpResult.ts" />
+    <TypeScriptCompile Include="Scripts\Shared\Api\ODataResult.ts" />
+    <TypeScriptCompile Include="Scripts\Shared\Api\ParsedDateObject.ts" />
     <TypeScriptCompile Include="Scripts\Shared\Error\ModalErrorGroupComponent.ts" />
     <TypeScriptCompile Include="Scripts\Shared\Error\ModalErrorListItem.ts" />
     <TypeScriptCompile Include="Scripts\Shared\Error\ModalErrorListItemView.ts" />

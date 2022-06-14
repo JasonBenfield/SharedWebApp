@@ -35,17 +35,9 @@ export class HttpClient {
             oReq.onreadystatechange = () => {
                 if (oReq.readyState == 4) {
                     let result: any;
-                    if (method === 'GET') {
+                    let contentType = (oReq.getResponseHeader('content-type') || '').toLowerCase();
+                    if (method === 'GET' || contentType.indexOf('application/json') === -1) {
                         result = oReq.responseText;
-                    }
-                    else if (!/^\s*[{\[]\s*.*[\]}]\s*$/.test(oReq.responseText)) {
-                        let responseText = oReq.responseText;
-                        if (!responseText) {
-                            responseText = 'null';
-                        }
-                        responseText = `{ "data": ${responseText} }`;
-                        let dataResult = JSON.parse(responseText);
-                        result = dataResult.data;
                     }
                     else {
                         result = JSON.parse(oReq.responseText);
