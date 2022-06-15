@@ -11,9 +11,5 @@ export class TableDataHeaderViewModel extends HtmlComponentViewModel implements 
 
     readonly content = new AggregateComponentViewModel();
 
-    readonly colspan = ko.observable<string>(null);
-
-    readonly rowspan = ko.observable<string>(null);
-
-    readonly headers = ko.observable<string>(null);
+    readonly attr: ko.Observable<ITableDataAttributes>;
 }

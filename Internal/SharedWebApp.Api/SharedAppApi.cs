@@ -1,4 +1,5 @@
 ﻿using XTI_App.Api;
+using XTI_ODataQuery.Api;
 using XTI_WebApp.Api;
 
 namespace SharedWebApp.Api;
@@ -10,8 +11,8 @@ public sealed class SharedAppApi : WebAppApiWrapper
         (
             new AppApi
             (
-                SharedInfo.AppKey, 
-                user, 
+                SharedInfo.AppKey,
+                user,
                 ResourceAccess.AllowAnonymous()
             ),
             sp
@@ -21,11 +22,17 @@ public sealed class SharedAppApi : WebAppApiWrapper
         (
             source.AddGroup(nameof(Employee))
         );
+        EmployeeQuery = new ODataGroup<EmployeeEntity>
+        (
+            source.AddGroup(nameof(EmployeeQuery)),
+            () => new EmployeeQueryAction()
+        );
         Product = new ProductGroup
         (
             source.AddGroup(nameof(Product))
         );
     }
     public EmployeeGroup Employee { get; }
+    public ODataGroup<EmployeeEntity> EmployeeQuery { get; }
     public ProductGroup Product { get; }
 }

@@ -1,6 +1,7 @@
 ﻿import { FlexCss } from '../FlexCss';
 import { BlockViewModel } from './BlockViewModel';
 import { HtmlContainerComponent } from './HtmlContainerComponent';
+import { ViewEvents } from './ViewEvents';
 
 export class Block extends HtmlContainerComponent {
     protected readonly vm: BlockViewModel;
@@ -8,6 +9,8 @@ export class Block extends HtmlContainerComponent {
     constructor(vm: BlockViewModel = new BlockViewModel()) {
         super(vm);
     }
+
+    readonly events = new ViewEvents(this, (options) => this.vm.xtiEvent(options));
 
     height100() {
         this.addCssName('h-100');
@@ -30,6 +33,6 @@ export class Block extends HtmlContainerComponent {
     }
 
     setRole(role: string) {
-        this.vm.role(role);
+        this.setAttr(attr => attr.role = role);
     }
 }

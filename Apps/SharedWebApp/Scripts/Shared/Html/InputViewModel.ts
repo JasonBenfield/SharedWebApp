@@ -7,10 +7,8 @@ export class InputViewModel extends HtmlComponentViewModel {
     constructor() {
         super(new ComponentTemplate('input', template));
     }
-    readonly type = ko.observable('text');
+    readonly attr: ko.Observable<IFormAttributes>;
     readonly value = ko.observable('');
-    readonly maxLength = ko.observable<number>(null);
     readonly isEnabled = ko.observable(true);
     readonly hasFocus = ko.observable(false);
-    readonly autocomplete = ko.observable<string>(null);
 }

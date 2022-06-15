@@ -1,8 +1,8 @@
-﻿import { Label } from "./Label";
+﻿import { LabelView } from "./LabelView";
 import { LabelViewModel } from './LabelViewModel';
 import { TextSpanView } from "./TextSpanView";
 
-export class TextLabel extends Label implements ITextComponentView {
+export class TextLabel extends LabelView implements ITextComponentView {
     readonly textSpan: TextSpanView;
 
     constructor(vm: LabelViewModel = new LabelViewModel()) {

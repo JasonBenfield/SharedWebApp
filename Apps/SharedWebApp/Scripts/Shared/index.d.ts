@@ -17,6 +17,77 @@ declare type FlexWraps = 'wrap' | 'nowrap' | 'wrap-reverse';
 
 declare type ContentJustifications = 'start' | 'end' | 'center' | 'between' | 'around' | 'evenly';
 
+interface IHtmlStyle {
+    width?: string;
+    height?: string;
+}
+
+interface IGridStyle extends IHtmlStyle {
+    'grid-template-columns'?: string;
+    'grid-template-rows'?: string;
+    'grid-auto-columns'?: string;
+    'grid-auto-rows'?: string;
+    'column-gap'?: string;
+    'row-gap'?: string;
+}
+
+interface IHtmlAttributes {
+    id?: string;
+    name?: string;
+    title?: string;
+    'class'?: string;
+    role?: string;
+}
+
+interface ITableDataAttributes extends IHtmlAttributes {
+    colspan?: string;
+    rowspan?: string;
+    headers?: string;
+}
+
+interface ILinkAttributes extends IHtmlAttributes {
+    href?: string;
+}
+
+interface ILabelAttributes extends IHtmlAttributes {
+    for?: string;
+}
+
+interface IInputAttributes extends IHtmlAttributes {
+    type?: string;
+    maxlength?: string;
+    autocomplete?: string;
+}
+
+interface IButtonAttributes extends IHtmlAttributes {
+    type?: string;
+}
+
+interface IFormAttributes extends IHtmlAttributes {
+    autocomplete?: string;
+    action?: string;
+    method?: string;
+}
+
+interface IXtiEventBindingOptions {
+    [name: string]: IXtiEventOptions;
+}
+
+interface IXtiEventOptionsBuilder {
+
+    select(selector: string): this;
+
+    preventDefault(): this;
+}
+
+declare type IXtiEventCallback = (context?, evt?) => any;
+
+interface IXtiEventOptions {
+    callback: IXtiEventCallback;
+    selector: string;
+    preventDefault: boolean;
+}
+
 interface ICssClass {
     toString(): string;
 }
@@ -81,10 +152,9 @@ interface RegisteredEventCallback {
     isEnabled: () => boolean;
 }
 
-interface DelegatedEvent {
-    event: string;
-    selector: string;
-    callback: (any, string) => boolean;
+interface IViewEventSource {
+    readonly view;
+    readonly containerView;
 }
 
 interface IActionErrorOptions {
@@ -140,6 +210,7 @@ interface IConstraint {
 }
 
 interface IComponentViewModel {
+    view: any;
     readonly componentName: ko.Observable<string>;
 }
 
@@ -149,11 +220,9 @@ interface IComponentTemplate {
 }
 
 interface IHtmlComponentViewModel extends IComponentViewModel {
-    readonly id: ko.Observable<string>;
-    readonly name: ko.Observable<string>;
-    readonly css: ko.Observable<string>;
+    readonly attr: ko.Observable<IHtmlAttributes>;
+    readonly style: ko.Observable<IHtmlStyle>;
     readonly isVisible: ko.Observable<boolean>;
-    readonly title: ko.Observable<string>;
 }
 
 interface IHtmlContainerComponentViewModel extends IHtmlComponentViewModel {
@@ -184,19 +253,40 @@ interface IAggregateComponentViewModel extends IComponentViewModel {
     readonly isVisible: ko.Observable<boolean>;
 }
 
+interface IViewEvents {
+    clear();
+    onClick(
+        callback: (source: IViewEventSource) => any,
+        config?: (builder: IXtiEventOptionsBuilder) => void
+    );
+    onFocus(
+        callback: (source: IViewEventSource) => any,
+        config?: (builder: IXtiEventOptionsBuilder) => void
+    );
+    onBlur(
+        callback: (source: IViewEventSource) => any,
+        config?: (builder: IXtiEventOptionsBuilder) => void
+    );
+    onSubmit(
+        callback: (source: IViewEventSource) => any,
+        config?: (builder: IXtiEventOptionsBuilder) => void
+    );
+    on(
+        name: string,
+        callback: (source: IViewEventSource) => any,
+        config?: (builder: IXtiEventOptionsBuilder) => void
+    );
+}
+
 interface IListView {
-    readonly itemClicked: IEventHandler<IListItemView>;
     removeFromListItem(itemVM: IListItemViewModel, item: IListItemView);
     addFromListItem(itemVM: IListItemViewModel, item: IListItemView);
 }
 
 interface IListViewModel extends IHtmlComponentViewModel {
-    readonly itemClicked: IEventHandler<IListItemViewModel>;
+    readonly xtiEvent: ko.Observable<IXtiEventBindingOptions>;
     readonly items: ko.ObservableArray<IListItemViewModel>;
     readonly hasItems: ko.Observable<boolean>;
-
-    defaultClick();
-    overrideDefaultClick();
 }
 
 interface IListItemViewModel extends IHtmlComponentViewModel {

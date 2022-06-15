@@ -6,8 +6,21 @@ import { UrlHashBuilder } from "./UrlHashBuilder";
 export class UrlBuilder {
     static current() { return new UrlBuilder(location.href); }
 
-    constructor(baseUrl: string) {
-        let url = baseUrl;
+    private _url: Url;
+    private readonly _query: UrlQueryBuilder;
+    private readonly _hash: UrlHashBuilder;
+
+    constructor(baseUrl: string | Url | UrlBuilder) {
+        let url: string;
+        if (baseUrl instanceof Url) {
+            url = baseUrl.value();
+        }
+        else if (baseUrl instanceof UrlBuilder) {
+            url = baseUrl.value();
+        }
+        else {
+            url = baseUrl;
+        }
         let hashIndex = url.indexOf('#');
         this._hash = new UrlHashBuilder(hashIndex > -1 ? url.substr(hashIndex + 1) : '');
         if (hashIndex > -1) {
@@ -20,10 +33,6 @@ export class UrlBuilder {
         }
         this._url = new Url(url);
     }
-
-    private _url: Url;
-    private readonly _query: UrlQueryBuilder;
-    private readonly _hash: UrlHashBuilder;
 
     get url() { return new Url(this.value()); }
 

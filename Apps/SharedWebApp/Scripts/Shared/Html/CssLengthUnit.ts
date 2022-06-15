@@ -15,7 +15,7 @@ export class CssLengthUnit {
     private readonly css: string;
 
     protected constructor(size: number, unit: string) {
-        this.css = `${size}${unit}`;
+        this.css = size ? `${size}${unit}` : unit;
     }
 
     value() { return this.css; }

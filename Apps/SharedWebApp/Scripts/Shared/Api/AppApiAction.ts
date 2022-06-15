@@ -1,12 +1,10 @@
-﻿import { HttpClient } from "./HttpClient";
-import { JsonText } from "./JsonText";
+﻿import { AppApiError } from "./AppApiError";
 import { AppApiEvents } from "./AppApiEvents";
-import { AppApiError } from "./AppApiError";
-import { ErrorModel } from "../ErrorModel";
 import { AppResourceUrl } from "./AppResourceUrl";
-import { MappedArray } from '../Enumerable';
-import { ParsedDateObject } from "./ParsedDateObject";
 import { ErrorFromHttpResult } from "./ErrorFromHttpResult";
+import { HttpClient } from "./HttpClient";
+import { JsonText } from "./JsonText";
+import { ParsedDateObject } from "./ParsedDateObject";
 
 export class AppApiAction<TArgs, TResult> {
     private readonly resourceUrl: AppResourceUrl;

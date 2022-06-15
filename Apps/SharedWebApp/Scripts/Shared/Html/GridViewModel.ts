@@ -9,19 +9,6 @@ export class GridViewModel extends HtmlComponentViewModel implements IHtmlContai
         super(new ComponentTemplate('grid-component', template));
     }
 
+    readonly xtiEvent = ko.observable<IXtiEventBindingOptions>(null);
     readonly content = new AggregateComponentViewModel();
-
-    readonly role = ko.observable<string>(null);
-
-    readonly autoColumns = ko.observable<string>(null);
-
-    readonly autoRows = ko.observable<string>(null);
-
-    readonly templateColumns = ko.observable<string>(null);
-
-    readonly templateRows = ko.observable<string>(null);
-
-    readonly columnGap = ko.observable<string>(null);
-
-    readonly rowGap = ko.observable<string>(null);
 }

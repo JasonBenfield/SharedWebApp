@@ -1,13 +1,7 @@
 ﻿<!-- ko if: isVisible -->
 <a data-bind="
-        attr: { 
-            'class': css, 
-            title: title, 
-            id: id, 
-            name: name,
-            href: href
-        }, 
-        click: click,
+        attr: attr, 
+        xtiEvent: xtiEvent,
         enable: isEnabled">
     <!-- ko with: content -->
     <!-- ko component: { name: componentName, params: $data } --><!-- /ko -->

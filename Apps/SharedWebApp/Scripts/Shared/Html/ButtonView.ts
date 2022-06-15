@@ -1,21 +1,25 @@
 ﻿import { ButtonViewModel } from "./ButtonViewModel";
 import { ContextualClass } from "../ContextualClass";
 import { HtmlContainerComponent } from "./HtmlContainerComponent";
+import { ViewEvents } from "./ViewEvents";
 
 export class Button extends HtmlContainerComponent {
     protected readonly vm: ButtonViewModel;
     private context: ContextualClass;
     private isOutline = false;
-    readonly clicked = this.vm.clicked;
 
     constructor(vm: ButtonViewModel = new ButtonViewModel()) {
         super(vm);
-        vm.type('button');
+        this.setAttr(attr => attr.type = 'button');
         this.addCssName('btn');
     }
 
+    readonly events = new ViewEvents(this, (options) => this.vm.xtiEvent(options));
+
+    protected setAttr: (config: (attr: IButtonAttributes) => void) => void;
+
     changeTypeToSubmit() {
-        this.vm.type('submit');
+        this.setAttr(attr => attr.type = 'submit');
     }
 
     enable() { this.vm.isEnabled(true); }

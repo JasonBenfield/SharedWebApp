@@ -8,15 +8,17 @@ export class TableDataHeaderView extends HtmlContainerComponent {
         super(vm);
     }
 
+    protected setAttr: (config: (attr: ITableDataAttributes) => void) => void;
+
     setColSpan(colspan: number) {
-        this.vm.colspan(colspan.toString());
+        this.setAttr((attr) => attr.colspan = colspan.toString());
     }
 
     setRowSpan(rowspan: number) {
-        this.vm.rowspan(rowspan.toString());
+        this.setAttr((attr) => attr.rowspan = rowspan.toString());
     }
 
     setHeaders(headers: string) {
-        this.vm.headers(headers);
+        this.setAttr((attr) => attr.headers = headers);
     }
 }

@@ -1,10 +1,14 @@
 ﻿import { ColumnCss } from '../../Shared/ColumnCss';
 import { ButtonCommandItem } from '../../Shared/Command/ButtonCommandItem';
 import { ContextualClass } from '../../Shared/ContextualClass';
+import { FlexCss } from '../../Shared/FlexCss';
 import { Block } from '../../Shared/Html/Block';
+import { BlockViewModel } from '../../Shared/Html/BlockViewModel';
 import { Container } from '../../Shared/Html/Container';
+import { CssLengthUnit } from '../../Shared/Html/CssLengthUnit';
 import { FlexColumn } from '../../Shared/Html/FlexColumn';
 import { FlexColumnFill } from '../../Shared/Html/FlexColumnFill';
+import { GridView } from '../../Shared/Html/GridView';
 import { TextHeading1View } from '../../Shared/Html/TextHeading1View';
 import { Toolbar } from '../../Shared/Html/Toolbar';
 import { MessageAlertView } from '../../Shared/MessageAlertView';
@@ -20,15 +24,21 @@ export class MainPageView {
     readonly saveButton: ButtonCommandItem;
     readonly submitButton: ButtonCommandItem;
 
-    constructor(private readonly page: PageFrameView) {
-        let flexColumn = this.page.addContent(new FlexColumn());
-        let headerRow = flexColumn.addContent(new Block());
-        headerRow.addContent(new Container());
-        this.heading = headerRow.addContent(new TextHeading1View());
-        let flexFill = flexColumn.addContent(new FlexColumnFill());
-        this.alert = flexFill.addContent(new MessageAlertView());
-        this.addEmployeeForm = flexFill.container.addContent(new AddEmployeeFormView());
-        let toolbar = flexColumn.addContent(new Toolbar());
+    constructor(page: PageFrameView) {
+        let grid = page.addContent(new GridView());
+        grid.borderless();
+        grid.setTemplateRows(CssLengthUnit.auto(), CssLengthUnit.flex(1), CssLengthUnit.auto());
+        grid.height100();
+        let headerRow = grid.addContent(new Block());
+        this.heading = headerRow.addContent(new Container())
+            .addContent(new TextHeading1View());
+        let fillRow = grid.addContent(new Block());
+        fillRow.setBackgroundContext(ContextualClass.light);
+        fillRow.scrollable();
+        let container = fillRow.addContent(new Container());
+        this.alert = container.addContent(new MessageAlertView());
+        this.addEmployeeForm = container.addContent(new AddEmployeeFormView());
+        let toolbar = grid.addContent(new Toolbar());
         toolbar.setPadding(PaddingCss.xs(3));
         toolbar.setBackgroundContext(ContextualClass.secondary);
         this.saveButton = toolbar.columnEnd.addContent(new ButtonCommandItem());
@@ -41,7 +51,6 @@ export class MainPageView {
             fg.captionColumn.setColumnCss(ColumnCss.xs(4));
         });
         this.addEmployeeForm.Address.useLayout((fg) => new AddressInputLayout(fg));
-        //this.addEmployeeForm.submitted.register(this.onFormSubmit.bind(this));
         this.addEmployeeForm.executeLayout();
     }
 }

@@ -1,4 +1,5 @@
-﻿import { AppApiError } from "./AppApiError";
+﻿import { UrlBuilder } from "../UrlBuilder";
+import { AppApiError } from "./AppApiError";
 import { AppApiEvents } from "./AppApiEvents";
 import { AppResourceUrl } from "./AppResourceUrl";
 import { ErrorFromHttpResult } from "./ErrorFromHttpResult";
@@ -17,9 +18,10 @@ export class AppApiQuery<TEntity> {
     }
 
     async execute(data: string, errorOptions: IActionErrorOptions) {
-        let query = data ? `&${data}` : '';
+        let url = new UrlBuilder(this.resourceUrl.url);
+        url.addQueryString(data);
         let postResult = await new HttpClient().post(
-            `${this.resourceUrl.url.value()}${query}`,
+            url.value(),
             ''
         );
         let result: ODataResult<TEntity>;

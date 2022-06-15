@@ -4,6 +4,7 @@ import { Block } from "./Block";
 import { CssLengthUnit } from "./CssLengthUnit";
 import { GridCellView } from "./GridCellView";
 import { GridViewModel } from "./GridViewModel";
+import { ViewEvents } from "./ViewEvents";
 
 export type GridTemplateCss = CssLengthUnit | GridTemplateMinMax | GridTemplateRepeat;
 
@@ -35,20 +36,26 @@ export class GridView extends Block {
         this.addCssName('grid');
     }
 
+    protected setStyle: (config: (style: IGridStyle) => void) => void;
+
+    readonly events = new ViewEvents(this, (options) => this.vm.xtiEvent(options));
+
+    borderless() { this.addCssName('grid-borderless'); }
+
     setColumnGap(length: CssLengthUnit) {
-        this.vm.columnGap(length.value());
+        this.setStyle(style => style['column-gap'] = length.value());
     }
 
     setRowGap(length: CssLengthUnit) {
-        this.vm.rowGap(length.value());
+        this.setStyle(style => style['row-gap'] = length.value());
     }
 
     setAutoColumns(columns: GridTemplateCss) {
-        this.vm.autoColumns(columns.toString());
+        this.setStyle(style => style['grid-auto-columns'] = columns.toString());
     }
 
     setAutoRows(rows: GridTemplateCss) {
-        this.vm.autoRows(rows.toString());
+        this.setStyle(style => style['grid-auto-rows'] = rows.toString());
     }
 
     setTemplateColumns(...columns: GridTemplateCss[]) {
@@ -59,7 +66,7 @@ export class GridView extends Block {
                 c => c.toString()
             )
         ).value();
-        this.vm.templateColumns(value);
+        this.setStyle(style => style['grid-template-columns'] = value);
     }
 
     setTemplateRows(...rows: GridTemplateCss[]) {
@@ -70,7 +77,7 @@ export class GridView extends Block {
                 c => c.toString()
             )
         ).value();
-        this.vm.templateRows(value);
+        this.setStyle(style => style['grid-template-rows'] = value);
     }
 
     addHeader() {

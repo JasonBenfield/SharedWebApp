@@ -1,17 +1,12 @@
-﻿import { HtmlComponentViewModel } from "./HtmlComponentViewModel";
-import * as template from './GridCell.html';
+﻿import * as ko from 'knockout';
 import { ComponentTemplate } from "../ComponentTemplate";
-import { AggregateComponentViewModel } from "./AggregateComponentViewModel";
-import * as ko from 'knockout';
+import { BlockViewModel } from "./BlockViewModel";
+import * as template from './GridCell.html';
 
-export class GridCellViewModel extends HtmlComponentViewModel implements IHtmlContainerComponentViewModel {
+export class GridCellViewModel extends BlockViewModel {
     constructor() {
         super(new ComponentTemplate('grid-cell', template));
     }
-
-    readonly content = new AggregateComponentViewModel();
-
-    readonly role = ko.observable<string>(null);
 
     readonly gridRow = ko.observable<string>(null);
 

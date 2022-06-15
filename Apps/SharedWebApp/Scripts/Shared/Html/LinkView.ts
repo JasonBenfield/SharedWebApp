@@ -1,25 +1,21 @@
 ﻿import { AggregateComponent } from "./AggregateComponent";
 import { HtmlContainerComponent } from "./HtmlContainerComponent";
 import { LinkViewModel } from "./LinkViewModel";
+import { ViewEvents } from "./ViewEvents";
 
 export class LinkView extends HtmlContainerComponent {
     protected readonly vm: LinkViewModel;
-    readonly clicked = this.vm.clicked;
 
     constructor(vm: LinkViewModel = new LinkViewModel()) {
         super(vm, new AggregateComponent(vm.content));
     }
 
-    defaultClick() {
-        this.vm.defaultClick();
-    }
+    readonly events = new ViewEvents(this, (options) => this.vm.xtiEvent(options));
 
-    overrideDefaultClick() {
-        this.vm.overrideDefaultClick();
-    }
+    protected setAttr: (config: (attr: ILinkAttributes) => void) => void;
 
     setHref(href: string) {
-        this.vm.href(href);
+        this.setAttr(attr => attr.href = href);
     }
 
     enable() {

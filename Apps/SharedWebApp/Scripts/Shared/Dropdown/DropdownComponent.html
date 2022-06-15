@@ -2,12 +2,7 @@
 <!-- ko with: button -->
 <button data-bind="
         dropdown: $data,
-        attr: {
-            'class': css,
-            title: title,
-            id: id,
-            name: name
-        },
+        attr: attr,
         enable: isEnabled"
         class="dropdown-toggle"
         type="button"
@@ -22,9 +17,9 @@
 <!-- ko with: menu -->
 <!-- ko if: hasItems -->
 <ul data-bind="
-    attr: { 'class': css, title: title, id: id, name: name },
+    attr: attr,
     foreach: items,
-    delegatedEvent: { event: 'click', selector: 'li', callback: click }
+    xtiEvent: xtiEvent
 " class="dropdown-menu dropdown-menu-right">
     <!-- ko component: { name: componentName, params: $data } --><!-- /ko -->
 </ul>

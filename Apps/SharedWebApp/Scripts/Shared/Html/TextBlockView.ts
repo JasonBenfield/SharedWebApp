@@ -11,8 +11,4 @@ export class TextBlockView extends HtmlComponent implements ITextComponentView {
     setText(text: string) {
         this.vm.text(text);
     }
-
-    setTitle(title: string) {
-        this.vm.title(title);
-    }
 }

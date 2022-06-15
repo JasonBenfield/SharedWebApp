@@ -1,63 +1,54 @@
 ﻿import _ = require("lodash");
 import { FilteredArray, First } from "../Enumerable";
 import { DefaultEvent } from "../Events";
+import { ListItem } from "../Html/ListItem";
 import { BaseListView } from "./BaseListView";
 
-class ListItemWithView {
-    constructor(readonly listItem: any, readonly view: IListItemView) {
-    }
-}
-
 export class ListGroup {
-    private readonly itemsWithView: ListItemWithView[] = [];
+    private readonly items: ListItem[] = [];
 
-    private readonly _itemClicked = new DefaultEvent<any>(this);
+    private readonly _itemClicked = new DefaultEvent<ListItem>(this);
     readonly itemClicked = this._itemClicked.handler()
 
     constructor(private readonly view: BaseListView) {
-        this.view.itemClicked.register(this.onItemClicked.bind(this));
-    }
-
-    private onItemClicked(itemView: IListItemView) {
-        let item = new First(
-            new FilteredArray(
-                this.itemsWithView,
-                itemWithView => itemWithView.view === itemView
-            )
-        ).value();
-        this._itemClicked.invoke(item && item.listItem);
+        view.events.onClick(
+            (source: IListItemView) => {
+                let found = new First(
+                    new FilteredArray(
+                        this.items,
+                        item => item.isView(source)
+                    )
+                ).value();
+                this._itemClicked.invoke(found);
+            },
+            builder => builder.select('button,li,a')
+        );
     }
 
     clearItems() {
-        for (let itemWithView of this.itemsWithView) {
-            itemWithView.view.removeFromList(this.view);
+        for (let item of this.items) {
+            item.removeFromList(this.view);
         }
-        this.itemsWithView.splice(0, this.itemsWithView.length);
+        this.items.splice(0, this.items.length);
     }
 
-    removeItem(item: any) {
-        let foundItems = new FilteredArray(
-            this.itemsWithView,
-            itemWithView => itemWithView.listItem === item
-        ).value();
-        for (let foundItem of foundItems) {
-            foundItem.view.removeFromList(this.view);
-        }
-        _(this.itemsWithView).remove(itemWithView => itemWithView.listItem === item);
+    removeItem(itemToRemove: ListItem) {
+        itemToRemove.removeFromList(this.view);
+        _(this.items).remove(item => item === itemToRemove);
     }
 
-    addItem<TSourceItem, TItem>(
+    addItem<TSourceItem, TItem extends ListItem>(
         sourceItem: TSourceItem,
         createItem: (sourceItem: TSourceItem, itemView: IListItemView) => TItem
     ) {
         let itemView = this.view.createItemView(sourceItem);
         let item = createItem(sourceItem, itemView);
-        this.itemsWithView.push(new ListItemWithView(item, itemView));
+        this.items.push(item);
         itemView.addToList(this.view);
         return item;
     }
 
-    setItems<TSourceItem, TItem>(
+    setItems<TSourceItem, TItem extends ListItem>(
         sourceItems: TSourceItem[],
         createItem: (sourceItem: TSourceItem, itemView: IListItemView) => TItem
     ) {

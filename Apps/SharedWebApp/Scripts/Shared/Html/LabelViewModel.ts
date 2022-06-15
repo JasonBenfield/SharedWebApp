@@ -10,5 +10,4 @@ export class LabelViewModel extends HtmlComponentViewModel {
     }
 
     readonly content = new AggregateComponentViewModel();
-    readonly forTarget = ko.observable<string>(null);
 }

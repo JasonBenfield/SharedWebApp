@@ -1,11 +1,9 @@
-﻿import { Button } from "../Html/Button";
+﻿import { Button } from "../Html/ButtonView";
 import { ButtonListItemViewModel } from "./ButtonListItemViewModel";
 import { ListGroupItemView } from "./ListGroupItemView";
 
 export class ButtonListGroupItemView extends ListGroupItemView {
     private readonly button: Button;
-
-    readonly clicked: IEventHandler<any>;
 
     constructor(vm: ButtonListItemViewModel = new ButtonListItemViewModel()) {
         super(vm);
@@ -13,7 +11,7 @@ export class ButtonListGroupItemView extends ListGroupItemView {
         this.button = new Button(vm);
         this.button.clearCss();
         this.button.addCssName(css);
-        this.clicked = this.button.clicked;
+        vm.view = this;
     }
 
     enable() {

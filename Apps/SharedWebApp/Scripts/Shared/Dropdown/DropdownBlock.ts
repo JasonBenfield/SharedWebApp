@@ -1,6 +1,6 @@
 ﻿import { Block } from "../Html/Block";
-import { ListItem } from "../Html/ListItem";
-import { UnorderedList } from "../Html/UnorderedList";
+import { ListItemView } from "../Html/ListItemView";
+import { UnorderedListView } from "../Html/UnorderedListView";
 import { DropdownBlockViewModel } from "./DropdownBlockViewModel";
 import { DropdownButton } from "./DropdownButton";
 import { DropdownLinkItem } from "./DropdownLinkItem";
@@ -8,16 +8,18 @@ import { DropdownSpanItem } from "./DropdownSpanItem";
 
 export class DropdownBlock extends Block {
     protected readonly vm: DropdownBlockViewModel;
-
-    readonly button = this.addContent(new DropdownButton(this.vm.button));
-    readonly menu = this.addContent(new UnorderedList(this.createItemView, this.vm.menu));
+    readonly button: DropdownButton;
+    readonly menu: UnorderedListView;
 
     constructor(
         private readonly createItemView: (source?: any) => IListItemView =
-            (() => new ListItem()),
-        vm: DropdownBlockViewModel = new DropdownBlockViewModel()) {
+            (() => new ListItemView()),
+        vm: DropdownBlockViewModel = new DropdownBlockViewModel()
+    ) {
         super(vm);
         this.addCssName('dropdown');
+        this.button = this.addContent(new DropdownButton(this.vm.button));
+        this.menu = this.addContent(new UnorderedListView(this.createItemView, this.vm.menu));
         this.menu.addCssName('dropdown-menu dropdown-menu-right');
     }
 

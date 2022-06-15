@@ -1,20 +1,9 @@
-﻿import { HtmlContainerComponent } from "./HtmlContainerComponent";
-import { ListItemViewModel } from "./ListItemViewModel";
-
-export class ListItem extends HtmlContainerComponent implements IListItemView {
-    protected readonly vm: IListItemViewModel;
-
-    constructor(vm: IListItemViewModel = new ListItemViewModel()) {
-        super(vm);
+﻿
+export class ListItem {
+    constructor(protected readonly view: IListItemView) {
     }
 
-    addToList(list: IListView) {
-        list.addFromListItem(this.vm, this);
-        return this;
-    }
+    isView(view: IListItemView) { return this.view === view; }
 
-    removeFromList(list: IListView) {
-        list.removeFromListItem(this.vm, this);
-        return this;
-    }
+    removeFromList(list: IListView) { this.view.removeFromList(list); }
 }

@@ -31,13 +31,17 @@ export class CardView extends Block {
     }
 
     addBlockListGroup(createItemView: (source?: any) => IListItemView = null) {
-        let listGroup = this.addContent(new ListGroupView(createItemView, new ListBlockViewModel()));
+        let listGroup = this.addContent(
+            new ListGroupView(createItemView, new ListBlockViewModel())
+        );
         listGroup.makeFlush();
         return listGroup;
     }
 
     addUnorderedListGroup(createItemView: (source?: any) => IListItemView = null) {
-        let listGroup = this.addContent(new ListGroupView(createItemView));
+        let listGroup = this.addContent(
+            new ListGroupView(createItemView)
+        );
         listGroup.makeFlush();
         return listGroup;
     }

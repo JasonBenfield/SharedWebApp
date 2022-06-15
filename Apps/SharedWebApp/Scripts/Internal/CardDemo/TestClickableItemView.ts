@@ -1,7 +1,6 @@
 ﻿import { ColumnCss } from "../../Shared/ColumnCss";
 import { ContextualClass } from "../../Shared/ContextualClass";
 import { Row } from "../../Shared/Grid/Row";
-import { TextBlock } from "../../Shared/Html/TextBlock";
 import { TextBlockView } from "../../Shared/Html/TextBlockView";
 import { ButtonListGroupItemView } from "../../Shared/ListGroup/ButtonListGroupItemView";
 import { ButtonListItemViewModel } from "../../Shared/ListGroup/ButtonListItemViewModel";

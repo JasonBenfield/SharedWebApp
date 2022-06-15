@@ -1,15 +1,16 @@
-﻿import { ButtonViewModel } from "../Html/ButtonViewModel";
-import { Button } from "../Html/Button";
-import { ContextualClass } from "../ContextualClass";
+﻿import { ContextualClass } from "../ContextualClass";
+import { SimpleEvent } from "../Events";
 import { FaIcon } from "../FaIcon";
-import { MarginCss } from "../MarginCss";
-import { TextSpanView } from "../Html/TextSpanView";
-import { ICommandItem } from "./CommandItem";
 import { LinkView } from "../Html/LinkView";
 import { LinkViewModel } from "../Html/LinkViewModel";
+import { TextSpanView } from "../Html/TextSpanView";
+import { MarginCss } from "../MarginCss";
+import { ICommandItem } from "./CommandItem";
 
 export class LinkCommandItem extends LinkView implements ICommandItem {
-    readonly executeRequested = this.clicked;
+    private readonly _executeRequested = new SimpleEvent(this);
+    readonly executeRequested = this._executeRequested.handler();
+
     readonly icon: FaIcon;
     private readonly textSpan: TextSpanView;
     private active = '';
@@ -24,6 +25,7 @@ export class LinkCommandItem extends LinkView implements ICommandItem {
         this.textSpan = new TextSpanView().addToContainer(this);
         this.addCssName('btn');
         this.setContext(ContextualClass.default);
+        this.events.onClick(() => this._executeRequested.invoke());
     }
 
     positionIconRight() {

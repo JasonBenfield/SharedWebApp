@@ -1,13 +1,5 @@
 ﻿<!-- ko if: isVisible -->
-<form data-bind="attr: { 
-      'class': css, 
-      title: title, 
-      id: id, 
-      name: name,
-      autocomplete: autocomplete,
-      action: action,
-      method: method
-    }, submit: submit">
+<form data-bind="attr: attr, xtiEvent: xtiEvent">
     <!-- ko with: content -->
     <!-- ko component: { name: componentName, params: $data } --><!-- /ko -->
     <!-- /ko -->

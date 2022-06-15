@@ -1,8 +1,8 @@
 ﻿import { ColumnCss } from "../ColumnCss";
-import { Label } from "../Html/Label";
+import { LabelView } from "../Html/LabelView";
 import { LabelViewModel } from "../Html/LabelViewModel";
 
-export class LabelColumn extends Label {
+export class LabelColumn extends LabelView {
     protected readonly vm: LabelViewModel;
     private columnCss: ColumnCss;
 

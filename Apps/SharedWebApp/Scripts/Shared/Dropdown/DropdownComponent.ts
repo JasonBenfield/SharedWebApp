@@ -1,5 +1,5 @@
-﻿import { ListItem } from "../Html/ListItem";
-import { UnorderedList } from "../Html/UnorderedList";
+﻿import { ListItemView } from "../Html/ListItemView";
+import { UnorderedListView } from "../Html/UnorderedListView";
 import { DropdownButton } from "./DropdownButton";
 import { DropdownComponentViewModel } from "./DropdownComponentViewModel";
 import { DropdownLinkItem } from "./DropdownLinkItem";
@@ -7,11 +7,11 @@ import { DropdownSpanItem } from "./DropdownSpanItem";
 
 export class DropdownComponent implements IComponent {
     readonly button = new DropdownButton(this.vm.button);
-    readonly menu = new UnorderedList(this.createItemView, this.vm.menu);
+    readonly menu = new UnorderedListView(this.createItemView, this.vm.menu);
 
     constructor(
         private readonly createItemView: (source?: any) => IListItemView =
-            (() => new ListItem()),
+            (() => new ListItemView()),
         private readonly vm: DropdownComponentViewModel = new DropdownComponentViewModel()
     ) {
         this.menu.addCssName('dropdown-menu dropdown-menu-right');

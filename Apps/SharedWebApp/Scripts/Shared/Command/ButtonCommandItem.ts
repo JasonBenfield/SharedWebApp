@@ -1,10 +1,11 @@
 ﻿import { ButtonViewModel } from "../Html/ButtonViewModel";
-import { Button } from "../Html/Button";
+import { Button } from "../Html/ButtonView";
 import { ContextualClass } from "../ContextualClass";
 import { FaIcon } from "../FaIcon";
 import { MarginCss } from "../MarginCss";
 import { TextSpanView } from "../Html/TextSpanView";
 import { ICommandItem } from "./CommandItem";
+import { SimpleEvent } from "../Events";
 
 export class ButtonCommandItem extends Button implements ICommandItem {
     static offscreenSubmit(vm: ButtonViewModel) {
@@ -13,7 +14,9 @@ export class ButtonCommandItem extends Button implements ICommandItem {
         return item;
     }
 
-    readonly executeRequested = this.clicked;
+    private readonly _executeRequested = new SimpleEvent(this);
+    readonly executeRequested = this._executeRequested.handler();
+
     readonly icon: FaIcon;
     private readonly textSpan: TextSpanView;
     private active = '';
@@ -24,9 +27,8 @@ export class ButtonCommandItem extends Button implements ICommandItem {
         this.icon = new FaIcon().addToContainer(this);
         this.icon.setMargin(MarginCss.end(1));
         this.textSpan = new TextSpanView().addToContainer(this);
-        vm.type('button');
-        this.addCssName('btn');
         this.setContext(ContextualClass.default);
+        this.events.onClick(() => this._executeRequested.invoke());
     }
 
     positionIconRight() {
@@ -49,10 +51,6 @@ export class ButtonCommandItem extends Button implements ICommandItem {
     private updateActiveCss(active: string) {
         this.replaceCssName(this.active, active);
         this.active = active;
-    }
-
-    changeTypeToSubmit() {
-        this.vm.type('submit');
     }
 
     makeOffscreenSubmit() {

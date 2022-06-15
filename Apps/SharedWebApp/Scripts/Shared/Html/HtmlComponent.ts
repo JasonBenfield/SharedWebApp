@@ -5,6 +5,8 @@ import { PaddingCss } from "../PaddingCss";
 import { TextCss } from "../TextCss";
 
 export class HtmlComponent implements IComponent {
+    private attr: IHtmlAttributes = {};
+    private style: IHtmlStyle = {};
     private bgContextCss = '';
     private textCss: TextCss;
     private margin: MarginCss = null;
@@ -12,6 +14,17 @@ export class HtmlComponent implements IComponent {
     private readonly css = new CssClass();
 
     constructor(protected readonly vm: IHtmlComponentViewModel) {
+        vm.view = this;
+    }
+
+    protected setAttr(config: (attr: IHtmlAttributes) => void) {
+        config(this.attr);
+        this.vm.attr(this.attr);
+    }
+
+    protected setStyle(config: (style: IHtmlStyle) => void) {
+        config(this.style);
+        this.vm.style(this.style);
     }
 
     addToContainer(container: IAggregateComponent): this {
@@ -32,11 +45,11 @@ export class HtmlComponent implements IComponent {
     }
 
     setID(id: string) {
-        this.vm.id(id);
+        this.setAttr(attr => attr.id = id);
     }
 
     setName(name: string) {
-        this.vm.name(name);
+        this.setAttr(attr => attr.name = name);
     }
 
     setBackgroundContext(contextClass: ContextualClass) {
@@ -101,11 +114,11 @@ export class HtmlComponent implements IComponent {
     }
 
     private updateVmCss() {
-        this.vm.css(this.css.toString());
+        this.setAttr(attr => attr.class = this.css.toString());
     }
 
     setTitle(title: string) {
-        this.vm.title(title);
+        this.setAttr(attr => attr.title = title);
     }
 
     show() {

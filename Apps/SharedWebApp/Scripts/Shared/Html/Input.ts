@@ -13,13 +13,15 @@ export class Input extends HtmlComponent {
 
     constructor(vm: InputViewModel = new InputViewModel()) {
         super(vm);
-        vm.type('text');
+        this.setType('text');
         vm.value.subscribe(this.onValueChanged.bind(this));
     }
 
     private onValueChanged(value: string) {
         this._changed.invoke(value);
     }
+
+    protected setAttr: (config: (attr: IInputAttributes) => void) => void;
 
     enable() { this.vm.isEnabled(true); }
 
@@ -32,7 +34,7 @@ export class Input extends HtmlComponent {
     setAutocompleteNewPassword() { this.setAutocomplete('new-password'); }
 
     private setAutocomplete(autocomplete: string) {
-        this.vm.autocomplete(autocomplete);
+        this.setAttr(attr => attr.autocomplete = autocomplete);
     }
 
     getValue() { return this.vm.value(); }
@@ -52,11 +54,11 @@ export class Input extends HtmlComponent {
     }
 
     setMaxLength(maxLength: number) {
-        this.vm.maxLength(maxLength);
+        this.setAttr(attr => attr.maxlength = maxLength.toString());
     }
 
     setType(type: 'text' | 'hidden' | 'password' | 'date' | 'number' | 'time') {
-        this.vm.type(type);
+        this.setAttr(attr => attr.type = type);
     }
 
     hasFocus() { return this.vm.hasFocus(); }

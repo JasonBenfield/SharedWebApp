@@ -5,7 +5,7 @@ import { FaIcon } from "../FaIcon";
 import { BlockViewModel } from "../Html/BlockViewModel";
 import { FormGroupView } from "../Html/FormGroupView";
 import { InputGroup } from "../Html/InputGroup";
-import { ListItem } from "../Html/ListItem";
+import { ListItemView } from "../Html/ListItemView";
 import { ListGroupView } from "../ListGroup/ListGroupView";
 import { MarginCss } from "../MarginCss";
 import { PaddingCss } from "../PaddingCss";
@@ -28,7 +28,7 @@ export class SimpleFieldFormGroupView extends FormGroupView {
                 i.solidStyle();
             });
         this.dropdown.menu.setPadding(PaddingCss.xs(0));
-        let alertItem = new ListItem().addToList(this.dropdown.menu);
+        let alertItem = new ListItemView().addToList(this.dropdown.menu);
         alertItem.addCssName(ContextualClass.danger.append('border'));
         let alert = alertItem.addContent(new Alert());
         alert.setMargin(MarginCss.xs(0));

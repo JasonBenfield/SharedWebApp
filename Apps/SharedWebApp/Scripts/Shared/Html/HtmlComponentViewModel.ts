@@ -6,9 +6,8 @@ export class HtmlComponentViewModel extends ComponentViewModel implements IHtmlC
         super(template);
     }
 
-    readonly id = ko.observable<string>(null);
-    readonly name = ko.observable<string>(null);
+    readonly attr = ko.observable<IHtmlAttributes>(null);
+    readonly style = ko.observable<IHtmlStyle>(null);
     readonly css = ko.observable('');
     readonly isVisible = ko.observable(true);
-    readonly title = ko.observable<string>(null);
 }

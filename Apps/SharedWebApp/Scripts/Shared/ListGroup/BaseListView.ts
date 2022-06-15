@@ -1,35 +1,22 @@
-﻿import { DefaultEvent } from "../Events";
-import { HtmlComponent } from "../Html/HtmlComponent";
+﻿import { HtmlComponent } from "../Html/HtmlComponent";
 import { UnorderedListViewModel } from "../Html/UnorderedListViewModel";
+import { ViewEvents } from "../Html/ViewEvents";
 
 export abstract class BaseListView extends HtmlComponent implements IListView {
     protected readonly vm: IListViewModel;
     readonly items: IListItemView[] = [];
-
-    private readonly _itemClicked = new DefaultEvent<IListItemView>(this);
-    readonly itemClicked = this._itemClicked.handler()
 
     constructor(
         readonly createItemView: (source?: any) => IListItemView,
         vm: IListViewModel = new UnorderedListViewModel()
     ) {
         super(vm);
-        this.vm.itemClicked.register(this.onItemClicked.bind(this));
     }
 
-    defaultClick() { this.vm.defaultClick(); }
-
-    overrideDefaultClick() { this.vm.overrideDefaultClick(); }
-
-    private onItemClicked(itemVM: IListItemViewModel) {
-        let index = this.vm.items.indexOf(itemVM);
-        if (index >= 0) {
-            this._itemClicked.invoke(this.items[index]);
-        }
-    }
+    readonly events = new ViewEvents(this, (options) => this.vm.xtiEvent(options));
 
     addListItemViews(howMany: number, create: () => IListItemView) {
-        let itemViews: IListItemView[];
+        let itemViews: IListItemView[] = [];
         for (let i = 0; i < howMany; i++) {
             let itemView = create();
             itemView.addToList(this);

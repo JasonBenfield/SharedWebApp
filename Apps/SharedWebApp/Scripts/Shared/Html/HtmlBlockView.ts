@@ -13,6 +13,6 @@ export class HtmlBlockView extends HtmlComponent {
     }
 
     setTitle(title: string) {
-        this.vm.title(title);
+        this.setAttr(attr => attr.title = title);
     }
 }

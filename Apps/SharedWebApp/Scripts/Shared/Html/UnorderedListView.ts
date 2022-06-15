@@ -1,14 +1,15 @@
 ﻿import { BaseListView } from "../ListGroup/BaseListView";
-import { ListItem } from "./ListItem";
+import { ListItemView } from "./ListItemView";
 import { ListItemViewModel } from "./ListItemViewModel";
 import { UnorderedListViewModel } from "./UnorderedListViewModel";
+import { ViewEvents } from "./ViewEvents";
 
-export class UnorderedList extends BaseListView {
+export class UnorderedListView extends BaseListView {
     protected readonly vm: UnorderedListViewModel;
 
     constructor(
         createItemView: (source?: any) => IListItemView =
-            ((itemVM: ListItemViewModel) => new ListItem(itemVM)),
+            ((itemVM: ListItemViewModel) => new ListItemView(itemVM)),
         vm: UnorderedListViewModel = new UnorderedListViewModel()
     ) {
         super(
@@ -17,16 +18,10 @@ export class UnorderedList extends BaseListView {
         );
     }
 
-    defaultClick() {
-        this.vm.defaultClick();
-    }
-
-    overrideDefaultClick() {
-        this.vm.overrideDefaultClick();
-    }
+    readonly events = new ViewEvents(this, (options) => this.vm.xtiEvent(options));
 
     addListItem() {
-        return this.addListItemView(new ListItem());
+        return this.addListItemView(new ListItemView());
     }
 
 }

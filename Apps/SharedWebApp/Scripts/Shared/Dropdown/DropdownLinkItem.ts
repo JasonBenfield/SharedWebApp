@@ -1,8 +1,8 @@
 ﻿import { LinkView } from "../Html/LinkView";
-import { ListItem } from "../Html/ListItem";
+import { ListItemView } from "../Html/ListItemView";
 import { ListItemViewModel } from "../Html/ListItemViewModel";
 
-export class DropdownLinkItem extends ListItem {
+export class DropdownLinkItem extends ListItemView {
     constructor(vm: ListItemViewModel = new ListItemViewModel()) {
         super(vm);
     }

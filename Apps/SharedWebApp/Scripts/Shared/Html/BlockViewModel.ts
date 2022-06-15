@@ -5,11 +5,11 @@ import { AggregateComponentViewModel } from "./AggregateComponentViewModel";
 import * as ko from 'knockout';
 
 export class BlockViewModel extends HtmlComponentViewModel implements IHtmlContainerComponentViewModel {
-    constructor() {
-        super(new ComponentTemplate('block', template));
+    constructor(componentTemplate?: ComponentTemplate) {
+        super(componentTemplate || new ComponentTemplate('block', template));
     }
 
     readonly content = new AggregateComponentViewModel();
 
-    readonly role = ko.observable<string>(null);
+    readonly xtiEvent = ko.observable<IXtiEventBindingOptions>(null);
 }

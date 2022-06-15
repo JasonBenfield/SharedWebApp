@@ -34,6 +34,10 @@ export class Url {
         return this._query.getValue(name);
     }
 
+    getQueryValues() {
+        return this._query.getValues();
+    }
+
     get hash() {
         return this._hash;
     }

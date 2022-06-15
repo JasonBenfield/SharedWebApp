@@ -6,14 +6,15 @@ interface IComponentWithViewModel {
 }
 
 export class AggregateComponent implements IAggregateComponent, IComponent {
+    private readonly items: IComponent[] = [];
+
     constructor(private readonly vm: IAggregateComponentViewModel) {
+        vm.view = this;
     }
 
     setName(name: string) {
         this.vm.name(name);
     }
-
-    private readonly items: IComponent[] = [];
 
     configure(action: (c: this) => void) {
         action(this);

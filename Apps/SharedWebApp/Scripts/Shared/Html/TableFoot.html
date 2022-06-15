@@ -1,10 +1,5 @@
 ﻿<!-- ko if: isVisible -->
-<tfoot data-bind="attr: { 
-    'class': css, 
-    title: title, 
-    id: id, 
-    name: name
-}">
+<tfoot data-bind="attr: attr">
     <!-- ko with: content -->
     <!-- ko component: { name: componentName, params: $data } --><!-- /ko -->
     <!-- /ko -->

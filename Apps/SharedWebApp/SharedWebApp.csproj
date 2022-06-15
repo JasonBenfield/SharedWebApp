@@ -45,6 +45,7 @@
     <None Remove="Scripts\Shared\Html\GridRowView.ts" />
     <None Remove="Scripts\Shared\Html\GridView.ts" />
     <None Remove="Scripts\Shared\Html\GridViewModel.ts" />
+    <None Remove="Scripts\Shared\Html\ListItem.ts" />
     <None Remove="Scripts\Shared\Html\NavView.ts" />
     <None Remove="Scripts\Shared\Html\TableBodyView.ts" />
     <None Remove="Scripts\Shared\Html\TableBodyViewModel.ts" />
@@ -62,17 +63,19 @@
     <None Remove="Scripts\Shared\Html\TableRowViewModel.ts" />
     <None Remove="Scripts\Shared\Html\TableView.ts" />
     <None Remove="Scripts\Shared\Html\TableViewModel.ts" />
+    <None Remove="Scripts\Shared\Html\ViewEvents.ts" />
     <None Remove="Scripts\Shared\JustifyContentCss.ts" />
+    <None Remove="Scripts\Shared\XtiEventOptionsBuilder.ts" />
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="XTI_App.Fakes" Version="1.8.19" />
+    <PackageReference Include="XTI_App.Fakes" Version="1.8.22-dev220613214414640" />
     <PackageReference Include="XTI_Core.Extensions" Version="1.10.10" />
     <PackageReference Include="XTI_TempLog.Fakes" Version="1.2.27" />
-    <PackageReference Include="XTI_WebApp.Extensions" Version="1.8.21" />
-    <PackageReference Include="XTI_WebApp.Fakes" Version="1.8.21" />
-    <PackageReference Include="XTI_WebApp.RCL" Version="1.8.21" />
-    <PackageReference Include="XTI_WebApp.TagHelpers" Version="1.8.21" />
+    <PackageReference Include="XTI_WebApp.Extensions" Version="1.8.22-dev220613214414640" />
+    <PackageReference Include="XTI_WebApp.Fakes" Version="1.8.22-dev220613214414640" />
+    <PackageReference Include="XTI_WebApp.RCL" Version="1.8.22-dev220613214414640" />
+    <PackageReference Include="XTI_WebApp.TagHelpers" Version="1.8.22-dev220613214414640" />
   </ItemGroup>
   
   <ItemGroup>
@@ -112,6 +115,7 @@
     <TypeScriptCompile Include="Scripts\Shared\Html\GridCellViewModel.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Shared\Html\ListItem.ts" />
     <TypeScriptCompile Include="Scripts\Shared\Html\NavView.ts" />
     <TypeScriptCompile Include="Scripts\Shared\Html\ColGroupViewModel.ts">
       <SubType>Code</SubType>
@@ -169,7 +173,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Shared\Html\TableDataViewModel.ts" />
+    <TypeScriptCompile Include="Scripts\Shared\Html\ViewEvents.ts" />
     <TypeScriptCompile Include="Scripts\Shared\JustifyContentCss.ts" />
+    <TypeScriptCompile Include="Scripts\Shared\XtiEventOptionsBuilder.ts" />
   </ItemGroup>
   
 </Project>
