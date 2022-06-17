@@ -1,15 +1,15 @@
-﻿import { Startup } from '../../Shared/Startup';
-import { AppApiAction } from '../../Shared/Api/AppApiAction';
-import { AppApiEvents } from '../../Shared/Api/AppApiEvents';
-import { AppResourceUrl } from '../../Shared/Api/AppResourceUrl';
-import { AsyncCommand } from '../../Shared/Command/AsyncCommand';
-import { ConsoleLog } from '../../Shared/ConsoleLog';
-import { MessageAlert } from '../../Shared/MessageAlert';
-import { PageFrameView } from '../../Shared/PageFrameView';
+﻿import { Startup } from '../../Lib/Startup';
+import { AppApiAction } from '../../Lib/Api/AppApiAction';
+import { AppApiEvents } from '../../Lib/Api/AppApiEvents';
+import { AppResourceUrl } from '../../Lib/Api/AppResourceUrl';
+import { AsyncCommand } from '../../Lib/Command/AsyncCommand';
+import { ConsoleLog } from '../../Lib/ConsoleLog';
+import { MessageAlert } from '../../Lib/MessageAlert';
+import { PageFrameView } from '../../Lib/PageFrameView';
 import { DefaultPageContext } from '../DefaultPageContext';
 import { AddEmployeeForm } from './AddEmployeeForm';
 import { MainPageView } from './MainPageView';
-import { TextBlock } from '../../Shared/Html/TextBlock';
+import { TextBlock } from '../../Lib/Html/TextBlock';
 
 class MainPage {
     private readonly alert: MessageAlert;

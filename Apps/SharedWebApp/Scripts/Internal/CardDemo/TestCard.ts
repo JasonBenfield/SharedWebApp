@@ -1,8 +1,8 @@
-﻿import { DelayedAction } from '../../Shared/DelayedAction';
-import { EnumerableRange } from "../../Shared/Enumerable";
-import { TextBlock } from "../../Shared/Html/TextBlock";
-import { ListGroup } from "../../Shared/ListGroup/ListGroup";
-import { CardAlert } from "../../Shared/Card/CardAlert";
+﻿import { DelayedAction } from '../../Lib/DelayedAction';
+import { EnumerableRange } from "../../Lib/Enumerable";
+import { TextBlock } from "../../Lib/Html/TextBlock";
+import { ListGroup } from "../../Lib/ListGroup/ListGroup";
+import { CardAlert } from "../../Lib/Card/CardAlert";
 import { TestCardView } from "./TestCardView";
 import { TestClickableListItem } from "./TestClickableItem";
 import { TestClickableListItemView } from "./TestClickableItemView";

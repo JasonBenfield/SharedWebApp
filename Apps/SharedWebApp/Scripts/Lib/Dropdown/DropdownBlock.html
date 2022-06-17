@@ -1,0 +1,29 @@
+﻿<!-- ko if: isVisible -->
+<div class="dropdown">
+    <!-- ko with: button -->
+    <button data-bind="
+            dropdown: $data,
+            attr: attr,
+            style: style,
+            enable: isEnabled" 
+            class="dropdown-toggle" 
+            type="button" 
+            data-bs-toggle="dropdown" 
+            data-toggle="dropdown" 
+            aria-expanded="false">
+        <!-- ko with: content -->
+        <!-- ko component: { name: componentName, params: $data } --><!-- /ko -->
+        <!-- /ko -->
+    </button>
+    <!-- /ko -->
+    <!-- ko with: menu -->
+    <ul data-bind="
+        attr: attr,
+        foreach: items,
+        xtiEvent: xtiEvent
+    " class="dropdown-menu dropdown-menu-right">
+        <!-- ko component: { name: componentName, params: $data } --><!-- /ko -->
+    </ul>
+    <!-- /ko -->
+</div>
+<!-- /ko -->

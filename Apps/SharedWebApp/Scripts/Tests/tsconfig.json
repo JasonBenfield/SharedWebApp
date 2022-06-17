@@ -16,7 +16,9 @@
     ]
   },
   "include": [
-    "./**/*.ts"
+    "./**/*.ts",
+    "../Internal/**/*.ts",
+    "../Lib/**/*.ts"
   ],
   "exclude": [
     "node_modules",

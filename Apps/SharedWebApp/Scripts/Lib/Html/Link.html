@@ -1,0 +1,11 @@
+﻿<!-- ko if: isVisible -->
+<a data-bind="
+    attr: attr, 
+    style: style, 
+    xtiEvent: xtiEvent,
+    enable: isEnabled">
+    <!-- ko with: content -->
+    <!-- ko component: { name: componentName, params: $data } --><!-- /ko -->
+    <!-- /ko -->
+</a>
+<!-- /ko -->

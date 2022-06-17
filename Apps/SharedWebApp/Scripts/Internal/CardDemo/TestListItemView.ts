@@ -1,6 +1,6 @@
-﻿import { Row } from "../../Shared/Grid/Row";
-import { TextBlockView } from "../../Shared/Html/TextBlockView";
-import { ListGroupItemView } from "../../Shared/ListGroup/ListGroupItemView";
+﻿import { Row } from "../../Lib/Grid/Row";
+import { TextBlockView } from "../../Lib/Html/TextBlockView";
+import { ListGroupItemView } from "../../Lib/ListGroup/ListGroupItemView";
 
 export class TestListItemView extends ListGroupItemView {
     readonly text: TextBlockView;

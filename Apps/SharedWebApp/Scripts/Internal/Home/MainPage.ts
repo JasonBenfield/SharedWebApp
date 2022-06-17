@@ -1,6 +1,6 @@
-﻿import { Startup } from '../../Shared/Startup';
-import { TextBlock } from '../../Shared/Html/TextBlock';
-import { PageFrameView } from '../../Shared/PageFrameView';
+﻿import { Startup } from '../../Lib/Startup';
+import { TextBlock } from '../../Lib/Html/TextBlock';
+import { PageFrameView } from '../../Lib/PageFrameView';
 import { DefaultPageContext } from '../DefaultPageContext';
 import { MainPageView } from './MainPageView';
 

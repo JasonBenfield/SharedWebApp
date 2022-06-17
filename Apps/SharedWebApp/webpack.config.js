@@ -5,7 +5,8 @@ const entry = {
     home: './Scripts/Internal/Home/MainPage.ts',
     employee: './Scripts/Internal/Employee/MainPage.ts',
     cardDemo: './Scripts/Internal/CardDemo/MainPage.ts',
-    gridDemo: './Scripts/Internal/GridDemo/MainPage.ts'
+    gridDemo: './Scripts/Internal/GridDemo/MainPage.ts',
+    odataDemo: './Scripts/Internal/ODataDemo/MainPage.ts'
 };
 const exportModule = {
     rules: [

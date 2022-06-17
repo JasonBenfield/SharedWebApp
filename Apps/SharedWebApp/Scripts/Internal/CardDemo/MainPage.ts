@@ -1,10 +1,10 @@
-﻿import { Startup } from '../../Shared/Startup';
-import { AsyncCommand } from '../../Shared/Command/AsyncCommand';
-import { PageFrameView } from '../../Shared/PageFrameView';
+﻿import { Startup } from '../../Lib/Startup';
+import { AsyncCommand } from '../../Lib/Command/AsyncCommand';
+import { PageFrameView } from '../../Lib/PageFrameView';
 import { DefaultPageContext } from '../DefaultPageContext';
 import { MainPageView } from './MainPageView';
 import { TestCard } from './TestCard';
-import { TextBlock } from '../../Shared/Html/TextBlock';
+import { TextBlock } from '../../Lib/Html/TextBlock';
 
 class MainPage {
     private readonly testCard: TestCard;

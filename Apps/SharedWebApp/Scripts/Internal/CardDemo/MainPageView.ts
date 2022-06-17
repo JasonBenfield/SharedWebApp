@@ -1,12 +1,12 @@
-﻿import { ButtonCommandItem } from '../../Shared/Command/ButtonCommandItem';
-import { ContextualClass } from '../../Shared/ContextualClass';
-import { Container } from '../../Shared/Html/Container';
-import { FlexColumn } from '../../Shared/Html/FlexColumn';
-import { FlexColumnFill } from '../../Shared/Html/FlexColumnFill';
-import { TextHeading1View } from '../../Shared/Html/TextHeading1View';
-import { Toolbar } from '../../Shared/Html/Toolbar';
-import { PaddingCss } from '../../Shared/PaddingCss';
-import { PageFrameView } from '../../Shared/PageFrameView';
+﻿import { ButtonCommandItem } from '../../Lib/Command/ButtonCommandItem';
+import { ContextualClass } from '../../Lib/ContextualClass';
+import { Container } from '../../Lib/Html/Container';
+import { FlexColumn } from '../../Lib/Html/FlexColumn';
+import { FlexColumnFill } from '../../Lib/Html/FlexColumnFill';
+import { TextHeading1View } from '../../Lib/Html/TextHeading1View';
+import { Toolbar } from '../../Lib/Html/Toolbar';
+import { PaddingCss } from '../../Lib/PaddingCss';
+import { PageFrameView } from '../../Lib/PageFrameView';
 import { TestCardView } from './TestCardView';
 
 export class MainPageView {

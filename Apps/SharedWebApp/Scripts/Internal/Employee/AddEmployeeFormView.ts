@@ -1,4 +1,4 @@
-﻿import { BaseFormView } from '../../Shared/Forms/BaseFormView';
+﻿import { BaseFormView } from '../../Lib/Forms/BaseFormView';
 import { AddressInputFieldView } from './AddressInputFieldView';
 
 export class AddEmployeeFormView extends BaseFormView {

@@ -1,0 +1,9 @@
+﻿<!-- ko if: isVisible -->
+<div data-bind="
+    attr: attr, 
+    style: style,
+    xtiEvent: xtiEvent,
+    foreach: items">
+    <!-- ko component: { name: componentName, params: $data } --><!-- /ko -->
+</div>
+<!-- /ko -->

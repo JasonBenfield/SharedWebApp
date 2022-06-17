@@ -1,19 +1,15 @@
-﻿import { ColumnCss } from '../../Shared/ColumnCss';
-import { ButtonCommandItem } from '../../Shared/Command/ButtonCommandItem';
-import { ContextualClass } from '../../Shared/ContextualClass';
-import { FlexCss } from '../../Shared/FlexCss';
-import { Block } from '../../Shared/Html/Block';
-import { BlockViewModel } from '../../Shared/Html/BlockViewModel';
-import { Container } from '../../Shared/Html/Container';
-import { CssLengthUnit } from '../../Shared/Html/CssLengthUnit';
-import { FlexColumn } from '../../Shared/Html/FlexColumn';
-import { FlexColumnFill } from '../../Shared/Html/FlexColumnFill';
-import { GridView } from '../../Shared/Html/GridView';
-import { TextHeading1View } from '../../Shared/Html/TextHeading1View';
-import { Toolbar } from '../../Shared/Html/Toolbar';
-import { MessageAlertView } from '../../Shared/MessageAlertView';
-import { PaddingCss } from '../../Shared/PaddingCss';
-import { PageFrameView } from '../../Shared/PageFrameView';
+﻿import { Container } from '../../Lib/Html/Container';
+import { CssLengthUnit } from '../../Lib/Html/CssLengthUnit';
+import { GridView } from '../../Lib/Html/GridView';
+import { TextHeading1View } from '../../Lib/Html/TextHeading1View';
+import { Toolbar } from '../../Lib/Html/Toolbar';
+import { MessageAlertView } from '../../Lib/MessageAlertView';
+import { PaddingCss } from '../../Lib/PaddingCss';
+import { PageFrameView } from '../../Lib/PageFrameView';
+import { ColumnCss } from '../../Lib/ColumnCss';
+import { ButtonCommandItem } from '../../Lib/Command/ButtonCommandItem';
+import { ContextualClass } from '../../Lib/ContextualClass';
+import { Block } from '../../Lib/Html/Block';
 import { AddEmployeeFormView } from './AddEmployeeFormView';
 import { AddressInputLayout } from './AddressInputLayout';
 
@@ -32,10 +28,27 @@ export class MainPageView {
         let headerRow = grid.addContent(new Block());
         this.heading = headerRow.addContent(new Container())
             .addContent(new TextHeading1View());
-        let fillRow = grid.addContent(new Block());
-        fillRow.setBackgroundContext(ContextualClass.light);
-        fillRow.scrollable();
-        let container = fillRow.addContent(new Container());
+        //let fillRow = grid.addContent(new Block());
+        //fillRow.setBackgroundContext(ContextualClass.light);
+        //fillRow.scrollable();
+        //let container = fillRow.addContent(new Container());
+
+        let container = grid.addContent(new Container())
+            .configure(b => {
+                b.height100();
+            })
+            .addContent(new Block())
+            .configure(b => {
+                b.height100();
+                b.positionRelative();
+            })
+            .addContent(new Block())
+            .configure(b => {
+                b.positionAbsoluteFill();
+                b.setBackgroundContext(ContextualClass.light);
+                b.scrollable();
+            });
+
         this.alert = container.addContent(new MessageAlertView());
         this.addEmployeeForm = container.addContent(new AddEmployeeFormView());
         let toolbar = grid.addContent(new Toolbar());

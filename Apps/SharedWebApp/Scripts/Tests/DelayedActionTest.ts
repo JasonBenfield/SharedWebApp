@@ -1,6 +1,6 @@
 ﻿import 'mocha';
 import { expect } from 'chai';
-import { DelayedAction } from '../Shared/DelayedAction';
+import { DelayedAction } from '../Lib/DelayedAction';
 
 describe('Delayed Action', () => {
     it('Delay action', async () => {

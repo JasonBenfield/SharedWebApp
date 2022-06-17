@@ -1,35 +1,47 @@
-﻿import { ButtonCommandItem } from '../../Shared/Command/ButtonCommandItem';
-import { ContextualClass } from '../../Shared/ContextualClass';
-import { Block } from '../../Shared/Html/Block';
-import { Container } from '../../Shared/Html/Container';
-import { CssLengthUnit } from '../../Shared/Html/CssLengthUnit';
-import { FlexColumn } from '../../Shared/Html/FlexColumn';
-import { FlexColumnFill } from '../../Shared/Html/FlexColumnFill';
-import { GridTemplateRepeat, GridView } from '../../Shared/Html/GridView';
-import { TextHeading1View } from '../../Shared/Html/TextHeading1View';
-import { Toolbar } from '../../Shared/Html/Toolbar';
-import { PaddingCss } from '../../Shared/PaddingCss';
-import { PageFrameView } from '../../Shared/PageFrameView';
+﻿import { ContextualClass } from '../../Lib/ContextualClass';
+import { Block } from '../../Lib/Html/Block';
+import { Container } from '../../Lib/Html/Container';
+import { CssLengthUnit } from '../../Lib/Html/CssLengthUnit';
+import { GridView } from '../../Lib/Html/GridView';
+import { TextHeading1View } from '../../Lib/Html/TextHeading1View';
+import { Toolbar } from '../../Lib/Html/Toolbar';
+import { PaddingCss } from '../../Lib/PaddingCss';
+import { PageFrameView } from '../../Lib/PageFrameView';
 
 export class MainPageView {
     readonly heading: TextHeading1View;
-    readonly grid: GridView;
+    readonly dataGrid: GridView;
 
     constructor(private readonly page: PageFrameView) {
-        let flexColumn = this.page.addContent(new FlexColumn());
-        this.heading = flexColumn
+        let layoutGrid = this.page.addContent(new GridView());
+        layoutGrid.borderless();
+        layoutGrid.height100();
+        layoutGrid.setTemplateRows(
+            CssLengthUnit.auto(),
+            CssLengthUnit.flex(1),
+            CssLengthUnit.auto()
+        );
+        this.heading = layoutGrid
             .addContent(new Container())
             .addContent(new TextHeading1View());
-        let flexFill = flexColumn.addContent(new FlexColumnFill());
+        let fillRow = layoutGrid.addContent(new Block());
+        fillRow.scrollable();
 
-        //let flexFill = flexColumn.addContent(new Block());
-        //flexFill.flexFill();
-        //flexFill.positionRelative();
-        //let abs = flexFill.addContent(new Block());
-        //abs.positionAbsoluteFill();
-        //abs.scrollable();
-        this.grid = flexFill.addContent(new GridView());
-        let toolbar = flexColumn.addContent(new Toolbar());
+        //let container = layoutGrid.addContent(new Container())
+        //    .addContent(new Block())
+        //    .configure(b => {
+        //        b.height100();
+        //        b.positionRelative();
+        //    })
+        //    .addContent(new Block())
+        //    .configure(b => {
+        //        b.positionAbsoluteFill();
+        //        b.setBackgroundContext(ContextualClass.light);
+        //        b.scrollable();
+        //    });
+
+        this.dataGrid = fillRow.addContent(new GridView());
+        let toolbar = layoutGrid.addContent(new Toolbar());
         toolbar.setBackgroundContext(ContextualClass.secondary);
         toolbar.setPadding(PaddingCss.xs(3));
     }

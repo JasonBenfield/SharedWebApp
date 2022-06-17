@@ -1,5 +1,5 @@
-﻿import { ListItem } from "../../Shared/Html/ListItem";
-import { TextBlock } from "../../Shared/Html/TextBlock";
+﻿import { ListItem } from "../../Lib/Html/ListItem";
+import { TextBlock } from "../../Lib/Html/TextBlock";
 import { TestClickableListItemView } from "./TestClickableItemView";
 
 export class TestClickableListItem extends ListItem {

@@ -1,9 +1,9 @@
-﻿import { CardAlertView } from "../../Shared/Card/CardAlertView";
-import { CardTitleHeaderView } from "../../Shared/Card/CardTitleHeaderView";
-import { CardView } from "../../Shared/Card/CardView";
-import { BlockViewModel } from "../../Shared/Html/BlockViewModel";
-import { TextBlockView } from "../../Shared/Html/TextBlockView";
-import { BaseListView } from "../../Shared/ListGroup/BaseListView";
+﻿import { CardAlertView } from "../../Lib/Card/CardAlertView";
+import { CardTitleHeaderView } from "../../Lib/Card/CardTitleHeaderView";
+import { CardView } from "../../Lib/Card/CardView";
+import { BlockViewModel } from "../../Lib/Html/BlockViewModel";
+import { TextBlockView } from "../../Lib/Html/TextBlockView";
+import { BaseListView } from "../../Lib/ListGroup/BaseListView";
 import { TestClickableListItemView } from "./TestClickableItemView";
 import { TestListItemView } from "./TestListItemView";
 

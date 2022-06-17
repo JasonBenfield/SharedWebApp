@@ -1,0 +1,12 @@
+﻿<!-- ko if: hasItems -->
+<!-- ko if: isVisible -->
+<ul data-bind="
+    attr: attr, 
+    style: style,
+    foreach: items,
+    xtiEvent: xtiEvent
+    ">
+    <!-- ko component: { name: componentName, params: $data } --><!-- /ko -->
+</ul>
+<!-- /ko -->
+<!-- /ko -->

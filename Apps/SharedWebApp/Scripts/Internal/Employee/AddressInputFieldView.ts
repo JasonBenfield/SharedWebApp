@@ -1,4 +1,4 @@
-﻿import { ComplexFieldFormGroupView } from '../../Shared/Forms/ComplexFieldFormGroupView';
+﻿import { ComplexFieldFormGroupView } from '../../Lib/Forms/ComplexFieldFormGroupView';
 
 export class AddressInputFieldView extends ComplexFieldFormGroupView {
     readonly Line1 = this.addInputFormGroup();

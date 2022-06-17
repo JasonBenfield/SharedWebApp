@@ -1,5 +1,5 @@
-﻿import { TextBlockView } from '../../Shared/Html/TextBlockView';
-import { PageFrameView } from '../../Shared/PageFrameView';
+﻿import { TextBlockView } from '../../Lib/Html/TextBlockView';
+import { PageFrameView } from '../../Lib/PageFrameView';
 
 export class MainPageView {
     readonly text: TextBlockView;

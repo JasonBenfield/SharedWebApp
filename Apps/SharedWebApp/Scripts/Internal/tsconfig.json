@@ -17,8 +17,8 @@
   },
   "include": [
     "./**/*.ts",
-    "../Shared/**/*.d.ts"
-  ],
+    "../Lib/**/*.d.ts"
+, "../Lib/OData/Types.ts"  ],
   "exclude": [
     "Imports",
     "node_modules",

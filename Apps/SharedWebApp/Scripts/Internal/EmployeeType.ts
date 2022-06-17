@@ -1,5 +1,5 @@
-﻿import { NumericValue } from '../Shared/NumericValue';
-import { NumericValues } from '../Shared/NumericValues';
+﻿import { NumericValue } from '../Lib/NumericValue';
+import { NumericValues } from '../Lib/NumericValues';
 
 export class EmployeeTypes extends NumericValues<EmployeeType> {
     constructor(

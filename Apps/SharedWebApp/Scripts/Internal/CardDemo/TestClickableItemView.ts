@@ -1,9 +1,9 @@
-﻿import { ColumnCss } from "../../Shared/ColumnCss";
-import { ContextualClass } from "../../Shared/ContextualClass";
-import { Row } from "../../Shared/Grid/Row";
-import { TextBlockView } from "../../Shared/Html/TextBlockView";
-import { ButtonListGroupItemView } from "../../Shared/ListGroup/ButtonListGroupItemView";
-import { ButtonListItemViewModel } from "../../Shared/ListGroup/ButtonListItemViewModel";
+﻿import { ColumnCss } from "../../Lib/ColumnCss";
+import { ContextualClass } from "../../Lib/ContextualClass";
+import { Row } from "../../Lib/Grid/Row";
+import { TextBlockView } from "../../Lib/Html/TextBlockView";
+import { ButtonListGroupItemView } from "../../Lib/ListGroup/ButtonListGroupItemView";
+import { ButtonListItemViewModel } from "../../Lib/ListGroup/ButtonListItemViewModel";
 
 export class TestClickableListItemView extends ButtonListGroupItemView {
     readonly text: TextBlockView;

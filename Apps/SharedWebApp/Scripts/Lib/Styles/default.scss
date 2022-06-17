@@ -1,0 +1,107 @@
+﻿@import "~bootstrap/scss/bootstrap";
+@import "./grid-variants.scss";
+
+.position-absolute-fill {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+}
+
+.offscreen {
+    position: absolute;
+    left: -9000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.d-contents {
+    display: contents;
+}
+
+.grid {
+    display: grid;
+    margin-bottom: $spacer;
+    color: $table-color;
+    vertical-align: $table-cell-vertical-align;
+    border-color: $table-border-color;
+
+    > * {
+        border-top: (2 * $table-border-width) solid $table-group-separator-color;
+    }
+}
+
+.grid-cell {
+    padding: $table-cell-padding-y $table-cell-padding-x;
+    background-color: var(--xti-grid-bg);
+    border-bottom-width: $table-border-width;
+    box-shadow: inset 0 0 0 9999px var(--xti-grid-accent-bg);
+}
+
+.grid-row {
+    padding: $table-cell-padding-y $table-cell-padding-x;
+    background-color: var(--xti-grid-bg);
+    border-bottom-width: $table-border-width;
+    box-shadow: inset 0 0 0 9999px var(--xti-grid-accent-bg);
+
+    .grid-cell {
+        padding: inherit;
+        background-color: inherit;
+        border: inherit;
+        box-shadow: inherit;
+    }
+}
+
+.grid-bordered {
+    > :not(caption) > * {
+        border-width: $table-border-width 0;
+        // stylelint-disable-next-line selector-max-universal
+        > * {
+            border-width: 0 $table-border-width;
+        }
+    }
+}
+
+.grid-borderless {
+    // stylelint-disable-next-line selector-max-universal
+    > :not(caption) > * > * {
+        border-bottom-width: 0;
+    }
+
+    > * {
+        border-top-width: 0;
+    }
+}
+
+.position-sticky-left {
+    position: sticky;
+    left: 0;
+}
+
+.position-sticky-right {
+    position: sticky;
+    right: 0;
+}
+
+.position-sticky-top {
+    position: sticky;
+    top: 0;
+}
+
+.position-sticky-bottom {
+    position: sticky;
+    bottom: 0;
+}
+
+@each $color, $value in $table-variants {
+    @include grid-variant($color, $value);
+}
+
+@each $state, $value in $theme-colors {
+    $grid-row-variant-bg: shift-color($value, $list-group-item-bg-scale);
+    $grid-row-variant-color: shift-color($value, $list-group-item-color-scale);
+
+    @include grid-row-variant($state, $grid-row-variant-bg, $grid-row-variant-color);
+}

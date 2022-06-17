@@ -1,10 +1,10 @@
-﻿import { ColumnCss } from "../../Shared/ColumnCss";
-import { ComplexFieldLayout } from "../../Shared/Forms/ComplexFieldLayout";
-import { Row } from "../../Shared/Grid/Row";
-import { TextBlock } from "../../Shared/Html/TextBlock";
-import { TextSpanView } from "../../Shared/Html/TextSpanView";
-import { MarginCss } from "../../Shared/MarginCss";
-import { PaddingCss } from "../../Shared/PaddingCss";
+﻿import { ColumnCss } from "../../Lib/ColumnCss";
+import { ComplexFieldLayout } from "../../Lib/Forms/ComplexFieldLayout";
+import { Row } from "../../Lib/Grid/Row";
+import { TextBlock } from "../../Lib/Html/TextBlock";
+import { TextSpanView } from "../../Lib/Html/TextSpanView";
+import { MarginCss } from "../../Lib/MarginCss";
+import { PaddingCss } from "../../Lib/PaddingCss";
 import { AddressInputFieldView } from "./AddressInputFieldView";
 
 export class AddressInputLayout extends ComplexFieldLayout {
