@@ -65,6 +65,22 @@ export class HtmlComponent implements IComponent {
         this.setStyle(style => style.width = width.value());
     }
 
+    setMinHeight(minHeight: CssLengthUnit) {
+        this.setStyle(style => style["min-height"] = minHeight.value());
+    }
+
+    setMinWidth(minWidth: CssLengthUnit) {
+        this.setStyle(style => style["min-width"] = minWidth.value());
+    }
+
+    setMaxHeight(maxHeight: CssLengthUnit) {
+        this.setStyle(style => style["max-height"] = maxHeight.value());
+    }
+
+    setMaxWidth(maxWidth: CssLengthUnit) {
+        this.setStyle(style => style["max-width"] = maxWidth.value());
+    }
+
     setBackgroundContext(contextClass: ContextualClass) {
         let css = contextClass.append('bg');
         this.replaceCssName(this.bgContextCss, css);

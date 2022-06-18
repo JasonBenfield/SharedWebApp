@@ -1,28 +1,20 @@
-﻿import { CssLengthUnit } from "../Html/CssLengthUnit";
-import { GridTemplateCss } from "../Html/GridView";
-import { ODataColumn } from "./ODataColumn";
-import { TextCellLayout } from "./TextCellLayout";
+﻿import { ODataColumn } from "./ODataColumn";
+import { ODataColumnViewBuilder } from "./ODataColumnViewBuilder";
+import { SourceType } from "./SourceType";
 
 export class ODataColumnBuilder {
-    private width: GridTemplateCss = CssLengthUnit.px(150);
-
     constructor(
         private readonly columnName: string,
-        private readonly sourceType: string
+        private readonly sourceType: SourceType,
+        private readonly view: ODataColumnViewBuilder
     ) {
-    }
-
-    setWidth(width: GridTemplateCss) {
-        this.width = width;
     }
 
     build() {
         return new ODataColumn(
             this.columnName,
             this.sourceType,
-            this.width,
-            new TextCellLayout(),
-            new TextCellLayout()
+            this.view.build()
         );
     }
 }

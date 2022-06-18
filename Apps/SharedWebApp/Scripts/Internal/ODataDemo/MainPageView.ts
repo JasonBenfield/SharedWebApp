@@ -5,13 +5,19 @@ import { CssLengthUnit } from '../../Lib/Html/CssLengthUnit';
 import { GridView } from '../../Lib/Html/GridView';
 import { TextHeading1View } from '../../Lib/Html/TextHeading1View';
 import { Toolbar } from '../../Lib/Html/Toolbar';
+import { NumberTextCellFormatter } from '../../Lib/OData/NumberTextCellFormatter';
+import { ODataColumnStyle } from '../../Lib/OData/ODataColumnStyle';
 import { ODataComponentView } from '../../Lib/OData/ODataComponentView';
+import { TextCellLayout } from '../../Lib/OData/TextCellLayout';
 import { PaddingCss } from '../../Lib/PaddingCss';
 import { PageFrameView } from '../../Lib/PageFrameView';
+import { TextCss } from '../../Lib/TextCss';
+import { ODataEmployeeColumnViewsBuilder } from './ODataEmployeeColumnsBuilder';
 
 export class MainPageView {
     readonly heading: TextHeading1View;
     readonly odataComponentView: ODataComponentView;
+    readonly columns: ODataEmployeeColumnViewsBuilder;
 
     constructor(private readonly page: PageFrameView) {
         let layoutGrid = this.page.addContent(new GridView());
@@ -29,6 +35,15 @@ export class MainPageView {
                 b.setBackgroundContext(ContextualClass.light);
                 b.scrollable();
             });
+
+        this.columns = new ODataEmployeeColumnViewsBuilder();
+        this.columns.Salary.layouts.setDefaultLayout(
+            new TextCellLayout(
+                new NumberTextCellFormatter('$0,0.00'),
+                new ODataColumnStyle({ textCss: new TextCss().end() })
+            )
+        );
+
         this.odataComponentView = fillRow.addContent(new ODataComponentView());
         
         let toolbar = layoutGrid.addContent(new Toolbar());

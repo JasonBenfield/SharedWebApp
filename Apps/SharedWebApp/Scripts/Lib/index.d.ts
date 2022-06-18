@@ -19,7 +19,11 @@ declare type ContentJustifications = 'start' | 'end' | 'center' | 'between' | 'a
 
 interface IHtmlStyle {
     width?: string;
+    'min-width'?: string;
+    'max-width'?: string;
     height?: string;
+    'min-height'?: string;
+    'max-height'?: string;
     'z-index'?: string;
 }
 

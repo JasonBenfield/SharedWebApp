@@ -35,7 +35,7 @@ export class GridRowView extends Block {
     addCells(howMany: number) {
         let cells = new MappedArray(
             new EnumerableRange(1, howMany),
-            () => new GridCellView()
+            () => new GridCellView(this)
         ).value();
         for (const cell of cells) {
             this.addContent(cell);

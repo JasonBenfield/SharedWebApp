@@ -1,13 +1,11 @@
-﻿import { GridTemplateCss } from "../Html/GridView";
-import { ICellLayout } from "./Types";
+﻿import { ODataColumnView } from "./ODataColumnView";
+import { SourceType } from "./SourceType";
 
 export class ODataColumn {
     constructor(
         readonly columnName: string,
-        readonly sourceType: string,
-        readonly width: GridTemplateCss,
-        readonly headerCellLayout: ICellLayout,
-        readonly dataCellLayout: ICellLayout
+        readonly sourceType: SourceType,
+        readonly view: ODataColumnView
     ) {
     }
 }

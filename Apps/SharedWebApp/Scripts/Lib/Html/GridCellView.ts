@@ -1,10 +1,11 @@
 ﻿import { Block } from "./Block";
 import { GridCellViewModel } from "./GridCellViewModel";
+import { GridRowView } from "./GridRowView";
 
 export class GridCellView extends Block {
     protected readonly vm: GridCellViewModel;
 
-    constructor(vm: GridCellViewModel = new GridCellViewModel()) {
+    constructor(readonly row: GridRowView = null, vm: GridCellViewModel = new GridCellViewModel()) {
         super(vm);
         this.addCssName('grid-cell');
     }

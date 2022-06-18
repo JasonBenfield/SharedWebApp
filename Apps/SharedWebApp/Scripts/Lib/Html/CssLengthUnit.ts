@@ -12,6 +12,10 @@ export class CssLengthUnit {
 
     static auto() { return new CssLengthUnit(null, 'auto'); }
 
+    static minContent() { return new CssLengthUnit(null, 'min-content'); }
+
+    static maxContent() { return new CssLengthUnit(null, 'max-content'); }
+
     private readonly css: string;
 
     protected constructor(size: number, unit: string) {
