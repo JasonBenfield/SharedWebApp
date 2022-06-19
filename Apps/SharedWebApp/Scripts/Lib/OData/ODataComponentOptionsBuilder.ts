@@ -1,6 +1,7 @@
 ﻿import { AppApiODataGroup } from "../Api/AppApiODataGroup";
 import { ODataColumnBuilder } from "./ODataColumnBuilder";
 import { ODataComponentOptions } from "./ODataComponentOptions";
+import { ODataQueryBuilder } from "./ODataQueryBuilder";
 
 export type IODataColumnsBuilder<TEntity> = {
     [K in keyof TEntity]: ODataColumnBuilder;
@@ -16,6 +17,8 @@ export class ODataComponentOptionsBuilder<TEntity> {
         this.odataGroup = odataGroup;
     }
 
+    readonly query = new ODataQueryBuilder();
+
     build() {
         let columns: any = {};
         for (let key in this.columns) {
@@ -24,6 +27,6 @@ export class ODataComponentOptionsBuilder<TEntity> {
                 columns[key] = column.build();
             }
         }
-        return new ODataComponentOptions(this.odataGroup, columns);
+        return new ODataComponentOptions(this.odataGroup, columns, this.query.toSerializable());
     }
 }

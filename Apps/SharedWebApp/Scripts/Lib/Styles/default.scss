@@ -21,6 +21,16 @@
     display: contents;
 }
 
+.modal-odata {
+    max-width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+
+    .modal-content {
+        height: 100%;
+    }
+}
+
 .grid {
     display: grid;
     margin-bottom: $spacer;
@@ -95,6 +105,14 @@
     z-index: 5;
 }
 
+.sort-button-not-set > .btn {
+    visibility: hidden;
+}
+
+.sort-button-not-set:hover > .btn {
+    visibility: visible;
+}
+
 .position-sticky-left {
     position: sticky;
     left: 0;
@@ -113,6 +131,27 @@
 .position-sticky-bottom {
     position: sticky;
     bottom: 0;
+}
+
+.grid-row-action {
+    .grid-cell {
+        cursor: pointer;
+        color: $list-group-action-color;
+        text-align: inherit; // For `<button>`s (anchors inherit)
+        // Hover state
+        &:hover,
+        &:focus {
+            z-index: 1; // Place hover/focus items above their siblings for proper border styling
+            color: $list-group-action-hover-color;
+            text-decoration: none;
+            background-color: $list-group-hover-bg;
+        }
+
+        &:active {
+            color: $list-group-action-active-color;
+            background-color: $list-group-action-active-bg;
+        }
+    }
 }
 
 @each $color, $value in $table-variants {

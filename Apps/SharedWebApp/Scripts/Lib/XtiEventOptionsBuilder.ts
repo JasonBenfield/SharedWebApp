@@ -1,15 +1,23 @@
-﻿export class XtiEventOptionsBuilder {
+﻿import { MappedArray } from "./Enumerable";
+
+export class XtiEventOptionsBuilder {
     private options: IXtiEventBindingOptions = {};
 
     clear() { this.options = {}; }
 
-    option(name: string): IXtiEventOptionsBuilder {
-        return new XtiEventOptionsBuilder2(this, this.options[name]);
+    option(name: string): IXtiEventOptionsBuilder[] {
+        return new MappedArray(
+            this.options[name],
+            o => new XtiEventOptionsBuilder2(this, o)
+        ).value();
     }
 
     on(name: string, callback: IXtiEventCallback) {
-        this.options[name] = { callback: callback, selector: null, preventDefault: false };
-        return new XtiEventOptionsBuilder2(this, this.options[name]);
+        const optionsArr: IXtiEventOptions[] = this.options[name] || [];
+        const options = { callback: callback, selector: null, preventDefault: false };
+        optionsArr.push(options);
+        this.options[name] = optionsArr;
+        return new XtiEventOptionsBuilder2(this, options);
     }
 
     build() { return this.options; }

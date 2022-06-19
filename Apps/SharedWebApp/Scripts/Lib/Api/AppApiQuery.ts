@@ -1,4 +1,6 @@
-﻿import { UrlBuilder } from "../UrlBuilder";
+﻿import { ErrorModel } from "../ErrorModel";
+import { JoinedStrings } from "../JoinedStrings";
+import { UrlBuilder } from "../UrlBuilder";
 import { AppApiError } from "./AppApiError";
 import { AppApiEvents } from "./AppApiEvents";
 import { AppResourceUrl } from "./AppResourceUrl";
@@ -6,6 +8,19 @@ import { ErrorFromHttpResult } from "./ErrorFromHttpResult";
 import { HttpClient } from "./HttpClient";
 import { ODataResult } from "./ODataResult";
 import { ParsedDateObject } from "./ParsedDateObject";
+
+interface IODataError {
+    code: string;
+    message: string;
+    details: string[];
+    innerError: IODataInnerError;
+}
+
+interface IODataInnerError {
+    message: string;
+    type: string;
+    stacktrace: string;
+}
 
 export class AppApiQuery<TEntity> {
     private readonly resourceUrl: AppResourceUrl;
@@ -36,12 +51,45 @@ export class AppApiQuery<TEntity> {
             result = new ODataResult<TEntity>(rawResult.value, rawResult['@odata.count']);
         }
         else {
-            apiError = new ErrorFromHttpResult(postResult, 'Get', errorOptions).value;
-            if (apiError) {
-                if (!errorOptions.preventDefault) {
-                    this.events.handleError(apiError);
+            const odataError = postResult.result && postResult.result.error;
+            if (odataError) {
+                const sourceError = <IODataError>odataError;
+                const messageParts: string[] = [];
+                if (sourceError.code) {
+                    messageParts.push(sourceError.code);
                 }
-                throw apiError;
+                if (sourceError.message) {
+                    messageParts.push(sourceError.message);
+                }
+                if (sourceError.innerError) {
+                    if (sourceError.innerError.message) {
+                        messageParts.push(sourceError.innerError.message);
+                    }
+                    if (sourceError.innerError.type) {
+                        messageParts.push(sourceError.innerError.type);
+                    }
+                    if (sourceError.innerError.stacktrace) {
+                        messageParts.push(sourceError.innerError.stacktrace);
+                    }
+                }
+                const message = new JoinedStrings('\r\n', messageParts).value();
+                apiError = new AppApiError(
+                    [
+                        new ErrorModel(message)
+                    ],
+                    postResult.status,
+                    'Get',
+                    errorOptions.caption || ''
+                );
+            }
+            else {
+                apiError = new ErrorFromHttpResult(postResult, 'Get', errorOptions).value;
+                if (apiError) {
+                    if (!errorOptions.preventDefault) {
+                        this.events.handleError(apiError);
+                    }
+                    throw apiError;
+                }
             }
         }
         return result;

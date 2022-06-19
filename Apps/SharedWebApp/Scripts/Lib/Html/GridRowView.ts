@@ -28,14 +28,19 @@ export class GridRowView extends Block {
         this.context = context;
     }
 
-    addCell() {
-        return this.addCells(1)[0];
+    addCell<TView extends GridCellView>(
+        createCellView: (row: this) => TView = (row: this) => new GridCellView(row) as TView
+    ) {
+        return this.addCells(1, createCellView)[0];
     }
 
-    addCells(howMany: number) {
+    addCells<TView extends GridCellView>(
+        howMany: number,
+        createCellView: (row: this) => TView = (row: this) => new GridCellView(row) as TView
+    ) {
         let cells = new MappedArray(
             new EnumerableRange(1, howMany),
-            () => new GridCellView(this)
+            () => createCellView(this)
         ).value();
         for (const cell of cells) {
             this.addContent(cell);

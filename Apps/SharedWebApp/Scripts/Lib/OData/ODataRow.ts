@@ -10,8 +10,7 @@ export class ODataRow {
     constructor(rowIndex: number, columns: ODataColumn[], record: any, view: GridRowView) {
         let i = 0;
         for (const column of columns) {
-            const cellView = view.cell(i);
-            const cell = new ODataCell(rowIndex, column, record, cellView);
+            const cell = column.createDataCell(rowIndex, record, view.cell(i));
             this.cells.push(cell);
             i++;
         }
@@ -21,6 +20,6 @@ export class ODataRow {
         return new FilteredArray(
             this.cells,
             c => c.hasView(view)
-        ).asEnumerable().first();
+        ).toEnumerableArray().first();
     }
 }

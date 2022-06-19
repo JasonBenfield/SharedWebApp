@@ -24,14 +24,18 @@
         &.grid-row-action {
             &:hover,
             &:focus {
-                color: $color;
-                background-color: shade-color($background, 10%);
+                .grid-cell {
+                    color: $color;
+                    background-color: shade-color($background, 10%);
+                }
             }
 
             &.active {
-                color: $white;
-                background-color: $color;
-                border-color: $color;
+                .grid-cell {
+                    color: $white;
+                    background-color: $color;
+                    border-color: $color;
+                }
             }
         }
     }

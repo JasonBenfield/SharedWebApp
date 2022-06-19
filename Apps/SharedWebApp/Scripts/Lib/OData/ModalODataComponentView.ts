@@ -1,30 +1,26 @@
-﻿import { Block } from '../Html/Block';
-import { HtmlContainerComponent } from '../Html/HtmlContainerComponent';
-import { ModalComponentViewModel } from './ModalComponentViewModel';
+﻿import { Block } from "../Html/Block";
+import { HtmlContainerComponent } from "../Html/HtmlContainerComponent";
+import { ModalComponentViewModel } from "../Modal/ModalComponentViewModel";
+import { SelectFieldsPanelView } from "./SelectFieldsPanelView";
 
-export class ModalComponentView extends HtmlContainerComponent {
+export class ModalODataComponentView extends HtmlContainerComponent {
     readonly closed: IEventHandler<any>;
 
-    readonly header: Block;
-    readonly body: Block;
-    readonly footer: Block;
+    readonly selectFieldsPanel: SelectFieldsPanelView;
 
     protected readonly vm: ModalComponentViewModel;
 
     constructor(vm: ModalComponentViewModel = new ModalComponentViewModel()) {
         super(vm);
-        const modal = this.addContent(new Block());
-        modal.setRole('document');
-        modal.addCssName('modal-dialog');
-        modal.addCssName('modal-dialog-centered');
-        const content = modal.addContent(new Block());
+        let dialog = this.addContent(new Block());
+        dialog.setRole('document');
+        dialog.addCssName('modal-dialog');
+        dialog.addCssName('modal-dialog-centered');
+        dialog.addCssName('modal-dialog-scrollable');
+        dialog.addCssName('modal-odata');
+        const content = dialog.addContent(new Block());
         content.addCssName('modal-content');
-        this.header = content.addContent(new Block());
-        this.header.addCssName('modal-header');
-        this.body = content.addContent(new Block());
-        this.body.addCssName('modal-body');
-        this.footer = content.addContent(new Block());
-        this.footer.addCssName('modal-footer');
+        this.selectFieldsPanel = content.addContent(new SelectFieldsPanelView());
         this.closed = this.vm.modalOptions.closed;
     }
 

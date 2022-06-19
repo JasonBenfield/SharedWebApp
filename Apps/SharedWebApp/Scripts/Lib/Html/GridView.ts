@@ -8,7 +8,17 @@ import { GridRowView } from "./GridRowView";
 import { GridViewModel } from "./GridViewModel";
 import { ViewEvents } from "./ViewEvents";
 
-export type GridTemplateCss = CssLengthUnit | GridTemplateMinMax | GridTemplateRepeat;
+export type GridTemplateCss = CssLengthUnit | GridTemplateMinMax | GridTemplateRepeat | GridTemplateFitContent;
+
+export class GridTemplateFitContent {
+    readonly value: string;
+
+    constructor(length: CssLengthUnit) {
+        this.value = `fit-content(${length.value()})`;
+    }
+
+    toString() { return this.value; }
+}
 
 export class GridTemplateMinMax {
     readonly value: string;
@@ -39,7 +49,6 @@ export class GridView extends Block {
     constructor(vm: GridViewModel = new GridViewModel()) {
         super(vm);
         this.addCssName('grid');
-        this.setContext(ContextualClass.light);
     }
 
     protected setStyle: (config: (style: IGridStyle) => void) => void;
@@ -124,14 +133,21 @@ export class GridView extends Block {
 
     cell(index: number) { return this.cells[index]; }
 
-    addRow(howManyCells: number = 0) {
-        return this.addRows(1, howManyCells)[0];
+    addRow<TRowView extends GridRowView>(
+        howManyCells: number = 0,
+        createRowView: () => TRowView = () => new GridRowView() as TRowView
+    ) {
+        return this.addRows(1, howManyCells, createRowView)[0];
     }
 
-    addRows(howManyRows: number, howManyCells: number = 0) {
+    addRows<TRowView extends GridRowView>(
+        howManyRows: number,
+        howManyCells: number = 0,
+        createRowView: () => TRowView = () => new GridRowView() as TRowView
+    ) {
         const rows = new MappedArray(
             new EnumerableRange(1, howManyRows),
-            () => new GridRowView()
+            () => createRowView()
         ).value();
         for (const row of rows) {
             this.addContent(row);

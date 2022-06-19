@@ -1,14 +1,8 @@
-﻿import { ContextualClass } from "../ContextualClass";
-import { CssClass } from "../CssClass";
-import { GridCellView } from "../Html/GridCellView";
-import { TextCss } from "../TextCss";
+﻿import { GridCellView } from "../Html/GridCellView";
+import { ICellStyle } from "./Types";
 
 export class ODataColumnStyle {
-    constructor(private readonly style: {
-        textCss?: TextCss;
-        backgroundContext?: ContextualClass;
-        cssClass?: CssClass;
-    } = {}) {
+    constructor(private readonly style: ICellStyle = {}) {
     }
 
     apply(view: GridCellView) {

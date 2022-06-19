@@ -21,7 +21,7 @@ export class ListGroup {
                 ).value();
                 this._itemClicked.invoke(found);
             },
-            builder => builder.select('button,li,a')
+            options => options.selector = 'button,li,a'
         );
     }
 
@@ -41,8 +41,8 @@ export class ListGroup {
         sourceItem: TSourceItem,
         createItem: (sourceItem: TSourceItem, itemView: IListItemView) => TItem
     ) {
-        let itemView = this.view.createItemView(sourceItem);
-        let item = createItem(sourceItem, itemView);
+        const itemView = this.view.createItemView();
+        const item = createItem(sourceItem, itemView);
         this.items.push(item);
         itemView.addToList(this.view);
         return item;

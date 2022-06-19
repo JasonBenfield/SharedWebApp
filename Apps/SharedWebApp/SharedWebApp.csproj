@@ -67,15 +67,17 @@
     <None Remove="Scripts\Lib\Html\TableViewModel.ts" />
     <None Remove="Scripts\Lib\Html\ViewEvents.ts" />
     <None Remove="Scripts\Lib\JustifyContentCss.ts" />
-    <None Remove="Scripts\Lib\OData\DefaultTextCellFormatter.ts" />
-    <None Remove="Scripts\Lib\OData\IconCellLayout.ts" />
-    <None Remove="Scripts\Lib\OData\IconCellLayoutView.ts" />
-    <None Remove="Scripts\Lib\OData\NumberTextCellFormatter.ts" />
+    <None Remove="Scripts\Lib\OData\DefaultValueFormatter.ts" />
+    <None Remove="Scripts\Lib\OData\IconCellView.ts" />
+    <None Remove="Scripts\Lib\OData\ModalODataComponent.ts" />
+    <None Remove="Scripts\Lib\OData\ModalODataComponentView.ts" />
+    <None Remove="Scripts\Lib\OData\ModalODataPanelView.ts" />
+    <None Remove="Scripts\Lib\OData\NumberValueFormatter.ts" />
     <None Remove="Scripts\Lib\OData\ODataCell.ts" />
     <None Remove="Scripts\Lib\OData\ODataCellClickedEventArgs.ts" />
     <None Remove="Scripts\Lib\OData\ODataColumn.ts" />
+    <None Remove="Scripts\Lib\OData\ODataColumnAccessor.ts" />
     <None Remove="Scripts\Lib\OData\ODataColumnBuilder.ts" />
-    <None Remove="Scripts\Lib\OData\ODataColumnLayouts.ts" />
     <None Remove="Scripts\Lib\OData\ODataColumnStyle.ts" />
     <None Remove="Scripts\Lib\OData\ODataColumnView.ts" />
     <None Remove="Scripts\Lib\OData\ODataColumnViewBuilder.ts" />
@@ -85,10 +87,18 @@
     <None Remove="Scripts\Lib\OData\ODataComponentView.ts" />
     <None Remove="Scripts\Lib\OData\ODataGrid.ts" />
     <None Remove="Scripts\Lib\OData\ODataGridView.ts" />
+    <None Remove="Scripts\Lib\OData\ODataHeaderCell.ts" />
+    <None Remove="Scripts\Lib\OData\ODataHeaderCellView.ts" />
+    <None Remove="Scripts\Lib\OData\ODataHeaderRow.ts" />
+    <None Remove="Scripts\Lib\OData\ODataQueryBuilder.ts" />
     <None Remove="Scripts\Lib\OData\ODataRow.ts" />
+    <None Remove="Scripts\Lib\OData\ODataTextCell.ts" />
+    <None Remove="Scripts\Lib\OData\ODataTextCellView.ts" />
+    <None Remove="Scripts\Lib\OData\SelectFIeldListItem.ts" />
+    <None Remove="Scripts\Lib\OData\SelectFieldListItemView.ts" />
+    <None Remove="Scripts\Lib\OData\SelectFieldsPanel.ts" />
+    <None Remove="Scripts\Lib\OData\SelectFieldsPanelView.ts" />
     <None Remove="Scripts\Lib\OData\SourceType.ts" />
-    <None Remove="Scripts\Lib\OData\TextCellLayout.ts" />
-    <None Remove="Scripts\Lib\OData\TextCellLayoutView.ts" />
     <None Remove="Scripts\Lib\OData\Types.ts" />
     <None Remove="Scripts\Lib\XtiEventOptionsBuilder.ts" />
   </ItemGroup>
@@ -202,18 +212,32 @@
     <TypeScriptCompile Include="Scripts\Lib\Html\TableDataViewModel.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Html\ViewEvents.ts" />
     <TypeScriptCompile Include="Scripts\Lib\JustifyContentCss.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\OData\IconCellLayout.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\OData\IconCellLayoutView.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\OData\NumberTextCellFormatter.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ModalODataComponent.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ModalODataComponentView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\NumberValueFormatter.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataCell.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataCellClickedEventArgs.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\OData\ODataColumnLayouts.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataColumnAccessor.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataColumnStyle.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataColumnView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataColumnViewBuilder.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataGridView.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\OData\DefaultTextCellFormatter.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\DefaultValueFormatter.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ModalODataPanelView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataHeaderCell.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataHeaderCellView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataQueryBuilder.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataHeaderRow.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataRow.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataTextCell.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataTextCellView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\IconCellView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\SelectFIeldListItem.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\SelectFieldListItemView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\SelectFieldsPanel.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\SelectFieldsPanelView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\SourceType.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\Types.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataColumn.ts" />
@@ -223,8 +247,6 @@
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataComponentOptionsBuilder.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataComponentView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataGrid.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\OData\TextCellLayout.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\OData\TextCellLayoutView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\XtiEventOptionsBuilder.ts" />
   </ItemGroup>
   

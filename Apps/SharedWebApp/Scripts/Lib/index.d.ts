@@ -80,7 +80,7 @@ interface IFormAttributes extends IHtmlAttributes {
 }
 
 interface IXtiEventBindingOptions {
-    [name: string]: IXtiEventOptions;
+    [name: string]: IXtiEventOptions[];
 }
 
 interface IXtiEventOptionsBuilder {
@@ -267,24 +267,24 @@ interface IViewEvents {
     clear();
     onClick(
         callback: (source: IViewEventSource) => any,
-        config?: (builder: IXtiEventOptionsBuilder) => void
+        config?: (options: IXtiEventOptions) => void
     );
     onFocus(
         callback: (source: IViewEventSource) => any,
-        config?: (builder: IXtiEventOptionsBuilder) => void
+        config?: (options: IXtiEventOptions) => void
     );
     onBlur(
         callback: (source: IViewEventSource) => any,
-        config?: (builder: IXtiEventOptionsBuilder) => void
+        config?: (options: IXtiEventOptions) => void
     );
     onSubmit(
         callback: (source: IViewEventSource) => any,
-        config?: (builder: IXtiEventOptionsBuilder) => void
+        config?: (options: IXtiEventOptions) => void
     );
     on(
         name: string,
         callback: (source: IViewEventSource) => any,
-        config?: (builder: IXtiEventOptionsBuilder) => void
+        config?: (builder: IXtiEventOptions) => void
     );
 }
 

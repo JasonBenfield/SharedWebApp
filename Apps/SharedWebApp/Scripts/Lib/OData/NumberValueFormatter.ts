@@ -1,8 +1,8 @@
 ﻿import { FormattedNumber } from "../FormattedNumber";
 import { ODataColumn } from "./ODataColumn";
-import { ITextCellFormatter } from "./Types";
+import { IValueFormatter } from "./Types";
 
-export class NumberTextCellFormatter implements ITextCellFormatter {
+export class NumberValueFormatter implements IValueFormatter {
     constructor(private readonly formatString: string) {
     }
 

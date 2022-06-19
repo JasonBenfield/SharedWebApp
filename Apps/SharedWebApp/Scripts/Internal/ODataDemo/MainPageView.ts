@@ -5,10 +5,10 @@ import { CssLengthUnit } from '../../Lib/Html/CssLengthUnit';
 import { GridView } from '../../Lib/Html/GridView';
 import { TextHeading1View } from '../../Lib/Html/TextHeading1View';
 import { Toolbar } from '../../Lib/Html/Toolbar';
-import { NumberTextCellFormatter } from '../../Lib/OData/NumberTextCellFormatter';
+import { NumberValueFormatter } from '../../Lib/OData/NumberValueFormatter';
 import { ODataColumnStyle } from '../../Lib/OData/ODataColumnStyle';
 import { ODataComponentView } from '../../Lib/OData/ODataComponentView';
-import { TextCellLayout } from '../../Lib/OData/TextCellLayout';
+import { ODataTextCellView } from '../../Lib/OData/ODataTextCellView';
 import { PaddingCss } from '../../Lib/PaddingCss';
 import { PageFrameView } from '../../Lib/PageFrameView';
 import { TextCss } from '../../Lib/TextCss';
@@ -37,12 +37,7 @@ export class MainPageView {
             });
 
         this.columns = new ODataEmployeeColumnViewsBuilder();
-        this.columns.Salary.layouts.setDefaultLayout(
-            new TextCellLayout(
-                new NumberTextCellFormatter('$0,0.00'),
-                new ODataColumnStyle({ textCss: new TextCss().end() })
-            )
-        );
+        this.columns.Salary.setDataCellStyle({ textCss: new TextCss().end() });
 
         this.odataComponentView = fillRow.addContent(new ODataComponentView());
         

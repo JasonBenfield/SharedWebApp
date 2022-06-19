@@ -1,7 +1,7 @@
 ﻿import { ODataColumn } from "./ODataColumn";
-import { ITextCellFormatter } from "./Types";
+import { IValueFormatter } from "./Types";
 
-export class DefaultTextCellFormatter implements ITextCellFormatter {
+export class DefaultValueFormatter implements IValueFormatter {
     format(column: ODataColumn, record?: any) {
         let formatted: string;
         if (record) {

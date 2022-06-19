@@ -10,12 +10,20 @@ export class ODataGridView extends GridView {
         this.setMargin(MarginCss.xs(0));
     }
 
-    addHeaderRow(howManyColumns: number) {
-        let row = this.addRow(howManyColumns);
+    addHeaderRow(columns: ODataColumnView[]) {
+        const row = this.addRow();
         row.setContext(ContextualClass.secondary);
         row.addCssName('fw-bold');
-        for (let cell of row.getCells()) {
-            cell.stickyAtTop();
+        for (const col of columns) {
+            row.addCell(r => col.createHeaderCellView(r))
+        }
+        return row;
+    }
+
+    addDataRow(columns: ODataColumnView[]) {
+        const row = this.addRow();
+        for (const col of columns) {
+            row.addCell(r => col.createDataCellView(r))
         }
         return row;
     }

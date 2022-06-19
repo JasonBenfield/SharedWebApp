@@ -1,7 +1,6 @@
-﻿import { XtiEventOptionsBuilder } from "../XtiEventOptionsBuilder";
-
+﻿
 export class ViewEvents implements IViewEvents {
-    private readonly builder = new XtiEventOptionsBuilder();
+    private bindingOptions: IXtiEventBindingOptions = {};
 
     constructor(
         private readonly source: any,
@@ -10,35 +9,34 @@ export class ViewEvents implements IViewEvents {
     }
 
     clear() {
-        this.builder.clear();
-        this.setXtiEvent(this.builder.build());
+        this.bindingOptions = {};
+        this.setXtiEvent(this.bindingOptions);
     }
 
-    onClick(callback: (source, container?) => any, config?: (builder: IXtiEventOptionsBuilder) => void) {
+    onClick(callback: (source, container?) => any, config?: (options: IXtiEventOptions) => void) {
         this.on('click', callback, config);
     }
 
-    onFocus(callback: (source, container?) => any, config?: (builder: IXtiEventOptionsBuilder) => void) {
+    onFocus(callback: (source, container?) => any, config?: (options: IXtiEventOptions) => void) {
         this.on('focus', callback, config);
     }
 
-    onBlur(callback: (source, container?) => any, config?: (builder: IXtiEventOptionsBuilder) => void) {
+    onBlur(callback: (source, container?) => any, config?: (options: IXtiEventOptions) => void) {
         this.on('blur', callback, config);
     }
 
-    onSubmit(callback: (source, container?) => any, config?: (builder: IXtiEventOptionsBuilder) => void) {
+    onSubmit(callback: (source, container?) => any, config?: (options: IXtiEventOptions) => void) {
         this.on('submit', callback, config);
     }
 
-    on(name: string, callback: (source, container?) => any, config?: (builder: IXtiEventOptionsBuilder) => void) {
-        let option = this.builder.option(name);
-        this.builder.on(name, (view: any) => {
-            callback(view, this.source);
-        });
-        option = this.builder.option(name);
+    on(name: string, callback: (source, container?) => any, config?: (options: IXtiEventOptions) => void) {
+        const optionsArr: IXtiEventOptions[] = this.bindingOptions[name] || [];
+        const options: IXtiEventOptions = { callback: callback, selector: null, preventDefault: false };
+        optionsArr.push(options);
+        this.bindingOptions[name] = optionsArr;
         if (config) {
-            config(option);
+            config(options);
         }
-        this.setXtiEvent(this.builder.build());
+        this.setXtiEvent(this.bindingOptions);
     }
 }

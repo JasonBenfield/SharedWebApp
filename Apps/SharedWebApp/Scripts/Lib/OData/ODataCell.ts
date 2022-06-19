@@ -6,9 +6,8 @@ export class ODataCell {
         readonly rowIndex: number,
         readonly column: ODataColumn,
         readonly record: any,
-        private readonly view: GridCellView
+        protected readonly view: GridCellView
     ) {
-        column.view.layouts.execute(rowIndex, view, column, record);
     }
 
     hasView(view: GridCellView) {

@@ -7,7 +7,7 @@ export abstract class BaseListView extends HtmlComponent implements IListView {
     readonly items: IListItemView[] = [];
 
     constructor(
-        readonly createItemView: (source?: any) => IListItemView,
+        readonly createItemView: () => IListItemView,
         vm: IListViewModel = new UnorderedListViewModel()
     ) {
         super(vm);
