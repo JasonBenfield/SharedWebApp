@@ -5,6 +5,7 @@ import { ODataColumns } from "./Types";
 export class ODataComponentOptions<TEntity> {
     constructor(
         readonly odataGroup: AppApiODataGroup<TEntity>,
+        readonly pageSize: number,
         readonly columns: ODataColumns<TEntity>,
         readonly defaultQuery: ISerializableQuery
     ) {

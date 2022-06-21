@@ -33,7 +33,7 @@ export class MainPageView {
                 b.addCssName('container');
                 b.setPadding(PaddingCss.xs(0));
                 b.setBackgroundContext(ContextualClass.light);
-                b.scrollable();
+                //b.scrollable();
             });
 
         this.columns = new ODataEmployeeColumnViewsBuilder();

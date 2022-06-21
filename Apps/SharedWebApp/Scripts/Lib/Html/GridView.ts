@@ -134,15 +134,13 @@ export class GridView extends Block {
     cell(index: number) { return this.cells[index]; }
 
     addRow<TRowView extends GridRowView>(
-        howManyCells: number = 0,
         createRowView: () => TRowView = () => new GridRowView() as TRowView
     ) {
-        return this.addRows(1, howManyCells, createRowView)[0];
+        return this.addRows(1, createRowView)[0];
     }
 
     addRows<TRowView extends GridRowView>(
         howManyRows: number,
-        howManyCells: number = 0,
         createRowView: () => TRowView = () => new GridRowView() as TRowView
     ) {
         const rows = new MappedArray(
@@ -151,7 +149,6 @@ export class GridView extends Block {
         ).value();
         for (const row of rows) {
             this.addContent(row);
-            row.addCells(howManyCells);
             this.rows.push(row);
         }
         return rows;

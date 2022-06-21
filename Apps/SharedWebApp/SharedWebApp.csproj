@@ -85,12 +85,16 @@
     <None Remove="Scripts\Lib\OData\ODataComponentOptions.ts" />
     <None Remove="Scripts\Lib\OData\ODataComponentOptionsBuilder.ts" />
     <None Remove="Scripts\Lib\OData\ODataComponentView.ts" />
+    <None Remove="Scripts\Lib\OData\ODataFooterComponent.ts" />
+    <None Remove="Scripts\Lib\OData\ODataFooterComponentView.ts" />
     <None Remove="Scripts\Lib\OData\ODataGrid.ts" />
     <None Remove="Scripts\Lib\OData\ODataGridView.ts" />
     <None Remove="Scripts\Lib\OData\ODataHeaderCell.ts" />
     <None Remove="Scripts\Lib\OData\ODataHeaderCellView.ts" />
     <None Remove="Scripts\Lib\OData\ODataHeaderRow.ts" />
+    <None Remove="Scripts\Lib\OData\ODataPage.ts" />
     <None Remove="Scripts\Lib\OData\ODataQueryBuilder.ts" />
+    <None Remove="Scripts\Lib\OData\ODataQueryFilterBuilder.ts" />
     <None Remove="Scripts\Lib\OData\ODataRow.ts" />
     <None Remove="Scripts\Lib\OData\ODataTextCell.ts" />
     <None Remove="Scripts\Lib\OData\ODataTextCellView.ts" />
@@ -221,15 +225,19 @@
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataColumnStyle.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataColumnView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataColumnViewBuilder.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataFooterComponent.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataFooterComponentView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataGridView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\DefaultValueFormatter.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ModalODataPanelView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataHeaderCell.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataHeaderCellView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataPage.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataQueryBuilder.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataHeaderRow.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataQueryFilterBuilder.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataRow.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataTextCell.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataTextCellView.ts" />

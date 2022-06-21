@@ -52,7 +52,8 @@
 
 .grid-row {
     padding: $table-cell-padding-y $table-cell-padding-x;
-    background-color: var(--xti-grid-bg);
+    color: $list-group-color;
+    background-color: $list-group-bg;
     border-bottom-width: $table-border-width;
     box-shadow: inset 0 0 0 9999px var(--xti-grid-accent-bg);
 
@@ -137,8 +138,8 @@
     .grid-cell {
         cursor: pointer;
         color: $list-group-action-color;
-        text-align: inherit; // For `<button>`s (anchors inherit)
-        // Hover state
+        text-align: inherit;
+
         &:hover,
         &:focus {
             z-index: 1; // Place hover/focus items above their siblings for proper border styling

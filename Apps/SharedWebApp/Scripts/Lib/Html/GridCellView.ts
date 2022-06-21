@@ -28,11 +28,11 @@ export class GridCellView extends Block {
         this.addCssName('positiion-sticky-right');
     }
 
-    setColumn(start: number, end?: number) {
+    setGridColumn(start: number, end?: number) {
         this.setStyle(style => style["grid-column"] = this.rangeValue(start, end));
     }
 
-    setRow(start: number, end?: number) {
+    setGridRow(start: number, end?: number) {
         this.setStyle(style => style["grid-row"] = this.rangeValue(start, end));
     }
 

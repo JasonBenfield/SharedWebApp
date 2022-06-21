@@ -1,11 +1,14 @@
-﻿import { MappedArray } from "../Enumerable";
+﻿import { ButtonCommandItem } from "../Command/ButtonCommandItem";
+import { MappedArray } from "../Enumerable";
 import { DefaultEvent, EventCollection } from "../Events";
 import { GridCellView } from "../Html/GridCellView";
+import { TextBlock } from "../Html/TextBlock";
 import { ODataCellClickedEventArgs } from "./ODataCellClickedEventArgs";
 import { ODataColumn } from "./ODataColumn";
+import { ODataFooterComponentView } from "./ODataFooterComponentView";
 import { ODataGridView } from "./ODataGridView";
 import { ODataHeaderRow } from "./ODataHeaderRow";
-import { IOrderByField, ODataQueryOrderByBuilder } from "./ODataQueryBuilder";
+import { ODataQueryOrderByBuilder } from "./ODataQueryBuilder";
 import { ODataRow } from "./ODataRow";
 import { IODataRow, Queryable } from "./Types";
 
@@ -17,6 +20,9 @@ export class ODataGrid<TEntity> {
 
     private readonly _sortClicked = new DefaultEvent<ODataColumn>(this);
     readonly sortClicked = this._sortClicked.handler();
+
+    private readonly _pageRequested = new DefaultEvent<number>(this);
+    readonly pageRequested = this._pageRequested.handler();
 
     private readonly events = new EventCollection();
 
@@ -69,6 +75,10 @@ export class ODataGrid<TEntity> {
             this.rows.push(dataRow);
             rowIndex++;
         }
+    }
+
+    private onPageButtonClicked(page: number) {
+        this._pageRequested.invoke(page);
     }
 
     private onSortClicked(column: ODataColumn) {

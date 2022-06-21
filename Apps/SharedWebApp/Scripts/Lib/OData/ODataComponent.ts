@@ -8,7 +8,9 @@ import { ODataColumnAccessor } from "./ODataColumnAccessor";
 import { ODataColumnBuilder } from "./ODataColumnBuilder";
 import { ODataComponentOptions } from "./ODataComponentOptions";
 import { ODataComponentView } from "./ODataComponentView";
+import { ODataFooterComponent } from "./ODataFooterComponent";
 import { ODataGrid } from "./ODataGrid";
+import { ODataPage } from "./ODataPage";
 import { ODataQueryBuilder } from "./ODataQueryBuilder";
 import { SourceType } from "./SourceType";
 
@@ -19,10 +21,12 @@ export class ODataComponent<TEntity> {
     private readonly odataGroup: AppApiODataGroup<TEntity>;
     private readonly columns: ODataColumnAccessor;
     private readonly query: ODataQueryBuilder;
+    private readonly currentPage: ODataPage;
+    private readonly footerComponent: ODataFooterComponent;
 
     private static readonly rowHeaderColumnName = 'RowHeader';
 
-    constructor(view: ODataComponentView, options: ODataComponentOptions<TEntity>) {
+    constructor(private readonly view: ODataComponentView, options: ODataComponentOptions<TEntity>) {
         this.odataGroup = options.odataGroup;
         options.columns[ODataComponent.rowHeaderColumnName] = new ODataColumnBuilder(
             ODataComponent.rowHeaderColumnName,
@@ -38,8 +42,13 @@ export class ODataComponent<TEntity> {
         this.alert = new MessageAlert(view.alert);
         this.modalODataComponent = new ModalODataComponent(this.query, this.columns, view.modalODataComponent);
         this.modalODataComponent.closed.register(this.onModalClosed.bind(this));
+        this.currentPage = new ODataPage(options.pageSize);
+        this.currentPage.pageChanged(1, this.query);
+        this.footerComponent = new ODataFooterComponent(this.view.footerComponent);
+        this.footerComponent.pageRequested.register(this.onPageRequested.bind(this));
         this.grid.sortClicked.register(this.onSortClick.bind(this));
         this.grid.cellClicked.register(this.onCellClick.bind(this));
+        this.grid.pageRequested.register(this.onPageRequested.bind(this));
     }
 
     private onSortClick(column: ODataColumn) {
@@ -68,6 +77,11 @@ export class ODataComponent<TEntity> {
         }
     }
 
+    private onPageRequested(page: number) {
+        this.currentPage.pageChanged(page, this.query);
+        this.refresh();
+    }
+
     private onModalClosed() {
         return this.refresh();
     }
@@ -81,10 +95,20 @@ export class ODataComponent<TEntity> {
                 result = await this.odataGroup.Get(query);
             }
         );
+        this.currentPage.countChanged(result.count);
         const selectedColumnNames = this.query.select.getExplicitlySelected();
         const gridColumns = this.columns.columns(selectedColumnNames);
         gridColumns.splice(0, 0, this.columns.column(ODataComponent.rowHeaderColumnName));
         this.grid.setData(gridColumns, result.records);
+        this.footerComponent.setPaging(
+            this.currentPage.page,
+            this.currentPage.numberOfPages
+        );
+        this.footerComponent.setCount(
+            this.currentPage.startRecord,
+            this.currentPage.startRecord + result.records.length - 1,
+            result.count
+        );
         this.grid.orderByChanged(this.query.orderBy);
     }
 }

@@ -1,7 +1,8 @@
-﻿import { EnumerableArray, FilteredArray, MappedArray } from "../Enumerable";
+﻿import { FilteredArray, MappedArray } from "../Enumerable";
 import { JoinedStrings } from "../JoinedStrings";
 import { ODataColumn } from "./ODataColumn";
 import { ODataColumnBuilder } from "./ODataColumnBuilder";
+import { ISerializableFilter, ODataQueryFilterBuilder } from "./ODataQueryFilterBuilder";
 
 export interface ISerializableQuery {
     readonly select: ISerializableSelect;
@@ -11,9 +12,6 @@ export interface ISerializableQuery {
 
 export interface ISerializableSelect {
     readonly fields: ISelectField[];
-}
-
-export interface ISerializableFilter {
 }
 
 export interface IOrderByField {
@@ -45,6 +43,11 @@ export class ODataQueryBuilder {
 
     skip(skip: number) {
         this._skip = skip;
+        return this;
+    }
+
+    top(top: number) {
+        this._top = top;
         return this;
     }
 
@@ -172,26 +175,6 @@ export class ODataQuerySelectBuilder {
         return {
             fields: this.fields
         } as ISerializableSelect;
-    }
-}
-
-export class ODataQueryFilterBuilder {
-    constructor(serialized?: ISerializableFilter) {
-        if (serialized) {
-        }
-    }
-
-    clear() {
-        return this;
-    }
-
-    build() {
-        return '';
-    }
-
-    toSerializable() {
-        return {
-        } as ISerializableFilter;
     }
 }
 

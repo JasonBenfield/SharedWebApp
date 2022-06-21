@@ -9,12 +9,17 @@ export type IODataColumnsBuilder<TEntity> = {
 
 export class ODataComponentOptionsBuilder<TEntity> {
     private odataGroup: AppApiODataGroup<TEntity>;
+    private pageSize: number = 50;
 
     constructor(private readonly columns: IODataColumnsBuilder<TEntity>) {
     }
 
     setODataGroup(odataGroup: AppApiODataGroup<TEntity>) {
         this.odataGroup = odataGroup;
+    }
+
+    setPageSize(pageSize: number) {
+        this.pageSize = pageSize;
     }
 
     readonly query = new ODataQueryBuilder();
@@ -27,6 +32,6 @@ export class ODataComponentOptionsBuilder<TEntity> {
                 columns[key] = column.build();
             }
         }
-        return new ODataComponentOptions(this.odataGroup, columns, this.query.toSerializable());
+        return new ODataComponentOptions(this.odataGroup, this.pageSize, columns, this.query.toSerializable());
     }
 }

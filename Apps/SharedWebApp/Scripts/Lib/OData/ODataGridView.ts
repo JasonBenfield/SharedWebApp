@@ -3,10 +3,12 @@ import { MappedArray } from "../Enumerable";
 import { GridView } from "../Html/GridView";
 import { MarginCss } from "../MarginCss";
 import { ODataColumnView } from "./ODataColumnView";
+import { ODataFooterComponentView } from "./ODataFooterComponentView";
 
 export class ODataGridView extends GridView {
     constructor() {
         super();
+        this.setName(ODataGridView.name);
         this.setMargin(MarginCss.xs(0));
     }
 
@@ -30,9 +32,9 @@ export class ODataGridView extends GridView {
 
     setSelectedTemplateColumns(columns: ODataColumnView[]) {
         const templateColumns = new MappedArray(
-                columns,
-                col => col.width
-            ).value();
+            columns,
+            col => col.width
+        ).value();
         this.setTemplateColumns(...templateColumns);
     }
 }
