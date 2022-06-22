@@ -21,11 +21,11 @@ export class HttpClient {
         return this.execute('GET', url);
     }
 
-    post(url: string, data: string) {
-        return this.execute('POST', url, data);
+    post(url: string, data: string, contentType?: string) {
+        return this.execute('POST', url, data, contentType);
     }
 
-    private execute(method: string, url: string, body?: string) {
+    private execute(method: string, url: string, body?: string, contentType?: string) {
         return new Promise<HttpPostResult>((resolve) => {
             function reqListener() {
                 console.log(this.responseText);
@@ -47,7 +47,10 @@ export class HttpClient {
             };
             oReq.addEventListener("load", reqListener.bind(oReq));
             oReq.open(method, url);
-            if (method === 'POST') {
+            if (contentType) {
+                oReq.setRequestHeader("Content-Type", contentType);
+            }
+            else if (method === 'POST') {
                 oReq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             }
             oReq.send(body);

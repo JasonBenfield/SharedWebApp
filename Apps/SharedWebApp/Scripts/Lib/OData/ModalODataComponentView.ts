@@ -1,12 +1,14 @@
 ﻿import { Block } from "../Html/Block";
 import { HtmlContainerComponent } from "../Html/HtmlContainerComponent";
 import { ModalComponentViewModel } from "../Modal/ModalComponentViewModel";
+import { FilterWorkflowView } from "./FilterWorkflowView";
 import { SelectFieldsPanelView } from "./SelectFieldsPanelView";
 
 export class ModalODataComponentView extends HtmlContainerComponent {
     readonly closed: IEventHandler<any>;
 
     readonly selectFieldsPanel: SelectFieldsPanelView;
+    readonly filterWorkflow: FilterWorkflowView;
 
     protected readonly vm: ModalComponentViewModel;
 
@@ -21,6 +23,7 @@ export class ModalODataComponentView extends HtmlContainerComponent {
         const content = dialog.addContent(new Block());
         content.addCssName('modal-content');
         this.selectFieldsPanel = content.addContent(new SelectFieldsPanelView());
+        this.filterWorkflow = content.addContent(new FilterWorkflowView());
         this.closed = this.vm.modalOptions.closed;
     }
 

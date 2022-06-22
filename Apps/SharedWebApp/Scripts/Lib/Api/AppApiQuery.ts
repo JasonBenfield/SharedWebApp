@@ -38,10 +38,11 @@ export class AppApiQuery<TEntity> {
 
     async execute(data: string, errorOptions: IActionErrorOptions) {
         let url = this.url();
-        url.addQueryString(data);
+        url.addPart('$query');
         let postResult = await new HttpClient().post(
             url.value(),
-            ''
+            data,
+            'text/plain'
         );
         let result: ODataResult<TEntity>;
         let apiError: AppApiError;

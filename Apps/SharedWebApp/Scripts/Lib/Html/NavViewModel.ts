@@ -9,7 +9,7 @@ export class NavViewModel extends HtmlComponentViewModel implements IHtmlContain
         super(new ComponentTemplate('nav', template));
     }
 
-    readonly content = new AggregateComponentViewModel();
+    readonly xtiEvent = ko.observable<IXtiEventBindingOptions>(null);
 
-    readonly role = ko.observable<string>(null);
+    readonly content = new AggregateComponentViewModel();
 }

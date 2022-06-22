@@ -45,3 +45,8 @@ export interface ICellStyle {
 export interface IODataRow {
     cellByView(view: GridCellView);
 }
+
+export enum FilterConditions {
+    None,
+    Equal
+}

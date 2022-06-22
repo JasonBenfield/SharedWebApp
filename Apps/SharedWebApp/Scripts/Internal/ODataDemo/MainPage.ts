@@ -19,7 +19,7 @@ class MainPage {
         const columns = new ODataEmployeeColumnsBuilder(view.columns);
         columns.Salary.setFormatter(new NumberValueFormatter('$0,0.00'));
         const options = new ODataComponentOptionsBuilder<IEmployee>(columns);
-        //options.setPageSize(8);
+        options.setPageSize(8);
         options.query.select.addFields(
             columns.ID,
             columns.EmployeeName,
@@ -27,9 +27,9 @@ class MainPage {
             columns.Salary
         );
         options.query.filter.add(
-            FilterConditionOperation.equal(
+            FilterConditionOperation.greaterThan(
                 new FilterField(columns.ID.columnName),
-                new FilterValue(2)
+                new FilterValue(5)
             )
         );
         const odataGroup = new AppApiODataGroup<IEmployee>(

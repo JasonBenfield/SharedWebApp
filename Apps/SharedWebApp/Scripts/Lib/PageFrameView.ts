@@ -1,15 +1,20 @@
 ﻿import { AlignCss } from "./AlignCss";
 import { XtiUrl } from "./Api/XtiUrl";
+import { ColumnCss } from "./ColumnCss";
 import { ContextualClass } from "./ContextualClass";
 import { DropdownBlock } from "./Dropdown/DropdownBlock";
 import { ModalErrorComponentView } from "./Error/ModalErrorComponentView";
 import { FaIcon } from "./FaIcon";
+import { Column } from "./Grid/Column";
+import { Row } from "./Grid/Row";
 import { AggregateComponent } from "./Html/AggregateComponent";
 import { Block } from "./Html/Block";
 import { CssLengthUnit } from "./Html/CssLengthUnit";
 import { GridView } from "./Html/GridView";
 import { Heading1 } from "./Html/Heading1";
 import { Link } from "./Html/Link";
+import { TextBlockView } from "./Html/TextBlockView";
+import { TextHeading1View } from "./Html/TextHeading1View";
 import { TextSmallView } from "./Html/TextSmallView";
 import { TextSpanView } from "./Html/TextSpanView";
 import { Toolbar } from "./Html/Toolbar";
@@ -19,9 +24,9 @@ import { PageViewModel } from "./PageViewModel";
 import { TextCss } from "./TextCss";
 
 export class PageFrameView {
-    readonly toolbar: Toolbar;
-    readonly appTitle: TextSpanView;
-    readonly pageTitle: TextSmallView;
+    readonly toolbar: Block;
+    readonly appTitle: TextHeading1View;
+    readonly pageTitle: TextBlockView;
 
     private readonly outerContent = new AggregateComponent(this.view.content);
     readonly content: Block;
@@ -35,18 +40,25 @@ export class PageFrameView {
         grid.height100();
         grid.setTemplateRows(CssLengthUnit.auto(), CssLengthUnit.flex(1));
         grid.setName('PageFrame');
-        this.toolbar = grid.addContent(new Toolbar());
+        this.toolbar = grid.addContent(new Block());
         this.toolbar.setName('PageFrame_MainToolbar');
         this.toolbar.setBackgroundContext(ContextualClass.primary);
         this.toolbar.setPadding(PaddingCss.xs(3));
-        this.toolbar.columnStart.setTextCss(new TextCss().context(ContextualClass.light));
-        let heading = this.toolbar.columnStart.addContent(new Heading1());
-        this.appTitle = heading.addContent(new TextSpanView());
+        this.toolbar.setTextCss(new TextCss().context(ContextualClass.light));
+        const row = this.toolbar.addContent(new Row());
+        const col1 = row.addColumn();
+        col1.setColumnCss(ColumnCss.xs('auto'));
+        this.appTitle = col1.addContent(new TextHeading1View());
         this.appTitle.setText(pageContext.AppTitle);
-        this.pageTitle = heading.addContent(new TextSmallView());
+        const col2 = row.addColumn();
+        col2.setTextCss(new TextCss().truncate());
+        col2.addCssFrom(new AlignCss().self(a => a.xs('center')));
+        this.pageTitle = col2.addContent(new TextBlockView());
         this.pageTitle.setText(pageContext.PageTitle);
-        this.toolbar.columnEnd.addCssFrom(new AlignCss().self(a => a.xs('center')).cssClass());
-        this.userDropdown = this.toolbar.columnEnd.addContent(new DropdownBlock());
+        const col3 = row.addColumn();
+        col3.setColumnCss(ColumnCss.xs('auto'));
+        col3.addCssFrom(new AlignCss().self(a => a.xs('center')));
+        this.userDropdown = col3.addContent(new DropdownBlock());
         if (!pageContext.IsAuthenticated) {
             this.userDropdown.hide();
         }

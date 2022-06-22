@@ -44,6 +44,7 @@ builder.Services
     });
 
 var app = builder.Build();
+app.UseODataQueryRequest();
 var appContext = app.Services.GetRequiredService<FakeAppContext>();
 var fakeApp = appContext.AddApp(SharedInfo.AppKey);
 appContext.SetCurrentApp(fakeApp);

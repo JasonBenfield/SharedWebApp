@@ -2,6 +2,7 @@
 import { HtmlContainerComponent } from "./HtmlContainerComponent";
 import { NavLinkView } from "./NavLinkView";
 import { NavViewModel } from "./NavViewModel";
+import { ViewEvents } from "./ViewEvents";
 
 export class NavView extends HtmlContainerComponent {
     protected readonly vm: NavViewModel;
@@ -11,6 +12,8 @@ export class NavView extends HtmlContainerComponent {
         super(vm);
         this.addCssName('nav');
     }
+
+    readonly events = new ViewEvents(this, (options) => this.vm.xtiEvent(options));
 
     pills() {
         this.addCssName('nav-pills');
@@ -29,7 +32,6 @@ export class NavView extends HtmlContainerComponent {
     }
 
     addLink() {
-        let link = this.addContent(new NavLinkView());
-        return link;
+        return this.addContent(new NavLinkView());
     }
 }
