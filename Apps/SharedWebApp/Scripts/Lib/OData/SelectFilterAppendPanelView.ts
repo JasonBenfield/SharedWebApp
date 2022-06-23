@@ -1,5 +1,4 @@
 ﻿import { FlexCss } from "../FlexCss";
-import { Heading1 } from "../Html/Heading1";
 import { NavLinkView } from "../Html/NavLinkView";
 import { NavView } from "../Html/NavView";
 import { TextBlockView } from "../Html/TextBlockView";

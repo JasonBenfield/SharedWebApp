@@ -5,19 +5,19 @@ import { FilterColumnOptionsBuilder } from "./FilterColumnOptionsBuilder";
 import { SelectFilterAppendPanelView } from "./SelectFilterAppendPanelView";
 
 interface IResult {
-    readonly done?: {};
+    readonly next?: {};
 }
 
-export class SelectFilterAppendPanelResult {
-    static done() { return new SelectFilterAppendPanelResult({ done: {} }); }
+class Result {
+    static next() { return new Result({ next: {} }); }
 
     private constructor(private readonly result: IResult) { }
 
-    get done() { return this.result.done; }
+    get next() { return this.result.next; }
 }
 
 export class SelectFilterAppendPanel implements IPanel {
-    private readonly awaitable = new Awaitable<SelectFilterAppendPanelResult>();
+    private readonly awaitable = new Awaitable<Result>();
     private options: FilterColumnOptionsBuilder;
 
     constructor(private readonly view: SelectFilterAppendPanelView) {
@@ -39,7 +39,7 @@ export class SelectFilterAppendPanel implements IPanel {
         else if (itemView === this.view.appendItem) {
             this.options.append();
         }
-        this.awaitable.resolve(SelectFilterAppendPanelResult.done());
+        this.awaitable.resolve(Result.next());
     }
 
     start() { return this.awaitable.start(); }

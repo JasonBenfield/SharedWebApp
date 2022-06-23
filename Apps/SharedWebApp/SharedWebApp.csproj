@@ -33,6 +33,7 @@
     <None Remove="Scripts\Lib\Api\ErrorFromHttpResult.ts" />
     <None Remove="Scripts\Lib\Api\ODataResult.ts" />
     <None Remove="Scripts\Lib\Api\ParsedDateObject.ts" />
+    <None Remove="Scripts\Lib\DateRange.ts" />
     <None Remove="Scripts\Lib\Error\ModalErrorGroupComponent.ts" />
     <None Remove="Scripts\Lib\Error\ModalErrorListItem.ts" />
     <None Remove="Scripts\Lib\Error\ModalErrorListItemView.ts" />
@@ -69,6 +70,13 @@
     <None Remove="Scripts\Lib\JustifyContentCss.ts" />
     <None Remove="Scripts\Lib\OData\DefaultValueFormatter.ts" />
     <None Remove="Scripts\Lib\OData\FilterColumnOptionsBuilder.ts" />
+    <None Remove="Scripts\Lib\OData\FilterConditionLink.ts" />
+    <None Remove="Scripts\Lib\OData\FilterConditionLinkView.ts" />
+    <None Remove="Scripts\Lib\OData\FilterSelection.ts" />
+    <None Remove="Scripts\Lib\OData\FilterSelectionBooleanValue.ts" />
+    <None Remove="Scripts\Lib\OData\FilterSelectionStringValue.ts" />
+    <None Remove="Scripts\Lib\OData\FilterValueInputPanel.ts" />
+    <None Remove="Scripts\Lib\OData\FilterValueInputPanelView.ts" />
     <None Remove="Scripts\Lib\OData\FilterWorkflow.ts" />
     <None Remove="Scripts\Lib\OData\FilterWorkflowView.ts" />
     <None Remove="Scripts\Lib\OData\IconCellView.ts" />
@@ -108,10 +116,13 @@
     <None Remove="Scripts\Lib\OData\SelectFilterAppendPanel.ts" />
     <None Remove="Scripts\Lib\OData\SelectFilterAppendPanelView.ts" />
     <None Remove="Scripts\Lib\OData\SelectFilterConditionPanel.ts" />
+    <None Remove="Scripts\Lib\OData\SelectFilterConditionPanelView.ts" />
     <None Remove="Scripts\Lib\OData\SourceType.ts" />
     <None Remove="Scripts\Lib\OData\Types.ts" />
+    <None Remove="Scripts\Lib\RelativeDateRange.ts" />
     <None Remove="Scripts\Lib\TimeSpan.ts" />
     <None Remove="Scripts\Lib\XtiEventOptionsBuilder.ts" />
+    <None Remove="Scripts\Tests\RelativeDateRangeTest.ts" />
     <None Remove="Scripts\Tests\TimeSpanTest.ts" />
   </ItemGroup>
   
@@ -152,6 +163,7 @@
     <TypeScriptCompile Include="Scripts\Lib\Api\ErrorFromHttpResult.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Api\ODataResult.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Api\ParsedDateObject.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\DateRange.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Error\ModalErrorGroupComponent.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Error\ModalErrorListItem.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Error\ModalErrorListItemView.ts" />
@@ -224,7 +236,14 @@
     <TypeScriptCompile Include="Scripts\Lib\Html\TableDataViewModel.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Html\ViewEvents.ts" />
     <TypeScriptCompile Include="Scripts\Lib\JustifyContentCss.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\FilterSelectionBooleanValue.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\FilterColumnOptionsBuilder.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\FilterSelection.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\FilterConditionLink.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Html\TextNavLinkView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\FilterSelectionStringValue.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\FilterValueInputPanel.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\FilterValueInputPanelView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\FilterWorkflow.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\FilterWorkflowView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ModalODataComponent.ts" />
@@ -260,6 +279,7 @@
     <TypeScriptCompile Include="Scripts\Lib\OData\SelectFilterAppendPanel.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\SelectFilterAppendPanelView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\SelectFilterConditionPanel.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\SelectFilterConditionPanelView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\SourceType.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\Types.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataColumn.ts" />
@@ -269,8 +289,12 @@
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataComponentOptionsBuilder.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataComponentView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataGrid.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\RelativeDateRange.ts" />
     <TypeScriptCompile Include="Scripts\Lib\TimeSpan.ts" />
     <TypeScriptCompile Include="Scripts\Lib\XtiEventOptionsBuilder.ts" />
+    <TypeScriptCompile Include="Scripts\Tests\RelativeDateRangeTest.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Tests\TimeSpanTest.ts" />
   </ItemGroup>
   

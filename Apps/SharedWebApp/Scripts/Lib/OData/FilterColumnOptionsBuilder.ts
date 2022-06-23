@@ -1,41 +1,48 @@
-﻿import { ODataColumn } from "./ODataColumn";
-import { FilterConditions } from "./Types";
+﻿import { FilterSelection } from "./FilterSelection";
+import { FilterSelectionBooleanValue } from "./FilterSelectionBooleanValue";
+import { ODataColumn } from "./ODataColumn";
+import { ODataQueryFilterBuilder } from "./ODataQueryFilterBuilder";
+
+enum FilterAppend {
+    replace,
+    append,
+    replaceField
+}
 
 export class FilterColumnOptionsBuilder {
-    private isAppending = false;
-    private _ignoreCase = false;
-    private condition: FilterConditions;
+    private appendValue: FilterAppend;
+    private selection: FilterSelection;
     private value: any;
 
-    constructor(readonly column: ODataColumn) {
+    constructor(private readonly filter: ODataQueryFilterBuilder, readonly column: ODataColumn) {
     }
 
     append() {
-        this.isAppending = true;
+        this.appendValue = FilterAppend.append;
     }
 
     replace() {
-        this.isAppending = false;
+        this.appendValue = FilterAppend.replace;
     }
 
-    setCondition(condition: FilterConditions) {
-        this.condition = condition;
+    replaceField() {
+        this.appendValue = FilterAppend.replaceField;
     }
 
-    setValue(value: any) {
-        this.value = value;
+    setFilterSelection(selection: FilterSelection) {
+        this.selection = selection;
+        if (selection === FilterSelection.isTrue) {
+            this.value = new FilterSelectionBooleanValue(this.column.columnName, true);
+        }
+        else if (selection === FilterSelection.isTrue) {
+            this.value = new FilterSelectionBooleanValue(this.column.columnName, false);
+        }
     }
 
-    ignoreCase() {
-        this._ignoreCase = true;
-    }
-
-    build() {
-        return {
-            isAppending: this.isAppending,
-            condition: this.condition,
-            ignoreCase: this._ignoreCase,
-            value: this.value
-        };
+    applyToQuery() {
+        if (this.appendValue === FilterAppend.replace) {
+            this.filter.clear();
+        }
+        this.selection.applyToQuery(this.filter, this.value);
     }
 }

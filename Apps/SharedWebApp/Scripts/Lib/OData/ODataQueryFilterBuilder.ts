@@ -1,6 +1,11 @@
 ﻿import { MappedArray } from "../Enumerable";
 import { JoinedStrings } from "../JoinedStrings";
 
+export interface IFilterSelectionValue {
+    toField(): FilterField | FilterFieldFunction;
+    toValue(): FilterValue;
+}
+
 export interface ISerializableFilter {
     conditions: ISerializableFilterPart<ISerializableConditionOperation>[];
 }

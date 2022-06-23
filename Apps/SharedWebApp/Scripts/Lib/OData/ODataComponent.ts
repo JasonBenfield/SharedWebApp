@@ -72,8 +72,8 @@ export class ODataComponent<TEntity> {
         else if (cell.column.columnName === ODataComponent.rowHeaderColumnName) {
             this.modalODataComponent.showSelect();
         }
-        else {
-            this.modalODataComponent.showSelect();
+        else if (cell.column.isSelectable) {
+            this.modalODataComponent.showFilter(cell.column);
         }
     }
 
