@@ -28,6 +28,8 @@
     <None Remove="Scripts\Internal\GridDemo\DemoGrid.ts" />
     <None Remove="Scripts\Internal\ODataDemo\index.d.ts" />
     <None Remove="Scripts\Internal\ODataDemo\ODataEmployeeColumnsBuilder.ts" />
+    <None Remove="Scripts\Internal\ViewDemo\MainPage.ts" />
+    <None Remove="Scripts\Internal\ViewDemo\MainPageView.ts" />
     <None Remove="Scripts\Lib\Api\AppApiQuery.ts" />
     <None Remove="Scripts\Lib\Api\AppVersionDomain.ts" />
     <None Remove="Scripts\Lib\Api\ErrorFromHttpResult.ts" />
@@ -121,6 +123,27 @@
     <None Remove="Scripts\Lib\OData\Types.ts" />
     <None Remove="Scripts\Lib\RelativeDateRange.ts" />
     <None Remove="Scripts\Lib\TimeSpan.ts" />
+    <None Remove="Scripts\Lib\Views\BasicComponentView.ts" />
+    <None Remove="Scripts\Lib\Views\BasicContainerView.ts" />
+    <None Remove="Scripts\Lib\Views\BasicTextComponentView.ts" />
+    <None Remove="Scripts\Lib\Views\BlockView.ts" />
+    <None Remove="Scripts\Lib\Views\BodyView.ts" />
+    <None Remove="Scripts\Lib\Views\Headings.ts" />
+    <None Remove="Scripts\Lib\Views\HorizontalRuleView.ts" />
+    <None Remove="Scripts\Lib\Views\HtmlElementView.ts" />
+    <None Remove="Scripts\Lib\Views\LinkView.ts" />
+    <None Remove="Scripts\Lib\Views\ListItemView.ts" />
+    <None Remove="Scripts\Lib\Views\NavView.ts" />
+    <None Remove="Scripts\Lib\Views\SelectView.ts" />
+    <None Remove="Scripts\Lib\Views\SmallView.ts" />
+    <None Remove="Scripts\Lib\Views\SpanView.ts" />
+    <None Remove="Scripts\Lib\Views\TextBlockView.ts" />
+    <None Remove="Scripts\Lib\Views\TextHeadings.ts" />
+    <None Remove="Scripts\Lib\Views\TextLinkView.ts" />
+    <None Remove="Scripts\Lib\Views\TextSpanView.ts" />
+    <None Remove="Scripts\Lib\Views\Types.ts" />
+    <None Remove="Scripts\Lib\Views\UnorderedListView.ts" />
+    <None Remove="Scripts\Lib\Views\ViewEventBuilder.ts" />
     <None Remove="Scripts\Lib\XtiEventOptionsBuilder.ts" />
     <None Remove="Scripts\Tests\RelativeDateRangeTest.ts" />
     <None Remove="Scripts\Tests\TimeSpanTest.ts" />
@@ -158,6 +181,8 @@
     <TypeScriptCompile Include="Scripts\Internal\GridDemo\DemoGrid.ts" />
     <TypeScriptCompile Include="Scripts\Internal\ODataDemo\index.d.ts" />
     <TypeScriptCompile Include="Scripts\Internal\ODataDemo\ODataEmployeeColumnsBuilder.ts" />
+    <TypeScriptCompile Include="Scripts\Internal\ViewDemo\MainPage.ts" />
+    <TypeScriptCompile Include="Scripts\Internal\ViewDemo\MainPageView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Api\AppApiQuery.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Api\AppVersionDomain.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Api\ErrorFromHttpResult.ts" />
@@ -291,6 +316,45 @@
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataGrid.ts" />
     <TypeScriptCompile Include="Scripts\Lib\RelativeDateRange.ts" />
     <TypeScriptCompile Include="Scripts\Lib\TimeSpan.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\BasicComponentView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\BasicContainerView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\BasicTextComponentView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\NavView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\SelectView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\TextLinkView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\LinkView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\ListItemView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\UnorderedListView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\SmallView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\SpanView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\BlockView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\HorizontalRuleView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\TextSpanView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\TextHeadings.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\Headings.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\HtmlElementView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\BodyView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\TextBlockView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\Types.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\ViewEventBuilder.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Lib\XtiEventOptionsBuilder.ts" />
     <TypeScriptCompile Include="Scripts\Tests\RelativeDateRangeTest.ts">
       <SubType>Code</SubType>
