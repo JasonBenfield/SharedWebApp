@@ -71,6 +71,7 @@ interface IInputAttributes extends IHtmlAttributes {
 
 interface IButtonAttributes extends IHtmlAttributes {
     type?: string;
+    disabled?: boolean;
 }
 
 interface IFormAttributes extends IHtmlAttributes {

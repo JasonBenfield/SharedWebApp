@@ -1,24 +1,55 @@
 ﻿import { ContextualClass } from "../ContextualClass";
 import { CssClass } from "../CssClass";
+import { EnumerableArray } from "../Enumerable";
 import { CssLengthUnit } from "../Html/CssLengthUnit";
 import { MarginCss } from "../MarginCss";
 import { PaddingCss } from "../PaddingCss";
 import { TextCss } from "../TextCss";
 import { HtmlElementView } from "./HtmlElementView";
-import { IHtmlAttributes } from './Types';
+import { IHtmlStyle, IHtmlAttributes, ViewConstructor } from './Types';
 import { ViewEventBuilder } from "./ViewEventBuilder";
+
+interface ICssBuilders {
+    [name: string]: ICssBuilder | string;
+}
 
 export class BasicComponentView {
     private attr: IHtmlAttributes = {
         style: {}
     };
-    private bgContextCss = '';
-    private textCss: TextCss;
-    private margin: MarginCss = null;
-    private padding: PaddingCss = null;
-    private readonly css = new CssClass();
+    private readonly cssClass = new CssClass();
+    private readonly css: ICssBuilders = {};
+    private readonly views: BasicComponentView[] = [];
 
     constructor(protected readonly elementView: HtmlElementView) {
+    }
+
+    getViewByElement(element: HTMLElement) {
+        for (const view of this.views) {
+            if (view.hasElement(element)) {
+                return view;
+            }
+        }
+        if (this.hasElement(element)) {
+            return this;
+        }
+        return null;
+    }
+
+    private hasElement(element: HTMLElement) {
+        return this.elementView.hasElement(element);
+    }
+
+    isOrContainsView(view: BasicComponentView) {
+        if (view === this) {
+            return true;
+        }
+        for (const childView of this.views) {
+            if (childView.isOrContainsView(view)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     protected setAttr(config: (attr: IHtmlAttributes) => void) {
@@ -36,11 +67,11 @@ export class BasicComponentView {
         return this;
     }
 
-    setID(id: string) {
+    setViewID(id: string) {
         this.setAttr(attr => attr.id = id);
     }
 
-    setName(name: string) {
+    setViewName(name: string) {
         this.setAttr(attr => attr.name = name);
     }
 
@@ -73,33 +104,40 @@ export class BasicComponentView {
     }
 
     setBackgroundContext(contextClass: ContextualClass) {
-        let css = contextClass.append('bg');
-        this.replaceCssName(this.bgContextCss, css);
-        this.bgContextCss = css;
+        this.setCss('bg-context', contextClass.append('bg'));
     }
 
     setTextCss(textCss: TextCss) {
-        this.replaceCssName(
-            this.textCss && this.textCss.cssClass().toString(),
-            textCss && textCss.cssClass().toString()
-        );
-        this.textCss = textCss;
+        this.setCss('text', textCss);
     }
 
     setMargin(margin: MarginCss) {
-        this.replaceCssName(
-            this.margin && this.margin.cssClass().toString(),
-            margin && margin.cssClass().toString()
-        );
-        this.margin = margin;
+        this.setCss('margin', margin);
     }
 
     setPadding(padding: PaddingCss) {
-        this.replaceCssName(
-            this.padding && this.padding.cssClass().toString(),
-            padding && padding.cssClass().toString()
-        );
-        this.padding = padding;
+        this.setCss('padding', padding);
+    }
+
+    setTitle(title: string) {
+        this.setAttr(attr => attr.title = title);
+    }
+
+    protected setCss(name: string, value: ICssBuilder | string) {
+        const previousValue = this.buildCss(this.css[name]);
+        const updatedValued = this.buildCss(value);
+        this.replaceCssName(previousValue, updatedValued);
+        this.css[name] = value;
+    }
+
+    private buildCss(value: ICssBuilder | string) {
+        if (value) {
+            if (typeof value === 'string') {
+                return value;
+            }
+            return value.cssClass().toString();
+        }
+        return '';
     }
 
     replaceCss(css: CssClass) {
@@ -108,37 +146,33 @@ export class BasicComponentView {
     }
 
     clearCss() {
-        this.css.clear();
-        this.updateVmCss();
+        this.cssClass.clear();
+        this.setCssClass();
     }
 
     addCssFrom(css: CssClass | ICssBuilder) {
-        this.css.addFrom(css);
-        this.updateVmCss();
+        this.cssClass.addFrom(css);
+        this.setCssClass();
     }
 
-    replaceCssName(nameToRemove: string, nameToAdd: string) {
-        this.css.removeName(nameToRemove);
-        this.css.addName(nameToAdd);
-        this.updateVmCss();
+    private replaceCssName(nameToRemove: string, nameToAdd: string) {
+        this.cssClass.removeName(nameToRemove);
+        this.cssClass.addName(nameToAdd);
+        this.setCssClass();
     }
 
     addCssName(name: string) {
-        this.css.addName(name);
-        this.updateVmCss();
+        this.cssClass.addName(name);
+        this.setCssClass();
     }
 
     removeCssName(name: string) {
-        this.css.removeName(name);
-        this.updateVmCss();
+        this.cssClass.removeName(name);
+        this.setCssClass();
     }
 
-    private updateVmCss() {
-        this.setAttr(attr => attr.class = this.css.toString());
-    }
-
-    setTitle(title: string) {
-        this.setAttr(attr => attr.title = title);
+    private setCssClass() {
+        this.setAttr(attr => attr.class = this.cssClass.toString());
     }
 
     show() {
@@ -151,5 +185,43 @@ export class BasicComponentView {
 
     on(eventName: string) {
         return new ViewEventBuilder(this, this.elementView, eventName);
+    }
+
+    dispose() {
+        for (const view of this.views) {
+            view.dispose();
+        }
+        this.elementView.removeFromContainer();
+    }
+
+    protected getViews() { return new EnumerableArray(this.views).value(); }
+
+    protected clearViews() {
+        for (const view of this.views) {
+            view.dispose();
+        }
+        this.views.splice(0, this.views.length);
+    }
+
+    protected removeView(view: BasicComponentView) {
+        const index = this.views.indexOf(view);
+        if (index > -1) {
+            view.dispose();
+            this.views.splice(index, 1);
+        }
+    }
+
+    protected addView<T extends BasicComponentView>(ctor: ViewConstructor<T>) {
+        return this.addViews(1, ctor)[0];
+    }
+
+    protected addViews<T extends BasicComponentView>(howMany: number, ctor: ViewConstructor<T>) {
+        const views: T[] = [];
+        for (let i = 0; i < howMany; i++) {
+            const view = new ctor(this.elementView);
+            this.views.push(view);
+            views.push(view);
+        }
+        return views;
     }
 }

@@ -13,9 +13,9 @@ export class ViewEventBuilder {
     ) {
     }
 
-    setAction(action: (source: BasicComponentView) => void) {
+    execute(action: (source: BasicComponentView) => void) {
         this.action = action;
-        return this;
+        return new ViewEventActionBuilder(this);
     }
 
     select(selector: string) {
@@ -23,8 +23,14 @@ export class ViewEventBuilder {
         return this;
     }
 
+    allowDefault() {
+        this._preventDefault = false;
+        return this;
+    }
+
     preventDefault() {
         this._preventDefault = true;
+        return this;
     }
 
     subscribe() {
@@ -32,7 +38,34 @@ export class ViewEventBuilder {
             this.name,
             this.selector,
             this._preventDefault,
-            () => this.action(this.view)
+            (el: HTMLElement) => {
+                const view = this.view.getViewByElement(el) || this.view;
+                this.action(view);
+            }
         );
+    }
+}
+
+export class ViewEventActionBuilder {
+    constructor(private readonly builder: ViewEventBuilder) {
+    }
+
+    select(selector: string) {
+        this.builder.select(selector);
+        return this;
+    }
+
+    allowDefault() {
+        this.builder.allowDefault();
+        return this;
+    }
+
+    preventDefault() {
+        this.builder.preventDefault();
+        return this;
+    }
+
+    subscribe() {
+        this.builder.subscribe();
     }
 }

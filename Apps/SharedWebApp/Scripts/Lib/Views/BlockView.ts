@@ -12,8 +12,8 @@ export class BlockView extends BasicContainerView {
         this.addCssName('h-100');
     }
 
-    flexFill() {
-        this.addCssFrom(new FlexCss().fill());
+    setFlexCss(flexCss: FlexCss) {
+        this.setCss('flex', flexCss);
     }
 
     positionRelative() {

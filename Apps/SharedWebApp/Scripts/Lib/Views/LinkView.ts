@@ -12,4 +12,9 @@ export class LinkView extends BasicContainerView {
     setHref(href: string) {
         this.setAttr(attr => attr.href = href);
     }
+
+    handleClick(action: () => void) {
+        this.on('click').execute(action).subscribe();
+    }
+
 }

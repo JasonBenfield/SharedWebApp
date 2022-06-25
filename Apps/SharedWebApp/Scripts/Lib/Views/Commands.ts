@@ -1,0 +1,132 @@
+﻿import { ContextualClass } from "../ContextualClass";
+import { MarginCss } from "../MarginCss";
+import { ButtonView } from "./ButtonView";
+import { FaIconView } from "./FaIconView";
+import { LinkView } from "./LinkView";
+import { TextSpanView } from "./TextSpanView";
+import { IContainerView } from "./Types";
+
+export interface ICommandView {
+    readonly icon: FaIconView;
+    positionIconRight();
+    setText(text: string);
+    setTitle(text: string);
+    setContext(contextualClass: ContextualClass);
+    setActive();
+    setInactive();
+    show();
+    hide();
+    enable();
+    disable();
+    handleClick(action: () => void);
+}
+
+export class ButtonCommandView extends ButtonView implements ICommandView {
+    static offscreenSubmit(container: IContainerView) {
+        let item = new ButtonCommandView(container);
+        item.makeOffscreenSubmit();
+        return item;
+    }
+
+    readonly icon: FaIconView;
+    private readonly textSpan: TextSpanView;
+
+    constructor(container: IContainerView) {
+        super(container);
+        this.icon = this.addView(FaIconView);
+        this.icon.setMargin(MarginCss.end(1));
+        this.textSpan = this.addView(TextSpanView);
+        this.setContext(ContextualClass.default);
+    }
+
+    positionIconRight() {
+        this.icon.pullRight();
+        this.icon.setMargin(MarginCss.start(1));
+    }
+
+    setText(text: string) {
+        this.textSpan.setText(text);
+    }
+
+    setActive() {
+        this.updateActiveCss('active');
+    }
+
+    setInactive() {
+        this.updateActiveCss('');
+    }
+
+    private updateActiveCss(active: string) {
+        this.setCss('active', active);
+    }
+
+    makeOffscreenSubmit() {
+        this.addCssName('offscreen');
+        this.changeTypeToSubmit();
+    }
+}
+
+export class LinkCommandView extends LinkView implements ICommandView {
+    readonly icon: FaIconView;
+    private readonly textSpan: TextSpanView;
+    private context: ContextualClass;
+    private isOutline = false;
+
+    constructor(container: IContainerView) {
+        super(container);
+        this.icon = this.addView(FaIconView);
+        this.icon.setMargin(MarginCss.end(1));
+        this.textSpan = this.addView(TextSpanView);
+        this.addCssName('btn');
+        this.setContext(ContextualClass.default);
+    }
+
+    positionIconRight() {
+        this.icon.pullRight();
+        this.icon.setMargin(MarginCss.start(1));
+    }
+
+    setText(text: string) {
+        this.textSpan.setText(text);
+    }
+
+    enable() {
+        this.updateDisabled('');
+    }
+
+    disable() {
+        this.updateDisabled('disabled');
+    }
+
+    private updateDisabled(disabled: string) {
+        this.setCss('link-disabled', disabled);
+    }
+
+    setActive() {
+        this.updateActiveCss('active');
+    }
+
+    setInactive() {
+        this.updateActiveCss('');
+    }
+
+    private updateActiveCss(active: string) {
+        this.setCss('link-active', active);
+    }
+
+    setContext(context: ContextualClass) {
+        const contextCss = this.getContextCss(context, this.isOutline);
+        this.setCss('link-context', contextCss);
+        this.context = context;
+    }
+
+    private getContextCss(context: ContextualClass, isOutline: boolean) {
+        return context ? context.append(isOutline ? 'btn-outline' : 'btn') : '';
+    }
+
+    useOutlineStyle() {
+        let contextCss = this.getContextCss(this.context, true);
+        this.setCss('link-context', contextCss);
+        this.isOutline = true;
+    }
+}

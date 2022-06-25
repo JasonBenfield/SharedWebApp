@@ -16,6 +16,7 @@
         border-color: mix($color, $background, percentage($table-border-factor));
     }
 }
+
 @mixin grid-row-variant($state, $background, $color) {
     .grid-row-#{$state} {
         color: $color;
@@ -32,6 +33,29 @@
 
             &.active {
                 .grid-cell {
+                    color: $white;
+                    background-color: $color;
+                    border-color: $color;
+                }
+            }
+        }
+    }
+}
+
+@mixin grid-list-group-item-variant($state, $background, $color) {
+    .grid {
+        .list-group-item-#{$state} {
+            color: $color;
+            background-color: $background;
+
+            &.list-group-item-action {
+                &:hover,
+                &:focus {
+                    color: $color;
+                    background-color: shade-color($background, 10%);
+                }
+
+                &.active {
                     color: $white;
                     background-color: $color;
                     border-color: $color;

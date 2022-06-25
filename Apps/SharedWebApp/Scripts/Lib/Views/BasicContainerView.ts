@@ -1,22 +1,17 @@
-﻿import { EnumerableArray } from "../Enumerable";
-import { BasicComponentView } from "./BasicComponentView";
+﻿import { BasicComponentView } from "./BasicComponentView";
 import { HtmlElementView } from "./HtmlElementView";
 import { IContainerView, ViewConstructor } from "./Types";
 
 export class BasicContainerView extends BasicComponentView implements IContainerView {
-    private readonly views: BasicComponentView[] = [];
-
     constructor(elementView: HtmlElementView) {
         super(elementView);
     }
 
-    getViews() { return new EnumerableArray(this.views).value(); }
+    getViews: () => BasicComponentView[];
 
-    addView<T extends BasicComponentView>(ctor: ViewConstructor<T>) {
-        const view = new ctor(this);
-        this.views.push(view);
-        return view;
-    }
+    addView: <T extends BasicComponentView>(ctor: ViewConstructor<T>) => T;
+
+    addViews: <T extends BasicComponentView>(howMany: number, ctor: ViewConstructor<T>) => T[];
 
     addElement(el: HTMLElement) {
         this.elementView.addElement(el);

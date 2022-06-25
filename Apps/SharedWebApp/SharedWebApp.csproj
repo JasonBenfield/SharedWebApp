@@ -28,6 +28,8 @@
     <None Remove="Scripts\Internal\GridDemo\DemoGrid.ts" />
     <None Remove="Scripts\Internal\ODataDemo\index.d.ts" />
     <None Remove="Scripts\Internal\ODataDemo\ODataEmployeeColumnsBuilder.ts" />
+    <None Remove="Scripts\Internal\ViewDemo\DemoGridListGroupItem.ts" />
+    <None Remove="Scripts\Internal\ViewDemo\DemoGridListGroupItemView.ts" />
     <None Remove="Scripts\Internal\ViewDemo\MainPage.ts" />
     <None Remove="Scripts\Internal\ViewDemo\MainPageView.ts" />
     <None Remove="Scripts\Lib\Api\AppApiQuery.ts" />
@@ -35,6 +37,10 @@
     <None Remove="Scripts\Lib\Api\ErrorFromHttpResult.ts" />
     <None Remove="Scripts\Lib\Api\ODataResult.ts" />
     <None Remove="Scripts\Lib\Api\ParsedDateObject.ts" />
+    <None Remove="Scripts\Lib\Components\BasicComponent.ts" />
+    <None Remove="Scripts\Lib\Components\ListGroupComponent.ts" />
+    <None Remove="Scripts\Lib\Components\TextComponent.ts" />
+    <None Remove="Scripts\Lib\Components\Types.ts" />
     <None Remove="Scripts\Lib\DateRange.ts" />
     <None Remove="Scripts\Lib\Error\ModalErrorGroupComponent.ts" />
     <None Remove="Scripts\Lib\Error\ModalErrorListItem.ts" />
@@ -128,17 +134,29 @@
     <None Remove="Scripts\Lib\Views\BasicTextComponentView.ts" />
     <None Remove="Scripts\Lib\Views\BlockView.ts" />
     <None Remove="Scripts\Lib\Views\BodyView.ts" />
+    <None Remove="Scripts\Lib\Views\ColumnView.ts" />
+    <None Remove="Scripts\Lib\Views\CssFontBuilder.ts" />
+    <None Remove="Scripts\Lib\Views\Dropdown.ts" />
+    <None Remove="Scripts\Lib\Views\FormGroup.ts" />
+    <None Remove="Scripts\Lib\Views\FormView.ts" />
+    <None Remove="Scripts\Lib\Views\Grid.ts" />
     <None Remove="Scripts\Lib\Views\Headings.ts" />
     <None Remove="Scripts\Lib\Views\HorizontalRuleView.ts" />
     <None Remove="Scripts\Lib\Views\HtmlElementView.ts" />
+    <None Remove="Scripts\Lib\Views\IconView.ts" />
+    <None Remove="Scripts\Lib\Views\LabelView.ts" />
     <None Remove="Scripts\Lib\Views\LinkView.ts" />
+    <None Remove="Scripts\Lib\Views\ListGroup.ts" />
     <None Remove="Scripts\Lib\Views\ListItemView.ts" />
     <None Remove="Scripts\Lib\Views\NavView.ts" />
+    <None Remove="Scripts\Lib\Views\RowView.ts" />
     <None Remove="Scripts\Lib\Views\SelectView.ts" />
     <None Remove="Scripts\Lib\Views\SmallView.ts" />
     <None Remove="Scripts\Lib\Views\SpanView.ts" />
+    <None Remove="Scripts\Lib\Views\Table.ts" />
     <None Remove="Scripts\Lib\Views\TextBlockView.ts" />
     <None Remove="Scripts\Lib\Views\TextHeadings.ts" />
+    <None Remove="Scripts\Lib\Views\TextLabelView.ts" />
     <None Remove="Scripts\Lib\Views\TextLinkView.ts" />
     <None Remove="Scripts\Lib\Views\TextSpanView.ts" />
     <None Remove="Scripts\Lib\Views\Types.ts" />
@@ -160,6 +178,7 @@
   </ItemGroup>
   
   <ItemGroup>
+    <Folder Include="Scripts\Lib\Bootstrap\" />
     <Folder Include="wwwroot\" />
     <Folder Include="wwwroot\styles\css\webfonts\" />
   </ItemGroup>
@@ -181,6 +200,8 @@
     <TypeScriptCompile Include="Scripts\Internal\GridDemo\DemoGrid.ts" />
     <TypeScriptCompile Include="Scripts\Internal\ODataDemo\index.d.ts" />
     <TypeScriptCompile Include="Scripts\Internal\ODataDemo\ODataEmployeeColumnsBuilder.ts" />
+    <TypeScriptCompile Include="Scripts\Internal\ViewDemo\DemoGridListGroupItemView.ts" />
+    <TypeScriptCompile Include="Scripts\Internal\ViewDemo\DemoGridListGroupItem.ts" />
     <TypeScriptCompile Include="Scripts\Internal\ViewDemo\MainPage.ts" />
     <TypeScriptCompile Include="Scripts\Internal\ViewDemo\MainPageView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Api\AppApiQuery.ts" />
@@ -188,6 +209,10 @@
     <TypeScriptCompile Include="Scripts\Lib\Api\ErrorFromHttpResult.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Api\ODataResult.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Api\ParsedDateObject.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\BasicComponent.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\ListGroupComponent.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\TextComponent.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\Types.ts" />
     <TypeScriptCompile Include="Scripts\Lib\DateRange.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Error\ModalErrorGroupComponent.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Error\ModalErrorListItem.ts" />
@@ -319,10 +344,27 @@
     <TypeScriptCompile Include="Scripts\Lib\Views\BasicComponentView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\BasicContainerView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\BasicTextComponentView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\Dropdown.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\FormGroup.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\FormView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\ColumnView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\Grid.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\IconView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\LabelView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\ListGroup.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\NavView.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\RowView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\SelectView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\Table.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\TextLabelView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Lib\Views\TextLinkView.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

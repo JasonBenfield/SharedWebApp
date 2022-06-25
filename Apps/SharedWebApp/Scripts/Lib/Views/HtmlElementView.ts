@@ -8,7 +8,11 @@ export class HtmlElementView implements IContainerView {
     }
 
     static body() {
-        return new HtmlElementView(null, () => document.body);
+        return HtmlElementView.fromElement(document.body);
+    }
+
+    static fromElement(element: HTMLElement) {
+        return new HtmlElementView(null, () => element);
     }
 
     readonly element: HTMLElement;
@@ -63,7 +67,8 @@ export class HtmlElementView implements IContainerView {
                 if (objStr) {
                     objStr += '; ';
                 }
-                objStr += this.formatValue(childValue);
+                const formatted = this.formatValue(childValue);
+                objStr += `${key}: ${formatted}`;
             }
         }
         return objStr;
@@ -97,12 +102,16 @@ export class HtmlElementView implements IContainerView {
         this.element.innerText = text;
     }
 
-    on(evtName: string, selector: string, preventDefault: boolean, action: () => void) {
+    hasElement(element: HTMLElement) {
+        return this.element.contains(element);
+    }
+
+    on(evtName: string, selector: string, preventDefault: boolean, action: (sourceElement: HTMLElement) => void) {
         $(this.element).on(
             evtName,
             selector,
-            (event) => {
-                action();
+            function (event: JQueryEventObject) {
+                action(this);
                 if (preventDefault) {
                     event.preventDefault();
                 }

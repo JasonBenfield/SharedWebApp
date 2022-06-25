@@ -1,18 +1,26 @@
 ﻿import { BasicComponentView } from "./BasicComponentView";
-import { BasicContainerView } from "./BasicContainerView";
 import { HtmlElementView } from "./HtmlElementView";
 import { ListItemView } from "./ListItemView";
 import { IContainerView, ViewConstructor } from "./Types";
+import { ViewEventActionBuilder } from "./ViewEventBuilder";
 
 export class UnorderedListView extends BasicComponentView {
-    private readonly view: BasicContainerView;
+    private clickConfig: (builder: ViewEventActionBuilder) => ViewEventActionBuilder;
 
     constructor(container: IContainerView) {
         super(HtmlElementView.fromTag(container, 'ul'));
-        this.view = new BasicContainerView(this.elementView);
+        this.clickConfig = b => b.select('li').preventDefault();
     }
 
-    getListItems() { return this.view.getViews() as ListItemView[]; }
+    configureClick(clickConfig: (builder: ViewEventActionBuilder) => ViewEventActionBuilder) {
+        this.clickConfig = clickConfig;
+    }
+
+    handleClick(action: (view: ListItemView) => void) {
+        this.clickConfig(this.on('click').execute(action)).subscribe();
+    }
+
+    getListItems() { return this.getViews() as ListItemView[]; }
 
     addListItem<T extends ListItemView>(ctor?: ViewConstructor<T>) {
         return this.addListItems(1, ctor)[0];
@@ -21,7 +29,7 @@ export class UnorderedListView extends BasicComponentView {
     addListItems<T extends ListItemView>(howMany: number, ctor?: ViewConstructor<T>) {
         const listItems: T[] = [];
         for (let i = 0; i < howMany; i++) {
-            const listItem = this.view.addView(ctor || ListItemView) as T;
+            const listItem = this.addView(ctor || ListItemView) as T;
             listItems.push(listItem);
         }
         return listItems;
