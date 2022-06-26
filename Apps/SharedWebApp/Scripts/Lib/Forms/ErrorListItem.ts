@@ -1,11 +1,11 @@
-﻿import { ErrorModel } from "../ErrorModel";
-import { ListItem } from "../Html/ListItem";
-import { TextBlock } from "../Html/TextBlock";
-import { ErrorListItemView } from "./ErrorListItemView";
+﻿import { BasicComponent } from "../Components/BasicComponent";
+import { TextComponent } from "../Components/TextComponent";
+import { ErrorModel } from "../ErrorModel";
+import { ErrorListItemView } from "../Views/ErrorListItemView";
 
-export class ErrorListItem extends ListItem {
+export class ErrorListItem extends BasicComponent {
     constructor(error: ErrorModel, view: ErrorListItemView) {
         super(view);
-        new TextBlock(error.Message, view.message);
+        new TextComponent(view.message).setText(error.Message);
     }
 }

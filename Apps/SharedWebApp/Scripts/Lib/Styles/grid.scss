@@ -44,7 +44,7 @@
     }
 }
 
-.grid-borderless {
+.grid-borderless, .grid-layout {
     // stylelint-disable-next-line selector-max-universal
     > :not(caption) > * > * {
         border-bottom-width: 0;
@@ -52,6 +52,14 @@
 
     > * {
         border-top-width: 0;
+    }
+}
+
+.grid.grid-layout {
+    margin: 0;
+
+    > .grid-cell {
+        padding: 0;
     }
 }
 

@@ -2,7 +2,7 @@
 import { BasicListGroupItemView, BasicListGroupView } from "../Views/ListGroup";
 import { BasicComponent } from "./BasicComponent";
 
-export class ListGroupComponent extends BasicComponent {
+export class ListGroup extends BasicComponent {
     protected readonly view: BasicListGroupView;
     private itemClicked: DefaultEvent<BasicComponent>;
 

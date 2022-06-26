@@ -1,12 +1,13 @@
 ﻿import { ColumnCss } from "../ColumnCss";
+import { BasicComponentView } from "./BasicComponentView";
 import { BlockView } from "./BlockView";
 import { LabelView } from "./LabelView";
 import { TextBlockView } from "./TextBlockView";
-import { IContainerView } from "./Types";
 
 export class ColumnView extends BlockView {
-    constructor(container: IContainerView) {
+    constructor(container: BasicComponentView) {
         super(container);
+        this.setColumnCss(ColumnCss.xs());
     }
 
     setColumnCss(columnCss: ColumnCss) {
@@ -15,7 +16,7 @@ export class ColumnView extends BlockView {
 }
 
 export class LabelColumnView extends LabelView {
-    constructor(container: IContainerView) {
+    constructor(container: BasicComponentView) {
         super(container);
     }
 
@@ -25,7 +26,7 @@ export class LabelColumnView extends LabelView {
 }
 
 export class TextColumnView extends TextBlockView {
-    constructor(container: IContainerView) {
+    constructor(container: BasicComponentView) {
         super(container);
     }
 

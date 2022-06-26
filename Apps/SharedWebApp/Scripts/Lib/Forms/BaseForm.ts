@@ -1,31 +1,28 @@
 ﻿import { AppApiAction } from "../Api/AppApiAction";
 import { AppApiError } from "../Api/AppApiError";
 import { ConsoleLog } from "../ConsoleLog";
-import { ModalErrorComponent } from "../Error/ModalErrorComponent";
+import { ModalError } from "../Components/ModalError";
 import { ErrorModel } from "../ErrorModel";
-import { BaseFormView } from "./BaseFormView";
-import { DropDownFormGroupView } from "./DropDownFormGroupView";
+import { BaseFormView } from "../Views/BaseFormView";
+import { SelectFormGroupView } from "../Views/FormGroup";
 import { ErrorList } from "./ErrorList";
 import { FormGroupCollection } from "./FormGroupCollection";
 import { FormSaveResult } from "./FormSaveResult";
-import { InputFormGroupView } from "./InputFormGroupView";
+import { InputFormGroupView } from "../Views/FormGroup";
 
 export class BaseForm {
     private readonly formGroups: FormGroupCollection;
-    private readonly modalError: ModalErrorComponent;
+    private readonly modalError: ModalError;
 
-    constructor(
-        private readonly name: string,
-        protected readonly view: BaseFormView
-    ) {
+    constructor(private readonly name: string, protected readonly view: BaseFormView) {
         this.formGroups = new FormGroupCollection(name);
-        this.modalError = new ModalErrorComponent(this.view.modalError);
-        this.modalError.errorSelected.register(this.onErrorSelected.bind(this));
+        this.modalError = new ModalError(this.view.modalError);
+        this.modalError.when.errorSelected.then(this.onErrorSelected.bind(this));
     }
 
     private async onErrorSelected(error: ErrorModel) {
         this.modalError.hide();
-        let field: any = this.getField(error.Source);
+        const field: any = this.getField(error.Source);
         if (field) {
             if (field.setFocus) {
                 field.setFocus();
@@ -73,23 +70,23 @@ export class BaseForm {
         return this.formGroups.addDateInputFormGroup(name, view);
     }
 
-    protected addTextDropDownFormGroup(name: string, view: DropDownFormGroupView<string>) {
+    protected addTextDropDownFormGroup(name: string, view: SelectFormGroupView) {
         return this.formGroups.addTextDropDownFormGroup(name, view);
     }
 
-    protected addNumberDropDownFormGroup(name: string, view: DropDownFormGroupView<number>) {
+    protected addNumberDropDownFormGroup(name: string, view: SelectFormGroupView) {
         return this.formGroups.addNumberDropDownFormGroup(name, view);
     }
 
-    protected addDateDropDownFormGroup(name: string, view: DropDownFormGroupView<Date>) {
+    protected addDateDropDownFormGroup(name: string, view: SelectFormGroupView) {
         return this.formGroups.addDateDropDownFormGroup(name, view);
     }
 
-    protected addBooleanDropDownFormGroup(name: string, view: DropDownFormGroupView<boolean>) {
+    protected addBooleanDropDownFormGroup(name: string, view: SelectFormGroupView) {
         return this.formGroups.addBooleanDropDownFormGroup(name, view);
     }
 
-    protected addDropDownFormGroup<T>(name: string, view: DropDownFormGroupView<T>) {
+    protected addDropDownFormGroup<T>(name: string, view: SelectFormGroupView) {
         return this.formGroups.addDropDownFormGroup<T>(name, view);
     }
 
@@ -98,16 +95,16 @@ export class BaseForm {
     }
 
     async save<TResult>(action: AppApiAction<any, TResult>) {
-        let validationResult = this.validate();
+        const validationResult = this.validate();
         if (validationResult.hasErrors()) {
-            let errors = validationResult.values();
+            const errors = validationResult.values();
             this.modalError.show(errors, `Unable to ${action.friendlyName}`);
             return new FormSaveResult(null, errors);
         }
         let result: TResult;
-        let errors: IErrorModel[] = [];
+        const errors: IErrorModel[] = [];
         try {
-            let model = this.export();
+            const model = this.export();
             result = await action.execute(model, { preventDefault: true });
         }
         catch (ex) {
@@ -127,7 +124,7 @@ export class BaseForm {
     }
 
     private validate() {
-        let errors = new ErrorList();
+        const errors = new ErrorList();
         this.formGroups.validate(errors);
         return errors;
     }
@@ -137,7 +134,7 @@ export class BaseForm {
     }
 
     private export() {
-        let values: Record<string, any> = {};
+        const values: Record<string, any> = {};
         this.formGroups.export(values);
         return values;
     }

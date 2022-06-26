@@ -1,23 +1,20 @@
 ﻿import { BasicComponentView } from "./BasicComponentView";
-import { HtmlElementView } from "./HtmlElementView";
-import { IContainerView, ViewConstructor } from "./Types";
+import { IHtmlElementView, ViewConstructor } from "./Types";
 
-export class BasicContainerView extends BasicComponentView implements IContainerView {
-    constructor(elementView: HtmlElementView) {
-        super(elementView);
+export class BasicContainerView extends BasicComponentView {
+    constructor(container: BasicComponentView, createElementView: IHtmlElementView) {
+        super(container, createElementView);
     }
 
     getViews: () => BasicComponentView[];
+
+    disposeAllViews: () => void;
+
+    removeView: (view: BasicComponentView) => void;
 
     addView: <T extends BasicComponentView>(ctor: ViewConstructor<T>) => T;
 
     addViews: <T extends BasicComponentView>(howMany: number, ctor: ViewConstructor<T>) => T[];
 
-    addElement(el: HTMLElement) {
-        this.elementView.addElement(el);
-    }
-
-    removeElement(el: HTMLElement) {
-        this.elementView.removeElement(el);
-    }
+    insertView: <T extends BasicComponentView>(index: number, ctor: ViewConstructor<T>) => T;
 }

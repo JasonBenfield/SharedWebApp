@@ -1,9 +1,9 @@
 ﻿import { BasicComponentView } from "./BasicComponentView";
-import { HtmlElementView } from "./HtmlElementView";
+import { IHtmlElementView } from "./Types";
 
 export class BasicTextComponentView extends BasicComponentView {
-    constructor(elementView: HtmlElementView) {
-        super(elementView);
+    constructor(container: BasicComponentView, element: IHtmlElementView) {
+        super(container, element);
     }
 
     setText(text: string) { this.elementView.setText(text); }

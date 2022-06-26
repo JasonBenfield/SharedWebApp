@@ -1,10 +1,10 @@
-﻿import { BasicTextComponentView } from "./BasicTextComponentView";
-import { HtmlElementView } from "./HtmlElementView";
-import { IContainerView, ILinkAttributes } from "./Types";
+﻿import { BasicComponentView } from "./BasicComponentView";
+import { BasicTextComponentView } from "./BasicTextComponentView";
+import { ILinkAttributes } from "./Types";
 
 export class TextLinkView extends BasicTextComponentView {
-    constructor(container: IContainerView) {
-        super(HtmlElementView.fromTag(container, 'a'));
+    constructor(container: BasicComponentView) {
+        super(container, 'a');
     }
 
     protected setAttr: (config: (attr: ILinkAttributes) => void) => void;

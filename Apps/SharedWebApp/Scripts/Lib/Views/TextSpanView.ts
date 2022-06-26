@@ -1,9 +1,8 @@
-﻿import { BasicTextComponentView } from "./BasicTextComponentView";
-import { HtmlElementView } from "./HtmlElementView";
-import { IContainerView } from "./Types";
+﻿import { BasicComponentView } from "./BasicComponentView";
+import { BasicTextComponentView } from "./BasicTextComponentView";
 
 export class TextSpanView extends BasicTextComponentView {
-    constructor(container: IContainerView) {
-        super(HtmlElementView.fromTag(container, 'span'));
+    constructor(container: BasicComponentView) {
+        super(container, 'span');
     }
 }

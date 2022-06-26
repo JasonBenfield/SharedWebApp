@@ -110,7 +110,7 @@ export class CssClass implements ICssClass {
     }
 
     private updateValue() {
-        this.value = this.names.length > 0 ? new JoinedStrings(' ', this.names).value() : null;
+        this.value = this.names.length > 0 ? new JoinedStrings(' ', this.names).value() : '';
     }
 
     toString() {

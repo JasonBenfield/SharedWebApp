@@ -2,17 +2,16 @@
 import { MappedArray } from "../Enumerable";
 import { JoinedStrings } from "../JoinedStrings";
 import { BasicComponentView } from "./BasicComponentView";
-import { GridCellView, GridTemplateCss, GridView } from "./Grid";
-import { HtmlElementView } from "./HtmlElementView";
-import { IContainerView, ViewConstructor } from "./Types";
+import { GridCellView, GridTemplateCss } from "./Grid";
+import { ViewConstructor } from "./Types";
 import { ViewEventActionBuilder } from "./ViewEventBuilder";
 
 export class BasicListGroupView extends BasicComponentView {
     private clickConfig: (builder: ViewEventActionBuilder) => ViewEventActionBuilder;
     private itemViewCtor: ViewConstructor<BasicListGroupItemView>;
 
-    constructor(container: IContainerView, tagName: 'ul' | 'div') {
-        super(HtmlElementView.fromTag(container, tagName));
+    constructor(container: BasicComponentView, tagName: 'ul' | 'div') {
+        super(container, tagName);
         this.addCssName('list-group');
     }
 
@@ -47,8 +46,8 @@ export class BasicListGroupView extends BasicComponentView {
 }
 
 export class BasicListGroupItemView extends BasicComponentView {
-    constructor(container: IContainerView, tagName: 'li' | 'button' | 'a' | 'div') {
-        super(HtmlElementView.fromTag(container, tagName));
+    constructor(container: BasicComponentView, tagName: 'li' | 'button' | 'a' | 'div') {
+        super(container, tagName);
         this.addCssName('list-group-item');
     }
 
@@ -66,7 +65,7 @@ export class BasicListGroupItemView extends BasicComponentView {
 }
 
 export class ListGroupView extends BasicListGroupView {
-    constructor(container: IContainerView) {
+    constructor(container: BasicComponentView) {
         super(container, 'ul');
         this.configureClick(b => b.select('li'));
         this.setItemViewType(ListGroupItemView);
@@ -78,13 +77,13 @@ export class ListGroupView extends BasicListGroupView {
 }
 
 export class ListGroupItemView extends BasicListGroupItemView {
-    constructor(container: IContainerView) {
+    constructor(container: BasicComponentView) {
         super(container, 'li');
     }
 }
 
 export class ButtonListGroupView extends BasicListGroupView {
-    constructor(container: IContainerView) {
+    constructor(container: BasicComponentView) {
         super(container, 'div');
         this.configureClick(b => b.select('button'));
         this.setItemViewType(ButtonListGroupItemView);
@@ -96,13 +95,13 @@ export class ButtonListGroupView extends BasicListGroupView {
 }
 
 export class ButtonListGroupItemView extends BasicListGroupItemView {
-    constructor(container: IContainerView) {
+    constructor(container: BasicComponentView) {
         super(container, 'button');
     }
 }
 
 export class LinkListGroupView extends BasicListGroupView {
-    constructor(container: IContainerView) {
+    constructor(container: BasicComponentView) {
         super(container, 'div');
         this.configureClick(b => b.select('a'));
         this.setItemViewType(LinkListGroupItemView);
@@ -114,13 +113,13 @@ export class LinkListGroupView extends BasicListGroupView {
 }
 
 export class LinkListGroupItemView extends BasicListGroupItemView {
-    constructor(container: IContainerView) {
+    constructor(container: BasicComponentView) {
         super(container, 'a');
     }
 }
 
 export class GridListGroupView extends BasicListGroupView {
-    constructor(container: IContainerView) {
+    constructor(container: BasicComponentView) {
         super(container, 'div');
         this.addCssName('grid');
         this.addCssName('grid-borderless');
@@ -147,7 +146,7 @@ export class GridListGroupView extends BasicListGroupView {
 export class GridListGroupItemView extends BasicListGroupItemView {
     private readonly cells: GridCellView[] = [];
 
-    constructor(container: IContainerView) {
+    constructor(container: BasicComponentView) {
         super(container, 'div');
         this.addCssName('d-contents');
     }

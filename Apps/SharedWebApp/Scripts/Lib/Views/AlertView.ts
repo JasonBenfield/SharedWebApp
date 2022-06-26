@@ -1,9 +1,9 @@
-﻿import { BlockView } from './BlockView';
-import { ContextualClass } from '../ContextualClass';
-import { IContainerView } from './Types';
+﻿import { ContextualClass } from '../ContextualClass';
+import { BasicComponentView } from './BasicComponentView';
+import { BlockView } from './BlockView';
 
 export class AlertView extends BlockView {
-    constructor(container: IContainerView) {
+    constructor(container: BasicComponentView) {
         super(container);
         this.addCssName('alert');
     }

@@ -1,14 +1,12 @@
 ﻿import { ContextualClass } from "../ContextualClass";
 import { BasicComponentView } from "./BasicComponentView";
-import { HtmlElementView } from "./HtmlElementView";
-import { IContainerView, IInputAttributes } from "./Types";
+import { IInputAttributes } from "./Types";
 
 export class InputView extends BasicComponentView {
-    private border = ContextualClass.default;
     protected readonly inputElement: HTMLInputElement;
 
-    constructor(container: IContainerView) {
-        super(HtmlElementView.fromTag(container, 'input'));
+    constructor(container: BasicComponentView) {
+        super(container, 'input');
         this.inputElement = this.elementView.element as HTMLInputElement;
         this.setType('text');
     }
@@ -36,9 +34,8 @@ export class InputView extends BasicComponentView {
     }
 
     setBorder(border: ContextualClass) {
-        let borderCss = this.getBorderCss(border);
-        this.replaceCssName(this.getBorderCss(this.border), borderCss);
-        this.border = border;
+        const borderCss = this.getBorderCss(border);
+        this.setCss('border', borderCss);
     }
 
     private getBorderCss(border: ContextualClass) {
@@ -63,6 +60,6 @@ export class InputView extends BasicComponentView {
 
     onBlur() { return this.on('blur'); }
 
-    onChange() { return this.on('change'); }
+    onInput() { return this.on('input change'); }
 
 }

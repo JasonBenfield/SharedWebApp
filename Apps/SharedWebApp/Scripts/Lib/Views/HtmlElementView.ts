@@ -1,39 +1,40 @@
-﻿import { IContainerView } from "./Types";
-import * as $ from 'jquery';
+﻿import * as $ from 'jquery';
 
-export class HtmlElementView implements IContainerView {
+export class HtmlElementView {
 
-    static fromTag(container: IContainerView, tagName: keyof HTMLElementTagNameMap) {
-        return new HtmlElementView(container, () => document.createElement(tagName));
+    static fromTag(tagName: keyof HTMLElementTagNameMap) {
+        return new HtmlElementView(() => document.createElement(tagName));
     }
 
-    static body() {
-        return HtmlElementView.fromElement(document.body);
+    static root() {
+        const root = document.body.appendChild(document.createElement('div'));
+        root.style.display = 'contents';
+        return HtmlElementView.fromElement(root);
     }
 
     static fromElement(element: HTMLElement) {
-        return new HtmlElementView(null, () => element);
+        return new HtmlElementView(() => element);
     }
 
     readonly element: HTMLElement;
 
-    private isAdded = false;
-
-    private constructor(protected readonly container: IContainerView, createElement: () => HTMLElement) {
+    private constructor(createElement: () => HTMLElement) {
         this.element = createElement();
-        this.addToContainer();
     }
 
     setAttributes(attributes: any) {
-        if (attributes) {
-            for (const key in this.element.attributes) {
-                if (!attributes[key]) {
-                    this.element.removeAttribute(key);
-                }
+        if (!attributes) {
+            attributes = {};
+        }
+        for (let i = 0; i < this.element.attributes.length; i++) {
+            const attribute = this.element.attributes.item(i);
+            const value = attributes[attribute.name];
+            if (!value) {
+                this.element.removeAttribute(attribute.name);
             }
-            for (const key in attributes) {
-                this.setAttribute(attributes, key);
-            }
+        }
+        for (const key in attributes) {
+            this.setAttribute(attributes, key);
         }
     }
 
@@ -44,9 +45,7 @@ export class HtmlElementView implements IContainerView {
         }
         else if (value) {
             const formatted = this.formatValue(value);
-            if (formatted) {
-                this.element.setAttribute(name, formatted);
-            }
+            this.element.setAttribute(name, formatted);
         }
     }
 
@@ -79,23 +78,13 @@ export class HtmlElementView implements IContainerView {
     }
 
     removeElement(el: HTMLElement) {
-        this.element.removeChild(el);
-    }
-
-    addToContainer() {
-        if (!this.isAdded) {
-            if (this.container) {
-                this.container.addElement(this.element);
-            }
-            this.isAdded = true;
+        if (el && el.parentElement) {
+            this.element.removeChild(el);
         }
     }
 
-    removeFromContainer() {
-        if (this.container) {
-            this.container.removeElement(this.element);
-        }
-        this.isAdded = false;
+    replaceElements(viewElements: HTMLElement[]) {
+        this.element.replaceChildren(...viewElements);
     }
 
     setText(text: string) {

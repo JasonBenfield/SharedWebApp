@@ -10,7 +10,7 @@
     }
 
     setValueFromView(viewValue: any) {
-        let value = this._fromView(viewValue);
+        const value = this._fromView(viewValue);
         this.value = value;
         return value;
     }

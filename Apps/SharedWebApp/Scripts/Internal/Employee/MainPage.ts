@@ -1,29 +1,30 @@
-﻿import { Startup } from '../../Lib/Startup';
-import { AppApiAction } from '../../Lib/Api/AppApiAction';
+﻿import { AppApiAction } from '../../Lib/Api/AppApiAction';
 import { AppApiEvents } from '../../Lib/Api/AppApiEvents';
 import { AppResourceUrl } from '../../Lib/Api/AppResourceUrl';
-import { AsyncCommand } from '../../Lib/Command/AsyncCommand';
+import { BasicPage } from '../../Lib/Components/BasicPage';
+import { AsyncCommand } from '../../Lib/Components/Command';
+import { MessageAlert } from '../../Lib/Components/MessageAlert';
 import { ConsoleLog } from '../../Lib/ConsoleLog';
-import { MessageAlert } from '../../Lib/MessageAlert';
-import { PageFrameView } from '../../Lib/PageFrameView';
+import { TextBlock } from '../../Lib/Html/TextBlock';
+import { Startup } from '../../Lib/Startup';
 import { DefaultPageContext } from '../DefaultPageContext';
 import { AddEmployeeForm } from './AddEmployeeForm';
 import { MainPageView } from './MainPageView';
-import { TextBlock } from '../../Lib/Html/TextBlock';
 
-class MainPage {
+class MainPage extends BasicPage {
+    protected readonly view: MainPageView;
     private readonly alert: MessageAlert;
     private readonly addEmployeeForm: AddEmployeeForm;
     private readonly saveCommand: AsyncCommand;
 
-    constructor(page: PageFrameView) {
-        let view = new MainPageView(page);
-        new TextBlock('Add Employee', view.heading);
-        this.alert = new MessageAlert(view.alert);
-        this.addEmployeeForm = new AddEmployeeForm(view.addEmployeeForm);
+    constructor() {
+        super(new MainPageView());
+        new TextBlock('Add Employee', this.view.heading);
+        this.alert = new MessageAlert(this.view.alert);
+        this.addEmployeeForm = new AddEmployeeForm(this.view.addEmployeeForm);
         this.saveCommand = new AsyncCommand(this.save.bind(this));
-        this.saveCommand.add(view.saveButton);
-        this.saveCommand.add(view.submitButton);
+        this.saveCommand.add(this.view.saveButton);
+        this.saveCommand.add(this.view.submitButton);
         this.test();
     }
 
@@ -39,7 +40,7 @@ class MainPage {
             'Test',
             'Test'
         );
-        let result = await action.execute(5, {});
+        const result = await action.execute(5, {});
         new ConsoleLog().info(result.toString());
     }
 
@@ -57,7 +58,7 @@ class MainPage {
                     'AddEmployee',
                     'Add Employee'
                 );
-                let result = await this.addEmployeeForm.save(action);
+                const result = await this.addEmployeeForm.save(action);
                 if (result.succeeded()) {
                     alert(`Success: ${result.value}`);
                 }
@@ -66,4 +67,4 @@ class MainPage {
     }
 }
 new DefaultPageContext().load();
-new MainPage(new Startup().build());
+new MainPage();

@@ -1,4 +1,4 @@
-﻿import { EnumerableArray, MappedArray } from "../Enumerable";
+﻿import { EnumerableArray } from "../Enumerable";
 import { BasicComponentView } from "../Views/BasicComponentView";
 
 export class BasicComponent {
@@ -17,6 +17,8 @@ export class BasicComponent {
     }
 
     private hasView(view: BasicComponentView) { return this.view.isOrContainsView(view); }
+
+    protected anyComponents() { return this.components.length > 0; }
 
     protected getComponents() {
         return new EnumerableArray(this.components).value();

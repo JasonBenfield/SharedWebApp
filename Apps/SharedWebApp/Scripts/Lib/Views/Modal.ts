@@ -1,16 +1,16 @@
 ﻿import { Modal } from 'bootstrap';
+import { ColumnCss } from '../ColumnCss';
+import { ContextualClass } from '../ContextualClass';
 import { SimpleEvent } from '../Events';
-import { MessageAlertView } from './MessageAlertView';
+import { MarginCss } from '../MarginCss';
+import { TextCss } from '../TextCss';
 import { BasicComponentView } from './BasicComponentView';
 import { BlockView } from './BlockView';
 import { ButtonCommandView } from './Commands';
-import { HtmlElementView } from './HtmlElementView';
-import { IContainerView } from './Types';
-import { MarginCss } from '../MarginCss';
+import { MessageAlertView } from './MessageAlertView';
 import { RowView } from './RowView';
-import { TextCss } from '../TextCss';
-import { ColumnCss } from '../ColumnCss';
-import { ContextualClass } from '../ContextualClass';
+import { TextBlockView } from './TextBlockView';
+import { TextHeading5View } from './TextHeadings';
 
 export class ModalComponentView extends BasicComponentView {
     private modal: Modal;
@@ -22,8 +22,8 @@ export class ModalComponentView extends BasicComponentView {
     readonly body: BlockView;
     readonly footer: BlockView;
 
-    constructor(container: IContainerView) {
-        super(HtmlElementView.fromTag(container, 'div'));
+    constructor(container: BasicComponentView) {
+        super(container, 'div');
         this.addCssName('modal');
         this.addCssName('fade');
         this.setAttr(a => a.role = 'dialog');
@@ -70,7 +70,7 @@ export class ModalMessageAlertView extends ModalComponentView {
     readonly alert: MessageAlertView;
     readonly okButton: ButtonCommandView;
 
-    constructor(container: IContainerView) {
+    constructor(container: BasicComponentView) {
         super(container);
         this.header.hide();
         this.body.setViewName(ModalMessageAlertView.name);
@@ -89,4 +89,39 @@ export class ModalMessageAlertView extends ModalComponentView {
         this.okButton.setContext(ContextualClass.secondary);
         this.okButton.setMargin(MarginCss.end(1));
     }
+}
+
+export class ModalConfirmView extends ModalComponentView {
+    readonly title: TextHeading5View;
+    readonly message: TextBlockView;
+
+    readonly noButton: ButtonCommandView;
+    readonly yesButton: ButtonCommandView;
+
+    constructor(container: BasicComponentView) {
+        super(container);
+        this.body.setViewName(ModalConfirmView.name);
+        this.title = this.header.addView(TextHeading5View);
+        this.message = this.body.addView(TextBlockView);
+        const row = this.footer.addView(RowView);
+        row.addColumn();
+        let buttonColumn = row.addColumn()
+            .configure(c => {
+                c.setTextCss(new TextCss().end());
+                c.setColumnCss(ColumnCss.xs('auto'));
+            });
+        this.noButton = buttonColumn.addView(ButtonCommandView);
+        this.noButton.icon.solidStyle('times');
+        this.noButton.setText('No');
+        this.noButton.setContext(ContextualClass.secondary);
+        this.noButton.setMargin(MarginCss.end(1));
+        this.yesButton = buttonColumn.addView(ButtonCommandView);
+        this.yesButton.icon.solidStyle('check');
+        this.yesButton.setText('Yes');
+        this.yesButton.setContext(ContextualClass.primary);
+    }
+
+    showTitle() { this.title.show(); }
+
+    hideTitle() { this.title.hide(); }
 }

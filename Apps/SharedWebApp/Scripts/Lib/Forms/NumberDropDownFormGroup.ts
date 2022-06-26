@@ -1,12 +1,12 @@
 ﻿import { NumberConstraintCollection } from "./ConstraintCollection";
 import { DropDownFormGroup } from "./DropDownFormGroup";
-import { DropDownFormGroupView } from "./DropDownFormGroupView";
+import { SelectFormGroupView } from "../Views/FormGroup";
 import { ErrorList } from "./ErrorList";
 
 export class NumberDropDownFormGroup extends DropDownFormGroup<number> {
     readonly constraints = new NumberConstraintCollection();
 
-    constructor(prefix: string, name: string, view: DropDownFormGroupView<number>) {
+    constructor(prefix: string, name: string, view: SelectFormGroupView) {
         super(prefix, name, view);
     }
 

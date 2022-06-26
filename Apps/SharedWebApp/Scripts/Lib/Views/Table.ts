@@ -1,11 +1,9 @@
 ﻿import { BasicComponentView } from "./BasicComponentView";
 import { BasicContainerView } from "./BasicContainerView";
-import { HtmlElementView } from "./HtmlElementView";
-import { IContainerView } from "./Types";
 
 export class TableRowContainerView extends BasicComponentView {
-    constructor(container: IContainerView, tagName: 'table' | 'tbody' | 'thead' | 'tfoot') {
-        super(HtmlElementView.fromTag(container, tagName));
+    constructor(container: BasicComponentView, tagName: 'table' | 'tbody' | 'thead' | 'tfoot') {
+        super(container, tagName);
     }
 
     addRow() {
@@ -14,7 +12,7 @@ export class TableRowContainerView extends BasicComponentView {
 }
 
 export class TableView extends TableRowContainerView {
-    constructor(container: IContainerView) {
+    constructor(container: BasicComponentView) {
         super(container, 'table');
     }
 
@@ -29,26 +27,26 @@ export class TableView extends TableRowContainerView {
 }
 
 export class TableHeadView extends TableRowContainerView {
-    constructor(container: IContainerView) {
+    constructor(container: BasicComponentView) {
         super(container, 'thead');
     }
 }
 
 export class TableBodyView extends TableRowContainerView {
-    constructor(container: IContainerView) {
+    constructor(container: BasicComponentView) {
         super(container, 'tbody');
     }
 }
 
 export class TableFootView extends TableRowContainerView {
-    constructor(container: IContainerView) {
+    constructor(container: BasicComponentView) {
         super(container, 'tfoot');
     }
 }
 
 export class TableRowView extends BasicComponentView {
-    constructor(container: IContainerView) {
-        super(HtmlElementView.fromTag(container, 'tr'));
+    constructor(container: BasicComponentView) {
+        super(container, 'tr');
     }
 
     addDataCell() {
@@ -61,34 +59,34 @@ export class TableRowView extends BasicComponentView {
 }
 
 export class TableCaptionView extends BasicComponentView {
-    constructor(container: IContainerView) {
-        super(HtmlElementView.fromTag(container, 'caption'));
+    constructor(container: BasicComponentView) {
+        super(container, 'caption');
     }
 }
 
 export class TableColGroupView extends BasicComponentView {
-    constructor(container: IContainerView) {
-        super(HtmlElementView.fromTag(container, 'colgroup'));
+    constructor(container: BasicComponentView) {
+        super(container, 'colgroup');
     }
 
     addCol() { return this.addView(TableColView); }
 }
 
 export class TableColView extends BasicComponentView {
-    constructor(container: IContainerView) {
-        super(HtmlElementView.fromTag(container, 'col'));
+    constructor(container: BasicComponentView) {
+        super(container, 'col');
     }
 }
 
 export class TableDataView extends BasicContainerView {
-    constructor(container: IContainerView) {
-        super(HtmlElementView.fromTag(container, 'td'));
+    constructor(container: BasicComponentView) {
+        super(container, 'td');
     }
 
 }
 
 export class TableHeaderView extends BasicContainerView {
-    constructor(container: IContainerView) {
-        super(HtmlElementView.fromTag(container, 'th'));
+    constructor(container: BasicComponentView) {
+        super(container, 'th');
     }
 }

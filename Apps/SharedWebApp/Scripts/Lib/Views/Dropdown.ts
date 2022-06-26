@@ -1,16 +1,17 @@
-﻿import { UnorderedListView } from "./UnorderedListView";
+﻿import { Dropdown } from 'bootstrap';
+import * as $ from 'jquery';
 import { BasicComponentView } from "./BasicComponentView";
 import { ButtonView } from "./ButtonView";
-import { HtmlElementView } from "./HtmlElementView";
-import { IContainerView } from "./Types";
-import { Dropdown } from 'bootstrap';
-import * as $ from 'jquery';
+import { LinkView } from './LinkView';
+import { ListItemView } from './ListItemView';
+import { SpanView } from './SpanView';
+import { UnorderedListView } from './UnorderedListView';
 
 export class DropdownContainerView extends BasicComponentView {
     readonly dropdown: DropdownComponentView;
 
-    constructor(container: IContainerView) {
-        super(HtmlElementView.fromTag(container, 'div'));
+    constructor(container: BasicComponentView) {
+        super(container, 'div');
         this.addCssName('dropdown');
         this.dropdown = this.addView(DropdownComponentView);
     }
@@ -20,8 +21,8 @@ export class DropdownComponentView extends BasicComponentView {
     readonly button: DropdownButtonView;
     readonly menu: DropdownMenuView;
 
-    constructor(container: IContainerView) {
-        super(HtmlElementView.fromTag(container, 'div'));
+    constructor(container: BasicComponentView) {
+        super(container, 'div');
         this.button = this.addView(DropdownButtonView);
         this.menu = this.addView(DropdownMenuView);
         const dropdown = new Dropdown(this.elementView.element);
@@ -30,7 +31,7 @@ export class DropdownComponentView extends BasicComponentView {
 }
 
 export class DropdownButtonView extends ButtonView {
-    constructor(container: IContainerView) {
+    constructor(container: BasicComponentView) {
         super(container);
         this.addCssName('dropdown-toggle');
         this.setAttr(a => a['data-bs-toggle'] = 'dropdown');
@@ -39,9 +40,37 @@ export class DropdownButtonView extends ButtonView {
 }
 
 export class DropdownMenuView extends UnorderedListView {
-    constructor(container: IContainerView) {
+    constructor(container: BasicComponentView) {
         super(container);
         this.addCssName('dropdown-menu');
         this.addCssName('dropdown-menu-right');
     }
+
+    addSpanItem() {
+        return this.addView(DropdownSpanListItemView);
+    }
+
+    addLinkItem() {
+        return this.addView(DropdownLinkListItemView);
+    }
+}
+
+export class DropdownLinkListItemView extends ListItemView {
+    constructor(container: BasicComponentView) {
+        super(container);
+        this.link = this.addView(LinkView);
+        this.link.addCssName('dropdown-item')
+    }
+
+    readonly link: LinkView;
+}
+
+export class DropdownSpanListItemView extends ListItemView {
+    constructor(container: BasicComponentView) {
+        super(container);
+        this.span = this.addView(SpanView);
+        this.span.addCssName('dropdown-item-text')
+    }
+
+    readonly span: SpanView;
 }

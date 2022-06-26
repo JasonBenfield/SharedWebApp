@@ -1,21 +1,21 @@
-﻿import { ErrorModel } from "../ErrorModel";
-import { TextBlock } from "../Html/TextBlock";
-import { ListGroup } from "../ListGroup/ListGroup";
+﻿import { ListGroup } from "../Components/ListGroup";
+import { TextComponent } from "../Components/TextComponent";
+import { ErrorModel } from "../ErrorModel";
+import { ErrorListItemView } from "../Views/ErrorListItemView";
+import { SimpleFieldFormGroupView } from "../Views/FormGroup";
 import { ErrorList } from "./ErrorList";
 import { ErrorListItem } from "./ErrorListItem";
-import { ErrorListItemView } from "./ErrorListItemView";
-import { SimpleFieldFormGroupView } from "./SimpleFieldFormGroupView";
 
 export abstract class SimpleFieldFormGroup<TValue> implements IField {
     private readonly name: string;
     private caption: string;
-    private readonly captionBlock: TextBlock;
+    private readonly captionBlock: TextComponent;
     private readonly alertList: ListGroup;
 
     constructor(prefix: string, name: string, protected readonly view: SimpleFieldFormGroupView) {
         this.name = prefix ? `${prefix}_${name}` : name;
-        this.captionBlock = new TextBlock('', this.view.caption);
-        this.alertList = new ListGroup(this.view.alertList);
+        this.captionBlock = new TextComponent(view.caption);
+        this.alertList = new ListGroup(view.alertList);
     }
 
     getName() {
@@ -55,7 +55,7 @@ export abstract class SimpleFieldFormGroup<TValue> implements IField {
     }
 
     validate(errors: IErrorList) {
-        let fieldErrors = new ErrorList();
+        const fieldErrors = new ErrorList();
         this.validateConstraints(fieldErrors);
         this.setErrors(fieldErrors.values());
         errors.merge(fieldErrors);
@@ -65,7 +65,7 @@ export abstract class SimpleFieldFormGroup<TValue> implements IField {
 
     import(values: Record<string, any>) {
         if (values) {
-            let value = values[this.getName()];
+            const value = values[this.getName()];
             if (value !== undefined) {
                 this.setValue(value);
             }

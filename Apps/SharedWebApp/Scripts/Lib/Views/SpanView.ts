@@ -1,9 +1,8 @@
-﻿import { BasicContainerView } from "./BasicContainerView";
-import { HtmlElementView } from "./HtmlElementView";
-import { IContainerView } from "./Types";
+﻿import { BasicComponentView } from "./BasicComponentView";
+import { BasicContainerView } from "./BasicContainerView";
 
 export class SpanView extends BasicContainerView {
-    constructor(container: IContainerView) {
-        super(HtmlElementView.fromTag(container, 'span'));
+    constructor(container: BasicComponentView) {
+        super(container, 'span');
     }
 }

@@ -71,7 +71,52 @@ export class ArrayItemEventCollection {
     }
 }
 
-export class DefaultEvent<TArgs> implements IEvent<TArgs> {
+class Something { }
+
+interface ITest {
+    selected: Something;
+}
+
+let test: ITest = {
+    selected: typeof Something
+} as const;
+
+export type Events<TEvents> = {
+    [K in keyof TEvents]: IEvent<TEvents[K]>;
+}
+
+export type EventBuilders<TEvents> = {
+    [K in keyof TEvents]: EventBuilder<TEvents[K]>;
+}
+
+let testEvents: Events<typeof test>;
+
+let testEventBuilders: EventBuilders<typeof test>;
+
+export class EventSource<TEvents> {
+    readonly events: Events<TEvents> = {} as Events<TEvents>;
+    readonly when: EventBuilders<TEvents> = {} as EventBuilders<TEvents>;
+
+    constructor(source, events: TEvents) {
+        const eventCollection = new EventCollection();
+        for (const key in events) {
+            const event: any = new DefaultEvent(source);
+            this.events[key] = event;
+            this.when[key] = new EventBuilder(eventCollection, event);
+        }
+    }
+}
+
+export class EventBuilder<TArgs> {
+    constructor(private readonly eventCollection: EventCollection, private readonly event: IEvent<TArgs>) {
+    }
+
+    then(callback: EventCallback<TArgs>) {
+        this.eventCollection.register(this.event, callback);
+    }
+}
+
+export class DefaultEvent<TArgs> implements IEvent<TArgs>, IEventHandler<TArgs> {
     private static defaultIsEnabled() {
         return true;
     }

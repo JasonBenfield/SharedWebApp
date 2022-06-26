@@ -1,12 +1,12 @@
 ﻿import { ContextualClass } from "../ContextualClass";
 import { CssClass } from "../CssClass";
-import { EnumerableArray } from "../Enumerable";
+import { EnumerableArray, FilteredArray, MappedArray } from "../Enumerable";
 import { CssLengthUnit } from "../Html/CssLengthUnit";
 import { MarginCss } from "../MarginCss";
 import { PaddingCss } from "../PaddingCss";
 import { TextCss } from "../TextCss";
 import { HtmlElementView } from "./HtmlElementView";
-import { IHtmlStyle, IHtmlAttributes, ViewConstructor } from './Types';
+import { IHtmlAttributes, IHtmlElementView, IHtmlStyle, ViewConstructor } from './Types';
 import { ViewEventBuilder } from "./ViewEventBuilder";
 
 interface ICssBuilders {
@@ -20,8 +20,20 @@ export class BasicComponentView {
     private readonly cssClass = new CssClass();
     private readonly css: ICssBuilders = {};
     private readonly views: BasicComponentView[] = [];
+    private isVisible = true;
+    protected readonly elementView: HtmlElementView;
+    private text: string;
 
-    constructor(protected readonly elementView: HtmlElementView) {
+    constructor(private readonly container: BasicComponentView, createElement: IHtmlElementView) {
+        if (typeof createElement === 'string') {
+            this.elementView = HtmlElementView.fromTag(createElement);
+        }
+        else if (createElement instanceof HTMLElement) {
+            this.elementView = HtmlElementView.fromElement(createElement);
+        }
+        else {
+            this.elementView = createElement();
+        }
     }
 
     getViewByElement(element: HTMLElement) {
@@ -176,39 +188,51 @@ export class BasicComponentView {
     }
 
     show() {
-        this.elementView.addToContainer();
+        this.isVisible = true;
+        if (this.container) {
+            this.container.replaceElements();
+        }
     }
 
     hide() {
-        this.elementView.removeFromContainer();
+        this.isVisible = false;
+        if (this.container) {
+            this.container.removeView(this);
+        }
     }
 
     on(eventName: string) {
         return new ViewEventBuilder(this, this.elementView, eventName);
     }
 
-    dispose() {
-        for (const view of this.views) {
-            view.dispose();
-        }
-        this.elementView.removeFromContainer();
-    }
+    get viewCount() { return this.views.length; }
 
     protected getViews() { return new EnumerableArray(this.views).value(); }
 
-    protected clearViews() {
+    protected disposeAllViews() {
         for (const view of this.views) {
             view.dispose();
         }
         this.views.splice(0, this.views.length);
+        this.elementView.replaceElements([]);
+    }
+
+    protected disposeView(view: BasicComponentView) {
+        this.removeView(view);
+        view.dispose();
+    }
+
+    dispose() {
+        this.disposeAllViews();
+        this.container.removeView(this);
     }
 
     protected removeView(view: BasicComponentView) {
         const index = this.views.indexOf(view);
         if (index > -1) {
-            view.dispose();
             this.views.splice(index, 1);
         }
+        this.elementView.removeElement(view.elementView.element);
     }
 
     protected addView<T extends BasicComponentView>(ctor: ViewConstructor<T>) {
@@ -218,10 +242,29 @@ export class BasicComponentView {
     protected addViews<T extends BasicComponentView>(howMany: number, ctor: ViewConstructor<T>) {
         const views: T[] = [];
         for (let i = 0; i < howMany; i++) {
-            const view = new ctor(this.elementView);
+            const view = new ctor(this);
             this.views.push(view);
             views.push(view);
         }
+        this.replaceElements();
         return views;
+    }
+
+    protected insertView<T extends BasicComponentView>(index: number, ctor: ViewConstructor<T>) {
+        const view = new ctor(this);
+        this.views.splice(index, 0, view);
+        this.replaceElements();
+        return view;
+    }
+
+    private replaceElements() {
+        const viewElements = new MappedArray(
+            new FilteredArray(
+                this.views,
+                v => v.isVisible
+            ),
+            v => v.elementView.element
+        ).value();
+        this.elementView.replaceElements(viewElements);
     }
 }

@@ -1,16 +1,21 @@
-﻿import { SelectOption } from "../Html/SelectOption";
+﻿import { SimpleEvent } from "../Events";
+import { SelectOption } from "../Html/SelectOption";
+import { SelectFormGroupView } from "../Views/FormGroup";
 import { ConstraintCollection } from "./ConstraintCollection";
-import { DropDownFormGroupView } from "./DropDownFormGroupView";
 import { ErrorList } from "./ErrorList";
 import { SimpleFieldFormGroup } from "./SimpleFieldFormGroup";
 
 export class DropDownFormGroup<TValue> extends SimpleFieldFormGroup<TValue> {
-    protected readonly view: DropDownFormGroupView<TValue>;
+    protected readonly view: SelectFormGroupView;
     readonly constraints = new ConstraintCollection();
-    readonly valueChanged = this.view.select.changed;
+    private readonly _valueChanged = new SimpleEvent(this);
+    readonly valueChanged = this._valueChanged.handler();
+    private readonly items: SelectOption<TValue>[] = [];
+    private itemCaption: string;
 
-    constructor(prefix: string, name: string, view: DropDownFormGroupView<TValue>) {
+    constructor(prefix: string, name: string, view: SelectFormGroupView) {
         super(prefix, name, view);
+        view.select.onChange().execute(() => this._valueChanged.invoke());
     }
 
     protected validateConstraints(fieldErrors: ErrorList) {
@@ -18,18 +23,42 @@ export class DropDownFormGroup<TValue> extends SimpleFieldFormGroup<TValue> {
     }
 
     getValue() {
-        return this.view.select.getValue();
+        const selectedIndex = this.view.select.getSelectedIndex();
+        return selectedIndex > -1 ? this.items[selectedIndex].value : null;
     }
 
     setValue(value: TValue) {
-        this.view.select.setValue(value);
+        const selectedIndex = this.items.findIndex(o => o.value === value);
+        this.view.select.setSelectedIndex(selectedIndex);
     }
 
     setItems(...items: SelectOption<TValue>[]) {
-        this.view.select.setItems(items);
+        this.items.splice(0, this.items.length, ...items);
+        this.prependCaption();
+        this.updateOptions();
     }
 
     setItemCaption(itemCaption: string) {
-        this.view.select.setItemCaption(itemCaption);
+        if (this.itemCaption) {
+            this.items.splice(0, 1);
+        }
+        this.itemCaption = itemCaption;
+        this.prependCaption();
+        this.updateOptions();
+    }
+
+    private prependCaption() {
+        if (this.itemCaption) {
+            this.items.splice(0, 0, new SelectOption<TValue>(null, this.itemCaption));
+        }
+    }
+
+    private updateOptions() {
+        const options = this.view.select.replaceOptions(this.items.length);
+        let i = 0;
+        for (const item of this.items) {
+            options[i].setText(item.displayText);
+            i++;
+        }
     }
 }

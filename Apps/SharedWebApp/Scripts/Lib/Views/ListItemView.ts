@@ -1,9 +1,8 @@
-﻿import { BasicContainerView } from "./BasicContainerView";
-import { HtmlElementView } from "./HtmlElementView";
-import { IContainerView } from "./Types";
+﻿import { BasicComponentView } from "./BasicComponentView";
+import { BasicContainerView } from "./BasicContainerView";
 
 export class ListItemView extends BasicContainerView {
-    constructor(container: IContainerView) {
-        super(HtmlElementView.fromTag(container, 'li'));
+    constructor(container: BasicComponentView) {
+        super(container, 'li');
     }
 }

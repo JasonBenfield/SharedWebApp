@@ -1,7 +1,7 @@
 ﻿import { DateConstraintCollection } from "./ConstraintCollection";
 import { ErrorList } from "./ErrorList";
 import { InputFormGroup } from "./InputFormGroup";
-import { InputFormGroupView } from "./InputFormGroupView";
+import { InputFormGroupView } from "../Views/FormGroup";
 import { TextToDateViewValue } from "./TextToDateViewValue";
 
 export class DateInputFormGroup extends InputFormGroup<Date> {

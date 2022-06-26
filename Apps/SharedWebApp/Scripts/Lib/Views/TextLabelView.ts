@@ -1,11 +1,10 @@
-﻿
+﻿import { BasicComponentView } from "./BasicComponentView";
 import { BasicTextComponentView } from "./BasicTextComponentView";
-import { HtmlElementView } from "./HtmlElementView";
-import { ILabelAttributes, IContainerView } from "./Types";
+import { ILabelAttributes } from "./Types";
 
 export class TextLabelView extends BasicTextComponentView {
-    constructor(container: IContainerView) {
-        super(HtmlElementView.fromTag(container, 'a'));
+    constructor(container: BasicComponentView) {
+        super(container, 'label');
     }
 
     protected setAttr: (config: (attr: ILabelAttributes) => void) => void;

@@ -1,11 +1,8 @@
-﻿import { BooleanDropDownFormGroup } from "./BooleanDropDownFormGroup";
-import { ComplexFieldFormGroup } from "./ComplexFieldFormGroup";
+﻿import { InputFormGroupView, SelectFormGroupView } from "../Views/FormGroup";
+import { BooleanDropDownFormGroup } from "./BooleanDropDownFormGroup";
 import { DateDropDownFormGroup } from "./DateDropDownFormGroup";
 import { DateInputFormGroup } from "./DateInputFormGroup";
 import { DropDownFormGroup } from "./DropDownFormGroup";
-import { DropDownFormGroupView } from "./DropDownFormGroupView";
-import { FormGroupViewCollection } from "./FormGroupViewCollection";
-import { InputFormGroupView } from "./InputFormGroupView";
 import { NumberDropDownFormGroup } from "./NumberDropDownFormGroup";
 import { NumberInputFormGroup } from "./NumberInputFormGroup";
 import { TextDropDownFormGroup } from "./TextDropDownFormGroup";
@@ -45,23 +42,23 @@ export class FormGroupCollection {
         return this.addFormGroup(new DateInputFormGroup(this.name, name, view));
     }
 
-    addTextDropDownFormGroup(name: string, view: DropDownFormGroupView<string>) {
+    addTextDropDownFormGroup(name: string, view: SelectFormGroupView) {
         return this.addFormGroup(new TextDropDownFormGroup(this.name, name, view));
     }
 
-    addNumberDropDownFormGroup(name: string, view: DropDownFormGroupView<number>) {
+    addNumberDropDownFormGroup(name: string, view: SelectFormGroupView) {
         return this.addFormGroup(new NumberDropDownFormGroup(this.name, name, view));
     }
 
-    addDateDropDownFormGroup(name: string, view: DropDownFormGroupView<Date>) {
+    addDateDropDownFormGroup(name: string, view: SelectFormGroupView) {
         return this.addFormGroup(new DateDropDownFormGroup(this.name, name, view));
     }
 
-    addBooleanDropDownFormGroup(name: string, view: DropDownFormGroupView<boolean>) {
+    addBooleanDropDownFormGroup(name: string, view: SelectFormGroupView) {
         return this.addFormGroup(new BooleanDropDownFormGroup(this.name, name, view));
     }
 
-    addDropDownFormGroup<T>(name: string, view: DropDownFormGroupView<T>) {
+    addDropDownFormGroup<T>(name: string, view: SelectFormGroupView) {
         return this.addFormGroup(new DropDownFormGroup<T>(this.name, name, view));
     }
 
@@ -71,15 +68,15 @@ export class FormGroupCollection {
     }
 
     forEach(action: (field: IField) => void) {
-        for (let formGroup of this.formGroups()) {
+        for (const formGroup of this.formGroups()) {
             action(formGroup);
         }
     }
 
     getField(name: string) {
         let match: IField = null;
-        for (let formGroup of this.formGroups()) {
-            let testField = formGroup.getField(name);
+        for (const formGroup of this.formGroups()) {
+            const testField = formGroup.getField(name);
             if (testField) {
                 match = testField;
                 break;
@@ -89,25 +86,25 @@ export class FormGroupCollection {
     }
 
     clearErrors() {
-        for (let field of this.formGroups()) {
+        for (const field of this.formGroups()) {
             field.clearErrors();
         }
     }
 
     validate(errors: IErrorList) {
-        for (let field of this.formGroups()) {
+        for (const field of this.formGroups()) {
             field.validate(errors);
         }
     }
 
     import(values: Record<string, any>) {
-        for (let field of this.formGroups()) {
+        for (const field of this.formGroups()) {
             field.import(values);
         }
     }
 
     export(values: Record<string, any>) {
-        for (let field of this.formGroups()) {
+        for (const field of this.formGroups()) {
             field.export(values);
         }
     }

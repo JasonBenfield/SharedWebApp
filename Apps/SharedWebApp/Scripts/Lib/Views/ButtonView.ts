@@ -1,14 +1,13 @@
 ﻿import { ContextualClass } from "../ContextualClass";
+import { BasicComponentView } from "./BasicComponentView";
 import { BasicContainerView } from "./BasicContainerView";
-import { HtmlElementView } from "./HtmlElementView";
-import { IContainerView } from "./Types";
 
 export class ButtonView extends BasicContainerView {
     private context: ContextualClass;
     private isOutline = false;
 
-    constructor(container: IContainerView) {
-        super(HtmlElementView.fromTag(container, 'button'));
+    constructor(container: BasicComponentView) {
+        super(container, 'button');
         this.setAttr(attr => attr.type = 'button');
         this.addCssName('btn');
     }

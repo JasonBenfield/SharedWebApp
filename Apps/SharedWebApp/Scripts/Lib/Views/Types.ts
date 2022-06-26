@@ -1,13 +1,12 @@
 ﻿import { ContextualClass } from "../ContextualClass";
 import { BasicComponentView } from "./BasicComponentView";
 import { FaIconView } from "./FaIconView";
+import { HtmlElementView } from "./HtmlElementView";
 
-export interface IContainerView {
-    addElement(el: HTMLElement);
-
-    removeElement(el: HTMLElement);
-}
-
+export type IHtmlElementView =
+    keyof HTMLElementTagNameMap |
+    HTMLElement |
+    (() => HtmlElementView);
 
 export interface IHtmlAttributes {
     id?: string;
@@ -72,7 +71,7 @@ export interface IGridCellStyle extends IHtmlStyle {
 }
 
 export type ViewConstructor<T extends BasicComponentView> = {
-    new(container: IContainerView): T;
+    new(container: BasicComponentView): T;
 };
 
 export interface IViewEventOptions {
@@ -95,4 +94,8 @@ export interface ICommandView {
     enable();
     disable();
     handleClick(action: () => void);
+}
+
+export interface IFormGroupLayout<T> {
+    addFormGroups(view: BasicComponentView): T;
 }

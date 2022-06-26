@@ -1,23 +1,32 @@
-﻿import { MarginCss } from "../MarginCss";
+﻿import { ContextualClass } from "../ContextualClass";
+import { CssLengthUnit } from "../Html/CssLengthUnit";
+import { MarginCss } from "../MarginCss";
+import { PaddingCss } from "../PaddingCss";
 import { TextCss } from "../TextCss";
+import { AlertView } from "./AlertView";
 import { BasicComponentView } from "./BasicComponentView";
 import { BasicTextComponentView } from "./BasicTextComponentView";
+import { DropdownComponentView } from "./Dropdown";
+import { FaIconView } from "./FaIconView";
 import { GridCellView, GridView } from "./Grid";
-import { HtmlElementView } from "./HtmlElementView";
+import { InputGroupView } from "./InputGroupView";
 import { InputView } from "./InputView";
+import { ListGroupView } from "./ListGroup";
+import { ModalErrorListItemView } from "./ModalError";
 import { SelectView } from "./SelectView";
 import { TextBlockView } from "./TextBlockView";
 import { TextLabelView } from "./TextLabelView";
-import { IContainerView, ViewConstructor } from "./Types";
+import { ViewConstructor } from "./Types";
 
 export class FormGroupGridView extends GridView {
-    constructor(container: IContainerView) {
-        super(HtmlElementView.fromTag(container, 'div'));
-        this.borderless();
+    constructor(container: BasicComponentView) {
+        super(container);
+        this.layout();
+        this.setTemplateColumns(CssLengthUnit.auto(), CssLengthUnit.flex(1));
     }
 
     addFormGroup<T extends FormGroupView>(ctor?: ViewConstructor<T>) {
-        return this.addView(ctor || FormGroupView);
+        return this.addView(ctor || FormGroupView) as T;
     }
 }
 
@@ -26,14 +35,15 @@ export class FormGroupView extends BasicComponentView {
     readonly caption: BasicTextComponentView;
     readonly valueCell: GridCellView;
 
-    constructor(container: IContainerView) {
-        super(HtmlElementView.fromTag(container, 'div'));
+    constructor(container: BasicComponentView) {
+        super(container, 'div');
         this.addCssName('d-contents');
         this.addCssName('form-group');
         this.setMargin(MarginCss.bottom(3));
         this.captionCell = this.addView(GridCellView);
         this.captionCell.setTextCss(new TextCss().end().bold());
         this.caption = this.captionCell.addView(TextLabelView);
+        this.caption.addCssName('col-form-label');
         this.valueCell = this.addView(GridCellView);
     }
 }
@@ -41,7 +51,7 @@ export class FormGroupView extends BasicComponentView {
 export class FormGroupTextView extends FormGroupView {
     readonly textValue: BasicTextComponentView;
 
-    constructor(container: IContainerView) {
+    constructor(container: BasicComponentView) {
         super(container);
         this.textValue = this.addView(TextBlockView);
         this.valueCell.addCssName('form-control-plaintext');
@@ -51,7 +61,7 @@ export class FormGroupTextView extends FormGroupView {
 export class FormGroupInputView extends FormGroupView {
     readonly input: InputView;
 
-    constructor(container: IContainerView) {
+    constructor(container: BasicComponentView) {
         super(container);
         this.input = this.addView(InputView);
         this.input.addCssName('form-control');
@@ -61,9 +71,58 @@ export class FormGroupInputView extends FormGroupView {
 export class FormGroupSelectView extends FormGroupView {
     readonly select: SelectView;
 
-    constructor(container: IContainerView) {
+    constructor(container: BasicComponentView) {
         super(container);
         this.select = this.addView(SelectView);
         this.select.addCssName('form-control');
+    }
+}
+
+export class SimpleFieldFormGroupView extends FormGroupView {
+    readonly alertList: ListGroupView;
+    private readonly dropdown: DropdownComponentView;
+    readonly inputGroup: InputGroupView;
+
+    constructor(container: BasicComponentView) {
+        super(container);
+        this.inputGroup = this.valueCell.addView(InputGroupView);
+        this.dropdown = this.inputGroup.addDropdown();
+        //this.dropdown.hide();
+        this.dropdown.button.setContext(ContextualClass.danger);
+        this.dropdown.button.useOutlineStyle();
+        this.dropdown.button.addView(FaIconView)
+            .configure(i => i.solidStyle('exclamation'));
+        this.dropdown.menu.setPadding(PaddingCss.xs(0));
+        const alertItem = this.dropdown.menu.addListItem();
+        alertItem.addCssName(ContextualClass.danger.append('border'));
+        const alert = alertItem.addView(AlertView);
+        alert.setMargin(MarginCss.xs(0));
+        alert.setContext(ContextualClass.danger);
+        this.alertList = alert.addView(ListGroupView);
+        this.alertList.setItemViewType(ModalErrorListItemView);
+    }
+
+    showDropDown() { this.dropdown.show(); }
+
+    hideDropDown() {
+        //this.dropdown.hide();
+    }
+}
+
+export class InputFormGroupView extends SimpleFieldFormGroupView {
+    readonly input: InputView;
+
+    constructor(container: BasicComponentView) {
+        super(container);
+        this.input = this.inputGroup.prependFormControl(InputView);
+    }
+}
+
+export class SelectFormGroupView extends SimpleFieldFormGroupView {
+    readonly select: SelectView;
+
+    constructor(container: BasicComponentView) {
+        super(container);
+        this.select = this.inputGroup.prependFormControl(SelectView);
     }
 }

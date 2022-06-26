@@ -1,14 +1,13 @@
 ﻿import { BasicComponentView } from "./BasicComponentView";
-import { HtmlElementView } from "./HtmlElementView";
 import { ListItemView } from "./ListItemView";
-import { IContainerView, ViewConstructor } from "./Types";
+import { ViewConstructor } from "./Types";
 import { ViewEventActionBuilder } from "./ViewEventBuilder";
 
 export class UnorderedListView extends BasicComponentView {
     private clickConfig: (builder: ViewEventActionBuilder) => ViewEventActionBuilder;
 
-    constructor(container: IContainerView) {
-        super(HtmlElementView.fromTag(container, 'ul'));
+    constructor(container: BasicComponentView) {
+        super(container, 'ul');
         this.clickConfig = b => b.select('li').preventDefault();
     }
 

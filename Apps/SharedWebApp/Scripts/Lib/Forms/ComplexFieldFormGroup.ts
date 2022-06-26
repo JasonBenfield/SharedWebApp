@@ -1,8 +1,7 @@
-﻿import { FormGroup } from "../Html/FormGroup";
-import { ComplexFieldFormGroupView } from "./ComplexFieldFormGroupView";
-import { DropDownFormGroupView } from "./DropDownFormGroupView";
+﻿import { ComplexFieldFormGroupView } from "../Views/ComplexFieldFormGroupView";
+import { InputFormGroupView, SelectFormGroupView } from "../Views/FormGroup";
+import { FormGroup } from "./FormGroup";
 import { FormGroupCollection } from "./FormGroupCollection";
-import { InputFormGroupView } from "./InputFormGroupView";
 
 export class ComplexFieldFormGroup extends FormGroup implements IField {
     private readonly name: string;
@@ -59,24 +58,24 @@ export class ComplexFieldFormGroup extends FormGroup implements IField {
         return this.formGroups.addDateInputFormGroup(name, view);
     }
 
-    protected addTextDropDownFormGroup(name: string, view: DropDownFormGroupView<string>) {
+    protected addTextDropDownFormGroup(name: string, view: SelectFormGroupView) {
         return this.formGroups.addTextDropDownFormGroup(name, view);
     }
 
-    protected addNumberDropDownFormGroup(name: string, view: DropDownFormGroupView<number>) {
+    protected addNumberDropDownFormGroup(name: string, view: SelectFormGroupView) {
         return this.formGroups.addNumberDropDownFormGroup(name, view);
     }
 
-    protected addDateDropDownFormGroup(name: string, view: DropDownFormGroupView<Date>) {
+    protected addDateDropDownFormGroup(name: string, view: SelectFormGroupView) {
         return this.formGroups.addDateDropDownFormGroup(name, view);
     }
 
-    protected addBooleanDropDownFormGroup(name: string, view: DropDownFormGroupView<boolean>) {
+    protected addBooleanDropDownFormGroup(name: string, view: SelectFormGroupView) {
         return this.formGroups.addBooleanDropDownFormGroup(name, view);
     }
 
-    protected addDropDownFormGroup<T>(name: string, view: DropDownFormGroupView<T>) {
-        return this.formGroups.addDropDownFormGroup<T>(name, view);
+    protected addDropDownFormGroup(name: string, view: SelectFormGroupView) {
+        return this.formGroups.addDropDownFormGroup(name, view);
     }
 
     protected addFormGroup<TFormGroup extends IField>(name: string, formGroup: TFormGroup) {

@@ -1,69 +1,59 @@
-﻿import { Container } from '../../Lib/Html/Container';
+﻿import { ContextualClass } from '../../Lib/ContextualClass';
 import { CssLengthUnit } from '../../Lib/Html/CssLengthUnit';
-import { GridView } from '../../Lib/Html/GridView';
-import { TextHeading1View } from '../../Lib/Html/TextHeading1View';
-import { Toolbar } from '../../Lib/Html/Toolbar';
-import { MessageAlertView } from '../../Lib/MessageAlertView';
 import { PaddingCss } from '../../Lib/PaddingCss';
-import { PageFrameView } from '../../Lib/PageFrameView';
-import { ColumnCss } from '../../Lib/ColumnCss';
-import { ButtonCommandItem } from '../../Lib/Command/ButtonCommandItem';
-import { ContextualClass } from '../../Lib/ContextualClass';
-import { Block } from '../../Lib/Html/Block';
+import { BasicPageView } from '../../Lib/Views/BasicPageView';
+import { BlockView } from '../../Lib/Views/BlockView';
+import { ButtonCommandView } from '../../Lib/Views/Commands';
+import { GridView } from '../../Lib/Views/Grid';
+import { MessageAlertView } from '../../Lib/Views/MessageAlertView';
+import { TextHeading1View } from '../../Lib/Views/TextHeadings';
+import { ToolbarView } from '../../Lib/Views/ToolbarView';
+import { AddEmployeeFormLayout } from './AddEmployeeFormLayout';
 import { AddEmployeeFormView } from './AddEmployeeFormView';
-import { AddressInputLayout } from './AddressInputLayout';
 
-export class MainPageView {
+export class MainPageView extends BasicPageView {
     readonly heading: TextHeading1View;
     readonly alert: MessageAlertView;
     readonly addEmployeeForm: AddEmployeeFormView;
-    readonly saveButton: ButtonCommandItem;
-    readonly submitButton: ButtonCommandItem;
+    readonly saveButton: ButtonCommandView;
+    readonly submitButton: ButtonCommandView;
 
-    constructor(page: PageFrameView) {
-        let grid = page.addContent(new GridView());
-        grid.borderless();
+    constructor() {
+        super();
+        const grid = this.addView(GridView);
+        grid.layout();
         grid.setTemplateRows(CssLengthUnit.auto(), CssLengthUnit.flex(1), CssLengthUnit.auto());
         grid.height100();
-        let headerRow = grid.addContent(new Block());
-        this.heading = headerRow.addContent(new Container())
-            .addContent(new TextHeading1View());
-        //let fillRow = grid.addContent(new Block());
-        //fillRow.setBackgroundContext(ContextualClass.light);
-        //fillRow.scrollable();
-        //let container = fillRow.addContent(new Container());
-
-        let container = grid.addContent(new Container())
-            .configure(b => {
-                b.height100();
+        const headerRow = grid.addCell();
+        this.heading = headerRow.addView(BlockView)
+            .configure(b => b.addCssName('container'))
+            .addView(TextHeading1View);
+        const container = grid.addCell()
+            .configure(c => {
+                c.addCssName('container');
+                c.addCssName('h-100');
             })
-            .addContent(new Block())
+            .addView(BlockView)
             .configure(b => {
                 b.height100();
                 b.positionRelative();
             })
-            .addContent(new Block())
+            .addView(BlockView)
             .configure(b => {
                 b.positionAbsoluteFill();
                 b.setBackgroundContext(ContextualClass.light);
                 b.scrollable();
             });
-
-        this.alert = container.addContent(new MessageAlertView());
-        this.addEmployeeForm = container.addContent(new AddEmployeeFormView());
-        let toolbar = grid.addContent(new Toolbar());
+        this.alert = container.addView(MessageAlertView);
+        this.addEmployeeForm = container.addView(AddEmployeeFormView);
+        this.addEmployeeForm.addContent(new AddEmployeeFormLayout());
+        this.submitButton = this.addEmployeeForm.addOffscreenSubmit();
+        const toolbar = grid.addCell().addView(ToolbarView);
         toolbar.setPadding(PaddingCss.xs(3));
         toolbar.setBackgroundContext(ContextualClass.secondary);
-        this.saveButton = toolbar.columnEnd.addContent(new ButtonCommandItem());
-        this.saveButton.icon.solidStyle();
-        this.saveButton.icon.setName('check');
+        this.saveButton = toolbar.columnEnd.addView(ButtonCommandView);
+        this.saveButton.icon.solidStyle('check');
         this.saveButton.setText('Save');
         this.saveButton.setContext(ContextualClass.light);
-        this.submitButton = this.addEmployeeForm.addOffscreenSubmit();
-        this.addEmployeeForm.forEachFormGroup(fg => {
-            fg.captionColumn.setColumnCss(ColumnCss.xs(4));
-        });
-        this.addEmployeeForm.Address.useLayout((fg) => new AddressInputLayout(fg));
-        this.addEmployeeForm.executeLayout();
     }
 }

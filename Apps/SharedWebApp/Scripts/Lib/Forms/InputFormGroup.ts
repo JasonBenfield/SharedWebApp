@@ -1,6 +1,6 @@
 ﻿import { DebouncedAction } from "../DebouncedAction";
 import { DefaultEvent } from "../Events";
-import { InputFormGroupView } from "./InputFormGroupView";
+import { InputFormGroupView } from "../Views/FormGroup";
 import { SimpleFieldFormGroup } from "./SimpleFieldFormGroup";
 import { TypedFieldViewValue } from "./TypedFieldViewValue";
 
@@ -18,13 +18,16 @@ export abstract class InputFormGroup<TValue> extends SimpleFieldFormGroup<TValue
     ) {
         super(prefix, name, view);
         let valueName = this.getName();
-        this.view.input.setID(valueName);
-        this.view.input.setName(valueName);
-        this.view.input.changed.register(this.onInputValueChanged.bind(this));
+        this.view.input.setViewID(valueName);
+        this.view.input.setViewName(valueName);
+        this.view.input.onInput()
+            .execute(this.onInputValueChanged.bind(this))
+            .subscribe();
     }
 
-    private onInputValueChanged(viewValue: string) {
-        let value = this.viewValue.setValueFromView(viewValue);
+    private onInputValueChanged() {
+        const viewValue = this.view.input.getValue();
+        const value = this.viewValue.setValueFromView(viewValue);
         this._valueChanged.invoke(value);
         this.debouncedOnInputValueChanged.execute();
     }
@@ -32,8 +35,8 @@ export abstract class InputFormGroup<TValue> extends SimpleFieldFormGroup<TValue
     private debouncedOnInputValueChanged = new DebouncedAction(
         () => {
             if (!this.view.input.hasFocus()) {
-                let currentValue = this.view.input.getValue();
-                let newValue = this.viewValue.toView();
+                const currentValue = this.view.input.getValue();
+                const newValue = this.viewValue.toView();
                 if (newValue !== currentValue) {
                     this.view.input.setValue(newValue);
                 }
@@ -48,7 +51,7 @@ export abstract class InputFormGroup<TValue> extends SimpleFieldFormGroup<TValue
 
     setValue(value: TValue) {
         this.viewValue.setValue(value);
-        let inputValue = this.viewValue.toView();
+        const inputValue = this.viewValue.toView();
         this.view.input.setValue(inputValue);
     }
 

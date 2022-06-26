@@ -1,7 +1,7 @@
 ﻿import { NumberConstraintCollection } from "./ConstraintCollection";
 import { ErrorList } from "./ErrorList";
 import { InputFormGroup } from "./InputFormGroup";
-import { InputFormGroupView } from "./InputFormGroupView";
+import { InputFormGroupView } from "../Views/FormGroup";
 import { TextToNumberViewValue } from "./TextToNumberViewValue";
 
 export class NumberInputFormGroup extends InputFormGroup<number> {

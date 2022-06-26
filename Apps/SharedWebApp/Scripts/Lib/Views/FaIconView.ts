@@ -1,11 +1,11 @@
 ﻿import { ContextualClass } from '../ContextualClass';
+import { BasicComponentView } from './BasicComponentView';
 import { IconView } from './IconView';
-import { IContainerView } from './Types';
 
 export type FaIconAnimation = 'spin' | 'pulse';
 
 export class FaIconView extends IconView {
-    constructor(container: IContainerView) {
+    constructor(container: BasicComponentView) {
         super(container);
     }
 

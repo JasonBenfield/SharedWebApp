@@ -4,8 +4,7 @@ import { CssLengthUnit } from "../Html/CssLengthUnit";
 import { JoinedStrings } from "../JoinedStrings";
 import { BasicComponentView } from "./BasicComponentView";
 import { BasicContainerView } from "./BasicContainerView";
-import { HtmlElementView } from "./HtmlElementView";
-import { IContainerView, IGridCellStyle, IGridStyle, ViewConstructor } from "./Types";
+import { IGridCellStyle, IGridStyle, ViewConstructor } from "./Types";
 
 export type GridTemplateCss = CssLengthUnit | GridTemplateMinMax | GridTemplateRepeat | GridTemplateFitContent;
 
@@ -53,12 +52,8 @@ export class GridView extends BasicComponentView {
     private readonly cells: GridCellView[] = [];
     private readonly rows: GridRowView[] = [];
 
-    constructor(container: IContainerView | HtmlElementView) {
-        super(
-            container instanceof HtmlElementView
-                ? container
-                : HtmlElementView.fromTag(container, 'div')
-        );
+    constructor(container: BasicComponentView) {
+        super(container, 'div');
         this.addCssName('grid');
     }
 
@@ -66,10 +61,14 @@ export class GridView extends BasicComponentView {
 
     borderless() { this.addCssName('grid-borderless'); }
 
+    layout() { this.addCssName('grid-layout'); }
+
+    height100() { this.addCssName('h-100'); }
+
     clearContents() {
         this.cells.splice(0, this.cells.length);
         this.rows.splice(0, this.rows.length);
-        this.clearViews();
+        this.disposeAllViews();
     }
 
     setContext(context: ContextualClass) {
@@ -142,8 +141,8 @@ export class GridView extends BasicComponentView {
 export class GridRowView extends BasicContainerView {
     private readonly cells: GridCellView[] = [];
 
-    constructor(container: IContainerView) {
-        super(HtmlElementView.fromTag(container, 'div'));
+    constructor(container: BasicComponentView) {
+        super(container, 'div');
         this.addCssName('d-contents');
         this.addCssName('grid-row');
     }
@@ -162,7 +161,7 @@ export class GridRowView extends BasicContainerView {
 
     clearContents() {
         this.cells.splice(0, this.cells.length);
-        this.clearViews();
+        this.disposeAllViews();
     }
 
     addCell<TView extends GridCellView>(ctor?: ViewConstructor<TView>) {
@@ -179,8 +178,8 @@ export class GridRowView extends BasicContainerView {
 }
 
 export class GridCellView extends BasicContainerView {
-    constructor(container: IContainerView) {
-        super(HtmlElementView.fromTag(container, 'div'));
+    constructor(container: BasicComponentView) {
+        super(container, 'div');
         this.addCssName('grid-cell');
     }
 

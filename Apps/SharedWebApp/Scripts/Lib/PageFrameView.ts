@@ -5,19 +5,15 @@ import { ContextualClass } from "./ContextualClass";
 import { DropdownBlock } from "./Dropdown/DropdownBlock";
 import { ModalErrorComponentView } from "./Error/ModalErrorComponentView";
 import { FaIcon } from "./FaIcon";
-import { Column } from "./Grid/Column";
 import { Row } from "./Grid/Row";
 import { AggregateComponent } from "./Html/AggregateComponent";
 import { Block } from "./Html/Block";
 import { CssLengthUnit } from "./Html/CssLengthUnit";
 import { GridView } from "./Html/GridView";
-import { Heading1 } from "./Html/Heading1";
 import { Link } from "./Html/Link";
 import { TextBlockView } from "./Html/TextBlockView";
 import { TextHeading1View } from "./Html/TextHeading1View";
-import { TextSmallView } from "./Html/TextSmallView";
 import { TextSpanView } from "./Html/TextSpanView";
-import { Toolbar } from "./Html/Toolbar";
 import { PaddingCss } from "./PaddingCss";
 import { PageLoader } from "./PageLoader";
 import { PageViewModel } from "./PageViewModel";
@@ -27,11 +23,9 @@ export class PageFrameView {
     readonly toolbar: Block;
     readonly appTitle: TextHeading1View;
     readonly pageTitle: TextBlockView;
-
     private readonly outerContent = new AggregateComponent(this.view.content);
     readonly content: Block;
     readonly modalError = new ModalErrorComponentView(this.view.modalError);
-
     readonly userDropdown: DropdownBlock;
 
     constructor(private readonly view: PageViewModel = new PageViewModel()) {

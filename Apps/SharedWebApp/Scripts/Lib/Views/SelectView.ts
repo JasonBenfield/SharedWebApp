@@ -1,14 +1,30 @@
 ﻿import { BasicComponentView } from "./BasicComponentView";
 import { BasicTextComponentView } from "./BasicTextComponentView";
-import { HtmlElementView } from "./HtmlElementView";
-import { IContainerView, IOptionAttributes } from "./Types";
+import { IOptionAttributes } from "./Types";
 
 export class SelectView extends BasicComponentView {
-    constructor(container: IContainerView) {
-        super(HtmlElementView.fromTag(container, 'select'));
+    protected readonly selectElement: HTMLSelectElement;
+
+    constructor(container: BasicComponentView) {
+        super(container, 'select');
+        this.selectElement = this.elementView.element as HTMLSelectElement;
     }
 
     options() { return this.getViews() as SelectOptionView[]; }
+
+    getSelectedIndex() { return this.selectElement.selectedIndex; }
+
+    setSelectedIndex(selectedIndex: number) {
+        return this.selectElement.selectedIndex = selectedIndex;
+    }
+
+    getValue() {
+        return this.selectElement.value;
+    }
+
+    setValue(value: string) {
+        this.selectElement.value = value;
+    }
 
     addOption() {
         return this.addOptions(1)[0];
@@ -22,17 +38,24 @@ export class SelectView extends BasicComponentView {
         }
         return options;
     }
+
+    replaceOptions(howMany?: number) {
+        this.disposeAllViews();
+        return this.addOptions(howMany);
+    }
+
+    onChange() { return this.on('change'); }
 }
 
 export class SelectOptionView extends BasicTextComponentView {
 
-    constructor(container: IContainerView) {
-        super(HtmlElementView.fromTag(container, 'option'));
+    constructor(container: BasicComponentView) {
+        super(container, 'option');
     }
 
     protected setAttr: (config: (attr: IOptionAttributes) => void) => void;
 
     setValue(value: string) {
-        this.setAttr(a=>a.value = value);
+        this.setAttr(a => a.value = value);
     }
 }

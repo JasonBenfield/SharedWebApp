@@ -1,16 +1,13 @@
 ﻿import { FlexCss } from "../FlexCss";
 import { BasicComponentView } from "./BasicComponentView";
 import { BasicContainerView } from "./BasicContainerView";
-import { HtmlElementView } from "./HtmlElementView";
 import { LinkView } from "./LinkView";
 import { TextLinkView } from "./TextLinkView";
-import { IContainerView, ViewConstructor } from "./Types";
+import { ViewConstructor } from "./Types";
 
 export class NavView extends BasicContainerView {
-    private flexCss: FlexCss;
-
-    constructor(container: IContainerView) {
-        super(HtmlElementView.fromTag(container, 'nav'));
+    constructor(container: BasicComponentView) {
+        super(container, 'nav');
     }
 
     pills() {
@@ -22,11 +19,7 @@ export class NavView extends BasicContainerView {
     }
 
     setFlexCss(flexCss: FlexCss) {
-        this.replaceCssName(
-            this.flexCss && this.flexCss.cssClass().toString(),
-            flexCss && flexCss.cssClass().toString()
-        );
-        this.flexCss = flexCss;
+        this.setCss('flex', flexCss && flexCss.cssClass().toString());
     }
 
     addTextLink<TLinkView extends TextLinkView>(ctor?: ViewConstructor<TLinkView>) {

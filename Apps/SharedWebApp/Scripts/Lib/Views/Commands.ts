@@ -1,10 +1,10 @@
 ﻿import { ContextualClass } from "../ContextualClass";
 import { MarginCss } from "../MarginCss";
+import { BasicComponentView } from "./BasicComponentView";
 import { ButtonView } from "./ButtonView";
 import { FaIconView } from "./FaIconView";
 import { LinkView } from "./LinkView";
 import { TextSpanView } from "./TextSpanView";
-import { IContainerView } from "./Types";
 
 export interface ICommandView {
     readonly icon: FaIconView;
@@ -22,7 +22,7 @@ export interface ICommandView {
 }
 
 export class ButtonCommandView extends ButtonView implements ICommandView {
-    static offscreenSubmit(container: IContainerView) {
+    static offscreenSubmit(container: BasicComponentView) {
         let item = new ButtonCommandView(container);
         item.makeOffscreenSubmit();
         return item;
@@ -31,7 +31,7 @@ export class ButtonCommandView extends ButtonView implements ICommandView {
     readonly icon: FaIconView;
     private readonly textSpan: TextSpanView;
 
-    constructor(container: IContainerView) {
+    constructor(container: BasicComponentView) {
         super(container);
         this.icon = this.addView(FaIconView);
         this.icon.setMargin(MarginCss.end(1));
@@ -72,7 +72,7 @@ export class LinkCommandView extends LinkView implements ICommandView {
     private context: ContextualClass;
     private isOutline = false;
 
-    constructor(container: IContainerView) {
+    constructor(container: BasicComponentView) {
         super(container);
         this.icon = this.addView(FaIconView);
         this.icon.setMargin(MarginCss.end(1));
