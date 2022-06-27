@@ -80,6 +80,8 @@ export class ListGroupItemView extends BasicListGroupItemView {
     constructor(container: BasicComponentView) {
         super(container, 'li');
     }
+
+    addView: <T extends BasicComponentView>(ctor: ViewConstructor<T>) => T;
 }
 
 export class ButtonListGroupView extends BasicListGroupView {
@@ -98,6 +100,8 @@ export class ButtonListGroupItemView extends BasicListGroupItemView {
     constructor(container: BasicComponentView) {
         super(container, 'button');
     }
+
+    addView: <T extends BasicComponentView>(ctor: ViewConstructor<T>) => T;
 }
 
 export class LinkListGroupView extends BasicListGroupView {
@@ -116,6 +120,8 @@ export class LinkListGroupItemView extends BasicListGroupItemView {
     constructor(container: BasicComponentView) {
         super(container, 'a');
     }
+
+    addView: <T extends BasicComponentView>(ctor: ViewConstructor<T>) => T;
 }
 
 export class GridListGroupView extends BasicListGroupView {

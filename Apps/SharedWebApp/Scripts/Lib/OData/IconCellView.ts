@@ -1,13 +1,11 @@
-﻿import { FaIcon } from "../FaIcon";
-import { GridCellView } from "../Html/GridCellView";
-import { GridCellViewModel } from "../Html/GridCellViewModel";
-import { GridRowView } from "../Html/GridRowView";
+﻿import { FaIconView } from "../Views/FaIconView";
+import { GridCellView, GridRowView } from "../Views/Grid";
 
 export class IconCellView extends GridCellView {
-    constructor(row: GridRowView, vm?: GridCellViewModel) {
-        super(row, vm);
-        this.icon = this.addContent(new FaIcon());
+    constructor(row: GridRowView) {
+        super(row);
+        this.icon = this.addView(FaIconView);
     }
 
-    readonly icon: FaIcon;
+    readonly icon: FaIconView;
 }

@@ -1,14 +1,14 @@
-﻿import { TextBlock } from "../Html/TextBlock";
-import { TextNavLinkView } from "../Html/TextNavLinkView";
+﻿import { BasicComponent } from "../Components/BasicComponent";
+import { TextComponent } from "../Components/TextComponent";
+import { TextLinkView } from "../Views/TextLinkView";
 import { FilterSelection } from "./FilterSelection";
 import { SourceType } from "./SourceType";
 
-export class FilterConditionLink {
-    constructor(readonly selection: FilterSelection, private readonly view: TextNavLinkView) {
-        new TextBlock(selection.displayText, view);
+export class FilterConditionLink extends BasicComponent {
+    constructor(readonly selection: FilterSelection, view: TextLinkView) {
+        super(view);
+        new TextComponent(view).setText(selection.displayText);
     }
-
-    hasView(view: TextNavLinkView) { return this.view === view; }
 
     sourceTypeChanged(sourceType: SourceType) {
         const canSelect = this.selection.canSelect(sourceType);

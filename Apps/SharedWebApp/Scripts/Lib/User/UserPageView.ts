@@ -1,9 +1,11 @@
-﻿import { MessageAlertView } from '../MessageAlertView';
-import { PageFrameView } from '../PageFrameView';
+﻿import { BasicPageView } from '../Views/BasicPageView';
+import { MessageAlertView } from '../Views/MessageAlertView';
 
-export class UserPageView {
-    readonly alert = this.page.addContent(new MessageAlertView());
+export class UserPageView extends BasicPageView {
+    readonly alert: MessageAlertView;
 
-    constructor(protected readonly page: PageFrameView) {
+    constructor() {
+        super();
+        this.alert = this.addView(MessageAlertView);
     }
 }

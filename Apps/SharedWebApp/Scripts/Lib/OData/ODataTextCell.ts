@@ -1,4 +1,4 @@
-﻿import { TextBlock } from "../Html/TextBlock";
+﻿import { TextComponent } from "../Components/TextComponent";
 import { DefaultValueFormatter } from "./DefaultValueFormatter";
 import { ODataCell } from "./ODataCell";
 import { ODataColumn } from "./ODataColumn";
@@ -16,6 +16,6 @@ export class ODataTextCell extends ODataCell {
         view: ODataTextCellView
     ) {
         super(rowIndex, column, record, view);
-        new TextBlock(formatter.format(column, record), view.value);
+        new TextComponent(view.value).setText(formatter.format(column, record));
     }
 }

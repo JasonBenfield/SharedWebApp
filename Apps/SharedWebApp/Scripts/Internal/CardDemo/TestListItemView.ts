@@ -1,13 +1,14 @@
-﻿import { Row } from "../../Lib/Grid/Row";
-import { TextBlockView } from "../../Lib/Html/TextBlockView";
-import { ListGroupItemView } from "../../Lib/ListGroup/ListGroupItemView";
+﻿import { BasicComponentView } from "../../Lib/Views/BasicComponentView";
+import { ListGroupItemView } from "../../Lib/Views/ListGroup";
+import { RowView } from "../../Lib/Views/RowView";
+import { TextBlockView } from "../../Lib/Views/TextBlockView";
 
 export class TestListItemView extends ListGroupItemView {
     readonly text: TextBlockView;
 
-    constructor() {
-        super();
-        let row = this.addContent(new Row());
-        this.text = row.addColumn().addContent(new TextBlockView());
+    constructor(container: BasicComponentView) {
+        super(container);
+        const row = this.addView(RowView);
+        this.text = row.addColumn().addView(TextBlockView);
     }
 }

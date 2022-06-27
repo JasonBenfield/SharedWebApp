@@ -1,5 +1,5 @@
 ﻿import { ContextualClass } from "../ContextualClass";
-import { CssLengthUnit } from "../Html/CssLengthUnit";
+import { CssLengthUnit } from "../CssLengthUnit";
 import { MarginCss } from "../MarginCss";
 import { PaddingCss } from "../PaddingCss";
 import { TextCss } from "../TextCss";

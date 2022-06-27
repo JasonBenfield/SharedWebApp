@@ -1,4 +1,4 @@
-﻿import { GridCellView } from "../Html/GridCellView";
+﻿import { GridCellView } from "../Views/Grid";
 import { ODataColumnView } from "./ODataColumnView";
 import { SourceType } from "./SourceType";
 import { ICreateDataCell, ICreateHeaderCell, IValueFormatter } from "./Types";

@@ -1,10 +1,10 @@
-﻿import { ListItem } from "../../Lib/Html/ListItem";
-import { TextBlock } from "../../Lib/Html/TextBlock";
+﻿import { BasicComponent } from "../../Lib/Components/BasicComponent";
+import { TextComponent } from "../../Lib/Components/TextComponent";
 import { TestListItemView } from "./TestListItemView";
 
-export class TestListItem extends ListItem {
+export class TestListItem extends BasicComponent {
     constructor(i: number, view: TestListItemView) {
         super(view);
-        new TextBlock(`Item ${i}`, view.text);
+        new TextComponent(view.text).setText(`Item ${i}`);
     }
 }

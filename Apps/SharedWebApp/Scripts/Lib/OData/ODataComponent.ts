@@ -1,6 +1,6 @@
 ﻿import { AppApiODataGroup } from "../Api/AppApiODataGroup";
 import { ODataResult } from "../Api/ODataResult";
-import { MessageAlert } from "../MessageAlert";
+import { MessageAlert } from "../Components/MessageAlert";
 import { ModalODataComponent } from "./ModalODataComponent";
 import { ODataCell } from "./ODataCell";
 import { ODataColumn } from "./ODataColumn";
@@ -24,14 +24,14 @@ export class ODataComponent<TEntity> {
     private readonly currentPage: ODataPage;
     private readonly footerComponent: ODataFooterComponent;
 
-    private static readonly rowHeaderColumnName = 'RowHeader';
+    private static readonly gearHeaderColumnName = 'GearHeader';
 
     constructor(private readonly view: ODataComponentView, options: ODataComponentOptions<TEntity>) {
         this.odataGroup = options.odataGroup;
-        options.columns[ODataComponent.rowHeaderColumnName] = new ODataColumnBuilder(
-            ODataComponent.rowHeaderColumnName,
+        options.columns[ODataComponent.gearHeaderColumnName] = new ODataColumnBuilder(
+            ODataComponent.gearHeaderColumnName,
             SourceType.none,
-            view.rowHeaderView()
+            view.gearHeaderView()
         )
             .setCreateHeaderCell((column, view) => new ODataCell(0, column, null, view))
             .disableSelect().build();
@@ -41,14 +41,13 @@ export class ODataComponent<TEntity> {
         this.grid = new ODataGrid(view.grid);
         this.alert = new MessageAlert(view.alert);
         this.modalODataComponent = new ModalODataComponent(this.query, this.columns, view.modalODataComponent);
-        this.modalODataComponent.closed.register(this.onModalClosed.bind(this));
+        this.modalODataComponent.when.closed.then(this.onModalClosed.bind(this));
         this.currentPage = new ODataPage(options.pageSize);
         this.currentPage.pageChanged(1, this.query);
         this.footerComponent = new ODataFooterComponent(this.view.footerComponent);
         this.footerComponent.pageRequested.register(this.onPageRequested.bind(this));
         this.grid.sortClicked.register(this.onSortClick.bind(this));
         this.grid.cellClicked.register(this.onCellClick.bind(this));
-        this.grid.pageRequested.register(this.onPageRequested.bind(this));
     }
 
     private onSortClick(column: ODataColumn) {
@@ -69,7 +68,7 @@ export class ODataComponent<TEntity> {
             const value = cell.record ? `\n${cell.record[cell.column.columnName]}` : '';
             alert(`${cell.column.columnName}${value}`);
         }
-        else if (cell.column.columnName === ODataComponent.rowHeaderColumnName) {
+        else if (cell.column.columnName === ODataComponent.gearHeaderColumnName) {
             this.modalODataComponent.showSelect();
         }
         else if (cell.column.isSelectable) {
@@ -98,7 +97,7 @@ export class ODataComponent<TEntity> {
         this.currentPage.countChanged(result.count);
         const selectedColumnNames = this.query.select.getExplicitlySelected();
         const gridColumns = this.columns.columns(selectedColumnNames);
-        gridColumns.splice(0, 0, this.columns.column(ODataComponent.rowHeaderColumnName));
+        gridColumns.splice(0, 0, this.columns.column(ODataComponent.gearHeaderColumnName));
         this.grid.setData(gridColumns, result.records);
         this.footerComponent.setPaging(
             this.currentPage.page,

@@ -1,14 +1,14 @@
-﻿import { ListItem } from "../Html/ListItem";
-import { TextBlock } from "../Html/TextBlock";
+﻿import { BasicComponent } from "../Components/BasicComponent";
+import { TextComponent } from "../Components/TextComponent";
 import { SelectFieldListItemView } from "./SelectFieldListItemView";
 
-export class SelectFieldListItem extends ListItem {
+export class SelectFieldListItem extends BasicComponent {
     protected readonly view: SelectFieldListItemView;
     private _isSelected = false;
 
     constructor(readonly fieldName: string, isActive: boolean, view: SelectFieldListItemView) {
         super(view);
-        new TextBlock(fieldName, view.fieldName);
+        new TextComponent(view.fieldName).setText(fieldName);
         if (isActive) {
             this.select();
         }

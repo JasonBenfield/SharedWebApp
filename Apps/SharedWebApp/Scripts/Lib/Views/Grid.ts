@@ -1,10 +1,11 @@
 ﻿import { ContextualClass } from "../ContextualClass";
 import { EnumerableArray, MappedArray } from "../Enumerable";
-import { CssLengthUnit } from "../Html/CssLengthUnit";
+import { CssLengthUnit } from "../CssLengthUnit";
 import { JoinedStrings } from "../JoinedStrings";
 import { BasicComponentView } from "./BasicComponentView";
 import { BasicContainerView } from "./BasicContainerView";
-import { IGridCellStyle, IGridStyle, ViewConstructor } from "./Types";
+import { IClickConfig, IGridCellStyle, IGridStyle, ViewConstructor } from "./Types";
+import { ViewEventActionBuilder } from "./ViewEventBuilder";
 
 export type GridTemplateCss = CssLengthUnit | GridTemplateMinMax | GridTemplateRepeat | GridTemplateFitContent;
 
@@ -118,7 +119,7 @@ export class GridView extends BasicComponentView {
     }
 
     addCells<TView extends GridCellView>(howMany: number, ctor?: ViewConstructor<TView>) {
-        return this.addViews(howMany, ctor || GridCellView);
+        return this.addViews(howMany, ctor || GridCellView) as TView[];
     }
 
     cell(index: number) { return this.cells[index]; }
@@ -130,7 +131,7 @@ export class GridView extends BasicComponentView {
     }
 
     addRows<TRowView extends GridRowView>(howManyRows: number, ctor?: ViewConstructor<TRowView>) {
-        return this.addViews(howManyRows, ctor || GridRowView);
+        return this.addViews(howManyRows, ctor || GridRowView) as TRowView[];
     }
 
     row(index: number) { return this.row[index]; }
@@ -140,11 +141,13 @@ export class GridView extends BasicComponentView {
 
 export class GridRowView extends BasicContainerView {
     private readonly cells: GridCellView[] = [];
+    private clickConfig: IClickConfig;
 
     constructor(container: BasicComponentView) {
         super(container, 'div');
         this.addCssName('d-contents');
         this.addCssName('grid-row');
+        this.configureClick(b => b.select('grid-cell'));
     }
 
     stickyAtTop() {
@@ -169,12 +172,21 @@ export class GridRowView extends BasicContainerView {
     }
 
     addCells<TView extends GridCellView>(howMany: number, ctor?: ViewConstructor<TView>) {
-        return this.addViews(howMany, ctor || GridCellView);
+        return this.addViews(howMany, ctor || GridCellView) as TView[];
     }
 
     cell(index: number) { return this.cells[index]; }
 
     getCells() { return this.cells; }
+
+    configureClick(clickConfig: (builder: ViewEventActionBuilder) => ViewEventActionBuilder) {
+        this.clickConfig = clickConfig;
+    }
+
+    handleClick(action: (view: GridCellView) => void) {
+        this.clickConfig(this.on('click').execute(action)).subscribe();
+    }
+
 }
 
 export class GridCellView extends BasicContainerView {
@@ -184,6 +196,8 @@ export class GridCellView extends BasicContainerView {
     }
 
     protected setStyle: (config: (style: IGridCellStyle) => void) => void;
+
+    scrollable() { this.addCssName('scrollable'); }
 
     stickyAtTop() {
         this.addCssName('position-sticky-top');

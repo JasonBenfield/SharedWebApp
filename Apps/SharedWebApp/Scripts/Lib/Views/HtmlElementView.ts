@@ -74,7 +74,9 @@ export class HtmlElementView {
     }
 
     addElement(el: HTMLElement) {
-        this.element.appendChild(el);
+        if (el && !el.parentElement) {
+            this.element.appendChild(el);
+        }
     }
 
     removeElement(el: HTMLElement) {

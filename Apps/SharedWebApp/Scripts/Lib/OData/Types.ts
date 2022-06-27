@@ -1,11 +1,10 @@
 ﻿import { ContextualClass } from "../ContextualClass"
 import { CssClass } from "../CssClass"
-import { GridCellView } from "../Html/GridCellView"
 import { TextCss } from "../TextCss"
+import { GridCellView } from "../Views/Grid"
 import { ODataCell } from "./ODataCell"
 import { ODataColumn } from "./ODataColumn"
 import { ODataColumnView } from "./ODataColumnView"
-import { ODataHeaderCell } from "./ODataHeaderCell"
 
 export type Queryable<TEntity> = {
     [K in keyof TEntity]?: TEntity[K];
@@ -43,5 +42,4 @@ export interface ICellStyle {
 }
 
 export interface IODataRow {
-    cellByView(view: GridCellView);
 }

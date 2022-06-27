@@ -1,4 +1,4 @@
-﻿import { CssLengthUnit } from "../Html/CssLengthUnit";
+﻿import { CssLengthUnit } from "../CssLengthUnit";
 import { BasicComponentView } from "./BasicComponentView";
 import { FormGroupGridView, FormGroupView, InputFormGroupView, SelectFormGroupView } from "./FormGroup";
 import { FormView } from "./FormView";

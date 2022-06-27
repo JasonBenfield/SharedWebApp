@@ -1,7 +1,7 @@
 ﻿import { ContextualClass } from "../ContextualClass";
 import { CssClass } from "../CssClass";
 import { EnumerableArray, FilteredArray, MappedArray } from "../Enumerable";
-import { CssLengthUnit } from "../Html/CssLengthUnit";
+import { CssLengthUnit } from "../CssLengthUnit";
 import { MarginCss } from "../MarginCss";
 import { PaddingCss } from "../PaddingCss";
 import { TextCss } from "../TextCss";
@@ -22,7 +22,6 @@ export class BasicComponentView {
     private readonly views: BasicComponentView[] = [];
     private isVisible = true;
     protected readonly elementView: HtmlElementView;
-    private text: string;
 
     constructor(private readonly container: BasicComponentView, createElement: IHtmlElementView) {
         if (typeof createElement === 'string') {
@@ -173,6 +172,8 @@ export class BasicComponentView {
         this.setCssClass();
     }
 
+    hasCssName(name: string) { return this.cssClass.includes(name); }
+
     addCssName(name: string) {
         this.cssClass.addName(name);
         this.setCssClass();
@@ -218,20 +219,22 @@ export class BasicComponentView {
     }
 
     protected disposeView(view: BasicComponentView) {
+        const index = this.views.indexOf(view);
+        if (index > -1) {
+            this.views.splice(index, 1);
+        }
         this.removeView(view);
         view.dispose();
     }
 
     dispose() {
         this.disposeAllViews();
-        this.container.removeView(this);
+        if (this.container) {
+            this.container.removeView(this);
+        }
     }
 
     protected removeView(view: BasicComponentView) {
-        const index = this.views.indexOf(view);
-        if (index > -1) {
-            this.views.splice(index, 1);
-        }
         this.elementView.removeElement(view.elementView.element);
     }
 

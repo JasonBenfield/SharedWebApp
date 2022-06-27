@@ -1,14 +1,16 @@
 ﻿import { ContextualClass } from "../ContextualClass";
-import { TextBlockView } from "../Html/TextBlockView";
-import { ListGroupItemView } from "../ListGroup/ListGroupItemView";
+import { BasicComponentView } from "../Views/BasicComponentView";
+import { BasicTextComponentView } from "../Views/BasicTextComponentView";
+import { ListGroupItemView } from "../Views/ListGroup";
+import { TextBlockView } from "../Views/TextBlockView";
 
 export class SelectFieldListItemView extends ListGroupItemView {
-    constructor() {
-        super();
-        this.fieldName = this.addContent(new TextBlockView());
+    constructor(container: BasicComponentView) {
+        super(container);
+        this.fieldName = this.addView(TextBlockView);
     }
 
-    readonly fieldName: ITextComponentView;
+    readonly fieldName: BasicTextComponentView;
 
     select() {
         this.setContext(ContextualClass.primary);

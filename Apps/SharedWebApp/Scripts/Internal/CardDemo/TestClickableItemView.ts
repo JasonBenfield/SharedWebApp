@@ -1,25 +1,24 @@
 ﻿import { ColumnCss } from "../../Lib/ColumnCss";
 import { ContextualClass } from "../../Lib/ContextualClass";
-import { Row } from "../../Lib/Grid/Row";
-import { TextBlockView } from "../../Lib/Html/TextBlockView";
-import { ButtonListGroupItemView } from "../../Lib/ListGroup/ButtonListGroupItemView";
-import { ButtonListItemViewModel } from "../../Lib/ListGroup/ButtonListItemViewModel";
+import { RowView } from "../../Lib/Views/RowView";
+import { TextBlockView } from "../../Lib/Views/TextBlockView";
+import { BasicComponentView } from "../../Lib/Views/BasicComponentView";
+import { ButtonListGroupItemView } from "../../Lib/Views/ListGroup";
 
 export class TestClickableListItemView extends ButtonListGroupItemView {
     readonly text: TextBlockView;
 
-    constructor() {
-        super(new ButtonListItemViewModel());
-        let row = this.addContent(new Row());
-        let iconColumn = row.addIconColumn(
-            'thumbs-up',
+    constructor(container: BasicComponentView) {
+        super(container);
+        const row = this.addView(RowView);
+        const iconColumn = row.addIconColumn(
             icon => {
+                icon.solidStyle('thumbs-up');
                 icon.makeFixedWidth();
                 icon.setColor(ContextualClass.success);
             }
         );
         iconColumn.setColumnCss(ColumnCss.xs('auto'));
-        this.text = row.addColumn()
-            .addContent(new TextBlockView());
+        this.text = row.addColumn().addView(TextBlockView);
     }
 }

@@ -92,7 +92,7 @@ export class CssClass implements ICssClass {
         if (name) {
             let nameParts = name.split(/\s+/);
             if (nameParts.length > 1) {
-                for (let namePart of nameParts) {
+                for (const namePart of nameParts) {
                     if (this._removeName(namePart)) {
                         removed = true;
                     }
@@ -112,6 +112,8 @@ export class CssClass implements ICssClass {
     private updateValue() {
         this.value = this.names.length > 0 ? new JoinedStrings(' ', this.names).value() : '';
     }
+
+    includes(name: string) { return this.names.includes(name); }
 
     toString() {
         return this.value;

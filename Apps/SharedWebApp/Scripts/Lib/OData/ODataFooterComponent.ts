@@ -20,7 +20,7 @@ export class ODataFooterComponent {
                     if (page === currentPage) {
                         pageButton.setActive();
                     }
-                    pageButton.events.onClick(this.onPageRequested.bind(this, page));
+                    pageButton.handleClick(this.onPageRequested.bind(this, page));
                 }
                 else {
                     this.view.addEllipsis();

@@ -1,23 +1,26 @@
 ﻿import { ContextualClass } from "../ContextualClass";
 import { MappedArray } from "../Enumerable";
-import { GridView } from "../Html/GridView";
 import { MarginCss } from "../MarginCss";
+import { TextCss } from "../TextCss";
+import { BasicComponentView } from "../Views/BasicComponentView";
+import { GridView } from "../Views/Grid";
 import { ODataColumnView } from "./ODataColumnView";
-import { ODataFooterComponentView } from "./ODataFooterComponentView";
+import { ODataHeaderRowView } from "./ODataHeaderRowView";
 
 export class ODataGridView extends GridView {
-    constructor() {
-        super();
-        this.setName(ODataGridView.name);
+    constructor(container: BasicComponentView) {
+        super(container);
+        this.setViewName(ODataGridView.name);
         this.setMargin(MarginCss.xs(0));
     }
 
     addHeaderRow(columns: ODataColumnView[]) {
-        const row = this.addRow();
+        const row = this.addRow(ODataHeaderRowView);
         row.setContext(ContextualClass.secondary);
-        row.addCssName('fw-bold');
+        row.setTextCss(new TextCss().bold());
         for (const col of columns) {
-            row.addCell(r => col.createHeaderCellView(r))
+            const cell = row.addCell(col.headerCellCtor);
+            col.configureHeaderCell(cell);
         }
         return row;
     }
@@ -25,7 +28,8 @@ export class ODataGridView extends GridView {
     addDataRow(columns: ODataColumnView[]) {
         const row = this.addRow();
         for (const col of columns) {
-            row.addCell(r => col.createDataCellView(r))
+            const cell = row.addCell(col.dataCellCtor);
+            col.configureDataCell(cell);
         }
         return row;
     }

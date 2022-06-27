@@ -1,27 +1,30 @@
-﻿import { CardAlertView } from "../../Lib/Card/CardAlertView";
-import { CardTitleHeaderView } from "../../Lib/Card/CardTitleHeaderView";
-import { CardView } from "../../Lib/Card/CardView";
-import { BlockViewModel } from "../../Lib/Html/BlockViewModel";
-import { TextBlockView } from "../../Lib/Html/TextBlockView";
-import { BaseListView } from "../../Lib/ListGroup/BaseListView";
+﻿import { CardAlertView } from "../../Lib/Views/Card";
+import { CardTitleHeaderView } from "../../Lib/Views/Card";
+import { CardView } from "../../Lib/Views/Card";
+import { TextBlockView } from "../../Lib/Views/TextBlockView";
+import { ButtonListGroupView, ListGroupView } from "../../Lib/Views/ListGroup";
+import { BasicComponentView } from "../../Lib/Views/BasicComponentView";
 import { TestClickableListItemView } from "./TestClickableItemView";
 import { TestListItemView } from "./TestListItemView";
+import { BasicTextComponentView } from "../../Lib/Views/BasicTextComponentView";
 
 export class TestCardView extends CardView {
     readonly cardTitleHeader: CardTitleHeaderView;
     readonly alert: CardAlertView;
-    readonly manualItem: ITextComponentView;
-    readonly testItems: BaseListView;
-    readonly clickableItems: BaseListView;
+    readonly manualItem: BasicTextComponentView;
+    readonly testItems: ListGroupView;
+    readonly clickableItems: ButtonListGroupView;
 
-    constructor(vm: BlockViewModel = new BlockViewModel()) {
-        super(vm);
+    constructor(container: BasicComponentView) {
+        super(container);
         this.cardTitleHeader = this.addCardTitleHeader();
         this.alert = this.addCardAlert();
-        let manualItems = this.addUnorderedListGroup();
+        const manualItems = this.addUnorderedListGroup();
         this.manualItem = manualItems.addListGroupItem()
-            .addContent(new TextBlockView());
-        this.testItems = this.addUnorderedListGroup(() => new TestListItemView());
-        this.clickableItems = this.addBlockListGroup(() => new TestClickableListItemView());
+            .addView(TextBlockView);
+        this.testItems = this.addUnorderedListGroup();
+        this.testItems.setItemViewType(TestListItemView);
+        this.clickableItems = this.addButtonListGroup();
+        this.clickableItems.setItemViewType(TestClickableListItemView);
     }
 }

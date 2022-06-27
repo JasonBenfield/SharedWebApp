@@ -1,6 +1,6 @@
 ﻿import { Awaitable } from "../Awaitable";
-import { NavLinkView } from "../Html/NavLinkView";
-import { TextBlock } from "../Html/TextBlock";
+import { LinkView } from "../Views/LinkView";
+import { TextComponent } from "../Components/TextComponent";
 import { FilterColumnOptionsBuilder } from "./FilterColumnOptionsBuilder";
 import { SelectFilterAppendPanelView } from "./SelectFilterAppendPanelView";
 
@@ -29,10 +29,10 @@ export class SelectFilterAppendPanel implements IPanel {
 
     setOptions(options: FilterColumnOptionsBuilder) {
         this.options = options;
-        new TextBlock(`${options.column.columnName} Filter`, this.view.title);
+        new TextComponent(this.view.title).setText(`${options.column.columnName} Filter`);
     }
 
-    private onItemClick(itemView: NavLinkView) {
+    private onItemClick(itemView: LinkView) {
         if (itemView === this.view.clearItem) {
             this.options.replace();
         }

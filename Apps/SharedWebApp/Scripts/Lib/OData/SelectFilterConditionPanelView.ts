@@ -1,17 +1,16 @@
 ﻿import { FlexCss } from "../FlexCss";
-import { NavView } from "../Html/NavView";
-import { TextHeading1View } from "../Html/TextHeading1View";
+import { ModalComponentView } from "../Views/Modal";
+import { NavView } from "../Views/NavView";
 import { ModalODataPanelView } from "./ModalODataPanelView";
 
 export class SelectFilterConditionPanelView extends ModalODataPanelView {
     readonly title: ITextComponentView;
     private readonly nav: NavView;
 
-    constructor() {
-        super();
-        this.title = this.header.addContent(new TextHeading1View());
-        this.nav = this.body.addContent(new NavView());
-        this.nav.addLink
+    constructor(modal: ModalComponentView) {
+        super(modal);
+        this.nav = this.body.addView(NavView);
+        this.nav.addLink();
         this.nav.pills();
         this.nav.setFlexCss(new FlexCss().column());
     }

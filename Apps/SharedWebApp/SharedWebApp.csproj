@@ -46,39 +46,9 @@
     <None Remove="Scripts\Lib\Components\TextComponent.ts" />
     <None Remove="Scripts\Lib\Components\Types.ts" />
     <None Remove="Scripts\Lib\DateRange.ts" />
-    <None Remove="Scripts\Lib\Error\ModalErrorGroupComponent.ts" />
-    <None Remove="Scripts\Lib\Error\ModalErrorListItem.ts" />
-    <None Remove="Scripts\Lib\Error\ModalErrorListItemView.ts" />
     <None Remove="Scripts\Lib\FlexCss.ts" />
     <None Remove="Scripts\Lib\Forms\ErrorListItem.ts" />
     <None Remove="Scripts\Lib\Forms\ErrorListItemView.ts" />
-    <None Remove="Scripts\Lib\Html\ColGroupView.ts" />
-    <None Remove="Scripts\Lib\Html\ColGroupViewModel.ts" />
-    <None Remove="Scripts\Lib\Html\CssLengthUnit.ts" />
-    <None Remove="Scripts\Lib\Html\GridCellView.ts" />
-    <None Remove="Scripts\Lib\Html\GridCellViewModel.ts" />
-    <None Remove="Scripts\Lib\Html\GridRowView.ts" />
-    <None Remove="Scripts\Lib\Html\GridView.ts" />
-    <None Remove="Scripts\Lib\Html\GridViewModel.ts" />
-    <None Remove="Scripts\Lib\Html\ListItem.ts" />
-    <None Remove="Scripts\Lib\Html\NavView.ts" />
-    <None Remove="Scripts\Lib\Html\TableBodyView.ts" />
-    <None Remove="Scripts\Lib\Html\TableBodyViewModel.ts" />
-    <None Remove="Scripts\Lib\Html\TableCaptionView.ts" />
-    <None Remove="Scripts\Lib\Html\TableCaptionViewModel.ts" />
-    <None Remove="Scripts\Lib\Html\TableDataHeaderView.ts" />
-    <None Remove="Scripts\Lib\Html\TableDataHeaderViewModel.ts" />
-    <None Remove="Scripts\Lib\Html\TableDataView.ts" />
-    <None Remove="Scripts\Lib\Html\TableDataViewModel.ts" />
-    <None Remove="Scripts\Lib\Html\TableFootView.ts" />
-    <None Remove="Scripts\Lib\Html\TableFootViewModel.ts" />
-    <None Remove="Scripts\Lib\Html\TableHeadView.ts" />
-    <None Remove="Scripts\Lib\Html\TableHeadViewModel.ts" />
-    <None Remove="Scripts\Lib\Html\TableRowView.ts" />
-    <None Remove="Scripts\Lib\Html\TableRowViewModel.ts" />
-    <None Remove="Scripts\Lib\Html\TableView.ts" />
-    <None Remove="Scripts\Lib\Html\TableViewModel.ts" />
-    <None Remove="Scripts\Lib\Html\ViewEvents.ts" />
     <None Remove="Scripts\Lib\JustifyContentCss.ts" />
     <None Remove="Scripts\Lib\OData\DefaultValueFormatter.ts" />
     <None Remove="Scripts\Lib\OData\FilterColumnOptionsBuilder.ts" />
@@ -101,7 +71,6 @@
     <None Remove="Scripts\Lib\OData\ODataColumn.ts" />
     <None Remove="Scripts\Lib\OData\ODataColumnAccessor.ts" />
     <None Remove="Scripts\Lib\OData\ODataColumnBuilder.ts" />
-    <None Remove="Scripts\Lib\OData\ODataColumnStyle.ts" />
     <None Remove="Scripts\Lib\OData\ODataColumnView.ts" />
     <None Remove="Scripts\Lib\OData\ODataColumnViewBuilder.ts" />
     <None Remove="Scripts\Lib\OData\ODataComponent.ts" />
@@ -115,6 +84,7 @@
     <None Remove="Scripts\Lib\OData\ODataHeaderCell.ts" />
     <None Remove="Scripts\Lib\OData\ODataHeaderCellView.ts" />
     <None Remove="Scripts\Lib\OData\ODataHeaderRow.ts" />
+    <None Remove="Scripts\Lib\OData\ODataHeaderRowView.ts" />
     <None Remove="Scripts\Lib\OData\ODataPage.ts" />
     <None Remove="Scripts\Lib\OData\ODataQueryBuilder.ts" />
     <None Remove="Scripts\Lib\OData\ODataQueryFilterBuilder.ts" />
@@ -224,83 +194,16 @@
     <TypeScriptCompile Include="Scripts\Lib\Components\TextComponent.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\Types.ts" />
     <TypeScriptCompile Include="Scripts\Lib\DateRange.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\Error\ModalErrorGroupComponent.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\Error\ModalErrorListItem.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\Error\ModalErrorListItemView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\FlexCss.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Forms\ErrorListItem.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ModalODataPanelView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataHeaderRowView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\ErrorListItemView.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\Html\CssLengthUnit.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\Html\GridCellView.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\Html\GridRowView.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\Html\GridCellViewModel.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scripts\Lib\Html\ListItem.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\Html\NavView.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\Html\ColGroupViewModel.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scripts\Lib\Html\ColGroupView.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scripts\Lib\Html\TableCaptionView.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scripts\Lib\Html\TableCaptionViewModel.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scripts\Lib\Html\TableFootView.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scripts\Lib\Html\TableFootViewModel.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scripts\Lib\Html\TableHeadView.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scripts\Lib\Html\TableBodyView.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scripts\Lib\Html\TableHeadViewModel.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scripts\Lib\Html\GridView.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scripts\Lib\Html\TableView.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scripts\Lib\Html\TableBodyViewModel.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scripts\Lib\Html\GridViewModel.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scripts\Lib\Html\TableViewModel.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scripts\Lib\Html\TableRowView.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scripts\Lib\Html\TableDataHeaderView.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scripts\Lib\Html\TableDataView.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\Html\TableRowViewModel.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scripts\Lib\Html\TableDataHeaderViewModel.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="Scripts\Lib\Html\TableDataViewModel.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\Html\ViewEvents.ts" />
     <TypeScriptCompile Include="Scripts\Lib\JustifyContentCss.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\FilterSelectionBooleanValue.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\FilterColumnOptionsBuilder.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\FilterSelection.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\FilterConditionLink.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\Html\TextNavLinkView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\FilterSelectionStringValue.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\FilterValueInputPanel.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\FilterValueInputPanelView.ts" />
@@ -312,14 +215,12 @@
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataCell.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataCellClickedEventArgs.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataColumnAccessor.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\OData\ODataColumnStyle.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataColumnView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataColumnViewBuilder.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataFooterComponent.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataFooterComponentView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataGridView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\DefaultValueFormatter.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\OData\ModalODataPanelView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataHeaderCell.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataHeaderCellView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataPage.ts" />

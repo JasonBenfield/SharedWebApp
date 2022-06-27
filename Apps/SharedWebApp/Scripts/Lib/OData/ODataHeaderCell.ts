@@ -1,5 +1,4 @@
-﻿import { DefaultEvent } from "../Events";
-import { TextBlock } from "../Html/TextBlock";
+﻿import { TextComponent } from "../Components/TextComponent";
 import { ODataCell } from "./ODataCell";
 import { ODataColumn } from "./ODataColumn";
 import { ODataHeaderCellView } from "./ODataHeaderCellView";
@@ -7,23 +6,14 @@ import { ODataHeaderCellView } from "./ODataHeaderCellView";
 export class ODataHeaderCell extends ODataCell {
     protected readonly view: ODataHeaderCellView;
 
-    private readonly _sortClicked = new DefaultEvent<ODataColumn>(this);
-    readonly sortClicked = this._sortClicked.handler();
-
     constructor(
         column: ODataColumn,
         view: ODataHeaderCellView
     ) {
         super(0, column, null, view);
-        new TextBlock(column.columnName, view.columnName).syncTitleWithText();
-        this.view.sortButton.events.onClick(
-            this.onSortButtonClicked.bind(this),
-            options => options.preventDefault = true
-        );
-    }
-
-    private onSortButtonClicked() {
-        this._sortClicked.invoke(this.column);
+        const columnName = new TextComponent(view.columnName);
+        columnName.setText(column.columnName)
+        columnName.syncTitleWithText();
     }
 
     sortNotSet() { this.view.sortNotSet(); }

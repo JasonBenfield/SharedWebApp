@@ -1,11 +1,13 @@
-﻿import { TextHeading1View } from "../Html/TextHeading1View";
+﻿import { BasicTextComponentView } from "../Views/BasicTextComponentView";
+import { ModalComponentView } from "../Views/Modal";
+import { TextHeading1View } from "../Views/TextHeadings";
 import { ModalODataPanelView } from "./ModalODataPanelView";
 
 export class FilterValueInputPanelView extends ModalODataPanelView {
-    readonly title: ITextComponentView;
+    readonly title: BasicTextComponentView;
 
-    constructor() {
-        super();
-        this.title = this.header.addContent(new TextHeading1View());
+    constructor(modal: ModalComponentView) {
+        super(modal);
+        this.title = this.header.addView(TextHeading1View);
     }
 }

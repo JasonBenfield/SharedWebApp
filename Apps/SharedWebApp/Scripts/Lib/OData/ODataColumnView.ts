@@ -1,13 +1,13 @@
-﻿import { GridCellView } from "../Html/GridCellView";
-import { GridRowView } from "../Html/GridRowView";
-import { GridTemplateCss } from "../Html/GridView";
-import { ODataColumnStyle } from "./ODataColumnStyle";
+﻿import { GridCellView, GridTemplateCss } from "../Views/Grid";
+import { ViewConstructor } from "../Views/Types";
 
 export class ODataColumnView {
     constructor(
         readonly width: GridTemplateCss,
-        readonly createHeaderCellView: (rowView: GridRowView, style?: ODataColumnStyle) => GridCellView,
-        readonly createDataCellView: (rowView: GridRowView, style?: ODataColumnStyle) => GridCellView
+        readonly headerCellCtor: ViewConstructor<GridCellView>,
+        readonly configureHeaderCell: (cell: GridCellView) => void,
+        readonly dataCellCtor: ViewConstructor<GridCellView>,
+        readonly configureDataCell: (cell: GridCellView) => void
     ) {
     }
 }

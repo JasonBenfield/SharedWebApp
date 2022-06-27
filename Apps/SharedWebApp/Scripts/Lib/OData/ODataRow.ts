@@ -1,6 +1,4 @@
-﻿import { FilteredArray } from "../Enumerable";
-import { GridCellView } from "../Html/GridCellView";
-import { GridRowView } from "../Html/GridRowView";
+﻿import { GridRowView } from "../Views/Grid";
 import { ODataCell } from "./ODataCell";
 import { ODataColumn } from "./ODataColumn";
 
@@ -14,12 +12,5 @@ export class ODataRow {
             this.cells.push(cell);
             i++;
         }
-    }
-
-    cellByView(view: GridCellView) {
-        return new FilteredArray(
-            this.cells,
-            c => c.hasView(view)
-        ).toEnumerableArray().first();
     }
 }

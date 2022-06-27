@@ -2,6 +2,7 @@
 import { BasicComponentView } from "./BasicComponentView";
 import { FaIconView } from "./FaIconView";
 import { HtmlElementView } from "./HtmlElementView";
+import { ViewEventActionBuilder } from "./ViewEventBuilder";
 
 export type IHtmlElementView =
     keyof HTMLElementTagNameMap |
@@ -99,3 +100,5 @@ export interface ICommandView {
 export interface IFormGroupLayout<T> {
     addFormGroups(view: BasicComponentView): T;
 }
+
+export type IClickConfig = (builder: ViewEventActionBuilder) => ViewEventActionBuilder;

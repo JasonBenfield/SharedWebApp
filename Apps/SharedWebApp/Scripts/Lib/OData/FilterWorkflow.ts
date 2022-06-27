@@ -79,7 +79,6 @@ export class FilterWorkflow implements IPanel {
 
     activate() {
         this.activateSelectFilterAppendPanel();
-        this.view.show();
     }
 
     deactivate() { this.view.hide(); }

@@ -1,42 +1,44 @@
-﻿import { ButtonCommandItem } from '../../Lib/Command/ButtonCommandItem';
-import { ContextualClass } from '../../Lib/ContextualClass';
-import { Container } from '../../Lib/Html/Container';
-import { FlexColumn } from '../../Lib/Html/FlexColumn';
-import { FlexColumnFill } from '../../Lib/Html/FlexColumnFill';
-import { TextHeading1View } from '../../Lib/Html/TextHeading1View';
-import { Toolbar } from '../../Lib/Html/Toolbar';
+﻿import { ContextualClass } from '../../Lib/ContextualClass';
+import { FlexCss } from '../../Lib/FlexCss';
 import { PaddingCss } from '../../Lib/PaddingCss';
-import { PageFrameView } from '../../Lib/PageFrameView';
+import { BasicPageView } from '../../Lib/Views/BasicPageView';
+import { BlockView } from '../../Lib/Views/BlockView';
+import { ButtonCommandView } from '../../Lib/Views/Commands';
+import { TextHeading1View } from '../../Lib/Views/TextHeadings';
+import { ToolbarView } from '../../Lib/Views/ToolbarView';
 import { TestCardView } from './TestCardView';
 
-export class MainPageView {
+export class MainPageView extends BasicPageView {
     readonly heading: TextHeading1View;
     readonly testCard: TestCardView;
-    readonly refreshButton: ButtonCommandItem;
-    readonly cancelButton: ButtonCommandItem;
-    readonly saveButton: ButtonCommandItem;
+    readonly refreshButton: ButtonCommandView;
+    readonly cancelButton: ButtonCommandView;
+    readonly saveButton: ButtonCommandView;
 
-    constructor(private readonly page: PageFrameView) {
-        let flexColumn = this.page.addContent(new FlexColumn());
+    constructor() {
+        super();
+        const flexColumn = this.addView(BlockView)
+            .configure(c => c.setFlexCss(new FlexCss().column()));
         this.heading = flexColumn
-            .addContent(new Container())
-            .addContent(new TextHeading1View());
-        let fillRow = flexColumn.addContent(new FlexColumnFill());
-        this.testCard = fillRow.container.addContent(new TestCardView());
-        let toolbar = flexColumn.addContent(new Toolbar());
+            .addView(BlockView)
+            .addView(TextHeading1View);
+        let fillRow = flexColumn.addView(BlockView)
+            .configure(r => r.setFlexCss(new FlexCss().fill()));
+        this.testCard = fillRow.addView(TestCardView);
+        let toolbar = flexColumn.addView(ToolbarView);
         toolbar.setBackgroundContext(ContextualClass.secondary);
         toolbar.setPadding(PaddingCss.xs(3));
-        this.refreshButton = toolbar.columnStart.addContent(new ButtonCommandItem());
-        this.refreshButton.icon.setName('sync-alt');
+        this.refreshButton = toolbar.columnStart.addView(ButtonCommandView);
+        this.refreshButton.icon.solidStyle('sync-alt');
         this.refreshButton.setText('Refresh');
         this.refreshButton.useOutlineStyle();
         this.refreshButton.setContext(ContextualClass.light);
-        this.cancelButton = toolbar.columnEnd.addContent(new ButtonCommandItem());
-        this.cancelButton.icon.setName('times');
+        this.cancelButton = toolbar.columnEnd.addView(ButtonCommandView);
+        this.cancelButton.icon.solidStyle('times');
         this.cancelButton.setText('Cancel');
         this.cancelButton.setContext(ContextualClass.danger);
-        this.saveButton = toolbar.columnEnd.addContent(new ButtonCommandItem());
-        this.saveButton.icon.setName('check');
+        this.saveButton = toolbar.columnEnd.addView(ButtonCommandView);
+        this.saveButton.icon.solidStyle('check');
         this.saveButton.setText('Save');
         this.saveButton.useOutlineStyle();
         this.saveButton.setBackgroundContext(ContextualClass.light);

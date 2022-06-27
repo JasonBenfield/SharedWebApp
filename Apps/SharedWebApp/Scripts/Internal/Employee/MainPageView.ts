@@ -1,5 +1,5 @@
 ﻿import { ContextualClass } from '../../Lib/ContextualClass';
-import { CssLengthUnit } from '../../Lib/Html/CssLengthUnit';
+import { CssLengthUnit } from '../../Lib/CssLengthUnit';
 import { PaddingCss } from '../../Lib/PaddingCss';
 import { BasicPageView } from '../../Lib/Views/BasicPageView';
 import { BlockView } from '../../Lib/Views/BlockView';

@@ -1,51 +1,46 @@
 ﻿import { ColumnCss } from "../ColumnCss";
-import { ButtonCommandItem } from "../Command/ButtonCommandItem";
 import { ContextualClass } from "../ContextualClass";
-import { Row } from "../Grid/Row";
-import { Block } from "../Html/Block";
-import { TextBlockView } from "../Html/TextBlockView";
-import { TextSpanView } from "../Html/TextSpanView";
 import { PaddingCss } from "../PaddingCss";
+import { BasicComponentView } from "../Views/BasicComponentView";
+import { BlockView } from "../Views/BlockView";
+import { ButtonCommandView } from "../Views/Commands";
+import { RowView } from "../Views/RowView";
+import { TextBlockView } from "../Views/TextBlockView";
+import { TextSpanView } from "../Views/TextSpanView";
 
-export class ODataFooterComponentView extends Block {
-    private readonly pageButtonContainer: Block;
-    private readonly contents: IComponent[] = [];
+export class ODataFooterComponentView extends BlockView {
+    private readonly pageButtonContainer: BlockView;
     readonly count: ITextComponentView;
 
-    constructor() {
-        super();
+    constructor(container: BasicComponentView) {
+        super(container);
         this.setPadding(PaddingCss.xs(3));
-        const row = this.addContent(new Row());
+        const row = this.addView(RowView);
         const col1 = row.addColumn();
-        this.pageButtonContainer = col1.addContent(new Block());
+        this.pageButtonContainer = col1.addView(BlockView);
         this.pageButtonContainer.addCssName('btn-group');
         const col2 = row.addColumn();
         col2.setColumnCss(ColumnCss.xs('auto'));
         col2.addCssName('col-form-label');
-        this.count = col2.addContent(new TextBlockView());
+        this.count = col2.addView(TextBlockView);
     }
 
     clearContents() {
-        for (const view of this.contents) {
-            this.pageButtonContainer.content.removeItem(view);
-        }
-        this.contents.splice(0, this.contents.length);
+        this.disposeAllViews();
     }
 
     addPageButton() {
-        const pageButton = this.pageButtonContainer.addContent(new ButtonCommandItem());
+        const pageButton = this.pageButtonContainer.addView(ButtonCommandView);
         pageButton.setContext(ContextualClass.primary);
         pageButton.useOutlineStyle();
-        this.contents.push(pageButton);
         return pageButton;
     }
 
     addEllipsis() {
-        const ellipsis = this.pageButtonContainer.addContent(new TextSpanView());
+        const ellipsis = this.pageButtonContainer.addView(TextSpanView);
         ellipsis.setText('...');
         ellipsis.addCssName('col-form-label');
         ellipsis.setPadding(PaddingCss.xs({ start: 3, end: 3 }));
-        this.contents.push(ellipsis);
         return ellipsis;
     }
 }

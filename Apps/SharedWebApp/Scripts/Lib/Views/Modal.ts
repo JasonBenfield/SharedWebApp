@@ -1,7 +1,7 @@
 ﻿import { Modal } from 'bootstrap';
 import { ColumnCss } from '../ColumnCss';
 import { ContextualClass } from '../ContextualClass';
-import { SimpleEvent } from '../Events';
+import { EventSource } from '../Events';
 import { MarginCss } from '../MarginCss';
 import { TextCss } from '../TextCss';
 import { BasicComponentView } from './BasicComponentView';
@@ -15,9 +15,12 @@ import { TextHeading5View } from './TextHeadings';
 export class ModalComponentView extends BasicComponentView {
     private modal: Modal;
     private backdrop: boolean | 'static' = 'static';
-    private readonly _closed = new SimpleEvent(this);
-    readonly closed = this._closed.handler();
 
+    private readonly events = { closed: null };
+    private readonly eventSource = new EventSource<typeof this.events>(this, this.events);
+    readonly when = this.eventSource.when;
+
+    readonly frame: BlockView;
     readonly header: BlockView;
     readonly body: BlockView;
     readonly footer: BlockView;
@@ -27,11 +30,11 @@ export class ModalComponentView extends BasicComponentView {
         this.addCssName('modal');
         this.addCssName('fade');
         this.setAttr(a => a.role = 'dialog');
-        const modalFrame = this.addView(BlockView);
-        modalFrame.setRole('document');
-        modalFrame.addCssName('modal-dialog');
-        modalFrame.addCssName('modal-dialog-centered');
-        const content = modalFrame.addView(BlockView);
+        this.frame = this.addView(BlockView);
+        this.frame.setRole('document');
+        this.frame.addCssName('modal-dialog');
+        this.frame.addCssName('modal-dialog-centered');
+        const content = this.frame.addView(BlockView);
         content.addCssName('modal-content');
         this.header = content.addView(BlockView);
         this.header.addCssName('modal-header');
@@ -39,7 +42,7 @@ export class ModalComponentView extends BasicComponentView {
         this.body.addCssName('modal-body');
         this.footer = content.addView(BlockView);
         this.footer.addCssName('modal-footer');
-        this.on('hidden.bs.modal').execute(() => this._closed.invoke());
+        this.on('hidden.bs.modal').execute(() => this.eventSource.events.closed.invoke());
     }
 
     setBackdrop(backdrop: boolean | 'static') {

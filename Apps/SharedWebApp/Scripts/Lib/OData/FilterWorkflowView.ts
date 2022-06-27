@@ -1,18 +1,22 @@
-﻿import { Block } from "../Html/Block";
+﻿import { ModalComponentView } from "../Views/Modal";
 import { FilterValueInputPanelView } from "./FilterValueInputPanelView";
 import { SelectFilterAppendPanelView } from "./SelectFilterAppendPanelView";
 import { SelectFilterConditionPanelView } from "./SelectFilterConditionPanelView";
 
-export class FilterWorkflowView extends Block {
+export class FilterWorkflowView {
     readonly selectFilterAppendPanel: SelectFilterAppendPanelView;
     readonly selectFilterConditionPanel: SelectFilterConditionPanelView;
     readonly filterValueInputPanel: FilterValueInputPanelView;
 
-    constructor() {
-        super();
-        this.addCssName('d-contents');
-        this.selectFilterAppendPanel = this.addContent(new SelectFilterAppendPanelView());
-        this.selectFilterConditionPanel = this.addContent(new SelectFilterConditionPanelView());
-        this.filterValueInputPanel = this.addContent(new FilterValueInputPanelView());
+    constructor(modal: ModalComponentView) {
+        this.selectFilterAppendPanel = new SelectFilterAppendPanelView(modal);
+        this.selectFilterConditionPanel = new SelectFilterConditionPanelView(modal);
+        this.filterValueInputPanel = new FilterValueInputPanelView(modal);
+    }
+
+    hide() {
+        this.selectFilterAppendPanel.hide();
+        this.selectFilterConditionPanel.hide();
+        this.filterValueInputPanel.hide();
     }
 }

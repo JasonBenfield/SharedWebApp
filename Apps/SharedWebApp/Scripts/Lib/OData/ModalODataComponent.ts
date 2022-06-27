@@ -1,4 +1,5 @@
-﻿import { SingleActivePanel } from "../Panel/SingleActivePanel";
+﻿import { EventBuilders } from "../Events";
+import { SingleActivePanel } from "../Panel/SingleActivePanel";
 import { FilterWorkflow } from "./FilterWorkflow";
 import { ModalODataComponentView } from "./ModalODataComponentView";
 import { ODataColumn } from "./ODataColumn";
@@ -11,7 +12,7 @@ export class ModalODataComponent {
     readonly selectFieldsPanel: SelectFieldsPanel;
     readonly filterWorkflow: FilterWorkflow;
 
-    readonly closed: IEventHandler<any>;
+    readonly when: EventBuilders<{ closed: any }>;
 
     constructor(
         query: ODataQueryBuilder,
@@ -24,7 +25,7 @@ export class ModalODataComponent {
         this.filterWorkflow = this.panels.add(
             new FilterWorkflow(query.filter, view.filterWorkflow)
         );
-        this.closed = view.closed;
+        this.when = view.when;
     }
 
     private async activateSelectFieldsPanel() {

@@ -1,5 +1,4 @@
-﻿import { filter } from "lodash";
-import { EnumerableArray, FilteredArray, MappedArray } from "../Enumerable";
+﻿import { EnumerableArray, FilteredArray, MappedArray } from "../Enumerable";
 import { ODataColumn } from "./ODataColumn";
 import { IODataColumns } from "./Types";
 

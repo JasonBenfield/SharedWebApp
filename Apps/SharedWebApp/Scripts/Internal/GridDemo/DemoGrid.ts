@@ -1,7 +1,7 @@
 ﻿import { ContextualClass } from '../../Lib/ContextualClass';
-import { CssLengthUnit } from '../../Lib/Html/CssLengthUnit';
-import { GridTemplateRepeat, GridView } from '../../Lib/Html/GridView';
-import { TextSpanView } from '../../Lib/Html/TextSpanView';
+import { CssLengthUnit } from '../../Lib/CssLengthUnit';
+import { GridTemplateRepeat, GridView } from '../../Lib/Views/Grid';
+import { TextSpanView } from '../../Lib/Views/TextSpanView';
 import { MarginCss } from '../../Lib/MarginCss';
 
 export class DemoGrid {
@@ -17,10 +17,10 @@ export class DemoGrid {
         this.view.setTemplateRows(
             CssLengthUnit.px(150)
         );
-        let headerRow = this.view.addRow();
+        const headerRow = this.view.addRow();
         headerRow.setContext(ContextualClass.secondary);
         headerRow.addCssName('fw-bold');
-        let headers = headerRow.addCells(20);
+        const headers = headerRow.addCells(20);
         for (let col = 1; col <= 20; col++) {
             headers[col - 1]
                 .configure(h => {
@@ -33,12 +33,12 @@ export class DemoGrid {
                         h.setZIndex(2);
                     }
                 })
-                .addContent(new TextSpanView())
+                .addView(TextSpanView)
                 .configure(ts => ts.setText(`Header ${col}`));
         }
         for (let row = 1; row <= 100; row++) {
-            let dataRow = this.view.addRow();
-            let cells = dataRow.addCells(20);
+            const dataRow = this.view.addRow();
+            const cells = dataRow.addCells(20);
             for (let col = 1; col <= 20; col++) {
                 cells[col - 1]
                     .configure(c => {
@@ -47,12 +47,12 @@ export class DemoGrid {
                             c.setZIndex(1);
                         }
                     })
-                    .addContent(new TextSpanView())
+                    .addView(TextSpanView)
                     .configure(ts => ts.setText(`Cell ${col}, ${row}`));
             }
         }
-        let footerRow = this.view.addRow();
-        let footers = footerRow.addCells(20);
+        const footerRow = this.view.addRow();
+        const footers = footerRow.addCells(20);
         for (let col = 1; col <= 20; col++) {
             footers[col - 1]
                 .configure(f => {
@@ -65,7 +65,7 @@ export class DemoGrid {
                         f.setZIndex(2);
                     }
                 })
-                .addContent(new TextSpanView())
+                .addView(TextSpanView)
                 .configure(ts => ts.setText(`Footer ${col}`));
         }
     }

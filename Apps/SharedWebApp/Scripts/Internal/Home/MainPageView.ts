@@ -1,10 +1,11 @@
-﻿import { TextBlockView } from '../../Lib/Html/TextBlockView';
-import { PageFrameView } from '../../Lib/PageFrameView';
+﻿import { BasicPageView } from '../../Lib/Views/BasicPageView';
+import { TextBlockView } from '../../Lib/Views/TextBlockView';
 
-export class MainPageView {
+export class MainPageView extends BasicPageView {
     readonly text: TextBlockView;
 
-    constructor(page: PageFrameView) {
-        this.text = page.addContent(new TextBlockView());
+    constructor() {
+        super();
+        this.text = this.addView(TextBlockView);
     }
 }

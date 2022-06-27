@@ -1,14 +1,12 @@
-﻿import { GridCellView } from "../Html/GridCellView";
-import { GridCellViewModel } from "../Html/GridCellViewModel";
-import { GridRowView } from "../Html/GridRowView";
-import { TextBlockView } from "../Html/TextBlockView";
-import { ODataColumnStyle } from "./ODataColumnStyle";
+﻿import { BasicTextComponentView } from "../Views/BasicTextComponentView";
+import { GridCellView, GridRowView } from "../Views/Grid";
+import { TextBlockView } from "../Views/TextBlockView";
 
 export class ODataTextCellView extends GridCellView {
-    constructor(rowView: GridRowView, vm?: GridCellViewModel) {
-        super(rowView, vm);
-        this.value = this.addContent(new TextBlockView());
+    constructor(rowView: GridRowView) {
+        super(rowView);
+        this.value = this.addView(TextBlockView);
     }
 
-    readonly value: ITextComponentView;
+    readonly value: BasicTextComponentView;
 }

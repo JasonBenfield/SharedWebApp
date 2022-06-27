@@ -3,4 +3,4 @@ import { Startup } from '../../Lib/Startup';
 import { DefaultPageContext } from '../DefaultPageContext';
 
 new DefaultPageContext().load();
-new UserPage(new Startup().build(), null);
+new UserPage(null);

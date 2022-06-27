@@ -1,18 +1,26 @@
-﻿import { Block } from "../Html/Block";
+﻿import { BlockView } from "../Views/BlockView";
+import { ModalComponentView } from "../Views/Modal";
 
-export class ModalODataPanelView extends Block {
-    protected readonly header: Block;
-    protected readonly body: Block;
-    protected readonly footer: Block;
+export class ModalODataPanelView {
+    readonly header: BlockView;
+    readonly body: BlockView;
+    readonly footer: BlockView;
 
-    constructor() {
-        super();
-        this.addCssName('d-contents');
-        this.header = this.addContent(new Block());
-        this.header.addCssName('modal-header');
-        this.body = this.addContent(new Block());
-        this.body.addCssName('modal-body');
-        this.footer = this.addContent(new Block());
-        this.footer.addCssName('modal-footer');
+    constructor(modal: ModalComponentView) {
+        this.header = modal.header.addView(BlockView);
+        this.body = modal.body.addView(BlockView);
+        this.footer = modal.body.addView(BlockView);
+    }
+
+    show() {
+        this.header.show();
+        this.body.show();
+        this.footer.show();
+    }
+
+    hide() {
+        this.header.hide();
+        this.body.hide();
+        this.footer.hide();
     }
 }

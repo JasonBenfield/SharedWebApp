@@ -1,17 +1,17 @@
 ﻿import { AppApi } from '../Api/AppApi';
-import { MessageAlert } from '../MessageAlert';
-import { PageFrameView } from '../PageFrameView';
-import { UrlBuilder } from '../UrlBuilder';
 import { WebPage } from '../Api/WebPage';
+import { BasicPage } from '../Components/BasicPage';
+import { MessageAlert } from '../Components/MessageAlert';
+import { UrlBuilder } from '../UrlBuilder';
 import { UserPageView } from './UserPageView';
 
-export class UserPage {
-    private readonly view: UserPageView;
+export class UserPage extends BasicPage {
+    protected readonly view: UserPageView;
     private readonly api: AppApi;
     private readonly alert: MessageAlert;
 
-    constructor(page: PageFrameView, api: AppApi) {
-        this.view = new UserPageView(page);
+    constructor(api: AppApi) {
+        super(new UserPageView());
         this.api = api;
         this.alert = new MessageAlert(this.view.alert);
         this.goToReturnUrl();

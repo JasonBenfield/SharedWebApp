@@ -2,7 +2,7 @@
 import { HtmlElementView } from "./HtmlElementView";
 
 export class ViewEventBuilder {
-    private action: (source: BasicComponentView) => void;
+    private action: (sourceView: BasicComponentView, sourceElement: HTMLElement) => void;
     private selector: string;
     private _preventDefault: boolean;
 
@@ -40,7 +40,7 @@ export class ViewEventBuilder {
             this._preventDefault,
             (el: HTMLElement) => {
                 const view = this.view.getViewByElement(el) || this.view;
-                this.action(view);
+                this.action(view, el);
             }
         );
     }

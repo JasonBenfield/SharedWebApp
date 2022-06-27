@@ -1,47 +1,48 @@
 ﻿import { ContextualClass } from '../../Lib/ContextualClass';
-import { Block } from '../../Lib/Html/Block';
-import { Container } from '../../Lib/Html/Container';
-import { CssLengthUnit } from '../../Lib/Html/CssLengthUnit';
-import { GridView } from '../../Lib/Html/GridView';
-import { TextHeading1View } from '../../Lib/Html/TextHeading1View';
-import { Toolbar } from '../../Lib/Html/Toolbar';
-import { NumberValueFormatter } from '../../Lib/OData/NumberValueFormatter';
-import { ODataColumnStyle } from '../../Lib/OData/ODataColumnStyle';
+import { CssLengthUnit } from '../../Lib/CssLengthUnit';
 import { ODataComponentView } from '../../Lib/OData/ODataComponentView';
 import { ODataTextCellView } from '../../Lib/OData/ODataTextCellView';
 import { PaddingCss } from '../../Lib/PaddingCss';
-import { PageFrameView } from '../../Lib/PageFrameView';
 import { TextCss } from '../../Lib/TextCss';
+import { BasicPageView } from '../../Lib/Views/BasicPageView';
+import { GridView } from '../../Lib/Views/Grid';
+import { TextHeading1View } from '../../Lib/Views/TextHeadings';
+import { ToolbarView } from '../../Lib/Views/ToolbarView';
 import { ODataEmployeeColumnViewsBuilder } from './ODataEmployeeColumnsBuilder';
 
-export class MainPageView {
+export class MainPageView extends BasicPageView {
     readonly heading: TextHeading1View;
     readonly odataComponentView: ODataComponentView;
     readonly columns: ODataEmployeeColumnViewsBuilder;
 
-    constructor(private readonly page: PageFrameView) {
-        let layoutGrid = this.page.addContent(new GridView());
-        layoutGrid.borderless();
+    constructor() {
+        super();
+        const layoutGrid = this.addView(GridView);
+        layoutGrid.layout();
         layoutGrid.setTemplateRows(CssLengthUnit.auto(), CssLengthUnit.flex(1));
         layoutGrid.height100();
         this.heading = layoutGrid
-            .addContent(new Container())
-            .addContent(new TextHeading1View());
-        let fillRow = layoutGrid.addContent(new Block())
+            .addCell()
+            .configure(b => b.addCssName('container'))
+            .addView(TextHeading1View);
+        const fillRow = layoutGrid.addCell()
             .configure(b => {
-                b.height100();
                 b.addCssName('container');
                 b.setPadding(PaddingCss.xs(0));
                 b.setBackgroundContext(ContextualClass.light);
-                //b.scrollable();
             });
 
         this.columns = new ODataEmployeeColumnViewsBuilder();
-        this.columns.Salary.setDataCellStyle({ textCss: new TextCss().end() });
+        this.columns.Salary.dataCell(
+            ODataTextCellView,
+            cellView => {
+                cellView.setTextCss(new TextCss().end());
+            }
+        );
 
-        this.odataComponentView = fillRow.addContent(new ODataComponentView());
-        
-        let toolbar = layoutGrid.addContent(new Toolbar());
+        this.odataComponentView = fillRow.addView(ODataComponentView);
+
+        let toolbar = layoutGrid.addCell().addView(ToolbarView);
         toolbar.setBackgroundContext(ContextualClass.secondary);
         toolbar.setPadding(PaddingCss.xs(3));
     }

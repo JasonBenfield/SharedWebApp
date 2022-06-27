@@ -1,41 +1,45 @@
-﻿import { FilteredArray } from "../Enumerable";
-import { DefaultEvent, EventCollection } from "../Events";
-import { GridCellView } from "../Html/GridCellView";
-import { GridRowView } from "../Html/GridRowView";
+﻿import { BasicComponent } from "../Components/BasicComponent";
+import { EventSource } from '../Events';
+import { GridCellView } from "../Views/Grid";
 import { ODataCell } from "./ODataCell";
 import { ODataColumn } from "./ODataColumn";
 import { ODataHeaderCell } from "./ODataHeaderCell";
+import { ODataHeaderRowView } from "./ODataHeaderRowView";
 import { ODataQueryOrderByBuilder } from "./ODataQueryBuilder";
 
-export class ODataHeaderRow {
+export class ODataHeaderRow extends BasicComponent {
     private readonly cells: ODataCell[] = [];
+    private readonly events = {
+        sortClicked: null as ODataColumn,
+        filterClicked: null as ODataColumn
+    };
+    private readonly eventSource = new EventSource<typeof this.events>(this, this.events);
+    readonly when = this.eventSource.when;
 
-    private readonly _sortClicked = new DefaultEvent<ODataColumn>(this);
-    readonly sortClicked = this._sortClicked.handler();
-
-    private readonly events = new EventCollection();
-
-    constructor(columns: ODataColumn[], view: GridRowView) {
+    constructor(columns: ODataColumn[], view: ODataHeaderRowView) {
+        super(view);
         let i = 0;
         for (const column of columns) {
             const cell = column.createHeaderCell(view.cell(i));
-            if (cell instanceof ODataHeaderCell) {
-                this.events.register(cell.sortClicked, this.onSortClicked.bind(this));
-            }
             this.cells.push(cell);
             i++;
         }
+        view.when.sortClicked.then(this.onSortClicked.bind(this));
+        view.when.filterClicked.then(this.onFilterClicked.bind(this));
     }
 
-    private onSortClicked(column: ODataColumn) {
-        this._sortClicked.invoke(column);
+    private onSortClicked(source: GridCellView) {
+        const odataCell = this.getComponent(source);
+        if (odataCell && odataCell instanceof ODataCell) {
+            this.eventSource.events.sortClicked.invoke(odataCell.column);
+        }
     }
 
-    cellByView(view: GridCellView) {
-        return new FilteredArray(
-            this.cells,
-            c => c.hasView(view)
-        ).toEnumerableArray().first();
+    private onFilterClicked(source: GridCellView) {
+        const odataCell = this.getComponent(source);
+        if (odataCell && odataCell instanceof ODataCell) {
+            this.eventSource.events.filterClicked.invoke(odataCell.column);
+        }
     }
 
     setOrderBy(orderBy: ODataQueryOrderByBuilder) {
@@ -56,6 +60,4 @@ export class ODataHeaderRow {
             }
         }
     }
-
-    disposeComponent() { this.events.dispose(); }
 }

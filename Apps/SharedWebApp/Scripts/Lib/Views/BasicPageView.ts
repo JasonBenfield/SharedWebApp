@@ -2,7 +2,7 @@
 import { ColumnCss } from "../ColumnCss";
 import { ContextualClass } from "../ContextualClass";
 import { EventSource } from '../Events';
-import { CssLengthUnit } from "../Html/CssLengthUnit";
+import { CssLengthUnit } from "../CssLengthUnit";
 import { MarginCss } from "../MarginCss";
 import { PaddingCss } from "../PaddingCss";
 import { TextCss } from "../TextCss";

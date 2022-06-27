@@ -1,11 +1,7 @@
-﻿import { ButtonCommandItem } from "../Command/ButtonCommandItem";
-import { MappedArray } from "../Enumerable";
+﻿import { MappedArray } from "../Enumerable";
 import { DefaultEvent, EventCollection } from "../Events";
-import { GridCellView } from "../Html/GridCellView";
-import { TextBlock } from "../Html/TextBlock";
 import { ODataCellClickedEventArgs } from "./ODataCellClickedEventArgs";
 import { ODataColumn } from "./ODataColumn";
-import { ODataFooterComponentView } from "./ODataFooterComponentView";
 import { ODataGridView } from "./ODataGridView";
 import { ODataHeaderRow } from "./ODataHeaderRow";
 import { ODataQueryOrderByBuilder } from "./ODataQueryBuilder";
@@ -21,34 +17,11 @@ export class ODataGrid<TEntity> {
     private readonly _sortClicked = new DefaultEvent<ODataColumn>(this);
     readonly sortClicked = this._sortClicked.handler();
 
-    private readonly _pageRequested = new DefaultEvent<number>(this);
-    readonly pageRequested = this._pageRequested.handler();
-
     private readonly events = new EventCollection();
 
     constructor(private readonly view: ODataGridView) {
-        view.events.onClick(
-            this.onClick.bind(this),
-            options => options.selector = '.grid-cell'
-        );
     }
 
-    private onClick(cellView: GridCellView) {
-        const cell = this.cellByView(cellView);
-        if (cell) {
-            this._cellClicked.invoke(cell);
-        }
-    }
-
-    private cellByView(view: GridCellView) {
-        for (const row of this.rows) {
-            const testCell = row.cellByView(view);
-            if (testCell) {
-                return testCell;
-            }
-        }
-        return null;
-    }
 
     orderByChanged(orderBy: ODataQueryOrderByBuilder) {
         const headerRowView = this.rows[0] as ODataHeaderRow;
@@ -66,7 +39,7 @@ export class ODataGrid<TEntity> {
         this.view.setSelectedTemplateColumns(columnViews);
         const headerRowView = this.view.addHeaderRow(columnViews);
         const headerRow = new ODataHeaderRow(columns, headerRowView);
-        this.events.register(headerRow.sortClicked, this.onSortClicked.bind(this));
+        headerRow.when.sortClicked.then(this.onSortClicked.bind(this));
         this.rows.push(headerRow);
         let rowIndex = 1;
         for (const record of records) {
@@ -75,10 +48,6 @@ export class ODataGrid<TEntity> {
             this.rows.push(dataRow);
             rowIndex++;
         }
-    }
-
-    private onPageButtonClicked(page: number) {
-        this._pageRequested.invoke(page);
     }
 
     private onSortClicked(column: ODataColumn) {

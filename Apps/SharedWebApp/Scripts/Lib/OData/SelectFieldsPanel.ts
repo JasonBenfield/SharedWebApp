@@ -1,7 +1,7 @@
 ﻿import { Awaitable } from "../Awaitable";
-import { Command } from "../Command/Command";
+import { Command } from "../Components/Command";
 import { FilteredArray, MappedArray } from "../Enumerable";
-import { ListGroup } from "../ListGroup/ListGroup";
+import { ListGroup } from "../Components/ListGroup";
 import { ODataColumnAccessor } from "./ODataColumnAccessor";
 import { ODataQuerySelectBuilder } from "./ODataQueryBuilder";
 import { SelectFieldListItem } from "./SelectFIeldListItem";
@@ -31,7 +31,7 @@ export class SelectFieldsPanel implements IPanel {
         private readonly view: SelectFieldsPanelView
     ) {
         this.selectFieldsList = new ListGroup(view.selectFields);
-        this.selectFieldsList.itemClicked.register(this.onSelectFieldClicked.bind(this));
+        this.selectFieldsList.registerItemClicked(this.onSelectFieldClicked.bind(this));
         new Command(this.cancel.bind(this)).add(view.cancelButton);
         new Command(this.save.bind(this)).add(view.saveButton);
     }
