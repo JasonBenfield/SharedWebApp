@@ -3,9 +3,8 @@ import { MappedArray } from "../Enumerable";
 import { MarginCss } from "../MarginCss";
 import { TextCss } from "../TextCss";
 import { BasicComponentView } from "../Views/BasicComponentView";
-import { GridView } from "../Views/Grid";
+import { GridRowView, GridView } from "../Views/Grid";
 import { ODataColumnView } from "./ODataColumnView";
-import { ODataHeaderRowView } from "./ODataHeaderRowView";
 
 export class ODataGridView extends GridView {
     constructor(container: BasicComponentView) {
@@ -14,8 +13,15 @@ export class ODataGridView extends GridView {
         this.setMargin(MarginCss.xs(0));
     }
 
+    handleClick(action: (view: BasicComponentView, element: HTMLElement) => void) {
+        this.on('click')
+            .select('.grid-cell,.odata-sort-button')
+            .execute(action)
+            .subscribe();
+    }
+
     addHeaderRow(columns: ODataColumnView[]) {
-        const row = this.addRow(ODataHeaderRowView);
+        const row = this.addRow(GridRowView);
         row.setContext(ContextualClass.secondary);
         row.setTextCss(new TextCss().bold());
         for (const col of columns) {

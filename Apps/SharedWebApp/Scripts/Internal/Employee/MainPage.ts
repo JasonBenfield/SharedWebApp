@@ -4,9 +4,8 @@ import { AppResourceUrl } from '../../Lib/Api/AppResourceUrl';
 import { BasicPage } from '../../Lib/Components/BasicPage';
 import { AsyncCommand } from '../../Lib/Components/Command';
 import { MessageAlert } from '../../Lib/Components/MessageAlert';
+import { TextComponent } from '../../Lib/Components/TextComponent';
 import { ConsoleLog } from '../../Lib/ConsoleLog';
-import { TextBlock } from '../../Lib/Html/TextBlock';
-import { Startup } from '../../Lib/Startup';
 import { DefaultPageContext } from '../DefaultPageContext';
 import { AddEmployeeForm } from './AddEmployeeForm';
 import { MainPageView } from './MainPageView';
@@ -19,7 +18,7 @@ class MainPage extends BasicPage {
 
     constructor() {
         super(new MainPageView());
-        new TextBlock('Add Employee', this.view.heading);
+        new TextComponent(this.view.heading).setText('Add Employee');
         this.alert = new MessageAlert(this.view.alert);
         this.addEmployeeForm = new AddEmployeeForm(this.view.addEmployeeForm);
         this.saveCommand = new AsyncCommand(this.save.bind(this));
@@ -29,7 +28,7 @@ class MainPage extends BasicPage {
     }
 
     private async test() {
-        let action = new AppApiAction<number, number>(
+        const action = new AppApiAction<number, number>(
             new AppApiEvents(() => { }),
             AppResourceUrl.app(
                 'Shared',
@@ -48,7 +47,7 @@ class MainPage extends BasicPage {
         return this.alert.infoAction(
             'Saving...',
             async () => {
-                let action = new AppApiAction<any, number>(
+                const action = new AppApiAction<any, number>(
                     new AppApiEvents(() => { }),
                     AppResourceUrl.app(
                         'Shared',

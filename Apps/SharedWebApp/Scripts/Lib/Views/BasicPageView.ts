@@ -19,6 +19,16 @@ import { TextBlockView } from "./TextBlockView";
 import { TextHeading1View } from "./TextHeadings";
 import { TextSpanView } from "./TextSpanView";
 import { ViewConstructor } from "./Types";
+import "@fortawesome/fontawesome-free/css/all.css";
+import "@fortawesome/fontawesome-free/webfonts/fa-brands-400.ttf";
+import "@fortawesome/fontawesome-free/webfonts/fa-brands-400.woff2";
+import "@fortawesome/fontawesome-free/webfonts/fa-regular-400.ttf";
+import "@fortawesome/fontawesome-free/webfonts/fa-regular-400.woff2";
+import "@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf";
+import "@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2";
+import "@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.ttf";
+import "@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.woff2";
+import '../Styles/default.scss';
 
 export class BasicPageView {
     readonly toolbar: BlockView;
@@ -41,11 +51,13 @@ export class BasicPageView {
         grid.setTemplateRows(CssLengthUnit.auto(), CssLengthUnit.flex(1));
         grid.setViewName('PageFrame');
         this.toolbar = grid.addCell(GridCellView)
+            .configure(b => {
+                b.setBackgroundContext(ContextualClass.primary);
+                b.setPadding(PaddingCss.xs(3));
+                b.setTextCss(new TextCss().context(ContextualClass.light));
+            })
             .addView(BlockView);
-        this.toolbar.setViewName('PageFrame_MainToolbar');
-        this.toolbar.setBackgroundContext(ContextualClass.primary);
-        this.toolbar.setPadding(PaddingCss.xs(3));
-        this.toolbar.setTextCss(new TextCss().context(ContextualClass.light));
+        this.toolbar.addCssName('container');
         const row = this.toolbar.addView(RowView);
         const col1 = row.addColumn();
         col1.setColumnCss(ColumnCss.xs('auto'));

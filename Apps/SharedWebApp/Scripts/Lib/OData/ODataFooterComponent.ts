@@ -1,10 +1,11 @@
-﻿import { DefaultEvent } from "../Events";
-import { TextBlock } from "../Html/TextBlock";
+﻿import { TextComponent } from "../Components/TextComponent";
+import { EventSource } from "../Events";
 import { ODataFooterComponentView } from "./ODataFooterComponentView";
 
 export class ODataFooterComponent {
-    private readonly _pageRequested = new DefaultEvent<number>(this);
-    readonly pageRequested = this._pageRequested.handler();
+    private readonly _events = { pageRequested: null as number };
+    private readonly eventSource = new EventSource<typeof this._events>(this, this._events);
+    readonly when = this.eventSource.when;
 
     constructor(private readonly view: ODataFooterComponentView) {
     }
@@ -20,17 +21,13 @@ export class ODataFooterComponent {
                     if (page === currentPage) {
                         pageButton.setActive();
                     }
-                    pageButton.handleClick(this.onPageRequested.bind(this, page));
+                    pageButton.handleClick(() => this.eventSource.events.pageRequested.invoke(page));
                 }
                 else {
                     this.view.addEllipsis();
                 }
             }
         }
-    }
-
-    private onPageRequested(page: number) {
-        this._pageRequested.invoke(page);
     }
 
     private getPages(currentPage: number, numberOfPages: number) {
@@ -67,7 +64,7 @@ export class ODataFooterComponent {
         else {
             countText = `${startRecord.toLocaleString()} to ${recordCount.toLocaleString()} of ${total.toLocaleString()}`;
         }
-        new TextBlock(countText, this.view.count);
+        new TextComponent(this.view.count).setText(countText);
     }
 
 }

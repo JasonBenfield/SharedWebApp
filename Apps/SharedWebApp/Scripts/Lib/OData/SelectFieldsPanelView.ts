@@ -23,7 +23,7 @@ export class SelectFieldsPanelView extends ModalODataPanelView {
         this.selectFields.setItemViewType(SelectFieldListItemView);
         const toolbar = this.footer.addView(RowView);
         toolbar.addColumn();
-        let buttonColumn = toolbar.addColumn()
+        const buttonColumn = toolbar.addColumn()
             .configure(c => {
                 c.setTextCss(new TextCss().end());
                 c.setColumnCss(ColumnCss.xs('auto'));

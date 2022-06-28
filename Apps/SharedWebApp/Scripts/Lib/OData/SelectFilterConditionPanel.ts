@@ -1,12 +1,10 @@
 ﻿import { Awaitable } from "../Awaitable";
-import { FilteredArray } from "../Enumerable";
-import { TextBlock } from "../Html/TextBlock";
-import { TextNavLinkView } from "../Html/TextNavLinkView";
+import { BasicComponent } from "../Components/BasicComponent";
+import { TextComponent } from "../Components/TextComponent";
+import { TextLinkView } from "../Views/TextLinkView";
 import { FilterColumnOptionsBuilder } from "./FilterColumnOptionsBuilder";
 import { FilterConditionLink } from "./FilterConditionLink";
 import { FilterSelection } from "./FilterSelection";
-import { FilterSelectionBooleanValue } from "./FilterSelectionBooleanValue";
-import { ODataQueryFilterBuilder } from "./ODataQueryFilterBuilder";
 import { SelectFilterConditionPanelView } from "./SelectFilterConditionPanelView";
 
 interface IResult {
@@ -26,34 +24,31 @@ class Result {
     get done() { return this.result.done; }
 }
 
-export class SelectFilterConditionPanel implements IPanel {
+export class SelectFilterConditionPanel extends BasicComponent implements IPanel {
+    private readonly panelView: SelectFilterConditionPanelView;
     private readonly awaitable = new Awaitable<Result>();
-    private readonly links: FilterConditionLink[] = [];
     private options: FilterColumnOptionsBuilder;
 
-    constructor(private readonly view: SelectFilterConditionPanelView) {
+    constructor(view: SelectFilterConditionPanelView) {
+        super(view.body);
+        this.panelView = view;
         for (const selection of FilterSelection.all) {
-            this.links.push(new FilterConditionLink(selection, view.addLink()));
+            this.addComponent(new FilterConditionLink(selection, view.addLink()));
         }
-        this.view.events.onClick(
-            this.onItemClick.bind(this),
-            o => o.selector = 'a'
-        );
+        view.handleClick(this.onItemClick.bind(this));
     }
 
     setOptions(options: FilterColumnOptionsBuilder) {
         this.options = options;
-        new TextBlock(`${options.column.columnName} Filter`, this.view.title);
-        for (const link of this.links) {
+        new TextComponent(this.panelView.title).setText(`${options.column.columnName} Filter`);
+        for (const component of this.getComponents()) {
+            const link = component as FilterConditionLink;
             link.sourceTypeChanged(options.column.sourceType);
         }
     }
 
-    private onItemClick(itemView: TextNavLinkView) {
-        const link = new FilteredArray(
-            this.links,
-            l => l.hasView(itemView)
-        ).value()[0];
+    private onItemClick(itemView: TextLinkView, sourceElement: HTMLElement) {
+        const link = this.getComponentByElement(sourceElement) as FilterConditionLink;
         if (link) {
             this.options.setFilterSelection(link.selection);
             if (link.selection === FilterSelection.isTrue || link.selection === FilterSelection.isFalse) {
@@ -68,7 +63,7 @@ export class SelectFilterConditionPanel implements IPanel {
 
     start() { return this.awaitable.start(); }
 
-    activate() { this.view.show(); }
+    activate() { this.panelView.show(); }
 
-    deactivate() { this.view.hide(); }
+    deactivate() { this.panelView.hide(); }
 }

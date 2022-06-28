@@ -140,7 +140,6 @@ export class GridView extends BasicComponentView {
 }
 
 export class GridRowView extends BasicContainerView {
-    private readonly cells: GridCellView[] = [];
     private clickConfig: IClickConfig;
 
     constructor(container: BasicComponentView) {
@@ -163,7 +162,6 @@ export class GridRowView extends BasicContainerView {
     }
 
     clearContents() {
-        this.cells.splice(0, this.cells.length);
         this.disposeAllViews();
     }
 
@@ -175,9 +173,9 @@ export class GridRowView extends BasicContainerView {
         return this.addViews(howMany, ctor || GridCellView) as TView[];
     }
 
-    cell(index: number) { return this.cells[index]; }
+    cell(index: number) { return this.getViewByIndex(index) as GridCellView; }
 
-    getCells() { return this.cells; }
+    getCells() { return this.getViews() as GridCellView[]; }
 
     configureClick(clickConfig: (builder: ViewEventActionBuilder) => ViewEventActionBuilder) {
         this.clickConfig = clickConfig;

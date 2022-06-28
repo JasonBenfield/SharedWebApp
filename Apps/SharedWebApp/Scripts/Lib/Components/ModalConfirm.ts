@@ -33,7 +33,7 @@ export class ModalConfirm {
         this.title = new TextComponent(this.view.title);
         this.noCommand.add(this.view.noButton);
         this.yesCommand.add(this.view.yesButton);
-        this.view.closed.register(this.onClosed.bind(this));
+        this.view.when.closed.then(this.onClosed.bind(this));
     }
 
     private onClosed() {

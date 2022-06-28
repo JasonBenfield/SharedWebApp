@@ -1,7 +1,5 @@
 ﻿import { BasicPage } from '../../Lib/Components/BasicPage';
-import { TextBlock } from '../../Lib/Html/TextBlock';
-import { PageFrameView } from '../../Lib/PageFrameView';
-import { Startup } from '../../Lib/Startup';
+import { TextComponent } from '../../Lib/Components/TextComponent';
 import { DefaultPageContext } from '../DefaultPageContext';
 import { DemoGrid } from './DemoGrid';
 import { MainPageView } from './MainPageView';
@@ -11,7 +9,7 @@ class MainPage extends BasicPage {
 
     constructor() {
         super(new MainPageView());
-        new TextBlock('Grid Demo', this.view.heading);
+        new TextComponent(this.view.heading).setText('Grid Demo');
         new DemoGrid(this.view.dataGrid);
     }
 }

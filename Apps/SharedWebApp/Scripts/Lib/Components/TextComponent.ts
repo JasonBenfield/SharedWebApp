@@ -1,10 +1,13 @@
 ﻿import { BasicTextComponentView } from "../Views/BasicTextComponentView";
+import { BasicComponent } from "./BasicComponent";
 
-export class TextComponent {
+export class TextComponent extends BasicComponent {
+    protected readonly view: BasicTextComponentView;
     private text: string;
     private formatTitle: (text: string) => string;
 
-    constructor(private readonly view: BasicTextComponentView) {
+    constructor(view: BasicTextComponentView) {
+        super(view);
     }
 
     setText(text: string) {

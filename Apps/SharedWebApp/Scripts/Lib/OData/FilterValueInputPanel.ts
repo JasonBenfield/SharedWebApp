@@ -1,5 +1,5 @@
 ﻿import { Awaitable } from "../Awaitable";
-import { TextBlock } from "../Html/TextBlock";
+import { TextComponent } from "../Components/TextComponent";
 import { FilterColumnOptionsBuilder } from "./FilterColumnOptionsBuilder";
 import { FilterValueInputPanelView } from "./FilterValueInputPanelView";
 
@@ -24,7 +24,7 @@ export class FilterValueInputPanel implements IPanel {
 
     setOptions(options: FilterColumnOptionsBuilder) {
         this.options = options;
-        new TextBlock(`Filter ${options.column.columnName}`, this.view.title);
+        new TextComponent(this.view.title).setText(`Filter ${options.column.columnName}`);
     }
 
     start() {

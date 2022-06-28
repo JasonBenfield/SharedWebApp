@@ -13,7 +13,7 @@ export class ViewEventBuilder {
     ) {
     }
 
-    execute(action: (source: BasicComponentView) => void) {
+    execute(action: (sourceView: BasicComponentView, sourceElement: HTMLElement) => void) {
         this.action = action;
         return new ViewEventActionBuilder(this);
     }

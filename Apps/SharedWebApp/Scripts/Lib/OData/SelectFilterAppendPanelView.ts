@@ -1,16 +1,16 @@
 ﻿import { FlexCss } from "../FlexCss";
-import { ModalComponentView } from "../Views/Modal";
-import { LinkView } from "../Views/LinkView";
-import { NavView } from "../Views/NavView";
-import { TextBlockView } from "../Views/TextBlockView";
-import { TextHeading1View } from "../Views/TextHeadings";
-import { ModalODataPanelView } from "./ModalODataPanelView";
 import { BasicTextComponentView } from "../Views/BasicTextComponentView";
+import { LinkView } from "../Views/LinkView";
+import { ModalComponentView } from "../Views/Modal";
+import { NavView } from "../Views/NavView";
+import { TextHeading1View } from "../Views/TextHeadings";
+import { TextLinkView } from "../Views/TextLinkView";
+import { ModalODataPanelView } from "./ModalODataPanelView";
 
 export class SelectFilterAppendPanelView extends ModalODataPanelView {
     readonly title: BasicTextComponentView;
-    readonly clearItem: LinkView;
-    readonly appendItem: LinkView;
+    readonly clearItem: TextLinkView;
+    readonly appendItem: TextLinkView;
 
     constructor(modal: ModalComponentView) {
         super(modal);
@@ -18,11 +18,11 @@ export class SelectFilterAppendPanelView extends ModalODataPanelView {
         const nav = this.body.addView(NavView);
         nav.pills();
         nav.setFlexCss(new FlexCss().column());
-        this.clearItem = nav.addLink();
-        this.clearItem.addView(TextBlockView)
-            .configure(tb => tb.setText('Replace Filter'));
-        this.appendItem = nav.addLink();
-        this.appendItem.addView(TextBlockView)
-            .configure(tb => tb.setText('Append to Filter'));
+        this.clearItem = nav.addTextLink();
+        this.appendItem = nav.addTextLink();
+    }
+
+    handleClick(action: (view: LinkView) => void) {
+        this.body.on('click').select('a').execute(action).subscribe();
     }
 }

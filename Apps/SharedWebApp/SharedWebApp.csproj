@@ -43,6 +43,7 @@
     <None Remove="Scripts\Lib\Components\ListGroup.ts" />
     <None Remove="Scripts\Lib\Components\ModalConfirm.ts" />
     <None Remove="Scripts\Lib\Components\ModalError.ts" />
+    <None Remove="Scripts\Lib\Components\SelectOption.ts" />
     <None Remove="Scripts\Lib\Components\TextComponent.ts" />
     <None Remove="Scripts\Lib\Components\Types.ts" />
     <None Remove="Scripts\Lib\DateRange.ts" />
@@ -84,7 +85,6 @@
     <None Remove="Scripts\Lib\OData\ODataHeaderCell.ts" />
     <None Remove="Scripts\Lib\OData\ODataHeaderCellView.ts" />
     <None Remove="Scripts\Lib\OData\ODataHeaderRow.ts" />
-    <None Remove="Scripts\Lib\OData\ODataHeaderRowView.ts" />
     <None Remove="Scripts\Lib\OData\ODataPage.ts" />
     <None Remove="Scripts\Lib\OData\ODataQueryBuilder.ts" />
     <None Remove="Scripts\Lib\OData\ODataQueryFilterBuilder.ts" />
@@ -191,13 +191,13 @@
     <TypeScriptCompile Include="Scripts\Lib\Components\ModalConfirm.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\ModalError.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\BasicPage.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\SelectOption.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\TextComponent.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\Types.ts" />
     <TypeScriptCompile Include="Scripts\Lib\DateRange.ts" />
     <TypeScriptCompile Include="Scripts\Lib\FlexCss.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Forms\ErrorListItem.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ModalODataPanelView.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\OData\ODataHeaderRowView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\ErrorListItemView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\JustifyContentCss.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\FilterSelectionBooleanValue.ts" />

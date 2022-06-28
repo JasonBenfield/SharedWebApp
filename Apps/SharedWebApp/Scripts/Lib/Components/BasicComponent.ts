@@ -7,7 +7,18 @@ export class BasicComponent {
     constructor(protected readonly view: BasicComponentView) {
     }
 
-    protected getComponent(view: BasicComponentView) {
+    protected getComponentByElement(element: HTMLElement) {
+        for (const component of this.components) {
+            if (component.hasElement(element)) {
+                return component;
+            }
+        }
+        return null;
+    }
+
+    private hasElement(element: HTMLElement) { return this.view.hasElement(element); }
+
+    protected getComponentByView(view: BasicComponentView) {
         for (const component of this.components) {
             if (component.hasView(view)) {
                 return component;

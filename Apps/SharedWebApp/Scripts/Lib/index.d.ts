@@ -17,88 +17,6 @@ declare type FlexWraps = 'wrap' | 'nowrap' | 'wrap-reverse';
 
 declare type ContentJustifications = 'start' | 'end' | 'center' | 'between' | 'around' | 'evenly';
 
-interface IHtmlStyle {
-    width?: string;
-    'min-width'?: string;
-    'max-width'?: string;
-    height?: string;
-    'min-height'?: string;
-    'max-height'?: string;
-    'z-index'?: string;
-}
-
-interface IGridStyle extends IHtmlStyle {
-    'grid-template-columns'?: string;
-    'grid-template-rows'?: string;
-    'grid-auto-columns'?: string;
-    'grid-auto-rows'?: string;
-    'column-gap'?: string;
-    'row-gap'?: string;
-}
-
-interface IGridCellStyle extends IHtmlStyle {
-    'grid-column'?: string;
-    'grid-row'?: string;
-}
-
-interface IHtmlAttributes {
-    id?: string;
-    name?: string;
-    title?: string;
-    'class'?: string;
-    role?: string;
-}
-
-interface ITableDataAttributes extends IHtmlAttributes {
-    colspan?: string;
-    rowspan?: string;
-    headers?: string;
-}
-
-interface ILinkAttributes extends IHtmlAttributes {
-    href?: string;
-}
-
-interface ILabelAttributes extends IHtmlAttributes {
-    for?: string;
-}
-
-interface IInputAttributes extends IHtmlAttributes {
-    type?: string;
-    maxlength?: string;
-    autocomplete?: string;
-}
-
-interface IButtonAttributes extends IHtmlAttributes {
-    type?: string;
-    disabled?: boolean;
-}
-
-interface IFormAttributes extends IHtmlAttributes {
-    autocomplete?: string;
-    action?: string;
-    method?: string;
-}
-
-interface IXtiEventBindingOptions {
-    [name: string]: IXtiEventOptions[];
-}
-
-interface IXtiEventOptionsBuilder {
-
-    select(selector: string): this;
-
-    preventDefault(): this;
-}
-
-declare type IXtiEventCallback = (context?, evt?) => any;
-
-interface IXtiEventOptions {
-    callback: IXtiEventCallback;
-    selector: string;
-    preventDefault: boolean;
-}
-
 interface ICssClass {
     toString(): string;
 }
@@ -131,11 +49,6 @@ interface IAppVersionDomain {
 }
 
 declare let pageContext: PageContext;
-
-interface ITextComponentView {
-    setText(text: string);
-    setTitle(title: string);
-}
 
 interface EventCallback<TArgs> {
     (args: TArgs, source?: any): void;
@@ -220,107 +133,6 @@ interface IConstraint {
     test(value: any): IConstraintResult;
 }
 
-interface IComponentViewModel {
-    view: any;
-    readonly componentName: ko.Observable<string>;
-}
-
-interface IComponentTemplate {
-    readonly name: string;
-    register();
-}
-
-interface IHtmlComponentViewModel extends IComponentViewModel {
-    readonly attr: ko.Observable<IHtmlAttributes>;
-    readonly style: ko.Observable<IHtmlStyle>;
-    readonly isVisible: ko.Observable<boolean>;
-}
-
-interface IHtmlContainerComponentViewModel extends IHtmlComponentViewModel {
-    readonly content: IAggregateComponentViewModel;
-}
-
-interface IAggregateComponent {
-    setName(name: string);
-    addContent<TItem extends IComponent>(item: TItem): TItem;
-    insertContent<TItem extends IComponent>(index: number, item: TItem): TItem;
-    addItem<TItemVM extends IComponentViewModel, TItem extends IComponent>(
-        itemVM: TItemVM,
-        item: TItem
-    ): TItem;
-    insertItem<TItemVM extends IComponentViewModel, TItem extends IComponent>(
-        index: number,
-        itemVM: TItemVM,
-        item: TItem
-    ): TItem;
-    removeItem<TItem extends IComponent>(item: TItem);
-    show();
-    hide();
-}
-
-interface IAggregateComponentViewModel extends IComponentViewModel {
-    readonly name: ko.Observable<string>;
-    readonly items: ko.ObservableArray<IComponentViewModel>;
-    readonly isVisible: ko.Observable<boolean>;
-}
-
-interface IViewEvents {
-    clear();
-    onClick(
-        callback: (source: IViewEventSource) => any,
-        config?: (options: IXtiEventOptions) => void
-    );
-    onFocus(
-        callback: (source: IViewEventSource) => any,
-        config?: (options: IXtiEventOptions) => void
-    );
-    onBlur(
-        callback: (source: IViewEventSource) => any,
-        config?: (options: IXtiEventOptions) => void
-    );
-    onSubmit(
-        callback: (source: IViewEventSource) => any,
-        config?: (options: IXtiEventOptions) => void
-    );
-    on(
-        name: string,
-        callback: (source: IViewEventSource) => any,
-        config?: (builder: IXtiEventOptions) => void
-    );
-}
-
-interface IListView {
-    removeFromListItem(itemVM: IListItemViewModel, item: IListItemView);
-    addFromListItem(itemVM: IListItemViewModel, item: IListItemView);
-}
-
-interface IListViewModel extends IHtmlComponentViewModel {
-    readonly xtiEvent: ko.Observable<IXtiEventBindingOptions>;
-    readonly items: ko.ObservableArray<IListItemViewModel>;
-    readonly hasItems: ko.Observable<boolean>;
-}
-
-interface IListItemViewModel extends IHtmlComponentViewModel {
-    readonly content: IAggregateComponentViewModel;
-    readonly isClickable: boolean;
-}
-
-interface IListItemView {
-    readonly content: IAggregateComponent;
-
-    addCssName(name: string);
-
-    addContent<TItem extends IComponent>(item: TItem): TItem;
-
-    addToList(list: IListView): this;
-
-    removeFromList(list: IListView): this;
-
-    show();
-
-    hide();
-}
-
 type ColumnCssSize = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 'auto' | 'fill';
 
 interface IColumnCss {
@@ -333,17 +145,6 @@ interface IColumnCss {
 }
 
 interface ITextCss {
-}
-
-interface IColumn {
-    setColumnCss(columnCss: IColumnCss);
-    setTextCss(textCss: ITextCss);
-}
-
-interface IComponent {
-    addToContainer(container: IAggregateComponent): this;
-    insertIntoContainer(container: IAggregateComponent, index: number): this;
-    removeFromContainer(container: IAggregateComponent): this;
 }
 
 declare type constructor<T> = {

@@ -32,6 +32,7 @@ export interface ILabelAttributes extends IHtmlAttributes {
 
 export interface IButtonAttributes extends IHtmlAttributes {
     type?: string;
+    disabled?: boolean;
 }
 
 export interface IFormAttributes extends IHtmlAttributes {

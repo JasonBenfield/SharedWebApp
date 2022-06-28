@@ -47,7 +47,7 @@ export class BasicComponentView {
         return null;
     }
 
-    private hasElement(element: HTMLElement) {
+    hasElement(element: HTMLElement) {
         return this.elementView.hasElement(element);
     }
 
@@ -208,6 +208,8 @@ export class BasicComponentView {
 
     get viewCount() { return this.views.length; }
 
+    protected getViewByIndex(index: number) { return this.views[index]; }
+
     protected getViews() { return new EnumerableArray(this.views).value(); }
 
     protected disposeAllViews() {
@@ -230,6 +232,10 @@ export class BasicComponentView {
     dispose() {
         this.disposeAllViews();
         if (this.container) {
+            const index = this.container.views.indexOf(this);
+            if (index > -1) {
+                this.container.views.splice(index, 1);
+            }
             this.container.removeView(this);
         }
     }

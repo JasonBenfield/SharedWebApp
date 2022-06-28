@@ -12,8 +12,8 @@ interface IResult {
     done?: {};
 }
 
-export class SelectFieldPanelResult {
-    static done() { return new SelectFieldPanelResult({ done: {} }); }
+export class Result {
+    static done() { return new Result({ done: {} }); }
 
     private constructor(private readonly result: IResult) { }
 
@@ -21,7 +21,7 @@ export class SelectFieldPanelResult {
 }
 
 export class SelectFieldsPanel implements IPanel {
-    private readonly awaitable = new Awaitable<SelectFieldPanelResult>();
+    private readonly awaitable = new Awaitable<Result>();
     private readonly selectFieldsList: ListGroup;
     private readonly selectFieldListItems: SelectFieldListItem[] = [];
 
@@ -41,7 +41,7 @@ export class SelectFieldsPanel implements IPanel {
     }
 
     private cancel() {
-        this.awaitable.resolve(SelectFieldPanelResult.done());
+        this.awaitable.resolve(Result.done());
     }
 
     private save() {
@@ -54,7 +54,7 @@ export class SelectFieldsPanel implements IPanel {
         ).value();
         this.select.clear();
         this.select.addFields(...selectedFields);
-        this.awaitable.resolve(SelectFieldPanelResult.done());
+        this.awaitable.resolve(Result.done());
     }
 
     start() { return this.awaitable.start(); }

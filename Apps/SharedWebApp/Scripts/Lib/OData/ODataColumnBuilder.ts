@@ -14,10 +14,12 @@ export class ODataColumnBuilder {
     private isVisible = true;
     private formatter: IValueFormatter = new DefaultValueFormatter();
     private createHeaderCell: ICreateHeaderCell =
-        (column, view: ODataHeaderCellView) => new ODataHeaderCell(column, view);
+        (column: ODataColumn, view: ODataHeaderCellView) => new ODataHeaderCell(column, view);
     private createDataCell: ICreateDataCell =
-        (rowIndex, column, record: any, formatter, view: ODataTextCellView) =>
-            new ODataTextCell(rowIndex, column, record, formatter, view);
+        (rowIndex: number, column: ODataColumn, record: any, formatter: IValueFormatter, view: ODataTextCellView) => {
+            return new ODataTextCell(rowIndex, column, record, formatter, view);
+        }
+            
 
     constructor(
         readonly columnName: string,

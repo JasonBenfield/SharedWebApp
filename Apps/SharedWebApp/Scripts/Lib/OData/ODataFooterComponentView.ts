@@ -2,6 +2,7 @@
 import { ContextualClass } from "../ContextualClass";
 import { PaddingCss } from "../PaddingCss";
 import { BasicComponentView } from "../Views/BasicComponentView";
+import { BasicTextComponentView } from "../Views/BasicTextComponentView";
 import { BlockView } from "../Views/BlockView";
 import { ButtonCommandView } from "../Views/Commands";
 import { RowView } from "../Views/RowView";
@@ -10,7 +11,7 @@ import { TextSpanView } from "../Views/TextSpanView";
 
 export class ODataFooterComponentView extends BlockView {
     private readonly pageButtonContainer: BlockView;
-    readonly count: ITextComponentView;
+    readonly count: BasicTextComponentView;
 
     constructor(container: BasicComponentView) {
         super(container);
@@ -26,7 +27,7 @@ export class ODataFooterComponentView extends BlockView {
     }
 
     clearContents() {
-        this.disposeAllViews();
+        this.pageButtonContainer.disposeAllViews();
     }
 
     addPageButton() {

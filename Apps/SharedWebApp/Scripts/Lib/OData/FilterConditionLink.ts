@@ -1,10 +1,10 @@
-﻿import { BasicComponent } from "../Components/BasicComponent";
-import { TextComponent } from "../Components/TextComponent";
+﻿import { TextComponent } from "../Components/TextComponent";
+import { TextLink } from "../Components/TextLink";
 import { TextLinkView } from "../Views/TextLinkView";
 import { FilterSelection } from "./FilterSelection";
 import { SourceType } from "./SourceType";
 
-export class FilterConditionLink extends BasicComponent {
+export class FilterConditionLink extends TextLink {
     constructor(readonly selection: FilterSelection, view: TextLinkView) {
         super(view);
         new TextComponent(view).setText(selection.displayText);

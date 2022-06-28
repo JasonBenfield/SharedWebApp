@@ -1,4 +1,5 @@
 ﻿import { BasicComponentView } from "./BasicComponentView";
+import { BasicTextComponentView } from "./BasicTextComponentView";
 import { BlockView } from "./BlockView";
 import { BasicListGroupItemView, BasicListGroupView, ButtonListGroupItemView, ButtonListGroupView, LinkListGroupItemView, LinkListGroupView, ListGroupItemView, ListGroupView } from "./ListGroup";
 import { MessageAlertView } from "./MessageAlertView";
@@ -71,14 +72,9 @@ export class CardHeaderView extends BlockView {
     }
 }
 
-export class CardTitleHeaderView extends CardHeaderView implements ITextComponentView {
-    readonly textBlock = this.addView(TextBlockView);
-
+export class CardTitleHeaderView extends BasicTextComponentView {
     constructor(container: BasicComponentView) {
-        super(container);
-    }
-
-    setText(text: string) {
-        this.textBlock.setText(text);
+        super(container, 'div');
+        this.addCssName('card-header');
     }
 }

@@ -18,7 +18,7 @@ export class ModalError extends BasicComponent {
     constructor(view: ModalErrorView) {
         super(view);
         this.title = new TextComponent(view.title);
-        this.view.closed.register(this.onClosed.bind(this));
+        this.view.when.closed.then(this.onClosed.bind(this));
         new Command(this.hide.bind(this)).add(this.view.okButton);
     }
 

@@ -1,12 +1,10 @@
 ﻿import { ContextualClass } from '../../Lib/ContextualClass';
-import { BlockView } from '../../Lib/Views/BlockView';
 import { CssLengthUnit } from '../../Lib/CssLengthUnit';
+import { PaddingCss } from '../../Lib/PaddingCss';
+import { BasicPageView } from '../../Lib/Views/BasicPageView';
 import { GridView } from '../../Lib/Views/Grid';
 import { TextHeading1View } from '../../Lib/Views/TextHeadings';
 import { ToolbarView } from '../../Lib/Views/ToolbarView';
-import { PaddingCss } from '../../Lib/PaddingCss';
-import { PageFrameView } from '../../Lib/PageFrameView';
-import { BasicPageView } from '../../Lib/Views/BasicPageView';
 
 export class MainPageView extends BasicPageView {
     readonly heading: TextHeading1View;

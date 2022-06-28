@@ -1,5 +1,5 @@
 ﻿import { SimpleEvent } from "../Events";
-import { SelectOption } from "../Html/SelectOption";
+import { SelectOption } from "../Components/SelectOption";
 import { SelectFormGroupView } from "../Views/FormGroup";
 import { ConstraintCollection } from "./ConstraintCollection";
 import { ErrorList } from "./ErrorList";

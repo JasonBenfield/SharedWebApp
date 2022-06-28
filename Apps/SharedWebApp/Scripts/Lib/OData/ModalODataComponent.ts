@@ -1,4 +1,5 @@
-﻿import { EventBuilders } from "../Events";
+﻿import { Awaitable } from "../Awaitable";
+import { EventBuilders, EventSource } from "../Events";
 import { SingleActivePanel } from "../Panel/SingleActivePanel";
 import { FilterWorkflow } from "./FilterWorkflow";
 import { ModalODataComponentView } from "./ModalODataComponentView";
@@ -7,12 +8,23 @@ import { ODataColumnAccessor } from "./ODataColumnAccessor";
 import { ODataQueryBuilder } from "./ODataQueryBuilder";
 import { SelectFieldsPanel } from "./SelectFieldsPanel";
 
+interface IResult {
+    done?: {};
+}
+
+class Result {
+    static done() { return new Result({ done: {} }); }
+
+    private constructor(private readonly result: IResult) { }
+
+    get done() { return this.result.done; }
+}
+
 export class ModalODataComponent {
+    private readonly awaitable = new Awaitable<Result>();
     private readonly panels = new SingleActivePanel();
     readonly selectFieldsPanel: SelectFieldsPanel;
     readonly filterWorkflow: FilterWorkflow;
-
-    readonly when: EventBuilders<{ closed: any }>;
 
     constructor(
         query: ODataQueryBuilder,
@@ -25,7 +37,6 @@ export class ModalODataComponent {
         this.filterWorkflow = this.panels.add(
             new FilterWorkflow(query.filter, view.filterWorkflow)
         );
-        this.when = view.when;
     }
 
     private async activateSelectFieldsPanel() {
@@ -33,18 +44,21 @@ export class ModalODataComponent {
         const result = await this.selectFieldsPanel.start();
         if (result.done) {
             this.hide();
+            this.awaitable.resolve(Result.done());
         }
     }
 
     showSelect() {
         this.view.showModal();
         this.activateSelectFieldsPanel();
+        return this.awaitable.start();
     }
 
     showFilter(column: ODataColumn) {
         this.view.showModal();
         this.filterWorkflow.setColumn(column);
         this.activateFilterWorkflow();
+        return this.awaitable.start();
     }
 
     private async activateFilterWorkflow() {
@@ -52,8 +66,9 @@ export class ModalODataComponent {
         const result = await this.filterWorkflow.start();
         if (result.done) {
             this.hide();
+            this.awaitable.resolve(Result.done());
         }
     }
 
-    hide() { this.view.hideModal(); }
+    private hide() { this.view.hideModal(); }
 }

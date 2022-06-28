@@ -24,7 +24,7 @@ export class ModalMessageAlert {
     constructor(private readonly view: ModalMessageAlertView) {
         this._alert = new MessageAlert(this.view.alert);
         this.okCommand.add(this.view.okButton);
-        this.view.closed.register(this.onClosed.bind(this));
+        this.view.when.closed.then(this.onClosed.bind(this));
     }
 
     private onClosed() {

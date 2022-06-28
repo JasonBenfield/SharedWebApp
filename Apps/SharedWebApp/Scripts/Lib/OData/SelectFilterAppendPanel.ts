@@ -1,6 +1,7 @@
 ﻿import { Awaitable } from "../Awaitable";
-import { LinkView } from "../Views/LinkView";
 import { TextComponent } from "../Components/TextComponent";
+import { TextLink } from "../Components/TextLink";
+import { TextLinkView } from "../Views/TextLinkView";
 import { FilterColumnOptionsBuilder } from "./FilterColumnOptionsBuilder";
 import { SelectFilterAppendPanelView } from "./SelectFilterAppendPanelView";
 
@@ -21,10 +22,9 @@ export class SelectFilterAppendPanel implements IPanel {
     private options: FilterColumnOptionsBuilder;
 
     constructor(private readonly view: SelectFilterAppendPanelView) {
-        this.view.events.onClick(
-            this.onItemClick.bind(this),
-            o => o.selector = 'a'
-        );
+        new TextLink(view.appendItem).setText('Append to Filter');
+        new TextLink(view.clearItem).setText('Replace Filter');
+        this.view.handleClick(this.onItemClick.bind(this));
     }
 
     setOptions(options: FilterColumnOptionsBuilder) {
@@ -32,7 +32,7 @@ export class SelectFilterAppendPanel implements IPanel {
         new TextComponent(this.view.title).setText(`${options.column.columnName} Filter`);
     }
 
-    private onItemClick(itemView: LinkView) {
+    private onItemClick(itemView: TextLinkView) {
         if (itemView === this.view.clearItem) {
             this.options.replace();
         }

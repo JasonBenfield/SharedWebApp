@@ -3,6 +3,7 @@ import { ODataResult } from "../Api/ODataResult";
 import { MessageAlert } from "../Components/MessageAlert";
 import { ModalODataComponent } from "./ModalODataComponent";
 import { ODataCell } from "./ODataCell";
+import { ODataCellClickedEventArgs } from "./ODataCellClickedEventArgs";
 import { ODataColumn } from "./ODataColumn";
 import { ODataColumnAccessor } from "./ODataColumnAccessor";
 import { ODataColumnBuilder } from "./ODataColumnBuilder";
@@ -41,13 +42,13 @@ export class ODataComponent<TEntity> {
         this.grid = new ODataGrid(view.grid);
         this.alert = new MessageAlert(view.alert);
         this.modalODataComponent = new ModalODataComponent(this.query, this.columns, view.modalODataComponent);
-        this.modalODataComponent.when.closed.then(this.onModalClosed.bind(this));
         this.currentPage = new ODataPage(options.pageSize);
         this.currentPage.pageChanged(1, this.query);
         this.footerComponent = new ODataFooterComponent(this.view.footerComponent);
-        this.footerComponent.pageRequested.register(this.onPageRequested.bind(this));
-        this.grid.sortClicked.register(this.onSortClick.bind(this));
-        this.grid.cellClicked.register(this.onCellClick.bind(this));
+        this.footerComponent.when.pageRequested.then(this.onPageRequested.bind(this));
+        this.grid.when.sortClicked.then(this.onSortClick.bind(this));
+        this.grid.when.headerCellClicked.then(this.onHeaderCellClick.bind(this));
+        this.grid.when.dataCellClicked.then(this.onDataCellClick.bind(this));
     }
 
     private onSortClick(column: ODataColumn) {
@@ -63,17 +64,19 @@ export class ODataComponent<TEntity> {
         this.refresh();
     }
 
-    private onCellClick(cell: ODataCell) {
-        if (cell.record) {
-            const value = cell.record ? `\n${cell.record[cell.column.columnName]}` : '';
-            alert(`${cell.column.columnName}${value}`);
+    private async onHeaderCellClick(column: ODataColumn) {
+        if (column.columnName === ODataComponent.gearHeaderColumnName) {
+            await this.modalODataComponent.showSelect();
         }
-        else if (cell.column.columnName === ODataComponent.gearHeaderColumnName) {
-            this.modalODataComponent.showSelect();
+        else if (column.isSelectable) {
+            await this.modalODataComponent.showFilter(column);
         }
-        else if (cell.column.isSelectable) {
-            this.modalODataComponent.showFilter(cell.column);
-        }
+        await this.refresh();
+    }
+
+    private onDataCellClick(args: ODataCellClickedEventArgs) {
+        const value = args.record ? `\n${args.record[args.column.columnName]}` : '';
+        alert(`${args.column.columnName}${value}`);
     }
 
     private onPageRequested(page: number) {
@@ -81,11 +84,8 @@ export class ODataComponent<TEntity> {
         this.refresh();
     }
 
-    private onModalClosed() {
-        return this.refresh();
-    }
-
     async refresh() {
+        this.grid.clearData();
         const query = this.query.build();
         let result: ODataResult<TEntity>;
         await this.alert.infoAction(

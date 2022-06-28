@@ -1,16 +1,21 @@
-﻿import { GridRowView } from "../Views/Grid";
+﻿import { BasicComponent } from "../Components/BasicComponent";
+import { GridCellView, GridRowView } from "../Views/Grid";
 import { ODataCell } from "./ODataCell";
 import { ODataColumn } from "./ODataColumn";
 
-export class ODataRow {
-    private readonly cells: ODataCell[] = [];
-
+export class ODataRow extends BasicComponent {
     constructor(rowIndex: number, columns: ODataColumn[], record: any, view: GridRowView) {
+        super(view);
         let i = 0;
         for (const column of columns) {
-            const cell = column.createDataCell(rowIndex, record, view.cell(i));
-            this.cells.push(cell);
+            const cell = record
+                ? column.createDataCell(rowIndex, record, view.cell(i)) 
+                : column.createHeaderCell(view.cell(i));
+            this.addComponent(cell);
             i++;
         }
     }
+
+    getCellByElement(element: HTMLElement) { return this.getComponentByElement(element) as ODataCell; }
+
 }

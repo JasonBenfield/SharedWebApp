@@ -1,6 +1,7 @@
 ﻿import { ContextualClass } from "../ContextualClass";
 import { BasicComponentView } from "./BasicComponentView";
 import { BasicContainerView } from "./BasicContainerView";
+import { IButtonAttributes } from "./Types";
 
 export class ButtonView extends BasicContainerView {
     private context: ContextualClass;

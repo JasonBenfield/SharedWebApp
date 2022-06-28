@@ -3,13 +3,10 @@ import { AppApiODataGroup } from '../../Lib/Api/AppApiODataGroup';
 import { AppResourceUrl } from '../../Lib/Api/AppResourceUrl';
 import { BasicPage } from '../../Lib/Components/BasicPage';
 import { TextComponent } from '../../Lib/Components/TextComponent';
-import { TextBlock } from '../../Lib/Html/TextBlock';
 import { NumberValueFormatter } from '../../Lib/OData/NumberValueFormatter';
 import { ODataComponent } from '../../Lib/OData/ODataComponent';
 import { ODataComponentOptionsBuilder } from '../../Lib/OData/ODataComponentOptionsBuilder';
 import { FilterConditionOperation, FilterField, FilterValue } from '../../Lib/OData/ODataQueryFilterBuilder';
-import { PageFrameView } from '../../Lib/PageFrameView';
-import { Startup } from '../../Lib/Startup';
 import { DefaultPageContext } from '../DefaultPageContext';
 import { MainPageView } from './MainPageView';
 import { ODataEmployeeColumnsBuilder } from './ODataEmployeeColumnsBuilder';
@@ -30,12 +27,12 @@ class MainPage extends BasicPage {
             columns.DateHired,
             columns.Salary
         );
-        options.query.filter.add(
-            FilterConditionOperation.greaterThan(
-                new FilterField(columns.ID.columnName),
-                new FilterValue(5)
-            )
-        );
+        //options.query.filter.add(
+        //    FilterConditionOperation.greaterThan(
+        //        new FilterField(columns.ID.columnName),
+        //        new FilterValue(5)
+        //    )
+        //);
         const odataGroup = new AppApiODataGroup<IEmployee>(
             new AppApiEvents(() => { }),
             AppResourceUrl.odata(

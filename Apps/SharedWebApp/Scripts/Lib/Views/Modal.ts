@@ -42,7 +42,11 @@ export class ModalComponentView extends BasicComponentView {
         this.body.addCssName('modal-body');
         this.footer = content.addView(BlockView);
         this.footer.addCssName('modal-footer');
-        this.on('hidden.bs.modal').execute(() => this.eventSource.events.closed.invoke());
+        this.on('hidden.bs.modal')
+            .execute(() => {
+                this.eventSource.events.closed.invoke();
+            })
+            .subscribe();
     }
 
     setBackdrop(backdrop: boolean | 'static') {
@@ -108,7 +112,7 @@ export class ModalConfirmView extends ModalComponentView {
         this.message = this.body.addView(TextBlockView);
         const row = this.footer.addView(RowView);
         row.addColumn();
-        let buttonColumn = row.addColumn()
+        const buttonColumn = row.addColumn()
             .configure(c => {
                 c.setTextCss(new TextCss().end());
                 c.setColumnCss(ColumnCss.xs('auto'));

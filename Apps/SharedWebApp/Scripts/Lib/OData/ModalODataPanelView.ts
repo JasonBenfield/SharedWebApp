@@ -9,7 +9,7 @@ export class ModalODataPanelView {
     constructor(modal: ModalComponentView) {
         this.header = modal.header.addView(BlockView);
         this.body = modal.body.addView(BlockView);
-        this.footer = modal.body.addView(BlockView);
+        this.footer = modal.footer.addView(BlockView);
     }
 
     show() {
