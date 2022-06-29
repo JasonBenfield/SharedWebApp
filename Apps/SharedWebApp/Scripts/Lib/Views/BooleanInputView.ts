@@ -2,39 +2,25 @@
 import { BasicComponentView } from "./BasicComponentView";
 import { IInputAttributes } from "./Types";
 
-export class InputView extends BasicComponentView {
+export class BooleanInputView extends BasicComponentView {
     protected readonly inputElement: HTMLInputElement;
 
     constructor(container: BasicComponentView) {
         super(container, 'input');
         this.inputElement = this.elementView.element as HTMLInputElement;
-        this.setType('text');
+        this.setType('checkbox');
     }
 
     protected setAttr: (config: (attr: IInputAttributes) => void) => void;
-
-    showAsFormControl() {
-        this.addCssName('form-control');
-    }
 
     enable() { this.setAttr(a => a.disabled = false); }
 
     disable() { this.setAttr(a => a.disabled = true); }
 
-    clearAutocomplete() { this.setAutocomplete(null); }
+    getValue() { return this.inputElement.checked; }
 
-    setAutocompleteOff() { this.setAutocomplete('off'); }
-
-    setAutocompleteNewPassword() { this.setAutocomplete('new-password'); }
-
-    private setAutocomplete(autocomplete: string) {
-        this.setAttr(attr => attr.autocomplete = autocomplete);
-    }
-
-    getValue() { return this.inputElement.value; }
-
-    setValue(value: string) {
-        this.inputElement.value = value;
+    setValue(value: boolean) {
+        this.inputElement.checked = value;
     }
 
     setBorder(border: ContextualClass) {
@@ -46,11 +32,7 @@ export class InputView extends BasicComponentView {
         return border === ContextualClass.default ? '' : border.append('border');
     }
 
-    setMaxLength(maxLength: number) {
-        this.setAttr(attr => attr.maxlength = maxLength.toString());
-    }
-
-    setType(type: 'text' | 'hidden' | 'password' | 'date' | 'number' | 'time') {
+    setType(type: 'checkbox' | 'radio') {
         this.setAttr(attr => attr.type = type);
     }
 
@@ -64,6 +46,6 @@ export class InputView extends BasicComponentView {
 
     onBlur() { return this.on('blur'); }
 
-    onInput() { return this.on('input change'); }
+    onChange() { return this.on('change'); }
 
 }

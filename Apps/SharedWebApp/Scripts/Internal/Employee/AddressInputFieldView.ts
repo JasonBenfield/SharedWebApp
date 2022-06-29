@@ -1,13 +1,13 @@
 ﻿import { BasicComponentView } from '../../Lib/Views/BasicComponentView';
 import { ComplexFieldFormGroupView } from '../../Lib/Views/ComplexFieldFormGroupView';
-import { InputFormGroupView } from '../../Lib/Views/FormGroup';
+import { SimpleFieldFormGroupInputView } from '../../Lib/Views/FormGroup';
 import { IFormGroupLayout } from '../../Lib/Views/Types';
 
 export interface IAddressInputFieldView {
-    Line1: InputFormGroupView;
-    City: InputFormGroupView;
-    State: InputFormGroupView;
-    Zip: InputFormGroupView;
+    Line1: SimpleFieldFormGroupInputView;
+    City: SimpleFieldFormGroupInputView;
+    State: SimpleFieldFormGroupInputView;
+    Zip: SimpleFieldFormGroupInputView;
 }
 
 export class DefaultAddressInputFieldViewLayout implements IFormGroupLayout<IAddressInputFieldView> {

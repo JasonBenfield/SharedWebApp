@@ -186,7 +186,7 @@ type RelativeOffset = RelativeDayOffset | RelativeMonthOffset | RelativeYearOffs
 
 type SerializableRelativeOffset = ISerializableRelativeDayOffset | ISerializableRelativeMonthOffset | ISerializableRelativeYearOffset;
 
-interface ISerializableRelativeDateRange {
+export interface ISerializableRelativeDateRange {
     readonly relativeStart: SerializableRelativeOffset;
     readonly relativeEnd: SerializableRelativeOffset;
     readonly isEndRelativeToStart: boolean

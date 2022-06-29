@@ -1,9 +1,10 @@
 ﻿import { MappedArray } from "../Enumerable";
 import { JoinedStrings } from "../JoinedStrings";
+import { ISerializableRelativeDateRange, RelativeDateRange } from "../RelativeDateRange";
 
 export interface IFilterSelectionValue {
     toField(): FilterField | FilterFieldFunction;
-    toValue(): FilterValue;
+    toValue(): FilterValue | RelativeDateRange;
 }
 
 export interface ISerializableFilter {
@@ -35,6 +36,9 @@ class FilterPartFactory {
         }
         else if (serializablePart.type === FilterConditionFunction.name) {
             part = FilterConditionFunction.deserialize(serializablePart.value);
+        }
+        else if (serializablePart.type === FilterRelativeDateRange.name) {
+            part = FilterRelativeDateRange.deserialize(serializablePart.value);
         }
         return part;
     }
@@ -245,8 +249,10 @@ export class FilterFieldFunction {
     }
 }
 
+export type FilterValueType = number | Date | boolean | string;
+
 interface ISerializableFilterValue {
-    readonly value: any;
+    readonly value: FilterValueType;
 }
 
 export class FilterValue {
@@ -254,7 +260,7 @@ export class FilterValue {
         return new FilterValue(serialized.value);
     }
 
-    constructor(readonly value: any) {
+    constructor(readonly value: FilterValueType) {
     }
 
     toQuery() {
@@ -301,8 +307,8 @@ export class FilterConditionFunction {
         return new FilterConditionFunction('endswith', field, value);
     }
 
-    static substringOf(field: FilterField | FilterFieldFunction, value: FilterValue) {
-        return new FilterConditionFunction('substringof', field, value);
+    static contains(field: FilterField | FilterFieldFunction, value: FilterValue) {
+        return new FilterConditionFunction('contains', field, value);
     }
 
     private readonly values: FilterValue[];
@@ -342,8 +348,66 @@ export class FilterConditionFunction {
     }
 }
 
+interface ISerializableFilterRelativeDateRange {
+    readonly field: ISerializableFilterPart<FilterField>;
+    readonly range: ISerializableRelativeDateRange;
+}
+
+export class FilterRelativeDateRange {
+    static deserialize(serialized: ISerializableFilterRelativeDateRange) {
+        return new FilterRelativeDateRange(
+            FilterPartFactory.create(serialized.field),
+            RelativeDateRange.deserialize(serialized.range)
+        );
+    }
+
+    constructor(
+        private readonly field: FilterField | FilterFieldFunction,
+        private readonly relativeDateRange: RelativeDateRange
+    ) {
+    }
+
+    getConditions() {
+        const conditions: FilterConditionOperation[] = [];
+        const dateRange = this.relativeDateRange.toDateRange();
+        if (dateRange.startDate) {
+            const condition = FilterConditionOperation.greaterThanOrEqual(
+                this.field,
+                new FilterValue(dateRange.startDate)
+            );
+            conditions.push(condition);
+        }
+        if (dateRange.endDate) {
+            const endDate = dateRange.endDate;
+            endDate.setDate(endDate.getDate() + 1);
+            const condition = FilterConditionOperation.lessThan(
+                this.field,
+                new FilterValue(dateRange.endDate)
+            );
+            conditions.push(condition);
+        }
+        return conditions;
+    }
+
+    serialize() {
+        return {
+            type: FilterRelativeDateRange.name,
+            value: {
+                field: this.field.serialize(),
+                range: this.relativeDateRange.serialize()
+            }
+        } as ISerializableFilterPart<ISerializableFilterRelativeDateRange>;
+    }
+}
+
+type SingleConditionType = FilterConditionOperation |
+    FilterConditionFunction |
+    FilterConjunction;
+
+type ConditionType = SingleConditionType | FilterRelativeDateRange;
+
 export class ODataQueryFilterBuilder {
-    private readonly conditions: (FilterConditionOperation | FilterConditionFunction | FilterConjunction)[] = [];
+    private readonly conditions: ConditionType[] = [];
 
     constructor(serialized?: ISerializableFilter) {
         if (serialized) {
@@ -353,12 +417,31 @@ export class ODataQueryFilterBuilder {
         }
     }
 
+    any() { return this.conditions.length > 0; }
+
+    conditionQueries() {
+        return new MappedArray(this.getSimpleConditions(), c => c.toQuery()).value();
+    }
+
+    private getSimpleConditions() {
+        const singleConditions: SingleConditionType[] = [];
+        for (const condition of this.conditions) {
+            if (condition instanceof FilterRelativeDateRange) {
+                singleConditions.push(...condition.getConditions());
+            }
+            else {
+                singleConditions.push(condition);
+            }
+        }
+        return singleConditions;
+    }
+
     clear() {
         this.conditions.splice(0, this.conditions.length);
         return this;
     }
 
-    add(condition: FilterConditionOperation | FilterConditionFunction) {
+    add(condition: ConditionType) {
         if (this.conditions.length > 0) {
             this.conditions.push(FilterConjunction.and());
         }
@@ -370,7 +453,7 @@ export class ODataQueryFilterBuilder {
         return new JoinedStrings(
             '',
             new MappedArray(
-                this.conditions,
+                this.getSimpleConditions(),
                 c => c.toQuery()
             )
         ).value();

@@ -238,10 +238,14 @@ export class BasicComponentView {
             }
             this.container.removeView(this);
         }
+        else {
+            this.unregisterEvents();
+        }
     }
 
     protected removeView(view: BasicComponentView) {
         this.elementView.removeElement(view.elementView.element);
+        view.unregisterEvents();
     }
 
     protected addView<T extends BasicComponentView>(ctor: ViewConstructor<T>) {
@@ -267,6 +271,7 @@ export class BasicComponentView {
     }
 
     private replaceElements() {
+        this.unregisterEvents();
         const viewElements = new MappedArray(
             new FilteredArray(
                 this.views,
@@ -275,5 +280,18 @@ export class BasicComponentView {
             v => v.elementView.element
         ).value();
         this.elementView.replaceElements(viewElements);
+        this.registerEvents();
+    }
+
+    private unregisterEvents() {
+        for (const view of this.views) {
+            view.unregisterEvents();
+        }
+    }
+
+    private registerEvents() {
+        for (const view of this.views) {
+            view.registerEvents();
+        }
     }
 }

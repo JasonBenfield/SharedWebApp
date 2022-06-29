@@ -1,5 +1,6 @@
 ﻿import { Awaitable } from "../Awaitable";
 import { BasicComponent } from "../Components/BasicComponent";
+import { Command } from "../Components/Command";
 import { TextComponent } from "../Components/TextComponent";
 import { TextLinkView } from "../Views/TextLinkView";
 import { FilterColumnOptionsBuilder } from "./FilterColumnOptionsBuilder";
@@ -36,7 +37,10 @@ export class SelectFilterConditionPanel extends BasicComponent implements IPanel
             this.addComponent(new FilterConditionLink(selection, view.addLink()));
         }
         view.handleClick(this.onItemClick.bind(this));
+        new Command(this.back.bind(this)).add(view.backButton);
     }
+
+    private back() { this.awaitable.resolve(Result.done()); }
 
     setOptions(options: FilterColumnOptionsBuilder) {
         this.options = options;
@@ -51,7 +55,12 @@ export class SelectFilterConditionPanel extends BasicComponent implements IPanel
         const link = this.getComponentByElement(sourceElement) as FilterConditionLink;
         if (link) {
             this.options.setFilterSelection(link.selection);
-            if (link.selection === FilterSelection.isTrue || link.selection === FilterSelection.isFalse) {
+            if (
+                link.selection === FilterSelection.isTrue ||
+                link.selection === FilterSelection.isFalse ||
+                link.selection === FilterSelection.isBlank ||
+                link.selection === FilterSelection.isNotBlank
+            ) {
                 this.options.applyToQuery();
                 this.awaitable.resolve(Result.done());
             }

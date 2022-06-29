@@ -1,6 +1,6 @@
 ﻿import { CssLengthUnit } from "../CssLengthUnit";
 import { BasicComponentView } from "./BasicComponentView";
-import { FormGroupGridView, FormGroupView, InputFormGroupView, SelectFormGroupView } from "./FormGroup";
+import { FormGroupGridView, FormGroupView, SimpleFieldFormGroupInputView, SimpleFieldFormGroupSelectView } from "./FormGroup";
 import { FormView } from "./FormView";
 import { ModalErrorView } from "./ModalError";
 import { ViewConstructor } from "./Types";
@@ -22,17 +22,17 @@ export class BaseFormView extends FormView {
         return formGroup;
     }
 
-    private hideFormGroup(formGroup: InputFormGroupView) {
+    private hideFormGroup(formGroup: SimpleFieldFormGroupInputView) {
         formGroup.input.setType('hidden');
         formGroup.hide();
     }
 
     addInputFormGroup() {
-        return this.addFormGroup(InputFormGroupView);
+        return this.addFormGroup(SimpleFieldFormGroupInputView);
     }
 
     addDropDownFormGroup() {
-        return this.addFormGroup(SelectFormGroupView);
+        return this.addFormGroup(SimpleFieldFormGroupSelectView);
     }
 
     addFormGroup<TView extends FormGroupView>(ctor: ViewConstructor<TView>) {

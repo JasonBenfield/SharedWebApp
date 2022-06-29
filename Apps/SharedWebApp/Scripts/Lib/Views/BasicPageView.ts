@@ -75,8 +75,7 @@ export class BasicPageView {
         if (!pageContext.IsAuthenticated) {
             this.userDropdown.hide();
         }
-        this.userDropdown.button.setContext(ContextualClass.light);
-        this.userDropdown.button.useOutlineStyle();
+        this.userDropdown.button.useOutlineStyle(ContextualClass.light);
         this.userDropdown.button.addView(FaIconView)
             .configure(i => i.solidStyle('user'));
         const userName = this.userDropdown.menu

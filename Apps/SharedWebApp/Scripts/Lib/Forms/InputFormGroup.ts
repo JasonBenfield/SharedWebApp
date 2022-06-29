@@ -1,11 +1,11 @@
 ﻿import { DebouncedAction } from "../DebouncedAction";
 import { DefaultEvent } from "../Events";
-import { InputFormGroupView } from "../Views/FormGroup";
+import { SimpleFieldFormGroupInputView } from "../Views/FormGroup";
 import { SimpleFieldFormGroup } from "./SimpleFieldFormGroup";
 import { TypedFieldViewValue } from "./TypedFieldViewValue";
 
 export abstract class InputFormGroup<TValue> extends SimpleFieldFormGroup<TValue> {
-    protected readonly view: InputFormGroupView;
+    protected readonly view: SimpleFieldFormGroupInputView;
 
     private readonly _valueChanged = new DefaultEvent<TValue>(this);
     readonly valueChanged = this._valueChanged.handler();
@@ -13,7 +13,7 @@ export abstract class InputFormGroup<TValue> extends SimpleFieldFormGroup<TValue
     constructor(
         prefix: string,
         name: string,
-        view: InputFormGroupView,
+        view: SimpleFieldFormGroupInputView,
         private readonly viewValue: TypedFieldViewValue<string, TValue>
     ) {
         super(prefix, name, view);

@@ -2,7 +2,10 @@
 
 export class TextToNumberViewValue extends TypedFieldViewValue<string, number> {
     protected _fromView(value: string) {
-        return value ? Number(value) : null;
+        if (value) {
+            value = value.replace(/[,|$]+/g, '');
+        }
+        return value ? parseFloat(value) : null;
     }
 
     protected _toView(value: number) {

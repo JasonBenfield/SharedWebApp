@@ -1,4 +1,5 @@
-﻿import { AppApiError } from "./AppApiError";
+﻿import { TimeSpan } from "../TimeSpan";
+import { AppApiError } from "./AppApiError";
 import { AppApiEvents } from "./AppApiEvents";
 import { AppResourceUrl } from "./AppResourceUrl";
 import { ErrorFromHttpResult } from "./ErrorFromHttpResult";
@@ -27,7 +28,10 @@ export class AppApiAction<TArgs, TResult> {
         if (postResult.isSuccessful()) {
             if (typeof result === 'string') {
                 if (ParsedDateObject.isDateString(result)) {
-                    result = <any>new Date(Date.parse(result));
+                    result = new Date(Date.parse(result)) as any;
+                }
+                else if (TimeSpan.canParse(result)) {
+                    result = TimeSpan.parse(result) as any;
                 }
             }
             else {

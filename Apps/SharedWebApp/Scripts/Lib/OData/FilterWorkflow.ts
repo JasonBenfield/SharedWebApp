@@ -1,10 +1,12 @@
 ﻿import { Awaitable } from "../Awaitable";
 import { SingleActivePanel } from "../Panel/SingleActivePanel";
 import { FilterColumnOptionsBuilder } from "./FilterColumnOptionsBuilder";
+import { FilterSelection } from "./FilterSelection";
 import { FilterValueInputPanel } from "./FilterValueInputPanel";
 import { FilterWorkflowView } from "./FilterWorkflowView";
 import { ODataColumn } from "./ODataColumn";
 import { ODataQueryFilterBuilder } from "./ODataQueryFilterBuilder";
+import { RelativeDateRangePanel } from "./RelativeDateRangePanel";
 import { SelectFilterAppendPanel } from "./SelectFilterAppendPanel";
 import { SelectFilterConditionPanel } from "./SelectFilterConditionPanel";
 
@@ -26,6 +28,8 @@ export class FilterWorkflow implements IPanel {
     private readonly selectFilterAppendPanel: SelectFilterAppendPanel;
     private readonly selectFilterConditionPanel: SelectFilterConditionPanel;
     private readonly filterValueInputPanel: FilterValueInputPanel;
+    private readonly relativeDateRangePanel: RelativeDateRangePanel;
+    private options: FilterColumnOptionsBuilder;
 
     constructor(
         private readonly filter: ODataQueryFilterBuilder,
@@ -40,6 +44,9 @@ export class FilterWorkflow implements IPanel {
         this.filterValueInputPanel = this.panels.add(
             new FilterValueInputPanel(view.filterValueInputPanel)
         );
+        this.relativeDateRangePanel = this.panels.add(
+            new RelativeDateRangePanel(view.relativeDateRangePanel)
+        );
     }
 
     private async activateSelectFilterAppendPanel() {
@@ -48,13 +55,21 @@ export class FilterWorkflow implements IPanel {
         if (result.next) {
             this.activateSelectFilterConditionPanel();
         }
+        else if (result.done) {
+            this.awaitable.resolve(Result.done());
+        }
     }
 
     private async activateSelectFilterConditionPanel() {
         this.panels.activate(this.selectFilterConditionPanel);
         const result = await this.selectFilterConditionPanel.start();
         if (result.next) {
-            this.activateFilterValueInputPanel();
+            if (this.options.getSelection() === FilterSelection.relativeDateRange) {
+                this.activateRelativeDateRangePanel();
+            }
+            else {
+                this.activateFilterValueInputPanel();
+            }
         }
         else if (result.done) {
             this.awaitable.resolve(Result.done());
@@ -69,16 +84,31 @@ export class FilterWorkflow implements IPanel {
         }
     }
 
+    private async activateRelativeDateRangePanel() {
+        this.panels.activate(this.relativeDateRangePanel);
+        const result = await this.relativeDateRangePanel.start();
+        if (result.done) {
+            this.awaitable.resolve(Result.done());
+        }
+    }
+
     setColumn(column: ODataColumn) {
-        const options = new FilterColumnOptionsBuilder(this.filter, column);
-        this.selectFilterAppendPanel.setOptions(options);
-        this.selectFilterConditionPanel.setOptions(options);
+        this.options = new FilterColumnOptionsBuilder(this.filter, column);
+        this.selectFilterAppendPanel.setOptions(this.options);
+        this.selectFilterConditionPanel.setOptions(this.options);
+        this.filterValueInputPanel.setOptions(this.options);
+        this.relativeDateRangePanel.setOptions(this.options);
     }
 
     start() { return this.awaitable.start(); }
 
     activate() {
-        this.activateSelectFilterAppendPanel();
+        if (this.filter.any()) {
+            this.activateSelectFilterAppendPanel();
+        }
+        else {
+            this.activateSelectFilterConditionPanel();
+        }
     }
 
     deactivate() { this.view.hide(); }

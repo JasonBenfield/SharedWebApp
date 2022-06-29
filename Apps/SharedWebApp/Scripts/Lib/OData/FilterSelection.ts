@@ -1,5 +1,7 @@
-﻿import { FilterSelectionStringValue } from "./FilterSelectionStringValue";
-import { FilterConditionFunction, FilterConditionOperation, IFilterSelectionValue, ODataQueryFilterBuilder } from "./ODataQueryFilterBuilder";
+﻿import { FilterSelectionRelativeDateRangeValue } from "./FilterSelectionRelativeDateRangeValue";
+import { FilterSelectionStringValue } from "./FilterSelectionStringValue";
+import { FilterSelectionValue } from "./FilterSelectionValue";
+import { FilterConditionFunction, FilterConditionOperation, FilterRelativeDateRange, IFilterSelectionValue, ODataQueryFilterBuilder } from "./ODataQueryFilterBuilder";
 import { SourceType } from "./SourceType";
 
 export abstract class FilterSelection {
@@ -14,6 +16,9 @@ export abstract class FilterSelection {
     static get startsWith() { return new FilterSelectionStartsWith(); }
     static get endsWith() { return new FilterSelectionEndsWith(); }
     static get contains() { return new FilterSelectionContains(); }
+    static get isBlank() { return new FilterSelectionIsBlank(); }
+    static get isNotBlank() { return new FilterSelectionIsNotBlank(); }
+    static get relativeDateRange() { return new FilterSelectionRelativeDateRange(); }
 
     static get all() {
         return [
@@ -27,7 +32,10 @@ export abstract class FilterSelection {
             FilterSelection.isFalse,
             FilterSelection.startsWith,
             FilterSelection.endsWith,
-            FilterSelection.contains
+            FilterSelection.contains,
+            FilterSelection.isBlank,
+            FilterSelection.isNotBlank,
+            FilterSelection.relativeDateRange
         ];
     }
 
@@ -50,7 +58,7 @@ class FilterSelectionEqual extends FilterSelection {
         return sourceType.isString() || sourceType.isNumber() || sourceType.isDate();
     }
 
-    applyToQuery(filter: ODataQueryFilterBuilder, value: IFilterSelectionValue) {
+    applyToQuery(filter: ODataQueryFilterBuilder, value: FilterSelectionValue) {
         filter.add(FilterConditionOperation.equal(value.toField(), value.toValue()));
     }
 }
@@ -64,7 +72,7 @@ class FilterSelectionNotEqual extends FilterSelection {
         return sourceType.isString() || sourceType.isNumber() || sourceType.isDate();
     }
 
-    applyToQuery(filter: ODataQueryFilterBuilder, value: IFilterSelectionValue) {
+    applyToQuery(filter: ODataQueryFilterBuilder, value: FilterSelectionValue) {
         filter.add(FilterConditionOperation.notEqual(value.toField(), value.toValue()));
     }
 }
@@ -75,10 +83,10 @@ class FilterSelectionGreaterThan extends FilterSelection {
     }
 
     canSelect(sourceType: SourceType) {
-        return sourceType.isString() || sourceType.isNumber() || sourceType.isDate();
+        return sourceType.isNumber() || sourceType.isDate();
     }
 
-    applyToQuery(filter: ODataQueryFilterBuilder, value: IFilterSelectionValue) {
+    applyToQuery(filter: ODataQueryFilterBuilder, value: FilterSelectionValue) {
         filter.add(FilterConditionOperation.greaterThan(value.toField(), value.toValue()));
     }
 }
@@ -89,10 +97,10 @@ class FilterSelectionLessThan extends FilterSelection {
     }
 
     canSelect(sourceType: SourceType) {
-        return sourceType.isString() || sourceType.isNumber() || sourceType.isDate();
+        return sourceType.isNumber() || sourceType.isDate();
     }
 
-    applyToQuery(filter: ODataQueryFilterBuilder, value: IFilterSelectionValue) {
+    applyToQuery(filter: ODataQueryFilterBuilder, value: FilterSelectionValue) {
         filter.add(FilterConditionOperation.lessThan(value.toField(), value.toValue()));
     }
 }
@@ -103,10 +111,10 @@ class FilterSelectionGreaterThanOrEqual extends FilterSelection {
     }
 
     canSelect(sourceType: SourceType) {
-        return sourceType.isString() || sourceType.isNumber() || sourceType.isDate();
+        return sourceType.isNumber() || sourceType.isDate();
     }
 
-    applyToQuery(filter: ODataQueryFilterBuilder, value: IFilterSelectionValue) {
+    applyToQuery(filter: ODataQueryFilterBuilder, value: FilterSelectionValue) {
         filter.add(FilterConditionOperation.greaterThanOrEqual(value.toField(), value.toValue()));
     }
 }
@@ -117,10 +125,10 @@ class FilterSelectionLessThanOrEqual extends FilterSelection {
     }
 
     canSelect(sourceType: SourceType) {
-        return sourceType.isString() || sourceType.isNumber() || sourceType.isDate();
+        return sourceType.isNumber() || sourceType.isDate();
     }
 
-    applyToQuery(filter: ODataQueryFilterBuilder, value: IFilterSelectionValue) {
+    applyToQuery(filter: ODataQueryFilterBuilder, value: FilterSelectionValue) {
         filter.add(FilterConditionOperation.lessThanOrEqual(value.toField(), value.toValue()));
     }
 }
@@ -134,7 +142,7 @@ class FilterSelectionIsTrue extends FilterSelection {
         return sourceType.isBoolean();
     }
 
-    applyToQuery(filter: ODataQueryFilterBuilder, value: IFilterSelectionValue) {
+    applyToQuery(filter: ODataQueryFilterBuilder, value: FilterSelectionValue) {
         filter.add(FilterConditionOperation.equal(value.toField(), value.toValue()));
     }
 }
@@ -148,7 +156,7 @@ class FilterSelectionIsFalse extends FilterSelection {
         return sourceType.isBoolean();
     }
 
-    applyToQuery(filter: ODataQueryFilterBuilder, value: IFilterSelectionValue) {
+    applyToQuery(filter: ODataQueryFilterBuilder, value: FilterSelectionValue) {
         filter.add(FilterConditionOperation.equal(value.toField(), value.toValue()));
     }
 }
@@ -191,6 +199,48 @@ class FilterSelectionContains extends FilterSelection {
     }
 
     applyToQuery(filter: ODataQueryFilterBuilder, value: FilterSelectionStringValue) {
-        filter.add(FilterConditionFunction.substringOf(value.toField(), value.toValue()));
+        filter.add(FilterConditionFunction.contains(value.toField(), value.toValue()));
+    }
+}
+
+class FilterSelectionIsBlank extends FilterSelection {
+    constructor() {
+        super('Is Blank');
+    }
+
+    canSelect(sourceType: SourceType) {
+        return sourceType.isString();
+    }
+
+    applyToQuery(filter: ODataQueryFilterBuilder, value: FilterSelectionStringValue) {
+        filter.add(FilterConditionOperation.equal(value.toField(), value.toValue()));
+    }
+}
+
+class FilterSelectionIsNotBlank extends FilterSelection {
+    constructor() {
+        super('Is Not Blank');
+    }
+
+    canSelect(sourceType: SourceType) {
+        return sourceType.isString();
+    }
+
+    applyToQuery(filter: ODataQueryFilterBuilder, value: FilterSelectionStringValue) {
+        filter.add(FilterConditionOperation.notEqual(value.toField(), value.toValue()));
+    }
+}
+
+class FilterSelectionRelativeDateRange extends FilterSelection {
+    constructor() {
+        super('Relative Date Range');
+    }
+
+    canSelect(sourceType: SourceType) {
+        return sourceType.isDate();
+    }
+
+    applyToQuery(filter: ODataQueryFilterBuilder, value: FilterSelectionRelativeDateRangeValue) {
+        filter.add(new FilterRelativeDateRange(value.toField(), value.toValue()));
     }
 }

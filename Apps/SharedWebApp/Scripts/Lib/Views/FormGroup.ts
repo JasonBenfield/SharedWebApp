@@ -11,7 +11,7 @@ import { FaIconView } from "./FaIconView";
 import { GridCellView, GridView } from "./Grid";
 import { InputGroupView } from "./InputGroupView";
 import { InputView } from "./InputView";
-import { ListGroupView } from "./ListGroup";
+import { GridListGroupView, ListGroupView } from "./ListGroup";
 import { ModalErrorListItemView } from "./ModalError";
 import { SelectView } from "./SelectView";
 import { TextBlockView } from "./TextBlockView";
@@ -64,7 +64,7 @@ export class FormGroupInputView extends FormGroupView {
     constructor(container: BasicComponentView) {
         super(container);
         this.input = this.addView(InputView);
-        this.input.addCssName('form-control');
+        this.input.showAsFormControl();
     }
 }
 
@@ -74,12 +74,12 @@ export class FormGroupSelectView extends FormGroupView {
     constructor(container: BasicComponentView) {
         super(container);
         this.select = this.addView(SelectView);
-        this.select.addCssName('form-control');
+        this.select.showAsFormControl();
     }
 }
 
 export class SimpleFieldFormGroupView extends FormGroupView {
-    readonly alertList: ListGroupView;
+    readonly alertList: GridListGroupView;
     private readonly dropdown: DropdownComponentView;
     readonly inputGroup: InputGroupView;
 
@@ -87,9 +87,8 @@ export class SimpleFieldFormGroupView extends FormGroupView {
         super(container);
         this.inputGroup = this.valueCell.addView(InputGroupView);
         this.dropdown = this.inputGroup.addDropdown();
-        //this.dropdown.hide();
-        this.dropdown.button.setContext(ContextualClass.danger);
-        this.dropdown.button.useOutlineStyle();
+        this.dropdown.hide();
+        this.dropdown.button.useOutlineStyle(ContextualClass.danger);
         this.dropdown.button.addView(FaIconView)
             .configure(i => i.solidStyle('exclamation'));
         this.dropdown.menu.setPadding(PaddingCss.xs(0));
@@ -98,18 +97,19 @@ export class SimpleFieldFormGroupView extends FormGroupView {
         const alert = alertItem.addView(AlertView);
         alert.setMargin(MarginCss.xs(0));
         alert.setContext(ContextualClass.danger);
-        this.alertList = alert.addView(ListGroupView);
+        this.alertList = alert.addView(GridListGroupView);
+        this.alertList.setTemplateColumns(CssLengthUnit.auto(), CssLengthUnit.flex(1));
         this.alertList.setItemViewType(ModalErrorListItemView);
     }
 
     showDropDown() { this.dropdown.show(); }
 
     hideDropDown() {
-        //this.dropdown.hide();
+        this.dropdown.hide();
     }
 }
 
-export class InputFormGroupView extends SimpleFieldFormGroupView {
+export class SimpleFieldFormGroupInputView extends SimpleFieldFormGroupView {
     readonly input: InputView;
 
     constructor(container: BasicComponentView) {
@@ -118,7 +118,7 @@ export class InputFormGroupView extends SimpleFieldFormGroupView {
     }
 }
 
-export class SelectFormGroupView extends SimpleFieldFormGroupView {
+export class SimpleFieldFormGroupSelectView extends SimpleFieldFormGroupView {
     readonly select: SelectView;
 
     constructor(container: BasicComponentView) {

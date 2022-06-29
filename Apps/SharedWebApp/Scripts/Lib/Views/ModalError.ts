@@ -1,12 +1,13 @@
 ﻿import { ColumnCss } from "../ColumnCss";
 import { ContextualClass } from "../ContextualClass";
+import { CssLengthUnit } from "../CssLengthUnit";
 import { TextCss } from "../TextCss";
 import { BasicComponentView } from "./BasicComponentView";
 import { BlockView } from "./BlockView";
-import { ColumnView } from "./ColumnView";
 import { ButtonCommandView } from "./Commands";
+import { GridCellView } from "./Grid";
 import { HorizontalRuleView } from "./HorizontalRuleView";
-import { LinkListGroupItemView, LinkListGroupView, ListGroupView } from "./ListGroup";
+import { GridListGroupItemView, GridListGroupView } from "./ListGroup";
 import { ModalComponentView } from "./Modal";
 import { RowView } from "./RowView";
 import { TextBlockView } from "./TextBlockView";
@@ -43,14 +44,15 @@ export class ModalErrorView extends ModalComponentView {
 export class ModalErrorGroupView extends BlockView {
     private readonly hr: HorizontalRuleView;
     readonly caption: TextHeading4View;
-    readonly errors: ListGroupView;
+    readonly errors: GridListGroupView;
 
     constructor(container: BasicComponentView) {
         super(container);
         this.hr = this.addView(HorizontalRuleView);
         this.caption = this.addView(TextHeading4View);
         this.caption.addCssName('alert-heading');
-        this.errors = this.addView(LinkListGroupView);
+        this.errors = this.addView(GridListGroupView);
+        this.errors.setTemplateColumns(CssLengthUnit.auto(), CssLengthUnit.flex(1));
         this.errors.setItemViewType(ModalErrorListItemView);
     }
 
@@ -59,19 +61,17 @@ export class ModalErrorGroupView extends BlockView {
     hideHR() { this.hr.hide(); }
 }
 
-export class ModalErrorListItemView extends LinkListGroupItemView {
-    private readonly captionCol: ColumnView;
+export class ModalErrorListItemView extends GridListGroupItemView {
+    private readonly captionCol: GridCellView;
     readonly caption: TextBlockView;
     readonly message: TextBlockView;
 
     constructor(container: BasicComponentView) {
         super(container);
-        const row = this.addView(RowView);
-        this.captionCol = row.addColumn();
-        this.captionCol.setColumnCss(ColumnCss.xs(3));
+        this.addCssName('list-group-item-action');
+        this.captionCol = this.addCell();
         this.caption = this.captionCol.addView(TextBlockView);
-        const col2 = row.addColumn();
-        this.message = col2.addView(TextBlockView);
+        this.message = this.addCell().addView(TextBlockView);
     }
 
     hideCaption() { this.captionCol.hide(); }

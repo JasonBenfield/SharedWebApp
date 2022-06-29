@@ -16,6 +16,7 @@ export class ODataHeaderCellView extends GridCellView {
     constructor(rowView: GridRowView) {
         super(rowView);
         this.stickyAtTop();
+        this.addCssName('z-4');
         this.addCssName('grid-header');
         const row = this.addView(RowView);
         row.addCssName('gx-0');

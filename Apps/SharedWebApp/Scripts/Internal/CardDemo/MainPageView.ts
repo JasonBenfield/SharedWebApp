@@ -31,8 +31,7 @@ export class MainPageView extends BasicPageView {
         this.refreshButton = toolbar.columnStart.addView(ButtonCommandView);
         this.refreshButton.icon.solidStyle('sync-alt');
         this.refreshButton.setText('Refresh');
-        this.refreshButton.useOutlineStyle();
-        this.refreshButton.setContext(ContextualClass.light);
+        this.refreshButton.useOutlineStyle(ContextualClass.light);
         this.cancelButton = toolbar.columnEnd.addView(ButtonCommandView);
         this.cancelButton.icon.solidStyle('times');
         this.cancelButton.setText('Cancel');
@@ -40,8 +39,7 @@ export class MainPageView extends BasicPageView {
         this.saveButton = toolbar.columnEnd.addView(ButtonCommandView);
         this.saveButton.icon.solidStyle('check');
         this.saveButton.setText('Save');
-        this.saveButton.useOutlineStyle();
+        this.saveButton.useOutlineStyle(ContextualClass.primary);
         this.saveButton.setBackgroundContext(ContextualClass.light);
-        this.saveButton.setContext(ContextualClass.primary);
     }
 }

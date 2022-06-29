@@ -32,8 +32,7 @@ export class ODataFooterComponentView extends BlockView {
 
     addPageButton() {
         const pageButton = this.pageButtonContainer.addView(ButtonCommandView);
-        pageButton.setContext(ContextualClass.primary);
-        pageButton.useOutlineStyle();
+        pageButton.useOutlineStyle(ContextualClass.primary);
         return pageButton;
     }
 

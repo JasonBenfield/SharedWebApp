@@ -1,4 +1,5 @@
-﻿import { AppApiODataGroup } from "../Api/AppApiODataGroup";
+﻿import { AppApiError } from "../Api/AppApiError";
+import { AppApiODataGroup } from "../Api/AppApiODataGroup";
 import { ODataResult } from "../Api/ODataResult";
 import { MessageAlert } from "../Components/MessageAlert";
 import { ModalODataComponent } from "./ModalODataComponent";
@@ -88,12 +89,18 @@ export class ODataComponent<TEntity> {
         this.grid.clearData();
         const query = this.query.build();
         let result: ODataResult<TEntity>;
-        await this.alert.infoAction(
-            'Loading...',
-            async () => {
-                result = await this.odataGroup.Get(query);
-            }
-        );
+        try {
+            await this.alert.infoAction(
+                'Loading...',
+                async () => {
+                    result = await this.odataGroup.Get(query, { preventDefault: true });
+                }
+            );
+        }
+        catch (err) {
+            this.alert.danger(err ? err.toString() : 'An Error Occurred');
+            return;
+        }
         this.currentPage.countChanged(result.count);
         const selectedColumnNames = this.query.select.getExplicitlySelected();
         const gridColumns = this.columns.columns(selectedColumnNames);

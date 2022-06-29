@@ -1,5 +1,12 @@
 ﻿import * as $ from 'jquery';
 
+interface IElementEvent {
+    evtName: string;
+    selector: string;
+    preventDefault: boolean;
+    action: (sourceElement: HTMLElement) => void;
+}
+
 export class HtmlElementView {
 
     static fromTag(tagName: keyof HTMLElementTagNameMap) {
@@ -17,6 +24,7 @@ export class HtmlElementView {
     }
 
     readonly element: HTMLElement;
+    private readonly handlers: IElementEvent[] = [];
 
     private constructor(createElement: () => HTMLElement) {
         this.element = createElement();
@@ -98,12 +106,30 @@ export class HtmlElementView {
     }
 
     on(evtName: string, selector: string, preventDefault: boolean, action: (sourceElement: HTMLElement) => void) {
+        const handler = { evtName: evtName, selector: selector, preventDefault: preventDefault, action: action };
+        this.handlers.push(handler);
+        if (document.contains(this.element)) {
+            this.registerEvent(handler);
+        }
+    }
+
+    unregisterEvents() {
+        $(this.element).off();
+    }
+
+    registerEvents() {
+        for (const handler of this.handlers) {
+            this.registerEvent(handler);
+        }
+    }
+
+    private registerEvent(handler: IElementEvent) {
         $(this.element).on(
-            evtName,
-            selector,
+            handler.evtName,
+            handler.selector,
             function (event: JQueryEventObject) {
-                action(this);
-                if (preventDefault) {
+                handler.action(this);
+                if (handler.preventDefault) {
                     event.preventDefault();
                 }
                 return false;

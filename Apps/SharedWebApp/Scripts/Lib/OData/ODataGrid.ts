@@ -1,4 +1,5 @@
 ﻿import { BasicComponent } from "../Components/BasicComponent";
+import { MessageAlert } from "../Components/MessageAlert";
 import { MappedArray } from "../Enumerable";
 import { EventSource } from "../Events";
 import { BasicComponentView } from "../Views/BasicComponentView";
@@ -63,12 +64,18 @@ export class ODataGrid<TEntity> extends BasicComponent {
         const headerRowView = this.view.addHeaderRow(columnViews);
         const headerRow = new ODataHeaderRow(columns, headerRowView);
         this.addComponent(headerRow);
-        let rowIndex = 1;
-        for (const record of records) {
-            const dataRowView = this.view.addDataRow(columnViews);
-            const dataRow = new ODataRow(rowIndex, columns, record, dataRowView);
-            this.addComponent(dataRow);
-            rowIndex++;
+        if (records.length > 0) {
+            let rowIndex = 1;
+            for (const record of records) {
+                const dataRowView = this.view.addDataRow(columnViews);
+                const dataRow = new ODataRow(rowIndex, columns, record, dataRowView);
+                this.addComponent(dataRow);
+                rowIndex++;
+            }
+        }
+        else {
+            const alert = new MessageAlert(this.view.addAlertRow());
+            alert.warning('No Records were found.');
         }
     }
 

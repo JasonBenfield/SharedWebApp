@@ -4,6 +4,7 @@ import { MarginCss } from "../MarginCss";
 import { TextCss } from "../TextCss";
 import { BasicComponentView } from "../Views/BasicComponentView";
 import { GridRowView, GridView } from "../Views/Grid";
+import { MessageAlertView } from "../Views/MessageAlertView";
 import { ODataColumnView } from "./ODataColumnView";
 
 export class ODataGridView extends GridView {
@@ -29,6 +30,13 @@ export class ODataGridView extends GridView {
             col.configureHeaderCell(cell);
         }
         return row;
+    }
+
+    addAlertRow() {
+        const cell = this.addCell();
+        cell.setGridColumn(1, -1);
+        const alert = cell.addView(MessageAlertView);
+        return alert;
     }
 
     addDataRow(columns: ODataColumnView[]) {

@@ -1,4 +1,5 @@
-﻿
+﻿import { TimeSpan } from "../TimeSpan";
+
 export class ParsedDateObject {
     private static dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.?\d{0,7}[\+\-]\d{2}:\d{2})?$/;
 
@@ -21,6 +22,9 @@ export class ParsedDateObject {
                         if (ParsedDateObject.dateRegex.test(el)) {
                             obj[i] = new Date(Date.parse(el));
                         }
+                        else if (TimeSpan.canParse(el)) {
+                            obj[i] = TimeSpan.parse(el);
+                        }
                     }
                     else {
                         this.parseDates(el);
@@ -34,6 +38,9 @@ export class ParsedDateObject {
                         if (typeof value === 'string') {
                             if (ParsedDateObject.dateRegex.test(value)) {
                                 obj[prop] = new Date(Date.parse(value));
+                            }
+                            else if (TimeSpan.canParse(value)) {
+                                obj[prop] = TimeSpan.parse(value);
                             }
                         }
                         else {

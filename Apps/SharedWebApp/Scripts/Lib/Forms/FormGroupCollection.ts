@@ -1,4 +1,4 @@
-﻿import { InputFormGroupView, SelectFormGroupView } from "../Views/FormGroup";
+﻿import { SimpleFieldFormGroupInputView, SimpleFieldFormGroupSelectView } from "../Views/FormGroup";
 import { BooleanDropDownFormGroup } from "./BooleanDropDownFormGroup";
 import { DateDropDownFormGroup } from "./DateDropDownFormGroup";
 import { DateInputFormGroup } from "./DateInputFormGroup";
@@ -18,47 +18,47 @@ export class FormGroupCollection {
         return this.values;
     }
 
-    addHiddenTextFormGroup(name: string, view: InputFormGroupView) {
+    addHiddenTextFormGroup(name: string, view: SimpleFieldFormGroupInputView) {
         return this.addFormGroup(new TextInputFormGroup(this.name, name, view));
     }
 
-    addHiddenNumberFormGroup(name: string, view: InputFormGroupView) {
+    addHiddenNumberFormGroup(name: string, view: SimpleFieldFormGroupInputView) {
         return this.addFormGroup(new NumberInputFormGroup(this.name, name, view));
     }
 
-    addHiddenDateFormGroup(name: string, view: InputFormGroupView) {
+    addHiddenDateFormGroup(name: string, view: SimpleFieldFormGroupInputView) {
         return this.addFormGroup(new DateInputFormGroup(this.name, name, view));
     }
 
-    addTextInputFormGroup(name: string, view: InputFormGroupView) {
+    addTextInputFormGroup(name: string, view: SimpleFieldFormGroupInputView) {
         return this.addFormGroup(new TextInputFormGroup(this.name, name, view));
     }
 
-    addNumberInputFormGroup(name: string, view: InputFormGroupView) {
+    addNumberInputFormGroup(name: string, view: SimpleFieldFormGroupInputView) {
         return this.addFormGroup(new NumberInputFormGroup(this.name, name, view));
     }
 
-    addDateInputFormGroup(name: string, view: InputFormGroupView) {
+    addDateInputFormGroup(name: string, view: SimpleFieldFormGroupInputView) {
         return this.addFormGroup(new DateInputFormGroup(this.name, name, view));
     }
 
-    addTextDropDownFormGroup(name: string, view: SelectFormGroupView) {
+    addTextDropDownFormGroup(name: string, view: SimpleFieldFormGroupSelectView) {
         return this.addFormGroup(new TextDropDownFormGroup(this.name, name, view));
     }
 
-    addNumberDropDownFormGroup(name: string, view: SelectFormGroupView) {
+    addNumberDropDownFormGroup(name: string, view: SimpleFieldFormGroupSelectView) {
         return this.addFormGroup(new NumberDropDownFormGroup(this.name, name, view));
     }
 
-    addDateDropDownFormGroup(name: string, view: SelectFormGroupView) {
+    addDateDropDownFormGroup(name: string, view: SimpleFieldFormGroupSelectView) {
         return this.addFormGroup(new DateDropDownFormGroup(this.name, name, view));
     }
 
-    addBooleanDropDownFormGroup(name: string, view: SelectFormGroupView) {
+    addBooleanDropDownFormGroup(name: string, view: SimpleFieldFormGroupSelectView) {
         return this.addFormGroup(new BooleanDropDownFormGroup(this.name, name, view));
     }
 
-    addDropDownFormGroup<T>(name: string, view: SelectFormGroupView) {
+    addDropDownFormGroup<T>(name: string, view: SimpleFieldFormGroupSelectView) {
         return this.addFormGroup(new DropDownFormGroup<T>(this.name, name, view));
     }
 

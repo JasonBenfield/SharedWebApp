@@ -58,11 +58,13 @@ export class ODataFooterComponent {
 
     setCount(startRecord: number, recordCount: number, total: number) {
         let countText = '';
-        if (startRecord === 1 && recordCount === total) {
-            countText = total.toLocaleString();
-        }
-        else {
-            countText = `${startRecord.toLocaleString()} to ${recordCount.toLocaleString()} of ${total.toLocaleString()}`;
+        if (total > 0) {
+            if (startRecord === 1 && recordCount === total) {
+                countText = total.toLocaleString();
+            }
+            else {
+                countText = `${startRecord.toLocaleString()} to ${recordCount.toLocaleString()} of ${total.toLocaleString()}`;
+            }
         }
         new TextComponent(this.view.count).setText(countText);
     }

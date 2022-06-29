@@ -1,13 +1,13 @@
 ﻿import { BaseFormView } from '../../Lib/Views/BaseFormView';
 import { BasicComponentView } from '../../Lib/Views/BasicComponentView';
-import { InputFormGroupView, SelectFormGroupView } from '../../Lib/Views/FormGroup';
+import { SimpleFieldFormGroupInputView, SimpleFieldFormGroupSelectView } from '../../Lib/Views/FormGroup';
 import { IFormGroupLayout } from '../../Lib/Views/Types';
 import { AddressInputFieldView } from './AddressInputFieldView';
 
 export interface IAddEmployeeFormView {
-    EmployeeName: InputFormGroupView;
-    BirthDate: InputFormGroupView;
-    Department: SelectFormGroupView;
+    EmployeeName: SimpleFieldFormGroupInputView;
+    BirthDate: SimpleFieldFormGroupInputView;
+    Department: SimpleFieldFormGroupSelectView;
     Address: AddressInputFieldView;
 }
 

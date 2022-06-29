@@ -32,8 +32,9 @@ export class ButtonView extends BasicContainerView {
         this.context = context;
     }
 
-    useOutlineStyle() {
-        this.setCss('button-context', this.getContextCss(this.context, true));
+    useOutlineStyle(context: ContextualClass) {
+        this.setCss('button-context', this.getContextCss(context, true));
+        this.context = context;
         this.isOutline = true;
     }
 

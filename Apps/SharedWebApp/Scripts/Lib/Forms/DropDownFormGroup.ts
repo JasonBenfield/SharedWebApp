@@ -1,19 +1,19 @@
 ﻿import { SimpleEvent } from "../Events";
 import { SelectOption } from "../Components/SelectOption";
-import { SelectFormGroupView } from "../Views/FormGroup";
+import { SimpleFieldFormGroupSelectView } from "../Views/FormGroup";
 import { ConstraintCollection } from "./ConstraintCollection";
 import { ErrorList } from "./ErrorList";
 import { SimpleFieldFormGroup } from "./SimpleFieldFormGroup";
 
 export class DropDownFormGroup<TValue> extends SimpleFieldFormGroup<TValue> {
-    protected readonly view: SelectFormGroupView;
+    protected readonly view: SimpleFieldFormGroupSelectView;
     readonly constraints = new ConstraintCollection();
     private readonly _valueChanged = new SimpleEvent(this);
     readonly valueChanged = this._valueChanged.handler();
     private readonly items: SelectOption<TValue>[] = [];
     private itemCaption: string;
 
-    constructor(prefix: string, name: string, view: SelectFormGroupView) {
+    constructor(prefix: string, name: string, view: SimpleFieldFormGroupSelectView) {
         super(prefix, name, view);
         view.select.onChange().execute(() => this._valueChanged.invoke());
     }

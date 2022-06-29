@@ -57,7 +57,9 @@
     <None Remove="Scripts\Lib\OData\FilterConditionLinkView.ts" />
     <None Remove="Scripts\Lib\OData\FilterSelection.ts" />
     <None Remove="Scripts\Lib\OData\FilterSelectionBooleanValue.ts" />
+    <None Remove="Scripts\Lib\OData\FilterSelectionRelativeDateRangeValue.ts" />
     <None Remove="Scripts\Lib\OData\FilterSelectionStringValue.ts" />
+    <None Remove="Scripts\Lib\OData\FilterSelectionValue.ts" />
     <None Remove="Scripts\Lib\OData\FilterValueInputPanel.ts" />
     <None Remove="Scripts\Lib\OData\FilterValueInputPanelView.ts" />
     <None Remove="Scripts\Lib\OData\FilterWorkflow.ts" />
@@ -91,6 +93,9 @@
     <None Remove="Scripts\Lib\OData\ODataRow.ts" />
     <None Remove="Scripts\Lib\OData\ODataTextCell.ts" />
     <None Remove="Scripts\Lib\OData\ODataTextCellView.ts" />
+    <None Remove="Scripts\Lib\OData\RelativeDatePickerView.ts" />
+    <None Remove="Scripts\Lib\OData\RelativeDateRangePanel.ts" />
+    <None Remove="Scripts\Lib\OData\RelativeDateRangePanelView.ts" />
     <None Remove="Scripts\Lib\OData\SelectFIeldListItem.ts" />
     <None Remove="Scripts\Lib\OData\SelectFieldListItemView.ts" />
     <None Remove="Scripts\Lib\OData\SelectFieldsPanel.ts" />
@@ -111,6 +116,7 @@
     <None Remove="Scripts\Lib\Views\ColumnView.ts" />
     <None Remove="Scripts\Lib\Views\CssFontBuilder.ts" />
     <None Remove="Scripts\Lib\Views\Dropdown.ts" />
+    <None Remove="Scripts\Lib\Views\FormCheckView.ts" />
     <None Remove="Scripts\Lib\Views\FormGroup.ts" />
     <None Remove="Scripts\Lib\Views\FormView.ts" />
     <None Remove="Scripts\Lib\Views\Grid.ts" />
@@ -197,7 +203,12 @@
     <TypeScriptCompile Include="Scripts\Lib\DateRange.ts" />
     <TypeScriptCompile Include="Scripts\Lib\FlexCss.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Forms\ErrorListItem.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\FilterSelectionRelativeDateRangeValue.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\FilterSelectionValue.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ModalODataPanelView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\RelativeDatePickerView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\RelativeDateRangePanel.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\RelativeDateRangePanelView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\ErrorListItemView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\JustifyContentCss.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\FilterSelectionBooleanValue.ts" />
@@ -257,6 +268,7 @@
     <TypeScriptCompile Include="Scripts\Lib\Views\BasicTextComponentView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\Card.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\Dropdown.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\FormCheckView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\FormGroup.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\FormView.ts">
       <SubType>Code</SubType>

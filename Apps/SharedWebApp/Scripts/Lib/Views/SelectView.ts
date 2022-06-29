@@ -10,6 +10,10 @@ export class SelectView extends BasicComponentView {
         this.selectElement = this.elementView.element as HTMLSelectElement;
     }
 
+    showAsFormControl() {
+        this.addCssName('form-control');
+    }
+
     options() { return this.getViews() as SelectOptionView[]; }
 
     getSelectedIndex() { return this.selectElement.selectedIndex; }

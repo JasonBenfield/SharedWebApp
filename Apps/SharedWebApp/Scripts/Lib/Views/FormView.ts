@@ -7,6 +7,7 @@ export class FormView extends BasicContainerView {
     constructor(container: BasicComponentView) {
         super(container, 'form');
         this.setAction("#");
+        this.setMethod('POST');
     }
 
     onSubmit() { return this.on('submit'); }
