@@ -6,13 +6,12 @@ import { HttpPostResult } from "./HttpClient";
 export class ErrorFromHttpResult {
     constructor(postResult: HttpPostResult, friendlyName: string, errorOptions: IActionErrorOptions) {
         let errors: ErrorModel[] = [];
-
         let result = postResult && postResult.result;
         if (result.Data) {
             result = result.Data;
         }
-        if (result) {
-            let rawErrors = <IErrorModel[]><any>result;
+        if (result && typeof result !== 'string') {
+            const rawErrors = <IErrorModel[]><any>result;
             errors = new MappedArray(
                 rawErrors,
                 e => new ErrorModel(e.Message, e.Caption, e.Source)

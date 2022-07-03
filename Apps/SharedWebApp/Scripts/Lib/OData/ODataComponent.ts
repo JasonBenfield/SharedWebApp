@@ -1,5 +1,4 @@
-﻿import { AppApiError } from "../Api/AppApiError";
-import { AppApiODataGroup } from "../Api/AppApiODataGroup";
+﻿import { AppApiQuery } from "../Api/AppApiQuery";
 import { ODataResult } from "../Api/ODataResult";
 import { MessageAlert } from "../Components/MessageAlert";
 import { ModalODataComponent } from "./ModalODataComponent";
@@ -20,7 +19,7 @@ export class ODataComponent<TEntity> {
     private readonly grid: ODataGrid<TEntity>;
     private readonly alert: MessageAlert;
     private readonly modalODataComponent: ModalODataComponent;
-    private readonly odataGroup: AppApiODataGroup<TEntity>;
+    private readonly odataGroup: AppApiQuery<TEntity>;
     private readonly columns: ODataColumnAccessor;
     private readonly query: ODataQueryBuilder;
     private readonly currentPage: ODataPage;
@@ -93,7 +92,7 @@ export class ODataComponent<TEntity> {
             await this.alert.infoAction(
                 'Loading...',
                 async () => {
-                    result = await this.odataGroup.Get(query, { preventDefault: true });
+                    result = await this.odataGroup.execute(query, { preventDefault: true });
                 }
             );
         }

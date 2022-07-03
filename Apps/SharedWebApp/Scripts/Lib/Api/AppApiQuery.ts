@@ -27,7 +27,8 @@ export class AppApiQuery<TEntity> {
 
     constructor(
         private readonly events: AppApiEvents,
-        resourceUrl: AppResourceUrl
+        resourceUrl: AppResourceUrl,
+        readonly name: string
     ) {
         this.resourceUrl = resourceUrl;
     }

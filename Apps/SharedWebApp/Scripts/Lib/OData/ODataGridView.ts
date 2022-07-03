@@ -1,9 +1,10 @@
 ﻿import { ContextualClass } from "../ContextualClass";
+import { CssLengthUnit } from "../CssLengthUnit";
 import { MappedArray } from "../Enumerable";
 import { MarginCss } from "../MarginCss";
 import { TextCss } from "../TextCss";
 import { BasicComponentView } from "../Views/BasicComponentView";
-import { GridRowView, GridView } from "../Views/Grid";
+import { GridRowView, GridTemplateFitContent, GridView } from "../Views/Grid";
 import { MessageAlertView } from "../Views/MessageAlertView";
 import { ODataColumnView } from "./ODataColumnView";
 
@@ -54,5 +55,18 @@ export class ODataGridView extends GridView {
             col => col.width
         ).value();
         this.setTemplateColumns(...templateColumns);
+        let minWidth = 0;
+        for (const column of columns) {
+            if (column.width instanceof CssLengthUnit && column.width.unit === 'px') {
+                minWidth += column.width.size;
+            }
+            else if (column.width instanceof GridTemplateFitContent && column.width.length.unit === 'px') {
+                minWidth += column.width.length.size;
+            }
+            else {
+                minWidth += 200;
+            }
+        }
+        this.setMinWidth(CssLengthUnit.px(minWidth));
     }
 }

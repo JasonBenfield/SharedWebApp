@@ -1,18 +1,22 @@
-﻿import { ConsoleLog } from "../ConsoleLog";
-import { ModalErrorComponent } from "../Error/ModalErrorComponent";
+﻿import { ModalError } from "../Components/ModalError";
+import { ConsoleLog } from "../ConsoleLog";
+import { ModalErrorView } from "../Views/ModalError";
 import { apiConstructor, AppApi } from "./AppApi";
 import { AppApiEvents } from "./AppApiEvents";
 
 export class AppApiFactory {
-    constructor(private readonly modalError: ModalErrorComponent) {
+    private readonly modalError: ModalError;
+
+    constructor(modalError: ModalErrorView) {
+        this.modalError = new ModalError(modalError);
     }
 
     api<TApi extends AppApi>(apiCtor: apiConstructor<TApi>): TApi {
-        let events = new AppApiEvents((err) => {
+        const events = new AppApiEvents((err) => {
             new ConsoleLog().error(err.toString());
             this.modalError.show(err.getErrors(), err.getCaption());
         });
-        let api = new apiCtor(events);
+        const api = new apiCtor(events);
         return api;
     }
 }

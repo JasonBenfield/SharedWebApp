@@ -182,7 +182,7 @@ export class RelativeDayOffset {
     }
 }
 
-type RelativeOffset = RelativeDayOffset | RelativeMonthOffset | RelativeYearOffset;
+export type RelativeOffset = RelativeDayOffset | RelativeMonthOffset | RelativeYearOffset;
 
 type SerializableRelativeOffset = ISerializableRelativeDayOffset | ISerializableRelativeMonthOffset | ISerializableRelativeYearOffset;
 

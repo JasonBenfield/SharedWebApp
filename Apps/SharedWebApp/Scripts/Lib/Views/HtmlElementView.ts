@@ -55,6 +55,9 @@ export class HtmlElementView {
             const formatted = this.formatValue(value);
             this.element.setAttribute(name, formatted);
         }
+        else {
+            this.element.removeAttribute(name);
+        }
     }
 
     private formatValue(value: any) {

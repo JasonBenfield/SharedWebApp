@@ -31,6 +31,8 @@ export class BasicComponent {
 
     protected anyComponents() { return this.components.length > 0; }
 
+    protected getComponent(index: number) { return this.components[index]; }
+
     protected getComponents() {
         return new EnumerableArray(this.components).value();
     }

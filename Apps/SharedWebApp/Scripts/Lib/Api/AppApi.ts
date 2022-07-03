@@ -1,6 +1,6 @@
 ﻿import { AppApiEvents } from "./AppApiEvents";
 import { AppApiGroup } from "./AppApiGroup";
-import { AppApiODataGroup } from "./AppApiODataGroup";
+import { AppApiQuery } from "./AppApiQuery";
 import { AppResourceUrl } from "./AppResourceUrl";
 import { XtiUrl } from './XtiUrl';
 
@@ -11,7 +11,7 @@ export type apiConstructor<T extends AppApi> = {
 export class AppApi {
     private readonly resourceUrl: AppResourceUrl;
     readonly groups: {
-        [name: string]: AppApiGroup | AppApiODataGroup<any>
+        [name: string]: AppApiGroup | AppApiQuery<any>
     } = {};
     readonly User: IUserGroup;
 
@@ -39,9 +39,9 @@ export class AppApi {
     }
 
     protected addODataGroup<T>(
-        createGroup: (evts: AppApiEvents, resourceUrl: AppResourceUrl) => AppApiODataGroup<T>
+        createGroup: (evts: AppApiEvents, resourceUrl: AppResourceUrl) => AppApiQuery<T>
     ) {
-        let group = createGroup(this.events, this.resourceUrl);
+        const group = createGroup(this.events, this.resourceUrl);
         this.groups[group.name] = group;
         return group;
     }

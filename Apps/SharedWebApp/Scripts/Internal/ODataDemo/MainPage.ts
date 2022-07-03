@@ -1,12 +1,11 @@
 ﻿import { AppApiEvents } from '../../Lib/Api/AppApiEvents';
-import { AppApiODataGroup } from '../../Lib/Api/AppApiODataGroup';
+import { AppApiQuery } from '../../Lib/Api/AppApiQuery';
 import { AppResourceUrl } from '../../Lib/Api/AppResourceUrl';
 import { BasicPage } from '../../Lib/Components/BasicPage';
 import { TextComponent } from '../../Lib/Components/TextComponent';
 import { NumberValueFormatter } from '../../Lib/OData/NumberValueFormatter';
 import { ODataComponent } from '../../Lib/OData/ODataComponent';
 import { ODataComponentOptionsBuilder } from '../../Lib/OData/ODataComponentOptionsBuilder';
-import { FilterConditionOperation, FilterField, FilterValue } from '../../Lib/OData/ODataQueryFilterBuilder';
 import { DefaultPageContext } from '../DefaultPageContext';
 import { MainPageView } from './MainPageView';
 import { ODataEmployeeColumnsBuilder } from './ODataEmployeeColumnsBuilder';
@@ -33,7 +32,7 @@ class MainPage extends BasicPage {
         //        new FilterValue(5)
         //    )
         //);
-        const odataGroup = new AppApiODataGroup<IEmployee>(
+        const odataGroup = new AppApiQuery<IEmployee>(
             new AppApiEvents(() => { }),
             AppResourceUrl.odata(
                 'Shared',

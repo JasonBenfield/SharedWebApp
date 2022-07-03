@@ -30,7 +30,7 @@ export class FilterValueInputPanelView extends ModalODataPanelView {
         this.operation.setMargin(MarginCss.bottom(3));
         this.ignoreCaseFormCheck = this.form.addView(FormCheckView);
         this.ignoreCaseFormCheck.setMargin(MarginCss.bottom(3));
-        this.ignoreCaseFormCheck.asSwitch();
+        this.ignoreCaseFormCheck.styleAsSwitch();
         this.ignoreCaseFormCheck.setInputID('filter-value-input-ignore-case');
         this.ignoreCaseInput = this.ignoreCaseFormCheck.input;
         this.ignoreCaseInput.setType('checkbox');

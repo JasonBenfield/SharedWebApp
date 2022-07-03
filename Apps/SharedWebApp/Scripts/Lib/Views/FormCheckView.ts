@@ -16,11 +16,11 @@ export class FormCheckView extends BasicComponentView {
         this.label.addCssName('form-check-label');
     }
 
-    asSwitch() {
+    styleAsSwitch() {
         this.addCssName('form-switch');
     }
 
-    asInline() {
+    inline() {
         this.addCssName('form-check-inline');
     }
 

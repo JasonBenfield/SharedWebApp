@@ -109,6 +109,7 @@ export class BasicPageView {
         }
         document.title = documentTitle;
         window.addEventListener('popstate', () => this.eventSource.events.urlChanged.invoke());
+        this.modalError = this.addView(ModalErrorView);
     }
 
     addView<T extends BasicComponentView>(ctor: ViewConstructor<T>) {

@@ -1,4 +1,4 @@
-﻿import { AppApiODataGroup } from "../Api/AppApiODataGroup";
+﻿import { AppApiQuery } from "../Api/AppApiQuery";
 import { ODataColumnBuilder } from "./ODataColumnBuilder";
 import { ODataComponentOptions } from "./ODataComponentOptions";
 import { ODataQueryBuilder } from "./ODataQueryBuilder";
@@ -8,13 +8,13 @@ export type IODataColumnsBuilder<TEntity> = {
 }
 
 export class ODataComponentOptionsBuilder<TEntity> {
-    private odataGroup: AppApiODataGroup<TEntity>;
+    private odataGroup: AppApiQuery<TEntity>;
     private pageSize: number = 50;
 
     constructor(private readonly columns: IODataColumnsBuilder<TEntity>) {
     }
 
-    setODataGroup(odataGroup: AppApiODataGroup<TEntity>) {
+    setODataGroup(odataGroup: AppApiQuery<TEntity>) {
         this.odataGroup = odataGroup;
     }
 

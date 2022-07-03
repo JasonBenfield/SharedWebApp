@@ -40,9 +40,12 @@
     <None Remove="Scripts\Lib\Components\BasicComponent.ts" />
     <None Remove="Scripts\Lib\Components\BasicPage.ts" />
     <None Remove="Scripts\Lib\Components\BasicPanelComponent.ts" />
+    <None Remove="Scripts\Lib\Components\BooleanInputControl.ts" />
+    <None Remove="Scripts\Lib\Components\InputControl.ts" />
     <None Remove="Scripts\Lib\Components\ListGroup.ts" />
     <None Remove="Scripts\Lib\Components\ModalConfirm.ts" />
     <None Remove="Scripts\Lib\Components\ModalError.ts" />
+    <None Remove="Scripts\Lib\Components\SelectControl.ts" />
     <None Remove="Scripts\Lib\Components\SelectOption.ts" />
     <None Remove="Scripts\Lib\Components\TextComponent.ts" />
     <None Remove="Scripts\Lib\Components\Types.ts" />
@@ -50,7 +53,9 @@
     <None Remove="Scripts\Lib\FlexCss.ts" />
     <None Remove="Scripts\Lib\Forms\ErrorListItem.ts" />
     <None Remove="Scripts\Lib\Forms\ErrorListItemView.ts" />
+    <None Remove="Scripts\Lib\Forms\MultiViewValue.ts" />
     <None Remove="Scripts\Lib\JustifyContentCss.ts" />
+    <None Remove="Scripts\Lib\OData\BooleanIconCell.ts" />
     <None Remove="Scripts\Lib\OData\DefaultValueFormatter.ts" />
     <None Remove="Scripts\Lib\OData\FilterColumnOptionsBuilder.ts" />
     <None Remove="Scripts\Lib\OData\FilterConditionLink.ts" />
@@ -93,9 +98,10 @@
     <None Remove="Scripts\Lib\OData\ODataRow.ts" />
     <None Remove="Scripts\Lib\OData\ODataTextCell.ts" />
     <None Remove="Scripts\Lib\OData\ODataTextCellView.ts" />
-    <None Remove="Scripts\Lib\OData\RelativeDatePickerView.ts" />
     <None Remove="Scripts\Lib\OData\RelativeDateRangePanel.ts" />
     <None Remove="Scripts\Lib\OData\RelativeDateRangePanelView.ts" />
+    <None Remove="Scripts\Lib\OData\RelativeOffsetPicker.ts" />
+    <None Remove="Scripts\Lib\OData\RelativeOffsetPickerView.ts" />
     <None Remove="Scripts\Lib\OData\SelectFIeldListItem.ts" />
     <None Remove="Scripts\Lib\OData\SelectFieldListItemView.ts" />
     <None Remove="Scripts\Lib\OData\SelectFieldsPanel.ts" />
@@ -144,7 +150,6 @@
     <None Remove="Scripts\Lib\Views\Types.ts" />
     <None Remove="Scripts\Lib\Views\UnorderedListView.ts" />
     <None Remove="Scripts\Lib\Views\ViewEventBuilder.ts" />
-    <None Remove="Scripts\Lib\XtiEventOptionsBuilder.ts" />
     <None Remove="Scripts\Tests\RelativeDateRangeTest.ts" />
     <None Remove="Scripts\Tests\TimeSpanTest.ts" />
   </ItemGroup>
@@ -160,7 +165,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Folder Include="Scripts\Lib\Bootstrap\" />
     <Folder Include="wwwroot\" />
     <Folder Include="wwwroot\styles\css\webfonts\" />
   </ItemGroup>
@@ -193,20 +197,28 @@
     <TypeScriptCompile Include="Scripts\Lib\Api\ParsedDateObject.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\BasicComponent.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\BasicPanelComponent.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\BooleanInputControl.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Components\InputControl.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\ListGroup.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\ModalConfirm.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\ModalError.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\BasicPage.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\SelectControl.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\SelectOption.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\TextComponent.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\Types.ts" />
     <TypeScriptCompile Include="Scripts\Lib\DateRange.ts" />
     <TypeScriptCompile Include="Scripts\Lib\FlexCss.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Forms\ErrorListItem.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Forms\MultiViewValue.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\BooleanIconCell.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\FilterSelectionRelativeDateRangeValue.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\FilterSelectionValue.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ModalODataPanelView.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\OData\RelativeDatePickerView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\RelativeOffsetPicker.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\RelativeOffsetPickerView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\RelativeDateRangePanel.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\RelativeDateRangePanelView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\ErrorListItemView.ts" />
@@ -322,7 +334,6 @@
     <TypeScriptCompile Include="Scripts\Lib\Views\ViewEventBuilder.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="Scripts\Lib\XtiEventOptionsBuilder.ts" />
     <TypeScriptCompile Include="Scripts\Tests\RelativeDateRangeTest.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

@@ -15,7 +15,6 @@ export interface IHtmlAttributes {
     title?: string;
     'class'?: string;
     role?: string;
-    style?: IHtmlStyle;
 }
 
 export interface ILinkAttributes extends IHtmlAttributes {

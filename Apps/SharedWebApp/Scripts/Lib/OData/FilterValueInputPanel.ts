@@ -1,8 +1,9 @@
 ﻿import { Awaitable } from "../Awaitable";
 import { Command } from "../Components/Command";
+import { InputControl } from "../Components/InputControl";
 import { TextComponent } from "../Components/TextComponent";
 import { DelayedAction } from "../DelayedAction";
-import { FieldViewValue } from "../Forms/FieldViewValue";
+import { MultiViewValue } from "../Forms/MultiViewValue";
 import { TextToDateViewValue } from "../Forms/TextToDateViewValue";
 import { TextToNumberViewValue } from "../Forms/TextToNumberViewValue";
 import { TextToTextViewValue } from "../Forms/TextToTextViewValue";
@@ -26,32 +27,27 @@ export class FilterValueInputPanel implements IPanel {
     private readonly title: TextComponent;
     private readonly operation: TextComponent;
     private options: FilterColumnOptionsBuilder;
-    private viewValue: FieldViewValue = new TextToTextViewValue();
+    private input: InputControl<number | string | Date>;
+    private viewValue: MultiViewValue<string, number | string | Date>;
 
     constructor(private readonly view: FilterValueInputPanelView) {
+        this.viewValue = new MultiViewValue(new TextToTextViewValue());
+        this.input = new InputControl(view.valueInput, this.viewValue);
         this.title = new TextComponent(this.view.title);
         this.operation = new TextComponent(this.view.operation);
         const saveCommand = new Command(this.save.bind(this));
         saveCommand.add(view.saveButton);
         view.form.onSubmit().preventDefault().execute(() => saveCommand.execute()).subscribe();
-        view.valueInput.onBlur().execute(this.onBlur.bind(this)).subscribe();
         new Command(this.cancel.bind(this)).add(view.cancelButton);
     }
 
     private cancel() { this.awaitable.resolve(Result.done()); }
 
-    private onBlur() {
-        const rawValue = this.view.valueInput.getValue();
-        this.viewValue.setValueFromView(rawValue);
-        this.view.valueInput.setValue(this.viewValue.getValue());
-    }
-
     private save() {
-        const rawValue = this.view.valueInput.getValue();
-        if (rawValue) {
+        if (!this.input.isBlank()) {
             const value = this.getValue();
             if (typeof value !== 'number' || !Number.isNaN(value)) {
-                if (this.options.column.sourceType.isString()) {
+                if (typeof value === 'string') {
                     this.options.setStringValue(value, this.view.ignoreCaseInput.getValue());
                 }
                 else {
@@ -73,15 +69,15 @@ export class FilterValueInputPanel implements IPanel {
             this.view.hideIgnoreCase();
         }
         if (options.column.sourceType.isNumber()) {
-            this.viewValue = new TextToNumberViewValue();
+            this.viewValue.setViewValue(new TextToNumberViewValue());
             this.view.valueInput.setType('text');
         }
         else if (options.column.sourceType.isDate()) {
-            this.viewValue = new TextToDateViewValue();
+            this.viewValue.setViewValue(new TextToDateViewValue());
             this.view.valueInput.setType('date');
         }
         else {
-            this.viewValue = new TextToTextViewValue();
+            this.viewValue.setViewValue(new TextToTextViewValue());
             this.view.valueInput.setType('text');
         }
         this.setValue('');
@@ -89,14 +85,11 @@ export class FilterValueInputPanel implements IPanel {
     }
 
     private getValue() {
-        const rawValue = this.view.valueInput.getValue();
-        this.viewValue.setValueFromView(rawValue);
-        return this.viewValue.getValue();
+        return this.input.getValue();
     }
 
     private setValue(value: string) {
-        this.viewValue.setValue(value);
-        this.view.valueInput.setValue(this.viewValue.getValue());
+        this.input.setValue(value);
     }
 
     start() {

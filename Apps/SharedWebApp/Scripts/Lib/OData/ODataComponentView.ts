@@ -48,7 +48,7 @@ export class ODataComponentView extends GridView {
                 (cellView) => {
                     cellView.addCssName('position-sticky-top');
                     cellView.addCssName('position-sticky-left');
-                    cellView.addCssName('z-4');
+                    cellView.addCssName('z-5');
                     cellView.icon.solidStyle('gear');
                     cellView.addCssName('odata-gear-header');
                 }

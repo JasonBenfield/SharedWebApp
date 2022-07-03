@@ -1,15 +1,14 @@
 ﻿import { AppApiAction } from "./AppApiAction";
-import { AppApiEvents } from "./AppApiEvents";
-import { AppResourceUrl } from "./AppResourceUrl";
-import { AppApiView } from "./AppApiView";
-import { AppApiQuery } from "./AppApiQuery";
 import { AppApiContent } from "./AppApiContent";
+import { AppApiEvents } from "./AppApiEvents";
+import { AppApiView } from "./AppApiView";
+import { AppResourceUrl } from "./AppResourceUrl";
 
 export class AppApiGroup {
     constructor(
         private readonly events: AppApiEvents,
         resourceUrl: AppResourceUrl,
-        public readonly name: string
+        readonly name: string
     ) {
         this.resourceUrl = resourceUrl.withGroup(name);
     }

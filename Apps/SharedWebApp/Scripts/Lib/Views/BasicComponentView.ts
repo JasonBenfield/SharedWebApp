@@ -14,9 +14,8 @@ interface ICssBuilders {
 }
 
 export class BasicComponentView {
-    private attr: IHtmlAttributes = {
-        style: {}
-    };
+    private attr: IHtmlAttributes = {};
+    private style: IHtmlStyle = {};
     private readonly cssClass = new CssClass();
     private readonly css: ICssBuilders = {};
     private readonly views: BasicComponentView[] = [];
@@ -65,12 +64,18 @@ export class BasicComponentView {
 
     protected setAttr(config: (attr: IHtmlAttributes) => void) {
         config(this.attr);
-        this.elementView.setAttributes(this.attr);
+        const attr = Object.create(this.attr);
+        attr.style = this.style;
+        this.elementView.setAttributes(attr);
     }
 
     protected setStyle(config: (style: IHtmlStyle) => void) {
-        config(this.attr.style);
-        this.elementView.setAttribute(this.attr, 'style');
+        config(this.style);
+        let style = this.style;
+        if (Object.keys(this.style).length === 0) {
+            style = null;
+        }
+        this.elementView.setAttribute({ style: style }, 'style');
     }
 
     configure(action: (c: this) => void) {

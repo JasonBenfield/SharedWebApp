@@ -1,4 +1,4 @@
-﻿import { DebouncedAction } from "../DebouncedAction";
+﻿import { InputControl } from "../Components/InputControl";
 import { DefaultEvent } from "../Events";
 import { SimpleFieldFormGroupInputView } from "../Views/FormGroup";
 import { SimpleFieldFormGroup } from "./SimpleFieldFormGroup";
@@ -6,6 +6,7 @@ import { TypedFieldViewValue } from "./TypedFieldViewValue";
 
 export abstract class InputFormGroup<TValue> extends SimpleFieldFormGroup<TValue> {
     protected readonly view: SimpleFieldFormGroupInputView;
+    private readonly input: InputControl<TValue>;
 
     private readonly _valueChanged = new DefaultEvent<TValue>(this);
     readonly valueChanged = this._valueChanged.handler();
@@ -14,45 +15,22 @@ export abstract class InputFormGroup<TValue> extends SimpleFieldFormGroup<TValue
         prefix: string,
         name: string,
         view: SimpleFieldFormGroupInputView,
-        private readonly viewValue: TypedFieldViewValue<string, TValue>
+        viewValue: TypedFieldViewValue<string, TValue>
     ) {
         super(prefix, name, view);
         let valueName = this.getName();
         this.view.input.setViewID(valueName);
         this.view.input.setViewName(valueName);
-        this.view.input.onInput()
-            .execute(this.onInputValueChanged.bind(this))
-            .subscribe();
+        this.input = new InputControl(view.input, viewValue);
+        this.input.when.valueChanged.then(() => this._valueChanged.invoke(this.getValue()));
     }
-
-    private onInputValueChanged() {
-        const viewValue = this.view.input.getValue();
-        const value = this.viewValue.setValueFromView(viewValue);
-        this._valueChanged.invoke(value);
-        this.debouncedOnInputValueChanged.execute();
-    }
-
-    private debouncedOnInputValueChanged = new DebouncedAction(
-        () => {
-            if (!this.view.input.hasFocus()) {
-                const currentValue = this.view.input.getValue();
-                const newValue = this.viewValue.toView();
-                if (newValue !== currentValue) {
-                    this.view.input.setValue(newValue);
-                }
-            }
-        },
-        700
-    );
 
     getValue() {
-        return this.viewValue.getValue();
+        return this.input.getValue();
     }
 
     setValue(value: TValue) {
-        this.viewValue.setValue(value);
-        const inputValue = this.viewValue.toView();
-        this.view.input.setValue(inputValue);
+        this.input.setValue(value);
     }
 
     setMaxLength(maxLength: number) {

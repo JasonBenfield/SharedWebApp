@@ -12,7 +12,7 @@ export type GridTemplateCss = CssLengthUnit | GridTemplateMinMax | GridTemplateR
 export class GridTemplateFitContent {
     readonly value: string;
 
-    constructor(length: CssLengthUnit) {
+    constructor(readonly length: CssLengthUnit) {
         this.value = `fit-content(${length.value()})`;
     }
 

@@ -3,6 +3,7 @@ import { WebPage } from '../Api/WebPage';
 import { BasicPage } from '../Components/BasicPage';
 import { MessageAlert } from '../Components/MessageAlert';
 import { UrlBuilder } from '../UrlBuilder';
+import { BasicPageView } from '../Views/BasicPageView';
 import { UserPageView } from './UserPageView';
 
 export class UserPage extends BasicPage {
@@ -10,9 +11,9 @@ export class UserPage extends BasicPage {
     private readonly api: AppApi;
     private readonly alert: MessageAlert;
 
-    constructor(api: AppApi) {
+    constructor(createApi: (view: BasicPageView) => AppApi) {
         super(new UserPageView());
-        this.api = api;
+        this.api = createApi(this.view);
         this.alert = new MessageAlert(this.view.alert);
         this.goToReturnUrl();
     }

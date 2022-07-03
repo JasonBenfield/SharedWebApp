@@ -5,7 +5,7 @@ import { AppVersionDomain } from "./AppVersionDomain";
 
 export class AppResourceUrl {
     static app(appName: string, modifier: string, cacheBust: string) {
-        let appVersionDomain = new AppVersionDomain().value(appName);
+        const appVersionDomain = new AppVersionDomain().value(appName);
         return new AppResourceUrl(
             `https://${appVersionDomain.Domain}/`,
             XtiPath.app(appName, appVersionDomain.Version, modifier),
@@ -14,12 +14,7 @@ export class AppResourceUrl {
     }
 
     static odata(appName: string, modifier: string, cacheBust: string) {
-        let appVersionDomain = new AppVersionDomain().value(appName);
-        return new AppResourceUrl(
-            `https://${appVersionDomain.Domain}/`,
-            XtiPath.odata(appName, appVersionDomain.Version, modifier),
-            cacheBust
-        );
+        return AppResourceUrl.app(appName, modifier, cacheBust).odata();
     }
 
     readonly url: Url;
@@ -49,6 +44,18 @@ export class AppResourceUrl {
 
     withModifier(modifier: string) {
         return new AppResourceUrl(this.baseUrl, this.path.withModifier(modifier), this.cacheBust);
+    }
+
+    odata(group?: string) {
+        let appResourceUrl = new AppResourceUrl(
+            this.baseUrl,
+            XtiPath.odata(this.path.app, this.path.version, this.path.modifier),
+            this.cacheBust
+        );
+        if (group) {
+            appResourceUrl = appResourceUrl.withGroup(group);
+        }
+        return appResourceUrl;
     }
 
     toString() {
