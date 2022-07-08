@@ -1,4 +1,4 @@
-﻿import { MappedArray } from "../Enumerable";
+﻿import { EnumerableArray, MappedArray } from "../Enumerable";
 import { JoinedStrings } from "../JoinedStrings";
 import { ISerializableRelativeDateRange, RelativeDateRange } from "../RelativeDateRange";
 
@@ -8,7 +8,7 @@ export interface IFilterSelectionValue {
 }
 
 export interface ISerializableFilter {
-    conditions: ISerializableFilterPart<ISerializableConditionOperation>[];
+    conditionClauses: ISerializableFilterPart<ISerializableFilterConditionClause>[];
 }
 
 interface ISerializableFilterPart<T> {
@@ -40,6 +40,9 @@ class FilterPartFactory {
         else if (serializablePart.type === FilterRelativeDateRange.name) {
             part = FilterRelativeDateRange.deserialize(serializablePart.value);
         }
+        else if (serializablePart.type === FilterConditionClause.name) {
+            part = FilterConditionClause.deserialize(serializablePart.value);
+        }
         return part;
     }
 }
@@ -59,6 +62,8 @@ export class FilterConjunction {
         return new FilterConjunction(serialized.value);
     }
 
+    static none() { return new FilterConjunction(''); }
+
     static and() { return new FilterConjunction('and'); }
 
     static or() { return new FilterConjunction('or'); }
@@ -66,7 +71,11 @@ export class FilterConjunction {
     private constructor(private readonly value: string) {
     }
 
-    toQuery() { return ` ${this.value} `; }
+    format() {
+        return this.toQuery();
+    }
+
+    toQuery() { return this.value ? ` ${this.value} ` : ''; }
 
     serialize() {
         return {
@@ -116,6 +125,35 @@ export class FilterConditionOperation {
     ) {
     }
 
+    format() {
+        if (this.operator === 'eq' && this.right.value === '') {
+            return `${this.left.format()} is blank`;
+        }
+        else if (this.operator === 'ne' && this.right.value === '') {
+            return `${this.left.format()} is not blank`;
+        }
+        let operator = this.operator;
+        if (operator === 'eq') {
+            operator = 'is equal to'
+        }
+        else if (operator === 'ne') {
+            operator = 'is not equal to'
+        }
+        if (operator === 'gt') {
+            operator = 'is greater than'
+        }
+        else if (operator === 'lt') {
+            operator = 'is less than'
+        }
+        if (operator === 'ge') {
+            operator = 'is greater than or equal to'
+        }
+        else if (operator === 'le') {
+            operator = 'is less than or equal to'
+        }
+        return `${this.left.format()} ${operator} ${this.right.format()}`;
+    }
+
     toQuery() {
         return `${this.left.toQuery()} ${this.operator} ${this.right.toQuery()}`;
     }
@@ -134,14 +172,19 @@ export class FilterConditionOperation {
 
 interface ISerializableFilterField {
     readonly fieldName: string;
+    readonly displayText: string;
 }
 
 export class FilterField {
     static deserialize(serialized: ISerializableFilterField) {
-        return new FilterField(serialized.fieldName);
+        return new FilterField(serialized.fieldName, serialized.displayText);
     }
 
-    constructor(readonly fieldName: string) {
+    constructor(readonly fieldName: string, private readonly displayText: string) {
+    }
+
+    format() {
+        return this.displayText;
     }
 
     toQuery() {
@@ -152,7 +195,8 @@ export class FilterField {
         return {
             type: FilterField.name,
             value: {
-                fieldName: this.fieldName
+                fieldName: this.fieldName,
+                displayText: this.displayText
             }
         } as ISerializableFilterPart<ISerializableFilterField>;
     }
@@ -217,9 +261,13 @@ export class FilterFieldFunction {
 
     private constructor(
         private readonly functionName,
-        private readonly field: FilterField | FilterFieldFunction,
+        readonly field: FilterField | FilterFieldFunction,
         ...values: FilterValue[]) {
         this.values = values;
+    }
+
+    format() {
+        return this.toQuery();
     }
 
     toQuery() {
@@ -263,9 +311,19 @@ export class FilterValue {
     constructor(readonly value: FilterValueType) {
     }
 
+    format() {
+        if (this.value instanceof Date) {
+            return `${this.value.toLocaleDateString()}`;
+        }
+        return this.toQuery();
+    }
+
     toQuery() {
         if (typeof this.value === 'number' || typeof this.value === 'boolean') {
             return this.value.toString();
+        }
+        if (this.value instanceof Date) {
+            return `${this.value.toISOString()}`;
         }
         return `'${this.value}'`;
     }
@@ -321,6 +379,17 @@ export class FilterConditionFunction {
         this.values = values;
     }
 
+    format() {
+        let functionName = this.functionName;
+        if (this.functionName === 'startswith') {
+            functionName = 'starts with';
+        }
+        else if (this.functionName === 'endswith') {
+            functionName = 'ends with';
+        }
+        return `${this.field.format()} ${functionName} ${this.values[0].format()}`;
+    }
+
     toQuery() {
         const args = [this.field.toQuery()];
         const values = new MappedArray(
@@ -367,26 +436,44 @@ export class FilterRelativeDateRange {
     ) {
     }
 
-    getConditions() {
-        const conditions: FilterConditionOperation[] = [];
+    getConditionClauses() {
+        const conditionClauses: FilterConditionClause[] = [];
         const dateRange = this.relativeDateRange.toDateRange();
         if (dateRange.startDate) {
             const condition = FilterConditionOperation.greaterThanOrEqual(
                 this.field,
                 new FilterValue(dateRange.startDate)
             );
-            conditions.push(condition);
+            conditionClauses.push(new FilterConditionClause(condition));
         }
         if (dateRange.endDate) {
+            if (conditionClauses.length > 0) {
+                conditionClauses[conditionClauses.length - 1].conjunction = FilterConjunction.and();
+            }
             const endDate = dateRange.endDate;
             endDate.setDate(endDate.getDate() + 1);
             const condition = FilterConditionOperation.lessThan(
                 this.field,
                 new FilterValue(dateRange.endDate)
             );
-            conditions.push(condition);
+            conditionClauses.push(new FilterConditionClause(condition));
         }
-        return conditions;
+        return conditionClauses;
+    }
+
+    format() {
+        return `${this.field.format()} ${this.relativeDateRange.format()}`;
+    }
+
+    toQuery() {
+        const clauses = this.getConditionClauses();
+        return new JoinedStrings(
+            '',
+            new MappedArray(
+                clauses,
+                c => c.toQuery()
+            )
+        ).value();
     }
 
     serialize() {
@@ -401,51 +488,80 @@ export class FilterRelativeDateRange {
 }
 
 type SingleConditionType = FilterConditionOperation |
-    FilterConditionFunction |
-    FilterConjunction;
+    FilterConditionFunction;
 
 type ConditionType = SingleConditionType | FilterRelativeDateRange;
 
+interface ISerializableFilterConditionClause {
+    readonly condition: ISerializableFilterPart<ConditionType>;
+    readonly conjunction: ISerializableFilterPart<ISerializableFilterConjunction>;
+}
+
+export class FilterConditionClause {
+    static deserialize(serialized: ISerializableFilterConditionClause) {
+        return new FilterConditionClause(
+            FilterPartFactory.create(serialized.condition),
+            FilterPartFactory.create(serialized.conjunction)
+        );
+    }
+
+    constructor(
+        readonly condition: ConditionType,
+        public conjunction: FilterConjunction = FilterConjunction.none()) {
+    }
+
+    toQuery() {
+        return `${this.condition.toQuery()}${this.conjunction.toQuery()}`;
+    }
+
+    serialize() {
+        return {
+            type: FilterConditionClause.name,
+            value: {
+                condition: this.condition.serialize() as any,
+                conjunction: this.conjunction.serialize()
+            }
+        } as ISerializableFilterPart<ISerializableFilterConditionClause>;
+    }
+}
+
 export class ODataQueryFilterBuilder {
-    private readonly conditions: ConditionType[] = [];
+    private readonly conditionClauses: FilterConditionClause[] = [];
 
     constructor(serialized?: ISerializableFilter) {
         if (serialized) {
-            for (const part of serialized.conditions) {
-                this.conditions.push(FilterPartFactory.create(part));
+            for (const part of serialized.conditionClauses) {
+                this.conditionClauses.push(FilterPartFactory.create(part));
             }
         }
     }
 
-    any() { return this.conditions.length > 0; }
+    any() { return this.conditionClauses.length > 0; }
 
-    conditionQueries() {
-        return new MappedArray(this.getSimpleConditions(), c => c.toQuery()).value();
+    getConditions() {
+        return new EnumerableArray(this.conditionClauses).value();
     }
 
-    private getSimpleConditions() {
-        const singleConditions: SingleConditionType[] = [];
-        for (const condition of this.conditions) {
-            if (condition instanceof FilterRelativeDateRange) {
-                singleConditions.push(...condition.getConditions());
-            }
-            else {
-                singleConditions.push(condition);
+    deleteCondition(conditionClause: FilterConditionClause) {
+        const index = this.conditionClauses.indexOf(conditionClause);
+        if (index > -1) {
+            this.conditionClauses.splice(0, 1);
+            if (this.conditionClauses.length > 0) {
+                this.conditionClauses[this.conditionClauses.length - 1].conjunction = FilterConjunction.none();
             }
         }
-        return singleConditions;
     }
 
     clear() {
-        this.conditions.splice(0, this.conditions.length);
+        this.conditionClauses.splice(0, this.conditionClauses.length);
         return this;
     }
 
     add(condition: ConditionType) {
-        if (this.conditions.length > 0) {
-            this.conditions.push(FilterConjunction.and());
+        if (this.conditionClauses.length > 0) {
+            this.conditionClauses[this.conditionClauses.length - 1].conjunction = FilterConjunction.and();
         }
-        this.conditions.push(condition);
+        this.conditionClauses.push(new FilterConditionClause(condition));
         return this;
     }
 
@@ -453,19 +569,19 @@ export class ODataQueryFilterBuilder {
         return new JoinedStrings(
             '',
             new MappedArray(
-                this.getSimpleConditions(),
+                this.conditionClauses,
                 c => c.toQuery()
             )
         ).value();
     }
 
     toSerializable() {
-        const conditions = new MappedArray(
-            this.conditions,
+        const conditionClauses = new MappedArray(
+            this.conditionClauses,
             c => c.serialize()
         ).value();
         return {
-            conditions: conditions
+            conditionClauses: conditionClauses
         } as ISerializableFilter;
     }
 }

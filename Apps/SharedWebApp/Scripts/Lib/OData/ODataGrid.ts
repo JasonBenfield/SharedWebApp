@@ -56,6 +56,7 @@ export class ODataGrid<TEntity> extends BasicComponent {
 
     setData(columns: ODataColumn[], records: Queryable<TEntity>[]) {
         this.clearComponents();
+        this.view.clearContents();
         const columnViews = new MappedArray(
             columns,
             column => column.view
@@ -74,7 +75,7 @@ export class ODataGrid<TEntity> extends BasicComponent {
             }
         }
         else {
-            const alert = new MessageAlert(this.view.addAlertRow());
+            const alert = this.addComponent(new MessageAlert(this.view.addAlertRow()));
             alert.warning('No Records were found.');
         }
     }

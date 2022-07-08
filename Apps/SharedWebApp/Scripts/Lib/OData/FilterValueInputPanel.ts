@@ -96,7 +96,7 @@ export class FilterValueInputPanel implements IPanel {
         new DelayedAction(
             () => {
                 this.view.valueInput.setFocus();
-                this.operation.setText(`${this.options.column.columnName} ${this.options.getSelection().displayText}`);
+                this.operation.setText(`${this.options.column.displayText} ${this.options.getSelection().displayText}`);
             },
             700
         ).execute();

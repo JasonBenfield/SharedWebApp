@@ -4,6 +4,7 @@ import { TextComponent } from "../Components/TextComponent";
 import { TextLink } from "../Components/TextLink";
 import { TextLinkView } from "../Views/TextLinkView";
 import { FilterColumnOptionsBuilder } from "./FilterColumnOptionsBuilder";
+import { FilterConditionClause, FilterConjunction } from "./ODataQueryFilterBuilder";
 import { SelectFilterAppendPanelView } from "./SelectFilterAppendPanelView";
 
 interface IResult {
@@ -38,19 +39,32 @@ export class SelectFilterAppendPanel implements IPanel {
 
     setOptions(options: FilterColumnOptionsBuilder) {
         this.options = options;
-        new TextComponent(this.view.title).setText(`${options.column.columnName} Filter`);
+        new TextComponent(this.view.title).setText(`${options.column.displayText} Filter`);
+        this.updateConditions();
+    }
+
+    private updateConditions() {
         this.view.clearConditions();
-        const conditionQueries = options.getConditionQueries();
-        for (const conditionQuery of conditionQueries) {
+        const conditionClauses = this.options.getConditionClauses();
+        for (const conditionClause of conditionClauses) {
             const conditionView = this.view.addCondition();
-            new TextComponent(conditionView).setText(conditionQuery);
+            new TextComponent(conditionView).setText(conditionClause.condition.format());
+            const deleteButton = this.view.addDeleteButton();
+            deleteButton.handleClick(this.onDeleteClick.bind(this, conditionClause));
+            const conjunctionView = this.view.addConjunction();
+            new TextComponent(conjunctionView).setText(conditionClause.conjunction.format());
         }
-        if (conditionQueries.length > 0) {
+        if (conditionClauses.length > 0) {
             this.view.showConditions();
         }
         else {
             this.view.hideConditions();
         }
+    }
+
+    private onDeleteClick(conditionClause: FilterConditionClause) {
+        this.options.deleteConditionClause(conditionClause);
+        this.updateConditions();
     }
 
     private onItemClick(itemView: TextLinkView, sourceElement: HTMLElement) {

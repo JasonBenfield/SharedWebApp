@@ -64,7 +64,7 @@ export class FormGroupInputView extends FormGroupView {
     constructor(container: BasicComponentView) {
         super(container);
         this.input = this.addView(InputView);
-        this.input.showAsFormControl();
+        this.input.styleAsFormControl();
     }
 }
 
@@ -74,7 +74,7 @@ export class FormGroupSelectView extends FormGroupView {
     constructor(container: BasicComponentView) {
         super(container);
         this.select = this.addView(SelectView);
-        this.select.showAsFormControl();
+        this.select.styleAsFormControl();
     }
 }
 

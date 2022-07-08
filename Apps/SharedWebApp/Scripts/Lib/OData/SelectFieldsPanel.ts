@@ -64,7 +64,7 @@ export class SelectFieldsPanel implements IPanel {
             this.columns.visibleSelectableColumns(),
             (column, itemView: SelectFieldListItemView) => {
                 const isSelected = this.select.containsExplicitySelected(column.columnName);
-                return new SelectFieldListItem(column.columnName, isSelected, itemView);
+                return new SelectFieldListItem(column.displayText, isSelected, itemView);
             }
         );
         this.selectFieldListItems.splice(0, this.selectFieldListItems.length, ...listItems);

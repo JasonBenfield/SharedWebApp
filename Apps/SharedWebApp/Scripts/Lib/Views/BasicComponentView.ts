@@ -65,7 +65,9 @@ export class BasicComponentView {
     protected setAttr(config: (attr: IHtmlAttributes) => void) {
         config(this.attr);
         const attr = Object.create(this.attr);
-        attr.style = this.style;
+        if (Object.keys(this.style).length > 0) {
+            attr.style = this.style;
+        }
         this.elementView.setAttributes(attr);
     }
 

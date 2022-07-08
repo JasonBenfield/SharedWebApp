@@ -1,10 +1,13 @@
 ﻿import { Awaitable } from "../Awaitable";
+import { BasicComponent } from "../Components/BasicComponent";
 import { Command } from "../Components/Command";
+import { TextComponent } from "../Components/TextComponent";
 import { DelayedAction } from "../DelayedAction";
 import { RelativeDateRange } from "../RelativeDateRange";
+import { BlockView } from "../Views/BlockView";
 import { FilterColumnOptionsBuilder } from "./FilterColumnOptionsBuilder";
-import { FilterSelectionRelativeDateRangeValue } from "./FilterSelectionRelativeDateRangeValue";
 import { RelativeDateRangePanelView } from "./RelativeDateRangePanelView";
+import { RelativeDateRangePicker } from "./RelativeDateRangePicker";
 
 interface IResult {
     readonly done?: {};
@@ -18,13 +21,27 @@ class Result {
     get done() { return this.result.done; }
 }
 
-export class RelativeDateRangePanel implements IPanel {
+export class RelativeDateRangePanel extends BasicComponent implements IPanel {
+    private readonly panelView: RelativeDateRangePanelView;
     private readonly awaitable = new Awaitable<Result>();
     private options: FilterColumnOptionsBuilder;
+    private readonly columnName: TextComponent;
+    private readonly relativeDateRangePicker: RelativeDateRangePicker;
+    private readonly preview: TextComponent;
 
-    constructor(private readonly view: RelativeDateRangePanelView) {
+    constructor(view: RelativeDateRangePanelView) {
+        super(view.body);
+        this.panelView = view;
+        this.columnName = new TextComponent(view.columnName);
+        this.relativeDateRangePicker = this.addComponent(new RelativeDateRangePicker(view.relativeDateRangePicker));
+        this.relativeDateRangePicker.when.valueChanged.then(this.onRelativeDateRangeChanged.bind(this));
+        this.preview = new TextComponent(view.preview);
         new Command(this.cancel.bind(this)).add(view.cancelButton);
         new Command(this.save.bind(this)).add(view.saveButton);
+    }
+
+    private onRelativeDateRangeChanged(relativeDateRange: RelativeDateRange) {
+        this.preview.setText(relativeDateRange.toDateRange().format());
     }
 
     private cancel() { this.awaitable.resolve(Result.done()); }
@@ -37,23 +54,33 @@ export class RelativeDateRangePanel implements IPanel {
     }
 
     private getRelativeDateRange() {
-        return new RelativeDateRange(null, null);
+        return this.relativeDateRangePicker.getValue();
     }
 
     setOptions(options: FilterColumnOptionsBuilder) {
         this.options = options;
+        this.columnName.setText(options.column.displayText);
+        this.relativeDateRangePicker.setValue(
+            new RelativeDateRange(
+                null,
+                null,
+                true
+            )
+        );
+        this.preview.setText(this.relativeDateRangePicker.getValue().toDateRange().format());
     }
 
     start() {
         new DelayedAction(
             () => {
+                this.relativeDateRangePicker.setFocus();
             },
             700
         ).execute();
         return this.awaitable.start();
     }
 
-    activate() { this.view.show(); }
+    activate() { this.panelView.show(); }
 
-    deactivate() { this.view.hide(); }
+    deactivate() { this.panelView.hide(); }
 }

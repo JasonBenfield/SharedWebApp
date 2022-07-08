@@ -9,6 +9,26 @@ import { ViewEventActionBuilder } from "./ViewEventBuilder";
 
 export type GridTemplateCss = CssLengthUnit | GridTemplateMinMax | GridTemplateRepeat | GridTemplateFitContent;
 
+export class GridTemplateCssValue {
+    private readonly templates: GridTemplateCss[];
+
+    constructor(...templates: GridTemplateCss[]) {
+        this.templates = templates;
+    }
+
+    value() {
+        return new JoinedStrings(
+            ' ',
+            new MappedArray(
+                this.templates,
+                c => c.toString()
+            )
+        ).value();
+    }
+
+    toString() { return this.value(); }
+}
+
 export class GridTemplateFitContent {
     readonly value: string;
 
@@ -93,24 +113,12 @@ export class GridView extends BasicComponentView {
     }
 
     setTemplateColumns(...columns: GridTemplateCss[]) {
-        const value = new JoinedStrings(
-            ' ',
-            new MappedArray(
-                columns,
-                c => c.toString()
-            )
-        ).value();
+        const value = new GridTemplateCssValue(...columns).value();
         this.setStyle(style => style['grid-template-columns'] = value);
     }
 
     setTemplateRows(...rows: GridTemplateCss[]) {
-        const value = new JoinedStrings(
-            ' ',
-            new MappedArray(
-                rows,
-                c => c.toString()
-            )
-        ).value();
+        const value = new GridTemplateCssValue(...rows).value();
         this.setStyle(style => style['grid-template-rows'] = value);
     }
 

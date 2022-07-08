@@ -13,7 +13,7 @@ export class InputView extends BasicComponentView {
 
     protected setAttr: (config: (attr: IInputAttributes) => void) => void;
 
-    showAsFormControl() {
+    styleAsFormControl() {
         this.addCssName('form-control');
     }
 

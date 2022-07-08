@@ -4,9 +4,6 @@ import { BasicContainerView } from "./BasicContainerView";
 import { IButtonAttributes } from "./Types";
 
 export class ButtonView extends BasicContainerView {
-    private context: ContextualClass;
-    private isOutline = false;
-
     constructor(container: BasicComponentView) {
         super(container, 'button');
         this.setAttr(attr => attr.type = 'button');
@@ -28,14 +25,11 @@ export class ButtonView extends BasicContainerView {
     disable() { this.setAttr(a => a.disabled = true); }
 
     setContext(context: ContextualClass) {
-        this.setCss('button-context', this.getContextCss(context, this.isOutline));
-        this.context = context;
+        this.setCss('button-context', this.getContextCss(context, false));
     }
 
     useOutlineStyle(context: ContextualClass) {
         this.setCss('button-context', this.getContextCss(context, true));
-        this.context = context;
-        this.isOutline = true;
     }
 
     private getContextCss(context: ContextualClass, isOutline: boolean) {

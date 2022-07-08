@@ -2,16 +2,21 @@
 import { EventSource } from "../Events";
 import { TypedFieldViewValue } from "../Forms/TypedFieldViewValue";
 import { InputView } from "../Views/InputView";
+import { BasicComponent } from "./BasicComponent";
 
-export class InputControl<TValue> {
-    private readonly events = { valueChanged: null as TValue };
-    private readonly eventSource = new EventSource<typeof this.events>(this, this.events);
+type Events<TValue> = { valueChanged: TValue };
+
+export class InputControl<TValue> extends BasicComponent {
+    protected readonly view: InputView;
+
+    private readonly eventSource = new EventSource<Events<TValue>>(this, { valueChanged: null as TValue });
     readonly when = this.eventSource.when;
 
     constructor(
-        private readonly view: InputView,
+        view: InputView,
         private readonly viewValue: TypedFieldViewValue<string, TValue>
     ) {
+        super(view);
         this.view.onInput()
             .execute(this.onInputValueChanged.bind(this))
             .subscribe();
@@ -48,6 +53,8 @@ export class InputControl<TValue> {
         const inputValue = this.viewValue.toView();
         this.view.setValue(inputValue);
     }
+
+    setFocus() { this.view.setFocus(); }
 
     show() { this.view.show(); }
 

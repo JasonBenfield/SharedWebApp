@@ -9,7 +9,7 @@ export class ODataHeaderCell extends ODataCell {
     constructor(column: ODataColumn, view: ODataHeaderCellView) {
         super(0, column, null, view);
         const columnName = new TextComponent(view.columnName);
-        columnName.setText(column ? column.columnName : '')
+        columnName.setText(column ? column.displayText : '')
         columnName.syncTitleWithText();
     }
 

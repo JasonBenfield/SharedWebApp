@@ -3,13 +3,14 @@ import { BasicComponent } from "./BasicComponent";
 import { SelectOption } from "./SelectOption";
 import { EventSource } from '../Events';
 
+type Events<TValue> = { valueChanged: TValue };
+
 export class SelectControl<TValue> extends BasicComponent {
     protected readonly view: SelectView;
     private readonly items: SelectOption<TValue>[] = [];
     private itemCaption: string;
 
-    private readonly events = { valueChanged: null as TValue };
-    private readonly eventSource = new EventSource<typeof this.events>(this, this.events);
+    private readonly eventSource = new EventSource<Events<TValue>>(this, { valueChanged: null as TValue });
     readonly when = this.eventSource.when;
 
     constructor(view: SelectView) {

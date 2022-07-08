@@ -1,12 +1,19 @@
 ﻿import { EventSource } from "../Events";
 import { BooleanInputView } from "../Views/BooleanInputView";
+import { BasicComponent } from "./BasicComponent";
 
-export class BooleanInputControl {
-    private readonly events = { valueChanged: null as boolean };
-    private readonly eventSource = new EventSource<typeof this.events>(this, this.events);
+export type BooleanInputControlEvents = { valueChanged: boolean };
+
+export class BooleanInputControl extends BasicComponent {
+    protected readonly view: BooleanInputView;
+    private readonly eventSource = new EventSource<BooleanInputControlEvents>(
+        this,
+        { valueChanged: null as boolean }
+    );
     readonly when = this.eventSource.when;
 
-    constructor(private readonly view: BooleanInputView) {
+    constructor(view: BooleanInputView) {
+        super(view);
         this.view.onChange()
             .execute(this.onInputValueChanged.bind(this))
             .subscribe();
@@ -23,5 +30,9 @@ export class BooleanInputControl {
 
     setValue(value: boolean) {
         this.view.setValue(value);
+    }
+
+    protected onDispose() {
+        this.eventSource.unregisterAll();
     }
 }

@@ -1,12 +1,29 @@
 ﻿import { DateRange } from "./DateRange";
+import { FormattedDate } from "./FormattedDate";
 
 interface ISerializableRelativeYearOffset {
     readonly type: string;
     readonly value: {
         readonly yearOffset: number;
-        readonly month: number;
+        readonly month: MonthOfYear;
         readonly dayOfMonth: ISerializableDayOfMonth;
     }
+}
+
+export type MonthOfYear = number | 'reference-date';
+
+function formatOrdinalDay(day: number) {
+    let suffix = 'th';
+    if (day === 1 || day === 21) {
+        suffix = 'st';
+    }
+    else if (day === 2 || day === 22) {
+        suffix = 'nd';
+    }
+    else if (day === 3 || day === 23) {
+        suffix = 'rd';
+    }
+    return `${day}${suffix}`;
 }
 
 export class RelativeYearOffset {
@@ -20,7 +37,7 @@ export class RelativeYearOffset {
 
     readonly dayOfMonth: DayOfMonth;
 
-    constructor(readonly yearOffset: number, readonly month: number, dayOfMonth: DayOfMonth | DayOfMonthValue) {
+    constructor(readonly yearOffset: number, readonly month: MonthOfYear, dayOfMonth: DayOfMonth | DayOfMonthValue) {
         if (dayOfMonth instanceof DayOfMonth) {
             this.dayOfMonth = dayOfMonth;
         }
@@ -29,11 +46,28 @@ export class RelativeYearOffset {
         }
     }
 
+    format() {
+        const yearOffset = Math.abs(this.yearOffset);
+        let type = this.yearOffset < 0 ? ' ago' : ' later';
+        if (yearOffset === 0) {
+            type = '';
+        }
+        const yearOffsetText = yearOffset > 0 ? yearOffset.toString() : 'same';
+        const pluralized = yearOffset > 1 ? 's' : '';
+        const month = typeof this.month === 'number'
+            ? new FormattedDate(new Date(2022, this.month, 1), { month: 'long' }).formatDate()
+            : 'reference month';
+        const dayOfMonth = typeof this.dayOfMonth.value === 'number'
+            ? `on the ${formatOrdinalDay(this.dayOfMonth.value)}`
+            : this.dayOfMonth.format().toLowerCase();
+        return `${yearOffsetText} year${pluralized}${type} in ${month} ${dayOfMonth}`;
+    }
+
     toDate(referenceDate: Date) {
         return this.dayOfMonth.toDate(
             new Date(
                 referenceDate.getFullYear() + this.yearOffset,
-                this.month,
+                typeof this.month === 'number' ? this.month : referenceDate.getMonth(),
                 1
             ),
             referenceDate.getDate()
@@ -79,6 +113,20 @@ export class RelativeMonthOffset {
         }
     }
 
+    format() {
+        const monthOffset = Math.abs(this.monthOffset);
+        const monthOffsetText = monthOffset > 0 ? monthOffset.toString() : 'same';
+        let type = this.monthOffset < 0 ? ' ago' : ' later';
+        if (monthOffset === 0) {
+            type = '';
+        }
+        const pluralized = monthOffset > 1 ? 's' : '';
+        const dayOfMonth = typeof this.dayOfMonth.value === 'number'
+            ? `on the ${formatOrdinalDay(this.dayOfMonth.value)}`
+            : this.dayOfMonth.format().toLowerCase();
+        return `${monthOffsetText} month${pluralized}${type} ${dayOfMonth}`;
+    }
+
     toDate(referenceDate: Date) {
         return this.dayOfMonth.toDate(
             new Date(
@@ -108,12 +156,60 @@ interface ISerializableDayOfMonth {
     readonly value: DayOfMonthValue;
 }
 
+export class DaysOfMonth {
+    private readonly daysOfMonth: DayOfMonth[] = [];
+
+    constructor() {
+        this.daysOfMonth.push(new DayOfMonth('reference-day'));
+        for (let day = 1; day <= 30; day++) {
+            this.daysOfMonth.push(new DayOfMonth(day));
+        }
+        this.daysOfMonth.push(new DayOfMonth('month-end'));
+    }
+
+    get values() { return this.daysOfMonth; }
+
+    value(dayOfMonth: DayOfMonth) {
+        let result: DayOfMonth;
+        if (dayOfMonth) {
+            if (dayOfMonth.isReferenceDay) {
+                result = this.daysOfMonth[0];
+            }
+            else if (dayOfMonth.isMonthEnd) {
+                result = this.daysOfMonth[31];
+            }
+            else {
+                result = this.daysOfMonth[dayOfMonth.value];
+            }
+        }
+        return result;
+    }
+}
+
 export class DayOfMonth {
     static deserialize(serialized: ISerializableDayOfMonth) {
         return new DayOfMonth(serialized.value);
     }
 
-    constructor(private readonly value: DayOfMonthValue) {
+    constructor(readonly value: DayOfMonthValue) {
+    }
+
+    get isMonthEnd() { return this.value === 'month-end'; }
+
+    get isReferenceDay() { return this.value === 'reference-day'; }
+
+    format() {
+        let formatted: string;
+        if (this.value === 'month-end') {
+            formatted = 'End of Month';
+        }
+        else if (this.value === 'reference-day') {
+            formatted = 'Reference Day';
+        }
+        else {
+            formatted = this.value.toString();
+        }
+        return formatted;
     }
 
     toDate(startOfMonth: Date, referenceDay: number) {
@@ -163,6 +259,17 @@ export class RelativeDayOffset {
     }
 
     constructor(readonly dayOffset: number) {
+    }
+
+    format() {
+        const dayOffset = Math.abs(this.dayOffset);
+        let type = this.dayOffset < 0 ? ' ago' : ' later';
+        if (dayOffset === 0) {
+            type = '';
+        }
+        const dayOffsetText = dayOffset > 0 ? dayOffset.toString() : 'same';
+        const pluralized = dayOffset > 1 ? 's' : '';
+        return `${dayOffsetText} day${pluralized}${type}`;
     }
 
     toDate(referenceDate: Date) {
@@ -220,10 +327,23 @@ export class RelativeDateRange {
     }
 
     constructor(
-        private readonly relativeStart: RelativeOffset,
-        private readonly relativeEnd: RelativeOffset,
-        private readonly isEndRelativeToStart: boolean = true
+        readonly relativeStart: RelativeOffset,
+        readonly relativeEnd: RelativeOffset,
+        readonly isEndRelativeToStart: boolean = true
     ) {
+    }
+
+    format() {
+        if (this.relativeStart && this.relativeEnd) {
+            return `From ${this.relativeStart.format()} until ${this.relativeEnd.format()}`;
+        }
+        if (this.relativeStart) {
+            return `On or after ${this.relativeStart.format()}`;
+        }
+        if (this.relativeEnd) {
+            return `On or before ${this.relativeEnd.format()}`;
+        }
+        return '';
     }
 
     toDateRange(referenceDate: Date = new Date()) {

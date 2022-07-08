@@ -10,7 +10,7 @@ export class SelectView extends BasicComponentView {
         this.selectElement = this.elementView.element as HTMLSelectElement;
     }
 
-    showAsFormControl() {
+    styleAsFormControl() {
         this.addCssName('form-control');
     }
 

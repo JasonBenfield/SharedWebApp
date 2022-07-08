@@ -1,42 +1,88 @@
-﻿import { FilterSelectionRelativeDateRangeValue } from "./FilterSelectionRelativeDateRangeValue";
+﻿import { MappedArray } from "../Enumerable";
+import { FilterSelectionRelativeDateRangeValue } from "./FilterSelectionRelativeDateRangeValue";
 import { FilterSelectionStringValue } from "./FilterSelectionStringValue";
 import { FilterSelectionValue } from "./FilterSelectionValue";
 import { FilterConditionFunction, FilterConditionOperation, FilterRelativeDateRange, IFilterSelectionValue, ODataQueryFilterBuilder } from "./ODataQueryFilterBuilder";
 import { SourceType } from "./SourceType";
 
 export abstract class FilterSelection {
-    static get equal() { return new FilterSelectionEqual(); }
-    static get notEqual() { return new FilterSelectionNotEqual(); }
-    static get greaterThan() { return new FilterSelectionGreaterThan(); }
-    static get lessThan() { return new FilterSelectionLessThan(); }
-    static get greaterThanOrEqual() { return new FilterSelectionGreaterThanOrEqual(); }
-    static get lessThanOrEqual() { return new FilterSelectionLessThanOrEqual(); }
-    static get isTrue() { return new FilterSelectionIsTrue(); }
-    static get isFalse() { return new FilterSelectionIsFalse(); }
-    static get startsWith() { return new FilterSelectionStartsWith(); }
-    static get endsWith() { return new FilterSelectionEndsWith(); }
-    static get contains() { return new FilterSelectionContains(); }
-    static get isBlank() { return new FilterSelectionIsBlank(); }
-    static get isNotBlank() { return new FilterSelectionIsNotBlank(); }
-    static get relativeDateRange() { return new FilterSelectionRelativeDateRange(); }
+    private static readonly selections = {
+        equal: null as FilterSelection,
+        notEqual: null as FilterSelection,
+        greaterThan: null as FilterSelection,
+        lessThan: null as FilterSelection,
+        greaterThanOrEqual: null as FilterSelection,
+        lessThanOrEqual: null as FilterSelection,
+        isTrue: null as FilterSelection,
+        isFalse: null as FilterSelection,
+        startsWith: null as FilterSelection,
+        endsWith: null as FilterSelection,
+        contains: null as FilterSelection,
+        isBlank: null as FilterSelection,
+        isNotBlank: null as FilterSelection,
+        relativeDateRange: null as FilterSelection
+    };
+
+    static get equal() {
+        return FilterSelection.getFilterSelection('equal', () => new FilterSelectionEqual());
+    }
+    static get notEqual() {
+        return FilterSelection.getFilterSelection('notEqual', () => new FilterSelectionNotEqual());
+    }
+    static get greaterThan() {
+        return FilterSelection.getFilterSelection('greaterThan', () => new FilterSelectionGreaterThan());
+    }
+    static get lessThan() {
+        return FilterSelection.getFilterSelection('lessThan', () => new FilterSelectionLessThan());
+    }
+    static get greaterThanOrEqual() {
+        return FilterSelection.getFilterSelection('greaterThanOrEqual', () => new FilterSelectionGreaterThanOrEqual());
+    }
+    static get lessThanOrEqual() {
+        return FilterSelection.getFilterSelection('lessThanOrEqual', () => new FilterSelectionLessThanOrEqual());
+    }
+    static get isTrue() {
+        return FilterSelection.getFilterSelection('isTrue', () => new FilterSelectionIsTrue());
+    }
+    static get isFalse() {
+        return FilterSelection.getFilterSelection('isFalse', () => new FilterSelectionIsFalse());
+    }
+    static get startsWith() {
+        return FilterSelection.getFilterSelection('startsWith', () => new FilterSelectionStartsWith());
+    }
+    static get endsWith() {
+        return FilterSelection.getFilterSelection('endsWith', () => new FilterSelectionEndsWith());
+    }
+    static get contains() {
+        return FilterSelection.getFilterSelection('contains', () => new FilterSelectionContains());
+    }
+    static get isBlank() {
+        return FilterSelection.getFilterSelection('isBlank', () => new FilterSelectionIsBlank());
+    }
+    static get isNotBlank() {
+        return FilterSelection.getFilterSelection('isNotBlank', () => new FilterSelectionIsNotBlank());
+    }
+    static get relativeDateRange() {
+        return FilterSelection.getFilterSelection('relativeDateRange', () => new FilterSelectionRelativeDateRange());
+    }
+
+    private static getFilterSelection(
+        name: keyof typeof FilterSelection.selections,
+        create: () => FilterSelection
+    ) {
+        return FilterSelection.selections[name] ||
+            (FilterSelection.selections[name] = create());
+    }
+
+    private static allSelections: FilterSelection[];
 
     static get all() {
-        return [
-            FilterSelection.equal,
-            FilterSelection.notEqual,
-            FilterSelection.greaterThan,
-            FilterSelection.lessThan,
-            FilterSelection.greaterThanOrEqual,
-            FilterSelection.lessThanOrEqual,
-            FilterSelection.isTrue,
-            FilterSelection.isFalse,
-            FilterSelection.startsWith,
-            FilterSelection.endsWith,
-            FilterSelection.contains,
-            FilterSelection.isBlank,
-            FilterSelection.isNotBlank,
-            FilterSelection.relativeDateRange
-        ];
+        return FilterSelection.allSelections || (
+            FilterSelection.allSelections = new MappedArray(
+                Object.keys(FilterSelection.selections),
+                key => FilterSelection[key] as FilterSelection
+            ).value()
+        );
     }
 
     protected constructor(readonly displayText: string) {

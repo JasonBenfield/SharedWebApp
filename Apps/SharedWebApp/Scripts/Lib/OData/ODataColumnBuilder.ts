@@ -9,6 +9,7 @@ import { SourceType } from "./SourceType";
 import { ICreateDataCell, ICreateHeaderCell, IValueFormatter } from "./Types";
 
 export class ODataColumnBuilder {
+    private displayText;
     private isRequired = false;
     private isSelectable = true;
     private isVisible = true;
@@ -26,6 +27,12 @@ export class ODataColumnBuilder {
         readonly sourceType: SourceType = SourceType.none,
         private readonly view: ODataColumnViewBuilder = new ODataColumnViewBuilder()
     ) {
+        this.displayText = this.columnName;
+    }
+
+    setDisplayText(displayText: string) {
+        this.displayText = displayText;
+        return this;
     }
 
     require() {
@@ -61,6 +68,7 @@ export class ODataColumnBuilder {
     build() {
         return new ODataColumn(
             this.columnName,
+            this.displayText,
             this.sourceType,
             this.createHeaderCell,
             this.formatter,

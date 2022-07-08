@@ -38,7 +38,7 @@ class MainPage extends BasicPage {
                 'Shared',
                 '',
                 pageContext.CacheBust
-            ),
+            ).withGroup('EmployeeQuery'),
             'EmployeeQuery'
         );
         options.setODataGroup(odataGroup);

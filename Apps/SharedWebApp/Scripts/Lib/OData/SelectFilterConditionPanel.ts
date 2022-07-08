@@ -44,7 +44,7 @@ export class SelectFilterConditionPanel extends BasicComponent implements IPanel
 
     setOptions(options: FilterColumnOptionsBuilder) {
         this.options = options;
-        new TextComponent(this.panelView.title).setText(`${options.column.columnName} Filter`);
+        new TextComponent(this.panelView.title).setText(`${options.column.displayText} Filter`);
         for (const component of this.getComponents()) {
             const link = component as FilterConditionLink;
             link.sourceTypeChanged(options.column.sourceType);

@@ -10,7 +10,6 @@ import { GridView } from "../Views/Grid";
 import { LinkView } from "../Views/LinkView";
 import { ModalComponentView } from "../Views/Modal";
 import { NavView } from "../Views/NavView";
-import { RowView } from "../Views/RowView";
 import { TextBlockView } from "../Views/TextBlockView";
 import { TextHeading1View, TextHeading3View } from "../Views/TextHeadings";
 import { TextLinkView } from "../Views/TextLinkView";
@@ -18,6 +17,7 @@ import { ModalODataPanelView } from "./ModalODataPanelView";
 
 export class SelectFilterAppendPanelView extends ModalODataPanelView {
     readonly title: BasicTextComponentView;
+    private readonly nav: NavView;
     readonly clearItem: TextLinkView;
     readonly appendItem: TextLinkView;
     private readonly conditionBlock: BlockView;
@@ -27,12 +27,12 @@ export class SelectFilterAppendPanelView extends ModalODataPanelView {
     constructor(modal: ModalComponentView) {
         super(modal);
         this.title = this.header.addView(TextHeading1View);
-        const nav = this.body.addView(NavView);
-        nav.pills();
-        nav.setFlexCss(new FlexCss().column());
-        this.clearItem = nav.addTextLink();
+        this.nav = this.body.addView(NavView);
+        this.nav.pills();
+        this.nav.setFlexCss(new FlexCss().column());
+        this.clearItem = this.nav.addTextLink();
         this.clearItem.setMargin(MarginCss.bottom(3));
-        this.appendItem = nav.addTextLink();
+        this.appendItem = this.nav.addTextLink();
         this.appendItem.setMargin(MarginCss.bottom(3));
         this.conditionBlock = this.body.addView(BlockView);
         const conditionTitle = this.conditionBlock.addView(TextHeading3View);
@@ -40,7 +40,7 @@ export class SelectFilterAppendPanelView extends ModalODataPanelView {
         conditionTitle.setText('Current Filter');
         this.grid = this.conditionBlock.addView(GridView);
         this.grid.borderless();
-        this.grid.setTemplateColumns(CssLengthUnit.auto(), CssLengthUnit.auto());
+        this.grid.setTemplateColumns(CssLengthUnit.flex(1), CssLengthUnit.auto(), CssLengthUnit.auto());
         this.footer.setTextCss(new TextCss().start());
         this.footer.addCssName('w-100');
         this.backButton = this.footer.addView(ButtonCommandView);
@@ -50,7 +50,7 @@ export class SelectFilterAppendPanelView extends ModalODataPanelView {
     }
 
     handleClick(action: (view: LinkView) => void) {
-        this.body.on('click').select('a').execute(action).subscribe();
+        this.nav.on('click').select('a').execute(action).subscribe();
     }
 
     showConditions() { this.conditionBlock.show(); }
@@ -64,5 +64,19 @@ export class SelectFilterAppendPanelView extends ModalODataPanelView {
     addCondition() {
         const cell = this.grid.addCell();
         return cell.addView(TextBlockView);
+    }
+
+    addConjunction() {
+        const cell = this.grid.addCell();
+        return cell.addView(TextBlockView);
+    }
+
+    addDeleteButton() {
+        const cell = this.grid.addCell();
+        const deleteButton = cell.addView(ButtonCommandView);
+        deleteButton.icon.solidStyle('times');
+        deleteButton.useOutlineStyle(ContextualClass.secondary);
+        deleteButton.setTitle('Delete condition');
+        return deleteButton;
     }
 }

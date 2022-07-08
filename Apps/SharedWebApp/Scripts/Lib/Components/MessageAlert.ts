@@ -4,15 +4,18 @@ import { DebouncedAction } from '../DebouncedAction';
 import { DefaultEvent } from '../Events';
 import { TextComponent } from './TextComponent';
 import { MessageAlertView } from '../Views/MessageAlertView';
+import { BasicComponent } from './BasicComponent';
 
-export class MessageAlert {
+export class MessageAlert extends BasicComponent {
+    protected readonly view: MessageAlertView
     private _message: string;
     private readonly textBlock: TextComponent;
 
     private readonly _isVisibleChanged = new DefaultEvent<boolean>(this);
     readonly isVisibleChanged = this._isVisibleChanged.handler();
 
-    constructor(private readonly view: MessageAlertView) {
+    constructor(view: MessageAlertView) {
+        super(view);
         this.textBlock = new TextComponent(view.textBlock);
     }
 

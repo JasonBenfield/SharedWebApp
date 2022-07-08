@@ -1,15 +1,17 @@
-﻿import { FilterField, FilterFieldFunction, FilterValue, IFilterSelectionValue } from "./ODataQueryFilterBuilder";
+﻿import { ODataColumn } from "./ODataColumn";
+import { FilterField, FilterFieldFunction, FilterValue, IFilterSelectionValue } from "./ODataQueryFilterBuilder";
 
 export class FilterSelectionStringValue implements IFilterSelectionValue {
-    static blank(fieldName: string) {
-        return new FilterSelectionStringValue(fieldName, '', false);
+    static blank(column: ODataColumn) {
+        return new FilterSelectionStringValue(column, '', false);
     }
 
-    constructor(readonly fieldName: string, readonly value: string, readonly ignoreCase: boolean) {
+    constructor(readonly column: ODataColumn, readonly value: string, readonly ignoreCase: boolean) {
     }
 
     toField() {
-        let field: FilterField | FilterFieldFunction = new FilterField(this.fieldName);
+        let field: FilterField | FilterFieldFunction =
+            new FilterField(this.column.columnName, this.column.displayText);
         if (this.ignoreCase) {
             field = FilterFieldFunction.toLower(field);
         }

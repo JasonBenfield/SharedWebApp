@@ -7,7 +7,7 @@
     vertical-align: $table-cell-vertical-align;
     border-color: $table-border-color;
 
-    > * {
+    > .grid-row > .grid-cell, > .grid-cell {
         border-top: (2 * $table-border-width) solid $table-group-separator-color;
     }
 }
@@ -39,22 +39,14 @@
 }
 
 .grid-bordered {
-    > :not(caption) > * {
+    > .grid-row > .grid-cell, > .grid-cell {
         border-width: $table-border-width 0;
-        // stylelint-disable-next-line selector-max-universal
-        > * {
-            border-width: 0 $table-border-width;
-        }
     }
 }
 
 .grid-borderless, .grid-layout {
-    // stylelint-disable-next-line selector-max-universal
-    > :not(caption) > * > * {
+    > .grid-row > .grid-cell, > .grid-cell {
         border-bottom-width: 0;
-    }
-
-    > * {
         border-top-width: 0;
     }
 }

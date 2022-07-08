@@ -10,6 +10,10 @@ export class TextComponent extends BasicComponent {
         super(view);
     }
 
+    show() { this.view.show(); }
+
+    hide() { this.view.hide(); }
+
     setText(text: string) {
         this.text = text;
         this.view.setText(text);

@@ -23,7 +23,7 @@ export class DefaultValueFormatter implements IValueFormatter {
             }
         }
         else {
-            formatted = column.columnName;
+            formatted = column.displayText;
         }
         return formatted;
     }

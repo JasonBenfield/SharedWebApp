@@ -5,7 +5,7 @@ import { FilterSelectionRelativeDateRangeValue } from "./FilterSelectionRelative
 import { FilterSelectionStringValue } from "./FilterSelectionStringValue";
 import { FilterSelectionValue } from "./FilterSelectionValue";
 import { ODataColumn } from "./ODataColumn";
-import { FilterField, FilterValue, IFilterSelectionValue, ODataQueryFilterBuilder } from "./ODataQueryFilterBuilder";
+import { FilterConditionClause, IFilterSelectionValue, ODataQueryFilterBuilder } from "./ODataQueryFilterBuilder";
 
 enum FilterAppend {
     replace,
@@ -21,7 +21,11 @@ export class FilterColumnOptionsBuilder {
     constructor(private readonly filter: ODataQueryFilterBuilder, readonly column: ODataColumn) {
     }
 
-    getConditionQueries() { return this.filter.conditionQueries(); }
+    getConditionClauses() { return this.filter.getConditions(); }
+
+    deleteConditionClause(conditionClause: FilterConditionClause) {
+        this.filter.deleteCondition(conditionClause);
+    }
 
     append() {
         this.appendValue = FilterAppend.append;
@@ -40,26 +44,26 @@ export class FilterColumnOptionsBuilder {
     setFilterSelection(selection: FilterSelection) {
         this.selection = selection;
         if (selection === FilterSelection.isTrue) {
-            this.value = new FilterSelectionBooleanValue(this.column.columnName, true);
+            this.value = new FilterSelectionBooleanValue(this.column, true);
         }
         else if (selection === FilterSelection.isTrue) {
-            this.value = new FilterSelectionBooleanValue(this.column.columnName, false);
+            this.value = new FilterSelectionBooleanValue(this.column, false);
         }
         else if (selection === FilterSelection.isBlank || selection === FilterSelection.isNotBlank) {
-            this.value = FilterSelectionStringValue.blank(this.column.columnName);
+            this.value = FilterSelectionStringValue.blank(this.column);
         }
     }
 
     setStringValue(value: any, ignoreCase) {
-        this.value = new FilterSelectionStringValue(this.column.columnName, value, ignoreCase);
+        this.value = new FilterSelectionStringValue(this.column, value, ignoreCase);
     }
 
     setRelativeDateRangeValue(value: RelativeDateRange) {
-        this.value = new FilterSelectionRelativeDateRangeValue(this.column.columnName, value);
+        this.value = new FilterSelectionRelativeDateRangeValue(this.column, value);
     }
 
     setValue(value: number | Date) {
-        this.value = new FilterSelectionValue(this.column.columnName, value);
+        this.value = new FilterSelectionValue(this.column, value);
     }
 
     applyToQuery() {

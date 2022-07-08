@@ -39,13 +39,14 @@ export class BasicComponent {
 
     protected clearComponents() {
         for (const component of this.components) {
-            component.view.dispose();
+            component.dispose();
         }
         this.components.splice(0, this.components.length);
     }
 
-    protected addComponent(component: BasicComponent) {
+    protected addComponent<T extends BasicComponent>(component: T) {
         this.components.push(component);
+        return component;
     }
 
     protected removeComponent(component: BasicComponent) {
@@ -55,4 +56,12 @@ export class BasicComponent {
             this.components.splice(index, 1);
         }
     }
+
+    dispose() {
+        this.clearComponents();
+        this.view.dispose();
+        this.onDipose();
+    }
+
+    protected onDipose() { }
 }

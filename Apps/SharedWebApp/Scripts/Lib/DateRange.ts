@@ -15,7 +15,7 @@ export class DateRange {
             else if (this.endDate && !this.startDate) {
                 str = `On or Before ${endDate}`;
             }
-            else if (this.startDate.getTime() == this.startDate.getTime()) {
+            else if (this.startDate.getTime() == this.endDate.getTime()) {
                 str = `On ${startDate}`;
             }
             else {

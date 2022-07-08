@@ -6,6 +6,7 @@ import { ICreateDataCell, ICreateHeaderCell, IValueFormatter } from "./Types";
 export class ODataColumn {
     constructor(
         readonly columnName: string,
+        readonly displayText: string,
         readonly sourceType: SourceType,
         private readonly _createHeaderCell: ICreateHeaderCell,
         private readonly formatter: IValueFormatter,

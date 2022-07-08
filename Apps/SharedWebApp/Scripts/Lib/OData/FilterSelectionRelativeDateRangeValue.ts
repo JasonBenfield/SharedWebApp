@@ -1,12 +1,13 @@
 ﻿import { RelativeDateRange } from "../RelativeDateRange";
+import { ODataColumn } from "./ODataColumn";
 import { FilterField, IFilterSelectionValue } from "./ODataQueryFilterBuilder";
 
 export class FilterSelectionRelativeDateRangeValue implements IFilterSelectionValue {
-    constructor(readonly fieldName: string, readonly value: RelativeDateRange) {
+    constructor(readonly column: ODataColumn, readonly value: RelativeDateRange) {
     }
 
     toField() {
-        return new FilterField(this.fieldName);
+        return new FilterField(this.column.columnName, this.column.displayText);
     }
 
     toValue() {

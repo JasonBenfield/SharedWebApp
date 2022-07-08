@@ -41,6 +41,7 @@
     <None Remove="Scripts\Lib\Components\BasicPage.ts" />
     <None Remove="Scripts\Lib\Components\BasicPanelComponent.ts" />
     <None Remove="Scripts\Lib\Components\BooleanInputControl.ts" />
+    <None Remove="Scripts\Lib\Components\FormCheck.ts" />
     <None Remove="Scripts\Lib\Components\InputControl.ts" />
     <None Remove="Scripts\Lib\Components\ListGroup.ts" />
     <None Remove="Scripts\Lib\Components\ModalConfirm.ts" />
@@ -100,6 +101,8 @@
     <None Remove="Scripts\Lib\OData\ODataTextCellView.ts" />
     <None Remove="Scripts\Lib\OData\RelativeDateRangePanel.ts" />
     <None Remove="Scripts\Lib\OData\RelativeDateRangePanelView.ts" />
+    <None Remove="Scripts\Lib\OData\RelativeDateRangePicker.ts" />
+    <None Remove="Scripts\Lib\OData\RelativeDateRangePickerView.ts" />
     <None Remove="Scripts\Lib\OData\RelativeOffsetPicker.ts" />
     <None Remove="Scripts\Lib\OData\RelativeOffsetPickerView.ts" />
     <None Remove="Scripts\Lib\OData\SelectFIeldListItem.ts" />
@@ -200,6 +203,7 @@
     <TypeScriptCompile Include="Scripts\Lib\Components\BooleanInputControl.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Components\FormCheck.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\InputControl.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\ListGroup.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\ModalConfirm.ts" />
@@ -217,6 +221,8 @@
     <TypeScriptCompile Include="Scripts\Lib\OData\FilterSelectionRelativeDateRangeValue.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\FilterSelectionValue.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ModalODataPanelView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\RelativeDateRangePicker.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\RelativeDateRangePickerView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\RelativeOffsetPicker.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\RelativeOffsetPickerView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\RelativeDateRangePanel.ts" />
