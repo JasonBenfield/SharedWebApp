@@ -34,32 +34,8 @@ export class BasicComponentView {
         }
     }
 
-    getViewByElement(element: HTMLElement) {
-        for (const view of this.views) {
-            if (view.hasElement(element)) {
-                return view;
-            }
-        }
-        if (this.hasElement(element)) {
-            return this;
-        }
-        return null;
-    }
-
     hasElement(element: HTMLElement) {
         return this.elementView.hasElement(element);
-    }
-
-    isOrContainsView(view: BasicComponentView) {
-        if (view === this) {
-            return true;
-        }
-        for (const childView of this.views) {
-            if (childView.isOrContainsView(view)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     protected setAttr(config: (attr: IHtmlAttributes) => void) {
@@ -84,6 +60,8 @@ export class BasicComponentView {
         action(this);
         return this;
     }
+
+    get offsetWidth() { return this.elementView.offsetWidth; }
 
     setViewID(id: string) {
         this.setAttr(attr => attr.id = id);
@@ -158,16 +136,6 @@ export class BasicComponentView {
         return '';
     }
 
-    replaceCss(css: CssClass) {
-        this.clearCss();
-        return this.addCssFrom(css);
-    }
-
-    clearCss() {
-        this.cssClass.clear();
-        this.setCssClass();
-    }
-
     addCssFrom(css: CssClass | ICssBuilder) {
         this.cssClass.addFrom(css);
         this.setCssClass();
@@ -210,7 +178,7 @@ export class BasicComponentView {
     }
 
     on(eventName: string) {
-        return new ViewEventBuilder(this, this.elementView, eventName);
+        return new ViewEventBuilder(this.elementView, eventName);
     }
 
     get viewCount() { return this.views.length; }
@@ -218,23 +186,6 @@ export class BasicComponentView {
     protected getViewByIndex(index: number) { return this.views[index]; }
 
     protected getViews() { return new EnumerableArray(this.views).value(); }
-
-    protected disposeAllViews() {
-        for (const view of this.views) {
-            view.dispose();
-        }
-        this.views.splice(0, this.views.length);
-        this.elementView.replaceElements([]);
-    }
-
-    protected disposeView(view: BasicComponentView) {
-        const index = this.views.indexOf(view);
-        if (index > -1) {
-            this.views.splice(index, 1);
-        }
-        this.removeView(view);
-        view.dispose();
-    }
 
     dispose() {
         this.disposeAllViews();
@@ -250,7 +201,15 @@ export class BasicComponentView {
         }
     }
 
-    protected removeView(view: BasicComponentView) {
+    protected disposeAllViews() {
+        for (const view of this.views) {
+            view.dispose();
+        }
+        this.views.splice(0, this.views.length);
+        this.elementView.replaceElements([]);
+    }
+
+    private removeView(view: BasicComponentView) {
         this.elementView.removeElement(view.elementView.element);
         view.unregisterEvents();
     }
@@ -291,12 +250,14 @@ export class BasicComponentView {
     }
 
     private unregisterEvents() {
+        this.elementView.unregisterEvents();
         for (const view of this.views) {
             view.unregisterEvents();
         }
     }
 
     private registerEvents() {
+        this.elementView.registerEvents();
         for (const view of this.views) {
             view.registerEvents();
         }

@@ -1,5 +1,6 @@
 ﻿import { GridCellView } from "../Views/Grid";
 import { ODataColumnView } from "./ODataColumnView";
+import { FilterField } from "./ODataQueryFilterBuilder";
 import { SourceType } from "./SourceType";
 import { ICreateDataCell, ICreateHeaderCell, IValueFormatter } from "./Types";
 
@@ -17,6 +18,8 @@ export class ODataColumn {
         readonly view: ODataColumnView
     ) {
     }
+
+    toFilterField() { return new FilterField(this.columnName, this.displayText); }
 
     createHeaderCell(view: GridCellView) {
         return this._createHeaderCell(this, view);

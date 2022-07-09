@@ -18,8 +18,8 @@ export class ListGroup extends BasicComponent {
         this.itemClicked.register(action);
     }
 
-    private handleClick(itemView: BasicListGroupItemView) {
-        const item = this.getComponentByView(itemView);
+    private handleClick(el: HTMLElement) {
+        const item = this.getComponentByElement(el);
         if (item) {
             this.itemClicked.invoke(item);
         }

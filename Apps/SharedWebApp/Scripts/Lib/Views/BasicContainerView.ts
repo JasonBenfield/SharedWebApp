@@ -10,8 +10,6 @@ export class BasicContainerView extends BasicComponentView {
 
     disposeAllViews: () => void;
 
-    removeView: (view: BasicComponentView) => void;
-
     addView: <T extends BasicComponentView>(ctor: ViewConstructor<T>) => T;
 
     addViews: <T extends BasicComponentView>(howMany: number, ctor: ViewConstructor<T>) => T[];

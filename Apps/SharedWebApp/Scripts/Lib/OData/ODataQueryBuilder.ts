@@ -85,7 +85,7 @@ export class ODataQueryBuilder {
     toSerializable() {
         return {
             select: this.select.toSerializable(),
-            filter: this.filter.toSerializable(),
+            filter: this.filter.serialize(),
             orderBy: this.orderBy.toSerializable()
         } as ISerializableQuery;
     }

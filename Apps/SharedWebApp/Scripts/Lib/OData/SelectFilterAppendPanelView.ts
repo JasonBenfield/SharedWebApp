@@ -7,12 +7,11 @@ import { BasicTextComponentView } from "../Views/BasicTextComponentView";
 import { BlockView } from "../Views/BlockView";
 import { ButtonCommandView } from "../Views/Commands";
 import { GridView } from "../Views/Grid";
-import { LinkView } from "../Views/LinkView";
 import { ModalComponentView } from "../Views/Modal";
 import { NavView } from "../Views/NavView";
-import { TextBlockView } from "../Views/TextBlockView";
 import { TextHeading1View, TextHeading3View } from "../Views/TextHeadings";
 import { TextLinkView } from "../Views/TextLinkView";
+import { FilterConditionClauseView } from "./FilterConditionClauseView";
 import { ModalODataPanelView } from "./ModalODataPanelView";
 
 export class SelectFilterAppendPanelView extends ModalODataPanelView {
@@ -49,7 +48,7 @@ export class SelectFilterAppendPanelView extends ModalODataPanelView {
         this.backButton.setText('Back');
     }
 
-    handleClick(action: (view: LinkView) => void) {
+    handleLinkClick(action: (el: HTMLElement) => void) {
         this.nav.on('click').select('a').execute(action).subscribe();
     }
 
@@ -62,21 +61,6 @@ export class SelectFilterAppendPanelView extends ModalODataPanelView {
     }
 
     addCondition() {
-        const cell = this.grid.addCell();
-        return cell.addView(TextBlockView);
-    }
-
-    addConjunction() {
-        const cell = this.grid.addCell();
-        return cell.addView(TextBlockView);
-    }
-
-    addDeleteButton() {
-        const cell = this.grid.addCell();
-        const deleteButton = cell.addView(ButtonCommandView);
-        deleteButton.icon.solidStyle('times');
-        deleteButton.useOutlineStyle(ContextualClass.secondary);
-        deleteButton.setTitle('Delete condition');
-        return deleteButton;
+        return this.grid.addRow(FilterConditionClauseView);
     }
 }

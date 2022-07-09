@@ -2,10 +2,12 @@
 import { BasicComponent } from "../Components/BasicComponent";
 import { Command } from "../Components/Command";
 import { TextComponent } from "../Components/TextComponent";
+import { DateRange } from "../DateRange";
 import { DelayedAction } from "../DelayedAction";
 import { RelativeDateRange } from "../RelativeDateRange";
+import { AbsoluteDateRangePanelView } from "./AbsoluteDateRangePanelView";
+import { DateRangePicker } from "./DateRangePicker";
 import { FilterColumnOptionsBuilder } from "./FilterColumnOptionsBuilder";
-import { RelativeDateRangePanelView } from "./RelativeDateRangePanelView";
 import { RelativeDateRangePicker } from "./RelativeDateRangePicker";
 
 interface IResult {
@@ -20,56 +22,55 @@ class Result {
     get done() { return this.result.done; }
 }
 
-export class RelativeDateRangePanel extends BasicComponent implements IPanel {
-    private readonly panelView: RelativeDateRangePanelView;
+export class AbsoluteDateRangePanel extends BasicComponent implements IPanel {
+    private readonly panelView: AbsoluteDateRangePanelView;
     private readonly awaitable = new Awaitable<Result>();
     private options: FilterColumnOptionsBuilder;
     private readonly columnName: TextComponent;
-    private readonly relativeDateRangePicker: RelativeDateRangePicker;
+    private readonly dateRangePicker: DateRangePicker;
     private readonly preview: TextComponent;
 
-    constructor(view: RelativeDateRangePanelView) {
+    constructor(view: AbsoluteDateRangePanelView) {
         super(view.body);
         this.panelView = view;
         this.columnName = new TextComponent(view.columnName);
-        this.relativeDateRangePicker = this.addComponent(new RelativeDateRangePicker(view.relativeDateRangePicker));
-        this.relativeDateRangePicker.when.valueChanged.then(this.onRelativeDateRangeChanged.bind(this));
+        this.dateRangePicker = this.addComponent(new DateRangePicker(view.dateRangePicker));
+        this.dateRangePicker.when.valueChanged.then(this.onDateRangeChanged.bind(this));
         this.preview = new TextComponent(view.preview);
         new Command(this.cancel.bind(this)).add(view.cancelButton);
         new Command(this.save.bind(this)).add(view.saveButton);
     }
 
-    private onRelativeDateRangeChanged(relativeDateRange: RelativeDateRange) {
-        this.preview.setText(relativeDateRange.toDateRange().format());
+    private onDateRangeChanged(dateRange: DateRange) {
+        this.preview.setText(dateRange.format());
     }
 
     private cancel() { this.awaitable.resolve(Result.done()); }
 
     private save() {
-        const relativeDateRange = this.getRelativeDateRange();
-        this.options.setRelativeDateRangeValue(relativeDateRange);
+        const dateRange = this.getDateRange();
+        this.options.setAbsoluteDateRangeValue(dateRange);
         this.awaitable.resolve(Result.done());
     }
 
-    private getRelativeDateRange() {
-        return this.relativeDateRangePicker.getValue();
+    private getDateRange() {
+        return this.dateRangePicker.getValue();
     }
 
     setOptions(options: FilterColumnOptionsBuilder) {
         this.options = options;
         this.columnName.setText(options.column.displayText);
-        this.relativeDateRangePicker.setValue(
-            new RelativeDateRange(
+        this.dateRangePicker.setValue(
+            new DateRange(
                 null,
-                null,
-                true
+                null
             )
         );
-        this.preview.setText(this.relativeDateRangePicker.getValue().toDateRange().format());
+        this.preview.setText(this.dateRangePicker.getValue().format());
     }
 
     start() {
-        this.relativeDateRangePicker.setFocus();
+        this.dateRangePicker.setFocus();
         return this.awaitable.start();
     }
 

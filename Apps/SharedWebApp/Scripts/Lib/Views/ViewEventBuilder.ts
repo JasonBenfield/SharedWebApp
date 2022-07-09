@@ -2,18 +2,17 @@
 import { HtmlElementView } from "./HtmlElementView";
 
 export class ViewEventBuilder {
-    private action: (sourceView: BasicComponentView, sourceElement: HTMLElement) => void;
+    private action: (sourceElement: HTMLElement) => void;
     private selector: string;
     private _preventDefault: boolean;
 
     constructor(
-        private readonly view: BasicComponentView,
         private readonly elementView: HtmlElementView,
         private readonly name: string
     ) {
     }
 
-    execute(action: (sourceView: BasicComponentView, sourceElement: HTMLElement) => void) {
+    execute(action: (sourceElement: HTMLElement) => void) {
         this.action = action;
         return new ViewEventActionBuilder(this);
     }
@@ -39,8 +38,7 @@ export class ViewEventBuilder {
             this.selector,
             this._preventDefault,
             (el: HTMLElement) => {
-                const view = this.view.getViewByElement(el) || this.view;
-                this.action(view, el);
+                this.action(el);
             }
         );
     }

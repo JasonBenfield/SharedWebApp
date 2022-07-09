@@ -2,10 +2,9 @@
 import { BasicComponent } from "../Components/BasicComponent";
 import { Command } from "../Components/Command";
 import { TextComponent } from "../Components/TextComponent";
-import { TextLinkView } from "../Views/TextLinkView";
 import { FilterColumnOptionsBuilder } from "./FilterColumnOptionsBuilder";
 import { FilterConditionLink } from "./FilterConditionLink";
-import { FilterSelection } from "./FilterSelection";
+import { FilterSelections } from "./FilterSelection";
 import { SelectFilterConditionPanelView } from "./SelectFilterConditionPanelView";
 
 interface IResult {
@@ -33,7 +32,7 @@ export class SelectFilterConditionPanel extends BasicComponent implements IPanel
     constructor(view: SelectFilterConditionPanelView) {
         super(view.body);
         this.panelView = view;
-        for (const selection of FilterSelection.all) {
+        for (const selection of FilterSelections.all) {
             this.addComponent(new FilterConditionLink(selection, view.addLink()));
         }
         view.handleClick(this.onItemClick.bind(this));
@@ -51,17 +50,11 @@ export class SelectFilterConditionPanel extends BasicComponent implements IPanel
         }
     }
 
-    private onItemClick(itemView: TextLinkView, sourceElement: HTMLElement) {
+    private onItemClick(sourceElement: HTMLElement) {
         const link = this.getComponentByElement(sourceElement) as FilterConditionLink;
         if (link) {
             this.options.setFilterSelection(link.selection);
-            if (
-                link.selection === FilterSelection.isTrue ||
-                link.selection === FilterSelection.isFalse ||
-                link.selection === FilterSelection.isBlank ||
-                link.selection === FilterSelection.isNotBlank
-            ) {
-                this.options.applyToQuery();
+            if (this.options.hasAppliedToQuery) {
                 this.awaitable.resolve(Result.done());
             }
             else {

@@ -19,7 +19,7 @@ export class BasicListGroupView extends BasicComponentView {
         this.clickConfig = clickConfig;
     }
 
-    handleClick(action: (view: BasicListGroupItemView) => void) {
+    handleClick(action: (element: HTMLElement) => void) {
         this.clickConfig(this.on('click').execute(action)).subscribe();
     }
 

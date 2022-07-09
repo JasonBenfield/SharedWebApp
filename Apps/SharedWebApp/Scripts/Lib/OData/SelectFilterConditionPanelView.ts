@@ -29,7 +29,7 @@ export class SelectFilterConditionPanelView extends ModalODataPanelView {
         this.backButton.setText('Back');
     }
 
-    handleClick(action: (view: TextLinkView) => void) {
+    handleClick(action: (element: HTMLElement) => void) {
         this.body.on('click').select('a').execute(action).subscribe();
     }
 

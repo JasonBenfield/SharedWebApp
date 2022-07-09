@@ -1,10 +1,11 @@
 ﻿import { Awaitable } from "../Awaitable";
+import { BasicComponent } from "../Components/BasicComponent";
 import { Command } from "../Components/Command";
 import { TextComponent } from "../Components/TextComponent";
 import { TextLink } from "../Components/TextLink";
-import { TextLinkView } from "../Views/TextLinkView";
 import { FilterColumnOptionsBuilder } from "./FilterColumnOptionsBuilder";
-import { FilterConditionClause, FilterConjunction } from "./ODataQueryFilterBuilder";
+import { FilterConditionClauseComponent } from "./FilterConditionClauseComponent";
+import { FilterConditionClause } from "./ODataQueryFilterBuilder";
 import { SelectFilterAppendPanelView } from "./SelectFilterAppendPanelView";
 
 interface IResult {
@@ -24,14 +25,18 @@ class Result {
     get done() { return this.result.done; }
 }
 
-export class SelectFilterAppendPanel implements IPanel {
+export class SelectFilterAppendPanel extends BasicComponent implements IPanel {
+    private readonly panelView: SelectFilterAppendPanelView;
     private readonly awaitable = new Awaitable<Result>();
     private options: FilterColumnOptionsBuilder;
+    private readonly conditionComponents: BasicComponent[] = [];
 
-    constructor(private readonly view: SelectFilterAppendPanelView) {
+    constructor(view: SelectFilterAppendPanelView) {
+        super(view.body);
+        this.panelView = view;
         new TextLink(view.appendItem).setText('Append to Filter');
         new TextLink(view.clearItem).setText('Replace Filter');
-        this.view.handleClick(this.onItemClick.bind(this));
+        view.handleLinkClick(this.onItemClick.bind(this));
         new Command(this.back.bind(this)).add(view.backButton);
     }
 
@@ -39,27 +44,40 @@ export class SelectFilterAppendPanel implements IPanel {
 
     setOptions(options: FilterColumnOptionsBuilder) {
         this.options = options;
-        new TextComponent(this.view.title).setText(`${options.column.displayText} Filter`);
+        new TextComponent(this.panelView.title).setText(`${options.column.displayText} Filter`);
         this.updateConditions();
     }
 
     private updateConditions() {
-        this.view.clearConditions();
-        const conditionClauses = this.options.getConditionClauses();
-        for (const conditionClause of conditionClauses) {
-            const conditionView = this.view.addCondition();
-            new TextComponent(conditionView).setText(conditionClause.condition.format());
-            const deleteButton = this.view.addDeleteButton();
-            deleteButton.handleClick(this.onDeleteClick.bind(this, conditionClause));
-            const conjunctionView = this.view.addConjunction();
-            new TextComponent(conjunctionView).setText(conditionClause.conjunction.format());
+        for (const component of this.conditionComponents) {
+            this.removeComponent(component);
         }
+        this.conditionComponents.splice(0, this.conditionComponents.length);
+        const conditionClauses = this.options.getConditionClauses();
         if (conditionClauses.length > 0) {
-            this.view.showConditions();
+            this.panelView.showConditions();
         }
         else {
-            this.view.hideConditions();
+            this.panelView.hideConditions();
         }
+        for (const conditionClause of conditionClauses) {
+            const conditionClauseComponent = this.addComponent(
+                new FilterConditionClauseComponent(this.panelView.addCondition())
+            );
+            conditionClauseComponent.setConditionClause(conditionClause);
+            conditionClauseComponent.when.deleteClicked.then(this.onDeleteClick.bind(this));
+            this.conditionComponents.push(conditionClauseComponent);
+        }
+    }
+
+    private onItemClick(sourceElement: HTMLElement) {
+        if (this.panelView.clearItem.hasElement(sourceElement)) {
+            this.options.replace();
+        }
+        else if (this.panelView.appendItem.hasElement(sourceElement)) {
+            this.options.append();
+        }
+        this.awaitable.resolve(Result.next());
     }
 
     private onDeleteClick(conditionClause: FilterConditionClause) {
@@ -67,19 +85,11 @@ export class SelectFilterAppendPanel implements IPanel {
         this.updateConditions();
     }
 
-    private onItemClick(itemView: TextLinkView, sourceElement: HTMLElement) {
-        if (this.view.clearItem.hasElement(sourceElement)) {
-            this.options.replace();
-        }
-        else if (this.view.appendItem.hasElement(sourceElement)) {
-            this.options.append();
-        }
-        this.awaitable.resolve(Result.next());
+    start() {
+        return this.awaitable.start();
     }
 
-    start() { return this.awaitable.start(); }
+    activate() { this.panelView.show(); }
 
-    activate() { this.view.show(); }
-
-    deactivate() { this.view.hide(); }
+    deactivate() { this.panelView.hide(); }
 }

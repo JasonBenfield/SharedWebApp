@@ -8,6 +8,7 @@ type Events<TValue> = { valueChanged: TValue };
 
 export class InputControl<TValue> extends BasicComponent {
     protected readonly view: InputView;
+    private debouncedSetFocus: DebouncedAction;
 
     private readonly eventSource = new EventSource<Events<TValue>>(this, { valueChanged: null as TValue });
     readonly when = this.eventSource.when;
@@ -17,6 +18,7 @@ export class InputControl<TValue> extends BasicComponent {
         private readonly viewValue: TypedFieldViewValue<string, TValue>
     ) {
         super(view);
+        this.debouncedSetFocus = new DebouncedAction(() => this.setFocus(), 700);
         this.view.onInput()
             .execute(this.onInputValueChanged.bind(this))
             .subscribe();
@@ -54,7 +56,7 @@ export class InputControl<TValue> extends BasicComponent {
         this.view.setValue(inputValue);
     }
 
-    setFocus() { this.view.setFocus(); }
+    setFocus() { this.debouncedSetFocus.execute(); }
 
     show() { this.view.show(); }
 

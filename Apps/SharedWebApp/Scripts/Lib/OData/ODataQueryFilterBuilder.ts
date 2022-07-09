@@ -1,10 +1,11 @@
-﻿import { EnumerableArray, MappedArray } from "../Enumerable";
+﻿import { DateRange, ISerializableDateRange } from "../DateRange";
+import { EnumerableArray, MappedArray } from "../Enumerable";
 import { JoinedStrings } from "../JoinedStrings";
 import { ISerializableRelativeDateRange, RelativeDateRange } from "../RelativeDateRange";
 
 export interface IFilterSelectionValue {
     toField(): FilterField | FilterFieldFunction;
-    toValue(): FilterValue | RelativeDateRange;
+    toValue(): FilterValue | RelativeDateRange | DateRange;
 }
 
 export interface ISerializableFilter {
@@ -16,41 +17,80 @@ interface ISerializableFilterPart<T> {
     value: T;
 }
 
+type FilterPart =
+    FilterConjunction |
+    FilterField |
+    FilterConditionOperation |
+    FilterFieldFunction |
+    FilterValue |
+    FilterConditionFunction |
+    FilterRelativeDateRange |
+    FilterAbsoluteDateRange |
+    FilterConditionClause;
+
+type SerializableFilterPart =
+    ISerializableFilterConjunction |
+    ISerializableFilterField |
+    ISerializableFilterConditionOperation |
+    ISerializableFilterFieldFunction |
+    ISerializableFilterValue |
+    ISerializableFilterConditionFunction |
+    ISerializableFilterRelativeDateRange |
+    ISerializableFilterAbsoluteDateRange |
+    ISerializableFilterConditionClause;
+
 class FilterPartFactory {
-    static create(serializablePart: ISerializableFilterPart<any>) {
-        let part: any;
+    static create<T extends FilterPart>(
+        serializablePart: ISerializableFilterPart<SerializableFilterPart>
+    ): T {
+        let part: FilterPart;
         if (serializablePart.type === FilterConditionOperation.name) {
-            part = FilterConditionOperation.deserialize(serializablePart.value);
+            part = FilterConditionOperation.deserialize(
+                serializablePart.value as ISerializableFilterConditionOperation
+            );
         }
         else if (serializablePart.type === FilterField.name) {
-            part = FilterField.deserialize(serializablePart.value);
+            part = FilterField.deserialize(
+                serializablePart.value as ISerializableFilterField
+            );
         }
         else if (serializablePart.type === FilterFieldFunction.name) {
-            part = FilterFieldFunction.deserialize(serializablePart.value);
+            part = FilterFieldFunction.deserialize(
+                serializablePart.value as ISerializableFilterFieldFunction
+            );
         }
         else if (serializablePart.type === FilterValue.name) {
-            part = FilterValue.deserialize(serializablePart.value);
+            part = FilterValue.deserialize(
+                serializablePart.value as ISerializableFilterValue
+            );
         }
         else if (serializablePart.type === FilterConjunction.name) {
-            part = FilterConjunction.deserialize(serializablePart.value);
+            part = FilterConjunction.deserialize(
+                serializablePart.value as ISerializableFilterConjunction
+            );
         }
         else if (serializablePart.type === FilterConditionFunction.name) {
-            part = FilterConditionFunction.deserialize(serializablePart.value);
+            part = FilterConditionFunction.deserialize(
+                serializablePart.value as ISerializableFilterConditionFunction
+            );
         }
         else if (serializablePart.type === FilterRelativeDateRange.name) {
-            part = FilterRelativeDateRange.deserialize(serializablePart.value);
+            part = FilterRelativeDateRange.deserialize(
+                serializablePart.value as ISerializableFilterRelativeDateRange
+            );
+        }
+        else if (serializablePart.type === FilterAbsoluteDateRange.name) {
+            part = FilterAbsoluteDateRange.deserialize(
+                serializablePart.value as ISerializableFilterAbsoluteDateRange
+            );
         }
         else if (serializablePart.type === FilterConditionClause.name) {
-            part = FilterConditionClause.deserialize(serializablePart.value);
+            part = FilterConditionClause.deserialize(
+                serializablePart.value as ISerializableFilterConditionClause
+            );
         }
-        return part;
+        return part as T;
     }
-}
-
-interface ISerializableConditionOperation {
-    readonly left: ISerializableFilterPart<ISerializableFilterField | ISerializableFilterFieldFunction>;
-    readonly operator: string;
-    readonly right: ISerializableFilterPart<ISerializableFilterValue>;
 }
 
 interface ISerializableFilterConjunction {
@@ -85,8 +125,14 @@ export class FilterConjunction {
     }
 }
 
+interface ISerializableFilterConditionOperation {
+    readonly left: ISerializableFilterPart<ISerializableFilterField | ISerializableFilterFieldFunction>;
+    readonly operator: string;
+    readonly right: ISerializableFilterPart<ISerializableFilterValue>;
+}
+
 export class FilterConditionOperation {
-    static deserialize(serialized: ISerializableConditionOperation) {
+    static deserialize(serialized: ISerializableFilterConditionOperation) {
         return new FilterConditionOperation(
             FilterPartFactory.create(serialized.left),
             serialized.operator,
@@ -159,14 +205,15 @@ export class FilterConditionOperation {
     }
 
     serialize() {
-        return {
+        const serialized: ISerializableFilterPart<ISerializableFilterConditionOperation> = {
             type: FilterConditionOperation.name,
             value: {
                 left: this.left.serialize(),
                 operator: this.operator,
                 right: this.right.serialize()
             }
-        } as ISerializableFilterPart<ISerializableConditionOperation>;
+        };
+        return serialized;
     }
 }
 
@@ -192,13 +239,14 @@ export class FilterField {
     }
 
     serialize() {
-        return {
+        const serialized: ISerializableFilterPart<ISerializableFilterField> = {
             type: FilterField.name,
             value: {
                 fieldName: this.fieldName,
                 displayText: this.displayText
             }
-        } as ISerializableFilterPart<ISerializableFilterField>;
+        };
+        return serialized;
     }
 }
 
@@ -286,14 +334,15 @@ export class FilterFieldFunction {
             this.values,
             v => v.serialize()
         ).value();
-        return {
+        const serialized: ISerializableFilterPart<ISerializableFilterFieldFunction> = {
             type: FilterFieldFunction.name,
             value: {
                 functionName: this.functionName,
                 field: this.field.serialize(),
                 values: serializedValues
             }
-        } as ISerializableFilterPart<ISerializableFilterFieldFunction>;
+        };
+        return serialized;
     }
 }
 
@@ -329,26 +378,27 @@ export class FilterValue {
     }
 
     serialize() {
-        return {
+        const serialized: ISerializableFilterPart<ISerializableFilterValue> = {
             type: FilterValue.name,
             value: {
                 value: this.value
             }
-        } as ISerializableFilterPart<ISerializableFilterValue>;
+        };
+        return serialized;
     }
 }
 
 interface ISerializableFilterConditionFunction {
     readonly functionName: string;
-    readonly field: ISerializableFilterPart<FilterField | FilterFieldFunction>;
-    readonly values: ISerializableFilterPart<FilterValue>[];
+    readonly field: ISerializableFilterPart<ISerializableFilterField | ISerializableFilterFieldFunction>;
+    readonly values: ISerializableFilterPart<ISerializableFilterValue>[];
 }
 
 export class FilterConditionFunction {
     static deserialize(serialized: ISerializableFilterConditionFunction) {
         const deserializedValues = new MappedArray(
             serialized.values,
-            v => <FilterValue>FilterPartFactory.create(v)
+            v => FilterPartFactory.create(v) as FilterValue
         ).value();
         return new FilterConditionFunction(
             serialized.functionName,
@@ -406,19 +456,107 @@ export class FilterConditionFunction {
             this.values,
             v => v.serialize()
         ).value();
-        return {
+        const serialized: ISerializableFilterPart<ISerializableFilterConditionFunction> = {
             type: FilterConditionFunction.name,
             value: {
                 functionName: this.functionName,
                 field: this.field.serialize(),
                 values: serializedValues
             }
-        } as ISerializableFilterPart<ISerializableFilterConditionFunction>;
+        };
+        return serialized;
+    }
+}
+
+interface ISerializableFilterAbsoluteDateRange {
+    readonly field: ISerializableFilterPart<ISerializableFilterField>;
+    readonly range: ISerializableDateRange;
+}
+
+export class FilterAbsoluteDateRange {
+    static deserialize(serialized: ISerializableFilterAbsoluteDateRange) {
+        return new FilterAbsoluteDateRange(
+            FilterPartFactory.create(serialized.field),
+            DateRange.deserialize(serialized.range)
+        );
+    }
+
+    constructor(
+        private readonly field: FilterField,
+        private readonly dateRange: DateRange
+    ) {
+    }
+
+    getConditionClauses() {
+        const conditionClauses: FilterConditionClause[] = [];
+        const dateRange = this.dateRange;
+        if (dateRange.start) {
+            let condition: FilterConditionOperation;
+            if (dateRange.start.isIncluded) {
+                condition = FilterConditionOperation.greaterThanOrEqual(
+                    this.field,
+                    new FilterValue(dateRange.start.value)
+                );
+            }
+            else {
+                condition = FilterConditionOperation.greaterThan(
+                    this.field,
+                    new FilterValue(dateRange.start.value)
+                );
+            }
+            conditionClauses.push(new FilterConditionClause(condition));
+        }
+        if (dateRange.end) {
+            if (conditionClauses.length > 0) {
+                conditionClauses[conditionClauses.length - 1].setAndConjunction();
+            }
+            let condition: FilterConditionOperation;
+            if (dateRange.end.isIncluded) {
+                condition = FilterConditionOperation.lessThanOrEqual(
+                    this.field,
+                    new FilterValue(dateRange.end.value)
+                );
+            }
+            else {
+                condition = FilterConditionOperation.lessThan(
+                    this.field,
+                    new FilterValue(dateRange.end.value)
+                );
+            }
+            conditionClauses.push(new FilterConditionClause(condition));
+        }
+        return conditionClauses;
+    }
+
+    format() {
+        return `${this.field.format()} ${this.dateRange.format()}`;
+    }
+
+    toQuery() {
+        const clauses = this.getConditionClauses();
+        return new JoinedStrings(
+            '',
+            new MappedArray(
+                clauses,
+                c => c.toQuery()
+            )
+        ).value();
+    }
+
+    serialize() {
+        const serialized: ISerializableFilterPart<ISerializableFilterAbsoluteDateRange> = {
+            type: FilterRelativeDateRange.name,
+            value: {
+                field: this.field.serialize(),
+                range: this.dateRange.serialize()
+            }
+        };
+        return serialized;
     }
 }
 
 interface ISerializableFilterRelativeDateRange {
-    readonly field: ISerializableFilterPart<FilterField>;
+    readonly field: ISerializableFilterPart<ISerializableFilterField>;
     readonly range: ISerializableRelativeDateRange;
 }
 
@@ -431,34 +569,14 @@ export class FilterRelativeDateRange {
     }
 
     constructor(
-        private readonly field: FilterField | FilterFieldFunction,
+        private readonly field: FilterField,
         private readonly relativeDateRange: RelativeDateRange
     ) {
     }
 
     getConditionClauses() {
-        const conditionClauses: FilterConditionClause[] = [];
         const dateRange = this.relativeDateRange.toDateRange();
-        if (dateRange.startDate) {
-            const condition = FilterConditionOperation.greaterThanOrEqual(
-                this.field,
-                new FilterValue(dateRange.startDate)
-            );
-            conditionClauses.push(new FilterConditionClause(condition));
-        }
-        if (dateRange.endDate) {
-            if (conditionClauses.length > 0) {
-                conditionClauses[conditionClauses.length - 1].conjunction = FilterConjunction.and();
-            }
-            const endDate = dateRange.endDate;
-            endDate.setDate(endDate.getDate() + 1);
-            const condition = FilterConditionOperation.lessThan(
-                this.field,
-                new FilterValue(dateRange.endDate)
-            );
-            conditionClauses.push(new FilterConditionClause(condition));
-        }
-        return conditionClauses;
+        return new FilterAbsoluteDateRange(this.field, dateRange).getConditionClauses();
     }
 
     format() {
@@ -477,23 +595,30 @@ export class FilterRelativeDateRange {
     }
 
     serialize() {
-        return {
+        const serialized: ISerializableFilterPart<ISerializableFilterRelativeDateRange> = {
             type: FilterRelativeDateRange.name,
             value: {
                 field: this.field.serialize(),
                 range: this.relativeDateRange.serialize()
             }
-        } as ISerializableFilterPart<ISerializableFilterRelativeDateRange>;
+        };
+        return serialized;
     }
 }
 
 type SingleConditionType = FilterConditionOperation |
     FilterConditionFunction;
 
-type ConditionType = SingleConditionType | FilterRelativeDateRange;
+type ConditionType = SingleConditionType | FilterRelativeDateRange | FilterAbsoluteDateRange;
+
+type SerializableConditionType =
+    ISerializableFilterConditionOperation |
+    ISerializableFilterConditionFunction |
+    ISerializableFilterRelativeDateRange |
+    ISerializableFilterAbsoluteDateRange;
 
 interface ISerializableFilterConditionClause {
-    readonly condition: ISerializableFilterPart<ConditionType>;
+    readonly condition: ISerializableFilterPart<SerializableConditionType>;
     readonly conjunction: ISerializableFilterPart<ISerializableFilterConjunction>;
 }
 
@@ -507,21 +632,32 @@ export class FilterConditionClause {
 
     constructor(
         readonly condition: ConditionType,
-        public conjunction: FilterConjunction = FilterConjunction.none()) {
+        private _conjunction: FilterConjunction = FilterConjunction.none()) {
+    }
+
+    get conjunction() { return this._conjunction; }
+
+    setAndConjunction() {
+        this._conjunction = FilterConjunction.and();
+    }
+
+    removeConjunction() {
+        this._conjunction = FilterConjunction.none();
     }
 
     toQuery() {
-        return `${this.condition.toQuery()}${this.conjunction.toQuery()}`;
+        return `${this.condition.toQuery()}${this._conjunction.toQuery()}`;
     }
 
     serialize() {
-        return {
+        const serialized: ISerializableFilterPart<ISerializableFilterConditionClause> = {
             type: FilterConditionClause.name,
             value: {
-                condition: this.condition.serialize() as any,
-                conjunction: this.conjunction.serialize()
+                condition: this.condition.serialize(),
+                conjunction: this._conjunction.serialize()
             }
-        } as ISerializableFilterPart<ISerializableFilterConditionClause>;
+        };
+        return serialized;
     }
 }
 
@@ -547,7 +683,7 @@ export class ODataQueryFilterBuilder {
         if (index > -1) {
             this.conditionClauses.splice(0, 1);
             if (this.conditionClauses.length > 0) {
-                this.conditionClauses[this.conditionClauses.length - 1].conjunction = FilterConjunction.none();
+                this.conditionClauses[this.conditionClauses.length - 1].removeConjunction();
             }
         }
     }
@@ -559,7 +695,7 @@ export class ODataQueryFilterBuilder {
 
     add(condition: ConditionType) {
         if (this.conditionClauses.length > 0) {
-            this.conditionClauses[this.conditionClauses.length - 1].conjunction = FilterConjunction.and();
+            this.conditionClauses[this.conditionClauses.length - 1].setAndConjunction();
         }
         this.conditionClauses.push(new FilterConditionClause(condition));
         return this;
@@ -575,13 +711,14 @@ export class ODataQueryFilterBuilder {
         ).value();
     }
 
-    toSerializable() {
+    serialize() {
         const conditionClauses = new MappedArray(
             this.conditionClauses,
             c => c.serialize()
         ).value();
-        return {
+        const serialized: ISerializableFilter = {
             conditionClauses: conditionClauses
-        } as ISerializableFilter;
+        };
+        return serialized;
     }
 }

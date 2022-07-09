@@ -1,10 +1,19 @@
-﻿import { EnumerableArray } from "../Enumerable";
+﻿import { EnumerableArray, FilteredArray } from "../Enumerable";
 import { BasicComponentView } from "../Views/BasicComponentView";
 
 export class BasicComponent {
     private readonly components: BasicComponent[] = [];
+    protected readonly view: BasicComponentView;
+    protected readonly views: BasicComponentView[] = [];
 
-    constructor(protected readonly view: BasicComponentView) {
+    constructor(view: BasicComponentView | BasicComponentView[]) {
+        if (Array.isArray(view)) {
+            this.views.splice(0, this.views.length, ...view);
+        }
+        else {
+            this.views.push(view);
+        }
+        this.view = this.views[0];
     }
 
     protected getComponentByElement(element: HTMLElement) {
@@ -16,18 +25,12 @@ export class BasicComponent {
         return null;
     }
 
-    private hasElement(element: HTMLElement) { return this.view.hasElement(element); }
-
-    protected getComponentByView(view: BasicComponentView) {
-        for (const component of this.components) {
-            if (component.hasView(view)) {
-                return component;
-            }
-        }
-        return null;
+    private hasElement(element: HTMLElement) {
+        return new FilteredArray(
+            this.views,
+            view => view.hasElement(element)
+        ).toEnumerableArray().any();
     }
-
-    private hasView(view: BasicComponentView) { return this.view.isOrContainsView(view); }
 
     protected anyComponents() { return this.components.length > 0; }
 
@@ -50,7 +53,7 @@ export class BasicComponent {
     }
 
     protected removeComponent(component: BasicComponent) {
-        component.view.hide();
+        component.dispose();
         const index = this.components.indexOf(component);
         if (index > -1) {
             this.components.splice(index, 1);
@@ -59,7 +62,9 @@ export class BasicComponent {
 
     dispose() {
         this.clearComponents();
-        this.view.dispose();
+        for (const view of this.views) {
+            view.dispose();
+        }
         this.onDipose();
     }
 

@@ -27,7 +27,7 @@ export class ODataGrid<TEntity> extends BasicComponent {
         view.handleClick(this.onClick.bind(this));
     }
 
-    private onClick(sourceView: BasicComponentView, sourceElement: HTMLElement) {
+    private onClick(sourceElement: HTMLElement) {
         const row = this.getComponentByElement(sourceElement) as ODataRow;
         if (row) {
             const cell = row.getCellByElement(sourceElement);
@@ -78,6 +78,7 @@ export class ODataGrid<TEntity> extends BasicComponent {
             const alert = this.addComponent(new MessageAlert(this.view.addAlertRow()));
             alert.warning('No Records were found.');
         }
+        this.view.resize();
     }
 
     show() { this.view.show(); }

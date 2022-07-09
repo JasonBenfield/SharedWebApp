@@ -46,6 +46,10 @@ export class FormGroupView extends BasicComponentView {
         this.caption.addCssName('col-form-label');
         this.valueCell = this.addView(GridCellView);
     }
+
+    addCell() {
+        return this.addView(GridCellView);
+    }
 }
 
 export class FormGroupTextView extends FormGroupView {
@@ -53,7 +57,7 @@ export class FormGroupTextView extends FormGroupView {
 
     constructor(container: BasicComponentView) {
         super(container);
-        this.textValue = this.addView(TextBlockView);
+        this.textValue = this.valueCell.addView(TextBlockView);
         this.valueCell.addCssName('form-control-plaintext');
     }
 }
@@ -63,7 +67,7 @@ export class FormGroupInputView extends FormGroupView {
 
     constructor(container: BasicComponentView) {
         super(container);
-        this.input = this.addView(InputView);
+        this.input = this.valueCell.addView(InputView);
         this.input.styleAsFormControl();
     }
 }
@@ -73,7 +77,7 @@ export class FormGroupSelectView extends FormGroupView {
 
     constructor(container: BasicComponentView) {
         super(container);
-        this.select = this.addView(SelectView);
+        this.select = this.valueCell.addView(SelectView);
         this.select.styleAsFormControl();
     }
 }

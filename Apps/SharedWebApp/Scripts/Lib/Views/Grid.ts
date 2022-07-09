@@ -127,7 +127,9 @@ export class GridView extends BasicComponentView {
     }
 
     addCells<TView extends GridCellView>(howMany: number, ctor?: ViewConstructor<TView>) {
-        return this.addViews(howMany, ctor || GridCellView) as TView[];
+        const cells = this.addViews(howMany, ctor || GridCellView) as TView[];
+        this.cells.push(...cells);
+        return cells;
     }
 
     cell(index: number) { return this.cells[index]; }
@@ -139,7 +141,9 @@ export class GridView extends BasicComponentView {
     }
 
     addRows<TRowView extends GridRowView>(howManyRows: number, ctor?: ViewConstructor<TRowView>) {
-        return this.addViews(howManyRows, ctor || GridRowView) as TRowView[];
+        const rows = this.addViews(howManyRows, ctor || GridRowView) as TRowView[];
+        this.rows.push(...rows);
+        return rows;
     }
 
     row(index: number) { return this.row[index]; }
@@ -155,6 +159,15 @@ export class GridRowView extends BasicContainerView {
         this.addCssName('d-contents');
         this.addCssName('grid-row');
         this.configureClick(b => b.select('grid-cell'));
+    }
+
+    calculateTotalWidth() {
+        let width = 0;
+        const cells = this.getCells();
+        for (const cell of cells) {
+            width += cell.offsetWidth;
+        }
+        return width;
     }
 
     stickyAtTop() {
@@ -189,7 +202,7 @@ export class GridRowView extends BasicContainerView {
         this.clickConfig = clickConfig;
     }
 
-    handleClick(action: (view: GridCellView) => void) {
+    handleClick(action: (element: HTMLElement) => void) {
         this.clickConfig(this.on('click').execute(action)).subscribe();
     }
 

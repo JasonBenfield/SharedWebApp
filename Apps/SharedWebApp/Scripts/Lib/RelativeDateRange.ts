@@ -1,5 +1,6 @@
 ﻿import { DateRange } from "./DateRange";
 import { FormattedDate } from "./FormattedDate";
+import { ValueRangeBound } from "./ValueRangeBound";
 
 interface ISerializableRelativeYearOffset {
     readonly type: string;
@@ -347,10 +348,22 @@ export class RelativeDateRange {
     }
 
     toDateRange(referenceDate: Date = new Date()) {
-        const startDate = this.relativeStart ? this.relativeStart.toDate(referenceDate) : null;
-        const endReferenceDate = this.isEndRelativeToStart && startDate ? startDate : referenceDate;
-        const endDate = this.relativeEnd ? this.relativeEnd.toDate(endReferenceDate) : null;
-        return new DateRange(startDate, endDate);
+        const start = this.relativeStart
+            ? new ValueRangeBound(this.relativeStart.toDate(referenceDate), true)
+            : null;
+        const endReferenceDate = this.isEndRelativeToStart && start
+            ? start.value
+            : referenceDate;
+        const endDate = this.relativeEnd
+            ? new Date(this.relativeEnd.toDate(endReferenceDate).getTime())
+            : null;
+        if (endDate) {
+            endDate.setDate(endDate.getDate() + 1);
+        }
+        const end = endDate
+            ? new ValueRangeBound(endDate, false)
+            : null;
+        return new DateRange(start, end);
     }
 
     serialize() {

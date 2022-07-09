@@ -27,7 +27,7 @@ export class FilterValueInputPanel implements IPanel {
     private readonly title: TextComponent;
     private readonly operation: TextComponent;
     private options: FilterColumnOptionsBuilder;
-    private input: InputControl<number | string | Date>;
+    private readonly input: InputControl<number | string | Date>;
     private viewValue: MultiViewValue<string, number | string | Date>;
 
     constructor(private readonly view: FilterValueInputPanelView) {
@@ -53,7 +53,6 @@ export class FilterValueInputPanel implements IPanel {
                 else {
                     this.options.setValue(value);
                 }
-                this.options.applyToQuery();
                 this.awaitable.resolve(Result.done());
             }
         }

@@ -15,7 +15,7 @@ export class ODataGridView extends GridView {
         this.setMargin(MarginCss.xs(0));
     }
 
-    handleClick(action: (view: BasicComponentView, element: HTMLElement) => void) {
+    handleClick(action: (element: HTMLElement) => void) {
         this.on('click')
             .select('.grid-cell,.odata-sort-button')
             .execute(action)
@@ -55,18 +55,14 @@ export class ODataGridView extends GridView {
             col => col.width
         ).value();
         this.setTemplateColumns(...templateColumns);
-        let minWidth = 0;
-        for (const column of columns) {
-            if (column.width instanceof CssLengthUnit && column.width.unit === 'px') {
-                minWidth += column.width.size;
-            }
-            else if (column.width instanceof GridTemplateFitContent && column.width.length.unit === 'px') {
-                minWidth += column.width.length.size;
-            }
-            else {
-                minWidth += 200;
-            }
+    }
+
+    resize() {
+        this.setWidth(CssLengthUnit.px(4000));
+        const rows = this.getRows();
+        const totalWidth = rows[0] && rows[0].calculateTotalWidth();
+        if (totalWidth) {
+            this.setWidth(CssLengthUnit.px(totalWidth + 50));
         }
-        this.setMinWidth(CssLengthUnit.px(minWidth));
     }
 }

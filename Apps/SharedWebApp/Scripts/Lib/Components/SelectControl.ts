@@ -25,9 +25,13 @@ export class SelectControl<TValue> extends BasicComponent {
         return selectedIndex > -1 ? this.items[selectedIndex].value : null;
     }
 
-    setValue(value: TValue) {
-        const selectedIndex = this.items.findIndex(o => o.value === value);
+    setValue(value: TValue, comparer: (x: TValue, y: TValue) => boolean = SelectControl.defaultComparer<TValue>) {
+        const selectedIndex = this.items.findIndex(o => comparer(o.value, value));
         this.view.setSelectedIndex(selectedIndex);
+    }
+
+    private static defaultComparer<TValue>(x: TValue, y: TValue) {
+        return x === y;
     }
 
     setItems(...items: SelectOption<TValue>[]) {

@@ -1,11 +1,8 @@
-﻿import { RelativeDateRange } from "../RelativeDateRange";
-import { FilterSelection } from "./FilterSelection";
-import { FilterSelectionBooleanValue } from "./FilterSelectionBooleanValue";
-import { FilterSelectionRelativeDateRangeValue } from "./FilterSelectionRelativeDateRangeValue";
-import { FilterSelectionStringValue } from "./FilterSelectionStringValue";
-import { FilterSelectionValue } from "./FilterSelectionValue";
+﻿import { DateRange } from "../DateRange";
+import { RelativeDateRange } from "../RelativeDateRange";
+import { FilterSelection, FilterSelectionContains, FilterSelectionEndsWith, FilterSelectionEqual, FilterSelectionGreaterThan, FilterSelectionGreaterThanOrEqual, FilterSelectionIsBlank, FilterSelectionIsFalse, FilterSelectionIsNotBlank, FilterSelectionIsTrue, FilterSelectionLessThan, FilterSelectionLessThanOrEqual, FilterSelectionNotEqual, FilterSelections, FilterSelectionStartsWith, FilterSelectionStringEqual, FilterSelectionStringNotEqual } from "./FilterSelection";
 import { ODataColumn } from "./ODataColumn";
-import { FilterConditionClause, IFilterSelectionValue, ODataQueryFilterBuilder } from "./ODataQueryFilterBuilder";
+import { FilterConditionClause, ODataQueryFilterBuilder } from "./ODataQueryFilterBuilder";
 
 enum FilterAppend {
     replace,
@@ -16,7 +13,7 @@ enum FilterAppend {
 export class FilterColumnOptionsBuilder {
     private appendValue: FilterAppend = FilterAppend.replace;
     private selection: FilterSelection;
-    private value: IFilterSelectionValue;
+    private _hasAppliedToQuery: boolean;
 
     constructor(private readonly filter: ODataQueryFilterBuilder, readonly column: ODataColumn) {
     }
@@ -39,37 +36,81 @@ export class FilterColumnOptionsBuilder {
         this.appendValue = FilterAppend.replaceField;
     }
 
+    get hasAppliedToQuery() { return this._hasAppliedToQuery; }
+
     getSelection() { return this.selection; }
 
     setFilterSelection(selection: FilterSelection) {
         this.selection = selection;
-        if (selection === FilterSelection.isTrue) {
-            this.value = new FilterSelectionBooleanValue(this.column, true);
-        }
-        else if (selection === FilterSelection.isTrue) {
-            this.value = new FilterSelectionBooleanValue(this.column, false);
-        }
-        else if (selection === FilterSelection.isBlank || selection === FilterSelection.isNotBlank) {
-            this.value = FilterSelectionStringValue.blank(this.column);
+        if (
+            selection instanceof FilterSelectionIsTrue ||
+            selection instanceof FilterSelectionIsFalse ||
+            selection instanceof FilterSelectionIsBlank ||
+            selection instanceof FilterSelectionIsNotBlank
+        ) {
+            this.applyingToQuery();
+            selection.applyToQuery(this.filter, this.column.toFilterField());
         }
     }
 
-    setStringValue(value: any, ignoreCase) {
-        this.value = new FilterSelectionStringValue(this.column, value, ignoreCase);
+    setStringValue(value: string, ignoreCase: boolean) {
+        if (
+            this.selection instanceof FilterSelectionStringEqual ||
+            this.selection instanceof FilterSelectionStringNotEqual ||
+            this.selection instanceof FilterSelectionStartsWith ||
+            this.selection instanceof FilterSelectionEndsWith ||
+            this.selection instanceof FilterSelectionContains
+        ) {
+            this.applyingToQuery();
+            this.selection.applyToQuery(
+                this.filter,
+                this.column.toFilterField(),
+                ignoreCase,
+                value
+            );
+        }
     }
 
     setRelativeDateRangeValue(value: RelativeDateRange) {
-        this.value = new FilterSelectionRelativeDateRangeValue(this.column, value);
+        this.applyingToQuery();
+        FilterSelections.relativeDateRange.applyToQuery(
+            this.filter,
+            this.column.toFilterField(),
+            value
+        );
+    }
+
+    setAbsoluteDateRangeValue(value: DateRange) {
+        this.applyingToQuery();
+        FilterSelections.absoluteDateRange.applyToQuery(
+            this.filter,
+            this.column.toFilterField(),
+            value
+        );
     }
 
     setValue(value: number | Date) {
-        this.value = new FilterSelectionValue(this.column, value);
+        if (
+            this.selection instanceof FilterSelectionEqual ||
+            this.selection instanceof FilterSelectionNotEqual ||
+            this.selection instanceof FilterSelectionLessThan ||
+            this.selection instanceof FilterSelectionGreaterThan ||
+            this.selection instanceof FilterSelectionLessThanOrEqual ||
+            this.selection instanceof FilterSelectionGreaterThanOrEqual
+        ) {
+            this.applyingToQuery();
+            this.selection.applyToQuery(
+                this.filter,
+                this.column.toFilterField(),
+                value
+            );
+        }
     }
 
-    applyToQuery() {
+    private applyingToQuery() {
         if (this.appendValue === FilterAppend.replace) {
             this.filter.clear();
         }
-        this.selection.applyToQuery(this.filter, this.value);
+        this._hasAppliedToQuery = true;
     }
 }

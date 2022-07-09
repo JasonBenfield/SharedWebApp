@@ -1,12 +1,12 @@
-﻿import { ButtonView } from "../Views/ButtonView";
+﻿import { ButtonCommandView, LinkCommandView } from "../Views/Commands";
 import { FaIconAnimation, FaIconView } from "../Views/FaIconView";
-import { ICommandView } from "../Views/Types";
+import { BasicComponent } from "./BasicComponent";
 
 export type CommandAction = (context?: any) => any;
 
-type CommandView = ICommandView | ButtonView;
+type CommandView = LinkCommandView | ButtonCommandView;
 
-export class AsyncCommand {
+export class AsyncCommand extends BasicComponent {
     private readonly items: CommandView[] = [];
     private isMultiExecutionAllowed = false;
     private isEnabled = true;
@@ -14,6 +14,7 @@ export class AsyncCommand {
     private inProgressAnimation: FaIconAnimation = null;
 
     constructor(private readonly action: CommandAction) {
+        super([]);
     }
 
     configure(action: (c: AsyncCommand) => void) {
@@ -24,6 +25,7 @@ export class AsyncCommand {
     add(item: CommandView) {
         this.items.push(item);
         item.handleClick(() => this.execute());
+        this.views.push(item);
         return item;
     }
 

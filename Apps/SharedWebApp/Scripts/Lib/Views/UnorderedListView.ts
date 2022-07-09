@@ -15,7 +15,7 @@ export class UnorderedListView extends BasicComponentView {
         this.clickConfig = clickConfig;
     }
 
-    handleClick(action: (view: ListItemView) => void) {
+    handleClick(action: (el: HTMLElement) => void) {
         this.clickConfig(this.on('click').execute(action)).subscribe();
     }
 

@@ -30,6 +30,8 @@ export class HtmlElementView {
         this.element = createElement();
     }
 
+    get offsetWidth() { return this.element.offsetWidth; }
+
     setAttributes(attributes: any) {
         if (!attributes) {
             attributes = {};
@@ -121,6 +123,7 @@ export class HtmlElementView {
     }
 
     registerEvents() {
+        $(this.element).off();
         for (const handler of this.handlers) {
             this.registerEvent(handler);
         }
