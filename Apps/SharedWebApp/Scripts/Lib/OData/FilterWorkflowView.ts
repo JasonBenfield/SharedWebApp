@@ -1,5 +1,5 @@
 ﻿import { ModalComponentView } from "../Views/Modal";
-import { AbsoluteDateRangePanelView } from "./AbsoluteDateRangePanelView";
+import { ValueRangePanelView } from "./ValueRangePanelView";
 import { FilterValueInputPanelView } from "./FilterValueInputPanelView";
 import { RelativeDateRangePanelView } from "./RelativeDateRangePanelView";
 import { SelectFilterAppendPanelView } from "./SelectFilterAppendPanelView";
@@ -10,14 +10,16 @@ export class FilterWorkflowView {
     readonly selectFilterConditionPanel: SelectFilterConditionPanelView;
     readonly filterValueInputPanel: FilterValueInputPanelView;
     readonly relativeDateRangePanel: RelativeDateRangePanelView;
-    readonly absoluteValueRangePanel: AbsoluteDateRangePanelView;
+    readonly absoluteDateRangePanel: ValueRangePanelView;
+    readonly absoluteNumberRangePanel: ValueRangePanelView;
 
     constructor(modal: ModalComponentView) {
         this.selectFilterAppendPanel = new SelectFilterAppendPanelView(modal);
         this.selectFilterConditionPanel = new SelectFilterConditionPanelView(modal);
         this.filterValueInputPanel = new FilterValueInputPanelView(modal);
         this.relativeDateRangePanel = new RelativeDateRangePanelView(modal);
-        this.absoluteValueRangePanel = new AbsoluteDateRangePanelView(modal);
+        this.absoluteDateRangePanel = new ValueRangePanelView(modal);
+        this.absoluteNumberRangePanel = new ValueRangePanelView(modal);
     }
 
     hide() {
@@ -25,6 +27,7 @@ export class FilterWorkflowView {
         this.selectFilterConditionPanel.hide();
         this.filterValueInputPanel.hide();
         this.relativeDateRangePanel.hide();
-        this.absoluteValueRangePanel.hide();
+        this.absoluteDateRangePanel.hide();
+        this.absoluteNumberRangePanel.hide();
     }
 }

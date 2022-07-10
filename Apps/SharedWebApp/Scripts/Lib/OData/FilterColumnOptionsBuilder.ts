@@ -1,4 +1,5 @@
 ﻿import { DateRange } from "../DateRange";
+import { NumberRange } from "../NumberRange";
 import { RelativeDateRange } from "../RelativeDateRange";
 import { FilterSelection, FilterSelectionContains, FilterSelectionEndsWith, FilterSelectionEqual, FilterSelectionGreaterThan, FilterSelectionGreaterThanOrEqual, FilterSelectionIsBlank, FilterSelectionIsFalse, FilterSelectionIsNotBlank, FilterSelectionIsTrue, FilterSelectionLessThan, FilterSelectionLessThanOrEqual, FilterSelectionNotEqual, FilterSelections, FilterSelectionStartsWith, FilterSelectionStringEqual, FilterSelectionStringNotEqual } from "./FilterSelection";
 import { ODataColumn } from "./ODataColumn";
@@ -83,6 +84,15 @@ export class FilterColumnOptionsBuilder {
     setAbsoluteDateRangeValue(value: DateRange) {
         this.applyingToQuery();
         FilterSelections.absoluteDateRange.applyToQuery(
+            this.filter,
+            this.column.toFilterField(),
+            value
+        );
+    }
+
+    setAbsoluteNumberRangeValue(value: NumberRange) {
+        this.applyingToQuery();
+        FilterSelections.absoluteNumberRange.applyToQuery(
             this.filter,
             this.column.toFilterField(),
             value

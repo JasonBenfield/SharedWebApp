@@ -8,9 +8,9 @@ import { TextHeading1View, TextHeading3View } from "../Views/TextHeadings";
 import { ModalODataPanelView } from "./ModalODataPanelView";
 import { ValueRangePickerView } from "./ValueRangePickerView";
 
-export class AbsoluteDateRangePanelView extends ModalODataPanelView {
+export class ValueRangePanelView extends ModalODataPanelView {
     readonly columnName: BasicTextComponentView;
-    readonly dateRangePicker: ValueRangePickerView;
+    readonly valueRangePicker: ValueRangePickerView;
     readonly preview: BasicTextComponentView;
     readonly cancelButton: ButtonCommandView;
     readonly saveButton: ButtonCommandView;
@@ -20,8 +20,8 @@ export class AbsoluteDateRangePanelView extends ModalODataPanelView {
         this.header.addView(TextHeading1View).setText('Filter');
         this.columnName = this.body.addView(TextHeading3View);
         this.columnName.setMargin(MarginCss.bottom(3));
-        this.dateRangePicker = this.body.addView(ValueRangePickerView);
-        this.dateRangePicker.setMargin(MarginCss.bottom(3));
+        this.valueRangePicker = this.body.addView(ValueRangePickerView);
+        this.valueRangePicker.setMargin(MarginCss.bottom(3));
         this.preview = this.body.addView(TextBlockView);
         this.cancelButton = this.footer.addView(ButtonCommandView);
         this.cancelButton.icon.solidStyle('times');

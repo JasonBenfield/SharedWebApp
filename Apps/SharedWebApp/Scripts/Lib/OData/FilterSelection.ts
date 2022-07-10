@@ -1,6 +1,7 @@
 ﻿import { DateRange } from "../DateRange";
+import { NumberRange } from "../NumberRange";
 import { RelativeDateRange } from "../RelativeDateRange";
-import { FilterAbsoluteDateRange, FilterConditionFunction, FilterConditionOperation, FilterField, FilterFieldFunction, FilterRelativeDateRange, FilterValue, ODataQueryFilterBuilder } from "./ODataQueryFilterBuilder";
+import { FilterAbsoluteDateRange, FilterAbsoluteNumberRange, FilterConditionFunction, FilterConditionOperation, FilterField, FilterFieldFunction, FilterRelativeDateRange, FilterValue, ODataQueryFilterBuilder } from "./ODataQueryFilterBuilder";
 import { SourceType } from "./SourceType";
 
 export interface FilterSelection {
@@ -44,7 +45,7 @@ export class FilterSelectionGreaterThan implements FilterSelection {
     readonly displayText = 'Greater Than';
 
     canSelect(sourceType: SourceType) {
-        return sourceType.isNumber() || sourceType.isDate();
+        return false;
     }
 
     applyToQuery(
@@ -60,7 +61,7 @@ export class FilterSelectionLessThan implements FilterSelection {
     readonly displayText = 'Less Than';
 
     canSelect(sourceType: SourceType) {
-        return sourceType.isNumber() || sourceType.isDate();
+        return false;
     }
 
     applyToQuery(
@@ -76,7 +77,7 @@ export class FilterSelectionGreaterThanOrEqual implements FilterSelection {
     readonly displayText = 'Greater Than or Equal To';
 
     canSelect(sourceType: SourceType) {
-        return sourceType.isNumber() || sourceType.isDate();
+        return false;
     }
 
     applyToQuery(
@@ -92,7 +93,7 @@ export class FilterSelectionLessThanOrEqual implements FilterSelection {
     readonly displayText = 'Less Than or Equal To';
 
     canSelect(sourceType: SourceType) {
-        return sourceType.isNumber() || sourceType.isDate();
+        return false;
     }
 
     applyToQuery(
@@ -308,6 +309,18 @@ export class FilterSelectionAbsoluteDateRange implements FilterSelection {
     }
 }
 
+export class FilterSelectionAbsoluteNumberRange implements FilterSelection {
+    readonly displayText = 'Number Range';
+
+    canSelect(sourceType: SourceType) {
+        return sourceType.isNumber();
+    }
+
+    applyToQuery(filter: ODataQueryFilterBuilder, field: FilterField, value: NumberRange) {
+        filter.add(new FilterAbsoluteNumberRange(field, value));
+    }
+}
+
 export class FilterSelections {
     static readonly equal = new FilterSelectionEqual();
     static readonly notEqual = new FilterSelectionNotEqual();
@@ -326,6 +339,7 @@ export class FilterSelections {
     static readonly isNotBlank = new FilterSelectionIsNotBlank();
     static readonly relativeDateRange = new FilterSelectionRelativeDateRange();
     static readonly absoluteDateRange = new FilterSelectionAbsoluteDateRange();
+    static readonly absoluteNumberRange = new FilterSelectionAbsoluteNumberRange();
 
     static readonly all = [
         FilterSelections.equal,
@@ -344,6 +358,7 @@ export class FilterSelections {
         FilterSelections.isBlank,
         FilterSelections.isNotBlank,
         FilterSelections.relativeDateRange,
-        FilterSelections.absoluteDateRange
+        FilterSelections.absoluteDateRange,
+        FilterSelections.absoluteNumberRange
     ];
 }

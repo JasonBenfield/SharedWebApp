@@ -1,6 +1,7 @@
 ﻿import { DateRange, ISerializableDateRange } from "../DateRange";
 import { EnumerableArray, MappedArray } from "../Enumerable";
 import { JoinedStrings } from "../JoinedStrings";
+import { ISerializableNumberRange, NumberRange } from "../NumberRange";
 import { ISerializableRelativeDateRange, RelativeDateRange } from "../RelativeDateRange";
 
 export interface IFilterSelectionValue {
@@ -26,7 +27,8 @@ type FilterPart =
     FilterConditionFunction |
     FilterRelativeDateRange |
     FilterAbsoluteDateRange |
-    FilterConditionClause;
+    FilterConditionClause |
+    FilterAbsoluteNumberRange;
 
 type SerializableFilterPart =
     ISerializableFilterConjunction |
@@ -37,7 +39,8 @@ type SerializableFilterPart =
     ISerializableFilterConditionFunction |
     ISerializableFilterRelativeDateRange |
     ISerializableFilterAbsoluteDateRange |
-    ISerializableFilterConditionClause;
+    ISerializableFilterConditionClause |
+    ISerializableFilterAbsoluteNumberRange;
 
 class FilterPartFactory {
     static create<T extends FilterPart>(
@@ -82,6 +85,11 @@ class FilterPartFactory {
         else if (serializablePart.type === FilterAbsoluteDateRange.name) {
             part = FilterAbsoluteDateRange.deserialize(
                 serializablePart.value as ISerializableFilterAbsoluteDateRange
+            );
+        }
+        else if (serializablePart.type === FilterAbsoluteNumberRange.name) {
+            part = FilterAbsoluteNumberRange.deserialize(
+                serializablePart.value as ISerializableFilterAbsoluteNumberRange
             );
         }
         else if (serializablePart.type === FilterConditionClause.name) {
@@ -545,10 +553,97 @@ export class FilterAbsoluteDateRange {
 
     serialize() {
         const serialized: ISerializableFilterPart<ISerializableFilterAbsoluteDateRange> = {
-            type: FilterRelativeDateRange.name,
+            type: FilterAbsoluteDateRange.name,
             value: {
                 field: this.field.serialize(),
                 range: this.dateRange.serialize()
+            }
+        };
+        return serialized;
+    }
+}
+
+interface ISerializableFilterAbsoluteNumberRange {
+    readonly field: ISerializableFilterPart<ISerializableFilterField>;
+    readonly range: ISerializableNumberRange;
+}
+
+export class FilterAbsoluteNumberRange {
+    static deserialize(serialized: ISerializableFilterAbsoluteNumberRange) {
+        return new FilterAbsoluteNumberRange(
+            FilterPartFactory.create(serialized.field),
+            NumberRange.deserialize(serialized.range)
+        );
+    }
+
+    constructor(
+        private readonly field: FilterField,
+        private readonly numberRange: NumberRange
+    ) {
+    }
+
+    getConditionClauses() {
+        const conditionClauses: FilterConditionClause[] = [];
+        const numberRange = this.numberRange;
+        if (numberRange.start) {
+            let condition: FilterConditionOperation;
+            if (numberRange.start.isIncluded) {
+                condition = FilterConditionOperation.greaterThanOrEqual(
+                    this.field,
+                    new FilterValue(numberRange.start.value)
+                );
+            }
+            else {
+                condition = FilterConditionOperation.greaterThan(
+                    this.field,
+                    new FilterValue(numberRange.start.value)
+                );
+            }
+            conditionClauses.push(new FilterConditionClause(condition));
+        }
+        if (numberRange.end) {
+            if (conditionClauses.length > 0) {
+                conditionClauses[conditionClauses.length - 1].setAndConjunction();
+            }
+            let condition: FilterConditionOperation;
+            if (numberRange.end.isIncluded) {
+                condition = FilterConditionOperation.lessThanOrEqual(
+                    this.field,
+                    new FilterValue(numberRange.end.value)
+                );
+            }
+            else {
+                condition = FilterConditionOperation.lessThan(
+                    this.field,
+                    new FilterValue(numberRange.end.value)
+                );
+            }
+            conditionClauses.push(new FilterConditionClause(condition));
+        }
+        return conditionClauses;
+    }
+
+    format() {
+        return `${this.field.format()} ${this.numberRange.format()}`;
+    }
+
+    toQuery() {
+        const clauses = this.getConditionClauses();
+        return new JoinedStrings(
+            '',
+            new MappedArray(
+                clauses,
+                c => c.toQuery()
+            )
+        ).value();
+    }
+
+    serialize() {
+        const serialized: ISerializableFilterPart<ISerializableFilterAbsoluteNumberRange> = {
+            type: FilterAbsoluteNumberRange.name,
+            value: {
+                field: this.field.serialize(),
+                range: this.numberRange.serialize()
             }
         };
         return serialized;
@@ -609,13 +704,18 @@ export class FilterRelativeDateRange {
 type SingleConditionType = FilterConditionOperation |
     FilterConditionFunction;
 
-type ConditionType = SingleConditionType | FilterRelativeDateRange | FilterAbsoluteDateRange;
+type ConditionType =
+    SingleConditionType |
+    FilterRelativeDateRange |
+    FilterAbsoluteDateRange |
+    FilterAbsoluteNumberRange;
 
 type SerializableConditionType =
     ISerializableFilterConditionOperation |
     ISerializableFilterConditionFunction |
     ISerializableFilterRelativeDateRange |
-    ISerializableFilterAbsoluteDateRange;
+    ISerializableFilterAbsoluteDateRange |
+    ISerializableFilterAbsoluteNumberRange;
 
 interface ISerializableFilterConditionClause {
     readonly condition: ISerializableFilterPart<SerializableConditionType>;

@@ -2,9 +2,9 @@
 import { BasicComponent } from "../Components/BasicComponent";
 import { Command } from "../Components/Command";
 import { TextComponent } from "../Components/TextComponent";
-import { DateRange } from "../DateRange";
-import { DateRangePicker } from "./DateRangePicker";
+import { NumberRange } from "../NumberRange";
 import { FilterColumnOptionsBuilder } from "./FilterColumnOptionsBuilder";
+import { NumberRangePicker } from "./NumberRangePicker";
 import { ValueRangePanelView } from "./ValueRangePanelView";
 
 interface IResult {
@@ -19,47 +19,48 @@ class Result {
     get done() { return this.result.done; }
 }
 
-export class AbsoluteDateRangePanel extends BasicComponent implements IPanel {
+export class AbsoluteNumberRangePanel extends BasicComponent implements IPanel {
     private readonly panelView: ValueRangePanelView;
     private readonly awaitable = new Awaitable<Result>();
     private options: FilterColumnOptionsBuilder;
     private readonly columnName: TextComponent;
-    private readonly dateRangePicker: DateRangePicker;
+    private readonly numberRangePicker: NumberRangePicker;
     private readonly preview: TextComponent;
 
     constructor(view: ValueRangePanelView) {
         super(view.body);
         this.panelView = view;
         this.columnName = new TextComponent(view.columnName);
-        this.dateRangePicker = this.addComponent(new DateRangePicker(view.valueRangePicker));
-        this.dateRangePicker.when.valueChanged.then(this.onDateRangeChanged.bind(this));
+        this.numberRangePicker = this.addComponent(new NumberRangePicker(view.valueRangePicker));
+        this.numberRangePicker.when.valueChanged.then(this.onNumberRangeChanged.bind(this));
         this.preview = new TextComponent(view.preview);
         new Command(this.cancel.bind(this)).add(view.cancelButton);
         new Command(this.save.bind(this)).add(view.saveButton);
     }
 
-    private onDateRangeChanged(dateRange: DateRange) {
-        this.preview.setText(dateRange.format());
+    private onNumberRangeChanged(numberRange: NumberRange) {
+        this.preview.setText(numberRange.format());
     }
 
     private cancel() { this.awaitable.resolve(Result.done()); }
 
     private save() {
-        const dateRange = this.dateRangePicker.getValue();
-        this.options.setAbsoluteDateRangeValue(dateRange);
+        const numberRange = this.numberRangePicker.getValue();
+        this.options.setAbsoluteNumberRangeValue(numberRange);
         this.awaitable.resolve(Result.done());
     }
 
     setOptions(options: FilterColumnOptionsBuilder) {
         this.options = options;
         this.columnName.setText(options.column.displayText);
-        const dateRange = new DateRange(null, null);
-        this.dateRangePicker.setValue(dateRange);
-        this.preview.setText(dateRange.format());
+        this.numberRangePicker.setNumberFormat(options.column.numberFormat);
+        const numberRange = new NumberRange(null, null, options.column.numberFormat);
+        this.numberRangePicker.setValue(numberRange);
+        this.preview.setText(numberRange.format());
     }
 
     start() {
-        this.dateRangePicker.setFocus();
+        this.numberRangePicker.setFocus();
         return this.awaitable.start();
     }
 

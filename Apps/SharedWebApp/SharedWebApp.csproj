@@ -58,7 +58,7 @@
     <None Remove="Scripts\Lib\JustifyContentCss.ts" />
     <None Remove="Scripts\Lib\NumberRange.ts" />
     <None Remove="Scripts\Lib\OData\AbsoluteDateRangePanel.ts" />
-    <None Remove="Scripts\Lib\OData\AbsoluteDateRangePanelView.ts" />
+    <None Remove="Scripts\Lib\OData\AbsoluteNumberRangePanel.ts" />
     <None Remove="Scripts\Lib\OData\BooleanIconCell.ts" />
     <None Remove="Scripts\Lib\OData\DateRangePicker.ts" />
     <None Remove="Scripts\Lib\OData\DefaultValueFormatter.ts" />
@@ -76,6 +76,7 @@
     <None Remove="Scripts\Lib\OData\ModalODataComponent.ts" />
     <None Remove="Scripts\Lib\OData\ModalODataComponentView.ts" />
     <None Remove="Scripts\Lib\OData\ModalODataPanelView.ts" />
+    <None Remove="Scripts\Lib\OData\NumberRangePicker.ts" />
     <None Remove="Scripts\Lib\OData\NumberValueFormatter.ts" />
     <None Remove="Scripts\Lib\OData\ODataCell.ts" />
     <None Remove="Scripts\Lib\OData\ODataCellClickedEventArgs.ts" />
@@ -117,6 +118,7 @@
     <None Remove="Scripts\Lib\OData\SelectFilterConditionPanelView.ts" />
     <None Remove="Scripts\Lib\OData\SourceType.ts" />
     <None Remove="Scripts\Lib\OData\Types.ts" />
+    <None Remove="Scripts\Lib\OData\ValueRangePanelView.ts" />
     <None Remove="Scripts\Lib\OData\ValueRangePickerView.ts" />
     <None Remove="Scripts\Lib\RelativeDateRange.ts" />
     <None Remove="Scripts\Lib\TimeSpan.ts" />
@@ -224,11 +226,17 @@
     <TypeScriptCompile Include="Scripts\Lib\FlexCss.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Forms\ErrorListItem.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Forms\MultiViewValue.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\AbsoluteNumberRangePanel.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Lib\OData\BooleanIconCell.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\NumberRangePicker.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Lib\OData\FilterConditionClauseComponent.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\FilterConditionClauseView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ModalODataPanelView.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\OData\AbsoluteDateRangePanelView.ts">
+    <TypeScriptCompile Include="Scripts\Lib\OData\ValueRangePanelView.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Lib\OData\AbsoluteDateRangePanel.ts">

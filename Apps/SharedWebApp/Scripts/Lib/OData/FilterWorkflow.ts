@@ -1,8 +1,9 @@
 ﻿import { Awaitable } from "../Awaitable";
 import { SingleActivePanel } from "../Panel/SingleActivePanel";
 import { AbsoluteDateRangePanel } from "./AbsoluteDateRangePanel";
+import { AbsoluteNumberRangePanel } from "./AbsoluteNumberRangePanel";
 import { FilterColumnOptionsBuilder } from "./FilterColumnOptionsBuilder";
-import { FilterSelection, FilterSelectionAbsoluteDateRange, FilterSelectionRelativeDateRange } from "./FilterSelection";
+import { FilterSelection, FilterSelectionAbsoluteDateRange, FilterSelectionAbsoluteNumberRange, FilterSelectionRelativeDateRange } from "./FilterSelection";
 import { FilterValueInputPanel } from "./FilterValueInputPanel";
 import { FilterWorkflowView } from "./FilterWorkflowView";
 import { ODataColumn } from "./ODataColumn";
@@ -30,7 +31,8 @@ export class FilterWorkflow implements IPanel {
     private readonly selectFilterConditionPanel: SelectFilterConditionPanel;
     private readonly filterValueInputPanel: FilterValueInputPanel;
     private readonly relativeDateRangePanel: RelativeDateRangePanel;
-    private readonly absoluteValueRangePanel: AbsoluteDateRangePanel;
+    private readonly absoluteDateRangePanel: AbsoluteDateRangePanel;
+    private readonly absoluteNumberRangePanel: AbsoluteNumberRangePanel;
     private options: FilterColumnOptionsBuilder;
 
     constructor(
@@ -49,8 +51,11 @@ export class FilterWorkflow implements IPanel {
         this.relativeDateRangePanel = this.panels.add(
             new RelativeDateRangePanel(view.relativeDateRangePanel)
         );
-        this.absoluteValueRangePanel = this.panels.add(
-            new AbsoluteDateRangePanel(view.absoluteValueRangePanel)
+        this.absoluteDateRangePanel = this.panels.add(
+            new AbsoluteDateRangePanel(view.absoluteDateRangePanel)
+        );
+        this.absoluteNumberRangePanel = this.panels.add(
+            new AbsoluteNumberRangePanel(view.absoluteNumberRangePanel)
         );
     }
 
@@ -74,7 +79,10 @@ export class FilterWorkflow implements IPanel {
                 this.activateRelativeDateRangePanel();
             }
             else if (selection instanceof FilterSelectionAbsoluteDateRange) {
-                this.activateAbsoluteValueRangePanel();
+                this.activateAbsoluteDateRangePanel();
+            }
+            else if (selection instanceof FilterSelectionAbsoluteNumberRange) {
+                this.activateAbsoluteNumberRangePanel();
             }
             else {
                 this.activateFilterValueInputPanel();
@@ -101,10 +109,17 @@ export class FilterWorkflow implements IPanel {
         }
     }
 
+    private async activateAbsoluteDateRangePanel() {
+        this.panels.activate(this.absoluteDateRangePanel);
+        const result = await this.absoluteDateRangePanel.start();
+        if (result.done) {
+            this.awaitable.resolve(Result.done());
+        }
+    }
 
-    private async activateAbsoluteValueRangePanel() {
-        this.panels.activate(this.absoluteValueRangePanel);
-        const result = await this.absoluteValueRangePanel.start();
+    private async activateAbsoluteNumberRangePanel() {
+        this.panels.activate(this.absoluteNumberRangePanel);
+        const result = await this.absoluteNumberRangePanel.start();
         if (result.done) {
             this.awaitable.resolve(Result.done());
         }
@@ -116,7 +131,8 @@ export class FilterWorkflow implements IPanel {
         this.selectFilterConditionPanel.setOptions(this.options);
         this.filterValueInputPanel.setOptions(this.options);
         this.relativeDateRangePanel.setOptions(this.options);
-        this.absoluteValueRangePanel.setOptions(this.options);
+        this.absoluteDateRangePanel.setOptions(this.options);
+        this.absoluteNumberRangePanel.setOptions(this.options);
     }
 
     start() { return this.awaitable.start(); }

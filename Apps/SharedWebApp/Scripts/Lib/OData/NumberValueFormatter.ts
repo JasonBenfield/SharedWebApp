@@ -3,7 +3,7 @@ import { ODataColumn } from "./ODataColumn";
 import { IValueFormatter } from "./Types";
 
 export class NumberValueFormatter implements IValueFormatter {
-    constructor(private readonly formatString: string) {
+    constructor(readonly formatString: string) {
     }
 
     format(column: ODataColumn, record?: any): string {

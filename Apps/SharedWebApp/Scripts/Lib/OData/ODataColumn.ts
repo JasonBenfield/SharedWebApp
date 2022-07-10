@@ -1,4 +1,5 @@
 ﻿import { GridCellView } from "../Views/Grid";
+import { NumberValueFormatter } from "./NumberValueFormatter";
 import { ODataColumnView } from "./ODataColumnView";
 import { FilterField } from "./ODataQueryFilterBuilder";
 import { SourceType } from "./SourceType";
@@ -17,6 +18,13 @@ export class ODataColumn {
         readonly isVisible: boolean,
         readonly view: ODataColumnView
     ) {
+    }
+
+    get numberFormat() {
+        if (this.formatter instanceof NumberValueFormatter) {
+            return this.formatter.formatString;
+        }
+        return '';
     }
 
     toFilterField() { return new FilterField(this.columnName, this.displayText); }

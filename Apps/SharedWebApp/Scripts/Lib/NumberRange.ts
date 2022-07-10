@@ -1,12 +1,35 @@
 ﻿import { FormattedNumber } from "./FormattedNumber";
-import { ValueRangeBound } from "./ValueRangeBound";
+import { ISerializableValueRangeBound, ValueRangeBound } from "./ValueRangeBound";
+
+export interface ISerializableNumberRange {
+    readonly start: ISerializableValueRangeBound<number>;
+    readonly end: ISerializableValueRangeBound<number>;
+    readonly numberFormat: string;
+}
 
 export class NumberRange {
+    static deserialize(serialized: ISerializableNumberRange) {
+        return new NumberRange(
+            ValueRangeBound.deserialize(serialized.start),
+            ValueRangeBound.deserialize(serialized.end),
+            serialized.numberFormat
+        );
+    }
+
     constructor(
         readonly start: ValueRangeBound<number>,
         readonly end: ValueRangeBound<number>,
         private readonly numberFormat: string = '0'
     ) {
+    }
+
+    serialize() {
+        const serialized: ISerializableNumberRange = {
+            start: this.start ? this.start.serialize() : null,
+            end: this.end ? this.end.serialize() : null,
+            numberFormat: this.numberFormat
+        };
+        return serialized;
     }
 
     format() {
@@ -19,7 +42,7 @@ export class NumberRange {
             if (this.start) {
                 let prefix: string;
                 if (this.start.isIncluded) {
-                    prefix += 'At Least';
+                    prefix = 'At Least';
                 }
                 else {
                     prefix = 'More than';
@@ -33,7 +56,7 @@ export class NumberRange {
                 }
                 let prefix: string;
                 if (this.end.isIncluded) {
-                    prefix += 'At Most';
+                    prefix = 'At Most';
                 }
                 else {
                     prefix = 'Less than';
