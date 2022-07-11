@@ -13,9 +13,9 @@ export class ODataColumn {
         private readonly _createHeaderCell: ICreateHeaderCell,
         private readonly formatter: IValueFormatter,
         private readonly _createDataCell: ICreateDataCell,
+        readonly canMove: boolean,
         readonly isRequired: boolean,
-        readonly isSelectable: boolean,
-        readonly isVisible: boolean,
+        readonly canSelect: boolean,
         readonly view: ODataColumnView
     ) {
     }

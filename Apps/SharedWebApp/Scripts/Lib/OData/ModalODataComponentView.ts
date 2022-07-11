@@ -14,4 +14,8 @@ export class ModalODataComponentView extends ModalComponentView {
         this.selectFieldsPanel = new SelectFieldsPanelView(this);
         this.filterWorkflow = new FilterWorkflowView(this);
     }
+
+    setViewID(id: string) {
+        this.filterWorkflow.setViewID(`${id}FilterWorkflow`);
+    }
 }

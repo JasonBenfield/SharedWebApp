@@ -33,4 +33,8 @@ export class RelativeDateRangePanelView extends ModalODataPanelView {
         this.saveButton.setText('Filter');
         this.saveButton.useOutlineStyle(ContextualClass.primary);
     }
+
+    setViewID(id: string) {
+        this.relativeDateRangePicker.setViewID(`${id}RelativeDateRangePicker`);
+    }
 }

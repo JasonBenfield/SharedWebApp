@@ -46,4 +46,20 @@ export class ODataHeaderCellView extends GridCellView {
         this.sortCol.removeCssName('sort-button-not-set');
         this.sortButton.icon.solidStyle('caret-up');
     }
+
+    styleAsDragStart() {
+        this.addCssName('drag-start');
+    }
+
+    styleAsDragEnd() {
+        this.removeCssName('drag-start');
+    }
+
+    styleAsDragOver() {
+        this.addCssName('drag-over');
+    }
+
+    styleAsDragLeave() {
+        this.removeCssName('drag-over');
+    }
 }

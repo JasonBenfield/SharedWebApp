@@ -10,9 +10,9 @@ import { ICreateDataCell, ICreateHeaderCell, IValueFormatter } from "./Types";
 
 export class ODataColumnBuilder {
     private displayText;
+    private canMove = true;
     private isRequired = false;
-    private isSelectable = true;
-    private isVisible = true;
+    private canSelect = true;
     private formatter: IValueFormatter = new DefaultValueFormatter();
     private createHeaderCell: ICreateHeaderCell =
         (column: ODataColumn, view: ODataHeaderCellView) => new ODataHeaderCell(column, view);
@@ -35,18 +35,18 @@ export class ODataColumnBuilder {
         return this;
     }
 
+    disableMove() {
+        this.canMove = false;
+        return this;
+    }
+
     require() {
         this.isRequired = true;
         return this;
     }
 
     disableSelect() {
-        this.isSelectable = false;
-        return this;
-    }
-
-    hide() {
-        this.isVisible = false;
+        this.canSelect = false;
         return this;
     }
 
@@ -73,9 +73,9 @@ export class ODataColumnBuilder {
             this.createHeaderCell,
             this.formatter,
             this.createDataCell,
+            this.canMove,
             this.isRequired,
-            this.isSelectable,
-            this.isVisible,
+            this.canSelect,
             this.view.build()
         );
     }

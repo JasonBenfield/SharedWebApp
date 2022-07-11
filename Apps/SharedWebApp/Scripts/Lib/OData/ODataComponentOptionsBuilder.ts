@@ -11,7 +11,10 @@ export class ODataComponentOptionsBuilder<TEntity> {
     private odataGroup: AppApiQuery<TEntity>;
     private pageSize: number = 50;
 
-    constructor(private readonly columns: IODataColumnsBuilder<TEntity>) {
+    constructor(
+        private readonly id: string,
+        private readonly columns: IODataColumnsBuilder<TEntity>
+    ) {
     }
 
     setODataGroup(odataGroup: AppApiQuery<TEntity>) {
@@ -32,6 +35,12 @@ export class ODataComponentOptionsBuilder<TEntity> {
                 columns[key] = column.build();
             }
         }
-        return new ODataComponentOptions(this.odataGroup, this.pageSize, columns, this.query.toSerializable());
+        return new ODataComponentOptions(
+            this.id,
+            this.odataGroup,
+            this.pageSize,
+            columns,
+            this.query.serialize()
+        );
     }
 }

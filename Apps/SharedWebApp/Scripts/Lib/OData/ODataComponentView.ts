@@ -10,6 +10,7 @@ import { ODataFooterComponentView } from "./ODataFooterComponentView";
 import { ODataGridView } from "./ODataGridView";
 import { ODataTextCellView } from './ODataTextCellView';
 import { BasicComponentView } from "../Views/BasicComponentView";
+import { ODataHeaderCellView } from "./ODataHeaderCellView";
 
 export class ODataComponentView extends GridView {
     readonly grid: ODataGridView;
@@ -40,7 +41,12 @@ export class ODataComponentView extends GridView {
         this.modalODataComponent = this.addView(ModalODataComponentView);
     }
 
-    gearHeaderView() {
+    setViewID(id: string) {
+        super.setViewID(id);
+        this.modalODataComponent.setViewID(`${id}ModalODataComponent`);
+    }
+
+    columnStart() {
         return new ODataColumnViewBuilder()
             .setWidth(CssLengthUnit.minContent())
             .headerCell(
@@ -58,6 +64,20 @@ export class ODataComponentView extends GridView {
                 (cellView) => {
                     cellView.addCssName('position-sticky-left');
                     cellView.addCssName('z-3');
+                }
+            );
+    }
+
+    columnEnd() {
+        return new ODataColumnViewBuilder()
+            .setWidth(CssLengthUnit.px(50))
+            .headerCell(
+                ODataHeaderCellView,
+                (cellView) => {
+                    cellView.removeCssName('grid-heading');
+                    cellView.columnName.hide();
+                    cellView.sortButton.hide();
+                    cellView.makeDraggable();
                 }
             );
     }

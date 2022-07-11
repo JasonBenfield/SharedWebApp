@@ -29,19 +29,21 @@ export class FilterValueInputPanel implements IPanel {
     private options: FilterColumnOptionsBuilder;
     private readonly input: InputControl<number | string | Date>;
     private viewValue: MultiViewValue<string, number | string | Date>;
+    private readonly saveCommand: Command;
 
     constructor(private readonly view: FilterValueInputPanelView) {
         this.viewValue = new MultiViewValue(new TextToTextViewValue());
         this.input = new InputControl(view.valueInput, this.viewValue);
         this.title = new TextComponent(this.view.title);
         this.operation = new TextComponent(this.view.operation);
-        const saveCommand = new Command(this.save.bind(this));
-        saveCommand.add(view.saveButton);
-        view.form.onSubmit().preventDefault().execute(() => saveCommand.execute()).subscribe();
+        this.saveCommand = new Command(this.save.bind(this));
+        this.saveCommand.add(view.saveButton);
+        view.form
+            .onSubmit()
+            .execute(this.onFormSubmit.bind(this))
+            .subscribe();
         new Command(this.cancel.bind(this)).add(view.cancelButton);
     }
-
-    private cancel() { this.awaitable.resolve(Result.done()); }
 
     private save() {
         if (!this.input.isBlank()) {
@@ -57,6 +59,13 @@ export class FilterValueInputPanel implements IPanel {
             }
         }
     }
+
+    private onFormSubmit(_: HTMLElement, evt: JQueryEventObject) {
+        evt.preventDefault();
+        this.saveCommand.execute();
+    }
+
+    private cancel() { this.awaitable.resolve(Result.done()); }
 
     setOptions(options: FilterColumnOptionsBuilder) {
         this.options = options;

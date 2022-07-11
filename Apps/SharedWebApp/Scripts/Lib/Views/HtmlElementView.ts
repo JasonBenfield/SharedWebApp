@@ -3,8 +3,7 @@
 interface IElementEvent {
     evtName: string;
     selector: string;
-    preventDefault: boolean;
-    action: (sourceElement: HTMLElement) => void;
+    action: (sourceElement: HTMLElement, evt: JQueryEventObject) => void;
 }
 
 export class HtmlElementView {
@@ -110,8 +109,8 @@ export class HtmlElementView {
         return this.element.contains(element);
     }
 
-    on(evtName: string, selector: string, preventDefault: boolean, action: (sourceElement: HTMLElement) => void) {
-        const handler = { evtName: evtName, selector: selector, preventDefault: preventDefault, action: action };
+    on(evtName: string, selector: string, action: (sourceElement: HTMLElement, evt: JQueryEventObject) => void) {
+        const handler: IElementEvent = { evtName: evtName, selector: selector, action: action };
         this.handlers.push(handler);
         if (document.contains(this.element)) {
             this.registerEvent(handler);
@@ -134,11 +133,7 @@ export class HtmlElementView {
             handler.evtName,
             handler.selector,
             function (event: JQueryEventObject) {
-                handler.action(this);
-                if (handler.preventDefault) {
-                    event.preventDefault();
-                }
-                return false;
+                return handler.action(this, event);
             }
         );
     }

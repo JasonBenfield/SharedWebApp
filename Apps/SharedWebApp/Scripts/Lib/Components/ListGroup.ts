@@ -25,6 +25,8 @@ export class ListGroup extends BasicComponent {
         }
     }
 
+    getItems() { return this.getComponents() as BasicComponent[]; }
+
     setItems<TSourceItem, TItem extends BasicComponent>(
         sourceItems: TSourceItem[],
         createItem: (sourceItem: TSourceItem, itemView: BasicListGroupItemView) => TItem

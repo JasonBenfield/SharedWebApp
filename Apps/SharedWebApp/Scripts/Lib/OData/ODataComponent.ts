@@ -10,7 +10,9 @@ import { ODataColumnBuilder } from "./ODataColumnBuilder";
 import { ODataComponentOptions } from "./ODataComponentOptions";
 import { ODataComponentView } from "./ODataComponentView";
 import { ODataFooterComponent } from "./ODataFooterComponent";
-import { ODataGrid } from "./ODataGrid";
+import { HeaderCellDroppedEventArgs, ODataGrid } from "./ODataGrid";
+import { ODataHeaderCell } from "./ODataHeaderCell";
+import { ODataHeaderCellView } from "./ODataHeaderCellView";
 import { ODataPage } from "./ODataPage";
 import { ODataQueryBuilder } from "./ODataQueryBuilder";
 import { SourceType } from "./SourceType";
@@ -25,20 +27,33 @@ export class ODataComponent<TEntity> {
     private readonly currentPage: ODataPage;
     private readonly footerComponent: ODataFooterComponent;
 
-    private static readonly gearHeaderColumnName = 'GearHeader';
+    private static readonly columnStartName = 'ColumnStart';
+    private static readonly columnEndName = 'ColumnEnd';
 
     constructor(private readonly view: ODataComponentView, options: ODataComponentOptions<TEntity>) {
         this.odataGroup = options.odataGroup;
-        options.columns[ODataComponent.gearHeaderColumnName] = new ODataColumnBuilder(
-            ODataComponent.gearHeaderColumnName,
+        options.columns[ODataComponent.columnStartName] = new ODataColumnBuilder(
+            ODataComponent.columnStartName,
             SourceType.none,
-            view.gearHeaderView()
+            view.columnStart()
         )
             .setCreateHeaderCell((column, view) => new ODataCell(0, column, null, view))
-            .disableSelect().build();
+            .disableSelect()
+            .disableMove()
+            .build();
+        options.columns[ODataComponent.columnEndName] = new ODataColumnBuilder(
+            ODataComponent.columnEndName,
+            SourceType.none,
+            view.columnEnd()
+        )
+            .setCreateHeaderCell((column, view: ODataHeaderCellView) => new ODataHeaderCell(column, view))
+            .disableSelect()
+            .disableMove()
+            .build();
+        view.setViewID(`${options.id}ODataComponent`);
         this.columns = new ODataColumnAccessor(options.columns);
         this.query = new ODataQueryBuilder(options.defaultQuery);
-        this.query.select.addRequiredFields(this.columns.requiredSelectableColumns());
+        this.query.select.addRequiredFields(this.columns.requiredDatabaseColumns());
         this.grid = new ODataGrid(view.grid);
         this.alert = new MessageAlert(view.alert);
         this.modalODataComponent = new ModalODataComponent(this.query, this.columns, view.modalODataComponent);
@@ -49,29 +64,36 @@ export class ODataComponent<TEntity> {
         this.grid.when.sortClicked.then(this.onSortClick.bind(this));
         this.grid.when.headerCellClicked.then(this.onHeaderCellClick.bind(this));
         this.grid.when.dataCellClicked.then(this.onDataCellClick.bind(this));
+        this.grid.when.headerCellDropped.then(this.onHeaderCellDropped.bind(this));
     }
 
     private onSortClick(column: ODataColumn) {
         const field = this.query.orderBy.getField(column.columnName);
         this.query.orderBy.clear();
         if (field && field.isAscending) {
-            this.query.orderBy.addDescending(column.columnName);
+            this.query.orderBy.addDescending(column);
         }
         else {
-            this.query.orderBy.addAscending(column.columnName);
+            this.query.orderBy.addAscending(column);
         }
         this.grid.orderByChanged(this.query.orderBy);
         this.refresh();
     }
 
     private async onHeaderCellClick(column: ODataColumn) {
-        if (column.columnName === ODataComponent.gearHeaderColumnName) {
+        if (column.columnName === ODataComponent.columnStartName) {
             await this.modalODataComponent.showSelect();
+            await this.refresh();
         }
-        else if (column.isSelectable) {
+        else if (!column.sourceType.isNone()) {
             await this.modalODataComponent.showFilter(column);
+            await this.refresh();
         }
-        await this.refresh();
+    }
+
+    private onHeaderCellDropped(eventArgs: HeaderCellDroppedEventArgs) {
+        this.query.select.moveField(eventArgs.source, eventArgs.destination);
+        return this.refresh();
     }
 
     private onDataCellClick(args: ODataCellClickedEventArgs) {
@@ -103,7 +125,8 @@ export class ODataComponent<TEntity> {
         this.currentPage.countChanged(result.count);
         const selectedColumnNames = this.query.select.getExplicitlySelected();
         const gridColumns = this.columns.columns(selectedColumnNames);
-        gridColumns.splice(0, 0, this.columns.column(ODataComponent.gearHeaderColumnName));
+        gridColumns.splice(0, 0, this.columns.column(ODataComponent.columnStartName));
+        gridColumns.push(this.columns.column(ODataComponent.columnEndName));
         this.grid.setData(gridColumns, result.records);
         this.footerComponent.setPaging(
             this.currentPage.page,

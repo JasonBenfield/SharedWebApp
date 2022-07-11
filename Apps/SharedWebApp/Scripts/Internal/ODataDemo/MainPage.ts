@@ -17,8 +17,9 @@ class MainPage extends BasicPage {
         super(new MainPageView());
         new TextComponent(this.view.heading).setText('OData Demo');
         const columns = new ODataEmployeeColumnsBuilder(this.view.columns);
+        columns.ID.require();
         columns.Salary.setFormatter(new NumberValueFormatter('$0,0.00'));
-        const options = new ODataComponentOptionsBuilder<IEmployee>(columns);
+        const options = new ODataComponentOptionsBuilder<IEmployee>('demo', columns);
         options.setPageSize(8);
         options.query.select.addFields(
             columns.ID,
@@ -26,12 +27,6 @@ class MainPage extends BasicPage {
             columns.DateHired,
             columns.Salary
         );
-        //options.query.filter.add(
-        //    FilterConditionOperation.greaterThan(
-        //        new FilterField(columns.ID.columnName),
-        //        new FilterValue(5)
-        //    )
-        //);
         const odataGroup = new AppApiQuery<IEmployee>(
             new AppApiEvents(() => { }),
             AppResourceUrl.odata(

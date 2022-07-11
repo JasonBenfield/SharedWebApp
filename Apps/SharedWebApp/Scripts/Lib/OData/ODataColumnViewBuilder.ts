@@ -8,7 +8,8 @@ import { ODataTextCellView } from "./ODataTextCellView";
 export class ODataColumnViewBuilder {
     private width: GridTemplateCss = new GridTemplateFitContent(CssLengthUnit.px(200));
     private headerCellCtor: ViewConstructor<GridCellView> = ODataHeaderCellView;
-    private configureHeaderCell: (cell: GridCellView) => void = () => { };
+    private configureHeaderCell: (cell: GridCellView) => void =
+        (cell: GridCellView) => { cell.makeDraggable(); };
     private dataCellCtor: ViewConstructor<GridCellView> = ODataTextCellView;
     private configureDataCell: (cell: GridCellView) => void = () => { };
 

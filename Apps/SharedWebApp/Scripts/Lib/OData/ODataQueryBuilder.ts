@@ -25,6 +25,7 @@ export interface ISerializableOrderBy {
 
 export interface ISelectField {
     readonly field: string;
+    readonly isDatabaseField: boolean;
     readonly isExplicitlySelected: boolean;
 }
 
@@ -82,16 +83,15 @@ export class ODataQueryBuilder {
         return new JoinedStrings('&', parts).value();
     }
 
-    toSerializable() {
-        return {
-            select: this.select.toSerializable(),
+    serialize() {
+        const serialized: ISerializableQuery = {
+            select: this.select.serialize(),
             filter: this.filter.serialize(),
-            orderBy: this.orderBy.toSerializable()
-        } as ISerializableQuery;
+            orderBy: this.orderBy.serialize()
+        };
+        return serialized;
     }
 }
-
-export type QueryField = string | ODataColumnBuilder | ODataColumn;
 
 export class ODataQuerySelectBuilder {
     private readonly requiredFields: string[] = [];
@@ -103,14 +103,18 @@ export class ODataQuerySelectBuilder {
         }
     }
 
-    addRequiredFields(fields: QueryField[]) {
+    addRequiredFields(fields: ODataColumn[]) {
         for (const field of fields) {
-            const fieldName = toFieldName(field);
+            const fieldName = field.columnName;
             if (this.requiredFields.indexOf(fieldName) === -1) {
                 this.requiredFields.push(fieldName);
             }
             if (!this.contains(fieldName)) {
-                this.fields.push({ field: fieldName, isExplicitlySelected: false });
+                this.fields.push({
+                    field: fieldName,
+                    isDatabaseField: !field.sourceType.isNone(),
+                    isExplicitlySelected: false
+                });
             }
         }
         return this;
@@ -120,7 +124,12 @@ export class ODataQuerySelectBuilder {
         const requiredFields = new MappedArray(
             this.requiredFields,
             requiredField => {
-                return { field: requiredField, isExplicitlySelected: false } as ISelectField;
+                const field: ISelectField = {
+                    field: requiredField,
+                    isDatabaseField: true,
+                    isExplicitlySelected: false
+                };
+                return field;
             }
         ).value();
         this.fields.splice(0, this.fields.length, ...requiredFields);
@@ -144,14 +153,18 @@ export class ODataQuerySelectBuilder {
     }
 
     getExplicitlySelected() {
-        return new MappedArray(this.fields, f => f.field).value();
+        return new MappedArray(
+            new FilteredArray(
+                this.fields,
+                f => f.isExplicitlySelected
+            ),
+            f => f.field
+        ).value();
     }
 
-    add(field: QueryField) { return this.addFields(field); }
-
-    addFields(...fields: QueryField[]) {
+    addFields(...fields: (ODataColumnBuilder | ODataColumn)[]) {
         for (const field of fields) {
-            const fieldName = toFieldName(field);
+            const fieldName = field.columnName;
             const index = new MappedArray(
                 this.fields,
                 f => f.field
@@ -159,22 +172,53 @@ export class ODataQuerySelectBuilder {
             if (index > -1) {
                 this.fields.splice(index, 1);
             }
-            this.fields.push({ field: fieldName, isExplicitlySelected: true });
+            this.fields.push({
+                field: fieldName,
+                isDatabaseField: !field.sourceType.isNone(),
+                isExplicitlySelected: true
+            });
         }
         return this;
+    }
+
+    moveField(source: string, destination: string) {
+        const sourceIndex = this.fields.findIndex(f => f.field === source);
+        if (sourceIndex > -1) {
+            let destinationIndex = this.fields.findIndex(f => f.field === destination);
+            if (destinationIndex === -1) {
+                destinationIndex = this.fields.length;
+            }
+            if (sourceIndex !== destinationIndex) {
+                const sourceField = this.fields[sourceIndex];
+                this.fields.splice(sourceIndex, 1);
+                if (destinationIndex > sourceIndex) {
+                    this.fields.splice(destinationIndex - 1, 0, sourceField);
+                }
+                else {
+                    this.fields.splice(destinationIndex, 0, sourceField);
+                }
+            }
+        }
     }
 
     build() {
         return new JoinedStrings(
             ',',
-            new MappedArray(this.fields, f => f.field)
+            new MappedArray(
+                new FilteredArray(
+                    this.fields,
+                    f => f.isDatabaseField
+                ),
+                f => f.field
+            )
         ).value();
     }
 
-    toSerializable() {
-        return {
+    serialize() {
+        const serialized: ISerializableSelect = {
             fields: this.fields
-        } as ISerializableSelect;
+        };
+        return serialized;
     }
 }
 
@@ -196,12 +240,12 @@ export class ODataQueryOrderByBuilder {
         return new FilteredArray(this.fields, f => f.field === name).toEnumerableArray().first();
     }
 
-    addAscending(field: QueryField) { return this.add(field, true); }
+    addAscending(field: ODataColumnBuilder | ODataColumn) { return this.add(field, true); }
 
-    addDescending(field: QueryField) { return this.add(field, false); }
+    addDescending(field: ODataColumnBuilder | ODataColumn) { return this.add(field, false); }
 
-    private add(field: QueryField, isAscending) {
-        const fieldName = toFieldName(field);
+    private add(field: ODataColumnBuilder | ODataColumn, isAscending) {
+        const fieldName = field.columnName;
         const index = this.fields.findIndex(f => f.field === fieldName);
         if (index > -1) {
             this.fields.splice(index, 1);
@@ -225,23 +269,10 @@ export class ODataQueryOrderByBuilder {
         return `${orderByField.field} ${direction}`;
     }
 
-    toSerializable() {
-        return {
+    serialize() {
+        const serialized: ISerializableOrderBy = {
             fields: this.fields
-        } as ISerializableOrderBy;
+        };
+        return serialized;
     }
-}
-
-function toFieldName(field: QueryField) {
-    let fieldName: string;
-    if (field instanceof ODataColumnBuilder) {
-        fieldName = field.columnName;
-    }
-    else if (field instanceof ODataColumn) {
-        fieldName = field.columnName;
-    }
-    else {
-        fieldName = field;
-    }
-    return fieldName;
 }

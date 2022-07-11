@@ -1,14 +1,15 @@
 ﻿import { BasicComponent } from "../Components/BasicComponent";
 import { TextComponent } from "../Components/TextComponent";
+import { ODataColumn } from "./ODataColumn";
 import { SelectFieldListItemView } from "./SelectFieldListItemView";
 
 export class SelectFieldListItem extends BasicComponent {
     protected readonly view: SelectFieldListItemView;
     private _isSelected = false;
 
-    constructor(readonly fieldName: string, isActive: boolean, view: SelectFieldListItemView) {
+    constructor(readonly column: ODataColumn, isActive: boolean, view: SelectFieldListItemView) {
         super(view);
-        new TextComponent(view.fieldName).setText(fieldName);
+        new TextComponent(view.fieldName).setText(column.displayText);
         if (isActive) {
             this.select();
         }

@@ -23,7 +23,6 @@ export class Result {
 export class SelectFieldsPanel implements IPanel {
     private readonly awaitable = new Awaitable<Result>();
     private readonly selectFieldsList: ListGroup;
-    private readonly selectFieldListItems: SelectFieldListItem[] = [];
 
     constructor(
         private readonly select: ODataQuerySelectBuilder,
@@ -45,29 +44,37 @@ export class SelectFieldsPanel implements IPanel {
     }
 
     private save() {
-        const selectedFields = new MappedArray(
+        const selectedColumns = new MappedArray(
             new FilteredArray(
-                this.selectFieldListItems,
+                this.selectFieldsList.getItems() as SelectFieldListItem[],
                 item => item.isSelected
             ),
-            item => item.fieldName
+            item => item.column
         ).value();
         this.select.clear();
-        this.select.addFields(...selectedFields);
+        this.select.addFields(...selectedColumns);
         this.awaitable.resolve(Result.done());
     }
 
     start() { return this.awaitable.start(); }
 
     activate() {
-        const listItems = this.selectFieldsList.setItems(
-            this.columns.visibleSelectableColumns(),
-            (column, itemView: SelectFieldListItemView) => {
-                const isSelected = this.select.containsExplicitySelected(column.columnName);
-                return new SelectFieldListItem(column.displayText, isSelected, itemView);
+        this.selectFieldsList.clearItems();
+        for (const selectedField of this.select.getExplicitlySelected()) {
+            const column = this.columns.column(selectedField);
+            this.selectFieldsList.addItem(
+                column,
+                (c, itemView: SelectFieldListItemView) => new SelectFieldListItem(c, true, itemView)
+            );
+        }
+        for (const column of this.columns.selectableColumns()) {
+            if (!this.select.containsExplicitySelected(column.columnName)) {
+                this.selectFieldsList.addItem(
+                    column,
+                    (c, itemView: SelectFieldListItemView) => new SelectFieldListItem(c, false, itemView)
+                );
             }
-        );
-        this.selectFieldListItems.splice(0, this.selectFieldListItems.length, ...listItems);
+        }
         this.view.show();
     }
 

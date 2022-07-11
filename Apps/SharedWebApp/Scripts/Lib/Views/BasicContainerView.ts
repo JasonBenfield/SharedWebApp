@@ -6,6 +6,10 @@ export class BasicContainerView extends BasicComponentView {
         super(container, createElementView);
     }
 
+    makeDraggable() {
+        this.setAttr(attr => attr.draggable = 'true');
+    }
+
     getViews: () => BasicComponentView[];
 
     disposeAllViews: () => void;

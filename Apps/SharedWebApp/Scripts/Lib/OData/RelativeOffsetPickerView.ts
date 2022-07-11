@@ -66,6 +66,11 @@ export class RelativeOffsetPickerView extends BasicComponentView {
         this.addView(BlockView);
     }
 
+    setViewID(id: string) {
+        this.noOffsetCheck.setInputID(`${id}NoOffsetCheck`);
+        super.setViewID(id);
+    }
+
     showMonth() {
         this.monthLabel.show();
         this.monthSelect.show();

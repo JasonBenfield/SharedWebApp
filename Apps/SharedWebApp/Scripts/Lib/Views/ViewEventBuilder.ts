@@ -1,8 +1,7 @@
-﻿import { BasicComponentView } from "./BasicComponentView";
-import { HtmlElementView } from "./HtmlElementView";
+﻿import { HtmlElementView } from "./HtmlElementView";
 
 export class ViewEventBuilder {
-    private action: (sourceElement: HTMLElement) => void;
+    private action: (sourceElement: HTMLElement, evt: JQueryEventObject) => void;
     private selector: string;
     private _preventDefault: boolean;
 
@@ -12,7 +11,7 @@ export class ViewEventBuilder {
     ) {
     }
 
-    execute(action: (sourceElement: HTMLElement) => void) {
+    execute(action: (sourceElement: HTMLElement, evt: JQueryEventObject) => void) {
         this.action = action;
         return new ViewEventActionBuilder(this);
     }
@@ -27,18 +26,12 @@ export class ViewEventBuilder {
         return this;
     }
 
-    preventDefault() {
-        this._preventDefault = true;
-        return this;
-    }
-
     subscribe() {
         this.elementView.on(
             this.name,
             this.selector,
-            this._preventDefault,
-            (el: HTMLElement) => {
-                this.action(el);
+            (el: HTMLElement, evt: JQueryEventObject) => {
+                return this.action(el, evt);
             }
         );
     }
@@ -55,11 +48,6 @@ export class ViewEventActionBuilder {
 
     allowDefault() {
         this.builder.allowDefault();
-        return this;
-    }
-
-    preventDefault() {
-        this.builder.preventDefault();
         return this;
     }
 

@@ -27,17 +27,17 @@ export class ODataColumnAccessor {
 
     values() { return new EnumerableArray(this._values).value(); }
 
-    visibleSelectableColumns() {
+    selectableColumns() {
         return new FilteredArray(
             this._values,
-            c => c.isVisible && c.isSelectable
+            c => c.canSelect
         ).value();
     }
 
-    requiredSelectableColumns() {
+    requiredDatabaseColumns() {
         return new FilteredArray(
             this._values,
-            c => c.isRequired && c.isSelectable
+            c => c.isRequired && !c.sourceType.isNone()
         ).value();
     }
 }

@@ -51,6 +51,8 @@ export class RelativeDateRangePickerView extends BasicComponentView {
         this.fromCheck.setInputID(`${id}_from`);
         this.toRelativeToFromCheck.setInputID(`${id}_relativeToStartDate`);
         this.toCheck.setInputID(`${id}_to`);
+        this.fromOffsetPicker.setViewID(`${id}_fromOffsetPicker`);
+        this.toOffsetPicker.setViewID(`${id}_toOffsetPicker`);
     }
 
     protected setStyle: (config: (style: IGridStyle) => void) => void;

@@ -22,6 +22,12 @@ export class FilterWorkflowView {
         this.absoluteNumberRangePanel = new ValueRangePanelView(modal);
     }
 
+    setViewID(id: string) {
+        this.relativeDateRangePanel.setViewID(`${id}RelativeDateRangePanel`);
+        this.absoluteDateRangePanel.setViewID(`${id}AbsoluteDateRangePanel`);
+        this.absoluteNumberRangePanel.setViewID(`${id}AbsoluteNumberRangePanel`);
+    }
+
     hide() {
         this.selectFilterAppendPanel.hide();
         this.selectFilterConditionPanel.hide();

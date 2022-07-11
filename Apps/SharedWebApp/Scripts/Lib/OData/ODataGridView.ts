@@ -4,7 +4,7 @@ import { MappedArray } from "../Enumerable";
 import { MarginCss } from "../MarginCss";
 import { TextCss } from "../TextCss";
 import { BasicComponentView } from "../Views/BasicComponentView";
-import { GridRowView, GridTemplateFitContent, GridView } from "../Views/Grid";
+import { GridRowView, GridView } from "../Views/Grid";
 import { MessageAlertView } from "../Views/MessageAlertView";
 import { ODataColumnView } from "./ODataColumnView";
 

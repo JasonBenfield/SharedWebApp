@@ -8,7 +8,7 @@ export class UnorderedListView extends BasicComponentView {
 
     constructor(container: BasicComponentView) {
         super(container, 'ul');
-        this.clickConfig = b => b.select('li').preventDefault();
+        this.clickConfig = b => b.select('li');
     }
 
     configureClick(clickConfig: (builder: ViewEventActionBuilder) => ViewEventActionBuilder) {

@@ -11,6 +11,9 @@ export class ODataHeaderCell extends ODataCell {
         const columnName = new TextComponent(view.columnName);
         columnName.setText(column ? column.displayText : '')
         columnName.syncTitleWithText();
+        if (column.sourceType.isNone()) {
+            this.view.sortButton.hide();
+        }
     }
 
     sortNotSet() { this.view.sortNotSet(); }
@@ -18,4 +21,20 @@ export class ODataHeaderCell extends ODataCell {
     sortDesc() { this.view.sortDesc(); }
 
     sortAsc() { this.view.sortAsc(); }
+
+    styleAsDragStart() {
+        this.view.styleAsDragStart();
+    }
+
+    styleAsDragEnd() {
+        this.view.styleAsDragEnd();
+    }
+
+    styleAsDragOver() {
+        this.view.styleAsDragOver();
+    }
+
+    styleAsDragLeave() {
+        this.view.styleAsDragLeave();
+    }
 }

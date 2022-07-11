@@ -33,4 +33,8 @@ export class ValueRangePanelView extends ModalODataPanelView {
         this.saveButton.setText('Filter');
         this.saveButton.useOutlineStyle(ContextualClass.primary);
     }
+
+    setViewID(id: string) {
+        this.valueRangePicker.setViewID(`${id}ValueRangePicker`);
+    }
 }
