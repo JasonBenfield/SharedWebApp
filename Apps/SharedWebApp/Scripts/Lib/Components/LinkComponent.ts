@@ -1,17 +1,23 @@
 ﻿import { Url } from "../Url";
 import { UrlBuilder } from "../UrlBuilder";
-import { TextLinkView } from "../Views/TextLinkView";
-import { LinkComponent } from "./LinkComponent";
-import { TextComponent } from "./TextComponent";
+import { LinkView } from "../Views/LinkView";
+import { BasicComponent } from "./BasicComponent";
 
-export class TextLink extends TextComponent {
-    protected readonly view: TextLinkView;
+export class LinkComponent extends BasicComponent {
+    static readonly doNothing = 'javascript:;';
+
+    protected readonly view: LinkView;
+    private _data: any;
     private href: string;
 
-    constructor(view: TextLinkView) {
+    constructor(view: LinkView) {
         super(view);
         this.setHrefToDoNothing();
     }
+
+    get data() { return this._data; }
+
+    set data(data: any) { this._data = data; }
 
     setHrefToDoNothing() {
         this.setHref(LinkComponent.doNothing);

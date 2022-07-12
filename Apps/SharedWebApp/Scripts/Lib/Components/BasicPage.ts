@@ -1,11 +1,11 @@
 ﻿import { XtiUrl } from "../Api/XtiUrl";
 import { BasicPageView } from "../Views/BasicPageView";
-import { Link } from "./Link";
+import { LinkComponent } from "./LinkComponent";
 
 export class BasicPage {
     constructor(protected readonly view: BasicPageView) {
-        new Link(view.homeLink).setHref(XtiUrl.current().homeUrl());
-        const logoutUrl = new Link(view.logOutLink);
+        new LinkComponent(view.homeLink).setHref(XtiUrl.current().homeUrl());
+        const logoutUrl = new LinkComponent(view.logOutLink);
         logoutUrl.setHref(this.getLogutUrl());
         view.when.urlChanged.then(() => logoutUrl.setHref(this.getLogutUrl()));
     }

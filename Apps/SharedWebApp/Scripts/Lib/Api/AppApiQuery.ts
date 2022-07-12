@@ -3,11 +3,13 @@ import { JoinedStrings } from "../JoinedStrings";
 import { UrlBuilder } from "../UrlBuilder";
 import { AppApiError } from "./AppApiError";
 import { AppApiEvents } from "./AppApiEvents";
+import { AppApiView } from "./AppApiView";
 import { AppResourceUrl } from "./AppResourceUrl";
 import { ErrorFromHttpResult } from "./ErrorFromHttpResult";
 import { HttpClient } from "./HttpClient";
 import { ODataResult } from "./ODataResult";
 import { ParsedDateObject } from "./ParsedDateObject";
+import { WebPage } from "./WebPage";
 
 interface IODataError {
     code: string;
@@ -37,10 +39,17 @@ export class AppApiQuery<TEntity> {
         return new UrlBuilder(this.resourceUrl.url);
     }
 
+    toExcel(odataQuery: string) {
+        const url = this.url()
+            .addPart('ToExcel')
+            .addQueryString(odataQuery);
+        new WebPage(url).openWindow();
+    }
+
     async execute(data: string, errorOptions: IActionErrorOptions) {
-        let url = this.url();
+        const url = this.url();
         url.addPart('$query');
-        let postResult = await new HttpClient().post(
+        const postResult = await new HttpClient().post(
             url.value(),
             data,
             'text/plain'

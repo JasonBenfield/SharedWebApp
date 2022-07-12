@@ -1,24 +1,16 @@
-﻿import { EnumerableArray, FilteredArray } from "../Enumerable";
+﻿import { EnumerableArray } from "../Enumerable";
 import { BasicComponentView } from "../Views/BasicComponentView";
+import { AsyncCommand } from "./Command";
 
 export class BasicComponent {
-    private readonly components: BasicComponent[] = [];
-    protected readonly view: BasicComponentView;
-    protected readonly views: BasicComponentView[] = [];
+    private readonly components: (BasicComponent | AsyncCommand)[] = [];
 
-    constructor(view: BasicComponentView | BasicComponentView[]) {
-        if (Array.isArray(view)) {
-            this.views.splice(0, this.views.length, ...view);
-        }
-        else {
-            this.views.push(view);
-        }
-        this.view = this.views[0];
+    constructor(protected readonly view: BasicComponentView) {
     }
 
     protected getComponentByElement(element: HTMLElement) {
         for (const component of this.components) {
-            if (component.hasElement(element)) {
+            if (component instanceof BasicComponent && component.hasElement(element)) {
                 return component;
             }
         }
@@ -26,10 +18,7 @@ export class BasicComponent {
     }
 
     private hasElement(element: HTMLElement) {
-        return new FilteredArray(
-            this.views,
-            view => view.hasElement(element)
-        ).toEnumerableArray().any();
+        return this.view.hasElement(element);
     }
 
     protected anyComponents() { return this.components.length > 0; }
@@ -47,12 +36,12 @@ export class BasicComponent {
         this.components.splice(0, this.components.length);
     }
 
-    protected addComponent<T extends BasicComponent>(component: T) {
+    protected addComponent<T extends BasicComponent | AsyncCommand>(component: T) {
         this.components.push(component);
         return component;
     }
 
-    protected removeComponent(component: BasicComponent) {
+    protected removeComponent(component: BasicComponent | AsyncCommand) {
         component.dispose();
         const index = this.components.indexOf(component);
         if (index > -1) {
@@ -62,9 +51,7 @@ export class BasicComponent {
 
     dispose() {
         this.clearComponents();
-        for (const view of this.views) {
-            view.dispose();
-        }
+        this.view.dispose();
         this.onDipose();
     }
 

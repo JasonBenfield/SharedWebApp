@@ -1,5 +1,6 @@
 ﻿import { AppApiQuery } from "../Api/AppApiQuery";
 import { ODataResult } from "../Api/ODataResult";
+import { AsyncCommand, Command } from "../Components/Command";
 import { MessageAlert } from "../Components/MessageAlert";
 import { ModalODataComponent } from "./ModalODataComponent";
 import { ODataCell } from "./ODataCell";
@@ -26,6 +27,8 @@ export class ODataComponent<TEntity> {
     private readonly query: ODataQueryBuilder;
     private readonly currentPage: ODataPage;
     private readonly footerComponent: ODataFooterComponent;
+    private readonly refreshCommand: AsyncCommand;
+    private readonly excelCommand: AsyncCommand;
 
     private static readonly columnStartName = 'ColumnStart';
     private static readonly columnEndName = 'ColumnEnd';
@@ -60,11 +63,19 @@ export class ODataComponent<TEntity> {
         this.currentPage = new ODataPage(options.pageSize);
         this.currentPage.pageChanged(1, this.query);
         this.footerComponent = new ODataFooterComponent(this.view.footerComponent);
+        this.refreshCommand = new AsyncCommand(this._refresh.bind(this));
+        this.refreshCommand.add(this.view.footerComponent.addRefreshButton());
+        this.excelCommand = new Command(this.exportToExcel.bind(this));
+        this.excelCommand.add(this.view.footerComponent.addExcelButton());
         this.footerComponent.when.pageRequested.then(this.onPageRequested.bind(this));
         this.grid.when.sortClicked.then(this.onSortClick.bind(this));
         this.grid.when.headerCellClicked.then(this.onHeaderCellClick.bind(this));
         this.grid.when.dataCellClicked.then(this.onDataCellClick.bind(this));
         this.grid.when.headerCellDropped.then(this.onHeaderCellDropped.bind(this));
+    }
+
+    private exportToExcel() {
+        this.odataGroup.toExcel(this.query.buildWithoutPaging());
     }
 
     private onSortClick(column: ODataColumn) {
@@ -106,7 +117,9 @@ export class ODataComponent<TEntity> {
         this.refresh();
     }
 
-    async refresh() {
+    refresh() { return this.refreshCommand.execute(); }
+
+    private async _refresh() {
         this.grid.clearData();
         const query = this.query.build();
         let result: ODataResult<TEntity>;

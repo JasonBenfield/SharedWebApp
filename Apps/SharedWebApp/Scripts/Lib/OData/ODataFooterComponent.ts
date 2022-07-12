@@ -1,30 +1,44 @@
-﻿import { TextComponent } from "../Components/TextComponent";
+﻿import { BasicComponent } from "../Components/BasicComponent";
+import { TextButtonComponent } from "../Components/TextButtonComponent";
+import { ButtonGroup } from "../Components/ButtonGroup";
+import { TextComponent } from "../Components/TextComponent";
 import { EventSource } from "../Events";
 import { ODataFooterComponentView } from "./ODataFooterComponentView";
 
-export class ODataFooterComponent {
+export class ODataFooterComponent extends BasicComponent {
+    protected readonly view: ODataFooterComponentView;
+    private readonly pageButtonGroup: ButtonGroup;
+    private readonly countText: TextComponent;
     private readonly _events = { pageRequested: null as number };
     private readonly eventSource = new EventSource<typeof this._events>(this, this._events);
     readonly when = this.eventSource.when;
 
-    constructor(private readonly view: ODataFooterComponentView) {
+    constructor(view: ODataFooterComponentView) {
+        super(view);
+        this.pageButtonGroup = this.addComponent(new ButtonGroup(view.pageButtonGroup));
+        this.pageButtonGroup.registerButtonClicked(this.onPageButtonClicked.bind(this));
+        this.countText = this.addComponent(new TextComponent(this.view.count));
+    }
+
+    private onPageButtonClicked(button: TextButtonComponent) {
+        this.eventSource.events.pageRequested.invoke(button.data as number);
     }
 
     setPaging(currentPage: number, numberOfPages: number) {
-        this.view.clearContents();
+        this.pageButtonGroup.clearItems();
         if (numberOfPages > 1) {
             const pages = this.getPages(currentPage, numberOfPages);
             for (const page of pages) {
                 if (page > -1) {
-                    const pageButton = this.view.addPageButton();
+                    const pageButton = this.pageButtonGroup.addTextButton();
+                    pageButton.data = page;
                     pageButton.setText(page.toString());
                     if (page === currentPage) {
                         pageButton.setActive();
                     }
-                    pageButton.handleClick(() => this.eventSource.events.pageRequested.invoke(page));
                 }
                 else {
-                    this.view.addEllipsis();
+                    this.pageButtonGroup.addText().setText('...');
                 }
             }
         }
@@ -66,7 +80,7 @@ export class ODataFooterComponent {
                 countText = `${startRecord.toLocaleString()} to ${recordCount.toLocaleString()} of ${total.toLocaleString()}`;
             }
         }
-        new TextComponent(this.view.count).setText(countText);
+        this.countText.setText(countText);
     }
 
 }

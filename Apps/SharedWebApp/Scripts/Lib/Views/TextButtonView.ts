@@ -1,9 +1,9 @@
 ﻿import { ContextualClass } from "../ContextualClass";
 import { BasicComponentView } from "./BasicComponentView";
-import { BasicContainerView } from "./BasicContainerView";
+import { BasicTextComponentView } from "./BasicTextComponentView";
 import { IButtonAttributes } from "./Types";
 
-export class ButtonView extends BasicContainerView {
+export class TextButtonView extends BasicTextComponentView {
     constructor(container: BasicComponentView) {
         super(container, 'button');
         this.setAttr(attr => attr.type = 'button');

@@ -47,23 +47,6 @@ export class ButtonCommandView extends ButtonView implements ICommandView {
     setText(text: string) {
         this.textSpan.setText(text);
     }
-
-    setActive() {
-        this.updateActiveCss('active');
-    }
-
-    setInactive() {
-        this.updateActiveCss('');
-    }
-
-    private updateActiveCss(active: string) {
-        this.setCss('active', active);
-    }
-
-    makeOffscreenSubmit() {
-        this.addCssName('offscreen');
-        this.changeTypeToSubmit();
-    }
 }
 
 export class LinkCommandView extends LinkView implements ICommandView {

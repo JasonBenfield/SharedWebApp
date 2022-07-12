@@ -1,16 +1,17 @@
 ﻿import { ContextualClass } from "../ContextualClass";
 import { BasicComponentView } from "./BasicComponentView";
-import { BasicContainerView } from "./BasicContainerView";
+import { BasicComponentWrapper } from "./BasicComponentWrapper";
+import { HtmlElementView } from "./HtmlElementView";
 import { IButtonAttributes } from "./Types";
 
-export class ButtonView extends BasicContainerView {
-    constructor(container: BasicComponentView) {
-        super(container, 'button');
+export class ButtonWrapper extends BasicComponentWrapper {
+    constructor(container: BasicComponentView, element: HtmlElementView) {
+        super(container, element);
         this.setAttr(attr => attr.type = 'button');
         this.addCssName('btn');
     }
 
-    protected setAttr: (config: (attr: IButtonAttributes) => void) => void;
+    setAttr: (config: (attr: IButtonAttributes) => void) => void;
 
     handleClick(action: () => void) {
         this.on('click').execute(action).subscribe();
@@ -36,11 +37,6 @@ export class ButtonView extends BasicContainerView {
         return context ? context.append(isOutline ? 'btn-outline' : 'btn') : '';
     }
 
-    makeOffscreenSubmit() {
-        this.addCssName('offscreen');
-        this.changeTypeToSubmit();
-    }
-
     setActive() {
         this.updateActiveCss('active');
     }
@@ -51,5 +47,10 @@ export class ButtonView extends BasicContainerView {
 
     private updateActiveCss(active: string) {
         this.setCss('active', active);
+    }
+
+    makeOffscreenSubmit() {
+        this.addCssName('offscreen');
+        this.changeTypeToSubmit();
     }
 }

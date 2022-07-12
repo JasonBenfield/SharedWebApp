@@ -24,16 +24,16 @@ export class AppApiView<TArgs> {
         else {
             model = data;
         }
-        let resourceUrl = modifier === undefined || modifier === null
+        const resourceUrl = modifier === undefined || modifier === null
             ? this.resourceUrl
             : this.resourceUrl.withModifier(modifier);
-        let urlBuilder = new UrlBuilder(resourceUrl.url.value());
+        const urlBuilder = new UrlBuilder(resourceUrl.url.value());
         urlBuilder.addQueryFromObject(model);
         return urlBuilder;
     }
 
     open(data: TArgs) {
-        let webPage = this.createWebPage(data);
+        const webPage = this.createWebPage(data);
         webPage.open();
     }
 

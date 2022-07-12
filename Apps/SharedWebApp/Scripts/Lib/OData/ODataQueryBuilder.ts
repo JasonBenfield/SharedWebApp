@@ -83,6 +83,24 @@ export class ODataQueryBuilder {
         return new JoinedStrings('&', parts).value();
     }
 
+    buildWithoutPaging() {
+        const parts: string[] = []
+        const select = this.select.build();
+        if (select) {
+            parts.push(`$select=${select}`);
+        }
+        const filter = this.filter.build();
+        if (filter) {
+            parts.push(`$filter=${filter}`);
+        }
+        const orderBy = this.orderBy.build();
+        if (orderBy) {
+            parts.push(`$orderBy=${orderBy}`);
+        }
+        parts.push(`$count=true`);
+        return new JoinedStrings('&', parts).value();
+    }
+
     serialize() {
         const serialized: ISerializableQuery = {
             select: this.select.serialize(),

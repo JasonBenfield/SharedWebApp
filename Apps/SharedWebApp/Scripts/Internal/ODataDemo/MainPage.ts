@@ -20,7 +20,7 @@ class MainPage extends BasicPage {
         columns.ID.require();
         columns.Salary.setFormatter(new NumberValueFormatter('$0,0.00'));
         const options = new ODataComponentOptionsBuilder<IEmployee>('demo', columns);
-        options.setPageSize(8);
+        options.setPageSize(2);
         options.query.select.addFields(
             columns.ID,
             columns.EmployeeName,

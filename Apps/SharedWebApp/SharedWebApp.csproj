@@ -41,6 +41,7 @@
     <None Remove="Scripts\Lib\Components\BasicPage.ts" />
     <None Remove="Scripts\Lib\Components\BasicPanelComponent.ts" />
     <None Remove="Scripts\Lib\Components\BooleanInputControl.ts" />
+    <None Remove="Scripts\Lib\Components\ButtonGroup.ts" />
     <None Remove="Scripts\Lib\Components\FormCheck.ts" />
     <None Remove="Scripts\Lib\Components\InputControl.ts" />
     <None Remove="Scripts\Lib\Components\ListGroup.ts" />
@@ -48,6 +49,7 @@
     <None Remove="Scripts\Lib\Components\ModalError.ts" />
     <None Remove="Scripts\Lib\Components\SelectControl.ts" />
     <None Remove="Scripts\Lib\Components\SelectOption.ts" />
+    <None Remove="Scripts\Lib\Components\TextButtonComponent.ts" />
     <None Remove="Scripts\Lib\Components\TextComponent.ts" />
     <None Remove="Scripts\Lib\Components\Types.ts" />
     <None Remove="Scripts\Lib\DateRange.ts" />
@@ -124,9 +126,12 @@
     <None Remove="Scripts\Lib\TimeSpan.ts" />
     <None Remove="Scripts\Lib\ValueRangeBound.ts" />
     <None Remove="Scripts\Lib\Views\BasicComponentView.ts" />
+    <None Remove="Scripts\Lib\Views\BasicComponentWrapper.ts" />
     <None Remove="Scripts\Lib\Views\BasicContainerView.ts" />
     <None Remove="Scripts\Lib\Views\BasicTextComponentView.ts" />
     <None Remove="Scripts\Lib\Views\BlockView.ts" />
+    <None Remove="Scripts\Lib\Views\ButtonGroupView.ts" />
+    <None Remove="Scripts\Lib\Views\ButtonWrapper.ts" />
     <None Remove="Scripts\Lib\Views\Card.ts" />
     <None Remove="Scripts\Lib\Views\ColumnView.ts" />
     <None Remove="Scripts\Lib\Views\CssFontBuilder.ts" />
@@ -209,6 +214,8 @@
     <TypeScriptCompile Include="Scripts\Lib\Components\BooleanInputControl.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Components\TextButtonComponent.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\ButtonGroup.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\FormCheck.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\InputControl.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\ListGroup.ts" />
@@ -251,6 +258,9 @@
     <TypeScriptCompile Include="Scripts\Lib\OData\DateRangePicker.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ValueRangePickerView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\ValueRangeBound.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\BasicComponentWrapper.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\ButtonGroupView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\ButtonWrapper.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\ErrorListItemView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\JustifyContentCss.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\FilterColumnOptionsBuilder.ts" />
