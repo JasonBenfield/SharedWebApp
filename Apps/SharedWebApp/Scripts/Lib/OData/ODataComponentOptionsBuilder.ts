@@ -2,6 +2,7 @@
 import { ODataColumnBuilder } from "./ODataColumnBuilder";
 import { ODataComponentOptions } from "./ODataComponentOptions";
 import { ODataQueryBuilder } from "./ODataQueryBuilder";
+import { SaveChangesOptions } from "./Types";
 
 export type IODataColumnsBuilder<TEntity> = {
     [K in keyof TEntity]: ODataColumnBuilder;
@@ -10,6 +11,8 @@ export type IODataColumnsBuilder<TEntity> = {
 export class ODataComponentOptionsBuilder<TEntity> {
     private odataGroup: AppApiQuery<TEntity>;
     private pageSize: number = 50;
+    readonly query = new ODataQueryBuilder();
+    private saveChangesOptions: SaveChangesOptions = { select: false, filter: false, orderby: false };
 
     constructor(
         private readonly id: string,
@@ -25,7 +28,9 @@ export class ODataComponentOptionsBuilder<TEntity> {
         this.pageSize = pageSize;
     }
 
-    readonly query = new ODataQueryBuilder();
+    saveChanges(options: SaveChangesOptions = { select: true, filter: true, orderby: true }) {
+        this.saveChangesOptions = options;
+    }
 
     build() {
         let columns: any = {};
@@ -39,6 +44,7 @@ export class ODataComponentOptionsBuilder<TEntity> {
             this.id,
             this.odataGroup,
             this.pageSize,
+            this.saveChangesOptions,
             columns,
             this.query.serialize()
         );

@@ -766,9 +766,13 @@ export class ODataQueryFilterBuilder {
 
     constructor(serialized?: ISerializableFilter) {
         if (serialized) {
-            for (const part of serialized.conditionClauses) {
-                this.conditionClauses.push(FilterPartFactory.create(part));
-            }
+            this.fromSerialized(serialized);
+        }
+    }
+
+    fromSerialized(serialized: ISerializableFilter) {
+        for (const part of serialized.conditionClauses) {
+            this.conditionClauses.push(FilterPartFactory.create(part));
         }
     }
 

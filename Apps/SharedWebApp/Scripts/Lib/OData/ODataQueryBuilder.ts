@@ -138,6 +138,12 @@ export class ODataQuerySelectBuilder {
         return this;
     }
 
+    fromSerialized(serialized: ISerializableSelect) {
+        for (const field of serialized.fields) {
+            this.addField(field);
+        }
+    }
+
     clear() {
         const requiredFields = new MappedArray(
             this.requiredFields,
@@ -180,23 +186,24 @@ export class ODataQuerySelectBuilder {
         ).value();
     }
 
-    addFields(...fields: (ODataColumnBuilder | ODataColumn)[]) {
-        for (const field of fields) {
-            const fieldName = field.columnName;
-            const index = new MappedArray(
-                this.fields,
-                f => f.field
-            ).toEnumerableArray().indexOf(fieldName);
-            if (index > -1) {
-                this.fields.splice(index, 1);
-            }
-            this.fields.push({
+    addFields(...columns: (ODataColumnBuilder | ODataColumn)[]) {
+        for (const column of columns) {
+            const fieldName = column.columnName;
+            this.addField({
                 field: fieldName,
-                isDatabaseField: !field.sourceType.isNone(),
+                isDatabaseField: !column.sourceType.isNone(),
                 isExplicitlySelected: true
             });
         }
         return this;
+    }
+
+    private addField(selectField: ISelectField) {
+        const index = this.fields.findIndex(f => f.field === selectField.field);
+        if (index > -1) {
+            this.fields.splice(index, 1);
+        }
+        this.fields.push(selectField);
     }
 
     moveField(source: string, destination: string) {
@@ -245,8 +252,12 @@ export class ODataQueryOrderByBuilder {
 
     constructor(serialized?: ISerializableOrderBy) {
         if (serialized) {
-            this.fields.splice(0, 0, ...serialized.fields)
+            this.fromSerialized(serialized);
         }
+    }
+
+    fromSerialized(serialized: ISerializableOrderBy) {
+        this.fields.splice(0, 0, ...serialized.fields)
     }
 
     clear() {

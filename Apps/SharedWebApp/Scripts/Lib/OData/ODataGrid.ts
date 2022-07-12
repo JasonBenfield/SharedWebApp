@@ -98,7 +98,7 @@ export class ODataGrid<TEntity> extends BasicComponent {
 
     private onDragEnter(sourceElement: HTMLElement, evt: JQueryEventObject) {
         const cell = this.getCellByElement(sourceElement);
-        if (cell && cell instanceof ODataHeaderCell) {
+        if (cell && cell instanceof ODataHeaderCell && cell.column.canMove) {
             this.dragEnterCell = cell;
             cell.styleAsDragOver();
             const dragEvent = evt.originalEvent as DragEvent;

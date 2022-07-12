@@ -20,13 +20,14 @@ class MainPage extends BasicPage {
         columns.ID.require();
         columns.Salary.setFormatter(new NumberValueFormatter('$0,0.00'));
         const options = new ODataComponentOptionsBuilder<IEmployee>('demo', columns);
-        options.setPageSize(2);
+        options.setPageSize(9);
         options.query.select.addFields(
             columns.ID,
             columns.EmployeeName,
             columns.DateHired,
             columns.Salary
         );
+        options.saveChanges();
         const odataGroup = new AppApiQuery<IEmployee>(
             new AppApiEvents(() => { }),
             AppResourceUrl.odata(

@@ -169,13 +169,13 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="XTI_App.Fakes" Version="1.8.22-dev220621174025790" />
-    <PackageReference Include="XTI_Core.Extensions" Version="1.10.10" />
+    <PackageReference Include="XTI_App.Fakes" Version="1.8.22-dev220712073821302" />
+    <PackageReference Include="XTI_Core.Extensions" Version="1.10.12" />
     <PackageReference Include="XTI_TempLog.Fakes" Version="1.2.27" />
-    <PackageReference Include="XTI_WebApp.Extensions" Version="1.8.22-dev220621174025790" />
-    <PackageReference Include="XTI_WebApp.Fakes" Version="1.8.22-dev220621174025790" />
-    <PackageReference Include="XTI_WebApp.RCL" Version="1.8.22-dev220621174025790" />
-    <PackageReference Include="XTI_WebApp.TagHelpers" Version="1.8.22-dev220621174025790" />
+    <PackageReference Include="XTI_WebApp.Extensions" Version="1.8.22-dev220712073821302" />
+    <PackageReference Include="XTI_WebApp.Fakes" Version="1.8.22-dev220712073821302" />
+    <PackageReference Include="XTI_WebApp.RCL" Version="1.8.22-dev220712073821302" />
+    <PackageReference Include="XTI_WebApp.TagHelpers" Version="1.8.22-dev220712073821302" />
   </ItemGroup>
   
   <ItemGroup>

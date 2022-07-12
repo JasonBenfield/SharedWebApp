@@ -17,6 +17,7 @@ import { ODataHeaderCellView } from "./ODataHeaderCellView";
 import { ODataPage } from "./ODataPage";
 import { ODataQueryBuilder } from "./ODataQueryBuilder";
 import { SourceType } from "./SourceType";
+import { SaveChangesOptions } from "./Types";
 
 export class ODataComponent<TEntity> {
     private readonly grid: ODataGrid<TEntity>;
@@ -29,12 +30,16 @@ export class ODataComponent<TEntity> {
     private readonly footerComponent: ODataFooterComponent;
     private readonly refreshCommand: AsyncCommand;
     private readonly excelCommand: AsyncCommand;
+    private readonly id: string;
+    private readonly saveChangesOptions: SaveChangesOptions;
 
     private static readonly columnStartName = 'ColumnStart';
     private static readonly columnEndName = 'ColumnEnd';
 
     constructor(private readonly view: ODataComponentView, options: ODataComponentOptions<TEntity>) {
         this.odataGroup = options.odataGroup;
+        this.id = options.id;
+        this.saveChangesOptions = options.saveChangesOptions;
         options.columns[ODataComponent.columnStartName] = new ODataColumnBuilder(
             ODataComponent.columnStartName,
             SourceType.none,
@@ -57,6 +62,27 @@ export class ODataComponent<TEntity> {
         this.columns = new ODataColumnAccessor(options.columns);
         this.query = new ODataQueryBuilder(options.defaultQuery);
         this.query.select.addRequiredFields(this.columns.requiredDatabaseColumns());
+        if (options.saveChangesOptions.select) {
+            const serializedSelect = localStorage.getItem(`odata_${this.id}_select`);
+            if (serializedSelect) {
+                this.query.select.clear();
+                this.query.select.fromSerialized(JSON.parse(serializedSelect));
+            }
+        }
+        if (options.saveChangesOptions.filter) {
+            const serializedFilter = localStorage.getItem(`odata_${this.id}_filter`);
+            if (serializedFilter) {
+                this.query.filter.clear();
+                this.query.filter.fromSerialized(JSON.parse(serializedFilter));
+            }
+        }
+        if (options.saveChangesOptions.orderby) {
+            const serializedOrderBy = localStorage.getItem(`odata_${this.id}_orderby`);
+            if (serializedOrderBy) {
+                this.query.orderBy.clear();
+                this.query.orderBy.fromSerialized(JSON.parse(serializedOrderBy));
+            }
+        }
         this.grid = new ODataGrid(view.grid);
         this.alert = new MessageAlert(view.alert);
         this.modalODataComponent = new ModalODataComponent(this.query, this.columns, view.modalODataComponent);
@@ -151,5 +177,14 @@ export class ODataComponent<TEntity> {
             result.count
         );
         this.grid.orderByChanged(this.query.orderBy);
+        if (this.saveChangesOptions.select) {
+            localStorage.setItem(`odata_${this.id}_select`, JSON.stringify(this.query.select.serialize()));
+        }
+        if (this.saveChangesOptions.filter) {
+            localStorage.setItem(`odata_${this.id}_filter`, JSON.stringify(this.query.filter.serialize()));
+        }
+        if (this.saveChangesOptions.orderby) {
+            localStorage.setItem(`odata_${this.id}_orderby`, JSON.stringify(this.query.orderBy.serialize()));
+        }
     }
 }
