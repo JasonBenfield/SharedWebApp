@@ -34,6 +34,14 @@ export class BasicComponentView {
         }
     }
 
+    resetOpacity() {
+        this.setAttr(attr => attr.opacity = null);
+    }
+
+    setOpacity(opacity: number) {
+        this.setAttr(attr => attr.opacity = opacity.toString());
+    }
+
     hasElement(element: HTMLElement) {
         return this.elementView.hasElement(element);
     }
@@ -234,6 +242,18 @@ export class BasicComponentView {
         this.views.splice(index, 0, view);
         this.replaceElements();
         return view;
+    }
+
+    moveChildView(childView: BasicComponentView, destinationIndex: number) {
+        const sourceIndex = this.views.indexOf(childView);
+        if (sourceIndex > -1 && sourceIndex !== destinationIndex) {
+            this.views.splice(sourceIndex, 1);
+            if (sourceIndex < destinationIndex) {
+                destinationIndex--;
+            }
+            this.views.splice(destinationIndex, 0, childView);
+            this.replaceElements();
+        }
     }
 
     private replaceElements() {

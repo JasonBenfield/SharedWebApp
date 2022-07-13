@@ -214,6 +214,10 @@ export class GridCellView extends BasicContainerView {
         this.addCssName('grid-cell');
     }
 
+    positionRelative() {
+        this.addCssName('position-relative');
+    }
+
     protected setStyle: (config: (style: IGridCellStyle) => void) => void;
 
     scrollable() { this.addCssName('scrollable'); }

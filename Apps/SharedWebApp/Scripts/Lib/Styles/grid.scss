@@ -100,7 +100,7 @@
 }
 
 .grid {
-    .list-group-item {
+    > .list-group-item {
         padding: $list-group-item-padding-y $list-group-item-padding-x;
         color: $list-group-color;
         text-decoration: if($link-decoration == none, null, none);
@@ -109,6 +109,14 @@
         border-right: 0;
         border-top: $list-group-border-width solid $list-group-border-color;
         border-bottom: $list-group-border-width solid $list-group-border-color;
+
+        &> .grid-cell:first-child {
+            border-left: $list-group-border-width solid $list-group-border-color;
+        }
+
+        &> .grid-cell:last-child {
+            border-right: $list-group-border-width solid $list-group-border-color;
+        }
 
         &.disabled,
         &:disabled {

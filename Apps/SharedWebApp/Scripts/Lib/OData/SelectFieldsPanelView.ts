@@ -1,17 +1,25 @@
 ﻿import { ColumnCss } from "../ColumnCss";
 import { ContextualClass } from "../ContextualClass";
+import { CssLengthUnit } from "../CssLengthUnit";
 import { MarginCss } from "../MarginCss";
 import { TextCss } from "../TextCss";
+import { BlockView } from "../Views/BlockView";
 import { ButtonCommandView } from "../Views/Commands";
-import { ListGroupView } from "../Views/ListGroup";
+import { GridView } from "../Views/Grid";
+import { ButtonListGroupView, GridListGroupView } from "../Views/ListGroup";
+import { MessageAlertView } from "../Views/MessageAlertView";
 import { ModalComponentView } from "../Views/Modal";
 import { RowView } from "../Views/RowView";
-import { TextHeading1View } from "../Views/TextHeadings";
+import { TextHeading1View, TextHeading3View } from "../Views/TextHeadings";
+import { AvailableFieldListItemView } from "./AvailableFieldListItemView";
 import { ModalODataPanelView } from "./ModalODataPanelView";
-import { SelectFieldListItemView } from "./SelectFieldListItemView";
+import { SelectedFieldListItemView } from "./SelectedFieldListItemView";
 
 export class SelectFieldsPanelView extends ModalODataPanelView {
-    readonly selectFields: ListGroupView;
+    readonly availableFields: ButtonListGroupView;
+    readonly availableFieldsAlert: MessageAlertView;
+    readonly selectFields: GridListGroupView;
+    readonly selectFieldsAlert: MessageAlertView;
     readonly cancelButton: ButtonCommandView;
     readonly saveButton: ButtonCommandView;
 
@@ -19,8 +27,49 @@ export class SelectFieldsPanelView extends ModalODataPanelView {
         super(modal);
         this.header.addView(TextHeading1View)
             .configure(h1 => h1.setText('Select'));
-        this.selectFields = this.body.addView(ListGroupView);
-        this.selectFields.setItemViewType(SelectFieldListItemView);
+        this.body.height100();
+        const layoutGrid = this.body.addView(GridView);
+        layoutGrid.layout();
+        layoutGrid.height100();
+        layoutGrid.setTemplateRows(
+            CssLengthUnit.auto(),
+            CssLengthUnit.flex(1),
+            CssLengthUnit.auto(),
+            CssLengthUnit.flex(1)
+        );
+        layoutGrid.addCell()
+            .addView(TextHeading3View)
+            .configure(h => h.setText('Available Columns'));
+        const availableBlock = layoutGrid.addCell()
+            .configure(c => c.positionRelative())
+            .addView(BlockView)
+            .configure(b => {
+                b.positionAbsoluteFill();
+                b.scrollable();
+            });
+        this.availableFieldsAlert = availableBlock.addView(MessageAlertView);
+        this.availableFields = availableBlock.addView(ButtonListGroupView);
+        this.availableFields.setItemViewType(AvailableFieldListItemView);
+        layoutGrid.addCell()
+            .addView(TextHeading3View)
+            .configure(h => h.setText('Selected Columns'));
+        const selectedBlock = layoutGrid.addCell()
+            .configure(c => c.positionRelative())
+            .addView(BlockView)
+            .configure(b => {
+                b.positionAbsoluteFill();
+                b.scrollable();
+            })
+            .addView(BlockView)
+            .configure(b => b.addCssName('container'));
+        this.selectFieldsAlert = selectedBlock.addView(MessageAlertView);
+        this.selectFields = selectedBlock.addView(GridListGroupView);
+        this.selectFields.setTemplateColumns(
+            CssLengthUnit.auto(),
+            CssLengthUnit.flex(1),
+            CssLengthUnit.auto()
+        );
+        this.selectFields.setItemViewType(SelectedFieldListItemView);
         const toolbar = this.footer.addView(RowView);
         toolbar.addColumn();
         const buttonColumn = toolbar.addColumn()
@@ -37,5 +86,47 @@ export class SelectFieldsPanelView extends ModalODataPanelView {
         this.saveButton.icon.solidStyle('check');
         this.saveButton.setText('Save');
         this.saveButton.setContext(ContextualClass.primary);
+    }
+
+    handleSelectedFieldDragStart(action: (el: HTMLElement, evt: JQueryEventObject) => void) {
+        this.selectFields.on('dragstart')
+            .select('[draggable]')
+            .execute(action)
+            .subscribe();
+    }
+
+    handleSelectedFieldDragEnter(action: (el: HTMLElement, evt: JQueryEventObject) => void) {
+        this.selectFields.on('dragenter')
+            .select('.list-group-item')
+            .execute(action)
+            .subscribe();
+    }
+
+    handleSelectedFieldDragOver(action: (el: HTMLElement, evt: JQueryEventObject) => void) {
+        this.selectFields.on('dragover')
+            .select('.list-group-item')
+            .execute(action)
+            .subscribe();
+    }
+
+    handleSelectedFieldDrop(action: (el: HTMLElement, evt: JQueryEventObject) => void) {
+        this.selectFields.on('drop')
+            .select('.list-group-item')
+            .execute(action)
+            .subscribe();
+    }
+
+    handleSelectedFieldDragEnd(action: (el: HTMLElement, evt: JQueryEventObject) => void) {
+        this.selectFields.on('dragend')
+            .select('.list-group-item')
+            .execute(action)
+            .subscribe();
+    }
+
+    handleDeleteButtonClick(action: (el: HTMLElement, evt: JQueryEventObject) => void) {
+        this.selectFields.on('click')
+            .select('button.deleteButton')
+            .execute(action)
+            .subscribe();
     }
 }

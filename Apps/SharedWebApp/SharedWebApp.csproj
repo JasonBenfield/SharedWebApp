@@ -61,6 +61,8 @@
     <None Remove="Scripts\Lib\NumberRange.ts" />
     <None Remove="Scripts\Lib\OData\AbsoluteDateRangePanel.ts" />
     <None Remove="Scripts\Lib\OData\AbsoluteNumberRangePanel.ts" />
+    <None Remove="Scripts\Lib\OData\AvailableFIeldListItem.ts" />
+    <None Remove="Scripts\Lib\OData\AvailableFieldListItemView.ts" />
     <None Remove="Scripts\Lib\OData\BooleanIconCell.ts" />
     <None Remove="Scripts\Lib\OData\DateRangePicker.ts" />
     <None Remove="Scripts\Lib\OData\DefaultValueFormatter.ts" />
@@ -110,8 +112,8 @@
     <None Remove="Scripts\Lib\OData\RelativeDateRangePickerView.ts" />
     <None Remove="Scripts\Lib\OData\RelativeOffsetPicker.ts" />
     <None Remove="Scripts\Lib\OData\RelativeOffsetPickerView.ts" />
-    <None Remove="Scripts\Lib\OData\SelectFIeldListItem.ts" />
-    <None Remove="Scripts\Lib\OData\SelectFieldListItemView.ts" />
+    <None Remove="Scripts\Lib\OData\SelectedFIeldListItem.ts" />
+    <None Remove="Scripts\Lib\OData\SelectedFieldListItemView.ts" />
     <None Remove="Scripts\Lib\OData\SelectFieldsPanel.ts" />
     <None Remove="Scripts\Lib\OData\SelectFieldsPanelView.ts" />
     <None Remove="Scripts\Lib\OData\SelectFilterAppendPanel.ts" />
@@ -243,6 +245,12 @@
     <TypeScriptCompile Include="Scripts\Lib\OData\FilterConditionClauseComponent.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\FilterConditionClauseView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ModalODataPanelView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\AvailableFIeldListItem.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\OData\AvailableFieldListItemView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Lib\OData\ValueRangePanelView.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -294,8 +302,8 @@
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataTextCell.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataTextCellView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\IconCellView.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\OData\SelectFIeldListItem.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\OData\SelectFieldListItemView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\SelectedFIeldListItem.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\SelectedFieldListItemView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\SelectFieldsPanel.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\SelectFieldsPanelView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\SelectFilterAppendPanel.ts" />

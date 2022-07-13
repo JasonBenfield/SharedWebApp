@@ -7,7 +7,6 @@ import { ViewConstructor } from "./Types";
 import { ViewEventActionBuilder } from "./ViewEventBuilder";
 
 export class BasicListGroupView extends BasicComponentView {
-    private clickConfig: (builder: ViewEventActionBuilder) => ViewEventActionBuilder;
     private itemViewCtor: ViewConstructor<BasicListGroupItemView>;
 
     constructor(container: BasicComponentView, tagName: 'ul' | 'div') {
@@ -15,12 +14,11 @@ export class BasicListGroupView extends BasicComponentView {
         this.addCssName('list-group');
     }
 
-    configureClick(clickConfig: (builder: ViewEventActionBuilder) => ViewEventActionBuilder) {
-        this.clickConfig = clickConfig;
-    }
-
     handleClick(action: (element: HTMLElement) => void) {
-        this.clickConfig(this.on('click').execute(action)).subscribe();
+        this.on('click')
+            .select('.list-group-item')
+            .execute(action)
+            .subscribe();
     }
 
     setItemViewType(itemViewCtor: ViewConstructor<BasicListGroupItemView>) {
@@ -67,8 +65,11 @@ export class BasicListGroupItemView extends BasicComponentView {
 export class ListGroupView extends BasicListGroupView {
     constructor(container: BasicComponentView) {
         super(container, 'ul');
-        this.configureClick(b => b.select('li'));
         this.setItemViewType(ListGroupItemView);
+    }
+
+    protected configureClick(b: ViewEventActionBuilder) {
+        return b.select('li');
     }
 
     addListGroupItem: <T extends ListGroupItemView>(ctor?: ViewConstructor<T>) => T;
@@ -87,7 +88,6 @@ export class ListGroupItemView extends BasicListGroupItemView {
 export class ButtonListGroupView extends BasicListGroupView {
     constructor(container: BasicComponentView) {
         super(container, 'div');
-        this.configureClick(b => b.select('button'));
         this.setItemViewType(ButtonListGroupItemView);
     }
 
@@ -107,7 +107,6 @@ export class ButtonListGroupItemView extends BasicListGroupItemView {
 export class LinkListGroupView extends BasicListGroupView {
     constructor(container: BasicComponentView) {
         super(container, 'div');
-        this.configureClick(b => b.select('a'));
         this.setItemViewType(LinkListGroupItemView);
     }
 
@@ -129,7 +128,6 @@ export class GridListGroupView extends BasicListGroupView {
         super(container, 'div');
         this.addCssName('grid');
         this.addCssName('grid-borderless');
-        this.configureClick(b => b.select('.grid-cell'));
         this.setItemViewType(GridListGroupItemView);
     }
 

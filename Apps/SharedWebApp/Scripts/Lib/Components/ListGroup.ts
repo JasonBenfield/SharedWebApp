@@ -25,6 +25,10 @@ export class ListGroup extends BasicComponent {
         }
     }
 
+    getItemByElement(element: HTMLElement) {
+        return this.getComponentByElement(element);
+    }
+
     getItems() { return this.getComponents(); }
 
     setItems<TSourceItem, TItem extends BasicComponent>(
@@ -56,5 +60,9 @@ export class ListGroup extends BasicComponent {
 
     removeItem(itemToRemove: BasicComponent) {
         this.removeComponent(itemToRemove);
+    }
+
+    moveItem(item: BasicComponent, destinationIndex: number) {
+        this.moveComponent(item, destinationIndex)
     }
 }

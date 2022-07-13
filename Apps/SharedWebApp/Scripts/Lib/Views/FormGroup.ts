@@ -103,7 +103,6 @@ export class SimpleFieldFormGroupView extends FormGroupView {
         alert.setContext(ContextualClass.danger);
         this.alertList = alert.addView(GridListGroupView);
         this.alertList.setTemplateColumns(CssLengthUnit.auto(), CssLengthUnit.flex(1));
-        this.alertList.setItemViewType(ModalErrorListItemView);
     }
 
     showDropDown() { this.dropdown.show(); }

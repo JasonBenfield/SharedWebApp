@@ -49,6 +49,18 @@ export class BasicComponent {
         }
     }
 
+    protected moveComponent(component: BasicComponent, destinationIndex: number) {
+        this.view.moveChildView(component.view, destinationIndex);
+        const sourceIndex = this.components.indexOf(component);
+        if (sourceIndex > -1 && sourceIndex !== destinationIndex) {
+            this.components.splice(sourceIndex, 1);
+            if (sourceIndex < destinationIndex) {
+                destinationIndex--;
+            }
+            this.components.splice(destinationIndex, 0, component);
+        }
+    }
+
     dispose() {
         this.clearComponents();
         this.view.dispose();

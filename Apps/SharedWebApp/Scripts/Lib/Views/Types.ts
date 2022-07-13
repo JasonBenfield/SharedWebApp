@@ -16,6 +16,7 @@ export interface IHtmlAttributes {
     'class'?: string;
     role?: string;
     draggable?: string;
+    opacity?: string;
 }
 
 export interface ILinkAttributes extends IHtmlAttributes {
