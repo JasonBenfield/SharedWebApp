@@ -17,13 +17,13 @@ import { ODataHeaderCellView } from "./ODataHeaderCellView";
 import { ODataPage } from "./ODataPage";
 import { ODataQueryBuilder } from "./ODataQueryBuilder";
 import { SourceType } from "./SourceType";
-import { SaveChangesOptions } from "./Types";
+import { IODataClient, SaveChangesOptions } from "./Types";
 
 export class ODataComponent<TEntity> {
     private readonly grid: ODataGrid<TEntity>;
     private readonly alert: MessageAlert;
     private readonly modalODataComponent: ModalODataComponent;
-    private readonly odataGroup: AppApiQuery<TEntity>;
+    private readonly odataClient: IODataClient<TEntity>;
     private readonly columns: ODataColumnAccessor;
     private readonly query: ODataQueryBuilder;
     private readonly currentPage: ODataPage;
@@ -37,7 +37,7 @@ export class ODataComponent<TEntity> {
     private static readonly columnEndName = 'ColumnEnd';
 
     constructor(private readonly view: ODataComponentView, options: ODataComponentOptions<TEntity>) {
-        this.odataGroup = options.odataGroup;
+        this.odataClient = options.odataClient;
         this.id = options.id;
         this.saveChangesOptions = options.saveChangesOptions;
         options.columns[ODataComponent.columnStartName] = new ODataColumnBuilder(
@@ -101,7 +101,7 @@ export class ODataComponent<TEntity> {
     }
 
     private exportToExcel() {
-        this.odataGroup.toExcel(this.query.buildWithoutPaging());
+        this.odataClient.toExcel(this.query.buildWithoutPaging());
     }
 
     private onSortClick(column: ODataColumn) {
@@ -153,7 +153,7 @@ export class ODataComponent<TEntity> {
             await this.alert.infoAction(
                 'Loading...',
                 async () => {
-                    result = await this.odataGroup.execute(query, { preventDefault: true });
+                    result = await this.odataClient.execute(query);
                 }
             );
         }

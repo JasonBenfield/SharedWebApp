@@ -1,4 +1,5 @@
-﻿import { GridCellView } from "../Views/Grid"
+﻿import { ODataResult } from "../Api/ODataResult"
+import { GridCellView } from "../Views/Grid"
 import { ODataCell } from "./ODataCell"
 import { ODataColumn } from "./ODataColumn"
 
@@ -27,4 +28,9 @@ export interface SaveChangesOptions {
     readonly select: boolean;
     readonly filter: boolean;
     readonly orderby: boolean;
+}
+
+export interface IODataClient<TEntity> {
+    toExcel(odataQuery: string);
+    execute(odataQuery: string): Promise<ODataResult<TEntity>>;
 }

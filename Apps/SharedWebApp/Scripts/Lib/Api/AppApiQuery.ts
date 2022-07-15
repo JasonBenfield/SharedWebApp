@@ -24,7 +24,7 @@ interface IODataInnerError {
     stacktrace: string;
 }
 
-export class AppApiQuery<TEntity> {
+export class AppApiQuery<TModel, TEntity> {
     private readonly resourceUrl: AppResourceUrl;
 
     constructor(
@@ -39,19 +39,21 @@ export class AppApiQuery<TEntity> {
         return new UrlBuilder(this.resourceUrl.url);
     }
 
-    toExcel(odataQuery: string) {
+    toExcel(odataQuery: string, model: TModel) {
         const url = this.url()
             .addPart('ToExcel')
-            .addQueryString(odataQuery);
+            .addQueryString(odataQuery)
+            .addQueryFromObject(model);
         new WebPage(url).openWindow();
     }
 
-    async execute(data: string, errorOptions: IActionErrorOptions) {
+    async execute(odataQuery: string, model: TModel, errorOptions: IActionErrorOptions) {
         const url = this.url();
         url.addPart('$query');
+        url.addQueryFromObject(model);
         const postResult = await new HttpClient().post(
             url.value(),
-            data,
+            odataQuery,
             'text/plain'
         );
         let result: ODataResult<TEntity>;

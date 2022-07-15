@@ -1,15 +1,16 @@
 ﻿import { AppApiQuery } from "../Api/AppApiQuery";
+import { ApiODataClient } from "./ApiODataClient";
 import { ODataColumnBuilder } from "./ODataColumnBuilder";
 import { ODataComponentOptions } from "./ODataComponentOptions";
 import { ODataQueryBuilder } from "./ODataQueryBuilder";
-import { SaveChangesOptions } from "./Types";
+import { IODataClient, SaveChangesOptions } from "./Types";
 
 export type IODataColumnsBuilder<TEntity> = {
     [K in keyof TEntity]: ODataColumnBuilder;
 }
 
 export class ODataComponentOptionsBuilder<TEntity> {
-    private odataGroup: AppApiQuery<TEntity>;
+    private odataClient: IODataClient<TEntity>;
     private pageSize: number = 50;
     readonly query = new ODataQueryBuilder();
     private saveChangesOptions: SaveChangesOptions = { select: false, filter: false, orderby: false };
@@ -20,8 +21,8 @@ export class ODataComponentOptionsBuilder<TEntity> {
     ) {
     }
 
-    setODataGroup(odataGroup: AppApiQuery<TEntity>) {
-        this.odataGroup = odataGroup;
+    setODataClient(odataClient: IODataClient<TEntity>) {
+        this.odataClient = odataClient;
     }
 
     setPageSize(pageSize: number) {
@@ -42,7 +43,7 @@ export class ODataComponentOptionsBuilder<TEntity> {
         }
         return new ODataComponentOptions(
             this.id,
-            this.odataGroup,
+            this.odataClient,
             this.pageSize,
             this.saveChangesOptions,
             columns,

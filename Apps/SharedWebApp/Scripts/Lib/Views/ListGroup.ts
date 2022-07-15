@@ -3,7 +3,7 @@ import { MappedArray } from "../Enumerable";
 import { JoinedStrings } from "../JoinedStrings";
 import { BasicComponentView } from "./BasicComponentView";
 import { GridCellView, GridTemplateCss } from "./Grid";
-import { ViewConstructor } from "./Types";
+import { ILinkAttributes, ViewConstructor } from "./Types";
 import { ViewEventActionBuilder } from "./ViewEventBuilder";
 
 export class BasicListGroupView extends BasicComponentView {
@@ -121,6 +121,12 @@ export class LinkListGroupItemView extends BasicListGroupItemView {
     }
 
     addView: <T extends BasicComponentView>(ctor: ViewConstructor<T>) => T;
+
+    protected setAttr: (config: (attr: ILinkAttributes) => void) => void;
+
+    setHref(href: string) {
+        this.setAttr(attr => attr.href = href);
+    }
 }
 
 export class GridListGroupView extends BasicListGroupView {

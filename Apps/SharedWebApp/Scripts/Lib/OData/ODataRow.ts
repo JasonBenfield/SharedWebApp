@@ -1,9 +1,11 @@
 ﻿import { BasicComponent } from "../Components/BasicComponent";
-import { GridCellView, GridRowView } from "../Views/Grid";
+import { GridRowView } from "../Views/Grid";
 import { ODataCell } from "./ODataCell";
 import { ODataColumn } from "./ODataColumn";
 
 export class ODataRow extends BasicComponent {
+    protected readonly view: GridRowView;
+
     constructor(rowIndex: number, columns: ODataColumn[], record: any, view: GridRowView) {
         super(view);
         let i = 0;

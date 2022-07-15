@@ -1,16 +1,17 @@
 ﻿import { Url } from "../Url";
 import { UrlBuilder } from "../UrlBuilder";
 import { LinkView } from "../Views/LinkView";
+import { LinkListGroupItemView } from "../Views/ListGroup";
 import { BasicComponent } from "./BasicComponent";
 
 export class LinkComponent extends BasicComponent {
     static readonly doNothing = 'javascript:;';
 
-    protected readonly view: LinkView;
+    protected readonly view: LinkView | LinkListGroupItemView;
     private _data: any;
     private href: string;
 
-    constructor(view: LinkView) {
+    constructor(view: LinkView | LinkListGroupItemView) {
         super(view);
         this.setHrefToDoNothing();
     }

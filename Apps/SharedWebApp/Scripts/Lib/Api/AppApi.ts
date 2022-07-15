@@ -11,7 +11,7 @@ export type apiConstructor<T extends AppApi> = {
 export class AppApi {
     private readonly resourceUrl: AppResourceUrl;
     readonly groups: {
-        [name: string]: AppApiGroup | AppApiQuery<any>
+        [name: string]: AppApiGroup | AppApiQuery<any, any>
     } = {};
     readonly User: IUserGroup;
 
@@ -38,8 +38,8 @@ export class AppApi {
         return group;
     }
 
-    protected addODataGroup<T>(
-        createGroup: (evts: AppApiEvents, resourceUrl: AppResourceUrl) => AppApiQuery<T>
+    protected addODataGroup<TArgs, TEntity>(
+        createGroup: (evts: AppApiEvents, resourceUrl: AppResourceUrl) => AppApiQuery<TArgs, TEntity>
     ) {
         const group = createGroup(this.events, this.resourceUrl);
         this.groups[group.name] = group;

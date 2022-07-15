@@ -3,6 +3,7 @@ import { AppApiQuery } from '../../Lib/Api/AppApiQuery';
 import { AppResourceUrl } from '../../Lib/Api/AppResourceUrl';
 import { BasicPage } from '../../Lib/Components/BasicPage';
 import { TextComponent } from '../../Lib/Components/TextComponent';
+import { ApiODataClient } from '../../Lib/OData/ApiODataClient';
 import { NumberValueFormatter } from '../../Lib/OData/NumberValueFormatter';
 import { ODataComponent } from '../../Lib/OData/ODataComponent';
 import { ODataComponentOptionsBuilder } from '../../Lib/OData/ODataComponentOptionsBuilder';
@@ -28,7 +29,7 @@ class MainPage extends BasicPage {
             columns.Salary
         );
         options.saveChanges();
-        const odataGroup = new AppApiQuery<IEmployee>(
+        const odataGroup = new AppApiQuery<IEmptyRequest, IEmployee>(
             new AppApiEvents(() => { }),
             AppResourceUrl.odata(
                 'Shared',
@@ -37,7 +38,8 @@ class MainPage extends BasicPage {
             ).withGroup('EmployeeQuery'),
             'EmployeeQuery'
         );
-        options.setODataGroup(odataGroup);
+        const odataClient = new ApiODataClient(odataGroup, {});
+        options.setODataClient(odataClient);
         const odataComponent = new ODataComponent(this.view.odataComponentView, options.build());
         odataComponent.refresh();
     }

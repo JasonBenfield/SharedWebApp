@@ -1,13 +1,11 @@
 ﻿import { BasicComponent } from "../Components/BasicComponent";
 import { MessageAlert } from "../Components/MessageAlert";
-import { DebouncedAction } from "../DebouncedAction";
 import { MappedArray } from "../Enumerable";
 import { EventSource } from "../Events";
 import { ODataCellClickedEventArgs } from "./ODataCellClickedEventArgs";
 import { ODataColumn } from "./ODataColumn";
 import { ODataGridView } from "./ODataGridView";
 import { ODataHeaderCell } from "./ODataHeaderCell";
-import { ODataHeaderCellView } from "./ODataHeaderCellView";
 import { ODataHeaderRow } from "./ODataHeaderRow";
 import { ODataQueryOrderByBuilder } from "./ODataQueryBuilder";
 import { ODataRow } from "./ODataRow";

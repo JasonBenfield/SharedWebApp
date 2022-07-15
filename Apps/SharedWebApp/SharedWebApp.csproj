@@ -51,6 +51,7 @@
     <None Remove="Scripts\Lib\Components\SelectOption.ts" />
     <None Remove="Scripts\Lib\Components\TextButtonComponent.ts" />
     <None Remove="Scripts\Lib\Components\TextComponent.ts" />
+    <None Remove="Scripts\Lib\Components\TextValueFormGroup.ts" />
     <None Remove="Scripts\Lib\Components\Types.ts" />
     <None Remove="Scripts\Lib\DateRange.ts" />
     <None Remove="Scripts\Lib\FlexCss.ts" />
@@ -61,6 +62,7 @@
     <None Remove="Scripts\Lib\NumberRange.ts" />
     <None Remove="Scripts\Lib\OData\AbsoluteDateRangePanel.ts" />
     <None Remove="Scripts\Lib\OData\AbsoluteNumberRangePanel.ts" />
+    <None Remove="Scripts\Lib\OData\ApiODataClient.ts" />
     <None Remove="Scripts\Lib\OData\AvailableFIeldListItem.ts" />
     <None Remove="Scripts\Lib\OData\AvailableFieldListItemView.ts" />
     <None Remove="Scripts\Lib\OData\BooleanIconCell.ts" />
@@ -162,6 +164,7 @@
     <None Remove="Scripts\Lib\Views\TextHeadings.ts" />
     <None Remove="Scripts\Lib\Views\TextLabelView.ts" />
     <None Remove="Scripts\Lib\Views\TextLinkView.ts" />
+    <None Remove="Scripts\Lib\Views\TextSmallView.ts" />
     <None Remove="Scripts\Lib\Views\TextSpanView.ts" />
     <None Remove="Scripts\Lib\Views\Types.ts" />
     <None Remove="Scripts\Lib\Views\UnorderedListView.ts" />
@@ -227,6 +230,7 @@
     <TypeScriptCompile Include="Scripts\Lib\Components\SelectControl.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\SelectOption.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\TextComponent.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Forms\TextValueFormGroup.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\Types.ts" />
     <TypeScriptCompile Include="Scripts\Lib\NumberRange.ts">
       <SubType>Code</SubType>
@@ -238,6 +242,7 @@
     <TypeScriptCompile Include="Scripts\Lib\OData\AbsoluteNumberRangePanel.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\OData\ApiODataClient.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\BooleanIconCell.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\NumberRangePicker.ts">
       <SubType>Code</SubType>
@@ -353,6 +358,9 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Lib\Views\LinkView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\ListItemView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\TextSmallView.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Lib\Views\UnorderedListView.ts">
