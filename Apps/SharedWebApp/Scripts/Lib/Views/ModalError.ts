@@ -4,7 +4,7 @@ import { CssLengthUnit } from "../CssLengthUnit";
 import { TextCss } from "../TextCss";
 import { BasicComponentView } from "./BasicComponentView";
 import { BlockView } from "./BlockView";
-import { ButtonCommandView } from "./Commands";
+import { ButtonCommandView } from "./Command";
 import { GridCellView } from "./Grid";
 import { HorizontalRuleView } from "./HorizontalRuleView";
 import { GridListGroupItemView, GridListGroupView } from "./ListGroup";

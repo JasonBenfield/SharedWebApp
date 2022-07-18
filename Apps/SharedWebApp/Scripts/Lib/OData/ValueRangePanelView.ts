@@ -1,7 +1,7 @@
 ﻿import { ContextualClass } from "../ContextualClass";
 import { MarginCss } from "../MarginCss";
 import { BasicTextComponentView } from "../Views/BasicTextComponentView";
-import { ButtonCommandView } from "../Views/Commands";
+import { ButtonCommandView } from "../Views/Command";
 import { ModalComponentView } from "../Views/Modal";
 import { TextBlockView } from "../Views/TextBlockView";
 import { TextHeading1View, TextHeading3View } from "../Views/TextHeadings";

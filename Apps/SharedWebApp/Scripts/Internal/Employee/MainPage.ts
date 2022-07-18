@@ -21,10 +21,15 @@ class MainPage extends BasicPage {
         new TextComponent(this.view.heading).setText('Add Employee');
         this.alert = new MessageAlert(this.view.alert);
         this.addEmployeeForm = new AddEmployeeForm(this.view.addEmployeeForm);
+        this.addEmployeeForm.handleSubmit(this.onFormSubmit.bind(this));
         this.saveCommand = new AsyncCommand(this.save.bind(this));
         this.saveCommand.add(this.view.saveButton);
-        this.saveCommand.add(this.view.submitButton);
         this.test();
+    }
+
+    private onFormSubmit() {
+        this.saveCommand.execute();
+        const dbg = '';
     }
 
     private async test() {

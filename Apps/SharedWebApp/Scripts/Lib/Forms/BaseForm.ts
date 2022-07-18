@@ -20,6 +20,10 @@ export class BaseForm {
         this.modalError.when.errorSelected.then(this.onErrorSelected.bind(this));
     }
 
+    handleSubmit(action: () => void) {
+        this.view.handleSubmit(action);
+    }
+
     private async onErrorSelected(error: ErrorModel) {
         this.modalError.hide();
         const field: any = this.getField(error.Source);

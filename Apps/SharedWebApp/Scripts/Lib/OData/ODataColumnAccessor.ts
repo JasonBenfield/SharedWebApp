@@ -19,9 +19,12 @@ export class ODataColumnAccessor {
     column(name: string) { return this._columns[name]; }
 
     columns(includedColumnNames: string[]) {
-        return new MappedArray(
-            includedColumnNames,
-            columnName => this.column(columnName)
+        return new FilteredArray(
+            new MappedArray(
+                includedColumnNames,
+                columnName => this.column(columnName)
+            ),
+            c => Boolean(c)
         ).value();
     }
 

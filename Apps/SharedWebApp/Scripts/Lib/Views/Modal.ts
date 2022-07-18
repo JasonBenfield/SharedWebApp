@@ -6,7 +6,7 @@ import { MarginCss } from '../MarginCss';
 import { TextCss } from '../TextCss';
 import { BasicComponentView } from './BasicComponentView';
 import { BlockView } from './BlockView';
-import { ButtonCommandView } from './Commands';
+import { ButtonCommandView } from './Command';
 import { MessageAlertView } from './MessageAlertView';
 import { RowView } from './RowView';
 import { TextBlockView } from './TextBlockView';

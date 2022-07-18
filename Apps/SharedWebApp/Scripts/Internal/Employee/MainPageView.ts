@@ -3,7 +3,7 @@ import { CssLengthUnit } from '../../Lib/CssLengthUnit';
 import { PaddingCss } from '../../Lib/PaddingCss';
 import { BasicPageView } from '../../Lib/Views/BasicPageView';
 import { BlockView } from '../../Lib/Views/BlockView';
-import { ButtonCommandView } from '../../Lib/Views/Commands';
+import { ButtonCommandView } from '../../Lib/Views/Command';
 import { GridView } from '../../Lib/Views/Grid';
 import { MessageAlertView } from '../../Lib/Views/MessageAlertView';
 import { TextHeading1View } from '../../Lib/Views/TextHeadings';
@@ -16,7 +16,6 @@ export class MainPageView extends BasicPageView {
     readonly alert: MessageAlertView;
     readonly addEmployeeForm: AddEmployeeFormView;
     readonly saveButton: ButtonCommandView;
-    readonly submitButton: ButtonCommandView;
 
     constructor() {
         super();
@@ -47,7 +46,7 @@ export class MainPageView extends BasicPageView {
         this.alert = container.addView(MessageAlertView);
         this.addEmployeeForm = container.addView(AddEmployeeFormView);
         this.addEmployeeForm.addContent(new AddEmployeeFormLayout());
-        this.submitButton = this.addEmployeeForm.addOffscreenSubmit();
+        this.addEmployeeForm.addOffscreenSubmit();
         const toolbar = grid.addCell().addView(ToolbarView);
         toolbar.setPadding(PaddingCss.xs(3));
         toolbar.setBackgroundContext(ContextualClass.secondary);

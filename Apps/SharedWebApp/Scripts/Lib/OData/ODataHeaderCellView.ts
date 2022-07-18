@@ -3,7 +3,7 @@ import { PaddingCss } from "../PaddingCss";
 import { TextCss } from "../TextCss";
 import { BasicTextComponentView } from "../Views/BasicTextComponentView";
 import { ColumnView } from "../Views/ColumnView";
-import { ButtonCommandView } from "../Views/Commands";
+import { ButtonCommandView } from "../Views/Command";
 import { GridCellView, GridRowView } from "../Views/Grid";
 import { RowView } from "../Views/RowView";
 import { TextBlockView } from "../Views/TextBlockView";

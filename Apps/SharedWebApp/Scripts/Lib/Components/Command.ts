@@ -1,9 +1,10 @@
-﻿import { ButtonCommandView, LinkCommandView } from "../Views/Commands";
+﻿import { BasicComponentView } from "../Views/BasicComponentView";
+import { ICommandView } from "../Views/Command";
 import { FaIconAnimation, FaIconView } from "../Views/FaIconView";
 
 export type CommandAction = (context?: any) => any;
 
-type CommandView = LinkCommandView | ButtonCommandView;
+type CommandView = BasicComponentView & ICommandView;
 
 export class AsyncCommand {
     private readonly items: CommandView[] = [];

@@ -2,7 +2,7 @@
 import { FlexCss } from "../FlexCss";
 import { TextCss } from "../TextCss";
 import { BasicTextComponentView } from "../Views/BasicTextComponentView";
-import { ButtonCommandView } from "../Views/Commands";
+import { ButtonCommandView } from "../Views/Command";
 import { ModalComponentView } from "../Views/Modal";
 import { NavView } from "../Views/NavView";
 import { TextHeading1View } from "../Views/TextHeadings";

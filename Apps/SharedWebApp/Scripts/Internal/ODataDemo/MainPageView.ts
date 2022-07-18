@@ -1,5 +1,6 @@
 ﻿import { ContextualClass } from '../../Lib/ContextualClass';
 import { CssLengthUnit } from '../../Lib/CssLengthUnit';
+import { ODataColumnViewBuilder } from '../../Lib/OData/ODataColumnViewBuilder';
 import { ODataComponentView } from '../../Lib/OData/ODataComponentView';
 import { ODataTextCellView } from '../../Lib/OData/ODataTextCellView';
 import { PaddingCss } from '../../Lib/PaddingCss';
@@ -8,12 +9,16 @@ import { BasicPageView } from '../../Lib/Views/BasicPageView';
 import { GridView } from '../../Lib/Views/Grid';
 import { TextHeading1View } from '../../Lib/Views/TextHeadings';
 import { ToolbarView } from '../../Lib/Views/ToolbarView';
+import { ODataButtonGroupCellView } from './ODataButtonGroupCellView';
+import { ODataDropdownView } from './ODataDropdownView';
 import { ODataEmployeeColumnViewsBuilder } from './ODataEmployeeColumnsBuilder';
 
 export class MainPageView extends BasicPageView {
     readonly heading: TextHeading1View;
     readonly odataComponentView: ODataComponentView;
     readonly columns: ODataEmployeeColumnViewsBuilder;
+    readonly btnGroupColumn: ODataColumnViewBuilder;
+    readonly dropdownColumn: ODataColumnViewBuilder;
 
     constructor() {
         super();
@@ -39,11 +44,33 @@ export class MainPageView extends BasicPageView {
                 cellView.setTextCss(new TextCss().end());
             }
         );
+        this.btnGroupColumn = new ODataColumnViewBuilder();
+        this.btnGroupColumn.dataCell(ODataButtonGroupCellView);
+
+        this.dropdownColumn = new ODataColumnViewBuilder();
+        this.dropdownColumn.dataCell(ODataDropdownView);
 
         this.odataComponentView = fillRow.addView(ODataComponentView);
+        this.odataComponentView.addToClickSelection('.editButton,.deleteButton,.warnButton,.highlightButton');
 
-        let toolbar = layoutGrid.addCell().addView(ToolbarView);
+        const toolbar = layoutGrid.addCell().addView(ToolbarView);
         toolbar.setBackgroundContext(ContextualClass.secondary);
         toolbar.setPadding(PaddingCss.xs(3));
+    }
+
+    isDeleteButton(element: HTMLElement) {
+        return element.classList.contains('deleteButton')
+    }
+
+    isEditButton(element: HTMLElement) {
+        return element.classList.contains('editButton')
+    }
+
+    isWarnButton(element: HTMLElement) {
+        return element.classList.contains('warnButton')
+    }
+
+    isHighlightButton(element: HTMLElement) {
+        return element.classList.contains('highlightButton')
     }
 }

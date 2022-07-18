@@ -1,4 +1,5 @@
 ﻿import { CssLengthUnit } from "../CssLengthUnit";
+import { DelayedAction } from "../DelayedAction";
 import { BasicComponentView } from "./BasicComponentView";
 import { FormGroupGridView, FormGroupView, SimpleFieldFormGroupInputView, SimpleFieldFormGroupSelectView } from "./FormGroup";
 import { FormView } from "./FormView";
@@ -14,6 +15,19 @@ export class BaseFormView extends FormView {
         this.grid = this.addView(FormGroupGridView);
         this.grid.setTemplateColumns(CssLengthUnit.auto(), CssLengthUnit.flex(1));
         this.modalError = this.addView(ModalErrorView);
+    }
+
+    handleSubmit(action: () => void) {
+        this.on('submit')
+            .execute(async (el, evt) => {
+                evt.preventDefault();
+                if (document.activeElement instanceof HTMLElement) {
+                    document.activeElement.blur();
+                }
+                await DelayedAction.delay(300);
+                action();
+            })
+            .subscribe();
     }
 
     addHiddenInputFormGroup() {

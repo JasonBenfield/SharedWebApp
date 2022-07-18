@@ -9,21 +9,36 @@ import { MessageAlertView } from "../Views/MessageAlertView";
 import { ODataColumnView } from "./ODataColumnView";
 
 export class ODataGridView extends GridView {
+    private _configureDataRow: (row: GridRowView) => void = () => { };
+    private clickSelection: string;
+
     constructor(container: BasicComponentView) {
         super(container);
         this.setViewName(ODataGridView.name);
         this.setMargin(MarginCss.xs(0));
     }
 
+    configureDataRow(configureDataRow: (row: GridRowView) => void) {
+        this._configureDataRow = configureDataRow;
+    }
+
+    addToClickSelection(clickSelection: string) {
+        this.clickSelection = clickSelection;
+    }
+
     handleClick(action: (element: HTMLElement) => void) {
+        let clickSelection = '.grid-cell,.odata-sort-button';
+        if (this.clickSelection) {
+            clickSelection += `,${this.clickSelection}`
+        }
         this.on('click')
-            .select('.grid-cell,.odata-sort-button')
+            .select(clickSelection)
             .execute(action)
             .subscribe();
     }
 
     addHeaderRow(columns: ODataColumnView[]) {
-        const row = this.addRow(GridRowView);
+        const row = this.addRow();
         row.setContext(ContextualClass.secondary);
         row.setTextCss(new TextCss().bold());
         for (const col of columns) {
@@ -42,6 +57,7 @@ export class ODataGridView extends GridView {
 
     addDataRow(columns: ODataColumnView[]) {
         const row = this.addRow();
+        this._configureDataRow(row);
         for (const col of columns) {
             const cell = row.addCell(col.dataCellCtor);
             col.configureDataCell(cell);

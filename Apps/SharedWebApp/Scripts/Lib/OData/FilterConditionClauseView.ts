@@ -1,7 +1,7 @@
 ﻿import { ContextualClass } from "../ContextualClass";
 import { BasicComponentView } from "../Views/BasicComponentView";
 import { BasicTextComponentView } from "../Views/BasicTextComponentView";
-import { ButtonCommandView } from "../Views/Commands";
+import { ButtonCommandView } from "../Views/Command";
 import { GridCellView, GridRowView } from "../Views/Grid";
 import { TextBlockView } from "../Views/TextBlockView";
 

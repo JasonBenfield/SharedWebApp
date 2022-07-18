@@ -82,7 +82,6 @@ const outputFilename = '[name].js';
 const resolve = {
     extensions: [".ts", ".tsx", ".js"],
     alias: {
-        xtistart: path.resolve(__dirname, 'Scripts/Internal/Startup.ts')
     }
 };
 const plugins = [

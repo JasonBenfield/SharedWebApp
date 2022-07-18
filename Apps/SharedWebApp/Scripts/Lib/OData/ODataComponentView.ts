@@ -1,16 +1,16 @@
-﻿import { BlockView } from "../Views/BlockView";
-import { CssLengthUnit } from "../CssLengthUnit";
-import { GridView } from "../Views/Grid";
-import { MessageAlertView } from "../Views/MessageAlertView";
+﻿import { CssLengthUnit } from "../CssLengthUnit";
 import { PaddingCss } from "../PaddingCss";
+import { BasicComponentView } from "../Views/BasicComponentView";
+import { BlockView } from "../Views/BlockView";
+import { GridRowView, GridView } from "../Views/Grid";
+import { MessageAlertView } from "../Views/MessageAlertView";
 import { IconCellView } from './IconCellView';
 import { ModalODataComponentView } from './ModalODataComponentView';
 import { ODataColumnViewBuilder } from "./ODataColumnViewBuilder";
 import { ODataFooterComponentView } from "./ODataFooterComponentView";
 import { ODataGridView } from "./ODataGridView";
-import { ODataTextCellView } from './ODataTextCellView';
-import { BasicComponentView } from "../Views/BasicComponentView";
 import { ODataHeaderCellView } from "./ODataHeaderCellView";
+import { ODataTextCellView } from './ODataTextCellView';
 
 export class ODataComponentView extends GridView {
     readonly grid: ODataGridView;
@@ -41,9 +41,18 @@ export class ODataComponentView extends GridView {
         this.modalODataComponent = this.addView(ModalODataComponentView);
     }
 
+    configureDataRow(configureDataRow: (row: GridRowView) => void) {
+        this.grid.configureDataRow(configureDataRow);
+        return this;
+    }
+
     setViewID(id: string) {
         super.setViewID(id);
         this.modalODataComponent.setViewID(`${id}ModalODataComponent`);
+    }
+
+    addToClickSelection(clickSelection: string) {
+        this.grid.addToClickSelection(clickSelection);
     }
 
     columnStart() {

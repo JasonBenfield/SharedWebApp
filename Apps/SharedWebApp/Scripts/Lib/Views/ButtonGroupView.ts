@@ -1,6 +1,6 @@
 ﻿import { BasicComponentView } from "./BasicComponentView";
 import { ButtonView } from "./ButtonView";
-import { ButtonCommandView } from "./Commands";
+import { ButtonCommandView } from "./Command";
 import { TextButtonView } from "./TextButtonView";
 import { TextSpanView } from "./TextSpanView";
 import { ViewEventActionBuilder } from "./ViewEventBuilder";

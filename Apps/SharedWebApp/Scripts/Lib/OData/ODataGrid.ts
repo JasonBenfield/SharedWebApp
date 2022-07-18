@@ -2,6 +2,7 @@
 import { MessageAlert } from "../Components/MessageAlert";
 import { MappedArray } from "../Enumerable";
 import { EventSource } from "../Events";
+import { GridRowView } from "../Views/Grid";
 import { ODataCellClickedEventArgs } from "./ODataCellClickedEventArgs";
 import { ODataColumn } from "./ODataColumn";
 import { ODataGridView } from "./ODataGridView";
@@ -38,18 +39,18 @@ export class ODataGrid<TEntity> extends BasicComponent {
     private dragStartCell: ODataHeaderCell;
     private dragEnterCell: ODataHeaderCell;
 
-    constructor(view: ODataGridView) {
+    constructor(
+        view: ODataGridView,
+        private readonly createDataRow: (rowIndex: number, columns: ODataColumn[], record: any, view: GridRowView) => ODataRow
+    ) {
         super(view);
         view.on('dragstart')
-            .allowDefault()
             .select('.grid-header')
             .execute(this.onDragStart.bind(this))
-            .allowDefault()
             .subscribe();
         view.on('dragend')
             .select('.grid-header')
             .execute(this.onDragEnd.bind(this))
-            .allowDefault()
             .subscribe();
         view.on('dragenter')
             .select('.grid-header')
@@ -136,12 +137,19 @@ export class ODataGrid<TEntity> extends BasicComponent {
         }
     }
 
-    private onClick(sourceElement: HTMLElement) {
-        const cell = this.getCellByElement(sourceElement);
+    private onClick(sourceElement: HTMLElement, event: JQueryEventObject) {
+        const row = this.getComponentByElement(sourceElement) as ODataRow;
+        const cell = row.getCellByElement(sourceElement);
         if (cell) {
             if (cell.record) {
                 this.eventSource.events.dataCellClicked.invoke(
-                    new ODataCellClickedEventArgs(cell.column, cell.record)
+                    new ODataCellClickedEventArgs(
+                        row,
+                        cell.column,
+                        cell.record,
+                        sourceElement,
+                        event
+                    )
                 );
             }
             else if (sourceElement.classList.contains('odata-sort-button')) {
@@ -183,7 +191,7 @@ export class ODataGrid<TEntity> extends BasicComponent {
             let rowIndex = 1;
             for (const record of records) {
                 const dataRowView = this.view.addDataRow(columnViews);
-                const dataRow = new ODataRow(rowIndex, columns, record, dataRowView);
+                const dataRow = this.createDataRow(rowIndex, columns, record, dataRowView);
                 this.addComponent(dataRow);
                 rowIndex++;
             }

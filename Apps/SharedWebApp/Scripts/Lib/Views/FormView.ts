@@ -1,6 +1,6 @@
 ﻿import { BasicComponentView } from "./BasicComponentView";
 import { BasicContainerView } from "./BasicContainerView";
-import { ButtonCommandView } from "./Commands";
+import { ButtonCommandView } from "./Command";
 import { IFormAttributes } from "./Types";
 
 export class FormView extends BasicContainerView {

@@ -1,8 +1,8 @@
 ﻿import { BasicComponentView } from "./BasicComponentView";
 import { BasicContainerView } from "./BasicContainerView";
-import { ILinkAttributes } from "./Types";
+import { ILinkAttributes, ILinkView } from "./Types";
 
-export class LinkView extends BasicContainerView {
+export class LinkView extends BasicContainerView implements ILinkView {
     constructor(container: BasicComponentView) {
         super(container, 'a');
     }

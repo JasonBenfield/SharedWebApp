@@ -3,7 +3,6 @@
 export class ViewEventBuilder {
     private action: (sourceElement: HTMLElement, evt: JQueryEventObject) => void;
     private selector: string;
-    private _preventDefault: boolean;
 
     constructor(
         private readonly elementView: HtmlElementView,
@@ -18,11 +17,6 @@ export class ViewEventBuilder {
 
     select(selector: string) {
         this.selector = selector;
-        return this;
-    }
-
-    allowDefault() {
-        this._preventDefault = false;
         return this;
     }
 
@@ -43,11 +37,6 @@ export class ViewEventActionBuilder {
 
     select(selector: string) {
         this.builder.select(selector);
-        return this;
-    }
-
-    allowDefault() {
-        this.builder.allowDefault();
         return this;
     }
 

@@ -1,16 +1,17 @@
 ﻿import { Url } from "../Url";
 import { UrlBuilder } from "../UrlBuilder";
-import { TextLinkView } from "../Views/TextLinkView";
+import { BasicComponentView } from "../Views/BasicComponentView";
+import { ILinkView, ITextComponentView } from "../Views/Types";
 import { TextComponent } from "./TextComponent";
 
 export class TextLinkComponent extends TextComponent {
     static readonly doNothing = 'javascript:;';
 
-    protected readonly view: TextLinkView;
+    protected readonly view: BasicComponentView & ITextComponentView & ILinkView;
     private _data: any;
     private href: string;
 
-    constructor(view: TextLinkView) {
+    constructor(view: BasicComponentView & ITextComponentView & ILinkView) {
         super(view);
         this.setHrefToDoNothing();
     }

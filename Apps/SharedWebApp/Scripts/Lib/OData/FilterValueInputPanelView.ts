@@ -2,7 +2,7 @@
 import { MarginCss } from "../MarginCss";
 import { BasicTextComponentView } from "../Views/BasicTextComponentView";
 import { BooleanInputView } from "../Views/BooleanInputView";
-import { ButtonCommandView } from "../Views/Commands";
+import { ButtonCommandView } from "../Views/Command";
 import { FormCheckView } from "../Views/FormCheckView";
 import { FormView } from "../Views/FormView";
 import { InputView } from "../Views/InputView";

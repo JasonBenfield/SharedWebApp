@@ -5,6 +5,7 @@ import { ButtonView } from "./ButtonView";
 import { LinkView } from './LinkView';
 import { ListItemView } from './ListItemView';
 import { SpanView } from './SpanView';
+import { TextLinkView } from './TextLinkView';
 import { UnorderedListView } from './UnorderedListView';
 
 export class DropdownContainerView extends BasicComponentView {
@@ -53,6 +54,10 @@ export class DropdownMenuView extends UnorderedListView {
     addLinkItem() {
         return this.addView(DropdownLinkListItemView);
     }
+
+    addTextLinkItem() {
+        return this.addView(DropdownTextLinkListItemView);
+    }
 }
 
 export class DropdownLinkListItemView extends ListItemView {
@@ -63,6 +68,16 @@ export class DropdownLinkListItemView extends ListItemView {
     }
 
     readonly link: LinkView;
+}
+
+export class DropdownTextLinkListItemView extends ListItemView {
+    constructor(container: BasicComponentView) {
+        super(container);
+        this.link = this.addView(TextLinkView);
+        this.link.addCssName('dropdown-item')
+    }
+
+    readonly link: TextLinkView;
 }
 
 export class DropdownSpanListItemView extends ListItemView {

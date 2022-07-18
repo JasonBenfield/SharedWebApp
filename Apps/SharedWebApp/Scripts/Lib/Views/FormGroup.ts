@@ -7,6 +7,7 @@ import { AlertView } from "./AlertView";
 import { BasicComponentView } from "./BasicComponentView";
 import { BasicTextComponentView } from "./BasicTextComponentView";
 import { DropdownComponentView } from "./Dropdown";
+import { ErrorListItemView } from "./ErrorListItemView";
 import { FaIconView } from "./FaIconView";
 import { GridCellView, GridView } from "./Grid";
 import { InputGroupView } from "./InputGroupView";
@@ -101,6 +102,7 @@ export class SimpleFieldFormGroupView extends FormGroupView {
         alert.setMargin(MarginCss.xs(0));
         alert.setContext(ContextualClass.danger);
         this.alertList = alert.addView(GridListGroupView);
+        this.alertList.setItemViewType(ErrorListItemView);
         this.alertList.setTemplateColumns(CssLengthUnit.auto(), CssLengthUnit.flex(1));
     }
 

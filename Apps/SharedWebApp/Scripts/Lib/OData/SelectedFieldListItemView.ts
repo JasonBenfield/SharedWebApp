@@ -1,6 +1,6 @@
 ﻿import { BasicComponentView } from "../Views/BasicComponentView";
 import { BasicTextComponentView } from "../Views/BasicTextComponentView";
-import { ButtonCommandView } from "../Views/Commands";
+import { ButtonCommandView } from "../Views/Command";
 import { FaIconView } from "../Views/FaIconView";
 import { GridListGroupItemView } from "../Views/ListGroup";
 import { TextBlockView } from "../Views/TextBlockView";

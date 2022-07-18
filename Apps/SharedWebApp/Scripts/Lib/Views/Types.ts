@@ -84,23 +84,19 @@ export interface IViewEventOptions {
     readonly preventDefault: boolean;
 }
 
-export interface ICommandView {
-    readonly icon: FaIconView;
-    positionIconRight();
-    setText(text: string);
-    setTitle(text: string);
-    setContext(contextualClass: ContextualClass);
-    setActive();
-    setInactive();
-    show();
-    hide();
-    enable();
-    disable();
-    handleClick(action: () => void);
-}
-
 export interface IFormGroupLayout<T> {
     addFormGroups(view: BasicComponentView): T;
 }
 
 export type IClickConfig = (builder: ViewEventActionBuilder) => ViewEventActionBuilder;
+
+export interface ITextComponentView {
+    show();
+    hide();
+    setText(text: string);
+    setTitle(title: string);
+}
+
+export interface ILinkView {
+    setHref(href: string);
+}

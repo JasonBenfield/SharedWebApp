@@ -1,7 +1,7 @@
-﻿import { AppApiQuery } from "../Api/AppApiQuery";
-import { ODataResult } from "../Api/ODataResult";
+﻿import { ODataResult } from "../Api/ODataResult";
 import { AsyncCommand, Command } from "../Components/Command";
 import { MessageAlert } from "../Components/MessageAlert";
+import { EventBuilders, EventSource } from '../Events';
 import { ModalODataComponent } from "./ModalODataComponent";
 import { ODataCell } from "./ODataCell";
 import { ODataCellClickedEventArgs } from "./ODataCellClickedEventArgs";
@@ -19,12 +19,18 @@ import { ODataQueryBuilder } from "./ODataQueryBuilder";
 import { SourceType } from "./SourceType";
 import { IODataClient, SaveChangesOptions } from "./Types";
 
+type Events = {
+    dataCellClicked: ODataCellClickedEventArgs;
+};
+
 export class ODataComponent<TEntity> {
     private readonly grid: ODataGrid<TEntity>;
     private readonly alert: MessageAlert;
     private readonly modalODataComponent: ModalODataComponent;
     private readonly odataClient: IODataClient<TEntity>;
+    private readonly startColumns: ODataColumn[];
     private readonly columns: ODataColumnAccessor;
+    private readonly endColumns: ODataColumn[];
     private readonly query: ODataQueryBuilder;
     private readonly currentPage: ODataPage;
     private readonly footerComponent: ODataFooterComponent;
@@ -36,11 +42,15 @@ export class ODataComponent<TEntity> {
     private static readonly columnStartName = 'ColumnStart';
     private static readonly columnEndName = 'ColumnEnd';
 
+    readonly when: EventBuilders<Events>;
+
     constructor(private readonly view: ODataComponentView, options: ODataComponentOptions<TEntity>) {
         this.odataClient = options.odataClient;
         this.id = options.id;
         this.saveChangesOptions = options.saveChangesOptions;
-        options.columns[ODataComponent.columnStartName] = new ODataColumnBuilder(
+        view.setViewID(`${options.id}ODataComponent`);
+        this.startColumns = options.startColumns;
+        const columnStart = new ODataColumnBuilder(
             ODataComponent.columnStartName,
             SourceType.none,
             view.columnStart()
@@ -49,7 +59,10 @@ export class ODataComponent<TEntity> {
             .disableSelect()
             .disableMove()
             .build();
-        options.columns[ODataComponent.columnEndName] = new ODataColumnBuilder(
+        this.startColumns.splice(0, 0, columnStart);
+        this.columns = new ODataColumnAccessor(options.columns);
+        this.endColumns = options.endColumns;
+        const columnEnd = new ODataColumnBuilder(
             ODataComponent.columnEndName,
             SourceType.none,
             view.columnEnd()
@@ -58,8 +71,7 @@ export class ODataComponent<TEntity> {
             .disableSelect()
             .disableMove()
             .build();
-        view.setViewID(`${options.id}ODataComponent`);
-        this.columns = new ODataColumnAccessor(options.columns);
+        this.endColumns.push(columnEnd);
         this.query = new ODataQueryBuilder(options.defaultQuery);
         this.query.select.addRequiredFields(this.columns.requiredDatabaseColumns());
         if (options.saveChangesOptions.select) {
@@ -83,7 +95,7 @@ export class ODataComponent<TEntity> {
                 this.query.orderBy.fromSerialized(JSON.parse(serializedOrderBy));
             }
         }
-        this.grid = new ODataGrid(view.grid);
+        this.grid = new ODataGrid(view.grid, options.createDataRow);
         this.alert = new MessageAlert(view.alert);
         this.modalODataComponent = new ModalODataComponent(this.query, this.columns, view.modalODataComponent);
         this.currentPage = new ODataPage(options.pageSize);
@@ -94,9 +106,9 @@ export class ODataComponent<TEntity> {
         this.excelCommand = new Command(this.exportToExcel.bind(this));
         this.excelCommand.add(this.view.footerComponent.addExcelButton());
         this.footerComponent.when.pageRequested.then(this.onPageRequested.bind(this));
+        this.when = this.grid.when;
         this.grid.when.sortClicked.then(this.onSortClick.bind(this));
         this.grid.when.headerCellClicked.then(this.onHeaderCellClick.bind(this));
-        this.grid.when.dataCellClicked.then(this.onDataCellClick.bind(this));
         this.grid.when.headerCellDropped.then(this.onHeaderCellDropped.bind(this));
     }
 
@@ -133,11 +145,6 @@ export class ODataComponent<TEntity> {
         return this.refresh();
     }
 
-    private onDataCellClick(args: ODataCellClickedEventArgs) {
-        const value = args.record ? `\n${args.record[args.column.columnName]}` : '';
-        alert(`${args.column.columnName}${value}`);
-    }
-
     private onPageRequested(page: number) {
         this.currentPage.pageChanged(page, this.query);
         this.refresh();
@@ -163,9 +170,10 @@ export class ODataComponent<TEntity> {
         }
         this.currentPage.countChanged(result.count);
         const selectedColumnNames = this.query.select.getExplicitlySelected();
-        const gridColumns = this.columns.columns(selectedColumnNames);
-        gridColumns.splice(0, 0, this.columns.column(ODataComponent.columnStartName));
-        gridColumns.push(this.columns.column(ODataComponent.columnEndName));
+        const gridColumns: ODataColumn[] = [];
+        gridColumns.push(...this.startColumns);
+        gridColumns.push(...this.columns.columns(selectedColumnNames));
+        gridColumns.push(...this.endColumns);
         this.grid.setData(gridColumns, result.records);
         this.footerComponent.setPaging(
             this.currentPage.page,

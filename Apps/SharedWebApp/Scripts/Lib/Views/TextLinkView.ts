@@ -1,8 +1,8 @@
 ﻿import { BasicComponentView } from "./BasicComponentView";
 import { BasicTextComponentView } from "./BasicTextComponentView";
-import { ILinkAttributes } from "./Types";
+import { ILinkAttributes, ILinkView } from "./Types";
 
-export class TextLinkView extends BasicTextComponentView {
+export class TextLinkView extends BasicTextComponentView implements ILinkView {
     constructor(container: BasicComponentView) {
         super(container, 'a');
     }

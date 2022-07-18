@@ -61,7 +61,7 @@
 }
 
 .grid-row-action {
-    .grid-cell {
+    > .grid-cell {
         cursor: pointer;
         color: $list-group-action-color;
         text-align: inherit;

@@ -27,6 +27,9 @@
     <None Remove="Scripts\Internal\DefaultPageContext.ts" />
     <None Remove="Scripts\Internal\GridDemo\DemoGrid.ts" />
     <None Remove="Scripts\Internal\ODataDemo\index.d.ts" />
+    <None Remove="Scripts\Internal\ODataDemo\ODataButtonGroupCellView.ts" />
+    <None Remove="Scripts\Internal\ODataDemo\ODataDemoRow.ts" />
+    <None Remove="Scripts\Internal\ODataDemo\ODataDropdownView.ts" />
     <None Remove="Scripts\Internal\ODataDemo\ODataEmployeeColumnsBuilder.ts" />
     <None Remove="Scripts\Internal\ViewDemo\DemoGridListGroupItem.ts" />
     <None Remove="Scripts\Internal\ViewDemo\DemoGridListGroupItemView.ts" />
@@ -95,6 +98,8 @@
     <None Remove="Scripts\Lib\OData\ODataComponentOptions.ts" />
     <None Remove="Scripts\Lib\OData\ODataComponentOptionsBuilder.ts" />
     <None Remove="Scripts\Lib\OData\ODataComponentView.ts" />
+    <None Remove="Scripts\Lib\OData\ODataComponentViewOptions.ts" />
+    <None Remove="Scripts\Lib\OData\ODataComponentViewOptionsBuilder.ts" />
     <None Remove="Scripts\Lib\OData\ODataFooterComponent.ts" />
     <None Remove="Scripts\Lib\OData\ODataFooterComponentView.ts" />
     <None Remove="Scripts\Lib\OData\ODataGrid.ts" />
@@ -204,6 +209,9 @@
     <TypeScriptCompile Include="Scripts\Internal\DefaultPageContext.ts" />
     <TypeScriptCompile Include="Scripts\Internal\GridDemo\DemoGrid.ts" />
     <TypeScriptCompile Include="Scripts\Internal\ODataDemo\index.d.ts" />
+    <TypeScriptCompile Include="Scripts\Internal\ODataDemo\ODataButtonGroupCellView.ts" />
+    <TypeScriptCompile Include="Scripts\Internal\ODataDemo\ODataDemoRow.ts" />
+    <TypeScriptCompile Include="Scripts\Internal\ODataDemo\ODataDropdownView.ts" />
     <TypeScriptCompile Include="Scripts\Internal\ODataDemo\ODataEmployeeColumnsBuilder.ts" />
     <TypeScriptCompile Include="Scripts\Internal\ViewDemo\DemoGridListGroupItemView.ts" />
     <TypeScriptCompile Include="Scripts\Internal\ViewDemo\DemoGridListGroupItem.ts" />
@@ -256,6 +264,8 @@
     <TypeScriptCompile Include="Scripts\Lib\OData\AvailableFieldListItemView.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataComponentViewOptions.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataComponentViewOptionsBuilder.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ValueRangePanelView.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

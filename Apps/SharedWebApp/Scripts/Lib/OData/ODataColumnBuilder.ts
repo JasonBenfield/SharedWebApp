@@ -1,4 +1,6 @@
-﻿import { DefaultValueFormatter } from "./DefaultValueFormatter";
+﻿import { GridCellView } from "../Views/Grid";
+import { DefaultValueFormatter } from "./DefaultValueFormatter";
+import { ODataCell } from "./ODataCell";
 import { ODataColumn } from "./ODataColumn";
 import { ODataColumnViewBuilder } from "./ODataColumnViewBuilder";
 import { ODataHeaderCell } from "./ODataHeaderCell";
@@ -17,8 +19,11 @@ export class ODataColumnBuilder {
     private createHeaderCell: ICreateHeaderCell =
         (column: ODataColumn, view: ODataHeaderCellView) => new ODataHeaderCell(column, view);
     private createDataCell: ICreateDataCell =
-        (rowIndex: number, column: ODataColumn, record: any, formatter: IValueFormatter, view: ODataTextCellView) => {
-            return new ODataTextCell(rowIndex, column, record, formatter, view);
+        (rowIndex: number, column: ODataColumn, record: any, formatter: IValueFormatter, view: GridCellView) => {
+            if (view instanceof ODataTextCellView) {
+                return new ODataTextCell(rowIndex, column, record, formatter, view);
+            }
+            return new ODataCell(rowIndex, column, record, view);
         }
             
 

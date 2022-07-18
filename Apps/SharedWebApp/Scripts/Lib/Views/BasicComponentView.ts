@@ -13,7 +13,7 @@ interface ICssBuilders {
     [name: string]: ICssBuilder | string;
 }
 
-export class BasicComponentView {
+export class BasicComponentView  {
     private attr: IHtmlAttributes = {};
     private style: IHtmlStyle = {};
     private readonly cssClass = new CssClass();

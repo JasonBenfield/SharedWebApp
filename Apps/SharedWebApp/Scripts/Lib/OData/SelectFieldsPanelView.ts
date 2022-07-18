@@ -4,7 +4,7 @@ import { CssLengthUnit } from "../CssLengthUnit";
 import { MarginCss } from "../MarginCss";
 import { TextCss } from "../TextCss";
 import { BlockView } from "../Views/BlockView";
-import { ButtonCommandView } from "../Views/Commands";
+import { ButtonCommandView } from "../Views/Command";
 import { GridView } from "../Views/Grid";
 import { ButtonListGroupView, GridListGroupView } from "../Views/ListGroup";
 import { MessageAlertView } from "../Views/MessageAlertView";

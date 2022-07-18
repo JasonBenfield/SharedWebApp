@@ -5,7 +5,7 @@ import { MarginCss } from "../MarginCss";
 import { TextCss } from "../TextCss";
 import { BasicTextComponentView } from "../Views/BasicTextComponentView";
 import { BlockView } from "../Views/BlockView";
-import { ButtonCommandView } from "../Views/Commands";
+import { ButtonCommandView } from "../Views/Command";
 import { GridView } from "../Views/Grid";
 import { ModalComponentView } from "../Views/Modal";
 import { NavView } from "../Views/NavView";

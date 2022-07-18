@@ -3,7 +3,7 @@ import { FlexCss } from '../../Lib/FlexCss';
 import { PaddingCss } from '../../Lib/PaddingCss';
 import { BasicPageView } from '../../Lib/Views/BasicPageView';
 import { BlockView } from '../../Lib/Views/BlockView';
-import { ButtonCommandView } from '../../Lib/Views/Commands';
+import { ButtonCommandView } from '../../Lib/Views/Command';
 import { TextHeading1View } from '../../Lib/Views/TextHeadings';
 import { ToolbarView } from '../../Lib/Views/ToolbarView';
 import { TestCardView } from './TestCardView';

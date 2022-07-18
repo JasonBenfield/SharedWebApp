@@ -1,6 +1,7 @@
 ﻿import { DefaultEvent } from "../Events";
-import { BasicListGroupItemView, BasicListGroupView } from "../Views/ListGroup";
+import { BasicListGroupItemView, BasicListGroupView, TextButtonListGroupItemView, TextLinkListGroupItemView, TextListGroupItemView } from "../Views/ListGroup";
 import { BasicComponent } from "./BasicComponent";
+import { TextComponent } from "./TextComponent";
 
 export class ListGroup extends BasicComponent {
     protected readonly view: BasicListGroupView;
@@ -65,4 +66,21 @@ export class ListGroup extends BasicComponent {
     moveItem(item: BasicComponent, destinationIndex: number) {
         this.moveComponent(item, destinationIndex)
     }
+}
+
+export class TextListItem extends BasicComponent {
+    readonly text: TextComponent;
+
+    constructor(protected readonly view: TextListGroupItemView | TextButtonListGroupItemView | TextLinkListGroupItemView) {
+        super(view);
+        this.text = this.addComponent(new TextComponent(view));
+    }
+
+    makeActive() { this.view.active(); }
+
+    makeNotActive() { this.view.notActive(); }
+
+    show() { this.view.show(); }
+
+    hide() { this.view.hide(); }
 }

@@ -1,9 +1,10 @@
 ﻿import { ContextualClass } from "../ContextualClass";
 import { MappedArray } from "../Enumerable";
 import { JoinedStrings } from "../JoinedStrings";
+import { TextCss } from "../TextCss";
 import { BasicComponentView } from "./BasicComponentView";
 import { GridCellView, GridTemplateCss } from "./Grid";
-import { ILinkAttributes, ViewConstructor } from "./Types";
+import { ILinkAttributes, ILinkView, ITextComponentView, ViewConstructor } from "./Types";
 import { ViewEventActionBuilder } from "./ViewEventBuilder";
 
 export class BasicListGroupView extends BasicComponentView {
@@ -85,6 +86,14 @@ export class ListGroupItemView extends BasicListGroupItemView {
     addView: <T extends BasicComponentView>(ctor: ViewConstructor<T>) => T;
 }
 
+export class TextListGroupItemView extends BasicListGroupItemView implements ITextComponentView {
+    constructor(container: BasicComponentView) {
+        super(container, 'li');
+    }
+
+    setText(text: string) { this.elementView.setText(text); }
+}
+
 export class ButtonListGroupView extends BasicListGroupView {
     constructor(container: BasicComponentView) {
         super(container, 'div');
@@ -99,9 +108,19 @@ export class ButtonListGroupView extends BasicListGroupView {
 export class ButtonListGroupItemView extends BasicListGroupItemView {
     constructor(container: BasicComponentView) {
         super(container, 'button');
+        this.setTextCss(new TextCss().start());
     }
 
     addView: <T extends BasicComponentView>(ctor: ViewConstructor<T>) => T;
+}
+
+export class TextButtonListGroupItemView extends BasicListGroupItemView implements ITextComponentView {
+    constructor(container: BasicComponentView) {
+        super(container, 'button');
+        this.setTextCss(new TextCss().start());
+    }
+
+    setText(text: string) { this.elementView.setText(text); }
 }
 
 export class LinkListGroupView extends BasicListGroupView {
@@ -115,7 +134,7 @@ export class LinkListGroupView extends BasicListGroupView {
     addListGroupItems: <T extends LinkListGroupItemView>(howMany: number, ctor?: ViewConstructor<T>) => T[];
 }
 
-export class LinkListGroupItemView extends BasicListGroupItemView {
+export class LinkListGroupItemView extends BasicListGroupItemView implements ILinkView {
     constructor(container: BasicComponentView) {
         super(container, 'a');
     }
@@ -127,6 +146,20 @@ export class LinkListGroupItemView extends BasicListGroupItemView {
     setHref(href: string) {
         this.setAttr(attr => attr.href = href);
     }
+}
+
+export class TextLinkListGroupItemView extends BasicListGroupItemView implements ILinkView, ITextComponentView {
+    constructor(container: BasicComponentView) {
+        super(container, 'a');
+    }
+
+    protected setAttr: (config: (attr: ILinkAttributes) => void) => void;
+
+    setHref(href: string) {
+        this.setAttr(attr => attr.href = href);
+    }
+
+    setText(text: string) { this.elementView.setText(text); }
 }
 
 export class GridListGroupView extends BasicListGroupView {

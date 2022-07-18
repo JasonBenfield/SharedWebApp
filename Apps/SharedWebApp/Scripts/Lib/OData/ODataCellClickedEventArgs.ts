@@ -1,6 +1,13 @@
 ﻿import { ODataColumn } from "./ODataColumn";
+import { ODataRow } from "./ODataRow";
 
 export class ODataCellClickedEventArgs {
-    constructor(readonly column: ODataColumn, readonly record: any) {
+    constructor(
+        readonly row: ODataRow,
+        readonly column: ODataColumn,
+        readonly record: any,
+        readonly element: HTMLElement,
+        readonly event: JQueryEventObject
+    ) {
     }
 }
