@@ -11,7 +11,13 @@ export class ODataHeaderCell extends ODataCell {
         const columnName = new TextComponent(view.columnName);
         columnName.setText(column ? column.displayText : '')
         columnName.syncTitleWithText();
-        if (column.sourceType.isNone()) {
+        if (column.canMove) {
+            this.view.makeDraggable();
+        }
+        if (column.canFilter) {
+            this.view.addCssName('clickable');
+        }
+        if (!column.canSort) {
             this.view.sortButton.hide();
         }
     }

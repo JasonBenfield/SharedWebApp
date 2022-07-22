@@ -2,6 +2,7 @@
 import { AsyncCommand, Command } from "../Components/Command";
 import { MessageAlert } from "../Components/MessageAlert";
 import { EventBuilders, EventSource } from '../Events';
+import { ButtonCommandView } from "../Views/Command";
 import { ModalODataComponent } from "./ModalODataComponent";
 import { ODataCell } from "./ODataCell";
 import { ODataCellClickedEventArgs } from "./ODataCellClickedEventArgs";
@@ -21,6 +22,7 @@ import { IODataClient, SaveChangesOptions } from "./Types";
 
 type Events = {
     dataCellClicked: ODataCellClickedEventArgs;
+    refreshed: any;
 };
 
 export class ODataComponent<TEntity> {
@@ -28,9 +30,8 @@ export class ODataComponent<TEntity> {
     private readonly alert: MessageAlert;
     private readonly modalODataComponent: ModalODataComponent;
     private readonly odataClient: IODataClient<TEntity>;
-    private readonly startColumns: ODataColumn[];
+    private readonly selectionColumn: ODataColumn;
     private readonly columns: ODataColumnAccessor;
-    private readonly endColumns: ODataColumn[];
     private readonly query: ODataQueryBuilder;
     private readonly currentPage: ODataPage;
     private readonly footerComponent: ODataFooterComponent;
@@ -42,15 +43,21 @@ export class ODataComponent<TEntity> {
     private static readonly columnStartName = 'ColumnStart';
     private static readonly columnEndName = 'ColumnEnd';
 
-    readonly when: EventBuilders<Events>;
+    private readonly eventSource = new EventSource<Events>(
+        this,
+        {
+            dataCellClicked: null as ODataCellClickedEventArgs,
+            refreshed: null as any
+        }
+    );
+    readonly when = this.eventSource.when;
 
-    constructor(private readonly view: ODataComponentView, options: ODataComponentOptions<TEntity>) {
+    constructor(private readonly view: ODataComponentView, private readonly options: ODataComponentOptions<TEntity>) {
         this.odataClient = options.odataClient;
         this.id = options.id;
         this.saveChangesOptions = options.saveChangesOptions;
         view.setViewID(`${options.id}ODataComponent`);
-        this.startColumns = options.startColumns;
-        const columnStart = new ODataColumnBuilder(
+        this.selectionColumn = new ODataColumnBuilder(
             ODataComponent.columnStartName,
             SourceType.none,
             view.columnStart()
@@ -59,9 +66,7 @@ export class ODataComponent<TEntity> {
             .disableSelect()
             .disableMove()
             .build();
-        this.startColumns.splice(0, 0, columnStart);
-        this.columns = new ODataColumnAccessor(options.columns);
-        this.endColumns = options.endColumns;
+        this.columns = new ODataColumnAccessor(options.startColumns, options.columns, options.endColumns);
         const columnEnd = new ODataColumnBuilder(
             ODataComponent.columnEndName,
             SourceType.none,
@@ -71,7 +76,7 @@ export class ODataComponent<TEntity> {
             .disableSelect()
             .disableMove()
             .build();
-        this.endColumns.push(columnEnd);
+        this.options.endColumns.push(columnEnd);
         this.query = new ODataQueryBuilder(options.defaultQuery);
         this.query.select.addRequiredFields(this.columns.requiredDatabaseColumns());
         if (options.saveChangesOptions.select) {
@@ -106,10 +111,10 @@ export class ODataComponent<TEntity> {
         this.excelCommand = new Command(this.exportToExcel.bind(this));
         this.excelCommand.add(this.view.footerComponent.addExcelButton());
         this.footerComponent.when.pageRequested.then(this.onPageRequested.bind(this));
-        this.when = this.grid.when;
         this.grid.when.sortClicked.then(this.onSortClick.bind(this));
         this.grid.when.headerCellClicked.then(this.onHeaderCellClick.bind(this));
         this.grid.when.headerCellDropped.then(this.onHeaderCellDropped.bind(this));
+        this.grid.when.dataCellClicked.then(this.onDataCellClicked.bind(this));
     }
 
     private exportToExcel() {
@@ -117,24 +122,28 @@ export class ODataComponent<TEntity> {
     }
 
     private onSortClick(column: ODataColumn) {
-        const field = this.query.orderBy.getField(column.columnName);
-        this.query.orderBy.clear();
-        if (field && field.isAscending) {
-            this.query.orderBy.addDescending(column);
+        if (column.canSort) {
+            const field = this.query.orderBy.getField(column.columnName);
+            this.query.orderBy.clear();
+            if (field && field.isAscending) {
+                this.query.orderBy.addDescending(column);
+            }
+            else {
+                this.query.orderBy.addAscending(column);
+            }
+            this.grid.orderByChanged(this.query.orderBy);
+            this.refresh();
         }
-        else {
-            this.query.orderBy.addAscending(column);
-        }
-        this.grid.orderByChanged(this.query.orderBy);
-        this.refresh();
     }
 
     private async onHeaderCellClick(column: ODataColumn) {
         if (column.columnName === ODataComponent.columnStartName) {
-            await this.modalODataComponent.showSelect();
-            await this.refresh();
+            if (this.options.canSelectColumns) {
+                await this.modalODataComponent.showSelect();
+                await this.refresh();
+            }
         }
-        else if (!column.sourceType.isNone()) {
+        else if (column.canFilter) {
             await this.modalODataComponent.showFilter(column);
             await this.refresh();
         }
@@ -145,9 +154,29 @@ export class ODataComponent<TEntity> {
         return this.refresh();
     }
 
+    private onDataCellClicked(eventArgs: ODataCellClickedEventArgs) {
+        this.eventSource.events.dataCellClicked.invoke(eventArgs);
+    }
+
     private onPageRequested(page: number) {
         this.currentPage.pageChanged(page, this.query);
         this.refresh();
+    }
+
+    showFooter() {
+        this.view.footerComponent.show();
+    }
+
+    hideFooter() {
+        this.view.footerComponent.hide();
+    }
+
+    addButtonToRefreshCommand(button: ButtonCommandView) {
+        this.refreshCommand.add(button);
+    }
+
+    addButtonToExcelCommand(button: ButtonCommandView) {
+        this.excelCommand.add(button);
     }
 
     refresh() { return this.refreshCommand.execute(); }
@@ -169,11 +198,14 @@ export class ODataComponent<TEntity> {
             return;
         }
         this.currentPage.countChanged(result.count);
-        const selectedColumnNames = this.query.select.getExplicitlySelected();
         const gridColumns: ODataColumn[] = [];
-        gridColumns.push(...this.startColumns);
+        if (this.options.canSelectColumns) {
+            gridColumns.push(this.selectionColumn);
+        }
+        gridColumns.push(...this.options.startColumns);
+        const selectedColumnNames = this.query.select.getExplicitlySelected();
         gridColumns.push(...this.columns.columns(selectedColumnNames));
-        gridColumns.push(...this.endColumns);
+        gridColumns.push(...this.options.endColumns);
         this.grid.setData(gridColumns, result.records);
         this.footerComponent.setPaging(
             this.currentPage.page,
@@ -194,5 +226,6 @@ export class ODataComponent<TEntity> {
         if (this.saveChangesOptions.orderby) {
             localStorage.setItem(`odata_${this.id}_orderby`, JSON.stringify(this.query.orderBy.serialize()));
         }
+        this.eventSource.events.refreshed.invoke();
     }
 }

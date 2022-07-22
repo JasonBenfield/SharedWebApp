@@ -16,6 +16,8 @@ export class ODataColumn {
         readonly canMove: boolean,
         readonly isRequired: boolean,
         readonly canSelect: boolean,
+        readonly canFilter: boolean,
+        readonly canSort: boolean,
         readonly view: ODataColumnView
     ) {
     }

@@ -7,7 +7,7 @@ import { JsonText } from "./JsonText";
 import { ParsedDateObject } from "./ParsedDateObject";
 
 export class AppApiContent<TArgs,TResult> {
-    private readonly resourceUrl: AppResourceUrl;
+    private resourceUrl: AppResourceUrl;
 
     constructor(
         private readonly events: AppApiEvents,
@@ -16,6 +16,10 @@ export class AppApiContent<TArgs,TResult> {
         readonly friendlyName: string
     ) {
         this.resourceUrl = resourceUrl.withAction(actionName);
+    }
+
+    withModifier(modifier: string) {
+        this.resourceUrl = this.resourceUrl.withModifier(modifier);
     }
 
     async execute(data: TArgs, errorOptions: IActionErrorOptions) {

@@ -133,10 +133,12 @@ export class SelectFieldsPanel extends BasicComponent implements IPanel {
         this.selectedFields.clearItems();
         for (const selectedField of this.select.getExplicitlySelected()) {
             const column = this.columns.column(selectedField);
-            this.selectedFields.addItem(
-                column,
-                (c, itemView: SelectedFieldListItemView) => new SelectedFieldListItem(c, itemView)
-            );
+            if (column.canSelect) {
+                this.selectedFields.addItem(
+                    column,
+                    (c, itemView: SelectedFieldListItemView) => new SelectedFieldListItem(c, itemView)
+                );
+            }
         }
         for (const column of this.columns.selectableColumns()) {
             if (!this.select.containsExplicitySelected(column.columnName)) {

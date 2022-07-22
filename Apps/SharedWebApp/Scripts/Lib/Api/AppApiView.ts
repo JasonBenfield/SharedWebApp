@@ -3,13 +3,17 @@ import { UrlBuilder } from "../UrlBuilder";
 import { WebPage } from "./WebPage";
 
 export class AppApiView<TArgs> {
-    private readonly resourceUrl: AppResourceUrl;
+    private resourceUrl: AppResourceUrl;
 
     constructor(
         resourceUrl: AppResourceUrl,
         actionName: string
     ) {
         this.resourceUrl = resourceUrl.withAction(actionName);
+    }
+
+    withModifier(modifier: string) {
+        this.resourceUrl = this.resourceUrl.withModifier(modifier);
     }
 
     getUrl(data: TArgs) {
@@ -32,18 +36,18 @@ export class AppApiView<TArgs> {
         return urlBuilder;
     }
 
-    open(data: TArgs) {
-        const webPage = this.createWebPage(data);
+    open(data: TArgs, modifier?: string) {
+        const webPage = this.createWebPage(data, modifier);
         webPage.open();
     }
 
-    openWindow(data: TArgs) {
-        let webPage = this.createWebPage(data);
+    openWindow(data: TArgs, modifier?: string) {
+        let webPage = this.createWebPage(data, modifier);
         webPage.openWindow();
     }
 
-    private createWebPage(data: TArgs) {
-        let urlBuilder = this.getUrl(data);
+    private createWebPage(data: TArgs, modifier?: string) {
+        let urlBuilder = this.getModifierUrl(modifier, data);
         return new WebPage(urlBuilder);
     }
 }

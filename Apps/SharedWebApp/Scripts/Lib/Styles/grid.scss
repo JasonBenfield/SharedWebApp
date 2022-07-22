@@ -19,10 +19,6 @@
     box-shadow: inset 0 0 0 9999px var(--xti-grid-accent-bg);
 }
 
-.grid-header {
-    cursor: pointer;
-}
-
 .grid-row, .form-group {
     padding: $table-cell-padding-y $table-cell-padding-x;
     color: $list-group-color;

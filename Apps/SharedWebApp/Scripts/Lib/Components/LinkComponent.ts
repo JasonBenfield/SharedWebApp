@@ -36,4 +36,8 @@ export class LinkComponent extends BasicComponent {
         }
         this.view.setHref(this.href);
     }
+
+    show() { this.view.show(); }
+
+    hide() { this.view.hide(); }
 }

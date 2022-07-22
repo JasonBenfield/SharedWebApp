@@ -14,7 +14,10 @@ export class ODataComponentOptions<TEntity> {
         readonly startColumns: ODataColumn[],
         readonly columns: ODataColumns<TEntity>,
         readonly endColumns: ODataColumn[],
-        readonly defaultQuery: ISerializableQuery
+        readonly defaultQuery: ISerializableQuery,
+        readonly canSelectColumns: boolean,
+        readonly canFilter: boolean,
+        readonly canSort: boolean
     ) {
     }
 }

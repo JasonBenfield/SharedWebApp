@@ -86,7 +86,6 @@ export class ODataComponentView extends GridView {
                     cellView.removeCssName('grid-heading');
                     cellView.columnName.hide();
                     cellView.sortButton.hide();
-                    cellView.makeDraggable();
                 }
             );
     }

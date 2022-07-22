@@ -29,7 +29,6 @@ class MainPage extends BasicPage {
 
     private onFormSubmit() {
         this.saveCommand.execute();
-        const dbg = '';
     }
 
     private async test() {

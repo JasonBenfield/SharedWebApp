@@ -15,6 +15,8 @@ export class ODataColumnBuilder {
     private canMove = true;
     private isRequired = false;
     private canSelect = true;
+    private canSort = true;
+    private canFilter = true;
     private formatter: IValueFormatter = new DefaultValueFormatter();
     private createHeaderCell: ICreateHeaderCell =
         (column: ODataColumn, view: ODataHeaderCellView) => new ODataHeaderCell(column, view);
@@ -33,6 +35,10 @@ export class ODataColumnBuilder {
         private readonly view: ODataColumnViewBuilder = new ODataColumnViewBuilder()
     ) {
         this.displayText = this.columnName;
+        if (sourceType === SourceType.none) {
+            this.canSort = false;
+            this.canFilter = false;
+        }
     }
 
     setDisplayText(displayText: string) {
@@ -52,6 +58,16 @@ export class ODataColumnBuilder {
 
     disableSelect() {
         this.canSelect = false;
+        return this;
+    }
+
+    disableFilter() {
+        this.canFilter = false;
+        return this;
+    }
+
+    disableSort() {
+        this.canSort = false;
         return this;
     }
 
@@ -81,6 +97,8 @@ export class ODataColumnBuilder {
             this.canMove,
             this.isRequired,
             this.canSelect,
+            this.canFilter,
+            this.canSort,
             this.view.build()
         );
     }

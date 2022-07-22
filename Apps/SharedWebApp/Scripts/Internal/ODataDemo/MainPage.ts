@@ -33,6 +33,9 @@ class MainPage extends BasicPage {
             columns.Salary
         );
         options.saveChanges();
+        //options.disableSelectColumns();
+        //options.disableFilter();
+        //options.disableSort();
         const odataGroup = new AppApiQuery<IEmptyRequest, IEmployee>(
             new AppApiEvents(() => { }),
             AppResourceUrl.odata(
@@ -51,6 +54,7 @@ class MainPage extends BasicPage {
         options.endColumns.add('Action', this.view.btnGroupColumn);
         options.endColumns.add('Dropdown', this.view.dropdownColumn);
         const odataComponent = new ODataComponent(this.view.odataComponentView, options.build());
+        //odataComponent.hideFooter();
         odataComponent.when.dataCellClicked.then(this.onDataCellClick.bind(this));
         odataComponent.refresh();
     }

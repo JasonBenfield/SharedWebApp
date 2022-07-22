@@ -58,7 +58,7 @@ export class FormGroupTextView extends FormGroupView {
     constructor(container: BasicComponentView) {
         super(container);
         this.textValue = this.valueCell.addView(TextBlockView);
-        this.valueCell.addCssName('form-control-plaintext');
+        this.textValue.addCssName('form-control-plaintext');
     }
 }
 

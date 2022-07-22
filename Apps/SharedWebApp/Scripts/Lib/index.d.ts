@@ -32,6 +32,17 @@ interface ILogoutRequest {
     ReturnUrl: string;
 }
 
+interface IResourcePath {
+    Group: string;
+    Action: string;
+    ModKey: string;
+}
+
+interface IResourcePathAccess {
+    Path: IResourcePath;
+    HasAccess: boolean;
+}
+
 interface PageContext {
     WebAppDomains: IAppVersionDomain[];
     CacheBust: string;
@@ -100,10 +111,6 @@ interface IAppApiView<TArgs> {
     getUrl(data: TArgs);
     open(data: TArgs);
     openWindow(data: TArgs);
-}
-
-interface IUserGroup {
-    readonly Index: IAppApiView<IUserStartRequest>;
 }
 
 interface IErrorList {

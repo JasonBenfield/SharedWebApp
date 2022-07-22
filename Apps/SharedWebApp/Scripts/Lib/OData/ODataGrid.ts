@@ -139,24 +139,26 @@ export class ODataGrid<TEntity> extends BasicComponent {
 
     private onClick(sourceElement: HTMLElement, event: JQueryEventObject) {
         const row = this.getComponentByElement(sourceElement) as ODataRow;
-        const cell = row.getCellByElement(sourceElement);
-        if (cell) {
-            if (cell.record) {
-                this.eventSource.events.dataCellClicked.invoke(
-                    new ODataCellClickedEventArgs(
-                        row,
-                        cell.column,
-                        cell.record,
-                        sourceElement,
-                        event
-                    )
-                );
-            }
-            else if (sourceElement.classList.contains('odata-sort-button')) {
-                this.eventSource.events.sortClicked.invoke(cell.column);
-            }
-            else {
-                this.eventSource.events.headerCellClicked.invoke(cell.column);
+        if (row) {
+            const cell = row.getCellByElement(sourceElement);
+            if (cell) {
+                if (cell.record) {
+                    this.eventSource.events.dataCellClicked.invoke(
+                        new ODataCellClickedEventArgs(
+                            row,
+                            cell.column,
+                            cell.record,
+                            sourceElement,
+                            event
+                        )
+                    );
+                }
+                else if (sourceElement.classList.contains('odata-sort-button')) {
+                    this.eventSource.events.sortClicked.invoke(cell.column);
+                }
+                else {
+                    this.eventSource.events.headerCellClicked.invoke(cell.column);
+                }
             }
         }
     }

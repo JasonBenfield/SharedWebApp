@@ -1,7 +1,10 @@
 ﻿import { FlexCss } from "../FlexCss";
 import { BasicComponentView } from "./BasicComponentView";
 import { BasicContainerView } from "./BasicContainerView";
+import { ButtonView } from "./ButtonView";
+import { ButtonCommandView } from "./Command";
 import { LinkView } from "./LinkView";
+import { TextButtonView } from "./TextButtonView";
 import { TextLinkView } from "./TextLinkView";
 import { ViewConstructor } from "./Types";
 
@@ -20,6 +23,24 @@ export class NavView extends BasicContainerView {
 
     setFlexCss(flexCss: FlexCss) {
         this.setCss('flex', flexCss && flexCss.cssClass().toString());
+    }
+
+    addButton() {
+        const link = this.addView(ButtonView);
+        link.addCssName('nav-link');
+        return link;
+    }
+
+    addTextButton() {
+        const link = this.addView(TextButtonView);
+        link.addCssName('nav-link');
+        return link;
+    }
+
+    addButtonCommand() {
+        const link = this.addView(ButtonCommandView);
+        link.addCssName('nav-link');
+        return link;
     }
 
     addTextLink<TLinkView extends TextLinkView>(ctor?: ViewConstructor<TLinkView>) {
