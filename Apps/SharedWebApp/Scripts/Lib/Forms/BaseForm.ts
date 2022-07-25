@@ -20,7 +20,7 @@ export class BaseForm {
         this.modalError.when.errorSelected.then(this.onErrorSelected.bind(this));
     }
 
-    handleSubmit(action: () => void) {
+    handleSubmit(action: (el: HTMLElement, evt: JQueryEventObject) => void) {
         this.view.handleSubmit(action);
     }
 
@@ -103,7 +103,7 @@ export class BaseForm {
         if (validationResult.hasErrors()) {
             const errors = validationResult.values();
             this.modalError.show(errors, `Unable to ${action.friendlyName}`);
-            return new FormSaveResult(null, errors);
+            return new FormSaveResult<TResult>(null, errors);
         }
         let result: TResult;
         const errors: IErrorModel[] = [];
@@ -118,7 +118,7 @@ export class BaseForm {
                 caption = ex.getCaption();
             }
             else {
-                let error = new ErrorModel(ex.message, '', '');
+                const error = new ErrorModel(ex.message, '', '');
                 errors.push(error);
                 new ConsoleLog().error(ex.message);
             }

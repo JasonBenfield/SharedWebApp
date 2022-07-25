@@ -8,17 +8,12 @@ export class TextLinkComponent extends TextComponent {
     static readonly doNothing = 'javascript:;';
 
     protected readonly view: BasicComponentView & ITextComponentView & ILinkView;
-    private _data: any;
     private href: string;
 
     constructor(view: BasicComponentView & ITextComponentView & ILinkView) {
         super(view);
         this.setHrefToDoNothing();
     }
-
-    get data() { return this._data; }
-
-    set data(data: any) { this._data = data; }
 
     setHrefToDoNothing() {
         this.setHref(TextLinkComponent.doNothing);

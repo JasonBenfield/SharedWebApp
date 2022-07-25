@@ -9,6 +9,7 @@ type Events<TValue> = { valueChanged: TValue };
 export class InputControl<TValue> extends BasicComponent {
     protected readonly view: InputView;
     private readonly debouncedSetFocus: DebouncedAction;
+    private previousValue: TValue;
 
     private readonly eventSource = new EventSource<Events<TValue>>(this, { valueChanged: null as TValue });
     readonly when = this.eventSource.when;
@@ -29,19 +30,23 @@ export class InputControl<TValue> extends BasicComponent {
 
     private onInputValueChanged() {
         const viewValue = this.view.getValue();
-        const value = this.viewValue.setValueFromView(viewValue);
-        this.eventSource.events.valueChanged.invoke(value);
+        this.viewValue.setValueFromView(viewValue);
         this.debouncedOnInputValueChanged.execute();
     }
 
     private debouncedOnInputValueChanged = new DebouncedAction(
         () => {
+            const currentRawValue = this.view.getValue();
             if (!this.view.hasFocus()) {
-                const currentValue = this.view.getValue();
-                const newValue = this.viewValue.toView();
-                if (newValue !== currentValue) {
-                    this.view.setValue(newValue);
+                const newViewValue = this.viewValue.toView();
+                if (newViewValue !== currentRawValue) {
+                    this.view.setValue(newViewValue);
                 }
+            }
+            const currentValue = this.getValue();
+            if (this.getValue() !== this.previousValue) {
+                this.eventSource.events.valueChanged.invoke(currentValue);
+                this.previousValue = currentValue;
             }
         },
         700

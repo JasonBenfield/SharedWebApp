@@ -2,7 +2,7 @@
 import { BasicComponent } from "../Components/BasicComponent";
 import { Command } from "../Components/Command";
 import { TextComponent } from "../Components/TextComponent";
-import { TextLink } from "../Components/TextLink";
+import { TextLinkComponent } from "../Components/TextLinkComponent";
 import { FilterColumnOptionsBuilder } from "./FilterColumnOptionsBuilder";
 import { FilterConditionClauseComponent } from "./FilterConditionClauseComponent";
 import { FilterConditionClause } from "./ODataQueryFilterBuilder";
@@ -34,8 +34,8 @@ export class SelectFilterAppendPanel extends BasicComponent implements IPanel {
     constructor(view: SelectFilterAppendPanelView) {
         super(view.body);
         this.panelView = view;
-        new TextLink(view.appendItem).setText('Append to Filter');
-        new TextLink(view.clearItem).setText('Replace Filter');
+        new TextLinkComponent(view.appendItem).setText('Append to Filter');
+        new TextLinkComponent(view.clearItem).setText('Replace Filter');
         view.handleLinkClick(this.onItemClick.bind(this));
         new Command(this.back.bind(this)).add(view.backButton);
     }

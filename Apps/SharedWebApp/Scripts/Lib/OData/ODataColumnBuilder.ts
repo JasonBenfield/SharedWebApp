@@ -8,10 +8,10 @@ import { ODataHeaderCellView } from "./ODataHeaderCellView";
 import { ODataTextCell } from "./ODataTextCell";
 import { ODataTextCellView } from "./ODataTextCellView";
 import { SourceType } from "./SourceType";
-import { ICreateDataCell, ICreateHeaderCell, IValueFormatter } from "./Types";
+import { ICreateDataCell, ICreateHeaderCell, ISuggestedValueGetter, IValueFormatter } from "./Types";
 
 export class ODataColumnBuilder {
-    private displayText;
+    private displayText: string;
     private canMove = true;
     private isRequired = false;
     private canSelect = true;
@@ -26,7 +26,8 @@ export class ODataColumnBuilder {
                 return new ODataTextCell(rowIndex, column, record, formatter, view);
             }
             return new ODataCell(rowIndex, column, record, view);
-        }
+        };
+    private suggestedValueGetter: ISuggestedValueGetter;
             
 
     constructor(
@@ -86,6 +87,15 @@ export class ODataColumnBuilder {
         return this;
     }
 
+    hasSuggestedValueGetter() {
+        return Boolean(this.suggestedValueGetter);
+    }
+
+    setSuggestedValueGetter(suggestedValueGetter: ISuggestedValueGetter) {
+        this.suggestedValueGetter = suggestedValueGetter;
+        return this;
+    }
+
     build() {
         return new ODataColumn(
             this.columnName,
@@ -99,7 +109,8 @@ export class ODataColumnBuilder {
             this.canSelect,
             this.canFilter,
             this.canSort,
-            this.view.build()
+            this.view.build(),
+            this.suggestedValueGetter
         );
     }
 }

@@ -3,8 +3,9 @@ import { SingleActivePanel } from "../Panel/SingleActivePanel";
 import { AbsoluteDateRangePanel } from "./AbsoluteDateRangePanel";
 import { AbsoluteNumberRangePanel } from "./AbsoluteNumberRangePanel";
 import { FilterColumnOptionsBuilder } from "./FilterColumnOptionsBuilder";
-import { FilterSelection, FilterSelectionAbsoluteDateRange, FilterSelectionAbsoluteNumberRange, FilterSelectionRelativeDateRange } from "./FilterSelection";
+import { FilterSelectionAbsoluteDateRange, FilterSelectionAbsoluteNumberRange, FilterSelectionEqual, FilterSelectionNotEqual, FilterSelectionRelativeDateRange, FilterSelectionStringEqual, FilterSelectionStringNotEqual } from "./FilterSelection";
 import { FilterValueInputPanel } from "./FilterValueInputPanel";
+import { FilterMultiValueInputPanel } from "./FilterMultiValueInputPanel";
 import { FilterWorkflowView } from "./FilterWorkflowView";
 import { ODataColumn } from "./ODataColumn";
 import { ODataQueryFilterBuilder } from "./ODataQueryFilterBuilder";
@@ -30,6 +31,7 @@ export class FilterWorkflow implements IPanel {
     private readonly selectFilterAppendPanel: SelectFilterAppendPanel;
     private readonly selectFilterConditionPanel: SelectFilterConditionPanel;
     private readonly filterValueInputPanel: FilterValueInputPanel;
+    private readonly filterMultiValueInputPanel: FilterMultiValueInputPanel;
     private readonly relativeDateRangePanel: RelativeDateRangePanel;
     private readonly absoluteDateRangePanel: AbsoluteDateRangePanel;
     private readonly absoluteNumberRangePanel: AbsoluteNumberRangePanel;
@@ -47,6 +49,9 @@ export class FilterWorkflow implements IPanel {
         );
         this.filterValueInputPanel = this.panels.add(
             new FilterValueInputPanel(view.filterValueInputPanel)
+        );
+        this.filterMultiValueInputPanel = this.panels.add(
+            new FilterMultiValueInputPanel(view.filterMultiValueInputPanel)
         );
         this.relativeDateRangePanel = this.panels.add(
             new RelativeDateRangePanel(view.relativeDateRangePanel)
@@ -84,7 +89,17 @@ export class FilterWorkflow implements IPanel {
             else if (selection instanceof FilterSelectionAbsoluteNumberRange) {
                 this.activateAbsoluteNumberRangePanel();
             }
+            else if (
+                selection instanceof FilterSelectionEqual ||
+                selection instanceof FilterSelectionNotEqual ||
+                selection instanceof FilterSelectionStringEqual ||
+                selection instanceof FilterSelectionStringNotEqual
+            ) {
+                this.filterMultiValueInputPanel.updateTitle();
+                this.activateFilterMultiValueInputPanel();
+            }
             else {
+                this.filterValueInputPanel.updateTitle();
                 this.activateFilterValueInputPanel();
             }
         }
@@ -96,6 +111,14 @@ export class FilterWorkflow implements IPanel {
     private async activateFilterValueInputPanel() {
         this.panels.activate(this.filterValueInputPanel);
         const result = await this.filterValueInputPanel.start();
+        if (result.done) {
+            this.awaitable.resolve(Result.done());
+        }
+    }
+
+    private async activateFilterMultiValueInputPanel() {
+        this.panels.activate(this.filterMultiValueInputPanel);
+        const result = await this.filterMultiValueInputPanel.start();
         if (result.done) {
             this.awaitable.resolve(Result.done());
         }
@@ -130,6 +153,7 @@ export class FilterWorkflow implements IPanel {
         this.selectFilterAppendPanel.setOptions(this.options);
         this.selectFilterConditionPanel.setOptions(this.options);
         this.filterValueInputPanel.setOptions(this.options);
+        this.filterMultiValueInputPanel.setOptions(this.options);
         this.relativeDateRangePanel.setOptions(this.options);
         this.absoluteDateRangePanel.setOptions(this.options);
         this.absoluteNumberRangePanel.setOptions(this.options);

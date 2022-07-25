@@ -7,6 +7,8 @@ import { ODataComponentOptions } from "./ODataComponentOptions";
 import { ODataQueryBuilder } from "./ODataQueryBuilder";
 import { ODataRow } from "./ODataRow";
 import { SourceType } from "./SourceType";
+import { SuggestedValueListGetter } from "./SuggestedValueListGetter";
+import { SuggestedValueODataGetter } from "./SuggestedValueODataGetter";
 import { IODataClient, SaveChangesOptions } from "./Types";
 
 export type IODataColumnsBuilder<TEntity> = {
@@ -99,6 +101,16 @@ export class ODataComponentOptionsBuilder<TEntity> {
                 }
                 if (!this.canSort) {
                     column.disableSort();
+                }
+                if (!column.hasSuggestedValueGetter()) {
+                    if (column.sourceType.isString()) {
+                        column.setSuggestedValueGetter(
+                            new SuggestedValueODataGetter(this.odataClient, column.columnName)
+                        );
+                    }
+                    else {
+                        column.setSuggestedValueGetter(new SuggestedValueListGetter([]));
+                    }
                 }
                 columns[key] = column.build();
             }

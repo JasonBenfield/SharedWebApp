@@ -19,6 +19,7 @@ export abstract class InputFormGroup<TValue> extends SimpleFieldFormGroup<TValue
     ) {
         super(prefix, name, view);
         let valueName = this.getName();
+        this.view.caption.setFor(valueName);
         this.view.input.setViewID(valueName);
         this.view.input.setViewName(valueName);
         this.input = new InputControl(view.input, viewValue);

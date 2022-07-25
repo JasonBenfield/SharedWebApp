@@ -6,7 +6,7 @@ namespace SharedWebApp.Api;
 internal sealed class EmployeeQueryAction : QueryAction<EmployeeEntity>
 {
     public IQueryable<EmployeeEntity> Execute(ODataQueryOptions<EmployeeEntity> options) =>
-        Enumerable.Range(1, 20)
+        Enumerable.Range(1, 40)
             .Select
             (
                 i => new EmployeeEntity
@@ -14,7 +14,8 @@ internal sealed class EmployeeQueryAction : QueryAction<EmployeeEntity>
                     ID = i,
                     EmployeeName = $"Employee {i}",
                     Salary = i * 2.1M,
-                    DateHired = DateTime.Today.AddDays(-i)
+                    DateHired = DateTime.Today.AddDays(-i),
+                    Department = i % 2 == 0 ? "IT" : "Finance"
                 }
             )
             .AsQueryable();

@@ -30,4 +30,8 @@ export class SelectedFieldListItemView extends GridListGroupItemView {
     styleAsDragEnd() {
         this.resetOpacity();
     }
+
+    hideDeleteButton() {
+        this.deleteButton.hide();
+    }
 }

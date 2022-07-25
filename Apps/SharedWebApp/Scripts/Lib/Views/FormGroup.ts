@@ -32,7 +32,7 @@ export class FormGroupGridView extends GridView {
 
 export class FormGroupView extends BasicComponentView {
     readonly captionCell: GridCellView;
-    readonly caption: BasicTextComponentView;
+    readonly caption: TextLabelView;
     readonly valueCell: GridCellView;
 
     constructor(container: BasicComponentView) {

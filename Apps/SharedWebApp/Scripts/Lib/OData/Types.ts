@@ -34,3 +34,11 @@ export interface IODataClient<TEntity> {
     toExcel(odataQuery: string);
     execute(odataQuery: string): Promise<ODataResult<TEntity>>;
 }
+
+export interface ISuggestedValueGetter {
+    setIgnoreCase(ignoreCase: boolean);
+
+    getSuggestedValues(inputValue: any): Promise<any[]>;
+
+    exclude(values: any[]);
+}

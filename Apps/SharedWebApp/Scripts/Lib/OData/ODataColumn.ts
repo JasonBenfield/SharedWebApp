@@ -3,7 +3,7 @@ import { NumberValueFormatter } from "./NumberValueFormatter";
 import { ODataColumnView } from "./ODataColumnView";
 import { FilterField } from "./ODataQueryFilterBuilder";
 import { SourceType } from "./SourceType";
-import { ICreateDataCell, ICreateHeaderCell, IValueFormatter } from "./Types";
+import { ICreateDataCell, ICreateHeaderCell, ISuggestedValueGetter, IValueFormatter } from "./Types";
 
 export class ODataColumn {
     constructor(
@@ -18,7 +18,8 @@ export class ODataColumn {
         readonly canSelect: boolean,
         readonly canFilter: boolean,
         readonly canSort: boolean,
-        readonly view: ODataColumnView
+        readonly view: ODataColumnView,
+        readonly suggestedValueGetter: ISuggestedValueGetter
     ) {
     }
 

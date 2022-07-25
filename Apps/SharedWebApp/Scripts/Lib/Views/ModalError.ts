@@ -19,6 +19,8 @@ export class ModalErrorView extends ModalComponentView {
 
     constructor(container: BasicComponentView) {
         super(container);
+        this.frame.addCssName('modal-dialog-scrollable');
+        this.frame.setMaxWidth(CssLengthUnit.percentage(80));
         this.body.setViewName(ModalErrorView.name);
         this.body.addCssName('alert alert-danger m-0 rounded-0 border-danger border-left-0 border-right-0');
         this.title = this.header.addView(TextHeading5View);

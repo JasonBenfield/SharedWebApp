@@ -1,4 +1,5 @@
-﻿import { FilteredArray, MappedArray } from "../Enumerable";
+﻿import { join } from "lodash";
+import { FilteredArray, MappedArray } from "../Enumerable";
 import { JoinedStrings } from "../JoinedStrings";
 import { ODataColumn } from "./ODataColumn";
 import { ODataColumnBuilder } from "./ODataColumnBuilder";
@@ -30,6 +31,7 @@ export interface ISelectField {
 }
 
 export class ODataQueryBuilder {
+    readonly apply: ODataQueryApplyBuilder;
     readonly select: ODataQuerySelectBuilder;
     readonly filter: ODataQueryFilterBuilder;
     readonly orderBy: ODataQueryOrderByBuilder;
@@ -37,6 +39,7 @@ export class ODataQueryBuilder {
     private _top: number;
 
     constructor(serialized?: ISerializableQuery) {
+        this.apply = new ODataQueryApplyBuilder();
         this.select = new ODataQuerySelectBuilder(serialized && serialized.select);
         this.filter = new ODataQueryFilterBuilder(serialized && serialized.filter);
         this.orderBy = new ODataQueryOrderByBuilder(serialized && serialized.orderBy);
@@ -61,6 +64,10 @@ export class ODataQueryBuilder {
 
     build() {
         const parts: string[] = []
+        const apply = this.apply.build();
+        if (apply) {
+            parts.push(`$apply=${apply}`);
+        }
         const select = this.select.build();
         if (select) {
             parts.push(`$select=${select}`);
@@ -295,7 +302,7 @@ export class ODataQueryOrderByBuilder {
 
     private formatField(orderByField: IOrderByField) {
         const direction = orderByField.isAscending ? '' : ' desc';
-        return `${orderByField.field} ${direction}`;
+        return `${orderByField.field}${direction}`;
     }
 
     serialize() {
@@ -303,5 +310,130 @@ export class ODataQueryOrderByBuilder {
             fields: this.fields
         };
         return serialized;
+    }
+}
+
+export type ApplyClauseType =
+    ODataQueryFilterBuilder |
+    ODataQueryGroupByBuilder |
+    ODataQueryAggregateBuilder;
+
+export class ODataQueryApplyBuilder {
+    private readonly clauses: ApplyClauseType[] = [];
+
+    addFilter() {
+        const filter = new ODataQueryFilterBuilder();
+        this.clauses.push(filter);
+        return filter;
+    }
+
+    addGroupBy() {
+        const groupBy = new ODataQueryGroupByBuilder();
+        this.clauses.push(groupBy);
+        return groupBy;
+    }
+
+    addAggregate() {
+        const aggregate = new ODataQueryAggregateBuilder();
+        this.clauses.push(aggregate);
+        return aggregate;
+    }
+
+    build() {
+        return new JoinedStrings(
+            '/',
+            new MappedArray(
+                this.clauses,
+                c => {
+                    let query = c.build();
+                    if (query) {
+                        if (c instanceof ODataQueryFilterBuilder) {
+                            query = `filter(${query})`;
+                        }
+                        else if (c instanceof ODataQueryGroupByBuilder) {
+                            query = `groupby(${query})`;
+                        }
+                        else if (c instanceof ODataQueryAggregateBuilder) {
+                            query = `aggregate(${query})`;
+                        }
+                    }
+                    return query;
+                }
+            )
+        ).value();
+    }
+}
+
+export class ODataQueryGroupByBuilder {
+    private readonly fields: string[] = [];
+    readonly aggregate = new ODataQueryAggregateBuilder();
+
+    addField(field: string) {
+        this.fields.push(field);
+        return this;
+    }
+
+    build() {
+        const parts: string[] = [];
+        if (this.fields.length > 0) {
+            parts.push(
+                new JoinedStrings(
+                    ',',
+                    new MappedArray(
+                        this.fields,
+                        f => `(${f})`
+                    )
+                ).value()
+            );
+            const aggregate = this.aggregate.build();
+            if (aggregate) {
+                parts.push(`aggregate(${aggregate})`);
+            }
+        }
+        return new JoinedStrings(',', parts).value();
+    }
+}
+
+export class ODataQueryAggregateBuilder {
+    private readonly aggFuncs: ODataQueryAggregateFunction[] = [];
+
+    addFunction(aggFunc: ODataQueryAggregateFunction) {
+        this.aggFuncs.push(aggFunc);
+        return this;
+    }
+
+    build() {
+        return new JoinedStrings(
+            ',',
+            new MappedArray(
+                this.aggFuncs,
+                f => f.toQuery()
+            )
+        ).value()
+    }
+}
+
+export class ODataQueryAggregateFunction {
+    static sum(inputField: string, outputField = `sum${inputField}`) {
+        return new ODataQueryAggregateFunction(inputField, 'sum', outputField);
+    }
+
+    static max(inputField: string, outputField = `max${inputField}`) {
+        return new ODataQueryAggregateFunction(inputField, 'max', outputField);
+    }
+
+    static min(inputField: string, outputField = `min${inputField}`) {
+        return new ODataQueryAggregateFunction(inputField, 'min', outputField);
+    }
+
+    constructor(
+        private readonly inputField: string,
+        private readonly functionName: string,
+        private readonly outputField: string
+    ) {
+    }
+
+    toQuery() {
+        return `${this.inputField} with ${this.functionName} as ${this.outputField}`;
     }
 }

@@ -69,7 +69,6 @@ export class FilterValueInputPanel implements IPanel {
 
     setOptions(options: FilterColumnOptionsBuilder) {
         this.options = options;
-        this.title.setText('Filter');
         if (options.column.sourceType.isString()) {
             this.view.showIgnoreCase();
         }
@@ -92,6 +91,13 @@ export class FilterValueInputPanel implements IPanel {
         this.view.ignoreCaseInput.setValue(true);
     }
 
+    updateTitle() {
+        const columnText = this.options && this.options.column && this.options.column.displayText;
+        const condition = this.options && this.options.getSelection();
+        const conditionText = condition && condition.displayText;
+        this.title.setText(`${columnText} ${conditionText}`);
+    }
+
     private getValue() {
         return this.input.getValue();
     }
@@ -101,13 +107,7 @@ export class FilterValueInputPanel implements IPanel {
     }
 
     start() {
-        new DelayedAction(
-            () => {
-                this.view.valueInput.setFocus();
-                this.operation.setText(`${this.options.column.displayText} ${this.options.getSelection().displayText}`);
-            },
-            700
-        ).execute();
+        this.view.valueInput.setFocus();
         return this.awaitable.start();
     }
 

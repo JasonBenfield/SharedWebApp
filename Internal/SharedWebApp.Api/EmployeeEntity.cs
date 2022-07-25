@@ -6,4 +6,5 @@ public sealed class EmployeeEntity
     public string EmployeeName { get; set; } = "";
     public DateTimeOffset DateHired { get; set; }
     public decimal Salary { get; set; }
+    public string Department { get; set; } = "";
 }

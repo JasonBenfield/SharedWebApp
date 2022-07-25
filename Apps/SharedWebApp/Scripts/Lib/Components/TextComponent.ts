@@ -6,10 +6,15 @@ export class TextComponent extends BasicComponent {
     protected readonly view: BasicComponentView & ITextComponentView;
     private text: string;
     private formatTitle: (text: string) => string;
+    private _data: any;
 
     constructor(view: BasicComponentView & ITextComponentView) {
         super(view);
     }
+
+    get data() { return this._data; }
+
+    set data(data: any) { this._data = data; }
 
     show() { this.view.show(); }
 

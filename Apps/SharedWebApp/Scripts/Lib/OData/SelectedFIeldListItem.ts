@@ -9,6 +9,9 @@ export class SelectedFieldListItem extends BasicComponent {
     constructor(readonly column: ODataColumn, view: SelectedFieldListItemView) {
         super(view);
         new TextComponent(view.fieldName).setText(column.displayText);
+        if (!column.canSelect) {
+            view.hideDeleteButton();
+        }
     }
 
     styleAsDragStart() {

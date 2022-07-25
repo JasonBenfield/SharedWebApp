@@ -33,6 +33,7 @@ class MainPage extends BasicPage {
             columns.Salary
         );
         options.saveChanges();
+        columns.EmployeeName.disableSelect();
         //options.disableSelectColumns();
         //options.disableFilter();
         //options.disableSort();

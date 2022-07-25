@@ -49,6 +49,10 @@ export class FilterValueInputPanelView extends ModalODataPanelView {
         this.saveButton.useOutlineStyle(ContextualClass.primary);
     }
 
+    setViewID(id: string) {
+        this.ignoreCaseFormCheck.setViewID(`${id}IgnoreCase`);
+    }
+
     showIgnoreCase() { this.ignoreCaseFormCheck.show(); }
 
     hideIgnoreCase() { this.ignoreCaseFormCheck.hide(); }

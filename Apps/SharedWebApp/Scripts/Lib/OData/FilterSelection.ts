@@ -1,7 +1,7 @@
 ﻿import { DateRange } from "../DateRange";
 import { NumberRange } from "../NumberRange";
 import { RelativeDateRange } from "../RelativeDateRange";
-import { FilterAbsoluteDateRange, FilterAbsoluteNumberRange, FilterConditionFunction, FilterConditionOperation, FilterField, FilterFieldFunction, FilterRelativeDateRange, FilterValue, ODataQueryFilterBuilder } from "./ODataQueryFilterBuilder";
+import { FilterAbsoluteDateRange, FilterAbsoluteNumberRange, FilterConditionFunction, FilterConditionOperation, FilterField, FilterFieldFunction, FilterRelativeDateRange, FilterStringValue, FilterValue, ODataQueryFilterBuilder } from "./ODataQueryFilterBuilder";
 import { SourceType } from "./SourceType";
 
 export interface FilterSelection {
@@ -19,7 +19,7 @@ export class FilterSelectionEqual implements FilterSelection {
     applyToQuery(
         filter: ODataQueryFilterBuilder,
         field: FilterField | FilterFieldFunction,
-        value: number | Date
+        value: number | Date | number[] | Date[]
     ) {
         filter.add(FilterConditionOperation.equal(field, new FilterValue(value)));
     }
@@ -35,7 +35,7 @@ export class FilterSelectionNotEqual implements FilterSelection {
     applyToQuery(
         filter: ODataQueryFilterBuilder,
         field: FilterField | FilterFieldFunction,
-        value: number | Date
+        value: number | Date | number[] | Date[]
     ) {
         filter.add(FilterConditionOperation.notEqual(field, new FilterValue(value)));
     }
@@ -135,22 +135,6 @@ export class FilterSelectionIsFalse implements FilterSelection {
     }
 }
 
-function getStringField(
-    field: FilterField,
-    ignoreCase: boolean
-) {
-    return ignoreCase
-        ? FilterFieldFunction.toLower(field)
-        : field;
-}
-
-function getStringValue(
-    value: string,
-    ignoreCase: boolean
-) {
-    return ignoreCase && value ? value.toLowerCase() : value;
-}
-
 export class FilterSelectionStringEqual implements FilterSelection {
     readonly displayText = 'Equal To';
 
@@ -162,12 +146,12 @@ export class FilterSelectionStringEqual implements FilterSelection {
         filter: ODataQueryFilterBuilder,
         field: FilterField,
         ignoreCase: boolean,
-        value: string
+        value: string | string[]
     ) {
         filter.add(
             FilterConditionOperation.equal(
-                getStringField(field, ignoreCase),
-                new FilterValue(getStringValue(value, ignoreCase))
+                field,
+                new FilterStringValue(ignoreCase, value)
             )
         );
     }
@@ -184,12 +168,12 @@ export class FilterSelectionStringNotEqual implements FilterSelection {
         filter: ODataQueryFilterBuilder,
         field: FilterField,
         ignoreCase: boolean,
-        value: string
+        value: string | string[]
     ) {
         filter.add(
             FilterConditionOperation.notEqual(
-                getStringField(field, ignoreCase),
-                new FilterValue(getStringValue(value, ignoreCase))
+                field,
+                new FilterStringValue(ignoreCase, value)
             )
         );
     }
@@ -206,12 +190,12 @@ export class FilterSelectionStartsWith implements FilterSelection {
         filter: ODataQueryFilterBuilder,
         field: FilterField,
         ignoreCase: boolean,
-        value: string
+        value: string | string[]
     ) {
         filter.add(
             FilterConditionFunction.startsWith(
-                getStringField(field, ignoreCase),
-                new FilterValue(getStringValue(value, ignoreCase))
+                field,
+                new FilterStringValue(ignoreCase, value)
             )
         );
     }
@@ -232,8 +216,8 @@ export class FilterSelectionEndsWith implements FilterSelection {
     ) {
         filter.add(
             FilterConditionFunction.endsWith(
-                getStringField(field, ignoreCase),
-                new FilterValue(getStringValue(value, ignoreCase))
+                field,
+                new FilterStringValue(ignoreCase, value)
             )
         );
     }
@@ -254,8 +238,8 @@ export class FilterSelectionContains implements FilterSelection {
     ) {
         filter.add(
             FilterConditionFunction.contains(
-                getStringField(field, ignoreCase),
-                new FilterValue(getStringValue(value, ignoreCase))
+                field,
+                new FilterStringValue(ignoreCase, value)
             )
         );
     }
@@ -269,7 +253,7 @@ export class FilterSelectionIsBlank implements FilterSelection {
     }
 
     applyToQuery(filter: ODataQueryFilterBuilder, field: FilterField) {
-        filter.add(FilterConditionOperation.equal(field, new FilterValue('')));
+        filter.add(FilterConditionOperation.equal(field, new FilterStringValue(false, '')));
     }
 }
 
@@ -281,7 +265,7 @@ export class FilterSelectionIsNotBlank implements FilterSelection {
     }
 
     applyToQuery(filter: ODataQueryFilterBuilder, field: FilterField) {
-        filter.add(FilterConditionOperation.notEqual(field, new FilterValue('')));
+        filter.add(FilterConditionOperation.notEqual(field, new FilterStringValue(false, '')));
     }
 }
 

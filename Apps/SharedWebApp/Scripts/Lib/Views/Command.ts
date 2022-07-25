@@ -22,19 +22,12 @@ export interface ICommandView {
 }
 
 export class ButtonCommandView extends ButtonView implements ICommandView {
-    static offscreenSubmit(container: BasicComponentView) {
-        let item = new ButtonCommandView(container);
-        item.makeOffscreenSubmit();
-        return item;
-    }
-
     readonly icon: FaIconView;
     private readonly textSpan: TextSpanView;
 
     constructor(container: BasicComponentView) {
         super(container);
         this.icon = this.addView(FaIconView);
-        this.icon.setMargin(MarginCss.end(1));
         this.textSpan = this.addView(TextSpanView);
         this.setContext(ContextualClass.default);
     }
@@ -46,6 +39,12 @@ export class ButtonCommandView extends ButtonView implements ICommandView {
 
     setText(text: string) {
         this.textSpan.setText(text);
+        if (text) {
+            this.icon.setMargin(MarginCss.end(1));
+        }
+        else { 
+            this.icon.setMargin(MarginCss.xs(0));
+        }
     }
 }
 

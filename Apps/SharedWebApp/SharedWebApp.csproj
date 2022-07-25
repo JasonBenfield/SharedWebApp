@@ -74,9 +74,9 @@
     <None Remove="Scripts\Lib\OData\FilterColumnOptionsBuilder.ts" />
     <None Remove="Scripts\Lib\OData\FilterConditionClauseComponent.ts" />
     <None Remove="Scripts\Lib\OData\FilterConditionClauseView.ts" />
-    <None Remove="Scripts\Lib\OData\FilterConditionLink.ts" />
     <None Remove="Scripts\Lib\OData\FilterConditionLinkView.ts" />
-    <None Remove="Scripts\Lib\OData\FilterSelection.ts" />
+    <None Remove="Scripts\Lib\OData\FilterMultiValueInputPanel.ts" />
+    <None Remove="Scripts\Lib\OData\FilterMultiValueInputPanelView.ts" />
     <None Remove="Scripts\Lib\OData\FilterValueInputPanel.ts" />
     <None Remove="Scripts\Lib\OData\FilterValueInputPanelView.ts" />
     <None Remove="Scripts\Lib\OData\FilterWorkflow.ts" />
@@ -110,6 +110,7 @@
     <None Remove="Scripts\Lib\OData\ODataPage.ts" />
     <None Remove="Scripts\Lib\OData\ODataQueryBuilder.ts" />
     <None Remove="Scripts\Lib\OData\ODataQueryFilterBuilder.ts" />
+    <None Remove="Scripts\Lib\OData\ODataQueryFilterPartFactory.ts" />
     <None Remove="Scripts\Lib\OData\ODataRow.ts" />
     <None Remove="Scripts\Lib\OData\ODataTextCell.ts" />
     <None Remove="Scripts\Lib\OData\ODataTextCellView.ts" />
@@ -121,6 +122,7 @@
     <None Remove="Scripts\Lib\OData\RelativeOffsetPickerView.ts" />
     <None Remove="Scripts\Lib\OData\SelectedFIeldListItem.ts" />
     <None Remove="Scripts\Lib\OData\SelectedFieldListItemView.ts" />
+    <None Remove="Scripts\Lib\OData\SelectedValueListItemView.ts" />
     <None Remove="Scripts\Lib\OData\SelectFieldsPanel.ts" />
     <None Remove="Scripts\Lib\OData\SelectFieldsPanelView.ts" />
     <None Remove="Scripts\Lib\OData\SelectFilterAppendPanel.ts" />
@@ -128,6 +130,10 @@
     <None Remove="Scripts\Lib\OData\SelectFilterConditionPanel.ts" />
     <None Remove="Scripts\Lib\OData\SelectFilterConditionPanelView.ts" />
     <None Remove="Scripts\Lib\OData\SourceType.ts" />
+    <None Remove="Scripts\Lib\OData\SuggestedValueListGetter.ts" />
+    <None Remove="Scripts\Lib\OData\SuggestedValueListItem.ts" />
+    <None Remove="Scripts\Lib\OData\SuggestedValueListItemView.ts" />
+    <None Remove="Scripts\Lib\OData\SuggestedValueODataGetter.ts" />
     <None Remove="Scripts\Lib\OData\Types.ts" />
     <None Remove="Scripts\Lib\OData\ValueRangePanelView.ts" />
     <None Remove="Scripts\Lib\OData\ValueRangePickerView.ts" />
@@ -161,6 +167,7 @@
     <None Remove="Scripts\Lib\Views\NavView.ts" />
     <None Remove="Scripts\Lib\Views\RootView.ts" />
     <None Remove="Scripts\Lib\Views\RowView.ts" />
+    <None Remove="Scripts\Lib\Views\SelectedValueListItem.ts" />
     <None Remove="Scripts\Lib\Views\SelectView.ts" />
     <None Remove="Scripts\Lib\Views\SmallView.ts" />
     <None Remove="Scripts\Lib\Views\SpanView.ts" />
@@ -252,6 +259,12 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Lib\OData\ApiODataClient.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\BooleanIconCell.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\FilterMultiValueInputPanelView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\OData\FilterMultiValueInputPanel.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Lib\OData\NumberRangePicker.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -266,6 +279,11 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataComponentViewOptions.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataComponentViewOptionsBuilder.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\SelectedValueListItemView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\SuggestedValueListGetter.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\SuggestedValueListItem.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\SuggestedValueListItemView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\SuggestedValueODataGetter.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ValueRangePanelView.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -287,8 +305,6 @@
     <TypeScriptCompile Include="Scripts\Lib\Views\ErrorListItemView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\JustifyContentCss.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\FilterColumnOptionsBuilder.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\OData\FilterSelection.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\OData\FilterConditionLink.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\FilterValueInputPanel.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\FilterValueInputPanelView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\FilterWorkflow.ts" />
@@ -358,6 +374,7 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Lib\Views\RowView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\SelectedValueListItem.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\SelectView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\Table.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\TextLabelView.ts">

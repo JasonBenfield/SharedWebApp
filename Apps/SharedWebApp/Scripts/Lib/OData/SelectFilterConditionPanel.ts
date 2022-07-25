@@ -1,10 +1,11 @@
 ﻿import { Awaitable } from "../Awaitable";
 import { BasicComponent } from "../Components/BasicComponent";
 import { Command } from "../Components/Command";
+import { ListGroup } from "../Components/ListGroup";
 import { TextComponent } from "../Components/TextComponent";
+import { TextButtonListGroupItemView } from "../Views/ListGroup";
 import { FilterColumnOptionsBuilder } from "./FilterColumnOptionsBuilder";
-import { FilterConditionLink } from "./FilterConditionLink";
-import { FilterSelections } from "./FilterSelection";
+import { FilterSelection } from "./FilterSelection";
 import { SelectFilterConditionPanelView } from "./SelectFilterConditionPanelView";
 
 interface IResult {
@@ -28,14 +29,13 @@ export class SelectFilterConditionPanel extends BasicComponent implements IPanel
     private readonly panelView: SelectFilterConditionPanelView;
     private readonly awaitable = new Awaitable<Result>();
     private options: FilterColumnOptionsBuilder;
+    private readonly conditionListGroup: ListGroup;
 
     constructor(view: SelectFilterConditionPanelView) {
         super(view.body);
         this.panelView = view;
-        for (const selection of FilterSelections.all) {
-            this.addComponent(new FilterConditionLink(selection, view.addLink()));
-        }
-        view.handleClick(this.onItemClick.bind(this));
+        this.conditionListGroup = new ListGroup(view.conditions);
+        this.conditionListGroup.registerItemClicked(this.onItemClick.bind(this));
         new Command(this.back.bind(this)).add(view.backButton);
     }
 
@@ -43,23 +43,27 @@ export class SelectFilterConditionPanel extends BasicComponent implements IPanel
 
     setOptions(options: FilterColumnOptionsBuilder) {
         this.options = options;
+        const conditions = options.getPotentialConditions(options.column.sourceType);
         new TextComponent(this.panelView.title).setText(`${options.column.displayText} Filter`);
-        for (const component of this.getComponents()) {
-            const link = component as FilterConditionLink;
-            link.sourceTypeChanged(options.column.sourceType);
-        }
+        this.conditionListGroup.setItems(
+            conditions,
+            (condition, itemView: TextButtonListGroupItemView) => {
+                const item = new TextComponent(itemView);
+                item.data = condition;
+                item.setText(condition.displayText);
+                return item;
+            }
+        );
     }
 
-    private onItemClick(sourceElement: HTMLElement) {
-        const link = this.getComponentByElement(sourceElement) as FilterConditionLink;
-        if (link) {
-            this.options.setFilterSelection(link.selection);
-            if (this.options.hasAppliedToQuery) {
-                this.awaitable.resolve(Result.done());
-            }
-            else {
-                this.awaitable.resolve(Result.next());
-            }
+    private onItemClick(item: TextComponent) {
+        const condition = item.data as FilterSelection;
+        this.options.setFilterSelection(condition);
+        if (this.options.hasAppliedToQuery) {
+            this.awaitable.resolve(Result.done());
+        }
+        else {
+            this.awaitable.resolve(Result.next());
         }
     }
 
