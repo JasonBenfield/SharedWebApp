@@ -16,6 +16,9 @@ export class ODataTextCell extends ODataCell {
         view: ODataTextCellView
     ) {
         super(rowIndex, column, record, view);
-        new TextComponent(view.value).setText(formatter.format(column, record));
+        const value = new TextComponent(view.value);
+        const text = formatter.format(column, record);
+        value.setText(text);
+        value.setTitle(text);
     }
 }

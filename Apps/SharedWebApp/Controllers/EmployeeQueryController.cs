@@ -20,15 +20,15 @@ public sealed class EmployeeQueryController : ODataController
     [HttpPost]
     [HttpGet]
     [EnableQuery]
-    public Task<IQueryable<EmployeeEntity>> Get(ODataQueryOptions<EmployeeEntity> odataQuery, ODataDemoArgs model, CancellationToken ct)
+    public Task<IQueryable<EmployeeEntity>> Get(ODataQueryOptions<EmployeeEntity> odataQuery, EmptyRequest model, CancellationToken ct)
     {
-        return groupApi.Query<EmployeeEntity>(nameof(Get)).Execute(odataQuery, ct);
+        return groupApi.Query<EmptyRequest, EmployeeEntity>(nameof(Get)).Execute(odataQuery, model, ct);
     }
 
     [Route("ToExcel")]
-    public async Task<IActionResult> ToExcel(ODataQueryOptions<EmployeeEntity> model, CancellationToken ct)
+    public async Task<IActionResult> ToExcel(ODataQueryOptions<EmployeeEntity> odataQuery, EmptyRequest model, CancellationToken ct)
     {
-        var result = await groupApi.QueryToExcel<EmployeeEntity>(nameof(ToExcel)).Execute(model, ct);
+        var result = await groupApi.QueryToExcel<EmptyRequest, EmployeeEntity>(nameof(ToExcel)).Execute(odataQuery, model, ct);
         return File(result.FileStream, result.ContentType, result.DownloadName);
     }
 }

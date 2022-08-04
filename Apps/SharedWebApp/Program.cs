@@ -46,7 +46,9 @@ builder.Services
 var app = builder.Build();
 app.UseODataQueryRequest();
 var appContext = app.Services.GetRequiredService<FakeAppContext>();
-var fakeApp = appContext.AddApp(SharedInfo.AppKey);
+var apiFactory = app.Services.GetRequiredService<SharedAppApiFactory>();
+var template = apiFactory.CreateTemplate().ToModel();
+var fakeApp = appContext.AddApp(template);
 appContext.SetCurrentApp(fakeApp);
 if (app.Environment.IsDevelopment())
 {

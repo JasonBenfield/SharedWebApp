@@ -1,4 +1,6 @@
-﻿import { ODataColumn } from "./ODataColumn";
+﻿import { FormattedDate } from "../FormattedDate";
+import { TimeSpan } from "../TimeSpan";
+import { ODataColumn } from "./ODataColumn";
 import { IValueFormatter } from "./Types";
 
 export class DefaultValueFormatter implements IValueFormatter {
@@ -7,7 +9,23 @@ export class DefaultValueFormatter implements IValueFormatter {
         if (record) {
             const value = record[column.columnName];
             if (value instanceof Date) {
-                formatted = value.toLocaleDateString();
+                if (value.getFullYear() === 9999 || value.getFullYear() === 1) {
+                    formatted = '';
+                }
+                else {
+                    if (value.getHours() || value.getMinutes() || value.getSeconds()) {
+                        formatted = new FormattedDate(
+                            value,
+                            {
+                                year: '2-digit', month: 'numeric', day: 'numeric',
+                                hour: 'numeric', minute: '2-digit'
+                            }
+                        ).formatDateTime();
+                    }
+                    else {
+                        formatted = value.toLocaleDateString();
+                    }
+                }
             }
             else if (typeof value === 'number') {
                 formatted = value.toLocaleString();
@@ -15,8 +33,16 @@ export class DefaultValueFormatter implements IValueFormatter {
             else if (typeof value === 'string') {
                 formatted = value;
             }
+            else if (value instanceof TimeSpan) {
+                formatted = value.toNearestMillisecond().toString();
+            }
             else if (value) {
-                formatted = value.toString();
+                if (value instanceof Object && 'displayText' in value) {
+                    formatted = value.displayText;
+                }
+                else {
+                    formatted = value.toString();
+                }
             }
             else {
                 formatted = '';

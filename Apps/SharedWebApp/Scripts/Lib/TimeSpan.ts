@@ -2,19 +2,33 @@
 
 export class TimeSpan {
 
-    private static readonly regex = /(?<days>\d+\.)?(?<hours>\d{1,2}):(?<minutes>\d{1,2}):?(?<seconds>\d{1,2})?(\.(?<ticks>\d+))?/;
+    private static readonly regex1 = /^(?<days>\d+\.)?(?<hours>\d{1,2}):(?<minutes>\d{1,2}):?(?<seconds>\d{1,2})?(\.(?<ticks>\d+))?$/;
+    private static readonly regex2 = /^PT(?<seconds>\d+)\.(?<ticks>\d{1,7})S$/;
 
-    static canParse(text: string) { return TimeSpan.regex.test(text); }
+    static canParse(text: string) { return TimeSpan.regex1.test(text) || TimeSpan.regex2.test(text); }
 
     static parse(text: string) {
-        const match = TimeSpan.regex.exec(text);
-        return new TimeSpan(
-            Number(match.groups.days || '0'),
-            Number(match.groups.hours || '0'),
-            Number(match.groups.minutes || '0'),
-            Number(match.groups.seconds || '0'),
-            Number(match.groups.ticks || '0')
-        );
+        if (TimeSpan.regex1.test(text)) {
+            const match = TimeSpan.regex1.exec(text);
+            return new TimeSpan(
+                Number(match.groups.days || '0'),
+                Number(match.groups.hours || '0'),
+                Number(match.groups.minutes || '0'),
+                Number(match.groups.seconds || '0'),
+                Number(match.groups.ticks || '0')
+            );
+        }
+        else if (TimeSpan.regex2.test(text)) {
+            const match = TimeSpan.regex2.exec(text);
+            return new TimeSpan(
+                Number(match.groups.days || '0'),
+                Number(match.groups.hours || '0'),
+                Number(match.groups.minutes || '0'),
+                Number(match.groups.seconds || '0'),
+                Number(match.groups.ticks || '0')
+            );
+        }
+        return null;
     }
 
     static dateDiff(date1: Date, date2: Date) {
@@ -83,17 +97,27 @@ export class TimeSpan {
         if (this.days > 0) {
             str += `${this.days}.`;
         }
-        const hours = this.hours.toString().padStart(2, '0');
-        const minutes = this.minutes.toString().padStart(2, '0');
-        str += `${hours}:${minutes}`;
+        if (this.hours || this.minutes) {
+            const hours = this.hours.toString().padStart(2, '0');
+            const minutes = this.minutes.toString().padStart(2, '0');
+            str += `${hours}:${minutes}`;
+        }
         if (this.seconds > 0 || this.ticks > 0) {
-            str += `:${this.seconds.toString().padStart(2, '0')}`;
+            if (this.hours || this.minutes) {
+                str += `:${this.seconds.toString().padStart(2, '0')}`;
+            }
+            else {
+                str += `${this.seconds.toString()}`;
+            }
         }
         if (this.ticks > 0) {
             const ticks = this.ticks % 10000 === 0
                 ? this.milliseconds.toString().padStart(3, '0')
                 : this.ticks.toString().padStart(7, '0');
             str += `.${ticks}`;
+        }
+        if (!this.days && !this.hours && !this.minutes) {
+            str += ' s';
         }
         return str;
     }

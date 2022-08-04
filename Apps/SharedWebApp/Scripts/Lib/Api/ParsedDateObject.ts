@@ -1,7 +1,7 @@
 ﻿import { TimeSpan } from "../TimeSpan";
 
 export class ParsedDateObject {
-    private static dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.?\d{0,7}[\+\-]\d{2}:\d{2})?$/;
+    private static dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{0,7}(([\+\-]\d{2}:\d{2})|Z))?$/;
 
     static isDateString(str: string) {
         return ParsedDateObject.dateRegex.test(str);

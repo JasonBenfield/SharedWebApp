@@ -22,7 +22,7 @@ public sealed class SharedAppApi : WebAppApiWrapper
         (
             source.AddGroup(nameof(Employee))
         );
-        EmployeeQuery = new ODataGroup<EmployeeEntity>
+        EmployeeQuery = new ODataGroup<EmptyRequest, EmployeeEntity>
         (
             source.AddGroup(nameof(EmployeeQuery)),
             () => new EmployeeQueryAction()
@@ -33,6 +33,6 @@ public sealed class SharedAppApi : WebAppApiWrapper
         );
     }
     public EmployeeGroup Employee { get; }
-    public ODataGroup<EmployeeEntity> EmployeeQuery { get; }
+    public ODataGroup<EmptyRequest, EmployeeEntity> EmployeeQuery { get; }
     public ProductGroup Product { get; }
 }
