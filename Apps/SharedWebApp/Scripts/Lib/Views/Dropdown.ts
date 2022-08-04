@@ -26,8 +26,7 @@ export class DropdownComponentView extends BasicComponentView {
         super(container, 'div');
         this.button = this.addView(DropdownButtonView);
         this.menu = this.addView(DropdownMenuView);
-        const dropdown = new Dropdown(this.elementView.element);
-        $(this.elementView.element).data('bs.dropdown', dropdown);
+        this.button.initialize();
     }
 }
 
@@ -37,6 +36,11 @@ export class DropdownButtonView extends ButtonView {
         this.addCssName('dropdown-toggle');
         this.setAttr(a => a['data-bs-toggle'] = 'dropdown');
         this.setAttr(a => a['data-toggle'] = 'dropdown');
+    }
+
+    initialize() {
+        const dropdown = new Dropdown(this.elementView.element);
+        $(this.elementView.element).data('bs.dropdown', dropdown);
     }
 }
 
