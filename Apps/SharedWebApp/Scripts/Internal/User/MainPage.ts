@@ -1,6 +1,5 @@
-﻿import { UserPage } from '../../Shared/User/UserPage';
-import { Startup } from '../../Shared/Startup';
+﻿import { UserPage } from '../../Lib/User/UserPage';
 import { DefaultPageContext } from '../DefaultPageContext';
 
 new DefaultPageContext().load();
-new UserPage(new Startup().build(), null);
+new UserPage(null);

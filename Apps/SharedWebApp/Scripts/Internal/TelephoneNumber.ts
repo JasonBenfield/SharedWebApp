@@ -1,4 +1,4 @@
-﻿import { FormattedNumber } from "../Shared/FormattedNumber";
+﻿import { FormattedNumber } from "../Lib/FormattedNumber";
 
 export class TelephoneNumber {
     constructor(private readonly areaCode: number, private readonly prefix: number, private readonly lineNumber: number) {

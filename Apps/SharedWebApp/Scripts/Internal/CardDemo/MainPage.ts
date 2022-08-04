@@ -1,21 +1,21 @@
-﻿import { Startup } from '../../Shared/Startup';
-import { AsyncCommand } from '../../Shared/Command/AsyncCommand';
-import { PageFrameView } from '../../Shared/PageFrameView';
+﻿import { AsyncCommand } from '../../Lib/Components/Command';
+import { BasicPage } from '../../Lib/Components/BasicPage';
+import { TextComponent } from '../../Lib/Components/TextComponent';
 import { DefaultPageContext } from '../DefaultPageContext';
 import { MainPageView } from './MainPageView';
 import { TestCard } from './TestCard';
-import { TextBlock } from '../../Shared/Html/TextBlock';
 
-class MainPage {
+class MainPage extends BasicPage {
+    protected readonly view: MainPageView;
     private readonly testCard: TestCard;
 
-    constructor(page: PageFrameView) {
-        let view = new MainPageView(page);
-        new TextBlock('Card Demo', view.heading);
-        this.testCard = new TestCard(view.testCard);
+    constructor() {
+        super(new MainPageView());
+        new TextComponent(this.view.heading).setText('Card Demo');
+        this.testCard = new TestCard(this.view.testCard);
         let refreshCommand = new AsyncCommand(this.refresh.bind(this));
         refreshCommand.animateIconWhenInProgress('spin');
-        refreshCommand.add(view.refreshButton);
+        refreshCommand.add(this.view.refreshButton);
     }
 
     private refresh() {
@@ -23,4 +23,4 @@ class MainPage {
     }
 }
 new DefaultPageContext().load();
-new MainPage(new Startup().build());
+new MainPage();

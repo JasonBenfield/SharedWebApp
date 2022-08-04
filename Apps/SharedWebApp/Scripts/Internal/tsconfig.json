@@ -1,5 +1,5 @@
 {
-  "compileOnSave": true,
+  "compileOnSave": false,
   "compilerOptions": {
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
@@ -16,8 +16,9 @@
     ]
   },
   "include": [
-    "./**/*.ts"
-  ],
+    "./**/*.ts",
+    "../Lib/**/*.d.ts"
+, "../Lib/OData/Types.ts"  ],
   "exclude": [
     "Imports",
     "node_modules",

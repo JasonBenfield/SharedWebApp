@@ -1,6 +1,6 @@
 ﻿import 'mocha';
 import { expect } from 'chai';
-import { FormattedDate } from '../Shared/FormattedDate';
+import { FormattedDate } from '../Lib/FormattedDate';
 
 describe('Formatted Date', () => {
     it('Default formatting', function () {

@@ -1,5 +1,5 @@
-﻿import { BaseForm } from '../../Shared/Forms/BaseForm';
-import { DropDownFieldItem } from "../../Shared/Forms/DropDownFieldItem";
+﻿import { BaseForm } from '../../Lib/Forms/BaseForm';
+import { DropDownFieldItem } from "../../Lib/Forms/DropDownFieldItem";
 import { AddEmployeeFormView } from './AddEmployeeFormView';
 import { AddressInputField } from './AddressInputField';
 

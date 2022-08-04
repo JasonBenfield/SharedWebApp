@@ -8,33 +8,23 @@ public sealed class ProductGroup : AppApiGroupWrapper
     public ProductGroup(AppApiGroup source)
         : base(source)
     {
-        var actions = new WebAppApiActionFactory(source);
-        Index = source.AddAction(actions.DefaultView());
+        Index = source.AddAction(nameof(Index), () => ViewAppAction<EmptyRequest>.Index());
         GetInfo = source.AddAction
         (
-            actions.Action
-            (
-                nameof(GetInfo),
-                () => new GetInfoAction()
-            )
+            nameof(GetInfo),
+            () => new GetInfoAction()
         );
         AddProduct = source.AddAction
         (
-            actions.Action
-            (
-                nameof(AddProduct),
-                () => new AddProductValidation(),
-                () => new AddProductAction()
-            )
+            nameof(AddProduct),
+            () => new AddProductAction(),
+            () => new AddProductValidation()
         );
         Product = source.AddAction
         (
-            actions.Action
-            (
-                nameof(Product),
-                () => new ProductAction(),
-                "Get Product Information"
-            )
+            nameof(Product),
+            () => new ProductAction(),
+            friendlyName: "Get Product Information"
         );
     }
     public AppApiAction<EmptyRequest, WebViewResult> Index { get; }

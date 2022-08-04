@@ -1,4 +1,4 @@
-﻿import { ComplexFieldFormGroup } from '../../Shared/Forms/ComplexFieldFormGroup';
+﻿import { ComplexFieldFormGroup } from '../../Lib/Forms/ComplexFieldFormGroup';
 import { AddressInputFieldView } from './AddressInputFieldView';
 
 export class AddressInputField extends ComplexFieldFormGroup {

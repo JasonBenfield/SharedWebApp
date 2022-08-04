@@ -1,26 +1,24 @@
-﻿import { ColumnCss } from "../../Shared/ColumnCss";
-import { ContextualClass } from "../../Shared/ContextualClass";
-import { Row } from "../../Shared/Grid/Row";
-import { TextBlock } from "../../Shared/Html/TextBlock";
-import { TextBlockView } from "../../Shared/Html/TextBlockView";
-import { ButtonListGroupItemView } from "../../Shared/ListGroup/ButtonListGroupItemView";
-import { ButtonListItemViewModel } from "../../Shared/ListGroup/ButtonListItemViewModel";
+﻿import { ColumnCss } from "../../Lib/ColumnCss";
+import { ContextualClass } from "../../Lib/ContextualClass";
+import { RowView } from "../../Lib/Views/RowView";
+import { TextBlockView } from "../../Lib/Views/TextBlockView";
+import { BasicComponentView } from "../../Lib/Views/BasicComponentView";
+import { ButtonListGroupItemView } from "../../Lib/Views/ListGroup";
 
 export class TestClickableListItemView extends ButtonListGroupItemView {
     readonly text: TextBlockView;
 
-    constructor() {
-        super(new ButtonListItemViewModel());
-        let row = this.addContent(new Row());
-        let iconColumn = row.addIconColumn(
-            'thumbs-up',
+    constructor(container: BasicComponentView) {
+        super(container);
+        const row = this.addView(RowView);
+        const iconColumn = row.addIconColumn(
             icon => {
+                icon.solidStyle('thumbs-up');
                 icon.makeFixedWidth();
                 icon.setColor(ContextualClass.success);
             }
         );
         iconColumn.setColumnCss(ColumnCss.xs('auto'));
-        this.text = row.addColumn()
-            .addContent(new TextBlockView());
+        this.text = row.addColumn().addView(TextBlockView);
     }
 }

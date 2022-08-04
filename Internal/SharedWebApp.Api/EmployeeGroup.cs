@@ -8,25 +8,18 @@ public sealed class EmployeeGroup : AppApiGroupWrapper
     public EmployeeGroup(AppApiGroup source)
         : base(source)
     {
-        var actions = new WebAppApiActionFactory(source);
-        Index = source.AddAction(actions.DefaultView());
+        Index = source.AddAction(nameof(Index), () => ViewAppAction<EmptyRequest>.Index());
         AddEmployee = source.AddAction
         (
-            actions.Action
-            (
-                nameof(AddEmployee),
-                () => new AddEmployeeValidation(),
-                () => new AddEmployeeAction()
-            )
+            nameof(AddEmployee),
+            () => new AddEmployeeAction(),
+            () => new AddEmployeeValidation()
         );
         Employee = source.AddAction
         (
-            actions.Action
-            (
-                nameof(Employee),
-                () => new EmployeeAction(),
-                "Get Employee Information"
-            )
+            nameof(Employee),
+            () => new EmployeeAction(),
+            friendlyName: "Get Employee Information"
         );
     }
     public AppApiAction<EmptyRequest, WebViewResult> Index { get; }
