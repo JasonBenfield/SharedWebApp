@@ -13,21 +13,21 @@ describe('Time Span', () => {
         expect(timeSpan.seconds).to.equal(2, 'Seconds should be 0');
     });
     it('Parse Time Span', function () {
-        const timeSpan1 = TimeSpan.parse('10675199.02:48:05.4775807');
+        const timeSpan1 = TimeSpan.parse('10675199.02:48:05.4775807')!;
         expect(timeSpan1.days).to.equal(10675199);
         expect(timeSpan1.hours).to.equal(2);
         expect(timeSpan1.minutes).to.equal(48);
         expect(timeSpan1.seconds).to.equal(5);
         expect(timeSpan1.ticks).to.equal(4775807);
 
-        const timeSpan2 = TimeSpan.parse('03:45');
+        const timeSpan2 = TimeSpan.parse('03:45')!;
         expect(timeSpan2.days).to.equal(0);
         expect(timeSpan2.hours).to.equal(3);
         expect(timeSpan2.minutes).to.equal(45);
         expect(timeSpan2.seconds).to.equal(0);
         expect(timeSpan2.ticks).to.equal(0);
 
-        const timeSpan3 = TimeSpan.parse('03:45:23');
+        const timeSpan3 = TimeSpan.parse('03:45:23')!;
         expect(timeSpan3.days).to.equal(0);
         expect(timeSpan3.hours).to.equal(3);
         expect(timeSpan3.minutes).to.equal(45);
