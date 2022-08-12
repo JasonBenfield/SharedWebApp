@@ -11,6 +11,7 @@ import { ViewConstructor } from "./Types";
 export class NavView extends BasicContainerView {
     constructor(container: BasicComponentView) {
         super(container, 'nav');
+        this.addCssName('nav');
     }
 
     pills() {
