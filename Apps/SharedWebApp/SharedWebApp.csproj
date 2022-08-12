@@ -181,6 +181,7 @@
     <None Remove="Scripts\Lib\Views\Types.ts" />
     <None Remove="Scripts\Lib\Views\UnorderedListView.ts" />
     <None Remove="Scripts\Lib\Views\ViewEventBuilder.ts" />
+    <None Remove="Scripts\Tests\ParsedDateObjectTest.ts" />
     <None Remove="Scripts\Tests\RelativeDateRangeTest.ts" />
     <None Remove="Scripts\Tests\TimeSpanTest.ts" />
   </ItemGroup>
@@ -413,6 +414,9 @@
     <TypeScriptCompile Include="Scripts\Lib\Views\TextBlockView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\Types.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\ViewEventBuilder.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Tests\ParsedDateObjectTest.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Tests\RelativeDateRangeTest.ts">
