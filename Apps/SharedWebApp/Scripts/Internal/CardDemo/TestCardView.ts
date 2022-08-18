@@ -7,6 +7,8 @@ import { BasicComponentView } from "../../Lib/Views/BasicComponentView";
 import { TestClickableListItemView } from "./TestClickableItemView";
 import { TestListItemView } from "./TestListItemView";
 import { BasicTextComponentView } from "../../Lib/Views/BasicTextComponentView";
+import { TextAreaView } from "../../Lib/Views/TextAreaView";
+import { FormGroupGridView, FormGroupTextAreaView } from "../../Lib/Views/FormGroup";
 
 export class TestCardView extends CardView {
     readonly cardTitleHeader: CardTitleHeaderView;
@@ -14,6 +16,7 @@ export class TestCardView extends CardView {
     readonly manualItem: BasicTextComponentView;
     readonly testItems: ListGroupView;
     readonly clickableItems: ButtonListGroupView;
+    readonly textArea: TextAreaView;
 
     constructor(container: BasicComponentView) {
         super(container);
@@ -26,5 +29,10 @@ export class TestCardView extends CardView {
         this.testItems.setItemViewType(TestListItemView);
         this.clickableItems = this.addButtonListGroup();
         this.clickableItems.setItemViewType(TestClickableListItemView);
+        const formGroups = this.addView(FormGroupGridView);
+        const formGroup = formGroups.addFormGroup(FormGroupTextAreaView);
+        formGroup.caption.setText('Text Area');
+        this.textArea = formGroup.textArea;
+        this.textArea.setRows(3);
     }
 }

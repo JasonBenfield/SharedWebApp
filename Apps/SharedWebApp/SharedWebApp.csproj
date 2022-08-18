@@ -52,6 +52,7 @@
     <None Remove="Scripts\Lib\Components\ModalError.ts" />
     <None Remove="Scripts\Lib\Components\SelectControl.ts" />
     <None Remove="Scripts\Lib\Components\SelectOption.ts" />
+    <None Remove="Scripts\Lib\Components\TextAreaControl.ts" />
     <None Remove="Scripts\Lib\Components\TextButtonComponent.ts" />
     <None Remove="Scripts\Lib\Components\TextComponent.ts" />
     <None Remove="Scripts\Lib\Components\TextValueFormGroup.ts" />
@@ -172,6 +173,7 @@
     <None Remove="Scripts\Lib\Views\SmallView.ts" />
     <None Remove="Scripts\Lib\Views\SpanView.ts" />
     <None Remove="Scripts\Lib\Views\Table.ts" />
+    <None Remove="Scripts\Lib\Views\TextAreaView.ts" />
     <None Remove="Scripts\Lib\Views\TextBlockView.ts" />
     <None Remove="Scripts\Lib\Views\TextHeadings.ts" />
     <None Remove="Scripts\Lib\Views\TextLabelView.ts" />
@@ -233,6 +235,9 @@
     <TypeScriptCompile Include="Scripts\Lib\Components\BasicComponent.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\BasicPanelComponent.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\BooleanInputControl.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Components\TextAreaControl.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Lib\Components\TextButtonComponent.ts" />
@@ -378,6 +383,9 @@
     <TypeScriptCompile Include="Scripts\Lib\OData\SelectedValueListItem.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\SelectView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\Table.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\TextAreaView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Lib\Views\TextLabelView.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

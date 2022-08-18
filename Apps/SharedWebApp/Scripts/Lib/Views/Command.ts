@@ -34,7 +34,7 @@ export class ButtonCommandView extends ButtonView implements ICommandView {
 
     positionIconRight() {
         this.icon.pullRight();
-        this.icon.setMargin(MarginCss.start(1));
+        this.icon.setMargin(MarginCss.xs({ start: 1, top: 1 }));
     }
 
     setText(text: string) {
