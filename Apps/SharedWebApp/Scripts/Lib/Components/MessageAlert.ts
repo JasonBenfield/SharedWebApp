@@ -16,6 +16,7 @@ export class MessageAlert extends BasicComponent {
 
     constructor(view: MessageAlertView) {
         super(view);
+        view.hide();
         this.textBlock = new TextComponent(view.textBlock);
     }
 

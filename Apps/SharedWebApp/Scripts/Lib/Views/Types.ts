@@ -1,6 +1,4 @@
-﻿import { ContextualClass } from "../ContextualClass";
-import { BasicComponentView } from "./BasicComponentView";
-import { FaIconView } from "./FaIconView";
+﻿import { BasicComponentView } from "./BasicComponentView";
 import { HtmlElementView } from "./HtmlElementView";
 import { ViewEventActionBuilder } from "./ViewEventBuilder";
 
@@ -42,11 +40,25 @@ export interface IFormAttributes extends IHtmlAttributes {
     method?: string;
 }
 
-export interface IInputAttributes extends IHtmlAttributes {
-    type?: string;
+export interface ITextAreaAttributes extends IHtmlAttributes {
+    rows?: string;
+    cols?: string;
     maxlength?: string;
     autocomplete?: string;
     disabled?: boolean;
+    readonly?: boolean;
+    placeholder?: string;
+}
+
+export interface IInputAttributes extends IHtmlAttributes {
+    type?: string;
+    inputmode?: string;
+    pattern?: string;
+    maxlength?: string;
+    autocomplete?: string;
+    disabled?: boolean;
+    readonly?: boolean;
+    placeholder?: string;
 }
 
 export interface IHtmlStyle {

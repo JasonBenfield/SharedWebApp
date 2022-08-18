@@ -50,8 +50,24 @@ export class InputView extends BasicComponentView {
         this.setAttr(attr => attr.maxlength = maxLength.toString());
     }
 
+    setReadOnly(readonly: boolean) {
+        this.setAttr(attr => attr.readonly = readonly);
+    }
+
+    setPlaceholder(placeholder: string) {
+        this.setAttr(attr => attr.placeholder = placeholder);
+    }
+
     setType(type: 'text' | 'hidden' | 'password' | 'date' | 'number' | 'time') {
         this.setAttr(attr => attr.type = type);
+    }
+
+    setInputMode(inputmode: 'text' | 'decimal' | 'numeric' | 'tel' | 'search' | 'email' | 'url') {
+        this.setAttr(attr => attr.inputmode = inputmode);
+    }
+
+    setPattern(pattern: string) {
+        this.setAttr(attr => attr.pattern = pattern);
     }
 
     hasFocus() { return document.activeElement === this.inputElement; }
