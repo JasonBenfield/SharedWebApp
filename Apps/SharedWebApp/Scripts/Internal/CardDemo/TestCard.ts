@@ -8,6 +8,7 @@ import { TestClickableListItemView } from "./TestClickableItemView";
 import { TestListItem } from "./TestListItem";
 import { TestListItemView } from "./TestListItemView";
 import { TextComponent } from '../../Lib/Components/TextComponent';
+import { TextAreaControl } from '../../Lib/Components/TextAreaControl';
 import { MessageAlert } from '../../Lib/Components/MessageAlert';
 
 export class TestCard {
@@ -15,6 +16,7 @@ export class TestCard {
     private readonly alert: MessageAlert;
     private readonly testItems: ListGroup;
     private readonly clickableItems: ListGroup;
+    private readonly textArea: TextAreaControl;
 
     constructor(private readonly view: TestCardView) {
         this.cardTitleHeader = new TextComponent(this.view.cardTitleHeader);
@@ -33,6 +35,12 @@ export class TestCard {
             (i: number, listItem: TestClickableListItemView) => new TestClickableListItem(i, listItem)
         );
         this.clickableItems.registerItemClicked(this.onClick.bind(this));
+        this.textArea = new TextAreaControl(view.textArea);
+        this.textArea.when.valueChanged.then(this.onTextAreaValueChanged.bind(this));
+    }
+
+    private onTextAreaValueChanged(value: string) {
+        alert(`textArea value ${value}`);
     }
 
     private onClick(listItem: TestClickableListItem) {

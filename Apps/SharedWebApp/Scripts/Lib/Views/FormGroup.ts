@@ -14,6 +14,7 @@ import { InputGroupView } from "./InputGroupView";
 import { InputView } from "./InputView";
 import { GridListGroupView } from "./ListGroup";
 import { SelectView } from "./SelectView";
+import { TextAreaView } from "./TextAreaView";
 import { TextBlockView } from "./TextBlockView";
 import { TextLabelView } from "./TextLabelView";
 import { ViewConstructor } from "./Types";
@@ -69,6 +70,16 @@ export class FormGroupInputView extends FormGroupView {
         super(container);
         this.input = this.valueCell.addView(InputView);
         this.input.styleAsFormControl();
+    }
+}
+
+export class FormGroupTextAreaView extends FormGroupView {
+    readonly textArea: TextAreaView;
+
+    constructor(container: BasicComponentView) {
+        super(container);
+        this.textArea = this.valueCell.addView(TextAreaView);
+        this.textArea.styleAsFormControl();
     }
 }
 

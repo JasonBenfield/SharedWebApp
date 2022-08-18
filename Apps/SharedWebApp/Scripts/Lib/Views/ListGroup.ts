@@ -129,9 +129,9 @@ export class LinkListGroupView extends BasicListGroupView {
         this.setItemViewType(LinkListGroupItemView);
     }
 
-    addListGroupItem: <T extends LinkListGroupItemView>(ctor?: ViewConstructor<T>) => T;
+    addListGroupItem: <T extends (BasicListGroupItemView & ILinkView)>(ctor?: ViewConstructor<T>) => T;
 
-    addListGroupItems: <T extends LinkListGroupItemView>(howMany: number, ctor?: ViewConstructor<T>) => T[];
+    addListGroupItems: <T extends (BasicListGroupItemView & ILinkView) >(howMany: number, ctor?: ViewConstructor<T>) => T[];
 }
 
 export class LinkListGroupItemView extends BasicListGroupItemView implements ILinkView {
