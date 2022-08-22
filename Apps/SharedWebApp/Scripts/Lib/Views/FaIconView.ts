@@ -16,7 +16,7 @@ export class FaIconView extends IconView {
     regularStyle(name: string) {
         this.setPrefix('fa-regular');
         if (name) {
-            this.setViewName(name);
+            this.setIconName(name);
         }
     }
 
