@@ -25,7 +25,7 @@ public sealed class EmployeeQueryController : ODataController
         return groupApi.Query<EmptyRequest, EmployeeEntity>(nameof(Get)).Execute(odataQuery, model, ct);
     }
 
-    [Route("ToExcel")]
+    [Route("~/[controller]/ToExcel")]
     public async Task<IActionResult> ToExcel(ODataQueryOptions<EmployeeEntity> odataQuery, EmptyRequest model, CancellationToken ct)
     {
         var result = await groupApi.QueryToExcel<EmptyRequest, EmployeeEntity>(nameof(ToExcel)).Execute(odataQuery, model, ct);

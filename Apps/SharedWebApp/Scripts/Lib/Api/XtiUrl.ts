@@ -5,9 +5,9 @@ export class XtiUrl {
     static current() { return XtiUrl.parse(location.href); }
 
     static parse(url: string) {
-        let protocolIndex = url.indexOf('//');
-        let slashIndex = url.indexOf('/', protocolIndex + 2);
-        let baseUrl = url.substring(0, slashIndex);
+        const protocolIndex = url.indexOf('//');
+        const slashIndex = url.indexOf('/', protocolIndex + 2);
+        const baseUrl = url.substring(0, slashIndex);
         let endIndex = url.indexOf('?');
         if (endIndex < 0) {
             endIndex = url.indexOf('#');
@@ -15,11 +15,8 @@ export class XtiUrl {
                 endIndex = url.length;
             }
         }
-        else {
-            endIndex = url.length;
-        }
-        let path = url.substring(slashIndex + 1, endIndex);
-        let split = path.split('/');
+        const path = url.substring(slashIndex + 1, endIndex);
+        const split = path.split('/');
         if (split[2] !== 'odata') {
             split.splice(3, 0, '');
         }

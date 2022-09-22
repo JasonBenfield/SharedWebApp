@@ -3,7 +3,21 @@
 
     constructor(data: any) {
         this.formatDates(data);
-        this.value = JSON.stringify(data);
+        if (data === null) {
+            this.value = null;
+        }
+        else if (typeof data === 'string') {
+            this.value = `"${data}"`;
+        }
+        else if (data instanceof Date) {
+            this.value = `"${data.toISOString()}"`;
+        }
+        else if (typeof data === 'number' || typeof data === 'boolean') {
+            this.value = `${data}`;
+        }
+        else {
+            this.value = JSON.stringify(data);
+        }
     }
 
     private formatDates(obj: any) {
@@ -19,10 +33,10 @@
                     }
                 }
             }
-            else if(typeof(obj) !== 'string' && typeof(obj) !== 'boolean' && typeof(obj) !== 'number') {
-                for (let prop in obj) {
+            else if (typeof (obj) !== 'string' && typeof (obj) !== 'boolean' && typeof (obj) !== 'number') {
+                for (const prop in obj) {
                     if (prop) {
-                        let value = obj[prop];
+                        const value = obj[prop];
                         if (value instanceof Date) {
                             obj[prop] = value.toISOString();
                         }

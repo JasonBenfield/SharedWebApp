@@ -1,5 +1,6 @@
 ﻿import { ErrorModel } from "../ErrorModel";
 import { JoinedStrings } from "../JoinedStrings";
+import { Url } from "../Url";
 import { UrlBuilder } from "../UrlBuilder";
 import { AppApiError } from "./AppApiError";
 import { AppApiEvents } from "./AppApiEvents";
@@ -26,6 +27,7 @@ interface IODataInnerError {
 
 export class AppApiQuery<TModel, TEntity> {
     private readonly resourceUrl: AppResourceUrl;
+    private readonly excelUrl: Url;
 
     constructor(
         private readonly events: AppApiEvents,
@@ -33,6 +35,10 @@ export class AppApiQuery<TModel, TEntity> {
         readonly name: string
     ) {
         this.resourceUrl = resourceUrl;
+        this.excelUrl = AppResourceUrl.app(this.resourceUrl.path.app, this.resourceUrl.path.modifier, pageContext.CacheBust)
+            .withGroup(this.resourceUrl.path.group)
+            .withAction('ToExcel')
+            .url;
     }
 
     url() {
@@ -40,8 +46,7 @@ export class AppApiQuery<TModel, TEntity> {
     }
 
     toExcel(odataQuery: string, model: TModel) {
-        const url = this.url()
-            .addPart('ToExcel')
+        const url = new UrlBuilder(this.excelUrl)
             .addQueryString(odataQuery)
             .addQueryFromObject(model);
         new WebPage(url).openWindow();

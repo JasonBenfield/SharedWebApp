@@ -3,6 +3,7 @@ import { AppApiEvents } from "./AppApiEvents";
 import { AppApiGroup } from "./AppApiGroup";
 import { AppApiQuery } from "./AppApiQuery";
 import { AppResourceUrl } from "./AppResourceUrl";
+import { UserCacheGroup } from "./UserCacheGroup";
 import { UserGroup } from "./UserGroup";
 import { XtiUrl } from './XtiUrl';
 
@@ -37,6 +38,7 @@ export class AppApi {
         [name: string]: AppApiGroup | AppApiQuery<any, any>
     } = {};
     readonly User: UserGroup;
+    readonly UserCache: UserCacheGroup;
 
     constructor(
         private readonly events: AppApiEvents,
@@ -48,6 +50,7 @@ export class AppApi {
             pageContext.CacheBust
         );
         this.User = this.addGroup((evts, resourceUrl) => new UserGroup(evts, resourceUrl));
+        this.UserCache = this.addGroup((evts, resourceUrl) => new UserCacheGroup(evts, resourceUrl));
     }
 
     get name() { return this.resourceUrl.path.app; }

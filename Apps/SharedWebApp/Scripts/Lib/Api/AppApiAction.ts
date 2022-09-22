@@ -26,8 +26,7 @@ export class AppApiAction<TArgs, TResult> {
     get path() { return this.resourceUrl.path; }
 
     async execute(data: TArgs, errorOptions: IActionErrorOptions) {
-        const jsonText = new JsonText(data).toString();
-        const postResult = await new HttpClient().post(this.resourceUrl.url.value(), jsonText);
+        const postResult = await new HttpClient().post(this.resourceUrl.url.value(), data);
         let result: TResult;
         let apiError: AppApiError;
         result = postResult && postResult.result && postResult.result.Data;

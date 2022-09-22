@@ -28,6 +28,9 @@ interface ICssBuilder {
 interface IEmptyRequest {
 }
 
+interface IEmptyActionResult {
+}
+
 interface ILogoutRequest {
     ReturnUrl: string;
 }
