@@ -1,4 +1,8 @@
-﻿export class HttpPostResult {
+﻿import { isArray } from "lodash";
+import { serialize } from "object-to-formdata";
+import { JsonText } from "./JsonText";
+
+export class HttpPostResult {
     constructor(
         public readonly result: any,
         public readonly url: string,
@@ -21,16 +25,49 @@ export class HttpClient {
         return this.execute('GET', url);
     }
 
-    post(url: string, data: string, contentType?: string) {
-        return this.execute('POST', url, data, contentType);
+    post(url: string, data: any, contentType?: string) {
+        let hasFiles = false;
+        let body: string | FormData;
+        if (data && typeof data !== 'string') {
+            hasFiles = this.hasFiles(data);
+        }
+        if (hasFiles) {
+            body = serialize(
+                data,
+                {
+                    dotsForObjectNotation: true,
+                    noFilesWithArrayNotation: true
+                }
+            );
+        }
+        else {
+            const isString = typeof data === 'string' && contentType && !contentType.startsWith('application/json');
+            body = isString ? data : new JsonText(data).toString();
+        }
+        return this.execute('POST', url, body, contentType);
     }
 
-    private execute(method: string, url: string, body?: string, contentType?: string) {
+    private hasFiles(data) {
+        let hasFiles = false;
+        if (data) {
+            if (data instanceof File || (isArray(data) && data[0] instanceof File)) {
+                hasFiles = true;
+            }
+            else if (typeof data === 'object' && !(data instanceof Date)) {
+                Object.keys(data).forEach(key => {
+                    hasFiles = this.hasFiles(data[key]);
+                });
+            }
+        }
+        return hasFiles;
+    }
+
+    private execute(method: string, url: string, body?: string | FormData, contentType?: string) {
         return new Promise<HttpPostResult>((resolve) => {
             function reqListener() {
                 console.log(this.responseText);
             }
-            let oReq = new XMLHttpRequest();
+            const oReq = new XMLHttpRequest();
             oReq.withCredentials = true;
             oReq.onreadystatechange = () => {
                 if (oReq.readyState == 4) {
@@ -50,7 +87,7 @@ export class HttpClient {
             if (contentType) {
                 oReq.setRequestHeader("Content-Type", contentType);
             }
-            else if (method === 'POST') {
+            else if (method === 'POST' && typeof body === 'string') {
                 oReq.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             }
             oReq.send(body);

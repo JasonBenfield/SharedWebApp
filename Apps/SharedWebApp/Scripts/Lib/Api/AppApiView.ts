@@ -42,12 +42,12 @@ export class AppApiView<TArgs> {
     }
 
     openWindow(data: TArgs, modifier?: string) {
-        let webPage = this.createWebPage(data, modifier);
+        const webPage = this.createWebPage(data, modifier);
         webPage.openWindow();
     }
 
     private createWebPage(data: TArgs, modifier?: string) {
-        let urlBuilder = this.getModifierUrl(modifier, data);
+        const urlBuilder = this.getModifierUrl(modifier, data);
         return new WebPage(urlBuilder);
     }
 }

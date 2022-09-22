@@ -45,6 +45,7 @@
     <None Remove="Scripts\Lib\Components\BasicPanelComponent.ts" />
     <None Remove="Scripts\Lib\Components\BooleanInputControl.ts" />
     <None Remove="Scripts\Lib\Components\ButtonGroup.ts" />
+    <None Remove="Scripts\Lib\Components\FileInputControl.ts" />
     <None Remove="Scripts\Lib\Components\FormCheck.ts" />
     <None Remove="Scripts\Lib\Components\InputControl.ts" />
     <None Remove="Scripts\Lib\Components\ListGroup.ts" />
@@ -189,13 +190,13 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="XTI_App.Fakes" Version="1.8.22" />
-    <PackageReference Include="XTI_Core.Extensions" Version="1.10.12" />
-    <PackageReference Include="XTI_TempLog.Fakes" Version="1.2.27" />
-    <PackageReference Include="XTI_WebApp.Extensions" Version="1.8.22" />
-    <PackageReference Include="XTI_WebApp.Fakes" Version="1.8.22" />
-    <PackageReference Include="XTI_WebApp.RCL" Version="1.8.22" />
-    <PackageReference Include="XTI_WebApp.TagHelpers" Version="1.8.22" />
+    <PackageReference Include="XTI_App.Fakes" Version="1.8.31" />
+    <PackageReference Include="XTI_Core.Extensions" Version="1.10.16" />
+    <PackageReference Include="XTI_TempLog.Fakes" Version="1.2.28" />
+    <PackageReference Include="XTI_WebApp.Extensions" Version="1.8.31" />
+    <PackageReference Include="XTI_WebApp.Fakes" Version="1.8.31" />
+    <PackageReference Include="XTI_WebApp.RCL" Version="1.8.31" />
+    <PackageReference Include="XTI_WebApp.TagHelpers" Version="1.8.31" />
   </ItemGroup>
   
   <ItemGroup>
@@ -237,6 +238,7 @@
     <TypeScriptCompile Include="Scripts\Lib\Components\BooleanInputControl.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Components\FileInputControl.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\TextAreaControl.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

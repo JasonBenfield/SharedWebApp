@@ -21,6 +21,10 @@ export class InputView extends BasicComponentView {
 
     disable() { this.setAttr(a => a.disabled = true); }
 
+    allowMultiple() { this.setAttr(a => a.multiple = true); }
+
+    preventMultiple() { this.setAttr(a => a.multiple = false); }
+
     clearAutocomplete() { this.setAutocomplete(null); }
 
     setAutocompleteOff() { this.setAutocomplete('off'); }
@@ -35,6 +39,18 @@ export class InputView extends BasicComponentView {
 
     setValue(value: string) {
         this.inputElement.value = value;
+    }
+
+    setAccept(accept: string) {
+        this.setAttr(attr => attr.accept = accept);
+    }
+
+    getFiles() {
+        const files: File[] = [];
+        for (let i = 0; i < this.inputElement.files.length; i++) {
+            files.push(this.inputElement.files.item(i));
+        }
+        return files;
     }
 
     setBorder(border: ContextualClass) {
@@ -58,7 +74,7 @@ export class InputView extends BasicComponentView {
         this.setAttr(attr => attr.placeholder = placeholder);
     }
 
-    setType(type: 'text' | 'hidden' | 'password' | 'date' | 'number' | 'time') {
+    setType(type: 'text' | 'hidden' | 'password' | 'date' | 'number' | 'time' | 'file') {
         this.setAttr(attr => attr.type = type);
     }
 

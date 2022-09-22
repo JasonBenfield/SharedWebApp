@@ -59,6 +59,8 @@ export interface IInputAttributes extends IHtmlAttributes {
     disabled?: boolean;
     readonly?: boolean;
     placeholder?: string;
+    accept?: string;
+    multiple?: boolean;
 }
 
 export interface IHtmlStyle {

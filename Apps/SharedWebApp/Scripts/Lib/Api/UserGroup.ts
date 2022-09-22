@@ -9,6 +9,8 @@ export class UserGroup extends AppApiGroup {
 
     constructor(events: AppApiEvents, resourceUrl: AppResourceUrl) {
         super(events, resourceUrl, 'User');
+        this.AccessDenied = this.createView<IEmptyRequest>('AccessDenied');
+        this.Error = this.createView<IEmptyRequest>('Error');
         this.Logout = this.createView<ILogoutRequest>('Logout');
         this.getUserAccessAction = this.createAction<IResourcePath[], IResourcePathAccess[]>(
             'GetUserAccess',
@@ -16,6 +18,8 @@ export class UserGroup extends AppApiGroup {
         );
     }
 
+    readonly AccessDenied: AppApiView<IEmptyRequest>;
+    readonly Error: AppApiView<IEmptyRequest>;
     readonly Logout: AppApiView<ILogoutRequest>;
 
     GetUserAccess(paths: IResourcePath[], options: IActionErrorOptions) {
