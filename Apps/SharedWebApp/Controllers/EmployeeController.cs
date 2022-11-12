@@ -19,7 +19,7 @@ public sealed class EmployeeController : Controller
         return Json(new ResultContainer<int>(1));
     }
 
-    public Task<ResultContainer<int>> AddProduct(AddProductModel model, CancellationToken ct)
+    public Task<ResultContainer<int>> AddProduct([FromBody] AddProductModel model, CancellationToken ct)
     {
         return Task.FromResult(new ResultContainer<int>(1));
     }

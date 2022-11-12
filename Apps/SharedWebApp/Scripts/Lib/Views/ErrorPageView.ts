@@ -19,7 +19,10 @@ export class ErrorPageView extends BasicPageView {
         let flexColumn = container.addView(BlockView);
         flexColumn.setFlexCss(new FlexCss().column())
         const flexFill = flexColumn.addView(BlockView)
-            .configure(b => b.positionAbsoluteFill())
+            .configure(b => {
+                b.positionAbsoluteFill();
+                b.scrollable();
+            })
             .addView(BlockView)
             .configure(b => b.addCssName('container'));
         this.caption = flexFill.addView(TextHeading1View)
