@@ -1,12 +1,12 @@
 ﻿import { ContextualClass } from '../../Lib/ContextualClass';
 import { FlexCss } from '../../Lib/FlexCss';
-import { BasicPageView } from '../../Lib/Views/BasicPageView';
 import { BlockView } from '../../Lib/Views/BlockView';
 import { ButtonCommandView } from '../../Lib/Views/Command';
 import { InputView } from '../../Lib/Views/InputView';
 import { TextHeading1View } from '../../Lib/Views/TextHeadings';
+import { SharedPageView } from '../SharedPageView';
 
-export class MainPageView extends BasicPageView {
+export class MainPageView extends SharedPageView {
     readonly heading: TextHeading1View;
     readonly fileInput: InputView;
     readonly uploadButton: ButtonCommandView;

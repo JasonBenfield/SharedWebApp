@@ -8,5 +8,6 @@ export class DefaultPageContext {
         pageContext.PageTitle = 'Page';
         pageContext.UserName = 'Jason.Benfield';
         pageContext.IsAuthenticated = true;
+        pageContext.EnvironmentName = 'Development';
     }
 }

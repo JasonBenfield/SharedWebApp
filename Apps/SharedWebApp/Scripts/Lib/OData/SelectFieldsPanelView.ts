@@ -16,9 +16,9 @@ import { ModalODataPanelView } from "./ModalODataPanelView";
 import { SelectedFieldListItemView } from "./SelectedFieldListItemView";
 
 export class SelectFieldsPanelView extends ModalODataPanelView {
-    readonly availableFields: ButtonListGroupView;
+    readonly availableFields: ButtonListGroupView<AvailableFieldListItemView>;
     readonly availableFieldsAlert: MessageAlertView;
-    readonly selectFields: GridListGroupView;
+    readonly selectFields: GridListGroupView<SelectedFieldListItemView>;
     readonly selectFieldsAlert: MessageAlertView;
     readonly cancelButton: ButtonCommandView;
     readonly saveButton: ButtonCommandView;
@@ -48,8 +48,7 @@ export class SelectFieldsPanelView extends ModalODataPanelView {
                 b.scrollable();
             });
         this.availableFieldsAlert = availableBlock.addView(MessageAlertView);
-        this.availableFields = availableBlock.addView(ButtonListGroupView);
-        this.availableFields.setItemViewType(AvailableFieldListItemView);
+        this.availableFields = ButtonListGroupView.addTo(availableBlock, AvailableFieldListItemView);
         layoutGrid.addCell()
             .addView(TextHeading3View)
             .configure(h => h.setText('Selected Columns'));
@@ -63,13 +62,12 @@ export class SelectFieldsPanelView extends ModalODataPanelView {
             .addView(BlockView)
             .configure(b => b.addCssName('container'));
         this.selectFieldsAlert = selectedBlock.addView(MessageAlertView);
-        this.selectFields = selectedBlock.addView(GridListGroupView);
+        this.selectFields = GridListGroupView.addTo(selectedBlock, SelectedFieldListItemView);
         this.selectFields.setTemplateColumns(
             CssLengthUnit.auto(),
             CssLengthUnit.flex(1),
             CssLengthUnit.auto()
         );
-        this.selectFields.setItemViewType(SelectedFieldListItemView);
         const toolbar = this.footer.addView(RowView);
         toolbar.addColumn();
         const buttonColumn = toolbar.addColumn()

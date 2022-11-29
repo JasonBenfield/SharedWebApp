@@ -14,8 +14,8 @@ import { MessageAlert } from '../../Lib/Components/MessageAlert';
 export class TestCard {
     private readonly cardTitleHeader: TextComponent;
     private readonly alert: MessageAlert;
-    private readonly testItems: ListGroup;
-    private readonly clickableItems: ListGroup;
+    private readonly testItems: ListGroup<TestListItem, TestListItemView>;
+    private readonly clickableItems: ListGroup<TestClickableListItem, TestClickableListItemView>;
     private readonly textArea: TextAreaControl;
 
     constructor(private readonly view: TestCardView) {

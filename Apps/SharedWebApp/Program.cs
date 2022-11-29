@@ -15,15 +15,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.UseXtiConfiguration(builder.Environment, "", "", new string[0]);
 builder.Services.AddSingleton(_ => XtiEnvironment.Parse(builder.Environment.EnvironmentName));
 builder.Services.AddFakesForXtiWebApp();
+builder.Services.AddScoped<ITransformedLinkFactory, DefaultTransformedLinkFactory>();
 builder.Services.AddScoped<XtiAuthenticationOptions>();
 builder.Services.AddScoped<AppClients>();
 builder.Services.AddScoped<AppClientDomainSelector>();
 builder.Services.AddScoped<IAppClientDomain, AppClientDomainSelector>();
 builder.Services.AddSingleton(_ => SharedInfo.AppKey);
 builder.Services.AddSingleton<InstallationIDAccessor, FakeInstallationIDAccessor>();
-builder.Services.AddSingleton<SharedAppApiFactory>();
-builder.Services.AddSingleton<AppApiFactory>(sp => sp.GetRequiredService<SharedAppApiFactory>());
-builder.Services.AddSingleton(sp => (SharedAppApi)sp.GetRequiredService<IAppApi>());
+builder.Services.AddScoped<SharedAppApiFactory>();
+builder.Services.AddScoped<AppApiFactory>(sp => sp.GetRequiredService<SharedAppApiFactory>());
+builder.Services.AddScoped(sp => (SharedAppApi)sp.GetRequiredService<IAppApi>());
 builder.Services.AddResponseCaching();
 builder.Services
     .AddMvc()
@@ -45,11 +46,15 @@ builder.Services
 
 var app = builder.Build();
 app.UseODataQueryRequest();
-var appContext = app.Services.GetRequiredService<FakeAppContext>();
-var apiFactory = app.Services.GetRequiredService<SharedAppApiFactory>();
+var sp = app.Services.CreateScope().ServiceProvider;
+var appContext = sp.GetRequiredService<FakeAppContext>();
+var apiFactory = sp.GetRequiredService<SharedAppApiFactory>();
 var template = apiFactory.CreateTemplate().ToModel();
 var fakeApp = appContext.AddApp(template);
 appContext.SetCurrentApp(fakeApp);
+var userContext = sp.GetRequiredService<FakeUserContext>();
+var userContextModel = userContext.AddUser(new AppUserName("Jason.Benfield"));
+userContext.SetCurrentUser(userContextModel.User.UserName);
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();

@@ -1,16 +1,13 @@
-﻿import { AppApiAction } from '../../Lib/Api/AppApiAction';
-import { AppApiEvents } from '../../Lib/Api/AppApiEvents';
-import { AppResourceUrl } from '../../Lib/Api/AppResourceUrl';
-import { BasicPage } from '../../Lib/Components/BasicPage';
-import { AsyncCommand } from '../../Lib/Components/Command';
+﻿import { AsyncCommand } from '../../Lib/Components/Command';
 import { MessageAlert } from '../../Lib/Components/MessageAlert';
 import { TextComponent } from '../../Lib/Components/TextComponent';
 import { ConsoleLog } from '../../Lib/ConsoleLog';
 import { DefaultPageContext } from '../DefaultPageContext';
+import { SharedPage } from '../SharedPage';
 import { AddEmployeeForm } from './AddEmployeeForm';
 import { MainPageView } from './MainPageView';
 
-class MainPage extends BasicPage {
+class MainPage extends SharedPage {
     protected readonly view: MainPageView;
     private readonly alert: MessageAlert;
     private readonly addEmployeeForm: AddEmployeeForm;
@@ -32,18 +29,7 @@ class MainPage extends BasicPage {
     }
 
     private async test() {
-        const action = new AppApiAction<number, number>(
-            new AppApiEvents(() => { }),
-            AppResourceUrl.app(
-                'Shared',
-                '',
-                pageContext.CacheBust
-            )
-                .withGroup('Employee'),
-            'Test',
-            'Test'
-        );
-        const result = await action.execute(5, {});
+        const result = await this.defaultApi.Employee.Test(5);
         new ConsoleLog().info(result.toString());
     }
 
@@ -51,17 +37,7 @@ class MainPage extends BasicPage {
         return this.alert.infoAction(
             'Saving...',
             async () => {
-                const action = new AppApiAction<any, number>(
-                    new AppApiEvents(() => { }),
-                    AppResourceUrl.app(
-                        'Shared',
-                        '',
-                        pageContext.CacheBust
-                    ).withGroup('Employee'),
-                    'AddEmployee',
-                    'Add Employee'
-                );
-                const result = await this.addEmployeeForm.save(action);
+                const result = await this.addEmployeeForm.save(this.defaultApi.Employee.AddEmployeeAction);
                 if (result.succeeded()) {
                     alert(`Success: ${result.value}`);
                 }

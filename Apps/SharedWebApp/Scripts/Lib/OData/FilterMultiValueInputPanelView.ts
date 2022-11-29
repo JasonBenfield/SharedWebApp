@@ -27,9 +27,9 @@ export class FilterMultiValueInputPanelView extends ModalODataPanelView {
     readonly cancelButton: ButtonCommandView;
     readonly saveButton: ButtonCommandView;
     private readonly form: FormView;
-    readonly suggestedValues: GridListGroupView;
+    readonly suggestedValues: GridListGroupView<SuggestedValueListItemView>;
     private readonly selectedValuesHeader: BasicTextComponentView;
-    readonly selectedValues: GridListGroupView;
+    readonly selectedValues: GridListGroupView<SelectedValueListItemView>;
 
     constructor(modal: ModalComponentView) {
         super(modal);
@@ -63,30 +63,32 @@ export class FilterMultiValueInputPanelView extends ModalODataPanelView {
         this.addButton.setTitle('Add Value');
         this.addButton.setContext(ContextualClass.secondary);
 
-        this.suggestedValues = layoutGrid.addCell()
-            .configure(c => c.positionRelative())
-            .addView(BlockView)
-            .configure(b => {
-                b.positionAbsoluteFill();
-                b.scrollable();
-            })
-            .addView(GridListGroupView);
-        this.suggestedValues.setItemViewType(SuggestedValueListItemView);
+        this.suggestedValues = GridListGroupView.addTo(
+            layoutGrid.addCell()
+                .configure(c => c.positionRelative())
+                .addView(BlockView)
+                .configure(b => {
+                    b.positionAbsoluteFill();
+                    b.scrollable();
+                }),
+            SuggestedValueListItemView
+        );
         this.suggestedValues.setTemplateColumns(CssLengthUnit.flex(1), CssLengthUnit.auto());
 
         this.selectedValuesHeader = layoutGrid.addCell()
             .addView(TextHeading3View);
         this.selectedValuesHeader.setText('Selected Values');
 
-        this.selectedValues = layoutGrid.addCell()
-            .configure(c => c.positionRelative())
-            .addView(BlockView)
-            .configure(b => {
-                b.positionAbsoluteFill();
-                b.scrollable();
-            })
-            .addView(GridListGroupView);
-        this.selectedValues.setItemViewType(SelectedValueListItemView);
+        this.selectedValues = GridListGroupView.addTo(
+            layoutGrid.addCell()
+                .configure(c => c.positionRelative())
+                .addView(BlockView)
+                .configure(b => {
+                    b.positionAbsoluteFill();
+                    b.scrollable();
+                }),
+            SelectedValueListItemView
+        );
         this.selectedValues.setTemplateColumns(CssLengthUnit.flex(1), CssLengthUnit.auto());
 
         this.cancelButton = this.footer.addView(ButtonCommandView);

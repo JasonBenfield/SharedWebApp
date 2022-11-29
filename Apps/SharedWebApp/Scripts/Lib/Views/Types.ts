@@ -1,4 +1,5 @@
 ﻿import { BasicComponentView } from "./BasicComponentView";
+import { LinkCommandView } from "./Command";
 import { HtmlElementView } from "./HtmlElementView";
 import { ViewEventActionBuilder } from "./ViewEventBuilder";
 
@@ -71,6 +72,11 @@ export interface IHtmlStyle {
     'min-height'?: string;
     'max-height'?: string;
     'z-index'?: string;
+    position?: string;
+    top?: string;
+    right?: string;
+    bottom?: string;
+    left?: string;
 }
 
 export interface IGridStyle extends IHtmlStyle {
@@ -85,6 +91,14 @@ export interface IGridStyle extends IHtmlStyle {
 export interface IGridCellStyle extends IHtmlStyle {
     'grid-column'?: string;
     'grid-row'?: string;
+}
+
+export interface IContainerView {
+    addView<T extends BasicComponentView>(ctor: ViewConstructor<T>): T;
+
+    addViews<T extends BasicComponentView>(howMany: number, ctor: ViewConstructor<T>): T[];
+
+    insertView<T extends BasicComponentView>(index: number, ctor: ViewConstructor<T>): T;
 }
 
 export type ViewConstructor<T extends BasicComponentView> = {
@@ -113,4 +127,8 @@ export interface ITextComponentView {
 
 export interface ILinkView {
     setHref(href: string);
+}
+
+export interface IMenuView {
+    addMenuItem(): LinkCommandView;
 }

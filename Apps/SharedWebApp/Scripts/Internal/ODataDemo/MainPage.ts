@@ -1,7 +1,6 @@
 ﻿import { AppApiEvents } from '../../Lib/Api/AppApiEvents';
 import { AppApiQuery } from '../../Lib/Api/AppApiQuery';
 import { AppResourceUrl } from '../../Lib/Api/AppResourceUrl';
-import { BasicPage } from '../../Lib/Components/BasicPage';
 import { TextComponent } from '../../Lib/Components/TextComponent';
 import { ApiODataClient } from '../../Lib/OData/ApiODataClient';
 import { NumberValueFormatter } from '../../Lib/OData/NumberValueFormatter';
@@ -11,11 +10,12 @@ import { ODataComponent } from '../../Lib/OData/ODataComponent';
 import { ODataComponentOptionsBuilder } from '../../Lib/OData/ODataComponentOptionsBuilder';
 import { GridRowView } from '../../Lib/Views/Grid';
 import { DefaultPageContext } from '../DefaultPageContext';
+import { SharedPage } from '../SharedPage';
 import { MainPageView } from './MainPageView';
 import { ODataDemoRow } from './ODataDemoRow';
 import { ODataEmployeeColumnsBuilder } from './ODataEmployeeColumnsBuilder';
 
-class MainPage extends BasicPage {
+class MainPage extends SharedPage {
     protected readonly view: MainPageView;
 
     constructor() {
@@ -37,16 +37,7 @@ class MainPage extends BasicPage {
         //options.disableSelectColumns();
         //options.disableFilter();
         //options.disableSort();
-        const odataGroup = new AppApiQuery<IEmptyRequest, IEmployee>(
-            new AppApiEvents(() => { }),
-            AppResourceUrl.odata(
-                'Shared',
-                '',
-                pageContext.CacheBust
-            ).withGroup('EmployeeQuery'),
-            'EmployeeQuery'
-        );
-        const odataClient = new ApiODataClient(odataGroup, {});
+        const odataClient = new ApiODataClient(this.defaultApi.EmployeeQuery, {});
         options.setODataClient(odataClient);
         options.setCreateDataRow(
             (rowIndex: number, columns: ODataColumn[], record: any, view: GridRowView) =>

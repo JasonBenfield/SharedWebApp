@@ -1,11 +1,11 @@
 ﻿import { AsyncCommand } from '../../Lib/Components/Command';
-import { BasicPage } from '../../Lib/Components/BasicPage';
 import { TextComponent } from '../../Lib/Components/TextComponent';
 import { DefaultPageContext } from '../DefaultPageContext';
+import { SharedPage } from '../SharedPage';
 import { MainPageView } from './MainPageView';
 import { TestCard } from './TestCard';
 
-class MainPage extends BasicPage {
+class MainPage extends SharedPage {
     protected readonly view: MainPageView;
     private readonly testCard: TestCard;
 

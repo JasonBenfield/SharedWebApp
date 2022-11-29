@@ -1,12 +1,12 @@
 ﻿import { ContextualClass } from '../../Lib/ContextualClass';
 import { CssLengthUnit } from '../../Lib/CssLengthUnit';
 import { PaddingCss } from '../../Lib/PaddingCss';
-import { BasicPageView } from '../../Lib/Views/BasicPageView';
 import { GridView } from '../../Lib/Views/Grid';
 import { TextHeading1View } from '../../Lib/Views/TextHeadings';
 import { ToolbarView } from '../../Lib/Views/ToolbarView';
+import { SharedPageView } from '../SharedPageView';
 
-export class MainPageView extends BasicPageView {
+export class MainPageView extends SharedPageView {
     readonly heading: TextHeading1View;
     readonly dataGrid: GridView;
 

@@ -1,7 +1,7 @@
 ﻿import { BasicComponentView } from "./BasicComponentView";
-import { IHtmlElementView, ViewConstructor } from "./Types";
+import { IHtmlElementView, ViewConstructor, IContainerView } from "./Types";
 
-export class BasicContainerView extends BasicComponentView {
+export class BasicContainerView extends BasicComponentView implements IContainerView {
     constructor(container: BasicComponentView, createElementView: IHtmlElementView) {
         super(container, createElementView);
     }

@@ -2,20 +2,20 @@
 import { CssLengthUnit } from '../../Lib/CssLengthUnit';
 import { PaddingCss } from '../../Lib/PaddingCss';
 import { BlockView } from '../../Lib/Views/BlockView';
-import { DropdownContainerView } from '../../Lib/Views/Dropdown';
+import { DropdownContainerView, DropdownMenuView } from '../../Lib/Views/Dropdown';
 import { Heading1View } from '../../Lib/Views/Headings';
 import { HorizontalRuleView } from '../../Lib/Views/HorizontalRuleView';
 import { GridListGroupView } from '../../Lib/Views/ListGroup';
 import { ModalConfirmView, ModalMessageAlertView } from '../../Lib/Views/Modal';
 import { ModalErrorView } from '../../Lib/Views/ModalError';
-import { BasicPageView } from '../../Lib/Views/BasicPageView';
 import { TextBlockView } from '../../Lib/Views/TextBlockView';
 import { TextHeading3View } from '../../Lib/Views/TextHeadings';
 import { TextSpanView } from '../../Lib/Views/TextSpanView';
+import { SharedPageView } from '../SharedPageView';
 import { DemoGridListGroupItemView } from './DemoGridListGroupItemView';
 
-export class MainPageView extends BasicPageView {
-    readonly demoGridListGroup: GridListGroupView;
+export class MainPageView extends SharedPageView {
+    readonly demoGridListGroup: GridListGroupView<DemoGridListGroupItemView>;
     readonly modalConfirm: ModalConfirmView;
     readonly modalAlert: ModalMessageAlertView;
     readonly modalError: ModalErrorView;
@@ -41,11 +41,11 @@ export class MainPageView extends BasicPageView {
             .configure(th => th.setText('Heading 3'));
         const dropdownContainer = block.addView(DropdownContainerView);
         dropdownContainer.dropdown.button.addView(TextSpanView).setText('Dropdown');
-        const dropdownListItem = dropdownContainer.dropdown.menu.addSpanItem();
+        const menu = dropdownContainer.dropdown.menuContainer.addView(DropdownMenuView);
+        const dropdownListItem = menu.addSpanItem();
         const dropdownText = dropdownListItem.addView(TextSpanView);
         dropdownText.setText('Testing');
-        this.demoGridListGroup = block.addView(GridListGroupView);
-        this.demoGridListGroup.setItemViewType(DemoGridListGroupItemView);
+        this.demoGridListGroup = GridListGroupView.addTo(block, DemoGridListGroupItemView);
         this.demoGridListGroup.setTemplateColumns(CssLengthUnit.auto(), CssLengthUnit.flex(1));
     }
 }

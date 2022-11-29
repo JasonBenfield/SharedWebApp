@@ -50,7 +50,7 @@ export class FlexCss implements ICssBuilder {
     }
 
     cssClass() {
-        let cssClass = new CssClass();
+        const cssClass = new CssClass();
         cssClass.addFrom(this._direction.getCssClass());
         cssClass.addFrom(this._fill.getCssClass());
         cssClass.addFrom(this._wrap.getCssClass());
@@ -99,7 +99,7 @@ export class FlexFill {
     }
 
     getCssClass() {
-        let cssClass = new CssClass();
+        const cssClass = new CssClass();
         cssClass.addName(this.cssClassName('xs'));
         cssClass.addName(this.cssClassName('sm'));
         cssClass.addName(this.cssClassName('md'));

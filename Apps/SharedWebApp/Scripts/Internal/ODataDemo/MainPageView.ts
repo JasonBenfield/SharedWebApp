@@ -5,15 +5,15 @@ import { ODataComponentView } from '../../Lib/OData/ODataComponentView';
 import { ODataTextCellView } from '../../Lib/OData/ODataTextCellView';
 import { PaddingCss } from '../../Lib/PaddingCss';
 import { TextCss } from '../../Lib/TextCss';
-import { BasicPageView } from '../../Lib/Views/BasicPageView';
 import { GridView } from '../../Lib/Views/Grid';
 import { TextHeading1View } from '../../Lib/Views/TextHeadings';
 import { ToolbarView } from '../../Lib/Views/ToolbarView';
+import { SharedPageView } from '../SharedPageView';
 import { ODataButtonGroupCellView } from './ODataButtonGroupCellView';
 import { ODataDropdownView } from './ODataDropdownView';
 import { ODataEmployeeColumnViewsBuilder } from './ODataEmployeeColumnsBuilder';
 
-export class MainPageView extends BasicPageView {
+export class MainPageView extends SharedPageView {
     readonly heading: TextHeading1View;
     readonly odataComponentView: ODataComponentView;
     readonly columns: ODataEmployeeColumnViewsBuilder;

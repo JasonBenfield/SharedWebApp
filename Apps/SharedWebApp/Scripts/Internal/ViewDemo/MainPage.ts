@@ -1,17 +1,17 @@
 ﻿import { ListGroup } from "../../Lib/Components/ListGroup";
+import { ModalConfirm } from '../../Lib/Components/ModalConfirm';
+import { ModalError } from '../../Lib/Components/ModalError';
+import { ModalMessageAlert } from '../../Lib/Components/ModalMessageAlert';
 import { EnumerableRange } from "../../Lib/Enumerable";
+import { ErrorModel } from "../../Lib/ErrorModel";
+import { SharedPage } from "../SharedPage";
 import { DemoGridListGroupItem } from "./DemoGridListGroupItem";
 import { DemoGridListGroupItemView } from "./DemoGridListGroupItemView";
 import { MainPageView } from "./MainPageView";
-import { ModalMessageAlert } from '../../Lib/Components/ModalMessageAlert';
-import { ModalConfirm } from '../../Lib/Components/ModalConfirm';
-import { ModalError } from '../../Lib/Components/ModalError';
-import { ErrorModel } from "../../Lib/ErrorModel";
-import { BasicPage } from '../../Lib/Components/BasicPage';
 
-class MainPage extends BasicPage {
+class MainPage extends SharedPage {
     protected readonly view: MainPageView;
-    private readonly demoGridListGroup: ListGroup;
+    private readonly demoGridListGroup: ListGroup<DemoGridListGroupItem, DemoGridListGroupItemView>;
 
     constructor() {
         super(new MainPageView());
@@ -19,7 +19,7 @@ class MainPage extends BasicPage {
         this.demoGridListGroup.registerItemClicked(this.onDemoGridListGroupItemClicked.bind(this));
         this.demoGridListGroup.setItems(
             new EnumerableRange(1, 10).value(),
-            (i, itemView: DemoGridListGroupItemView) => new DemoGridListGroupItem(i, itemView)
+            (i, itemView) => new DemoGridListGroupItem(i, itemView)
         );
         this.load();
     }

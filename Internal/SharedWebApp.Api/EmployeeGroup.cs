@@ -1,14 +1,15 @@
-﻿using XTI_App.Api;
+﻿using Microsoft.Extensions.DependencyInjection;
+using XTI_App.Api;
 using XTI_WebApp.Api;
 
 namespace SharedWebApp.Api;
 
 public sealed class EmployeeGroup : AppApiGroupWrapper
 {
-    public EmployeeGroup(AppApiGroup source)
+    public EmployeeGroup(AppApiGroup source, IServiceProvider sp)
         : base(source)
     {
-        Index = source.AddAction(nameof(Index), () => ViewAppAction<EmptyRequest>.Index());
+        Index = source.AddAction(nameof(Index), () => new EmployeeIndexAction(sp.GetRequiredService<WebViewResultFactory>()));
         AddEmployee = source.AddAction
         (
             nameof(AddEmployee),

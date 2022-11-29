@@ -1,5 +1,5 @@
-﻿import { NamedValue } from "./NamedValue";
-import * as _ from 'lodash';
+﻿import * as _ from 'lodash';
+import { NamedValue } from "./NamedValue";
 import { UrlQuery } from "./UrlQuery";
 
 export class UrlQueryBuilder {
@@ -34,9 +34,9 @@ export class UrlQueryBuilder {
     }
 
     removeQuery(name: string) {
-        let queryValues = this._query.getValues();
+        const queryValues = this._query.getValues();
         for (let i = queryValues.length - 1; i >= 0; i--) {
-            let queryPart = queryValues[i];
+            const queryPart = queryValues[i];
             if (queryPart.name === name) {
                 queryValues.splice(i, 1);
             }
@@ -59,27 +59,16 @@ export class UrlQueryBuilder {
     addQuery(name: string, value: Date): UrlQueryBuilder;
     addQuery(name: string, value: number): UrlQueryBuilder;
     addQuery(name: string, value: any) {
-        let queryValues = this._query.getValues();
-        if (name) {
+        const queryValues = this._query.getValues();
+        if (name && value !== undefined && value !== null) {
             if (value instanceof Date) {
-                let queryValue = value === undefined || value === null
-                    ? null
-                    : value.toISOString();
-                queryValues.push(new NamedValue(name, queryValue));
+                queryValues.push(new NamedValue(name, value.toISOString()));
             }
             else if (typeof value === 'string') {
-                let queryValue: string;
-                if (value !== undefined && value !== null) {
-                    queryValue = value;
-                }
-                queryValues.push(new NamedValue(name, queryValue));
+                queryValues.push(new NamedValue(name, value));
             }
             else if (typeof value === 'number') {
-                let queryValue: string;
-                if (value !== undefined && value !== null) {
-                    queryValue = value.toString();
-                }
-                queryValues.push(new NamedValue(name, queryValue));
+                queryValues.push(new NamedValue(name, value.toString()));
             }
             else if (_.isArray(value)) {
                 _(value).forEach(arrValue => {
@@ -100,10 +89,10 @@ export class UrlQueryBuilder {
 
     private _addQueryFromObject(obj: any, prefix: string) {
         if (obj) {
-            for (let prop in obj) {
+            for (const prop in obj) {
                 if (obj.hasOwnProperty(prop)) {
-                    let k = prefix ? `${prefix}[${prop}]` : prop;
-                    let propValue = obj[prop];
+                    const k = prefix ? `${prefix}[${prop}]` : prop;
+                    const propValue = obj[prop];
                     if (propValue !== null && typeof propValue === "object" && !(propValue instanceof Date)) {
                         this._addQueryFromObject(propValue, k)
                     }

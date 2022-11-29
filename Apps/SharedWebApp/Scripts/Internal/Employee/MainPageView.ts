@@ -1,17 +1,17 @@
 ﻿import { ContextualClass } from '../../Lib/ContextualClass';
 import { CssLengthUnit } from '../../Lib/CssLengthUnit';
 import { PaddingCss } from '../../Lib/PaddingCss';
-import { BasicPageView } from '../../Lib/Views/BasicPageView';
 import { BlockView } from '../../Lib/Views/BlockView';
 import { ButtonCommandView } from '../../Lib/Views/Command';
 import { GridView } from '../../Lib/Views/Grid';
 import { MessageAlertView } from '../../Lib/Views/MessageAlertView';
 import { TextHeading1View } from '../../Lib/Views/TextHeadings';
 import { ToolbarView } from '../../Lib/Views/ToolbarView';
+import { SharedPageView } from '../SharedPageView';
 import { AddEmployeeFormLayout } from './AddEmployeeFormLayout';
 import { AddEmployeeFormView } from './AddEmployeeFormView';
 
-export class MainPageView extends BasicPageView {
+export class MainPageView extends SharedPageView {
     readonly heading: TextHeading1View;
     readonly alert: MessageAlertView;
     readonly addEmployeeForm: AddEmployeeFormView;

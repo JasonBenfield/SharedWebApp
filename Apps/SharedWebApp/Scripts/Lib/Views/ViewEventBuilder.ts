@@ -3,6 +3,7 @@
 export class ViewEventBuilder {
     private action: (sourceElement: HTMLElement, evt: JQueryEventObject) => void;
     private selector: string;
+    private _preventDefault: boolean;
 
     constructor(
         private readonly elementView: HtmlElementView,
@@ -20,11 +21,19 @@ export class ViewEventBuilder {
         return this;
     }
 
+    preventDefault() {
+        this._preventDefault = true;
+        return this;
+    }
+
     subscribe() {
         this.elementView.on(
             this.name,
             this.selector,
             (el: HTMLElement, evt: JQueryEventObject) => {
+                if (this._preventDefault) {
+                    evt.preventDefault();
+                }
                 return this.action(el, evt);
             }
         );

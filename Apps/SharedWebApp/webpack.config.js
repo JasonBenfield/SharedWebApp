@@ -2,7 +2,6 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const entry = {
-    user: './Scripts/Internal/User/MainPage.ts',
     home: './Scripts/Internal/Home/MainPage.ts',
     employee: './Scripts/Internal/Employee/MainPage.ts',
     cardDemo: './Scripts/Internal/CardDemo/MainPage.ts',

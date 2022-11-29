@@ -17,11 +17,11 @@ import { SuggestedValueListItem } from "./SuggestedValueListItem";
 import { SuggestedValueListItemView } from "./SuggestedValueListItemView";
 
 interface IResult {
-    readonly done?: {};
+    readonly done?: boolean;
 }
 
 class Result {
-    static done() { return new Result({ done: {} }); }
+    static done() { return new Result({ done: true }); }
 
     private constructor(private readonly result: IResult) { }
 
@@ -35,8 +35,8 @@ export class FilterMultiValueInputPanel implements IPanel {
     private readonly input: InputControl<number | string | Date>;
     private readonly ignoreCaseInput: BooleanInputControl;
     private viewValue: MultiViewValue<string, number | string | Date>;
-    private readonly suggestedValues: ListGroup;
-    private readonly selectedValues: ListGroup;
+    private readonly suggestedValues: ListGroup<SuggestedValueListItem, SuggestedValueListItemView>;
+    private readonly selectedValues: ListGroup<SelectedValueListItem, SelectedValueListItemView>;
     private readonly addCommand: Command;
     private readonly saveCommand: Command;
 
@@ -76,13 +76,13 @@ export class FilterMultiValueInputPanel implements IPanel {
         const suggestedValues = await this.options.column.suggestedValueGetter.getSuggestedValues(this.input.getValue());
         this.suggestedValues.setItems(
             suggestedValues as string[],
-            (v, itemView: SuggestedValueListItemView) => new SuggestedValueListItem(v, v, itemView)
+            (v, itemView) => new SuggestedValueListItem(v, v, itemView)
         );
     }
 
     private onSuggestedValueAddClicked(el: HTMLElement, evt: JQueryEventObject) {
         evt.preventDefault();
-        const item = this.suggestedValues.getItemByElement(el) as SuggestedValueListItem;
+        const item = this.suggestedValues.getItemByElement(el);
         this.addValue(item.value);
     }
 
@@ -143,7 +143,7 @@ export class FilterMultiValueInputPanel implements IPanel {
 
     private getSelectedValues() {
         const values: any[] = [];
-        const items = this.selectedValues.getItems() as SelectedValueListItem[];
+        const items = this.selectedValues.getItems();
         for (const item of items) {
             values.push(item.value);
         }

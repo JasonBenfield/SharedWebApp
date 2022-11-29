@@ -46,16 +46,15 @@ export class ModalErrorView extends ModalComponentView {
 export class ModalErrorGroupView extends BlockView {
     private readonly hr: HorizontalRuleView;
     readonly caption: TextHeading4View;
-    readonly errors: GridListGroupView;
+    readonly errors: GridListGroupView<ModalErrorListItemView>;
 
     constructor(container: BasicComponentView) {
         super(container);
         this.hr = this.addView(HorizontalRuleView);
         this.caption = this.addView(TextHeading4View);
         this.caption.addCssName('alert-heading');
-        this.errors = this.addView(GridListGroupView);
+        this.errors = GridListGroupView.addTo(this, ModalErrorListItemView);
         this.errors.setTemplateColumns(CssLengthUnit.auto(), CssLengthUnit.flex(1));
-        this.errors.setItemViewType(ModalErrorListItemView);
     }
 
     showHR() { this.hr.show(); }

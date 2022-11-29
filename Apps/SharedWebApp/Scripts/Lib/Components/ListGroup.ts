@@ -3,43 +3,43 @@ import { BasicListGroupItemView, BasicListGroupView, TextButtonListGroupItemView
 import { BasicComponent } from "./BasicComponent";
 import { TextComponent } from "./TextComponent";
 
-export class ListGroup extends BasicComponent {
-    protected readonly view: BasicListGroupView;
-    private itemClicked: DefaultEvent<BasicComponent>;
+export class ListGroup<TItem extends BasicComponent, TItemView extends BasicListGroupItemView> extends BasicComponent {
+    protected readonly view: BasicListGroupView<TItemView>;
+    private itemClicked: DefaultEvent<TItem>;
 
-    constructor(view: BasicListGroupView) {
+    constructor(view: BasicListGroupView<TItemView>) {
         super(view);
     }
 
-    registerItemClicked(action: (item: BasicComponent) => void) {
+    registerItemClicked(action: (item: TItem) => void) {
         if (!this.itemClicked) {
-            this.itemClicked = new DefaultEvent<BasicComponent>(this);
+            this.itemClicked = new DefaultEvent<TItem>(this);
             this.view.handleClick(this.handleClick.bind(this));
         }
         this.itemClicked.register(action);
     }
 
     private handleClick(el: HTMLElement) {
-        const item = this.getComponentByElement(el);
+        const item = this.getItemByElement(el);
         if (item) {
             this.itemClicked.invoke(item);
         }
     }
 
     getItemByElement(element: HTMLElement) {
-        return this.getComponentByElement(element);
+        return this.getComponentByElement(element) as TItem;
     }
 
-    getItems() { return this.getComponents(); }
+    getItems() { return this.getComponents() as TItem[]; }
 
-    setItems<TSourceItem, TItem extends BasicComponent>(
+    setItems<TSourceItem>(
         sourceItems: TSourceItem[],
-        createItem: (sourceItem: TSourceItem, itemView: BasicListGroupItemView) => TItem
+        createItem: (sourceItem: TSourceItem, itemView: TItemView) => TItem
     ) {
         this.clearItems();
         const items: TItem[] = [];
         for (const sourceItem of sourceItems) {
-            const item = this.addItem<TSourceItem, TItem>(sourceItem, createItem);
+            const item = this.addItem<TSourceItem>(sourceItem, createItem);
             items.push(item);
         }
         return items;
@@ -49,9 +49,9 @@ export class ListGroup extends BasicComponent {
         this.clearComponents();
     }
 
-    addItem<TSourceItem, TItem extends BasicComponent>(
+    addItem<TSourceItem>(
         sourceItem: TSourceItem,
-        createItem: (sourceItem: TSourceItem, itemView: BasicListGroupItemView) => TItem
+        createItem: (sourceItem: TSourceItem, itemView: TItemView) => TItem
     ) {
         const itemView = this.view.addListGroupItem();
         const item = createItem(sourceItem, itemView);

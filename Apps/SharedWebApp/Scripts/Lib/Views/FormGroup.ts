@@ -6,7 +6,7 @@ import { TextCss } from "../TextCss";
 import { AlertView } from "./AlertView";
 import { BasicComponentView } from "./BasicComponentView";
 import { BasicTextComponentView } from "./BasicTextComponentView";
-import { DropdownComponentView } from "./Dropdown";
+import { DropdownComponentView, DropdownMenuView } from "./Dropdown";
 import { ErrorListItemView } from "./ErrorListItemView";
 import { FaIconView } from "./FaIconView";
 import { GridCellView, GridView } from "./Grid";
@@ -94,7 +94,7 @@ export class FormGroupSelectView extends FormGroupView {
 }
 
 export class SimpleFieldFormGroupView extends FormGroupView {
-    readonly alertList: GridListGroupView;
+    readonly alertList: GridListGroupView<ErrorListItemView>;
     private readonly dropdown: DropdownComponentView;
     readonly inputGroup: InputGroupView;
 
@@ -106,14 +106,14 @@ export class SimpleFieldFormGroupView extends FormGroupView {
         this.dropdown.button.useOutlineStyle(ContextualClass.danger);
         this.dropdown.button.addView(FaIconView)
             .configure(i => i.solidStyle('exclamation'));
-        this.dropdown.menu.setPadding(PaddingCss.xs(0));
-        const alertItem = this.dropdown.menu.addListItem();
+        const menu = this.dropdown.menuContainer.addView(DropdownMenuView);
+        menu.setPadding(PaddingCss.xs(0));
+        const alertItem = menu.addListItem();
         alertItem.addCssName(ContextualClass.danger.append('border'));
         const alert = alertItem.addView(AlertView);
         alert.setMargin(MarginCss.xs(0));
         alert.setContext(ContextualClass.danger);
-        this.alertList = alert.addView(GridListGroupView);
-        this.alertList.setItemViewType(ErrorListItemView);
+        this.alertList = GridListGroupView.addTo(alert, ErrorListItemView);
         this.alertList.setTemplateColumns(CssLengthUnit.auto(), CssLengthUnit.flex(1));
     }
 

@@ -22,7 +22,8 @@
             return this.Value === other;
         }
         else if (typeof other === "string") {
-            return this.normalizeDisplayText(this.DisplayText) === this.normalizeDisplayText(other);
+            return this.normalizeDisplayText(this.DisplayText) === this.normalizeDisplayText(other) ||
+                this.Value.toString() === other;
         }
         return this.Value === other.Value;
     }

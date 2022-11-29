@@ -1,7 +1,7 @@
-﻿import { BasicPageView } from '../../Lib/Views/BasicPageView';
-import { TextBlockView } from '../../Lib/Views/TextBlockView';
+﻿import { TextBlockView } from '../../Lib/Views/TextBlockView';
+import { SharedPageView } from '../SharedPageView';
 
-export class MainPageView extends BasicPageView {
+export class MainPageView extends SharedPageView {
     readonly text: TextBlockView;
 
     constructor() {

@@ -46,6 +46,12 @@ interface IResourcePathAccess {
     HasAccess: boolean;
 }
 
+interface ILinkModel {
+    LinkName: string;
+    DisplayText: string;
+    Url: string;
+}
+
 interface PageContext {
     WebAppDomains: IAppVersionDomain[];
     CacheBust: string;
@@ -54,6 +60,7 @@ interface PageContext {
     PageTitle: string;
     IsAuthenticated: boolean;
     UserName: string;
+    RootUrl: string;
 }
 
 interface IAppVersionDomain {

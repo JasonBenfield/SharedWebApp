@@ -1,9 +1,10 @@
 ﻿import { ContextualClass } from "../ContextualClass";
 import { CssClass } from "../CssClass";
-import { EnumerableArray, FilteredArray, MappedArray } from "../Enumerable";
 import { CssLengthUnit } from "../CssLengthUnit";
+import { EnumerableArray, FilteredArray, MappedArray } from "../Enumerable";
 import { MarginCss } from "../MarginCss";
 import { PaddingCss } from "../PaddingCss";
+import { Position } from "../Position";
 import { TextCss } from "../TextCss";
 import { HtmlElementView } from "./HtmlElementView";
 import { IHtmlAttributes, IHtmlElementView, IHtmlStyle, ViewConstructor } from './Types';
@@ -13,7 +14,7 @@ interface ICssBuilders {
     [name: string]: ICssBuilder | string;
 }
 
-export class BasicComponentView  {
+export class BasicComponentView {
     private attr: IHtmlAttributes = {};
     private style: IHtmlStyle = {};
     private readonly cssClass = new CssClass();
@@ -121,6 +122,32 @@ export class BasicComponentView  {
 
     setPadding(padding: PaddingCss) {
         this.setCss('padding', padding);
+    }
+
+    positionAbsolute(position?: Position) {
+        this.setPosition('absolute', position || new Position());
+    }
+
+    positionRelative(position?: Position) {
+        this.setPosition('relative', position || new Position());
+    }
+
+    positionFixed(position?: Position) {
+        this.setPosition('fixed', position || new Position());
+    }
+
+    positionSticky(position?: Position) {
+        this.setPosition('sticky', position || new Position());
+    }
+
+    private setPosition(value: string, position: Position) {
+        this.setStyle(style => {
+            style.position = value;
+            style.top = position.top && position.top.value();
+            style.right = position.right && position.right.value();
+            style.bottom = position.bottom && position.bottom.value();
+            style.left = position.left && position.left.value();
+        });
     }
 
     setTitle(title: string) {

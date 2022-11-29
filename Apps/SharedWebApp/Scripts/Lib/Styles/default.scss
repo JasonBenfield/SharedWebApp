@@ -104,3 +104,12 @@ body {
 .grid-cell.drag-over {
     border-left: 2px dashed #000;
 }
+
+.dropdown-menu > ul {
+    padding: 0;
+    margin: 0;
+}
+
+.dropdown-menu > ul > li {
+    list-style: none;
+}

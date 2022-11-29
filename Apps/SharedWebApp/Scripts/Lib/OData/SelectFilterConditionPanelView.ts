@@ -9,14 +9,13 @@ import { ModalODataPanelView } from "./ModalODataPanelView";
 
 export class SelectFilterConditionPanelView extends ModalODataPanelView {
     readonly title: BasicTextComponentView;
-    readonly conditions: ButtonListGroupView;
+    readonly conditions: ButtonListGroupView<TextButtonListGroupItemView>;
     readonly backButton: ButtonCommandView;
 
     constructor(modal: ModalComponentView) {
         super(modal);
         this.title = this.header.addView(TextHeading1View);
-        this.conditions = this.body.addView(ButtonListGroupView);
-        this.conditions.setItemViewType(TextButtonListGroupItemView);
+        this.conditions = ButtonListGroupView.addTo(this.body, TextButtonListGroupItemView);
         this.footer.setTextCss(new TextCss().start());
         this.footer.addCssName('w-100');
         this.backButton = this.footer.addView(ButtonCommandView);
