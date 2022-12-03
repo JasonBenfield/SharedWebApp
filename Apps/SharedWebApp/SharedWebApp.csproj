@@ -31,15 +31,21 @@
     <None Remove="Scripts\Internal\ODataDemo\ODataDemoRow.ts" />
     <None Remove="Scripts\Internal\ODataDemo\ODataDropdownView.ts" />
     <None Remove="Scripts\Internal\ODataDemo\ODataEmployeeColumnsBuilder.ts" />
+    <None Remove="Scripts\Internal\SharedAppApi.ts" />
+    <None Remove="Scripts\Internal\SharedPage.ts" />
+    <None Remove="Scripts\Internal\SharedPageView.ts" />
     <None Remove="Scripts\Internal\ViewDemo\DemoGridListGroupItem.ts" />
     <None Remove="Scripts\Internal\ViewDemo\DemoGridListGroupItemView.ts" />
     <None Remove="Scripts\Internal\ViewDemo\MainPage.ts" />
     <None Remove="Scripts\Internal\ViewDemo\MainPageView.ts" />
     <None Remove="Scripts\Lib\Api\AppApiQuery.ts" />
     <None Remove="Scripts\Lib\Api\AppVersionDomain.ts" />
+    <None Remove="Scripts\Lib\Api\DefaultMenuDefinitions.ts" />
     <None Remove="Scripts\Lib\Api\ErrorFromHttpResult.ts" />
     <None Remove="Scripts\Lib\Api\ODataResult.ts" />
     <None Remove="Scripts\Lib\Api\ParsedDateObject.ts" />
+    <None Remove="Scripts\Lib\Api\UserMenuDefinition.ts" />
+    <None Remove="Scripts\Lib\BorderCss.ts" />
     <None Remove="Scripts\Lib\Components\BasicComponent.ts" />
     <None Remove="Scripts\Lib\Components\BasicPage.ts" />
     <None Remove="Scripts\Lib\Components\BasicPanelComponent.ts" />
@@ -49,6 +55,8 @@
     <None Remove="Scripts\Lib\Components\FormCheck.ts" />
     <None Remove="Scripts\Lib\Components\InputControl.ts" />
     <None Remove="Scripts\Lib\Components\ListGroup.ts" />
+    <None Remove="Scripts\Lib\Components\MenuComponent.ts" />
+    <None Remove="Scripts\Lib\Components\MenuItemComponent.ts" />
     <None Remove="Scripts\Lib\Components\ModalConfirm.ts" />
     <None Remove="Scripts\Lib\Components\ModalError.ts" />
     <None Remove="Scripts\Lib\Components\SelectControl.ts" />
@@ -58,6 +66,7 @@
     <None Remove="Scripts\Lib\Components\TextComponent.ts" />
     <None Remove="Scripts\Lib\Components\TextValueFormGroup.ts" />
     <None Remove="Scripts\Lib\Components\Types.ts" />
+    <None Remove="Scripts\Lib\Components\UserMenuComponent.ts" />
     <None Remove="Scripts\Lib\DateRange.ts" />
     <None Remove="Scripts\Lib\FlexCss.ts" />
     <None Remove="Scripts\Lib\Forms\ErrorListItem.ts" />
@@ -139,6 +148,7 @@
     <None Remove="Scripts\Lib\OData\Types.ts" />
     <None Remove="Scripts\Lib\OData\ValueRangePanelView.ts" />
     <None Remove="Scripts\Lib\OData\ValueRangePickerView.ts" />
+    <None Remove="Scripts\Lib\Position.ts" />
     <None Remove="Scripts\Lib\RelativeDateRange.ts" />
     <None Remove="Scripts\Lib\TimeSpan.ts" />
     <None Remove="Scripts\Lib\ValueRangeBound.ts" />
@@ -183,6 +193,7 @@
     <None Remove="Scripts\Lib\Views\TextSpanView.ts" />
     <None Remove="Scripts\Lib\Views\Types.ts" />
     <None Remove="Scripts\Lib\Views\UnorderedListView.ts" />
+    <None Remove="Scripts\Lib\Views\UserMenuView.ts" />
     <None Remove="Scripts\Lib\Views\ViewEventBuilder.ts" />
     <None Remove="Scripts\Tests\ParsedDateObjectTest.ts" />
     <None Remove="Scripts\Tests\RelativeDateRangeTest.ts" />
@@ -190,13 +201,13 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="XTI_App.Fakes" Version="1.8.31" />
+    <PackageReference Include="XTI_App.Fakes" Version="1.8.32-dev221127212046589" />
     <PackageReference Include="XTI_Core.Extensions" Version="1.10.16" />
-    <PackageReference Include="XTI_TempLog.Fakes" Version="1.2.28" />
-    <PackageReference Include="XTI_WebApp.Extensions" Version="1.8.31" />
-    <PackageReference Include="XTI_WebApp.Fakes" Version="1.8.31" />
-    <PackageReference Include="XTI_WebApp.RCL" Version="1.8.31" />
-    <PackageReference Include="XTI_WebApp.TagHelpers" Version="1.8.31" />
+    <PackageReference Include="XTI_TempLog.Fakes" Version="1.2.29-dev221111081347141" />
+    <PackageReference Include="XTI_WebApp.Extensions" Version="1.8.32-dev221127212046589" />
+    <PackageReference Include="XTI_WebApp.Fakes" Version="1.8.32-dev221127212046589" />
+    <PackageReference Include="XTI_WebApp.RCL" Version="1.8.32-dev221127212046589" />
+    <PackageReference Include="XTI_WebApp.TagHelpers" Version="1.8.32-dev221127212046589" />
   </ItemGroup>
   
   <ItemGroup>
@@ -224,21 +235,29 @@
     <TypeScriptCompile Include="Scripts\Internal\ODataDemo\ODataDemoRow.ts" />
     <TypeScriptCompile Include="Scripts\Internal\ODataDemo\ODataDropdownView.ts" />
     <TypeScriptCompile Include="Scripts\Internal\ODataDemo\ODataEmployeeColumnsBuilder.ts" />
+    <TypeScriptCompile Include="Scripts\Internal\SharedAppApi.ts" />
+    <TypeScriptCompile Include="Scripts\Internal\SharedPage.ts" />
+    <TypeScriptCompile Include="Scripts\Internal\SharedPageView.ts" />
     <TypeScriptCompile Include="Scripts\Internal\ViewDemo\DemoGridListGroupItemView.ts" />
     <TypeScriptCompile Include="Scripts\Internal\ViewDemo\DemoGridListGroupItem.ts" />
     <TypeScriptCompile Include="Scripts\Internal\ViewDemo\MainPage.ts" />
     <TypeScriptCompile Include="Scripts\Internal\ViewDemo\MainPageView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Api\AppApiQuery.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Api\AppVersionDomain.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Api\DefaultMenuDefinitions.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Api\ErrorFromHttpResult.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Api\ODataResult.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Api\ParsedDateObject.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Api\UserMenuDefinition.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\BorderCss.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\BasicComponent.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\BasicPanelComponent.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\BooleanInputControl.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Lib\Components\FileInputControl.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\MenuComponent.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\MenuItemComponent.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\TextAreaControl.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -253,6 +272,7 @@
     <TypeScriptCompile Include="Scripts\Lib\Components\SelectControl.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\SelectOption.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\TextComponent.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\UserMenuComponent.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Forms\TextValueFormGroup.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\Types.ts" />
     <TypeScriptCompile Include="Scripts\Lib\NumberRange.ts">
@@ -306,6 +326,7 @@
     <TypeScriptCompile Include="Scripts\Lib\OData\RelativeDateRangePanelView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\DateRangePicker.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ValueRangePickerView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Position.ts" />
     <TypeScriptCompile Include="Scripts\Lib\ValueRangeBound.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\BasicComponentWrapper.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\ButtonGroupView.ts" />
@@ -423,6 +444,7 @@
     <TypeScriptCompile Include="Scripts\Lib\Views\RootView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\TextBlockView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\Types.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\UserMenuView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\ViewEventBuilder.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

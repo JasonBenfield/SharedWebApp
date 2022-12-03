@@ -1,10 +1,10 @@
-﻿import { BasicPage } from '../../Lib/Components/BasicPage';
-import { TextComponent } from '../../Lib/Components/TextComponent';
+﻿import { TextComponent } from '../../Lib/Components/TextComponent';
 import { DefaultPageContext } from '../DefaultPageContext';
+import { SharedPage } from '../SharedPage';
 import { DemoGrid } from './DemoGrid';
 import { MainPageView } from './MainPageView';
 
-class MainPage extends BasicPage {
+class MainPage extends SharedPage {
     protected readonly view: MainPageView;
 
     constructor() {

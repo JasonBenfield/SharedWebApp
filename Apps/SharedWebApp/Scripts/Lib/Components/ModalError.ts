@@ -57,7 +57,7 @@ export class ModalError extends BasicComponent {
 export class ModalErrorGroupComponent extends BasicComponent {
     protected readonly view: ModalErrorGroupView
     private readonly caption: TextComponent;
-    private readonly errors: ListGroup;
+    private readonly errors: ListGroup<ModalErrorListItem, ModalErrorListItemView>;
 
     private readonly events = { errorSelected: null as ErrorModel };
     private readonly eventSource = new EventSource<typeof this.events>(this, this.events);
@@ -88,7 +88,7 @@ export class ModalErrorGroupComponent extends BasicComponent {
         ).toEnumerableArray().any();
         this.errors.setItems(
             errors,
-            (e: ErrorModel, itemView: ModalErrorListItemView) =>
+            (e, itemView) =>
                 new ModalErrorListItem(e, itemView, anyCaptions)
         );
     }

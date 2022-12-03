@@ -9,6 +9,7 @@ import { ODataGridView } from "./ODataGridView";
 import { ODataHeaderCell } from "./ODataHeaderCell";
 import { ODataHeaderRow } from "./ODataHeaderRow";
 import { ODataQueryOrderByBuilder } from "./ODataQueryBuilder";
+import { ODataQueryFilterBuilder } from "./ODataQueryFilterBuilder";
 import { ODataRow } from "./ODataRow";
 import { Queryable } from "./Types";
 
@@ -169,6 +170,11 @@ export class ODataGrid<TEntity> extends BasicComponent {
             return row.getCellByElement(sourceElement);
         }
         return null;
+    }
+
+    filterChanged(filter: ODataQueryFilterBuilder) {
+        const headerRowView = this.getComponents()[0] as ODataHeaderRow;
+        headerRowView.setFilter(filter);
     }
 
     orderByChanged(orderBy: ODataQueryOrderByBuilder) {

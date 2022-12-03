@@ -1,11 +1,11 @@
 ﻿import { AppApiAction } from '../../Lib/Api/AppApiAction';
 import { AppApiEvents } from '../../Lib/Api/AppApiEvents';
 import { AppResourceUrl } from '../../Lib/Api/AppResourceUrl';
-import { BasicPage } from '../../Lib/Components/BasicPage';
 import { AsyncCommand } from '../../Lib/Components/Command';
 import { FileInputControl, FileType } from '../../Lib/Components/FileInputControl';
 import { TextComponent } from '../../Lib/Components/TextComponent';
 import { DefaultPageContext } from '../DefaultPageContext';
+import { SharedPage } from '../SharedPage';
 import { MainPageView } from './MainPageView';
 
 interface IAddProductModel {
@@ -21,7 +21,7 @@ interface IAddProductNested {
     MoreFiles: File[];
 }
 
-class MainPage extends BasicPage {
+class MainPage extends SharedPage {
     protected readonly view: MainPageView;
     private readonly fileInput: FileInputControl;
 

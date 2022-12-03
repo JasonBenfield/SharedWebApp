@@ -1,31 +1,32 @@
-﻿import { XtiUrl } from "../Api/XtiUrl";
+﻿import { AppApi } from "../Api/AppApi";
+import { HostEnvironment } from "../HostEnvironment";
 import { BasicPageView } from "../Views/BasicPageView";
-import { LinkComponent } from "./LinkComponent";
+import { TextComponent } from "./TextComponent";
+import { UserMenuComponent } from "./UserMenuComponent";
 
 export class BasicPage {
-    constructor(protected readonly view: BasicPageView) {
-        new LinkComponent(view.homeLink).setHref(XtiUrl.current().homeUrl());
-        const logoutUrl = new LinkComponent(view.logOutLink);
-        logoutUrl.setHref(this.getLogutUrl());
-        view.when.urlChanged.then(() => logoutUrl.setHref(this.getLogutUrl()));
-    }
+    private readonly userMenu: UserMenuComponent;
 
-    private getLogutUrl() {
-        let returnUrl = location.href;
-        if (returnUrl.indexOf('#') > -1) {
-            if (returnUrl.indexOf('?') > -1) {
-                returnUrl.replace('#', '&');
-            }
-            else {
-                returnUrl.replace('#', '?');
-            }
+    constructor(protected readonly defaultApi: AppApi, protected readonly view: BasicPageView) {
+        new TextComponent(view.appTitle).setText(pageContext.AppTitle);
+        new TextComponent(view.pageTitle).setText(pageContext.PageTitle);
+        const environmentName = new TextComponent(view.environmentName);
+        environmentName.setText(pageContext.EnvironmentName);
+        environmentName.syncTitleWithText();
+        const env = new HostEnvironment();
+        if (env.isProduction) {
+            view.hideEnvironmentBox();
         }
-        return XtiUrl.current()
-            .homeUrl()
-            .addPart('User')
-            .addPart('Logout')
-            .addQuery('cacheBust', pageContext.CacheBust)
-            .addQuery('ReturnUrl', encodeURIComponent(returnUrl));
+        this.userMenu = new UserMenuComponent(this.defaultApi, view.userMenu);
+        if (!pageContext.IsAuthenticated) {
+            view.hideUserDropdown();
+        }
+        if (pageContext.IsAuthenticated && this.defaultApi) {
+            this.userMenu.refresh();
+        }
+        const documentTitle = pageContext.PageTitle ?
+            `${pageContext.AppTitle} - ${pageContext.PageTitle}` :
+            pageContext.AppTitle;
+        view.setDocumentTitle(documentTitle);
     }
-
 }

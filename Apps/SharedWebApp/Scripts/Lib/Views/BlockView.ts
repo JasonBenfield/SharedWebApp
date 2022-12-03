@@ -1,4 +1,6 @@
-﻿import { FlexCss } from "../FlexCss";
+﻿import { BorderCss } from "../BorderCss";
+import { FlexCss } from "../FlexCss";
+import { Position } from "../Position";
 import { BasicComponentView } from "./BasicComponentView";
 import { BasicContainerView } from "./BasicContainerView";
 
@@ -15,12 +17,12 @@ export class BlockView extends BasicContainerView {
         this.setCss('flex', flexCss);
     }
 
-    positionRelative() {
-        this.addCssName('position-relative');
+    setBorderCss(borderCss: BorderCss) {
+        this.setCss('border', borderCss);
     }
 
     positionAbsoluteFill() {
-        this.addCssName('position-absolute-fill');
+        this.positionAbsolute(Position.fill());
     }
 
     scrollable() {

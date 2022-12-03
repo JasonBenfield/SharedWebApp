@@ -1,15 +1,16 @@
 ﻿import { ContextualClass } from '../../Lib/ContextualClass';
-import { FlexCss } from '../../Lib/FlexCss';
+import { CssLengthUnit } from '../../Lib/CssLengthUnit';
 import { MarginCss } from '../../Lib/MarginCss';
 import { PaddingCss } from '../../Lib/PaddingCss';
-import { BasicPageView } from '../../Lib/Views/BasicPageView';
 import { BlockView } from '../../Lib/Views/BlockView';
 import { ButtonCommandView } from '../../Lib/Views/Command';
+import { GridView } from '../../Lib/Views/Grid';
 import { TextHeading1View } from '../../Lib/Views/TextHeadings';
 import { ToolbarView } from '../../Lib/Views/ToolbarView';
+import { SharedPageView } from '../SharedPageView';
 import { TestCardView } from './TestCardView';
 
-export class MainPageView extends BasicPageView {
+export class MainPageView extends SharedPageView {
     readonly heading: TextHeading1View;
     readonly testCard: TestCardView;
     readonly refreshButton: ButtonCommandView;
@@ -18,20 +19,33 @@ export class MainPageView extends BasicPageView {
 
     constructor() {
         super();
-        const flexColumn = this.addView(BlockView)
-            .configure(c => {
-                c.addCssName('container');
-                c.setFlexCss(new FlexCss().column());
-                c.height100();
-                c.scrollable();
-            });
-        this.heading = flexColumn
+        const grid = this.addView(GridView);
+        grid.layout();
+        grid.setTemplateRows(CssLengthUnit.auto(), CssLengthUnit.flex(1), CssLengthUnit.auto());
+        grid.height100();
+
+        this.heading = grid.addCell()
             .addView(BlockView)
             .addView(TextHeading1View);
-        let fillRow = flexColumn.addView(BlockView)
-            .configure(r => r.setFlexCss(new FlexCss().fill()));
-        this.testCard = fillRow.addView(TestCardView);
-        let toolbar = flexColumn.addView(ToolbarView);
+
+        const container = grid.addCell()
+            .configure(c => {
+                c.addCssName('container');
+                c.addCssName('h-100');
+            })
+            .addView(BlockView)
+            .configure(b => {
+                b.height100();
+                b.positionRelative();
+            })
+            .addView(BlockView)
+            .configure(b => {
+                b.positionAbsoluteFill();
+                b.setBackgroundContext(ContextualClass.light);
+                b.scrollable();
+            });
+        this.testCard = container.addView(TestCardView);
+        const toolbar = grid.addCell().addView(ToolbarView);
         toolbar.setBackgroundContext(ContextualClass.secondary);
         toolbar.addCssName('bg-opacity-25');
         toolbar.setPadding(PaddingCss.xs(3));

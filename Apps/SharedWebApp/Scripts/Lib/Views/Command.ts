@@ -57,7 +57,6 @@ export class LinkCommandView extends LinkView implements ICommandView {
     constructor(container: BasicComponentView) {
         super(container);
         this.icon = this.addView(FaIconView);
-        this.icon.setMargin(MarginCss.end(1));
         this.textSpan = this.addView(TextSpanView);
         this.addCssName('btn');
         this.setContext(ContextualClass.default);
@@ -65,11 +64,17 @@ export class LinkCommandView extends LinkView implements ICommandView {
 
     positionIconRight() {
         this.icon.pullRight();
-        this.icon.setMargin(MarginCss.start(1));
+        this.icon.setMargin(MarginCss.xs({ start: 1, top: 1 }));
     }
 
     setText(text: string) {
         this.textSpan.setText(text);
+        if (text) {
+            this.icon.setMargin(MarginCss.end(1));
+        }
+        else {
+            this.icon.setMargin(MarginCss.xs(0));
+        }
     }
 
     enable() {

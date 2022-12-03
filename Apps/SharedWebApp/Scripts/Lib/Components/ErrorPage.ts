@@ -8,7 +8,7 @@ export class ErrorPage extends BasicPage {
     protected readonly view: ErrorPageView;
 
     constructor() {
-        super(new ErrorPageView());
+        super(null, new ErrorPageView());
         new TextComponent(this.view.caption).setText(serverError.Caption);
         new TextComponent(this.view.message).setText(serverError.Message);
     }

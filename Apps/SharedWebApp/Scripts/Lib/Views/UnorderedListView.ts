@@ -21,6 +21,10 @@ export class UnorderedListView extends BasicComponentView {
 
     getListItems() { return this.getViews() as ListItemView[]; }
 
+    insertListItem<T extends ListItemView>(index: number, ctor?: ViewConstructor<T>) {
+        return this.insertView(index, ctor || ListItemView) as T;
+    }
+
     addListItem<T extends ListItemView>(ctor?: ViewConstructor<T>) {
         return this.addListItems(1, ctor)[0];
     }

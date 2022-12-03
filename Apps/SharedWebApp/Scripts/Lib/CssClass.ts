@@ -34,7 +34,7 @@ export class CssClass implements ICssClass {
     addNames(...names: string[]) {
         if (names) {
             let added = false;
-            for (let name of names) {
+            for (const name of names) {
                 if (this._addName(name)) {
                     added = true;
                 }
@@ -49,16 +49,16 @@ export class CssClass implements ICssClass {
     private _addName(name: string) {
         let added = false;
         if (name) {
-            let nameParts = name.split(/\s+/);
+            const nameParts = name.split(/\s+/);
             if (nameParts.length > 1) {
-                for (let namePart of nameParts) {
+                for (const namePart of nameParts) {
                     if (this._addName(namePart)) {
                         added = true;
                     }
                 }
             }
             else {
-                let index = this.names.indexOf(nameParts[0]);
+                const index = this.names.indexOf(nameParts[0]);
                 if (index < 0) {
                     this.names.push(nameParts[0]);
                     added = true;
@@ -75,7 +75,7 @@ export class CssClass implements ICssClass {
     removeNames(...names: string[]) {
         if (names) {
             let removed = false;
-            for (let name of names) {
+            for (const name of names) {
                 if (this._removeName(name)) {
                     removed = true;
                 }
@@ -90,7 +90,7 @@ export class CssClass implements ICssClass {
     private _removeName(name: string) {
         let removed = false;
         if (name) {
-            let nameParts = name.split(/\s+/);
+            const nameParts = name.split(/\s+/);
             if (nameParts.length > 1) {
                 for (const namePart of nameParts) {
                     if (this._removeName(namePart)) {
@@ -99,7 +99,7 @@ export class CssClass implements ICssClass {
                 }
             }
             else {
-                let index = this.names.indexOf(nameParts[0]);
+                const index = this.names.indexOf(nameParts[0]);
                 if (index >= 0) {
                     this.names.splice(index, 1);
                     removed = true;

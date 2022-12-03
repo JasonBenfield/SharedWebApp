@@ -9,14 +9,14 @@ import { FilterSelection } from "./FilterSelection";
 import { SelectFilterConditionPanelView } from "./SelectFilterConditionPanelView";
 
 interface IResult {
-    readonly next?: {};
-    readonly done?: {};
+    readonly next?: boolean;
+    readonly done?: boolean;
 }
 
 class Result {
-    static next() { return new Result({ next: {} }); }
+    static next() { return new Result({ next: true }); }
 
-    static done() { return new Result({ done: {} }); }
+    static done() { return new Result({ done: true }); }
 
     private constructor(private readonly result: IResult) { }
 
@@ -29,7 +29,7 @@ export class SelectFilterConditionPanel extends BasicComponent implements IPanel
     private readonly panelView: SelectFilterConditionPanelView;
     private readonly awaitable = new Awaitable<Result>();
     private options: FilterColumnOptionsBuilder;
-    private readonly conditionListGroup: ListGroup;
+    private readonly conditionListGroup: ListGroup<TextComponent, TextButtonListGroupItemView>;
 
     constructor(view: SelectFilterConditionPanelView) {
         super(view.body);
@@ -47,7 +47,7 @@ export class SelectFilterConditionPanel extends BasicComponent implements IPanel
         new TextComponent(this.panelView.title).setText(`${options.column.displayText} Filter`);
         this.conditionListGroup.setItems(
             conditions,
-            (condition, itemView: TextButtonListGroupItemView) => {
+            (condition, itemView) => {
                 const item = new TextComponent(itemView);
                 item.data = condition;
                 item.setText(condition.displayText);

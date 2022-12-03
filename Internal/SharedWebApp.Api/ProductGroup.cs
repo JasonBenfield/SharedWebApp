@@ -1,14 +1,15 @@
-﻿using XTI_App.Api;
+﻿using Microsoft.Extensions.DependencyInjection;
+using XTI_App.Api;
 using XTI_WebApp.Api;
 
 namespace SharedWebApp.Api;
 
 public sealed class ProductGroup : AppApiGroupWrapper
 {
-    public ProductGroup(AppApiGroup source)
+    public ProductGroup(AppApiGroup source, IServiceProvider sp)
         : base(source)
     {
-        Index = source.AddAction(nameof(Index), () => ViewAppAction<EmptyRequest>.Index());
+        Index = source.AddAction(nameof(Index), () => new ProductIndexAction(sp.GetRequiredService<WebViewResultFactory>()));
         GetInfo = source.AddAction
         (
             nameof(GetInfo),

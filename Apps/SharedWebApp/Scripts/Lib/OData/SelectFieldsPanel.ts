@@ -13,11 +13,11 @@ import { SelectedFieldListItemView } from "./SelectedFieldListItemView";
 import { SelectFieldsPanelView } from "./SelectFieldsPanelView";
 
 interface IResult {
-    done?: {};
+    done?: boolean;
 }
 
 export class Result {
-    static done() { return new Result({ done: {} }); }
+    static done() { return new Result({ done: true }); }
 
     private constructor(private readonly result: IResult) { }
 
@@ -27,9 +27,9 @@ export class Result {
 export class SelectFieldsPanel extends BasicComponent implements IPanel {
     private readonly panelView: SelectFieldsPanelView
     private readonly awaitable = new Awaitable<Result>();
-    private readonly availableFields: ListGroup;
+    private readonly availableFields: ListGroup<AvailableFieldListItem, AvailableFieldListItemView>;
     private readonly availableAlert: MessageAlert;
-    private readonly selectedFields: ListGroup;
+    private readonly selectedFields: ListGroup<SelectedFieldListItem, SelectedFieldListItemView>;
     private readonly selectedAlert: MessageAlert;
 
     constructor(
@@ -92,13 +92,13 @@ export class SelectFieldsPanel extends BasicComponent implements IPanel {
     }
 
     private onDeleteClicked(el: HTMLElement, evt: JQueryEventObject) {
-        const selectedField = this.selectedFields.getItemByElement(el) as SelectedFieldListItem;
+        const selectedField = this.selectedFields.getItemByElement(el);
         if (selectedField) {
             evt.stopPropagation();
             this.selectedFields.removeItem(selectedField);
             this.availableFields.addItem(
                 selectedField.column,
-                (c, itemView: AvailableFieldListItemView) => new AvailableFieldListItem(c, itemView)
+                (c, itemView) => new AvailableFieldListItem(c, itemView)
             );
         }
     }
@@ -106,7 +106,7 @@ export class SelectFieldsPanel extends BasicComponent implements IPanel {
     private onAvailableFieldClicked(availableField: SelectedFieldListItem) {
         this.selectedFields.addItem(
             availableField.column,
-            (c, itemView: SelectedFieldListItemView) => new SelectedFieldListItem(c, itemView)
+            (c, itemView) => new SelectedFieldListItem(c, itemView)
         );
         this.availableFields.removeItem(availableField);
         this.updateAlerts();
@@ -118,7 +118,7 @@ export class SelectFieldsPanel extends BasicComponent implements IPanel {
 
     private save() {
         const selectedColumns = new MappedArray(
-            this.selectedFields.getItems() as SelectedFieldListItem[],
+            this.selectedFields.getItems(),
             item => item.column
         ).value();
         this.select.clear();

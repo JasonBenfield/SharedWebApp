@@ -18,9 +18,15 @@ public sealed class SharedAppApi : WebAppApiWrapper
             sp
         )
     {
+        Home = new HomeGroup
+        (
+            source.AddGroup(nameof(Home)),
+            sp
+        );
         Employee = new EmployeeGroup
         (
-            source.AddGroup(nameof(Employee))
+            source.AddGroup(nameof(Employee)),
+            sp
         );
         EmployeeQuery = new ODataGroup<EmptyRequest, EmployeeEntity>
         (
@@ -29,9 +35,11 @@ public sealed class SharedAppApi : WebAppApiWrapper
         );
         Product = new ProductGroup
         (
-            source.AddGroup(nameof(Product))
+            source.AddGroup(nameof(Product)),
+            sp
         );
     }
+    public HomeGroup Home { get; }
     public EmployeeGroup Employee { get; }
     public ODataGroup<EmptyRequest, EmployeeEntity> EmployeeQuery { get; }
     public ProductGroup Product { get; }

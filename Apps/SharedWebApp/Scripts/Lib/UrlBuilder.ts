@@ -167,11 +167,11 @@ export class UrlBuilder {
 
     value() {
         let url = this._url.value();
-        let query = this._query.toString();
+        const query = this._query.toString();
         if (query) {
             url += `?${query}`;
         }
-        let hash = this._hash.toString();
+        const hash = this._hash.toString();
         if (hash) {
             url += `#${hash}`;
         }

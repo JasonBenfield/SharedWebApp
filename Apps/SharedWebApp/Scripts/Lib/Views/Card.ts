@@ -1,9 +1,8 @@
 ﻿import { BasicComponentView } from "./BasicComponentView";
 import { BasicTextComponentView } from "./BasicTextComponentView";
 import { BlockView } from "./BlockView";
-import { BasicListGroupItemView, BasicListGroupView, ButtonListGroupItemView, ButtonListGroupView, LinkListGroupItemView, LinkListGroupView, ListGroupItemView, ListGroupView } from "./ListGroup";
+import { ButtonListGroupItemView, ButtonListGroupView, GridListGroupItemView, GridListGroupView, LinkListGroupItemView, LinkListGroupView, ListGroupItemView, ListGroupView } from "./ListGroup";
 import { MessageAlertView } from "./MessageAlertView";
-import { TextBlockView } from "./TextBlockView";
 import { ViewConstructor } from "./Types";
 
 export class CardView extends BlockView {
@@ -30,27 +29,27 @@ export class CardView extends BlockView {
         return body;
     }
 
-    addLinkListGroup(ctor?: ViewConstructor<LinkListGroupItemView>) {
-        return this.addListGroup(LinkListGroupView, ctor || LinkListGroupItemView);
-    }
-
-    addButtonListGroup(ctor?: ViewConstructor<ButtonListGroupItemView>) {
-        return this.addListGroup(ButtonListGroupView, ctor || ButtonListGroupItemView);
-    }
-
-    addUnorderedListGroup(ctor?: ViewConstructor<ListGroupItemView>) {
-        return this.addListGroup(ListGroupView, ctor || ListGroupItemView);
-    }
-
-    private addListGroup<TView extends BasicListGroupView, TItemView extends BasicListGroupItemView>(
-        ctor: ViewConstructor<TView>,
-        itemCtor?: ViewConstructor<TItemView>
-    ) {
-        const listGroup = this.addView(ctor);
+    addGridListGroup<TItemView extends GridListGroupItemView>(itemCtor: ViewConstructor<TItemView>) {
+        const listGroup = GridListGroupView.addTo(this, itemCtor);
         listGroup.makeFlush();
-        if (itemCtor) {
-            listGroup.setItemViewType(itemCtor);
-        }
+        return listGroup;
+    }
+
+    addLinkListGroup<TItemView extends LinkListGroupItemView>(itemCtor: ViewConstructor<TItemView>) {
+        const listGroup = LinkListGroupView.addTo(this, itemCtor);
+        listGroup.makeFlush();
+        return listGroup;
+    }
+
+    addButtonListGroup<TItemView extends ButtonListGroupItemView>(itemCtor: ViewConstructor<TItemView>) {
+        const listGroup = ButtonListGroupView.addTo(this, itemCtor);
+        listGroup.makeFlush();
+        return listGroup;
+    }
+
+    addUnorderedListGroup<TItemView extends ListGroupItemView>(itemCtor: ViewConstructor<TItemView>) {
+        const listGroup = ListGroupView.addTo(this, itemCtor);
+        listGroup.makeFlush();
         return listGroup;
     }
 }

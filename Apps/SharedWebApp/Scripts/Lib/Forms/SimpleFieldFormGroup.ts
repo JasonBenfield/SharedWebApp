@@ -10,7 +10,7 @@ export abstract class SimpleFieldFormGroup<TValue> implements IField {
     private readonly name: string;
     private caption: string;
     private readonly captionBlock: TextComponent;
-    private readonly alertList: ListGroup;
+    private readonly alertList: ListGroup<ErrorListItem, ErrorListItemView>;
 
     constructor(prefix: string, name: string, protected readonly view: SimpleFieldFormGroupView) {
         this.name = prefix ? `${prefix}_${name}` : name;
@@ -40,7 +40,7 @@ export abstract class SimpleFieldFormGroup<TValue> implements IField {
     setErrors(errors: ErrorModel[]) {
         this.alertList.setItems(
             errors,
-            (e: ErrorModel, li: ErrorListItemView) => new ErrorListItem(e, li)
+            (e, li) => new ErrorListItem(e, li)
         );
         if (errors.length > 0) {
             this.view.showDropDown();

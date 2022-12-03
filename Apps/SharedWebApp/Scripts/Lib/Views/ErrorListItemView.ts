@@ -1,15 +1,15 @@
 ﻿import { ContextualClass } from "../ContextualClass";
-import { TextSpanView } from "./TextSpanView";
 import { BasicComponentView } from "./BasicComponentView";
-import { ListGroupItemView } from "./ListGroup";
+import { GridListGroupItemView } from "./ListGroup";
+import { TextSpanView } from "./TextSpanView";
 
-export class ErrorListItemView extends ListGroupItemView {
+export class ErrorListItemView extends GridListGroupItemView {
     readonly message: TextSpanView;
 
     constructor(container: BasicComponentView) {
         super(container);
         this.addCssName('dropdown-item-text');
         this.addCssName(ContextualClass.danger.append('text'));
-        this.message = this.addView(TextSpanView);
+        this.message = this.addCell().addView(TextSpanView);
     }
 }

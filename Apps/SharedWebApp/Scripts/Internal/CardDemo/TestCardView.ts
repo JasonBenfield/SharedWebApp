@@ -2,7 +2,7 @@
 import { CardTitleHeaderView } from "../../Lib/Views/Card";
 import { CardView } from "../../Lib/Views/Card";
 import { TextBlockView } from "../../Lib/Views/TextBlockView";
-import { ButtonListGroupView, ListGroupView } from "../../Lib/Views/ListGroup";
+import { ButtonListGroupView, ListGroupItemView, ListGroupView } from "../../Lib/Views/ListGroup";
 import { BasicComponentView } from "../../Lib/Views/BasicComponentView";
 import { TestClickableListItemView } from "./TestClickableItemView";
 import { TestListItemView } from "./TestListItemView";
@@ -14,21 +14,19 @@ export class TestCardView extends CardView {
     readonly cardTitleHeader: CardTitleHeaderView;
     readonly alert: CardAlertView;
     readonly manualItem: BasicTextComponentView;
-    readonly testItems: ListGroupView;
-    readonly clickableItems: ButtonListGroupView;
+    readonly testItems: ListGroupView<TestListItemView>;
+    readonly clickableItems: ButtonListGroupView<TestClickableListItemView>;
     readonly textArea: TextAreaView;
 
     constructor(container: BasicComponentView) {
         super(container);
         this.cardTitleHeader = this.addCardTitleHeader();
         this.alert = this.addCardAlert();
-        const manualItems = this.addUnorderedListGroup();
+        const manualItems = this.addUnorderedListGroup(ListGroupItemView);
         this.manualItem = manualItems.addListGroupItem()
             .addView(TextBlockView);
-        this.testItems = this.addUnorderedListGroup();
-        this.testItems.setItemViewType(TestListItemView);
-        this.clickableItems = this.addButtonListGroup();
-        this.clickableItems.setItemViewType(TestClickableListItemView);
+        this.testItems = this.addUnorderedListGroup(TestListItemView);
+        this.clickableItems = this.addButtonListGroup(TestClickableListItemView);
         const formGroups = this.addView(FormGroupGridView);
         const formGroup = formGroups.addFormGroup(FormGroupTextAreaView);
         formGroup.caption.setText('Text Area');

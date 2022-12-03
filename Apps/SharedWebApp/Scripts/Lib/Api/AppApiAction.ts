@@ -4,7 +4,6 @@ import { AppApiEvents } from "./AppApiEvents";
 import { AppResourceUrl } from "./AppResourceUrl";
 import { ErrorFromHttpResult } from "./ErrorFromHttpResult";
 import { HttpClient } from "./HttpClient";
-import { JsonText } from "./JsonText";
 import { ParsedDateObject } from "./ParsedDateObject";
 
 export class AppApiAction<TArgs, TResult> {

@@ -29,7 +29,7 @@ export class ODataHeaderCellView extends GridCellView {
         this.sortButton = this.sortCol.addView(ButtonCommandView);
         this.sortButton.addCssName('odata-sort-button');
         this.sortButton.icon.solidStyle('caret-up');
-        this.sortButton.setPadding(PaddingCss.xs({ top: 0, end: 0 }));
+        this.sortButton.setPadding(PaddingCss.xs({ top: 0, start: 1, end: 1 }));
     }
 
     sortNotSet() {
@@ -61,5 +61,13 @@ export class ODataHeaderCellView extends GridCellView {
 
     styleAsDragLeave() {
         this.removeCssName('drag-over');
+    }
+
+    styleAsFiltered() {
+        this.addCssName('odata-filtered');
+    }
+
+    styleAsNotFiltered() {
+        this.removeCssName('odata-filtered');
     }
 }

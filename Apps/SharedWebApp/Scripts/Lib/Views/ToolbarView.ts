@@ -2,6 +2,7 @@
 import { BasicComponentView } from "./BasicComponentView";
 import { BlockView } from "./BlockView";
 import { ColumnView } from "./ColumnView";
+import { ButtonCommandView } from "./Command";
 import { RowView } from "./RowView";
 
 export class ToolbarView extends BasicComponentView {
@@ -27,4 +28,16 @@ export class ToolbarView extends BasicComponentView {
     readonly columnStart: ColumnView;
     readonly columnMiddle: ColumnView;
     readonly columnEnd: ColumnView;
+
+    addButtonCommandToStart() {
+        return this.columnStart.addView(ButtonCommandView);
+    }
+
+    addButtonCommandToMiddle() {
+        return this.columnMiddle.addView(ButtonCommandView);
+    }
+
+    addButtonCommandToEnd() {
+        return this.columnEnd.addView(ButtonCommandView);
+    }
 }

@@ -1,7 +1,6 @@
-﻿import { ContextualClass } from "../ContextualClass";
-import { BasicComponentView } from "../Views/BasicComponentView";
+﻿import { BasicComponentView } from "../Views/BasicComponentView";
 import { BasicTextComponentView } from "../Views/BasicTextComponentView";
-import { ButtonCommandView } from "../Views/Command";
+import { FaIconView } from "../Views/FaIconView";
 import { GridListGroupItemView } from "../Views/ListGroup";
 import { TextBlockView } from "../Views/TextBlockView";
 
@@ -10,11 +9,9 @@ export class SuggestedValueListItemView extends GridListGroupItemView {
 
     constructor(container: BasicComponentView) {
         super(container);
+        this.addCssName('clickable');
         this.valueText = this.addCell().addView(TextBlockView);
-        const addButton = this.addCell().addView(ButtonCommandView);
-        addButton.icon.solidStyle('plus');
-        addButton.setContext(ContextualClass.secondary);
-        addButton.setTitle('Add Suggested Value');
-        addButton.addCssName('addButton');
+        const icon = this.addCell().addView(FaIconView);
+        icon.solidStyle('plus');
     }
 }
