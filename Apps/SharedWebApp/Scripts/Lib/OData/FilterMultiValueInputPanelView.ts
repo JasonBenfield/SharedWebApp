@@ -1,6 +1,7 @@
 ﻿import { ContextualClass } from "../ContextualClass";
 import { CssLengthUnit } from "../CssLengthUnit";
 import { MarginCss } from "../MarginCss";
+import { Position, PositionUnit } from "../Position";
 import { BasicTextComponentView } from "../Views/BasicTextComponentView";
 import { BlockView } from "../Views/BlockView";
 import { BooleanInputView } from "../Views/BooleanInputView";
@@ -11,6 +12,7 @@ import { GridView } from "../Views/Grid";
 import { InputGroupView } from "../Views/InputGroupView";
 import { InputView } from "../Views/InputView";
 import { GridListGroupView } from "../Views/ListGroup";
+import { MessageAlertView } from "../Views/MessageAlertView";
 import { ModalComponentView } from "../Views/Modal";
 import { TextBlockView } from "../Views/TextBlockView";
 import { TextHeading1View, TextHeading3View } from "../Views/TextHeadings";
@@ -27,6 +29,7 @@ export class FilterMultiValueInputPanelView extends ModalODataPanelView {
     readonly cancelButton: ButtonCommandView;
     readonly saveButton: ButtonCommandView;
     private readonly form: FormView;
+    readonly alert: MessageAlertView;
     readonly suggestedValues: GridListGroupView<SuggestedValueListItemView>;
     private readonly selectedValuesHeader: BasicTextComponentView;
     readonly selectedValues: GridListGroupView<SelectedValueListItemView>;
@@ -63,14 +66,17 @@ export class FilterMultiValueInputPanelView extends ModalODataPanelView {
         this.addButton.setTitle('Add Value');
         this.addButton.setContext(ContextualClass.secondary);
 
+        const suggestedValuesCell = layoutGrid.addCell()
+            .configure(c => c.positionRelative())
+            .addView(BlockView)
+            .configure(b => {
+                b.positionAbsoluteFill();
+                b.scrollable();
+            });
+        this.alert = suggestedValuesCell.addView(MessageAlertView);
+        this.alert.positionSticky(Position.fillHorizontal());
         this.suggestedValues = GridListGroupView.addTo(
-            layoutGrid.addCell()
-                .configure(c => c.positionRelative())
-                .addView(BlockView)
-                .configure(b => {
-                    b.positionAbsoluteFill();
-                    b.scrollable();
-                }),
+            suggestedValuesCell,
             SuggestedValueListItemView
         );
         this.suggestedValues.setTemplateColumns(CssLengthUnit.flex(1), CssLengthUnit.auto());
@@ -109,13 +115,6 @@ export class FilterMultiValueInputPanelView extends ModalODataPanelView {
     handleDeleteButton(action: (el: HTMLElement, evt: JQueryEventObject) => void) {
         this.selectedValues.on('click')
             .select('.deleteButton')
-            .execute(action)
-            .subscribe();
-    }
-
-    handleAddButton(action: (el: HTMLElement, evt: JQueryEventObject) => void) {
-        this.suggestedValues.on('click')
-            .select('.addButton')
             .execute(action)
             .subscribe();
     }

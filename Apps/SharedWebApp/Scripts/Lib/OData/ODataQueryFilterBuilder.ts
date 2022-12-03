@@ -1,5 +1,5 @@
 ﻿import { DateRange, ISerializableDateRange } from "../DateRange";
-import { EnumerableArray, MappedArray } from "../Enumerable";
+import { EnumerableArray, FilteredArray, MappedArray } from "../Enumerable";
 import { JoinedStrings } from "../JoinedStrings";
 import { ISerializableNumberRange, NumberRange } from "../NumberRange";
 import { ISerializableRelativeDateRange, RelativeDateRange } from "../RelativeDateRange";
@@ -390,6 +390,13 @@ export class FilterFieldFunction {
             return this.field.isField(fieldName);
         }
         return this.field.field.isField(fieldName);
+    }
+
+    getField() {
+        if (this.field instanceof FilterField) {
+            return this.field;
+        }
+        return this.field.getField();
     }
 
     isToLower() { return this.functionName === 'tolower'; }
@@ -964,6 +971,13 @@ export class ODataQueryFilterBuilder {
     }
 
     any() { return this.conditionClauses.length > 0; }
+
+    isField(name: string) {
+        return new FilteredArray(
+            this.conditionClauses,
+            f => f.condition.isField(name)
+        ).toEnumerableArray().any();
+    }
 
     getConditions() {
         return new EnumerableArray(this.conditionClauses).value();

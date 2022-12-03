@@ -8,6 +8,8 @@ export class PositionUnit {
 
     static percentage(size: number) { return new PositionUnit(size, '%'); }
 
+    static zero() { return new PositionUnit(0, ''); }
+
     private readonly css: string;
 
     protected constructor(readonly size: number, readonly unit: string) {
@@ -22,10 +24,18 @@ export class PositionUnit {
 export class Position {
     static fill() {
         return new Position({
-            top: PositionUnit.px(0),
-            right: PositionUnit.px(0),
-            bottom: PositionUnit.px(0),
-            left: PositionUnit.px(0)
+            top: PositionUnit.zero(),
+            right: PositionUnit.zero(),
+            bottom: PositionUnit.zero(),
+            left: PositionUnit.zero()
+        });
+    }
+
+    static fillHorizontal() {
+        return new Position({
+            top: PositionUnit.zero(),
+            right: PositionUnit.zero(),
+            left: PositionUnit.zero()
         });
     }
 

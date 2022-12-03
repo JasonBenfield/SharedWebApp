@@ -3,6 +3,7 @@ import { BooleanInputControl } from "../Components/BooleanInputControl";
 import { Command } from "../Components/Command";
 import { InputControl } from "../Components/InputControl";
 import { ListGroup } from "../Components/ListGroup";
+import { MessageAlert } from "../Components/MessageAlert";
 import { TextComponent } from "../Components/TextComponent";
 import { DebouncedAction } from "../DebouncedAction";
 import { MultiViewValue } from "../Forms/MultiViewValue";
@@ -35,6 +36,7 @@ export class FilterMultiValueInputPanel implements IPanel {
     private readonly input: InputControl<number | string | Date>;
     private readonly ignoreCaseInput: BooleanInputControl;
     private viewValue: MultiViewValue<string, number | string | Date>;
+    private readonly alert: MessageAlert;
     private readonly suggestedValues: ListGroup<SuggestedValueListItem, SuggestedValueListItemView>;
     private readonly selectedValues: ListGroup<SelectedValueListItem, SelectedValueListItemView>;
     private readonly addCommand: Command;
@@ -44,10 +46,11 @@ export class FilterMultiValueInputPanel implements IPanel {
         this.viewValue = new MultiViewValue(new TextToTextViewValue());
         this.ignoreCaseInput = new BooleanInputControl(view.ignoreCaseInput);
         this.input = new InputControl(view.valueInput, this.viewValue);
-        this.title = new TextComponent(this.view.title);
-        this.suggestedValues = new ListGroup(this.view.suggestedValues);
-        view.handleAddButton(this.onSuggestedValueAddClicked.bind(this));
-        this.selectedValues = new ListGroup(this.view.selectedValues);
+        this.title = new TextComponent(view.title);
+        this.alert = new MessageAlert(view.alert);
+        this.suggestedValues = new ListGroup(view.suggestedValues);
+        this.suggestedValues.registerItemClicked(this.onSuggestedValueAddClicked.bind(this));
+        this.selectedValues = new ListGroup(view.selectedValues);
         view.handleDeleteButton(this.onSelectedValueDeleteClicked.bind(this));
         this.saveCommand = new Command(this.save.bind(this));
         this.saveCommand.add(view.saveButton);
@@ -69,27 +72,30 @@ export class FilterMultiValueInputPanel implements IPanel {
 
     private readonly debouncedGetSuggestedValues = new DebouncedAction(
         () => this.getSuggestedValues(),
-        1000
+        500
     );
 
     private async getSuggestedValues() {
-        const suggestedValues = await this.options.column.suggestedValueGetter.getSuggestedValues(this.input.getValue());
+        const suggestedValues = await this.alert.infoAction(
+            'Loading...',
+            () => this.options.column.suggestedValueGetter.getSuggestedValues(this.input.getValue())
+        );
         this.suggestedValues.setItems(
             suggestedValues as string[],
             (v, itemView) => new SuggestedValueListItem(v, v, itemView)
         );
     }
 
-    private onSuggestedValueAddClicked(el: HTMLElement, evt: JQueryEventObject) {
-        evt.preventDefault();
-        const item = this.suggestedValues.getItemByElement(el);
+    private onSuggestedValueAddClicked(item: SuggestedValueListItem) {
         this.addValue(item.value);
     }
 
     private onSelectedValueDeleteClicked(el: HTMLElement) {
         const item = this.selectedValues.getItemByElement(el);
         this.selectedValues.removeItem(item);
+        this.options.column.suggestedValueGetter.exclude(this.getSelectedValues());
         this.updateSelectedValueVisibility();
+        this.debouncedGetSuggestedValues.execute();
     }
 
     private updateSelectedValueVisibility() {

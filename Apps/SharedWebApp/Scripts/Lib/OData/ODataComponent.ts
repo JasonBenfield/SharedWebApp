@@ -216,6 +216,7 @@ export class ODataComponent<TEntity> {
             this.currentPage.startRecord + result.records.length - 1,
             result.count
         );
+        this.grid.filterChanged(this.query.filter);
         this.grid.orderByChanged(this.query.orderBy);
         if (this.saveChangesOptions.select) {
             localStorage.setItem(`odata_${this.id}_select`, JSON.stringify(this.query.select.serialize()));

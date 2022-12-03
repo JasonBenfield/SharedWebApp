@@ -1,4 +1,5 @@
-﻿import { ContextualClass } from "../ContextualClass";
+﻿import { BorderCss } from "../BorderCss";
+import { ContextualClass } from "../ContextualClass";
 import { CssLengthUnit } from "../CssLengthUnit";
 import { MarginCss } from "../MarginCss";
 import { PaddingCss } from "../PaddingCss";
@@ -6,7 +7,8 @@ import { TextCss } from "../TextCss";
 import { AlertView } from "./AlertView";
 import { BasicComponentView } from "./BasicComponentView";
 import { BasicTextComponentView } from "./BasicTextComponentView";
-import { DropdownComponentView, DropdownMenuView } from "./Dropdown";
+import { BlockView } from "./BlockView";
+import { DropdownButtonView, DropdownComponentView, DropdownMenuView } from "./Dropdown";
 import { ErrorListItemView } from "./ErrorListItemView";
 import { FaIconView } from "./FaIconView";
 import { GridCellView, GridView } from "./Grid";
@@ -95,18 +97,25 @@ export class FormGroupSelectView extends FormGroupView {
 
 export class SimpleFieldFormGroupView extends FormGroupView {
     readonly alertList: GridListGroupView<ErrorListItemView>;
-    private readonly dropdown: DropdownComponentView;
+    private readonly dropdownButton: DropdownButtonView;
     readonly inputGroup: InputGroupView;
 
     constructor(container: BasicComponentView) {
         super(container);
         this.inputGroup = this.valueCell.addView(InputGroupView);
-        this.dropdown = this.inputGroup.addDropdown();
-        this.dropdown.hide();
-        this.dropdown.button.useOutlineStyle(ContextualClass.danger);
-        this.dropdown.button.addView(FaIconView)
+        this.dropdownButton = this.inputGroup.addButton(DropdownButtonView);
+        const menuContainer = this.inputGroup.appendText(BlockView);
+        menuContainer.addCssName('dropdown-menu');
+        menuContainer.addCssName('dropdown-menu-right');
+        menuContainer.setMargin(MarginCss.xs(0));
+        menuContainer.setPadding(PaddingCss.xs(0));
+        menuContainer.setBorderCss(new BorderCss().all(b => b.remove()));
+        this.dropdownButton.initialize();
+        this.dropdownButton.hide();
+        this.dropdownButton.useOutlineStyle(ContextualClass.danger);
+        this.dropdownButton.addView(FaIconView)
             .configure(i => i.solidStyle('exclamation'));
-        const menu = this.dropdown.menuContainer.addView(DropdownMenuView);
+        const menu = menuContainer.addView(DropdownMenuView);
         menu.setPadding(PaddingCss.xs(0));
         const alertItem = menu.addListItem();
         alertItem.addCssName(ContextualClass.danger.append('border'));
@@ -117,10 +126,10 @@ export class SimpleFieldFormGroupView extends FormGroupView {
         this.alertList.setTemplateColumns(CssLengthUnit.auto(), CssLengthUnit.flex(1));
     }
 
-    showDropDown() { this.dropdown.show(); }
+    showDropDown() { this.dropdownButton.show(); }
 
     hideDropDown() {
-        this.dropdown.hide();
+        this.dropdownButton.hide();
     }
 }
 

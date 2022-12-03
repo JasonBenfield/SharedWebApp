@@ -28,6 +28,10 @@ export class ODataHeaderCell extends ODataCell {
 
     sortAsc() { this.view.sortAsc(); }
 
+    filtered() { this.view.styleAsFiltered(); }
+
+    notFiltered() { this.view.styleAsNotFiltered(); }
+
     styleAsDragStart() {
         this.view.styleAsDragStart();
     }
