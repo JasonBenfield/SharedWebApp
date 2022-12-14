@@ -15,7 +15,7 @@ export class SelectFilterConditionPanelView extends ModalODataPanelView {
     constructor(modal: ModalComponentView) {
         super(modal);
         this.title = this.header.addView(TextHeading1View);
-        this.conditions = ButtonListGroupView.addTo(this.body, TextButtonListGroupItemView);
+        this.conditions = this.body.addButtonListGroup(TextButtonListGroupItemView);
         this.footer.setTextCss(new TextCss().start());
         this.footer.addCssName('w-100');
         this.backButton = this.footer.addView(ButtonCommandView);

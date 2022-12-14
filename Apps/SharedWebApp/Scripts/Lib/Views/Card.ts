@@ -1,7 +1,7 @@
 ﻿import { BasicComponentView } from "./BasicComponentView";
 import { BasicTextComponentView } from "./BasicTextComponentView";
 import { BlockView } from "./BlockView";
-import { ButtonListGroupItemView, ButtonListGroupView, GridListGroupItemView, GridListGroupView, LinkListGroupItemView, LinkListGroupView, ListGroupItemView, ListGroupView } from "./ListGroup";
+import { ButtonListGroupItemView, ButtonListGroupView, GridListGroupItemView, GridListGroupView, LinkListGroupItemView, LinkListGroupView, ListGroupItemView, ListGroupView, TextButtonListGroupItemView } from "./ListGroup";
 import { MessageAlertView } from "./MessageAlertView";
 import { ViewConstructor } from "./Types";
 
@@ -41,13 +41,13 @@ export class CardView extends BlockView {
         return listGroup;
     }
 
-    addButtonListGroup<TItemView extends ButtonListGroupItemView>(itemCtor: ViewConstructor<TItemView>) {
+    addButtonListGroup<TItemView extends (ButtonListGroupItemView | TextButtonListGroupItemView)>(itemCtor: ViewConstructor<TItemView>) {
         const listGroup = ButtonListGroupView.addTo(this, itemCtor);
         listGroup.makeFlush();
         return listGroup;
     }
 
-    addUnorderedListGroup<TItemView extends ListGroupItemView>(itemCtor: ViewConstructor<TItemView>) {
+    addListGroup<TItemView extends ListGroupItemView>(itemCtor: ViewConstructor<TItemView>) {
         const listGroup = ListGroupView.addTo(this, itemCtor);
         listGroup.makeFlush();
         return listGroup;

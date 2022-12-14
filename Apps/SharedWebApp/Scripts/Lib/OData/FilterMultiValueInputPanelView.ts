@@ -75,26 +75,21 @@ export class FilterMultiValueInputPanelView extends ModalODataPanelView {
             });
         this.alert = suggestedValuesCell.addView(MessageAlertView);
         this.alert.positionSticky(Position.fillHorizontal());
-        this.suggestedValues = GridListGroupView.addTo(
-            suggestedValuesCell,
-            SuggestedValueListItemView
-        );
+        this.suggestedValues = suggestedValuesCell.addGridListGroup(SuggestedValueListItemView);
         this.suggestedValues.setTemplateColumns(CssLengthUnit.flex(1), CssLengthUnit.auto());
 
         this.selectedValuesHeader = layoutGrid.addCell()
             .addView(TextHeading3View);
         this.selectedValuesHeader.setText('Selected Values');
 
-        this.selectedValues = GridListGroupView.addTo(
-            layoutGrid.addCell()
-                .configure(c => c.positionRelative())
-                .addView(BlockView)
-                .configure(b => {
-                    b.positionAbsoluteFill();
-                    b.scrollable();
-                }),
-            SelectedValueListItemView
-        );
+        this.selectedValues = layoutGrid.addCell()
+            .configure(c => c.positionRelative())
+            .addView(BlockView)
+            .configure(b => {
+                b.positionAbsoluteFill();
+                b.scrollable();
+            })
+            .addGridListGroup(SelectedValueListItemView);
         this.selectedValues.setTemplateColumns(CssLengthUnit.flex(1), CssLengthUnit.auto());
 
         this.cancelButton = this.footer.addView(ButtonCommandView);
