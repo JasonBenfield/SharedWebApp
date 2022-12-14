@@ -22,10 +22,10 @@ export class TestCardView extends CardView {
         super(container);
         this.cardTitleHeader = this.addCardTitleHeader();
         this.alert = this.addCardAlert();
-        const manualItems = this.addUnorderedListGroup(ListGroupItemView);
+        const manualItems = this.addListGroup(ListGroupItemView);
         this.manualItem = manualItems.addListGroupItem()
             .addView(TextBlockView);
-        this.testItems = this.addUnorderedListGroup(TestListItemView);
+        this.testItems = this.addListGroup(TestListItemView);
         this.clickableItems = this.addButtonListGroup(TestClickableListItemView);
         const formGroups = this.addView(FormGroupGridView);
         const formGroup = formGroups.addFormGroup(FormGroupTextAreaView);

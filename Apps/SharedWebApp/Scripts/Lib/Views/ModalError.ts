@@ -53,7 +53,7 @@ export class ModalErrorGroupView extends BlockView {
         this.hr = this.addView(HorizontalRuleView);
         this.caption = this.addView(TextHeading4View);
         this.caption.addCssName('alert-heading');
-        this.errors = GridListGroupView.addTo(this, ModalErrorListItemView);
+        this.errors = this.addGridListGroup(ModalErrorListItemView);
         this.errors.setTemplateColumns(CssLengthUnit.auto(), CssLengthUnit.flex(1));
     }
 

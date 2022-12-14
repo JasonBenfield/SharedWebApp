@@ -122,7 +122,7 @@ export class SimpleFieldFormGroupView extends FormGroupView {
         const alert = alertItem.addView(AlertView);
         alert.setMargin(MarginCss.xs(0));
         alert.setContext(ContextualClass.danger);
-        this.alertList = GridListGroupView.addTo(alert, ErrorListItemView);
+        this.alertList = alert.addGridListGroup(ErrorListItemView);
         this.alertList.setTemplateColumns(CssLengthUnit.auto(), CssLengthUnit.flex(1));
     }
 

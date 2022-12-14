@@ -1,5 +1,5 @@
 ﻿import { BasicComponentView } from "./BasicComponentView";
-import { IHtmlElementView, ViewConstructor, IContainerView } from "./Types";
+import { IContainerView, IHtmlElementView, ViewConstructor } from "./Types";
 
 export class BasicContainerView extends BasicComponentView implements IContainerView {
     constructor(container: BasicComponentView, createElementView: IHtmlElementView) {

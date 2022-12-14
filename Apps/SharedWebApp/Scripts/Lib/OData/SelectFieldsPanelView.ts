@@ -48,7 +48,7 @@ export class SelectFieldsPanelView extends ModalODataPanelView {
                 b.scrollable();
             });
         this.availableFieldsAlert = availableBlock.addView(MessageAlertView);
-        this.availableFields = ButtonListGroupView.addTo(availableBlock, AvailableFieldListItemView);
+        this.availableFields = availableBlock.addButtonListGroup(AvailableFieldListItemView);
         layoutGrid.addCell()
             .addView(TextHeading3View)
             .configure(h => h.setText('Selected Columns'));
@@ -62,7 +62,7 @@ export class SelectFieldsPanelView extends ModalODataPanelView {
             .addView(BlockView)
             .configure(b => b.addCssName('container'));
         this.selectFieldsAlert = selectedBlock.addView(MessageAlertView);
-        this.selectFields = GridListGroupView.addTo(selectedBlock, SelectedFieldListItemView);
+        this.selectFields = selectedBlock.addGridListGroup(SelectedFieldListItemView);
         this.selectFields.setTemplateColumns(
             CssLengthUnit.auto(),
             CssLengthUnit.flex(1),
