@@ -19,6 +19,8 @@ export class InputControl<TValue> extends BasicComponent {
         private readonly viewValue: TypedFieldViewValue<string, TValue>
     ) {
         super(view);
+        const rawValue = this.view.getValue();
+        this.viewValue.setValueFromView(rawValue);
         this.debouncedSetFocus = new DebouncedAction(
             () => this.view.setFocus(),
             700
