@@ -1,4 +1,5 @@
 ﻿import { DebouncedAction } from "../DebouncedAction";
+import { DelayedAction } from "../DelayedAction";
 import { EventSource } from "../Events";
 import { TypedFieldViewValue } from "../Forms/TypedFieldViewValue";
 import { InputView } from "../Views/InputView";
@@ -19,8 +20,13 @@ export class InputControl<TValue> extends BasicComponent {
         private readonly viewValue: TypedFieldViewValue<string, TValue>
     ) {
         super(view);
-        const rawValue = this.view.getValue();
-        this.viewValue.setValueFromView(rawValue);
+        new DelayedAction(
+            () => {
+                const rawValue = this.view.getValue();
+                this.viewValue.setValueFromView(rawValue);
+            },
+            100
+        ).execute();
         this.debouncedSetFocus = new DebouncedAction(
             () => this.view.setFocus(),
             700
