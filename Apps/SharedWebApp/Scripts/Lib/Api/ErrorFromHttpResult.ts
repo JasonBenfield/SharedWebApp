@@ -11,7 +11,13 @@ export class ErrorFromHttpResult {
             result = result.Data;
         }
         if (result && typeof result !== 'string') {
-            const rawErrors = <IErrorModel[]><any>result;
+            let rawErrors: IErrorModel[];
+            if (result.Errors) {
+                rawErrors = result.Errors;
+            }
+            else {
+                rawErrors = <IErrorModel[]><any>result;
+            }
             errors = new MappedArray(
                 rawErrors,
                 e => new ErrorModel(e.Message, e.Caption, e.Source)
