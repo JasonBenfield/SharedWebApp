@@ -16,7 +16,7 @@ class MenuCache {
     private cache: IMenuCache;
 
     constructor(menuName: string) {
-        this.cacheKey = `menu_${menuName}`;
+        this.cacheKey = `${pageContext.AppTitle}_menu_${menuName}`;
         const serializedMenu = localStorage.getItem(this.cacheKey);
         if (serializedMenu) {
             this.cache = new ParsedDateObject(JSON.parse(serializedMenu)).value;
