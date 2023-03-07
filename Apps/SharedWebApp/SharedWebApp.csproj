@@ -22,6 +22,8 @@
   <ItemGroup>
     <None Remove="Scripts\Internal\CardDemo\TestClickableItem.ts" />
     <None Remove="Scripts\Internal\CardDemo\TestClickableItemView.ts" />
+    <None Remove="Scripts\Internal\CardDemo\TestGridListItem.ts" />
+    <None Remove="Scripts\Internal\CardDemo\TestGridListItemView.ts" />
     <None Remove="Scripts\Internal\CardDemo\TestListItem.ts" />
     <None Remove="Scripts\Internal\CardDemo\TestListItemView.ts" />
     <None Remove="Scripts\Internal\DefaultPageContext.ts" />
@@ -220,6 +222,12 @@
   </ItemGroup>
   
   <ItemGroup>
+    <TypeScriptCompile Include="Scripts\Internal\CardDemo\TestGridListItemView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Internal\CardDemo\TestGridListItem.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Internal\CardDemo\TestListItemView.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

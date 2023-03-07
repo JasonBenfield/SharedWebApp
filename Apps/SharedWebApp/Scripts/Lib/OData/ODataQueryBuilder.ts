@@ -90,9 +90,9 @@ export class ODataQueryBuilder {
         return new JoinedStrings('&', parts).value();
     }
 
-    buildWithoutPaging() {
+    buildToExcel() {
         const parts: string[] = []
-        const select = this.select.build();
+        const select = this.select.buildExplicitlySelected();
         if (select) {
             parts.push(`$select=${select}`);
         }
@@ -240,6 +240,19 @@ export class ODataQuerySelectBuilder {
                 new FilteredArray(
                     this.fields,
                     f => f.isDatabaseField
+                ),
+                f => f.field
+            )
+        ).value();
+    }
+
+    buildExplicitlySelected() {
+        return new JoinedStrings(
+            ',',
+            new MappedArray(
+                new FilteredArray(
+                    this.fields,
+                    f => f.isDatabaseField && f.isExplicitlySelected
                 ),
                 f => f.field
             )
