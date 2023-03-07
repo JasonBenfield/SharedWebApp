@@ -10,12 +10,15 @@ import { TestListItemView } from "./TestListItemView";
 import { TextComponent } from '../../Lib/Components/TextComponent';
 import { TextAreaControl } from '../../Lib/Components/TextAreaControl';
 import { MessageAlert } from '../../Lib/Components/MessageAlert';
+import { TestGridListItem } from './TestGridListItem';
+import { TestGridListItemView } from './TestGridListItemView';
 
 export class TestCard {
     private readonly cardTitleHeader: TextComponent;
     private readonly alert: MessageAlert;
     private readonly testItems: ListGroup<TestListItem, TestListItemView>;
     private readonly clickableItems: ListGroup<TestClickableListItem, TestClickableListItemView>;
+    private readonly gridItems: ListGroup<TestGridListItem, TestGridListItemView>;
     private readonly textArea: TextAreaControl;
 
     constructor(private readonly view: TestCardView) {
@@ -27,14 +30,19 @@ export class TestCard {
         this.clickableItems = new ListGroup(this.view.clickableItems);
         this.testItems.setItems(
             new EnumerableRange(1, 5).value(),
-            (i: number, listItem: TestListItemView) => new TestListItem(i, listItem)
+            (i, listItem) => new TestListItem(i, listItem)
         );
         this.testItems.addItem(6, (i: number, listItem: TestListItemView) => new TestListItem(i, listItem));
         this.clickableItems.setItems(
             new EnumerableRange(1, 5).value(),
-            (i: number, listItem: TestClickableListItemView) => new TestClickableListItem(i, listItem)
+            (i, listItem) => new TestClickableListItem(i, listItem)
         );
         this.clickableItems.registerItemClicked(this.onClick.bind(this));
+        this.gridItems = new ListGroup(view.gridItems);
+        this.gridItems.setItems(
+            new EnumerableRange(1, 5).value(),
+            (i, listItem) => new TestGridListItem(i, listItem)
+        );
         this.textArea = new TextAreaControl(view.textArea);
         this.textArea.when.valueChanged.then(this.onTextAreaValueChanged.bind(this));
     }
