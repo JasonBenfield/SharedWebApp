@@ -19,4 +19,8 @@ export class FormGroup extends BasicComponent {
         this.caption = caption;
         this.captionText.setText(caption);
     }
+
+    show() { this.view.show(); }
+
+    hide() { this.view.hide(); }
 }

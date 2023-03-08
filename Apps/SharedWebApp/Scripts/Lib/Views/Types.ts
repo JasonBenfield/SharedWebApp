@@ -18,6 +18,10 @@ export interface IHtmlAttributes {
     opacity?: string;
 }
 
+export interface ICitableAttributes extends IHtmlAttributes {
+    cite?: string;
+}
+
 export interface ILinkAttributes extends IHtmlAttributes {
     href?: string;
 }

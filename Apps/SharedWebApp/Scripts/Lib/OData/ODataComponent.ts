@@ -118,7 +118,7 @@ export class ODataComponent<TEntity> {
     }
 
     private exportToExcel() {
-        this.odataClient.toExcel(this.query.buildWithoutPaging());
+        this.odataClient.toExcel(this.query.buildToExcel());
     }
 
     private onSortClick(column: ODataColumn) {

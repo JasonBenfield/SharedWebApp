@@ -22,6 +22,8 @@
   <ItemGroup>
     <None Remove="Scripts\Internal\CardDemo\TestClickableItem.ts" />
     <None Remove="Scripts\Internal\CardDemo\TestClickableItemView.ts" />
+    <None Remove="Scripts\Internal\CardDemo\TestGridListItem.ts" />
+    <None Remove="Scripts\Internal\CardDemo\TestGridListItemView.ts" />
     <None Remove="Scripts\Internal\CardDemo\TestListItem.ts" />
     <None Remove="Scripts\Internal\CardDemo\TestListItemView.ts" />
     <None Remove="Scripts\Internal\DefaultPageContext.ts" />
@@ -156,12 +158,14 @@
     <None Remove="Scripts\Lib\Views\BasicComponentWrapper.ts" />
     <None Remove="Scripts\Lib\Views\BasicContainerView.ts" />
     <None Remove="Scripts\Lib\Views\BasicTextComponentView.ts" />
+    <None Remove="Scripts\Lib\Views\BlockQuoteView.ts" />
     <None Remove="Scripts\Lib\Views\BlockView.ts" />
     <None Remove="Scripts\Lib\Views\ButtonGroupView.ts" />
     <None Remove="Scripts\Lib\Views\ButtonWrapper.ts" />
     <None Remove="Scripts\Lib\Views\Card.ts" />
     <None Remove="Scripts\Lib\Views\ColumnView.ts" />
     <None Remove="Scripts\Lib\Views\CssFontBuilder.ts" />
+    <None Remove="Scripts\Lib\Views\DelView.ts" />
     <None Remove="Scripts\Lib\Views\Dropdown.ts" />
     <None Remove="Scripts\Lib\Views\FormCheckView.ts" />
     <None Remove="Scripts\Lib\Views\FormGroup.ts" />
@@ -171,10 +175,12 @@
     <None Remove="Scripts\Lib\Views\HorizontalRuleView.ts" />
     <None Remove="Scripts\Lib\Views\HtmlElementView.ts" />
     <None Remove="Scripts\Lib\Views\IconView.ts" />
+    <None Remove="Scripts\Lib\Views\InsView.ts" />
     <None Remove="Scripts\Lib\Views\LabelView.ts" />
     <None Remove="Scripts\Lib\Views\LinkView.ts" />
     <None Remove="Scripts\Lib\Views\ListGroup.ts" />
     <None Remove="Scripts\Lib\Views\ListItemView.ts" />
+    <None Remove="Scripts\Lib\Views\MarkView.ts" />
     <None Remove="Scripts\Lib\Views\ModalError.ts" />
     <None Remove="Scripts\Lib\Views\NavView.ts" />
     <None Remove="Scripts\Lib\Views\RootView.ts" />
@@ -185,12 +191,19 @@
     <None Remove="Scripts\Lib\Views\SpanView.ts" />
     <None Remove="Scripts\Lib\Views\Table.ts" />
     <None Remove="Scripts\Lib\Views\TextAreaView.ts" />
+    <None Remove="Scripts\Lib\Views\TextBlockQuoteView.ts" />
     <None Remove="Scripts\Lib\Views\TextBlockView.ts" />
+    <None Remove="Scripts\Lib\Views\TextDelView.ts" />
+    <None Remove="Scripts\Lib\Views\TextEmView.ts" />
     <None Remove="Scripts\Lib\Views\TextHeadings.ts" />
+    <None Remove="Scripts\Lib\Views\TextInsView.ts" />
     <None Remove="Scripts\Lib\Views\TextLabelView.ts" />
     <None Remove="Scripts\Lib\Views\TextLinkView.ts" />
+    <None Remove="Scripts\Lib\Views\TextMarkView.ts" />
+    <None Remove="Scripts\Lib\Views\TextPreView.ts" />
     <None Remove="Scripts\Lib\Views\TextSmallView.ts" />
     <None Remove="Scripts\Lib\Views\TextSpanView.ts" />
+    <None Remove="Scripts\Lib\Views\TextStrongView.ts" />
     <None Remove="Scripts\Lib\Views\Types.ts" />
     <None Remove="Scripts\Lib\Views\UnorderedListView.ts" />
     <None Remove="Scripts\Lib\Views\UserMenuView.ts" />
@@ -220,6 +233,12 @@
   </ItemGroup>
   
   <ItemGroup>
+    <TypeScriptCompile Include="Scripts\Internal\CardDemo\TestGridListItemView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Internal\CardDemo\TestGridListItem.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Internal\CardDemo\TestListItemView.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -329,6 +348,15 @@
     <TypeScriptCompile Include="Scripts\Lib\Position.ts" />
     <TypeScriptCompile Include="Scripts\Lib\ValueRangeBound.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\BasicComponentWrapper.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\MarkView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\DelView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\InsView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Lib\Views\ButtonGroupView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\ButtonWrapper.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\ErrorListItemView.ts" />
@@ -405,8 +433,29 @@
     <TypeScriptCompile Include="Scripts\Lib\Views\RowView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\SelectedValueListItem.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\SelectView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\BlockQuoteView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Lib\Views\Table.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\TextAreaView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\TextBlockQuoteView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\TextInsView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\TextMarkView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\TextEmView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\TextPreView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\TextStrongView.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Lib\Views\TextLabelView.ts">
@@ -417,6 +466,9 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Lib\Views\LinkView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\ListItemView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\TextDelView.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Lib\Views\TextSmallView.ts">

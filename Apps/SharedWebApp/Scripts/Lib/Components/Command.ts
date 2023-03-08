@@ -40,20 +40,6 @@ export class AsyncCommand {
         this.inProgressAnimation = inProgressAnimation;
     }
 
-    private icons(action: (i: FaIconView) => void) {
-        this.forEachItem(c => {
-            if ('icon' in c) {
-                action(c.icon);
-            }
-        });
-    }
-
-    private forEachItem(action: (item: CommandView) => void) {
-        for (const item of this.items) {
-            action(item);
-        }
-    }
-
     activate() {
         this.forEachItem(c => {
             if ('setActive' in c) {
@@ -68,6 +54,12 @@ export class AsyncCommand {
                 c.setInactive();
             }
         });
+    }
+
+    private forEachItem(action: (item: CommandView) => void) {
+        for (const item of this.items) {
+            action(item);
+        }
     }
 
     allowMultiExecution() {
@@ -88,11 +80,12 @@ export class AsyncCommand {
     }
 
     disable() {
+        this.isEnabled = false;
         this.updateIsEnabled();
     }
 
     private updateIsEnabled() {
-        let isEnabled = this.isEnabled && this.executionCount === 0;
+        const isEnabled = this.isEnabled && this.executionCount === 0;
         if (isEnabled) {
             this.forEachItem(c => c.enable());
         }
@@ -128,6 +121,14 @@ export class AsyncCommand {
 
     private canExecute() {
         return this.isEnabled && (this.isMultiExecutionAllowed || this.executionCount === 0);
+    }
+
+    private icons(action: (i: FaIconView) => void) {
+        this.forEachItem(c => {
+            if ('icon' in c) {
+                action(c.icon);
+            }
+        });
     }
 
     dispose() {
