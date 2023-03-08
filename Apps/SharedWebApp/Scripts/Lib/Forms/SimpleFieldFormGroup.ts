@@ -75,4 +75,8 @@ export abstract class SimpleFieldFormGroup<TValue> implements IField {
     export(values: Record<string, any>) {
         values[this.getName()] = this.getValue();
     }
+
+    show() { this.view.show(); }
+
+    hide() { this.view.hide(); }
 }
