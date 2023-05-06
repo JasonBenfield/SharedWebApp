@@ -107,14 +107,14 @@ export class FilterMultiValueInputPanelView extends ModalODataPanelView {
         this.ignoreCaseFormCheck.setViewID(`${id}IgnoreCase`);
     }
 
-    handleDeleteButton(action: (el: HTMLElement, evt: JQueryEventObject) => void) {
+    handleDeleteButton(action: (el: HTMLElement, evt: JQuery.Event) => void) {
         this.selectedValues.on('click')
             .select('.deleteButton')
             .execute(action)
             .subscribe();
     }
 
-    handleFormSubmit(action: (el: HTMLElement, evt: JQueryEventObject) => void) {
+    handleFormSubmit(action: (el: HTMLElement, evt: JQuery.Event) => void) {
         this.form
             .onSubmit()
             .execute(action)

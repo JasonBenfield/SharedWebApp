@@ -51,7 +51,7 @@ export class MenuComponent extends BasicComponent {
         this.cache = new MenuCache(menuName);
     }
 
-    handleClick(action: (item: MenuItemComponent, evt: JQueryEventObject) => void) {
+    handleClick(action: (item: MenuItemComponent, evt: JQuery.Event) => void) {
         this.view.on('click')
             .select('a.menu-item')
             .execute(this._handleClick.bind(this, action))
@@ -59,9 +59,9 @@ export class MenuComponent extends BasicComponent {
     }
 
     private _handleClick(
-        action: (item: MenuItemComponent, evt: JQueryEventObject) => void,
+        action: (item: MenuItemComponent, evt: JQuery.Event) => void,
         el: HTMLElement,
-        evt: JQueryEventObject
+        evt: JQuery.Event
     ) {
         const item = this.getComponentByElement(el) as MenuItemComponent;
         if (item) {
