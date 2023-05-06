@@ -3,7 +3,7 @@
 interface IElementEvent {
     evtName: string;
     selector: string;
-    action: (sourceElement: HTMLElement, evt: JQueryEventObject) => void;
+    action: (sourceElement: HTMLElement, evt: JQuery.Event) => void;
 }
 
 export class HtmlElementView {
@@ -109,7 +109,7 @@ export class HtmlElementView {
         return this.element.contains(element);
     }
 
-    on(evtName: string, selector: string, action: (sourceElement: HTMLElement, evt: JQueryEventObject) => void) {
+    on(evtName: string, selector: string, action: (sourceElement: HTMLElement, evt: JQuery.Event) => void) {
         const handler: IElementEvent = { evtName: evtName, selector: selector, action: action };
         this.handlers.push(handler);
         if (document.contains(this.element)) {
@@ -132,7 +132,7 @@ export class HtmlElementView {
         $(this.element).on(
             handler.evtName,
             handler.selector,
-            function (event: JQueryEventObject) {
+            function (event: JQuery.Event) {
                 return handler.action(this, event);
             }
         );

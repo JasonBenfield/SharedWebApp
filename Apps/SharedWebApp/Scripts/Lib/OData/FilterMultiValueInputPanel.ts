@@ -156,7 +156,7 @@ export class FilterMultiValueInputPanel implements IPanel {
         return values;
     }
 
-    private onFormSubmit(_: HTMLElement, evt: JQueryEventObject) {
+    private onFormSubmit(_: HTMLElement, evt: JQuery.Event) {
         evt.preventDefault();
         this.addCommand.execute();
     }

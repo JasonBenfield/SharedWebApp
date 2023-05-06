@@ -86,42 +86,42 @@ export class SelectFieldsPanelView extends ModalODataPanelView {
         this.saveButton.setContext(ContextualClass.primary);
     }
 
-    handleSelectedFieldDragStart(action: (el: HTMLElement, evt: JQueryEventObject) => void) {
+    handleSelectedFieldDragStart(action: (el: HTMLElement, evt: JQuery.Event) => void) {
         this.selectFields.on('dragstart')
             .select('[draggable]')
             .execute(action)
             .subscribe();
     }
 
-    handleSelectedFieldDragEnter(action: (el: HTMLElement, evt: JQueryEventObject) => void) {
+    handleSelectedFieldDragEnter(action: (el: HTMLElement, evt: JQuery.Event) => void) {
         this.selectFields.on('dragenter')
             .select('.list-group-item')
             .execute(action)
             .subscribe();
     }
 
-    handleSelectedFieldDragOver(action: (el: HTMLElement, evt: JQueryEventObject) => void) {
+    handleSelectedFieldDragOver(action: (el: HTMLElement, evt: JQuery.Event) => void) {
         this.selectFields.on('dragover')
             .select('.list-group-item')
             .execute(action)
             .subscribe();
     }
 
-    handleSelectedFieldDrop(action: (el: HTMLElement, evt: JQueryEventObject) => void) {
+    handleSelectedFieldDrop(action: (el: HTMLElement, evt: JQuery.Event) => void) {
         this.selectFields.on('drop')
             .select('.list-group-item')
             .execute(action)
             .subscribe();
     }
 
-    handleSelectedFieldDragEnd(action: (el: HTMLElement, evt: JQueryEventObject) => void) {
+    handleSelectedFieldDragEnd(action: (el: HTMLElement, evt: JQuery.Event) => void) {
         this.selectFields.on('dragend')
             .select('.list-group-item')
             .execute(action)
             .subscribe();
     }
 
-    handleDeleteButtonClick(action: (el: HTMLElement, evt: JQueryEventObject) => void) {
+    handleDeleteButtonClick(action: (el: HTMLElement, evt: JQuery.Event) => void) {
         this.selectFields.on('click')
             .select('button.deleteButton')
             .execute(action)

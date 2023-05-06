@@ -72,7 +72,7 @@ export class ODataGrid<TEntity> extends BasicComponent {
         view.handleClick(this.onClick.bind(this));
     }
 
-    private onDragStart(sourceElement: HTMLElement, evt: JQueryEventObject) {
+    private onDragStart(sourceElement: HTMLElement, evt: JQuery.DragStartEvent) {
         const cell = this.getCellByElement(sourceElement);
         if (cell && cell instanceof ODataHeaderCell && cell.column.canMove) {
             const dragEvent = evt.originalEvent as DragEvent;
@@ -84,7 +84,7 @@ export class ODataGrid<TEntity> extends BasicComponent {
         return false;
     }
 
-    private onDragEnd(sourceElement: HTMLElement, evt: JQueryEventObject) {
+    private onDragEnd(sourceElement: HTMLElement, evt: JQuery.Event) {
         if (this.dragStartCell) {
             this.dragStartCell.styleAsDragEnd();
             this.dragStartCell = null;
@@ -96,29 +96,29 @@ export class ODataGrid<TEntity> extends BasicComponent {
         return true;
     }
 
-    private onDragEnter(sourceElement: HTMLElement, evt: JQueryEventObject) {
+    private onDragEnter(sourceElement: HTMLElement, evt: JQuery.DragEnterEvent) {
         const cell = this.getCellByElement(sourceElement);
         if (cell && cell instanceof ODataHeaderCell && cell.column.canMove) {
             this.dragEnterCell = cell;
             cell.styleAsDragOver();
-            const dragEvent = evt.originalEvent as DragEvent;
-            dragEvent.dataTransfer.dropEffect = 'move';
+            const dragEvt = evt.originalEvent as DragEvent;
+            dragEvt.dataTransfer.dropEffect = 'move';
         }
         return false;
     }
 
-    private onDragOver(sourceElement: HTMLElement, evt: JQueryEventObject) {
+    private onDragOver(sourceElement: HTMLElement, evt: JQuery.Event) {
         evt.preventDefault();
     }
 
-    private onDragLeave(sourceElement: HTMLElement, evt: JQueryEventObject) {
+    private onDragLeave(sourceElement: HTMLElement, evt: JQuery.Event) {
         const cell = this.getCellByElement(sourceElement);
         if (cell && cell instanceof ODataHeaderCell && this.dragEnterCell !== cell) {
             cell.styleAsDragLeave();
         }
     }
 
-    private onDrop(sourceElement: HTMLElement, evt: JQueryEventObject) {
+    private onDrop(sourceElement: HTMLElement, evt: JQuery.Event) {
         evt.stopPropagation();
         evt.preventDefault();
         if (this.dragStartCell) {
@@ -138,7 +138,7 @@ export class ODataGrid<TEntity> extends BasicComponent {
         }
     }
 
-    private onClick(sourceElement: HTMLElement, event: JQueryEventObject) {
+    private onClick(sourceElement: HTMLElement, event: JQuery.Event) {
         const row = this.getComponentByElement(sourceElement) as ODataRow;
         if (row) {
             const cell = row.getCellByElement(sourceElement);
