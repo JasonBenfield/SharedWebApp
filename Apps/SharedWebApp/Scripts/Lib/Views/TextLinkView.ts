@@ -1,6 +1,6 @@
 ﻿import { BasicComponentView } from "./BasicComponentView";
 import { BasicTextComponentView } from "./BasicTextComponentView";
-import { ILinkAttributes, ILinkView } from "./Types";
+import { ILinkAttributes, ILinkView, TargetValue } from "./Types";
 
 export class TextLinkView extends BasicTextComponentView implements ILinkView {
     constructor(container: BasicComponentView) {
@@ -12,4 +12,9 @@ export class TextLinkView extends BasicTextComponentView implements ILinkView {
     setHref(href: string) {
         this.setAttr(attr => attr.href = href);
     }
+
+    setTarget(target: TargetValue) {
+        this.setAttr(attr => attr.target = target);
+    }
+
 }
