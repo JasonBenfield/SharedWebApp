@@ -10,6 +10,7 @@ public sealed class AddEmployeeForm : Form
         EmployeeName.MaxLength = 100;
         EmployeeName.SetValue("");
         BirthDate = AddDateInput(nameof(BirthDate));
+        Salary = AddDecimalInput(nameof(Salary));
         Department = AddInt32DropDown
         (
             nameof(Department),
@@ -23,6 +24,7 @@ public sealed class AddEmployeeForm : Form
 
     public InputField<string> EmployeeName { get; }
     public InputField<DateTimeOffset?> BirthDate { get; }
+    public InputField<decimal?> Salary { get; }
     public DropDownField<int?> Department { get; }
     public AddressInput Address { get; }
 }

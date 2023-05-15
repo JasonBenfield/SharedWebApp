@@ -16,6 +16,8 @@ export class AddEmployeeForm extends BaseForm {
         this.BirthDate.constraints.mustNotBeNull();
         this.BirthDate.constraints.mustBeAbove(new Date(1920, 1, 1), 'must be greater than 1/1/1920');
         this.BirthDate.constraints.mustBeOnOrBelow(new Date(2000, 1, 1), 'must be less than or equal to 1/1/2000');
+        this.Salary.setCaption("Salary");
+        this.Salary.format = '$0,0.00';
         this.Department.constraints.mustNotBeNull();
         this.Department.setItemCaption("Select...");
         this.Department.setItems(
@@ -28,6 +30,7 @@ export class AddEmployeeForm extends BaseForm {
 
     readonly EmployeeName = this.addTextInputFormGroup('Name', this.view.EmployeeName);
     readonly BirthDate = this.addDateInputFormGroup('BirthDate', this.view.BirthDate);
+    readonly Salary = this.addNumberInputFormGroup('Salary', this.view.Salary);
     readonly Department = this.addNumberDropDownFormGroup('Department', this.view.Department);
     readonly Address = this.addFormGroup(
         new AddressInputField(this.getName(), 'Address', this.view.Address)
