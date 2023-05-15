@@ -24,6 +24,7 @@ export interface ICitableAttributes extends IHtmlAttributes {
 
 export interface ILinkAttributes extends IHtmlAttributes {
     href?: string;
+    target?: string;
 }
 
 export interface IOptionAttributes extends IHtmlAttributes {
@@ -43,6 +44,7 @@ export interface IFormAttributes extends IHtmlAttributes {
     autocomplete?: string;
     action?: string;
     method?: string;
+    target?: string;
 }
 
 export interface ITextAreaAttributes extends IHtmlAttributes {
@@ -131,8 +133,11 @@ export interface ITextComponentView {
 
 export interface ILinkView {
     setHref(href: string);
+    setTarget(target: TargetValue);
 }
 
 export interface IMenuView {
     addMenuItem(): LinkCommandView;
 }
+
+export type TargetValue = '_blank' | '_self' | '_parent' | '_top';

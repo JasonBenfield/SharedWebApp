@@ -1,6 +1,6 @@
 ﻿import { BasicComponentView } from "./BasicComponentView";
 import { BasicContainerView } from "./BasicContainerView";
-import { ILinkAttributes, ILinkView } from "./Types";
+import { ILinkAttributes, ILinkView, TargetValue } from "./Types";
 
 export class LinkView extends BasicContainerView implements ILinkView {
     constructor(container: BasicComponentView) {
@@ -11,6 +11,10 @@ export class LinkView extends BasicContainerView implements ILinkView {
 
     setHref(href: string) {
         this.setAttr(attr => attr.href = href);
+    }
+
+    setTarget(target: TargetValue) {
+        this.setAttr(attr => attr.target = target);
     }
 
     handleClick(action: () => void) {

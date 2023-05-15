@@ -4,6 +4,7 @@ import { AppResourceUrl } from '../../Lib/Api/AppResourceUrl';
 import { AsyncCommand } from '../../Lib/Components/Command';
 import { FileInputControl, FileType } from '../../Lib/Components/FileInputControl';
 import { TextComponent } from '../../Lib/Components/TextComponent';
+import { TextLinkComponent } from '../../Lib/Components/TextLinkComponent';
 import { DefaultPageContext } from '../DefaultPageContext';
 import { SharedPage } from '../SharedPage';
 import { MainPageView } from './MainPageView';
@@ -24,6 +25,7 @@ interface IAddProductNested {
 class MainPage extends SharedPage {
     protected readonly view: MainPageView;
     private readonly fileInput: FileInputControl;
+    private readonly link: TextLinkComponent;
 
     constructor() {
         super(new MainPageView());
@@ -33,6 +35,9 @@ class MainPage extends SharedPage {
         this.fileInput.acceptFileTypes(FileType.anyImage);
         const uploadCommand = new AsyncCommand(this.upload.bind(this));
         uploadCommand.add(this.view.uploadButton);
+        this.link = new TextLinkComponent(this.view.linkView);
+        this.link.setHref('https://developer.mozilla.org');
+        this.link.setTargetToBlank();
     }
 
     private upload() {

@@ -31,4 +31,12 @@ export class TextLinkComponent extends TextComponent {
         }
         this.view.setHref(this.href);
     }
+
+    setTargetToBlank() {
+        this.view.setTarget('_blank');
+    }
+
+    show() { this.view.show(); }
+
+    hide() { this.view.hide(); }
 }
