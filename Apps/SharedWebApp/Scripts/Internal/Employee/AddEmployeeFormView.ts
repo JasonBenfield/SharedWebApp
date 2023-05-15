@@ -7,6 +7,7 @@ import { AddressInputFieldView } from './AddressInputFieldView';
 export interface IAddEmployeeFormView {
     EmployeeName: SimpleFieldFormGroupInputView;
     BirthDate: SimpleFieldFormGroupInputView;
+    Salary: SimpleFieldFormGroupInputView;
     Department: SimpleFieldFormGroupSelectView;
     Address: AddressInputFieldView;
 }
@@ -16,6 +17,7 @@ export class DefaultAddEmployeeFormViewLayout implements IFormGroupLayout<IAddEm
         return {
             EmployeeName: form.addInputFormGroup(),
             BirthDate: form.addInputFormGroup(),
+            Salary: form.addInputFormGroup(),
             Department: form.addDropDownFormGroup(),
             Address: form.addFormGroup(AddressInputFieldView)
         };
@@ -39,6 +41,8 @@ export class AddEmployeeFormView extends BaseFormView {
     get EmployeeName() { return this.formGroups.EmployeeName; }
 
     get BirthDate() { return this.formGroups.BirthDate; }
+
+    get Salary() { return this.formGroups.Salary; }
 
     get Department() { return this.formGroups.Department; }
 

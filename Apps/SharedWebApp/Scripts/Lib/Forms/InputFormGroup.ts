@@ -15,10 +15,10 @@ export abstract class InputFormGroup<TValue> extends SimpleFieldFormGroup<TValue
         prefix: string,
         name: string,
         view: SimpleFieldFormGroupInputView,
-        viewValue: TypedFieldViewValue<string, TValue>
+        protected readonly viewValue: TypedFieldViewValue<string, TValue>
     ) {
         super(prefix, name, view);
-        let valueName = this.getName();
+        const valueName = this.getName();
         this.view.caption.setFor(valueName);
         this.view.input.setViewID(valueName);
         this.view.input.setViewName(valueName);
