@@ -17,7 +17,7 @@ export class BaseFormView extends FormView {
         this.modalError = this.addView(ModalErrorView);
     }
 
-    handleSubmit(action: (el: HTMLElement, evt: JQueryEventObject) => void) {
+    handleSubmit(action: (el: HTMLElement, evt: JQuery.Event) => void) {
         this.on('submit')
             .execute(async (el, evt) => {
                 evt.preventDefault();

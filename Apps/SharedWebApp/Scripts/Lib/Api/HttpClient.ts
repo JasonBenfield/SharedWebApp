@@ -64,9 +64,6 @@ export class HttpClient {
 
     private execute(method: string, url: string, body?: string | FormData, contentType?: string) {
         return new Promise<HttpPostResult>((resolve) => {
-            function reqListener() {
-                console.log(this.responseText);
-            }
             const oReq = new XMLHttpRequest();
             oReq.withCredentials = true;
             oReq.onreadystatechange = () => {
@@ -82,7 +79,6 @@ export class HttpClient {
                     resolve(new HttpPostResult(result, url, oReq.status, oReq.responseText));
                 }
             };
-            oReq.addEventListener("load", reqListener.bind(oReq));
             oReq.open(method, url);
             if (contentType) {
                 oReq.setRequestHeader("Content-Type", contentType);

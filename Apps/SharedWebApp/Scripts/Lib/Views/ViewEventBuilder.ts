@@ -1,7 +1,7 @@
 ﻿import { HtmlElementView } from "./HtmlElementView";
 
 export class ViewEventBuilder {
-    private action: (sourceElement: HTMLElement, evt: JQueryEventObject) => void;
+    private action: (sourceElement: HTMLElement, evt: JQuery.Event) => void;
     private selector: string;
     private _preventDefault: boolean;
 
@@ -11,7 +11,7 @@ export class ViewEventBuilder {
     ) {
     }
 
-    execute(action: (sourceElement: HTMLElement, evt: JQueryEventObject) => void) {
+    execute(action: (sourceElement: HTMLElement, evt: JQuery.Event) => void) {
         this.action = action;
         return new ViewEventActionBuilder(this);
     }
@@ -30,7 +30,7 @@ export class ViewEventBuilder {
         this.elementView.on(
             this.name,
             this.selector,
-            (el: HTMLElement, evt: JQueryEventObject) => {
+            (el: HTMLElement, evt: JQuery.Event) => {
                 if (this._preventDefault) {
                     evt.preventDefault();
                 }

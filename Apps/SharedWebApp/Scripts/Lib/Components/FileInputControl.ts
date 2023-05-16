@@ -39,4 +39,8 @@ export class FileInputControl extends BasicComponent {
     getFiles() {
         return this.view.getFiles();
     }
+
+    clear() {
+        this.view.setValue('');
+    }
 }

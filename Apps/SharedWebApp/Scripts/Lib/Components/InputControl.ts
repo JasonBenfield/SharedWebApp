@@ -49,6 +49,7 @@ export class InputControl<TValue> extends BasicComponent {
                 const newViewValue = this.viewValue.toView();
                 if (newViewValue !== currentRawValue) {
                     this.view.setValue(newViewValue);
+                    this.viewValue.setValueFromView(newViewValue);
                 }
             }
             const currentValue = this.getValue();

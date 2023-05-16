@@ -1,7 +1,7 @@
 ﻿import { BasicComponentView } from "./BasicComponentView";
 import { BasicContainerView } from "./BasicContainerView";
 import { ButtonCommandView } from "./Command";
-import { IFormAttributes } from "./Types";
+import { IFormAttributes, TargetValue } from "./Types";
 
 export class FormView extends BasicContainerView {
     constructor(container: BasicComponentView) {
@@ -28,10 +28,19 @@ export class FormView extends BasicContainerView {
 
     setMethod(method: string) { this.setAttr(attr => attr.method = method); }
 
+    setTarget(target: TargetValue) {
+        this.setAttr(attr => attr.target = target);
+    }
+
     addOffscreenSubmit() {
         return this.addView(ButtonCommandView)
             .configure(button => {
                 button.makeOffscreenSubmit();
             });
+    }
+
+    submit() {
+        const form = this.elementView.element as HTMLFormElement;
+        form.submit();
     }
 }

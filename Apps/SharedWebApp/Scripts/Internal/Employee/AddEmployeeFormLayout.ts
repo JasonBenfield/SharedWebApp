@@ -7,12 +7,14 @@ export class AddEmployeeFormLayout implements IFormGroupLayout<IAddEmployeeFormV
     addFormGroups(form: AddEmployeeFormView) {
         const employeeName = form.addInputFormGroup();
         const birthDate = form.addInputFormGroup();
+        const salary = form.addInputFormGroup();
         const department = form.addDropDownFormGroup();
         const address = form.addFormGroup(AddressInputFieldView);
         address.addFormGroups(new AddressInputLayout());
         return {
             EmployeeName: employeeName,
             BirthDate: birthDate,
+            Salary: salary,
             Department: department,
             Address: address
         };

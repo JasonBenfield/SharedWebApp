@@ -7,7 +7,7 @@ export class ODataCellClickedEventArgs {
         readonly column: ODataColumn,
         readonly record: any,
         readonly element: HTMLElement,
-        readonly event: JQueryEventObject
+        readonly event: JQuery.Event
     ) {
     }
 }

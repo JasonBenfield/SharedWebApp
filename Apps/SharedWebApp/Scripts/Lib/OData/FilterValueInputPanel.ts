@@ -60,7 +60,7 @@ export class FilterValueInputPanel implements IPanel {
         }
     }
 
-    private onFormSubmit(_: HTMLElement, evt: JQueryEventObject) {
+    private onFormSubmit(_: HTMLElement, evt: JQuery.Event) {
         evt.preventDefault();
         this.saveCommand.execute();
     }

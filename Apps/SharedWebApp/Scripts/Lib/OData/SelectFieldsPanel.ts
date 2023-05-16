@@ -56,31 +56,31 @@ export class SelectFieldsPanel extends BasicComponent implements IPanel {
 
     private selectedFieldDragStart: SelectedFieldListItem;
 
-    private onSelectFieldDragStart(el: HTMLElement, evt: JQueryEventObject) {
+    private onSelectFieldDragStart(el: HTMLElement, evt: JQuery.DragStartEvent) {
         this.selectedFieldDragStart = this.selectedFields.getItemByElement(el) as SelectedFieldListItem;
         this.selectedFieldDragStart.styleAsDragStart();
         const dragEvent = evt.originalEvent as DragEvent;
         dragEvent.dataTransfer.effectAllowed = 'move';
     }
 
-    private onSelectFieldDragEnter(el: HTMLElement, evt: JQueryEventObject) {
+    private onSelectFieldDragEnter(el: HTMLElement, evt: JQuery.Event) {
         evt.preventDefault();
     }
 
-    private onSelectFieldOver(el: HTMLElement, evt: JQueryEventObject) {
+    private onSelectFieldOver(el: HTMLElement, evt: JQuery.DragOverEvent) {
         evt.preventDefault();
         const dragEvent = evt.originalEvent as DragEvent;
         dragEvent.dataTransfer.dropEffect = 'move';
     }
 
-    private onSelectFieldDragEnd(el: HTMLElement, evt: JQueryEventObject) {
+    private onSelectFieldDragEnd(el: HTMLElement, evt: JQuery.Event) {
         if (this.selectedFieldDragStart) {
             this.selectedFieldDragStart.styleAsDragEnd();
             this.selectedFieldDragStart = null;
         }
     }
 
-    private onSelectFieldDrop(el: HTMLElement, evt: JQueryEventObject) {
+    private onSelectFieldDrop(el: HTMLElement, evt: JQuery.Event) {
         evt.stopPropagation();
         if (this.selectedFieldDragStart) {
             this.selectedFieldDragStart.styleAsDragEnd();
@@ -91,7 +91,7 @@ export class SelectFieldsPanel extends BasicComponent implements IPanel {
         }
     }
 
-    private onDeleteClicked(el: HTMLElement, evt: JQueryEventObject) {
+    private onDeleteClicked(el: HTMLElement, evt: JQuery.Event) {
         const selectedField = this.selectedFields.getItemByElement(el);
         if (selectedField) {
             evt.stopPropagation();

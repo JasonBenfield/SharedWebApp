@@ -20,7 +20,7 @@ export class BaseForm {
         this.modalError.when.errorSelected.then(this.onErrorSelected.bind(this));
     }
 
-    handleSubmit(action: (el: HTMLElement, evt: JQueryEventObject) => void) {
+    handleSubmit(action: (el: HTMLElement, evt: JQuery.Event) => void) {
         this.view.handleSubmit(action);
     }
 
@@ -141,5 +141,9 @@ export class BaseForm {
         const values: Record<string, any> = {};
         this.formGroups.export(values);
         return values;
+    }
+
+    submit() {
+        this.view.submit();
     }
 }

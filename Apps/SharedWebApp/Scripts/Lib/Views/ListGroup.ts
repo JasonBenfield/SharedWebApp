@@ -4,7 +4,7 @@ import { JoinedStrings } from "../JoinedStrings";
 import { TextCss } from "../TextCss";
 import { BasicComponentView } from "./BasicComponentView";
 import { GridCellView, GridTemplateCss } from "./Grid";
-import { IContainerView, ILinkAttributes, ILinkView, ITextComponentView, ViewConstructor } from "./Types";
+import { IContainerView, ILinkAttributes, ILinkView, ITextComponentView, TargetValue, ViewConstructor } from "./Types";
 import { ViewEventActionBuilder } from "./ViewEventBuilder";
 
 export class BasicListGroupView<TItemView extends BasicListGroupItemView> extends BasicComponentView {
@@ -163,6 +163,10 @@ export class LinkListGroupItemView extends BasicListGroupItemView implements ILi
     setHref(href: string) {
         this.setAttr(attr => attr.href = href);
     }
+
+    setTarget(target: TargetValue) {
+        this.setAttr(attr => attr.target = target);
+    }
 }
 
 export class TextLinkListGroupItemView extends BasicListGroupItemView implements ILinkView, ITextComponentView {
@@ -174,6 +178,10 @@ export class TextLinkListGroupItemView extends BasicListGroupItemView implements
 
     setHref(href: string) {
         this.setAttr(attr => attr.href = href);
+    }
+
+    setTarget(target: TargetValue) {
+        this.setAttr(attr => attr.target = target);
     }
 
     setText(text: string) { this.elementView.setText(text); }
