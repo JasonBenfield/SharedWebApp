@@ -5,7 +5,7 @@ import { TextComponent } from "./TextComponent";
 import { UserMenuComponent } from "./UserMenuComponent";
 
 export class BasicPage {
-    private readonly userMenu: UserMenuComponent;
+    protected readonly userMenu: UserMenuComponent;
 
     constructor(protected readonly defaultApi: AppApi, protected readonly view: BasicPageView) {
         new TextComponent(view.appTitle).setText(pageContext.AppTitle);
@@ -17,7 +17,7 @@ export class BasicPage {
         if (env.isProduction) {
             view.hideEnvironmentBox();
         }
-        this.userMenu = new UserMenuComponent(this.defaultApi, view.userMenu);
+        this.userMenu = this.createUserMenu();
         if (!pageContext.IsAuthenticated) {
             view.hideUserDropdown();
         }
@@ -28,5 +28,9 @@ export class BasicPage {
             `${pageContext.AppTitle} - ${pageContext.PageTitle}` :
             pageContext.AppTitle;
         view.setDocumentTitle(documentTitle);
+    }
+
+    protected createUserMenu() {
+        return new UserMenuComponent(this.defaultApi, this.view.userMenu);
     }
 }
