@@ -38,4 +38,9 @@ export class FormView extends BasicContainerView {
                 button.makeOffscreenSubmit();
             });
     }
+
+    submit() {
+        const form = this.elementView.element as HTMLFormElement;
+        form.submit();
+    }
 }
