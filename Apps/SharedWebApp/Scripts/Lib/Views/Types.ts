@@ -136,6 +136,13 @@ export interface ILinkView {
     setTarget(target: TargetValue);
 }
 
+export interface IImgAttributes extends IHtmlAttributes {
+    src?: string;
+    alt?: string;
+    width?: string;
+    height?: string;
+}
+
 export interface IMenuView {
     addMenuItem(): LinkCommandView;
 }

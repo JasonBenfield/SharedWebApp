@@ -51,8 +51,6 @@ export class ButtonCommandView extends ButtonView implements ICommandView {
 export class LinkCommandView extends LinkView implements ICommandView {
     readonly icon: FaIconView;
     private readonly textSpan: TextSpanView;
-    private context: ContextualClass;
-    private isOutline = false;
 
     constructor(container: BasicComponentView) {
         super(container);
@@ -102,18 +100,14 @@ export class LinkCommandView extends LinkView implements ICommandView {
     }
 
     setContext(context: ContextualClass) {
-        const contextCss = this.getContextCss(context, this.isOutline);
-        this.setCss('link-context', contextCss);
-        this.context = context;
+        this.setCss('link-context', this.getContextCss(context, false));
+    }
+
+    useOutlineStyle(context: ContextualClass) {
+        this.setCss('link-context', this.getContextCss(context, true));
     }
 
     private getContextCss(context: ContextualClass, isOutline: boolean) {
         return context ? context.append(isOutline ? 'btn-outline' : 'btn') : '';
-    }
-
-    useOutlineStyle() {
-        let contextCss = this.getContextCss(this.context, true);
-        this.setCss('link-context', contextCss);
-        this.isOutline = true;
     }
 }
