@@ -142,4 +142,8 @@ export class BaseForm {
         this.formGroups.export(values);
         return values;
     }
+
+    submit() {
+        this.view.submit();
+    }
 }
