@@ -390,7 +390,7 @@
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataTextCell.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\ODataTextCellView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\IconCellView.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\OData\SelectedFIeldListItem.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\SelectedFieldListItem.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\SelectedFieldListItemView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\SelectFieldsPanel.ts" />
     <TypeScriptCompile Include="Scripts\Lib\OData\SelectFieldsPanelView.ts" />

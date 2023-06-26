@@ -24,6 +24,8 @@ export interface ICommandView {
 export class ButtonCommandView extends ButtonView implements ICommandView {
     readonly icon: FaIconView;
     private readonly textSpan: TextSpanView;
+    private isIconRight: boolean;
+    private text: string;
 
     constructor(container: BasicComponentView) {
         super(container);
@@ -34,16 +36,34 @@ export class ButtonCommandView extends ButtonView implements ICommandView {
 
     positionIconRight() {
         this.icon.pullRight();
-        this.icon.setMargin(MarginCss.xs({ start: 1, top: 1 }));
+        this.isIconRight = true;
+        this.updateMargin();
     }
 
     setText(text: string) {
         this.textSpan.setText(text);
-        if (text) {
-            this.icon.setMargin(MarginCss.end(1));
+        this.text = text;
+        this.updateMargin();
+    }
+
+    private updateMargin() {
+        if (this.isIconRight) {
+            this.icon.setMargin(MarginCss.top(1));
+            if (this.text) {
+                this.textSpan.setMargin(MarginCss.end(1));
+            }
+            else {
+                this.textSpan.setMargin(MarginCss.xs(0));
+            }
         }
-        else { 
+        else {
             this.icon.setMargin(MarginCss.xs(0));
+            if (this.text) {
+                this.textSpan.setMargin(MarginCss.start(1));
+            }
+            else {
+                this.textSpan.setMargin(MarginCss.xs(0));
+            }
         }
     }
 }
@@ -51,6 +71,8 @@ export class ButtonCommandView extends ButtonView implements ICommandView {
 export class LinkCommandView extends LinkView implements ICommandView {
     readonly icon: FaIconView;
     private readonly textSpan: TextSpanView;
+    private isIconRight: boolean;
+    private text: string;
 
     constructor(container: BasicComponentView) {
         super(container);
@@ -62,16 +84,34 @@ export class LinkCommandView extends LinkView implements ICommandView {
 
     positionIconRight() {
         this.icon.pullRight();
-        this.icon.setMargin(MarginCss.xs({ start: 1, top: 1 }));
+        this.isIconRight = true;
+        this.updateMargin();
     }
 
     setText(text: string) {
         this.textSpan.setText(text);
-        if (text) {
-            this.icon.setMargin(MarginCss.end(1));
+        this.text = text;
+        this.updateMargin();
+    }
+
+    private updateMargin() {
+        if (this.isIconRight) {
+            this.icon.setMargin(MarginCss.top(1));
+            if (this.text) {
+                this.textSpan.setMargin(MarginCss.end(1));
+            }
+            else {
+                this.textSpan.setMargin(MarginCss.xs(0));
+            }
         }
         else {
             this.icon.setMargin(MarginCss.xs(0));
+            if (this.text) {
+                this.textSpan.setMargin(MarginCss.start(1));
+            }
+            else {
+                this.textSpan.setMargin(MarginCss.xs(0));
+            }
         }
     }
 

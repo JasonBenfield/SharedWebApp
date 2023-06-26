@@ -55,7 +55,10 @@ export class HttpClient {
             }
             else if (typeof data === 'object' && !(data instanceof Date)) {
                 Object.keys(data).forEach(key => {
-                    hasFiles = this.hasFiles(data[key]);
+                    const propHasFiles = this.hasFiles(data[key]);
+                    if (propHasFiles) {
+                        hasFiles = true;
+                    }
                 });
             }
         }
