@@ -71,9 +71,9 @@ export class MainPageView extends SharedPageView {
         this.cancelButton.setContext(ContextualClass.danger);
         this.cancelButton.setMargin(MarginCss.end(3));
         this.saveButton = toolbar.columnEnd.addView(ButtonCommandView);
+        this.saveButton.positionIconRight();
         this.saveButton.icon.solidStyle('check');
         this.saveButton.setText('Save');
         this.saveButton.setContext(ContextualClass.primary);
-        this.saveButton.positionIconRight();
     }
 }

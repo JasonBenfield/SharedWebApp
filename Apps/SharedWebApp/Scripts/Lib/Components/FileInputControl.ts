@@ -1,6 +1,7 @@
 ﻿import { JoinedStrings } from "../JoinedStrings";
 import { InputView } from "../Views/InputView";
 import { BasicComponent } from "./BasicComponent";
+import { EventSource } from "../Events";
 
 export class FileType {
     static readonly anyImage = new FileType('image/*');
@@ -15,10 +16,23 @@ export class FileType {
     toString() { return this.value; }
 }
 
+type Events = { valueChanged: File[] };
+
 export class FileInputControl extends BasicComponent {
+    private readonly eventSource = new EventSource<Events>(this, { valueChanged: [] as File[] });
+    readonly when = this.eventSource.when;
+
     constructor(protected readonly view: InputView) {
         super(view);
         view.setType('file');
+        view.on('change')
+            .execute(this.onInputValueChanged.bind(this))
+            .subscribe();
+    }
+
+    private onInputValueChanged() {
+        const files = this.getFiles();
+        this.eventSource.events.valueChanged.invoke(files);
     }
 
     allowMultiple() { this.view.allowMultiple(); }
