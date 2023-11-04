@@ -2,7 +2,7 @@
 import { UrlBuilder } from "../UrlBuilder";
 import { WebPage } from "./WebPage";
 
-export class AppApiView<TArgs> {
+export class AppClientView<TArgs> {
     private resourceUrl: AppResourceUrl;
 
     constructor(

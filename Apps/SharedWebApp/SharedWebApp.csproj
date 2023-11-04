@@ -40,7 +40,7 @@
     <None Remove="Scripts\Internal\ViewDemo\DemoGridListGroupItemView.ts" />
     <None Remove="Scripts\Internal\ViewDemo\MainPage.ts" />
     <None Remove="Scripts\Internal\ViewDemo\MainPageView.ts" />
-    <None Remove="Scripts\Lib\Api\AppApiQuery.ts" />
+    <None Remove="Scripts\Lib\Api\AppClientQuery.ts" />
     <None Remove="Scripts\Lib\Api\AppVersionDomain.ts" />
     <None Remove="Scripts\Lib\Api\DefaultMenuDefinitions.ts" />
     <None Remove="Scripts\Lib\Api\ErrorFromHttpResult.ts" />
@@ -261,7 +261,7 @@
     <TypeScriptCompile Include="Scripts\Internal\ViewDemo\DemoGridListGroupItem.ts" />
     <TypeScriptCompile Include="Scripts\Internal\ViewDemo\MainPage.ts" />
     <TypeScriptCompile Include="Scripts\Internal\ViewDemo\MainPageView.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\Api\AppApiQuery.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Api\AppClientQuery.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Api\AppVersionDomain.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Api\DefaultMenuDefinitions.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Api\ErrorFromHttpResult.ts" />

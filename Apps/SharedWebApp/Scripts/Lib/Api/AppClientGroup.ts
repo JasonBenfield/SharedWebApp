@@ -1,15 +1,15 @@
-﻿import { AppApiAction } from "./AppApiAction";
-import { AppApiContent } from "./AppApiContent";
-import { AppApiEvents } from "./AppApiEvents";
-import { AppApiView } from "./AppApiView";
+﻿import { AppClientAction } from "./AppClientAction";
+import { AppClientContent } from "./AppClientContent";
+import { AppClientEvents } from "./AppClientEvents";
+import { AppClientView } from "./AppClientView";
 import { AppResourceUrl } from "./AppResourceUrl";
 
-export class AppApiGroup {
+export class AppClientGroup {
     private readonly resourceUrl: AppResourceUrl;
-    private readonly actions: (AppApiAction<any, any> | AppApiView<any> | AppApiContent<any, any>)[] = [];
+    private readonly actions: (AppClientAction<any, any> | AppClientView<any> | AppClientContent<any, any>)[] = [];
 
     constructor(
-        private readonly events: AppApiEvents,
+        private readonly events: AppClientEvents,
         resourceUrl: AppResourceUrl,
         readonly name: string
     ) {
@@ -23,19 +23,19 @@ export class AppApiGroup {
     }
 
     protected createView<TModel>(name: string) {
-        const view = new AppApiView<TModel>(this.resourceUrl, name);
+        const view = new AppClientView<TModel>(this.resourceUrl, name);
         this.actions.push(view);
         return view;
     }
 
     protected createAction<TModel, TResult>(name: string, friendlyName: string) {
-        const action = new AppApiAction<TModel, TResult>(this.events, this.resourceUrl, name, friendlyName);
+        const action = new AppClientAction<TModel, TResult>(this.events, this.resourceUrl, name, friendlyName);
         this.actions.push(action);
         return action;
     }
 
     protected createContent<TModel, TResult>(name: string, friendlyName: string) {
-        const content = new AppApiContent<TModel, TResult>(this.events, this.resourceUrl, name, friendlyName);
+        const content = new AppClientContent<TModel, TResult>(this.events, this.resourceUrl, name, friendlyName);
         this.actions.push(content);
         return content;
     }

@@ -1,16 +1,16 @@
-﻿import { AppApiError } from "./AppApiError";
-import { AppApiEvents } from "./AppApiEvents";
+﻿import { TimeSpan } from "../TimeSpan";
+import { AppClientError } from "./AppClientError";
+import { AppClientEvents } from "./AppClientEvents";
 import { AppResourceUrl } from "./AppResourceUrl";
 import { ErrorFromHttpResult } from "./ErrorFromHttpResult";
 import { HttpClient } from "./HttpClient";
-import { JsonText } from "./JsonText";
 import { ParsedDateObject } from "./ParsedDateObject";
 
-export class AppApiContent<TArgs,TResult> {
+export class AppClientAction<TArgs, TResult> {
     private resourceUrl: AppResourceUrl;
 
     constructor(
-        private readonly events: AppApiEvents,
+        private readonly events: AppClientEvents,
         resourceUrl: AppResourceUrl,
         actionName: string,
         readonly friendlyName: string
@@ -22,15 +22,20 @@ export class AppApiContent<TArgs,TResult> {
         this.resourceUrl = this.resourceUrl.withModifier(modifier);
     }
 
+    get path() { return this.resourceUrl.path; }
+
     async execute(data: TArgs, errorOptions: IActionErrorOptions) {
         const postResult = await new HttpClient().post(this.resourceUrl.url.value(), data);
         let result: TResult;
-        let apiError: AppApiError;
-        result = postResult && postResult.result;
+        let apiError: AppClientError;
+        result = postResult && postResult.result && postResult.result.Data;
         if (postResult.isSuccessful()) {
             if (typeof result === 'string') {
                 if (ParsedDateObject.isDateString(result)) {
-                    result = <any>new Date(Date.parse(result));
+                    result = new Date(Date.parse(result)) as any;
+                }
+                else if (TimeSpan.canParse(result)) {
+                    result = TimeSpan.parse(result) as any;
                 }
             }
             else {
@@ -50,6 +55,6 @@ export class AppApiContent<TArgs,TResult> {
     }
 
     toString() {
-        return `AppApiContent ${this.resourceUrl}`;
+        return `AppApiAction ${this.resourceUrl}`;
     }
 }

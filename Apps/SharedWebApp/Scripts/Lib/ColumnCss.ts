@@ -61,22 +61,27 @@ export class ColumnCss implements IColumnCss, ICssBuilder {
 
     sm(columnSize: ColumnCssSize = 'fill') {
         this.breakpoints.sm = new ColumnCssForBreakpoint('sm', columnSize);
+        return this;
     }
 
     md(columnSize: ColumnCssSize = 'fill') {
         this.breakpoints.md = new ColumnCssForBreakpoint('md', columnSize);
+        return this;
     }
 
     lg(columnSize: ColumnCssSize = 'fill') {
         this.breakpoints.lg = new ColumnCssForBreakpoint('lg', columnSize);
+        return this;
     }
 
     xl(columnSize: ColumnCssSize = 'fill') {
         this.breakpoints.xl = new ColumnCssForBreakpoint('xl', columnSize);
+        return this;
     }
 
     xxl(columnSize: ColumnCssSize = 'fill') {
         this.breakpoints.xxl = new ColumnCssForBreakpoint('xxl', columnSize);
+        return this;
     }
 
     cssClass() {

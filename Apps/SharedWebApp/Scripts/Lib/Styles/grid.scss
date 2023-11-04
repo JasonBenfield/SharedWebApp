@@ -8,7 +8,7 @@
     border-color: $table-border-color;
 
     > .grid-row > .grid-cell, > .grid-cell {
-        border-top: (2 * $table-border-width) solid $table-group-separator-color;
+        border-top: calc(2 * $table-border-width) solid $table-group-separator-color;
     }
 }
 
@@ -173,8 +173,32 @@
 .list-group.grid.list-group-flush {
     @include border-radius(0);
 
+    &:first-child {
+        & > .grid-cell:first-child {
+            border-top-left-radius: 0;
+        }
+
+        & > .grid-cell:last-child {
+            border-top-right-radius: 0;
+        }
+    }
+
+    &:last-child {
+        & > .grid-cell:first-child {
+            border-bottom-left-radius: 0;
+        }
+
+        & > .grid-cell:last-child {
+            border-bottom-right-radius: 0;
+        }
+    }
+
     > .list-group-item {
         border-width: 0 0 $list-group-border-width;
+
+        &:first-child {
+            border-top-width: 0;
+        }
 
         &:last-child {
             border-bottom-width: 0;

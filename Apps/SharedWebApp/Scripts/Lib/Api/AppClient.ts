@@ -1,25 +1,25 @@
-﻿import { AppApiAction } from "./AppApiAction";
-import { AppApiEvents } from "./AppApiEvents";
-import { AppApiGroup } from "./AppApiGroup";
-import { AppApiQuery } from "./AppApiQuery";
+﻿import { AppClientAction } from "./AppClientAction";
+import { AppClientEvents } from "./AppClientEvents";
+import { AppClientGroup } from "./AppClientGroup";
+import { AppClientQuery } from "./AppClientQuery";
 import { AppResourceUrl } from "./AppResourceUrl";
 import { UserCacheGroup } from "./UserCacheGroup";
 import { UserGroup } from "./UserGroup";
 import { XtiUrl } from './XtiUrl';
 
-export type apiConstructor<T extends AppApi> = {
-    new(events: AppApiEvents): T;
+export type apiConstructor<T extends AppClient> = {
+    new(events: AppClientEvents): T;
 };
 
-class UserAccessRequest<T extends AppApi> {
+class UserAccessRequest<T extends AppClient> {
     constructor(
-        readonly getAction: (api: T) => AppApiAction<any, any>,
+        readonly getAction: (api: T) => AppClientAction<any, any>,
         readonly modKey = XtiUrl.current().path.modifier
     ) {
     }
 }
 
-interface IGetUserAccessRequest<T extends AppApi> {
+interface IGetUserAccessRequest<T extends AppClient> {
     [name: string]: UserAccessRequest<T>;
 }
 
@@ -32,16 +32,16 @@ interface IKeyPath {
     path: IResourcePath;
 }
 
-export class AppApi {
+export class AppClient {
     private readonly resourceUrl: AppResourceUrl;
     readonly groups: {
-        [name: string]: AppApiGroup | AppApiQuery<any, any>
+        [name: string]: AppClientGroup | AppClientQuery<any, any>
     } = {};
     readonly User: UserGroup;
     readonly UserCache: UserCacheGroup;
 
     constructor(
-        private readonly events: AppApiEvents,
+        private readonly events: AppClientEvents,
         app: string
     ) {
         this.resourceUrl = AppResourceUrl.app(
@@ -57,8 +57,8 @@ export class AppApi {
 
     get url() { return this.resourceUrl.relativeUrl; }
 
-    protected addGroup<T extends AppApiGroup>(
-        createGroup: (evts: AppApiEvents, resourceUrl: AppResourceUrl) => T
+    protected addGroup<T extends AppClientGroup>(
+        createGroup: (evts: AppClientEvents, resourceUrl: AppResourceUrl) => T
     ) {
         const group = createGroup(this.events, this.resourceUrl);
         this.groups[group.name] = group;
@@ -66,7 +66,7 @@ export class AppApi {
     }
 
     protected addODataGroup<TArgs, TEntity>(
-        createGroup: (evts: AppApiEvents, resourceUrl: AppResourceUrl) => AppApiQuery<TArgs, TEntity>
+        createGroup: (evts: AppClientEvents, resourceUrl: AppResourceUrl) => AppClientQuery<TArgs, TEntity>
     ) {
         const group = createGroup(this.events, this.resourceUrl);
         this.groups[group.name] = group;
@@ -74,7 +74,7 @@ export class AppApi {
     }
 
     getAccessRequest(
-        getAction: (api: this) => AppApiAction<any, any>,
+        getAction: (api: this) => AppClientAction<any, any>,
         modKey?: string
     ) {
         return new UserAccessRequest(getAction, modKey);

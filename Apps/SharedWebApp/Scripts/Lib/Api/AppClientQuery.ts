@@ -2,9 +2,8 @@
 import { JoinedStrings } from "../JoinedStrings";
 import { Url } from "../Url";
 import { UrlBuilder } from "../UrlBuilder";
-import { AppApiError } from "./AppApiError";
-import { AppApiEvents } from "./AppApiEvents";
-import { AppApiView } from "./AppApiView";
+import { AppClientError } from "./AppClientError";
+import { AppClientEvents } from "./AppClientEvents";
 import { AppResourceUrl } from "./AppResourceUrl";
 import { ErrorFromHttpResult } from "./ErrorFromHttpResult";
 import { HttpClient } from "./HttpClient";
@@ -25,12 +24,12 @@ interface IODataInnerError {
     stacktrace: string;
 }
 
-export class AppApiQuery<TModel, TEntity> {
+export class AppClientQuery<TModel, TEntity> {
     private readonly resourceUrl: AppResourceUrl;
     private readonly excelUrl: Url;
 
     constructor(
-        private readonly events: AppApiEvents,
+        private readonly events: AppClientEvents,
         resourceUrl: AppResourceUrl,
         readonly name: string
     ) {
@@ -62,7 +61,7 @@ export class AppApiQuery<TModel, TEntity> {
             'text/plain'
         );
         let result: ODataResult<TEntity>;
-        let apiError: AppApiError;
+        let apiError: AppClientError;
         let rawResult = postResult && postResult.result;
         if (postResult.isSuccessful()) {
             rawResult = new ParsedDateObject(rawResult).value;
@@ -91,7 +90,7 @@ export class AppApiQuery<TModel, TEntity> {
                     }
                 }
                 const message = new JoinedStrings('\r\n', messageParts).value();
-                apiError = new AppApiError(
+                apiError = new AppClientError(
                     [
                         new ErrorModel(message)
                     ],

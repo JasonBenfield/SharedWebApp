@@ -1,14 +1,14 @@
-﻿import { AppApiAction } from './AppApiAction';
-import { AppApiEvents } from './AppApiEvents';
-import { AppApiGroup } from './AppApiGroup';
-import { AppApiView } from './AppApiView';
+﻿import { AppClientAction } from './AppClientAction';
+import { AppClientEvents } from './AppClientEvents';
+import { AppClientGroup } from './AppClientGroup';
+import { AppClientView } from './AppClientView';
 import { AppResourceUrl } from './AppResourceUrl';
 
-export class UserGroup extends AppApiGroup {
-    private readonly getUserAccessAction: AppApiAction<IResourcePath[], IResourcePathAccess[]>;
-    private readonly getMenuLinksAction: AppApiAction<string, ILinkModel[]>;
+export class UserGroup extends AppClientGroup {
+    private readonly getUserAccessAction: AppClientAction<IResourcePath[], IResourcePathAccess[]>;
+    private readonly getMenuLinksAction: AppClientAction<string, ILinkModel[]>;
 
-    constructor(events: AppApiEvents, resourceUrl: AppResourceUrl) {
+    constructor(events: AppClientEvents, resourceUrl: AppResourceUrl) {
         super(events, resourceUrl, 'User');
         this.Logout = this.createView<ILogoutRequest>('Logout');
         this.UserProfile = this.createView<ILogoutRequest>('UserProfile');
@@ -22,9 +22,9 @@ export class UserGroup extends AppApiGroup {
         );
     }
 
-    readonly Logout: AppApiView<ILogoutRequest>;
+    readonly Logout: AppClientView<ILogoutRequest>;
 
-    readonly UserProfile: AppApiView<ILogoutRequest>;
+    readonly UserProfile: AppClientView<ILogoutRequest>;
 
     GetUserAccess(paths: IResourcePath[], options?: IActionErrorOptions) {
         return this.getUserAccessAction.execute(paths, options || {});

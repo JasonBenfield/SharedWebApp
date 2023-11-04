@@ -2,7 +2,7 @@
 import { JoinedStrings } from "../JoinedStrings";
 import { MappedArray } from '../Enumerable';
 
-export class AppApiError {
+export class AppClientError {
     constructor(
         errors: IErrorModel[],
         private readonly _status: number,
