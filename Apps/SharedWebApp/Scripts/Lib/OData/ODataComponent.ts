@@ -80,21 +80,21 @@ export class ODataComponent<TEntity> {
         this.query = new ODataQueryBuilder(options.defaultQuery);
         this.query.select.addRequiredFields(this.columns.requiredDatabaseColumns());
         if (options.saveChangesOptions.select) {
-            const serializedSelect = localStorage.getItem(`odata_${pageContext.UserName}_${this.id}_select`);
+            const serializedSelect = localStorage.getItem(this.getStorageSelectKey());
             if (serializedSelect) {
                 this.query.select.clear();
                 this.query.select.fromSerialized(JSON.parse(serializedSelect));
             }
         }
         if (options.saveChangesOptions.filter) {
-            const serializedFilter = localStorage.getItem(`odata_${pageContext.UserName}_${this.id}_filter`);
+            const serializedFilter = localStorage.getItem(this.getStorageFilterKey());
             if (serializedFilter) {
                 this.query.filter.clear();
                 this.query.filter.fromSerialized(JSON.parse(serializedFilter));
             }
         }
         if (options.saveChangesOptions.orderby) {
-            const serializedOrderBy = localStorage.getItem(`odata_${pageContext.UserName}_${this.id}_orderby`);
+            const serializedOrderBy = localStorage.getItem(this.getStorageOrderByKey());
             if (serializedOrderBy) {
                 this.query.orderBy.clear();
                 this.query.orderBy.fromSerialized(JSON.parse(serializedOrderBy));
@@ -219,14 +219,30 @@ export class ODataComponent<TEntity> {
         this.grid.filterChanged(this.query.filter);
         this.grid.orderByChanged(this.query.orderBy);
         if (this.saveChangesOptions.select) {
-            localStorage.setItem(`odata_${this.id}_select`, JSON.stringify(this.query.select.serialize()));
+            localStorage.setItem(this.getStorageSelectKey(), JSON.stringify(this.query.select.serialize()));
         }
         if (this.saveChangesOptions.filter) {
-            localStorage.setItem(`odata_${this.id}_filter`, JSON.stringify(this.query.filter.serialize()));
+            localStorage.setItem(this.getStorageFilterKey(), JSON.stringify(this.query.filter.serialize()));
         }
         if (this.saveChangesOptions.orderby) {
-            localStorage.setItem(`odata_${this.id}_orderby`, JSON.stringify(this.query.orderBy.serialize()));
+            localStorage.setItem(this.getStorageOrderByKey(), JSON.stringify(this.query.orderBy.serialize()));
         }
         this.eventSource.events.refreshed.invoke();
+    }
+
+    private getStorageSelectKey() {
+        return this.getStorageKey('select');
+    }
+
+    private getStorageFilterKey() {
+        return this.getStorageKey('filter');
+    }
+
+    private getStorageOrderByKey() {
+        return this.getStorageKey('orderby');
+    }
+
+    private getStorageKey(type: string) {
+        return `odata_${pageContext.UserName}_${this.id}_${type}`;
     }
 }
