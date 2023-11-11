@@ -38,7 +38,9 @@ export class BooleanInputView extends BasicComponentView {
 
     hasFocus() { return document.activeElement === this.inputElement; }
 
-    setFocus() { this.inputElement.focus(); }
+    setFocus() {
+        this.inputElement.focus();
+    }
 
     blur() { this.inputElement.blur(); }
 

@@ -1,5 +1,6 @@
 ﻿import { DebouncedAction } from "../DebouncedAction";
 import { DelayedAction } from "../DelayedAction";
+import { DeviceType } from "../DeviceType";
 import { EventSource } from "../Events";
 import { TypedFieldViewValue } from "../Forms/TypedFieldViewValue";
 import { InputView } from "../Views/InputView";
@@ -73,7 +74,23 @@ export class InputControl<TValue> extends BasicComponent {
         this.view.setValue(inputValue);
     }
 
-    setFocus() { this.debouncedSetFocus.execute(); }
+    setFocus() {
+        if (new DeviceType().canFocus) {
+            this.debouncedSetFocus.execute();
+        }
+    }
+
+    blur() {
+        this.view.blur();
+    }
+
+    protect() {
+        this.view.setType('password');
+    }
+
+    setMaxLength(maxLength: number) {
+        this.view.setMaxLength(maxLength);
+    }
 
     show() { this.view.show(); }
 

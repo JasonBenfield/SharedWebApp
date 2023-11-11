@@ -1,7 +1,9 @@
 ﻿import { AppClientAction } from "./AppClientAction";
+import { AppClientContent } from "./AppClientContent";
 import { AppClientEvents } from "./AppClientEvents";
 import { AppClientGroup } from "./AppClientGroup";
 import { AppClientQuery } from "./AppClientQuery";
+import { AppClientView } from "./AppClientView";
 import { AppResourceUrl } from "./AppResourceUrl";
 import { UserCacheGroup } from "./UserCacheGroup";
 import { UserGroup } from "./UserGroup";
@@ -11,9 +13,15 @@ export type apiConstructor<T extends AppClient> = {
     new(events: AppClientEvents): T;
 };
 
+type AppClientMethod =
+    AppClientAction<any, any> |
+    AppClientView<any> |
+    AppClientContent<any, any> |
+    AppClientQuery<any, any>;
+
 class UserAccessRequest<T extends AppClient> {
     constructor(
-        readonly getAction: (api: T) => AppClientAction<any, any>,
+        readonly getAction: (api: T) => AppClientMethod,
         readonly modKey = XtiUrl.current().path.modifier
     ) {
     }
@@ -74,7 +82,7 @@ export class AppClient {
     }
 
     getAccessRequest(
-        getAction: (api: this) => AppClientAction<any, any>,
+        getAction: (api: this) => AppClientMethod,
         modKey?: string
     ) {
         return new UserAccessRequest(getAction, modKey);

@@ -167,3 +167,8 @@ interface ITextCss {
 declare type constructor<T> = {
     new(...args: any[]): T;
 };
+
+interface INumericValue {
+    Value: number;
+    DisplayText: string;
+}

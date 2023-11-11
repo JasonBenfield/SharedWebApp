@@ -1,5 +1,4 @@
 ﻿import { ContextualClass } from "../ContextualClass";
-import { EnumerableArray, MappedArray } from "../Enumerable";
 import { CssLengthUnit } from "../CssLengthUnit";
 import { JoinedStrings } from "../JoinedStrings";
 import { BasicComponentView } from "./BasicComponentView";
@@ -19,10 +18,7 @@ export class GridTemplateCssValue {
     value() {
         return new JoinedStrings(
             ' ',
-            new MappedArray(
-                this.templates,
-                c => c.toString()
-            )
+            this.templates.map(c => c.toString())
         ).value();
     }
 
@@ -134,7 +130,7 @@ export class GridView extends BasicComponentView {
 
     cell(index: number) { return this.cells[index]; }
 
-    getCells() { return new EnumerableArray(this.cells).value(); }
+    getCells() { return this.cells.map(c => c); }
 
     addRow<TRowView extends GridRowView>(ctor?: ViewConstructor<TRowView>) {
         return this.addRows(1, ctor)[0];
@@ -148,7 +144,7 @@ export class GridView extends BasicComponentView {
 
     row(index: number) { return this.row[index]; }
 
-    getRows() { return new EnumerableArray(this.rows).value(); }
+    getRows() { return this.rows.map(r => r); }
 }
 
 export class GridRowView extends BasicContainerView {

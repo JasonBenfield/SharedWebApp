@@ -71,9 +71,9 @@ export class UrlQueryBuilder {
                 queryValues.push(new NamedValue(name, value.toString()));
             }
             else if (_.isArray(value)) {
-                _(value).forEach(arrValue => {
+                for (const arrValue of value) {
                     this.addQuery(name, arrValue);
-                });
+                }
             }
             else {
                 queryValues.push(new NamedValue(name, value && value.toString()));

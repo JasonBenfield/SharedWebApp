@@ -1,6 +1,5 @@
-﻿import { MappedArray } from "../Enumerable";
-import { ODataQueryBuilder } from "./ODataQueryBuilder";
-import { FilterConditionFunction, FilterConditionOperation, FilterField, FilterStringValue, FilterValue } from "./ODataQueryFilterBuilder";
+﻿import { ODataQueryBuilder } from "./ODataQueryBuilder";
+import { FilterConditionFunction, FilterConditionOperation, FilterField, FilterStringValue } from "./ODataQueryFilterBuilder";
 import { IODataClient, ISuggestedValueGetter } from "./Types";
 
 export class SuggestedValueODataGetter implements ISuggestedValueGetter {
@@ -45,6 +44,6 @@ export class SuggestedValueODataGetter implements ISuggestedValueGetter {
         const records = odataResult.records.length > this.top
             ? odataResult.records.slice(0, this.top - 1)
             : odataResult.records;
-        return new MappedArray(records, r => r[this.fieldName]).value();
+        return records.map(r => r[this.fieldName]);
     }
 }

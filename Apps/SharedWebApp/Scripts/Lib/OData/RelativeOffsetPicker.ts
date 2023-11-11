@@ -1,17 +1,15 @@
-﻿import { BooleanInputControl } from "../Components/BooleanInputControl";
+﻿import { BasicComponent } from "../Components/BasicComponent";
+import { FormCheck } from "../Components/FormCheck";
 import { InputControl } from "../Components/InputControl";
 import { SelectControl } from "../Components/SelectControl";
 import { SelectOption } from "../Components/SelectOption";
 import { TextComponent } from "../Components/TextComponent";
+import { DebouncedAction } from "../DebouncedAction";
+import { EventSource } from '../Events';
+import { FormattedDate } from "../FormattedDate";
 import { TextToNumberViewValue } from "../Forms/TextToNumberViewValue";
 import { DayOfMonth, DaysOfMonth, RelativeDayOffset, RelativeMonthOffset, RelativeOffset, RelativeYearOffset } from "../RelativeDateRange";
 import { RelativeOffsetPickerView } from "./RelativeOffsetPickerView";
-import { EventSource } from '../Events';
-import { DebouncedAction } from "../DebouncedAction";
-import { BasicComponent } from "../Components/BasicComponent";
-import { FormCheck } from "../Components/FormCheck";
-import { MappedArray } from "../Enumerable";
-import { FormattedDate } from "../FormattedDate";
 
 enum UnitSelection {
     NotSet = 0,
@@ -56,17 +54,13 @@ export class RelativeOffsetPicker extends BasicComponent {
         for (let month = 0; month < 12; month++) {
             this.months.push(new Date(2022, month, 1));
         }
-        const monthOptions = new MappedArray(
-            this.months,
+        const monthOptions = this.months.map(
             m => new SelectOption(m, new FormattedDate(m, { month: 'long' }).formatDate())
-        ).value();
+        );
         this.monthSelect = this.addComponent(new SelectControl(view.monthSelect));
         this.monthSelect.setItems(...monthOptions);
         this.daysOfMonth = new DaysOfMonth();
-        const daysOfMonthOptions = new MappedArray(
-            this.daysOfMonth.values,
-            d => new SelectOption(d, d.format())
-        ).value();
+        const daysOfMonthOptions = this.daysOfMonth.values.map(d => new SelectOption(d, d.format()));
         this.dayOfMonthSelect.setItems(...daysOfMonthOptions);
         this.setValue(null);
         this.offsetInput.when.valueChanged.then(this.onOffsetInputChanged.bind(this));

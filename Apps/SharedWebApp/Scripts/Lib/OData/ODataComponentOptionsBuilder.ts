@@ -1,5 +1,4 @@
-﻿import { MappedArray } from "../Enumerable";
-import { GridRowView } from "../Views/Grid";
+﻿import { GridRowView } from "../Views/Grid";
 import { ODataColumn } from "./ODataColumn";
 import { ODataColumnBuilder } from "./ODataColumnBuilder";
 import { ODataColumnViewBuilder } from "./ODataColumnViewBuilder";
@@ -27,10 +26,7 @@ export class ODataFixedColumnsBuilder {
     }
 
     build() {
-        return new MappedArray(
-            this.columns,
-            c => c.build()
-        ).value();
+        return this.columns.map(c => c.build());
     }
 }
 

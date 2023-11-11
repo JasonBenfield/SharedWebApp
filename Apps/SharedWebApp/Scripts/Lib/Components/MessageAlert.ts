@@ -1,5 +1,4 @@
-﻿import * as _ from 'lodash';
-import { ContextualClass } from '../ContextualClass';
+﻿import { ContextualClass } from '../ContextualClass';
 import { DebouncedAction } from '../DebouncedAction';
 import { DefaultEvent } from '../Events';
 import { TextComponent } from './TextComponent';
@@ -65,7 +64,7 @@ export class MessageAlert extends BasicComponent {
     }
 
     private setMessage(message: string) {
-        this._message = _.trim(message);
+        this._message = message.trim();
         if (this._message) {
             this.updateViewMessage(this._message);
         }

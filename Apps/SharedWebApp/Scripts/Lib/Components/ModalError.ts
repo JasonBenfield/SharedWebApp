@@ -1,5 +1,4 @@
-﻿import { FilteredArray } from "../Enumerable";
-import { ErrorModel } from "../ErrorModel";
+﻿import { ErrorModel } from "../ErrorModel";
 import { EventSource } from "../Events";
 import { ModalErrorGroupView, ModalErrorListItemView, ModalErrorView } from "../Views/ModalError";
 import { BasicComponent } from "./BasicComponent";
@@ -82,10 +81,7 @@ export class ModalErrorGroupComponent extends BasicComponent {
             this.view.showHR();
         }
         this.caption.setText(caption);
-        const anyCaptions = new FilteredArray(
-            errors,
-            e => Boolean(e.Caption)
-        ).toEnumerableArray().any();
+        const anyCaptions = errors.filter(e => Boolean(e.Caption)).length > 0;
         this.errors.setItems(
             errors,
             (e, itemView) =>

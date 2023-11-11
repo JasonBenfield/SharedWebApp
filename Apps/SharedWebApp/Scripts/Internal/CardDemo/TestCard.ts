@@ -1,17 +1,17 @@
-﻿import { DelayedAction } from '../../Lib/DelayedAction';
-import { EnumerableRange } from "../../Lib/Enumerable";
+﻿import { CardAlert } from "../../Lib/Components/CardAlert";
 import { ListGroup } from "../../Lib/Components/ListGroup";
-import { CardAlert } from "../../Lib/Components/CardAlert";
+import { MessageAlert } from '../../Lib/Components/MessageAlert';
+import { TextAreaControl } from '../../Lib/Components/TextAreaControl';
+import { TextComponent } from '../../Lib/Components/TextComponent';
+import { DelayedAction } from '../../Lib/DelayedAction';
+import { EnumerableRange } from '../../Lib/EnumerableRange';
 import { TestCardView } from "./TestCardView";
 import { TestClickableListItem } from "./TestClickableItem";
 import { TestClickableListItemView } from "./TestClickableItemView";
-import { TestListItem } from "./TestListItem";
-import { TestListItemView } from "./TestListItemView";
-import { TextComponent } from '../../Lib/Components/TextComponent';
-import { TextAreaControl } from '../../Lib/Components/TextAreaControl';
-import { MessageAlert } from '../../Lib/Components/MessageAlert';
 import { TestGridListItem } from './TestGridListItem';
 import { TestGridListItemView } from './TestGridListItemView';
+import { TestListItem } from "./TestListItem";
+import { TestListItemView } from "./TestListItemView";
 
 export class TestCard {
     private readonly cardTitleHeader: TextComponent;

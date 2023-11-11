@@ -1,7 +1,7 @@
 ﻿import { AsyncCommand } from '../../Lib/Components/Command';
 import { ListGroup } from '../../Lib/Components/ListGroup';
 import { TextComponent } from '../../Lib/Components/TextComponent';
-import { EnumerableRange } from '../../Lib/Enumerable';
+import { EnumerableRange } from '../../Lib/EnumerableRange';
 import { DefaultPageContext } from '../DefaultPageContext';
 import { SharedPage } from '../SharedPage';
 import { MainPageView } from './MainPageView';

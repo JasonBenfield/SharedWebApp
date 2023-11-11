@@ -1,5 +1,4 @@
-﻿import { EnumerableArray } from "../Enumerable";
-import { BasicComponentView } from "../Views/BasicComponentView";
+﻿import { BasicComponentView } from "../Views/BasicComponentView";
 import { AsyncCommand } from "./Command";
 
 export class BasicComponent {
@@ -26,7 +25,7 @@ export class BasicComponent {
     protected getComponent(index: number) { return this.components[index]; }
 
     protected getComponents() {
-        return new EnumerableArray(this.components).value();
+        return this.components.map(c => c);
     }
 
     protected clearComponents() {

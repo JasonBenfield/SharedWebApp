@@ -1,5 +1,4 @@
-﻿import { EnumerableArray, FilteredArray, MappedArray } from "../Enumerable";
-import { ODataColumn } from "./ODataColumn";
+﻿import { ODataColumn } from "./ODataColumn";
 import { IODataColumns } from "./Types";
 
 export class ODataColumnAccessor {
@@ -31,28 +30,18 @@ export class ODataColumnAccessor {
     column(name: string) { return this._columns[name]; }
 
     columns(includedColumnNames: string[]) {
-        return new FilteredArray(
-            new MappedArray(
-                includedColumnNames,
-                columnName => this.column(columnName)
-            ),
-            c => Boolean(c)
-        ).value();
+        return includedColumnNames
+            .map(columnName => this.column(columnName))
+            .filter(c => Boolean(c));
     }
 
-    values() { return new EnumerableArray(this._values).value(); }
+    values() { return this._values.map(v => v); }
 
     selectableColumns() {
-        return new FilteredArray(
-            this._values,
-            c => c.canSelect
-        ).value();
+        return this._values.filter(c => c.canSelect);
     }
 
     requiredDatabaseColumns() {
-        return new FilteredArray(
-            this._values,
-            c => c.isRequired && !c.sourceType.isNone()
-        ).value();
+        return this._values.filter(c => c.isRequired && !c.sourceType.isNone());
     }
 }

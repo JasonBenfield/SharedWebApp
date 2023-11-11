@@ -1,5 +1,4 @@
 ﻿import { ContextualClass } from "../ContextualClass";
-import { MappedArray } from "../Enumerable";
 import { JoinedStrings } from "../JoinedStrings";
 import { TextCss } from "../TextCss";
 import { BasicComponentView } from "./BasicComponentView";
@@ -204,10 +203,7 @@ export class GridListGroupView<TItemView extends GridListGroupItemView> extends 
     setTemplateColumns(...columns: GridTemplateCss[]) {
         const value = new JoinedStrings(
             ' ',
-            new MappedArray(
-                columns,
-                c => c.toString()
-            )
+            columns.map(c => c.toString())
         ).value();
         this.setStyle(style => style['grid-template-columns'] = value);
     }

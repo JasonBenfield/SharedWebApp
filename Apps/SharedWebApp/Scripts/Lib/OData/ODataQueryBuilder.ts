@@ -1,6 +1,4 @@
-﻿import { join } from "lodash";
-import { FilteredArray, MappedArray } from "../Enumerable";
-import { JoinedStrings } from "../JoinedStrings";
+﻿import { JoinedStrings } from "../JoinedStrings";
 import { ODataColumn } from "./ODataColumn";
 import { ODataColumnBuilder } from "./ODataColumnBuilder";
 import { ISerializableFilter, ODataQueryFilterBuilder } from "./ODataQueryFilterBuilder";
@@ -152,8 +150,7 @@ export class ODataQuerySelectBuilder {
     }
 
     clear() {
-        const requiredFields = new MappedArray(
-            this.requiredFields,
+        const requiredFields = this.requiredFields.map(
             requiredField => {
                 const field: ISelectField = {
                     field: requiredField,
@@ -162,7 +159,7 @@ export class ODataQuerySelectBuilder {
                 };
                 return field;
             }
-        ).value();
+        );
         this.fields.splice(0, this.fields.length, ...requiredFields);
         return this;
     }
@@ -170,27 +167,15 @@ export class ODataQuerySelectBuilder {
     any() { return this.fields.length > 0; }
 
     contains(field: string) {
-        return new FilteredArray(
-            this.fields,
-            f => f.field === field
-        ).toEnumerableArray().any();
+        return this.fields.filter(f => f.field === field).length > 0;
     }
 
     containsExplicitySelected(field: string) {
-        return new FilteredArray(
-            this.fields,
-            f => f.field === field && f.isExplicitlySelected
-        ).toEnumerableArray().any();
+        return this.fields.filter(f => f.field === field && f.isExplicitlySelected).length > 0;
     }
 
     getExplicitlySelected() {
-        return new MappedArray(
-            new FilteredArray(
-                this.fields,
-                f => f.isExplicitlySelected
-            ),
-            f => f.field
-        ).value();
+        return this.fields.filter(f => f.isExplicitlySelected).map(f => f.field);
     }
 
     addFields(...columns: (ODataColumnBuilder | ODataColumn)[]) {
@@ -236,26 +221,14 @@ export class ODataQuerySelectBuilder {
     build() {
         return new JoinedStrings(
             ',',
-            new MappedArray(
-                new FilteredArray(
-                    this.fields,
-                    f => f.isDatabaseField
-                ),
-                f => f.field
-            )
+            this.fields.filter(f => f.isDatabaseField).map(f => f.field)
         ).value();
     }
 
     buildExplicitlySelected() {
         return new JoinedStrings(
             ',',
-            new MappedArray(
-                new FilteredArray(
-                    this.fields,
-                    f => f.isDatabaseField && f.isExplicitlySelected
-                ),
-                f => f.field
-            )
+            this.fields.filter(f => f.isDatabaseField && f.isExplicitlySelected).map(f => f.field)
         ).value();
     }
 
@@ -286,7 +259,7 @@ export class ODataQueryOrderByBuilder {
     }
 
     getField(name: string) {
-        return new FilteredArray(this.fields, f => f.field === name).toEnumerableArray().first();
+        return this.fields.filter(f => f.field === name)[0];
     }
 
     addAscending(field: ODataColumnBuilder | ODataColumn) { return this.add(field, true); }
@@ -306,10 +279,7 @@ export class ODataQueryOrderByBuilder {
     build() {
         return new JoinedStrings(
             ',',
-            new MappedArray(
-                this.fields,
-                f => this.formatField(f)
-            )
+            this.fields.map(f => this.formatField(f))
         ).value();
     }
 
@@ -355,8 +325,7 @@ export class ODataQueryApplyBuilder {
     build() {
         return new JoinedStrings(
             '/',
-            new MappedArray(
-                this.clauses,
+            this.clauses.map(
                 c => {
                     let query = c.build();
                     if (query) {
@@ -392,10 +361,7 @@ export class ODataQueryGroupByBuilder {
             parts.push(
                 new JoinedStrings(
                     ',',
-                    new MappedArray(
-                        this.fields,
-                        f => `(${f})`
-                    )
+                    this.fields.map(f => `(${f})`)
                 ).value()
             );
             const aggregate = this.aggregate.build();
@@ -418,10 +384,7 @@ export class ODataQueryAggregateBuilder {
     build() {
         return new JoinedStrings(
             ',',
-            new MappedArray(
-                this.aggFuncs,
-                f => f.toQuery()
-            )
+            this.aggFuncs.map(f => f.toQuery())
         ).value()
     }
 }

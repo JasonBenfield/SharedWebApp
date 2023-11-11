@@ -1,4 +1,4 @@
-﻿import { AppApi } from "../Api/AppApi";
+﻿import { AppClient } from "../Http/AppClient";
 import { BasicComponentView } from "../Views/BasicComponentView";
 import { LinkCommandView } from "../Views/Command";
 import { IMenuView } from "../Views/Types";
@@ -7,7 +7,7 @@ import { MenuItemComponent } from "./MenuItemComponent";
 
 export class MenuComponent extends BasicComponent {
     constructor(
-        private readonly app: AppApi,
+        private readonly app: AppClient,
         private readonly menuName: string,
         protected readonly view: (BasicComponentView & IMenuView)
     ) {

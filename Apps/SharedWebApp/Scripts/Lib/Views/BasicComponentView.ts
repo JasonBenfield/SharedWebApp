@@ -1,7 +1,6 @@
 ﻿import { ContextualClass } from "../ContextualClass";
 import { CssClass } from "../CssClass";
 import { CssLengthUnit } from "../CssLengthUnit";
-import { EnumerableArray, FilteredArray, MappedArray } from "../Enumerable";
 import { MarginCss } from "../MarginCss";
 import { PaddingCss } from "../PaddingCss";
 import { Position } from "../Position";
@@ -220,7 +219,7 @@ export class BasicComponentView {
 
     protected getViewByIndex(index: number) { return this.views[index]; }
 
-    protected getViews() { return new EnumerableArray(this.views).value(); }
+    protected getViews() { return this.views.map(v => v); }
 
     dispose() {
         this.disposeAllViews();
@@ -285,13 +284,7 @@ export class BasicComponentView {
 
     private replaceElements() {
         this.unregisterEvents();
-        const viewElements = new MappedArray(
-            new FilteredArray(
-                this.views,
-                v => v.isVisible
-            ),
-            v => v.elementView.element
-        ).value();
+        const viewElements = this.views.filter(v => v.isVisible).map(v => v.elementView.element);
         this.elementView.replaceElements(viewElements);
         this.registerEvents();
     }

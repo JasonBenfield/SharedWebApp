@@ -5,4 +5,8 @@ export class TextBlockView extends BasicTextComponentView {
     constructor(container: BasicComponentView) {
         super(container, 'div');
     }
+
+    styleAsFormControl() {
+        this.addCssName('form-control-plaintext');
+    }
 }

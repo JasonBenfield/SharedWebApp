@@ -82,9 +82,9 @@ export class UrlHashBuilder {
                 hashValues.push(new NamedValue(name, queryValue));
             }
             else if (_.isArray(value)) {
-                _(value).forEach(arrValue => {
+                for(const arrValue of value) {
                     this.addQuery(name, arrValue);
-                });
+                }
             }
             else {
                 hashValues.push(new NamedValue(name, value && value.toString()));
@@ -100,7 +100,7 @@ export class UrlHashBuilder {
 
     private _addQueryFromObject(obj: any, prefix: string) {
         if (obj) {
-            for (let prop in obj) {
+            for (const prop in obj) {
                 if (obj.hasOwnProperty(prop)) {
                     let k = prefix ? `${prefix}[${prop}]` : prop;
                     let propValue = obj[prop];

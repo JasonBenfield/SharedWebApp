@@ -1,12 +1,12 @@
-﻿export class NumericValue {
+﻿export class NumericValue implements INumericValue {
     constructor(
         public readonly Value: number,
         public readonly DisplayText: string
     ) {
     }
 
-    equalsAny(...other: NumericValue[] | number[] | string[]) {
-        for (let item of other) {
+    equalsAny(...other: number[] | string[] | INumericValue[]) {
+        for (const item of other) {
             if (this.equals(item)) {
                 return true;
             }
@@ -14,7 +14,7 @@
         return false;
     }
 
-    equals(other: NumericValue | number | string) {
+    equals(other: number | string | INumericValue) {
         if (other === undefined || other === null) {
             return false;
         }
@@ -22,8 +22,9 @@
             return this.Value === other;
         }
         else if (typeof other === "string") {
-            return this.normalizeDisplayText(this.DisplayText) === this.normalizeDisplayText(other) ||
-                this.Value.toString() === other;
+            const normalized = this.normalizeDisplayText(this.DisplayText);
+            const otherNormalized = this.normalizeDisplayText(other);
+            return normalized === otherNormalized || this.Value.toString() === other;
         }
         return this.Value === other.Value;
     }

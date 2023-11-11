@@ -1,6 +1,5 @@
 ﻿import { BasicComponent } from "../Components/BasicComponent";
 import { MessageAlert } from "../Components/MessageAlert";
-import { MappedArray } from "../Enumerable";
 import { EventSource } from "../Events";
 import { GridRowView } from "../Views/Grid";
 import { ODataCellClickedEventArgs } from "./ODataCellClickedEventArgs";
@@ -187,10 +186,7 @@ export class ODataGrid<TEntity> extends BasicComponent {
     setData(columns: ODataColumn[], records: Queryable<TEntity>[]) {
         this.clearComponents();
         this.view.clearContents();
-        const columnViews = new MappedArray(
-            columns,
-            column => column.view
-        ).value();
+        const columnViews = columns.map(column => column.view);
         this.view.setSelectedTemplateColumns(columnViews);
         const headerRowView = this.view.addHeaderRow(columnViews);
         const headerRow = new ODataHeaderRow(columns, headerRowView);

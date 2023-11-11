@@ -1,7 +1,4 @@
-﻿import { AppApiEvents } from '../../Lib/Api/AppApiEvents';
-import { AppApiQuery } from '../../Lib/Api/AppApiQuery';
-import { AppResourceUrl } from '../../Lib/Api/AppResourceUrl';
-import { TextComponent } from '../../Lib/Components/TextComponent';
+﻿import { TextComponent } from '../../Lib/Components/TextComponent';
 import { ApiODataClient } from '../../Lib/OData/ApiODataClient';
 import { NumberValueFormatter } from '../../Lib/OData/NumberValueFormatter';
 import { ODataCellClickedEventArgs } from '../../Lib/OData/ODataCellClickedEventArgs';
@@ -37,7 +34,7 @@ class MainPage extends SharedPage {
         //options.disableSelectColumns();
         //options.disableFilter();
         //options.disableSort();
-        const odataClient = new ApiODataClient(this.defaultApi.EmployeeQuery, {});
+        const odataClient = new ApiODataClient(this.defaultClient.EmployeeQuery, {});
         options.setODataClient(odataClient);
         options.setCreateDataRow(
             (rowIndex: number, columns: ODataColumn[], record: any, view: GridRowView) =>

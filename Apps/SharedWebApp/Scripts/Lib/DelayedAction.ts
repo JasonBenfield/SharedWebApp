@@ -1,5 +1,4 @@
-﻿import * as _ from 'lodash';
-
+﻿
 export class DelayedAction<TResult> {
     public static delay(wait: number) {
         return new DelayedAction(() => { }, wait).execute();

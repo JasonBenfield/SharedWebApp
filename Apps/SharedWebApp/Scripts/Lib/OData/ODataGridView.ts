@@ -1,6 +1,5 @@
 ﻿import { ContextualClass } from "../ContextualClass";
 import { CssLengthUnit } from "../CssLengthUnit";
-import { MappedArray } from "../Enumerable";
 import { MarginCss } from "../MarginCss";
 import { TextCss } from "../TextCss";
 import { BasicComponentView } from "../Views/BasicComponentView";
@@ -66,10 +65,7 @@ export class ODataGridView extends GridView {
     }
 
     setSelectedTemplateColumns(columns: ODataColumnView[]) {
-        const templateColumns = new MappedArray(
-            columns,
-            col => col.width
-        ).value();
+        const templateColumns = columns.map(col => col.width);
         this.setTemplateColumns(...templateColumns);
     }
 

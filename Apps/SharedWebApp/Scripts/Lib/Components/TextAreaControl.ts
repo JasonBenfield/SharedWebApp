@@ -1,4 +1,5 @@
 ﻿import { DebouncedAction } from "../DebouncedAction";
+import { DeviceType } from "../DeviceType";
 import { EventSource } from "../Events";
 import { InputView } from "../Views/InputView";
 import { TextAreaView } from "../Views/TextAreaView";
@@ -49,7 +50,11 @@ export class TextAreaControl extends BasicComponent {
         this.view.setValue(value);
     }
 
-    setFocus() { this.debouncedSetFocus.execute(); }
+    setFocus() {
+        if (new DeviceType().canFocus) {
+            this.debouncedSetFocus.execute();
+        }
+    }
 
     show() { this.view.show(); }
 

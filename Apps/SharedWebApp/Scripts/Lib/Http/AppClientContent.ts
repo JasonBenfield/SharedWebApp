@@ -17,6 +17,8 @@ export class AppClientContent<TArgs,TResult> {
         this.resourceUrl = resourceUrl.withAction(actionName);
     }
 
+    get path() { return this.resourceUrl.path; }
+
     withModifier(modifier: string) {
         this.resourceUrl = this.resourceUrl.withModifier(modifier);
     }

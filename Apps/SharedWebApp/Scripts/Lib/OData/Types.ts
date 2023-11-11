@@ -1,4 +1,4 @@
-﻿import { ODataResult } from "../Api/ODataResult"
+﻿import { ODataResult } from "../Http/ODataResult"
 import { GridCellView } from "../Views/Grid"
 import { ODataCell } from "./ODataCell"
 import { ODataColumn } from "./ODataColumn"
