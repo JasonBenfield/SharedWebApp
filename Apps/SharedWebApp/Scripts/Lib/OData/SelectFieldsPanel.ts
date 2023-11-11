@@ -48,7 +48,7 @@ export class SelectFieldsPanel extends BasicComponent implements IPanel {
         view.handleSelectedFieldDragOver(this.onSelectFieldOver.bind(this));
         view.handleSelectedFieldDragEnd(this.onSelectFieldDragEnd.bind(this));
         view.handleSelectedFieldDrop(this.onSelectFieldDrop.bind(this));
-        this.availableFields.registerItemClicked(this.onAvailableFieldClicked.bind(this));
+        this.availableFields.when.itemClicked.then(this.onAvailableFieldClicked.bind(this));
         new Command(this.cancel.bind(this)).add(view.cancelButton);
         new Command(this.save.bind(this)).add(view.saveButton);
     }

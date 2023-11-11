@@ -1,5 +1,5 @@
 ﻿
-export class EventCollection {
+class EventCollection {
     private readonly _identifier: any;
     private readonly _events: IEvent<any>[] = [];
 
@@ -55,7 +55,7 @@ export class EventBuilder<TArgs> {
     }
 }
 
-export class DefaultEvent<TArgs> implements IEvent<TArgs>, IEventHandler<TArgs> {
+class DefaultEvent<TArgs> implements IEvent<TArgs>, IEventHandler<TArgs> {
     private static defaultIsEnabled() {
         return true;
     }
@@ -101,7 +101,7 @@ export class DefaultEvent<TArgs> implements IEvent<TArgs>, IEventHandler<TArgs> 
     }
 }
 
-export class DefaultEventHandler<TArgs> implements IEventHandler<TArgs> {
+class DefaultEventHandler<TArgs> implements IEventHandler<TArgs> {
     constructor(private readonly source: IEvent<TArgs>) {
     }
 
@@ -112,15 +112,5 @@ export class DefaultEventHandler<TArgs> implements IEventHandler<TArgs> {
 
     unregister(identifier: any) {
         this.source.unregister(identifier);
-    }
-}
-
-export class SimpleEvent extends DefaultEvent<any> {
-    constructor(source: any) {
-        super(source);
-    }
-
-    invoke() {
-        super.invoke(null);
     }
 }
