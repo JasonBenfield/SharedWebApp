@@ -1,6 +1,5 @@
 ﻿import { ErrorModel } from "../ErrorModel";
 import { JoinedStrings } from "../JoinedStrings";
-import { MappedArray } from '../Enumerable';
 
 export class AppClientError {
     constructor(
@@ -9,7 +8,7 @@ export class AppClientError {
         private readonly _location: string,
         private readonly _caption: string
     ) {
-        this._errors = new MappedArray(errors, e => new ErrorModel(e.Message, e.Caption, e.Source)).value();
+        this._errors = errors.map(e => new ErrorModel(e.Message, e.Caption, e.Source));
     }
 
     private readonly _errors: ErrorModel[];

@@ -1,10 +1,9 @@
 ﻿import { DateRange } from "../DateRange";
-import { FilteredArray } from "../Enumerable";
 import { NumberRange } from "../NumberRange";
 import { RelativeDateRange } from "../RelativeDateRange";
 import { FilterSelection, FilterSelectionContains, FilterSelectionEndsWith, FilterSelectionEqual, FilterSelectionGreaterThan, FilterSelectionGreaterThanOrEqual, FilterSelectionIsBlank, FilterSelectionIsFalse, FilterSelectionIsNotBlank, FilterSelectionIsTrue, FilterSelectionLessThan, FilterSelectionLessThanOrEqual, FilterSelectionNotEqual, FilterSelections, FilterSelectionStartsWith, FilterSelectionStringEqual, FilterSelectionStringNotEqual } from "./FilterSelection";
 import { ODataColumn } from "./ODataColumn";
-import { FilterConditionClause, FilterStringValue, ODataQueryFilterBuilder } from "./ODataQueryFilterBuilder";
+import { FilterConditionClause, ODataQueryFilterBuilder } from "./ODataQueryFilterBuilder";
 import { SourceType } from "./SourceType";
 
 enum FilterAppend {
@@ -22,10 +21,7 @@ export class FilterColumnOptionsBuilder {
     }
 
     getPotentialConditions(sourceType: SourceType) {
-        return new FilteredArray(
-            FilterSelections.all,
-            c => c.canSelect(sourceType)
-        ).value();
+        return FilterSelections.all.filter(c => c.canSelect(sourceType));
     }
 
     getConditionClauses() { return this.filter.getConditions(); }

@@ -3,7 +3,6 @@ import { BasicComponent } from "../Components/BasicComponent";
 import { Command } from "../Components/Command";
 import { ListGroup } from "../Components/ListGroup";
 import { MessageAlert } from "../Components/MessageAlert";
-import { MappedArray } from "../Enumerable";
 import { AvailableFieldListItem } from "./AvailableFIeldListItem";
 import { AvailableFieldListItemView } from "./AvailableFieldListItemView";
 import { ODataColumnAccessor } from "./ODataColumnAccessor";
@@ -117,10 +116,7 @@ export class SelectFieldsPanel extends BasicComponent implements IPanel {
     }
 
     private save() {
-        const selectedColumns = new MappedArray(
-            this.selectedFields.getItems(),
-            item => item.column
-        ).value();
+        const selectedColumns = this.selectedFields.getItems().map(item => item.column);
         this.select.clear();
         this.select.addFields(...selectedColumns);
         this.awaitable.resolve(Result.done());

@@ -1,32 +1,32 @@
-﻿import { AppApi } from "../Lib/Api/AppApi";
-import { AppApiAction } from "../Lib/Api/AppApiAction";
-import { AppApiEvents } from "../Lib/Api/AppApiEvents";
-import { AppApiGroup } from "../Lib/Api/AppApiGroup";
-import { AppApiQuery } from "../Lib/Api/AppApiQuery";
-import { AppResourceUrl } from "../Lib/Api/AppResourceUrl";
+﻿import { AppClient } from "../Lib/Http/AppClient";
+import { AppClientAction } from "../Lib/Http/AppClientAction";
+import { AppClientEvents } from "../Lib/Http/AppClientEvents";
+import { AppClientGroup } from "../Lib/Http/AppClientGroup";
+import { AppClientQuery } from "../Lib/Http/AppClientQuery";
+import { AppResourceUrl } from "../Lib/Http/AppResourceUrl";
 import { AddEmployeeForm } from "./Employee/AddEmployeeForm";
 
-export class SharedAppApi extends AppApi {
+export class SharedAppApi extends AppClient {
 
-    constructor(events: AppApiEvents) {
+    constructor(events: AppClientEvents) {
 		super(events, 'Shared');
 		this.Employee = this.addGroup((evts, resourceUrl) => new EmployeeGroup(evts, resourceUrl));
-		this.EmployeeQuery = this.addODataGroup((evts, resourceUrl) => new AppApiQuery<IEmptyRequest, IEmployee>(evts, resourceUrl.odata('EmployeeQuery'), 'EmployeeQuery'));
+		this.EmployeeQuery = this.addODataGroup((evts, resourceUrl) => new AppClientQuery<IEmptyRequest, IEmployee>(evts, resourceUrl.odata('EmployeeQuery'), 'EmployeeQuery'));
 	}
 
 	readonly Employee: EmployeeGroup;
-	readonly EmployeeQuery: AppApiQuery<IEmptyRequest, IEmployee>;
+	readonly EmployeeQuery: AppClientQuery<IEmptyRequest, IEmployee>;
 }
 
-export class EmployeeGroup extends AppApiGroup {
-	constructor(events: AppApiEvents, resourceUrl: AppResourceUrl) {
+export class EmployeeGroup extends AppClientGroup {
+	constructor(events: AppClientEvents, resourceUrl: AppResourceUrl) {
 		super(events, resourceUrl, 'Employee');
 		this.TestAction = this.createAction<number, number>('Test', 'Test');
 		this.AddEmployeeAction = this.createAction<AddEmployeeForm, number>('AddEmployee', 'Add Employee');
 	}
 
-	readonly TestAction: AppApiAction<number, number>;
-	readonly AddEmployeeAction: AppApiAction<AddEmployeeForm, number>;
+	readonly TestAction: AppClientAction<number, number>;
+	readonly AddEmployeeAction: AppClientAction<AddEmployeeForm, number>;
 
 	Test(model: number, errorOptions?: IActionErrorOptions) {
 		return this.TestAction.execute(model, errorOptions || {});

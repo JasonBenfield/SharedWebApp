@@ -2,8 +2,8 @@
 import { ModalConfirm } from '../../Lib/Components/ModalConfirm';
 import { ModalError } from '../../Lib/Components/ModalError';
 import { ModalMessageAlert } from '../../Lib/Components/ModalMessageAlert';
-import { EnumerableRange } from "../../Lib/Enumerable";
 import { ErrorModel } from "../../Lib/ErrorModel";
+import { EnumerableRange } from "../../Lib/EnumerableRange";
 import { SharedPage } from "../SharedPage";
 import { DemoGridListGroupItem } from "./DemoGridListGroupItem";
 import { DemoGridListGroupItemView } from "./DemoGridListGroupItemView";

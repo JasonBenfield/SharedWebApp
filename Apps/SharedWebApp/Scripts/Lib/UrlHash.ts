@@ -1,6 +1,5 @@
-﻿import { NamedValue } from "./NamedValue";
-import * as _ from 'lodash';
-import { JoinedStrings } from "./JoinedStrings";
+﻿import { JoinedStrings } from "./JoinedStrings";
+import { NamedValue } from "./NamedValue";
 
 export class UrlHash {
     constructor(hash: string | NamedValue[]) {
@@ -15,16 +14,16 @@ export class UrlHash {
     }
 
     private pushHashValues(query: string) {
-        let parts = query.split('&');
-        _(parts).forEach(part => {
-            let nameValue = part.split('=');
-            let name = nameValue[0];
+        const parts = query.split('&');
+        for (const part of parts) {
+            const nameValue = part.split('=');
+            const name = nameValue[0];
             let value = '';
             if (nameValue[1]) {
                 value = nameValue[1];
             }
             this.hashValues.push(new NamedValue(name, value));
-        });
+        }
     }
 
     private readonly hashValues: NamedValue[] = [];
@@ -34,7 +33,7 @@ export class UrlHash {
     }
 
     getValue(name: string) {
-        let hashValue = _(this.hashValues).find(qv => qv.name === name);
+        let hashValue = this.hashValues.find(qv => qv.name === name);
         return hashValue ? hashValue.value : null;
     }
 
@@ -44,7 +43,7 @@ export class UrlHash {
     }
 
     hasQuery(name: string) {
-        let queryValue = _(this.hashValues).find(qv => qv.name === name);
+        let queryValue = this.hashValues.find(qv => qv.name === name);
         return Boolean(queryValue);
     }
 

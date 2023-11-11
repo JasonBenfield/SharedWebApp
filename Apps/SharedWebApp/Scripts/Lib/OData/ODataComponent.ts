@@ -1,7 +1,7 @@
-﻿import { ODataResult } from "../Api/ODataResult";
-import { AsyncCommand, Command } from "../Components/Command";
+﻿import { AsyncCommand, Command } from "../Components/Command";
 import { MessageAlert } from "../Components/MessageAlert";
-import { EventBuilders, EventSource } from '../Events';
+import { EventSource } from '../Events';
+import { ODataResult } from "../Http/ODataResult";
 import { ButtonCommandView } from "../Views/Command";
 import { ModalODataComponent } from "./ModalODataComponent";
 import { ODataCell } from "./ODataCell";

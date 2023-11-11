@@ -1,6 +1,5 @@
-﻿import { MappedArray } from "../Enumerable";
-import { ErrorModel } from "../ErrorModel";
-import { AppApiError } from "./AppApiError";
+﻿import { ErrorModel } from "../ErrorModel";
+import { AppClientError } from "./AppClientError";
 import { HttpPostResult } from "./HttpClient";
 
 export class ErrorFromHttpResult {
@@ -18,10 +17,7 @@ export class ErrorFromHttpResult {
             else {
                 rawErrors = <IErrorModel[]><any>result;
             }
-            errors = new MappedArray(
-                rawErrors,
-                e => new ErrorModel(e.Message, e.Caption, e.Source)
-            ).value();
+            errors = rawErrors.map(e => new ErrorModel(e.Message, e.Caption, e.Source));
         }
         else if (postResult.status === 404) {
             errors = [new ErrorModel('Not Found', '', '', this)];
@@ -39,7 +35,7 @@ export class ErrorFromHttpResult {
             }
             errors = [new ErrorModel(message, '', '', this)];
         }
-        this.value = new AppApiError(
+        this.value = new AppClientError(
             errors,
             postResult.status,
             friendlyName,
@@ -47,5 +43,5 @@ export class ErrorFromHttpResult {
         );
     }
 
-    readonly value: AppApiError;
+    readonly value: AppClientError;
 }

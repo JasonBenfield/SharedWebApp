@@ -1,5 +1,4 @@
-﻿import _ = require("lodash");
-
+﻿
 export class TimeSpan {
 
     private static readonly regex1 = /^(?<days>\d+\.)?(?<hours>\d{1,2}):(?<minutes>\d{1,2}):?(?<seconds>\d{1,2})?(\.(?<ticks>\d+))?$/;

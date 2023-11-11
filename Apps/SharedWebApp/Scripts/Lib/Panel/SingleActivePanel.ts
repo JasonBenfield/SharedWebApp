@@ -14,7 +14,7 @@
 
     activate(panel: IPanel) {
         this._previousActive = this._currentActive;
-        for (let p of this.panels) {
+        for (const p of this.panels) {
             p.deactivate();
         }
         panel.activate();

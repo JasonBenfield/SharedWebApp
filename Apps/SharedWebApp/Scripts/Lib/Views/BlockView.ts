@@ -50,4 +50,8 @@ export class BlockView extends BasicContainerView {
     addListGroup<TItemView extends ListGroupItemView>(itemCtor: ViewConstructor<TItemView>) {
         return ListGroupView.addTo(this, itemCtor);
     }
+
+    styleAsFormControl() {
+        this.addCssName('form-control-plaintext');
+    }
 }

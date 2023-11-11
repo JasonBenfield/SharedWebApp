@@ -5,7 +5,6 @@ import { SimpleFieldFormGroup } from "./SimpleFieldFormGroup";
 import { TypedFieldViewValue } from "./TypedFieldViewValue";
 
 export abstract class InputFormGroup<TValue> extends SimpleFieldFormGroup<TValue> {
-    protected readonly view: SimpleFieldFormGroupInputView;
     private readonly input: InputControl<TValue>;
 
     private readonly _valueChanged = new DefaultEvent<TValue>(this);
@@ -14,14 +13,14 @@ export abstract class InputFormGroup<TValue> extends SimpleFieldFormGroup<TValue
     constructor(
         prefix: string,
         name: string,
-        view: SimpleFieldFormGroupInputView,
+        protected readonly view: SimpleFieldFormGroupInputView,
         protected readonly viewValue: TypedFieldViewValue<string, TValue>
     ) {
         super(prefix, name, view);
         const valueName = this.getName();
-        this.view.caption.setFor(valueName);
-        this.view.input.setViewID(valueName);
-        this.view.input.setViewName(valueName);
+        view.caption.setFor(valueName);
+        view.input.setViewID(valueName);
+        view.input.setViewName(valueName);
         this.input = new InputControl(view.input, viewValue);
         this.input.when.valueChanged.then(() => this._valueChanged.invoke(this.getValue()));
     }
@@ -35,14 +34,16 @@ export abstract class InputFormGroup<TValue> extends SimpleFieldFormGroup<TValue
     }
 
     setMaxLength(maxLength: number) {
-        this.view.input.setMaxLength(maxLength);
+        this.input.setMaxLength(maxLength);
     }
 
     protect() {
-        this.view.input.setType('password');
+        this.input.protect();
     }
 
-    setFocus() { this.view.input.setFocus(); }
+    setFocus() {
+        this.input.setFocus();
+    }
 
-    blur() { this.view.input.blur(); }
+    blur() { this.input.blur(); }
 }

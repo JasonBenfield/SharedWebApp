@@ -1,13 +1,13 @@
 ﻿import { BasicPage } from "../Lib/Components/BasicPage";
-import { AppApiFactory } from "../Lib/Api/AppApiFactory";
+import { AppClientFactory } from "../Lib/Http/AppClientFactory";
 import { SharedAppApi } from "./SharedAppApi";
 import { SharedPageView } from "./SharedPageView";
 
 export class SharedPage extends BasicPage {
-    protected readonly defaultApi: SharedAppApi;
+    protected readonly defaultClient: SharedAppApi;
 
     constructor(view: SharedPageView) {
-        super(new AppApiFactory(view.modalError).api(SharedAppApi), view);
+        super(new AppClientFactory(view.modalError).api(SharedAppApi), view);
     }
 
 }

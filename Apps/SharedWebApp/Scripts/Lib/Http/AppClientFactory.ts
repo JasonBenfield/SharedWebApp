@@ -11,7 +11,7 @@ export class AppClientFactory {
         this.modalError = new ModalError(modalError);
     }
 
-    api<TApi extends AppClient>(apiCtor: apiConstructor<TApi>): TApi {
+    create<TApi extends AppClient>(apiCtor: apiConstructor<TApi>): TApi {
         const events = new AppClientEvents((err) => {
             new ConsoleLog().error(err.toString());
             this.modalError.show(err.getErrors(), err.getCaption());

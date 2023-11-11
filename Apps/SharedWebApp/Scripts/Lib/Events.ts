@@ -1,5 +1,4 @@
-﻿import * as _ from 'lodash';
-
+﻿
 export class EventCollection {
     private readonly _identifier: any;
     private readonly _events: IEvent<any>[] = [];
@@ -76,19 +75,19 @@ export class DefaultEvent<TArgs> implements IEvent<TArgs>, IEventHandler<TArgs> 
     }
 
     invoke(args: TArgs) {
-        _(this._callbacks).forEach(c => {
+        for (const c of this._callbacks) {
             if (c.isEnabled()) {
                 c.callback(args, this.source);
             }
-        });
+        };
     }
 
     unregister(identifier: any) {
         if (identifier) {
-            let index = _(this._callbacks).findIndex(c => c.identifier === identifier);
+            let index = this._callbacks.findIndex(c => c.identifier === identifier);
             while (index > -1) {
                 this._callbacks.splice(index, 1);
-                index = _(this._callbacks).findIndex(c => c.identifier === identifier);
+                index = this._callbacks.findIndex(c => c.identifier === identifier);
             }
         }
     }

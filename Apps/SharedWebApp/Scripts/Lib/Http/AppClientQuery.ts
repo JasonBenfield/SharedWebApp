@@ -40,6 +40,8 @@ export class AppClientQuery<TModel, TEntity> {
             .url;
     }
 
+    get path() { return this.resourceUrl.path; }
+
     url() {
         return new UrlBuilder(this.resourceUrl.url);
     }

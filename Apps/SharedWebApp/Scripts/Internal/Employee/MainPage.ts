@@ -29,7 +29,7 @@ class MainPage extends SharedPage {
     }
 
     private async test() {
-        const result = await this.defaultApi.Employee.Test(5);
+        const result = await this.defaultClient.Employee.Test(5);
         new ConsoleLog().info(result.toString());
     }
 
@@ -37,7 +37,7 @@ class MainPage extends SharedPage {
         return this.alert.infoAction(
             'Saving...',
             async () => {
-                const result = await this.addEmployeeForm.save(this.defaultApi.Employee.AddEmployeeAction);
+                const result = await this.addEmployeeForm.save(this.defaultClient.Employee.AddEmployeeAction);
                 if (result.succeeded()) {
                     alert(`Success: ${result.value}`);
                 }

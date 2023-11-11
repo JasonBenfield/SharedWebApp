@@ -1,5 +1,5 @@
-﻿import { AppApiAction } from "../Api/AppApiAction";
-import { AppApiError } from "../Api/AppApiError";
+﻿import { AppClientAction } from "../Http/AppClientAction";
+import { AppClientError } from "../Http/AppClientError";
 import { ConsoleLog } from "../ConsoleLog";
 import { ModalError } from "../Components/ModalError";
 import { ErrorModel } from "../ErrorModel";
@@ -98,7 +98,7 @@ export class BaseForm {
         return this.formGroups.addFormGroup(formGroup);
     }
 
-    async save<TResult>(action: AppApiAction<any, TResult>) {
+    async save<TResult>(action: AppClientAction<any, TResult>) {
         const validationResult = this.validate();
         if (validationResult.hasErrors()) {
             const errors = validationResult.values();
@@ -113,7 +113,7 @@ export class BaseForm {
         }
         catch (ex) {
             let caption = '';
-            if (ex instanceof AppApiError) {
+            if (ex instanceof AppClientError) {
                 errors.push(...ex.getErrors());
                 caption = ex.getCaption();
             }

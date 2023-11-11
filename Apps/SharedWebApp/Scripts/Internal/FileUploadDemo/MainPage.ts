@@ -1,6 +1,6 @@
-﻿import { AppApiAction } from '../../Lib/Api/AppApiAction';
-import { AppApiEvents } from '../../Lib/Api/AppApiEvents';
-import { AppResourceUrl } from '../../Lib/Api/AppResourceUrl';
+﻿import { AppClientAction } from '../../Lib/Http/AppClientAction';
+import { AppClientEvents } from '../../Lib/Http/AppClientEvents';
+import { AppResourceUrl } from '../../Lib/Http/AppResourceUrl';
 import { AsyncCommand } from '../../Lib/Components/Command';
 import { FileInputControl, FileType } from '../../Lib/Components/FileInputControl';
 import { TextComponent } from '../../Lib/Components/TextComponent';
@@ -43,12 +43,12 @@ class MainPage extends SharedPage {
     }
 
     protected createUserMenu() {
-        return new CustomUserMenu(this.defaultApi, this.view.userMenu);
+        return new CustomUserMenu(this.defaultClient, this.view.userMenu);
     }
 
     private upload() {
-        const action = new AppApiAction<IAddProductModel, {}>(
-            new AppApiEvents(() => { }),
+        const action = new AppClientAction<IAddProductModel, {}>(
+            new AppClientEvents(() => { }),
             AppResourceUrl.app(
                 'Shared',
                 '',

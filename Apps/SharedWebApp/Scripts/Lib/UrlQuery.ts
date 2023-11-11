@@ -1,5 +1,4 @@
 ﻿import { NamedValue } from "./NamedValue";
-import * as _ from 'lodash';
 import { JoinedStrings } from "./JoinedStrings";
 
 export class UrlQuery {
@@ -21,25 +20,25 @@ export class UrlQuery {
     }
 
     getValue(name: string) {
-        let queryValue = _(this.queryValues).find(qv => qv.name === name);
+        const queryValue = this.queryValues.find(qv => qv.name === name);
         return queryValue ? queryValue.value : null;
     }
 
     private pushQueryValues(query: string) {
-        let parts = query.split('&');
-        _(parts).forEach(part => {
-            let nameValue = part.split('=');
-            let name = nameValue[0];
+        const parts = query.split('&');
+        for(const part of parts) {
+            const nameValue = part.split('=');
+            const name = nameValue[0];
             let value = '';
             if (nameValue[1]) {
                 value = nameValue[1];
             }
             this.queryValues.push(new NamedValue(name, value));
-        });
+        }
     }
 
     hasQuery(name: string) {
-        let queryValue = _(this.queryValues).find(qv => qv.name === name);
+        let queryValue = this.queryValues.find(qv => qv.name === name);
         return Boolean(queryValue);
     }
 
