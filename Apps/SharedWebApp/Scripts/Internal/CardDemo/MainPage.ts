@@ -6,6 +6,8 @@ import { DefaultPageContext } from '../DefaultPageContext';
 import { SharedPage } from '../SharedPage';
 import { MainPageView } from './MainPageView';
 import { TestCard } from './TestCard';
+import { TestGridLinkListItem } from './TestGridLinkListItem';
+import { TestGridLinkListItemView } from './TestGridLinkListItemView';
 import { TestGridListItem } from './TestGridListItem';
 import { TestGridListItemView } from './TestGridListItemView';
 
@@ -13,6 +15,7 @@ class MainPage extends SharedPage {
     protected readonly view: MainPageView;
     private readonly testCard: TestCard;
     private readonly gridItems: ListGroup<TestGridListItem, TestGridListItemView>;
+    private readonly gridLinkItems: ListGroup<TestGridLinkListItem, TestGridLinkListItemView>;
 
     constructor() {
         super(new MainPageView());
@@ -22,6 +25,11 @@ class MainPage extends SharedPage {
         this.gridItems.setItems(
             new EnumerableRange(10, 3).value(),
             (i, listItem) => new TestGridListItem(i, listItem)
+        );
+        this.gridLinkItems = new ListGroup(this.view.gridLinkItems);
+        this.gridLinkItems.setItems(
+            new EnumerableRange(10, 3).value(),
+            (i, listItem) => new TestGridLinkListItem(i, listItem)
         );
         let refreshCommand = new AsyncCommand(this.refresh.bind(this));
         refreshCommand.animateIconWhenInProgress('spin');

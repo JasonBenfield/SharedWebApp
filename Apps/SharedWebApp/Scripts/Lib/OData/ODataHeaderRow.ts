@@ -1,4 +1,4 @@
-﻿import { GridRowView } from "../Views/Grid";
+﻿import { BasicGridRowView, GridRowView } from "../Views/Grid";
 import { ODataColumn } from "./ODataColumn";
 import { ODataHeaderCell } from "./ODataHeaderCell";
 import { ODataQueryOrderByBuilder } from "./ODataQueryBuilder";
@@ -6,7 +6,7 @@ import { ODataQueryFilterBuilder } from "./ODataQueryFilterBuilder";
 import { ODataRow } from "./ODataRow";
 
 export class ODataHeaderRow extends ODataRow {
-    constructor(columns: ODataColumn[], view: GridRowView) {
+    constructor(columns: ODataColumn[], view: BasicGridRowView) {
         super(0, columns, null, view);
     }
 

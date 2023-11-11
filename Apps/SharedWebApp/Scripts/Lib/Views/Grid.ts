@@ -3,7 +3,7 @@ import { CssLengthUnit } from "../CssLengthUnit";
 import { JoinedStrings } from "../JoinedStrings";
 import { BasicComponentView } from "./BasicComponentView";
 import { BasicContainerView } from "./BasicContainerView";
-import { IClickConfig, IGridCellStyle, IGridStyle, ViewConstructor } from "./Types";
+import { IClickConfig, IGridCellStyle, IGridStyle, IHtmlElementView, ILinkAttributes, ILinkView, TargetValue, ViewConstructor } from "./Types";
 import { ViewEventActionBuilder } from "./ViewEventBuilder";
 
 export type GridTemplateCss = CssLengthUnit | GridTemplateMinMax | GridTemplateRepeat | GridTemplateFitContent;
@@ -67,7 +67,7 @@ export class GridSpan {
 
 export class GridView extends BasicComponentView {
     private readonly cells: GridCellView[] = [];
-    private readonly rows: GridRowView[] = [];
+    private readonly rows: BasicGridRowView[] = [];
 
     constructor(container: BasicComponentView) {
         super(container, 'div');
@@ -132,12 +132,15 @@ export class GridView extends BasicComponentView {
 
     getCells() { return this.cells.map(c => c); }
 
-    addRow<TRowView extends GridRowView>(ctor?: ViewConstructor<TRowView>) {
+    addRow<TRowView extends BasicGridRowView>(ctor?: ViewConstructor<TRowView>) {
         return this.addRows(1, ctor)[0];
     }
 
-    addRows<TRowView extends GridRowView>(howManyRows: number, ctor?: ViewConstructor<TRowView>) {
-        const rows = this.addViews(howManyRows, ctor || GridRowView) as TRowView[];
+    addRows<TRowView extends BasicGridRowView>(howManyRows: number, ctor?: ViewConstructor<TRowView>) {
+        if (!ctor) {
+            ctor = GridRowView as any;
+        }
+        const rows = this.addViews(howManyRows, ctor) as TRowView[];
         this.rows.push(...rows);
         return rows;
     }
@@ -147,14 +150,11 @@ export class GridView extends BasicComponentView {
     getRows() { return this.rows.map(r => r); }
 }
 
-export class GridRowView extends BasicContainerView {
-    private clickConfig: IClickConfig;
-
-    constructor(container: BasicComponentView) {
-        super(container, 'div');
+export class BasicGridRowView extends BasicContainerView {
+    constructor(container: BasicComponentView, createElementView: IHtmlElementView) {
+        super(container, createElementView);
         this.addCssName('d-contents');
         this.addCssName('grid-row');
-        this.configureClick(b => b.select('grid-cell'));
     }
 
     calculateTotalWidth() {
@@ -194,6 +194,16 @@ export class GridRowView extends BasicContainerView {
 
     getCells() { return this.getViews() as GridCellView[]; }
 
+}
+
+export class GridRowView extends BasicGridRowView {
+    private clickConfig: IClickConfig;
+
+    constructor(container: BasicComponentView) {
+        super(container, 'div');
+        this.configureClick(b => b.select('grid-cell'));
+    }
+
     configureClick(clickConfig: (builder: ViewEventActionBuilder) => ViewEventActionBuilder) {
         this.clickConfig = clickConfig;
     }
@@ -201,7 +211,33 @@ export class GridRowView extends BasicContainerView {
     handleClick(action: (element: HTMLElement) => void) {
         this.clickConfig(this.on('click').execute(action)).subscribe();
     }
+}
 
+export class LinkGridRowView extends BasicGridRowView implements ILinkView {
+    private clickConfig: IClickConfig;
+
+    constructor(container: BasicComponentView) {
+        super(container, 'a');
+        this.configureClick(b => b.select('grid-cell'));
+    }
+
+    protected setAttr: (config: (attr: ILinkAttributes) => void) => void;
+
+    setHref(href: string) {
+        this.setAttr(attr => attr.href = href);
+    }
+
+    setTarget(target: TargetValue) {
+        this.setAttr(attr => attr.target = target);
+    }
+
+    configureClick(clickConfig: (builder: ViewEventActionBuilder) => ViewEventActionBuilder) {
+        this.clickConfig = clickConfig;
+    }
+
+    handleClick(action: (element: HTMLElement) => void) {
+        this.clickConfig(this.on('click').execute(action)).subscribe();
+    }
 }
 
 export class GridCellView extends BasicContainerView {

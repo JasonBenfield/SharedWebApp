@@ -3,7 +3,7 @@ import { FlexCss } from "../FlexCss";
 import { Position } from "../Position";
 import { BasicComponentView } from "./BasicComponentView";
 import { BasicContainerView } from "./BasicContainerView";
-import { ButtonListGroupItemView, ButtonListGroupView, GridListGroupItemView, GridListGroupView, LinkListGroupItemView, LinkListGroupView, ListGroupItemView, ListGroupView, TextButtonListGroupItemView } from "./ListGroup";
+import { ButtonListGroupItemView, ButtonListGroupView, GridLinkListGroupItemView, GridLinkListGroupView, GridListGroupItemView, GridListGroupView, LinkListGroupItemView, LinkListGroupView, ListGroupItemView, ListGroupView, TextButtonListGroupItemView } from "./ListGroup";
 import { ViewConstructor } from "./Types";
 
 export class BlockView extends BasicContainerView {
@@ -37,6 +37,10 @@ export class BlockView extends BasicContainerView {
 
     addGridListGroup<TItemView extends GridListGroupItemView>(itemCtor: ViewConstructor<TItemView>) {
         return GridListGroupView.addTo(this, itemCtor);
+    }
+
+    addGridLinkListGroup<TItemView extends GridLinkListGroupItemView>(itemCtor: ViewConstructor<TItemView>) {
+        return GridLinkListGroupView.addTo(this, itemCtor);
     }
 
     addLinkListGroup<TItemView extends LinkListGroupItemView>(itemCtor: ViewConstructor<TItemView>) {

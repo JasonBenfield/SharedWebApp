@@ -1,12 +1,12 @@
 ﻿import { BasicComponent } from "../Components/BasicComponent";
-import { GridRowView } from "../Views/Grid";
+import { BasicGridRowView, GridRowView } from "../Views/Grid";
 import { ODataCell } from "./ODataCell";
 import { ODataColumn } from "./ODataColumn";
 
 export class ODataRow extends BasicComponent {
-    protected readonly view: GridRowView;
+    protected readonly view: BasicGridRowView;
 
-    constructor(rowIndex: number, columns: ODataColumn[], record: any, view: GridRowView) {
+    constructor(rowIndex: number, columns: ODataColumn[], record: any, view: BasicGridRowView) {
         super(view);
         let i = 0;
         for (const column of columns) {

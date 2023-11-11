@@ -5,17 +5,19 @@ import { PaddingCss } from '../../Lib/PaddingCss';
 import { BlockView } from '../../Lib/Views/BlockView';
 import { ButtonCommandView } from '../../Lib/Views/Command';
 import { GridView } from '../../Lib/Views/Grid';
-import { GridListGroupView } from '../../Lib/Views/ListGroup';
+import { GridLinkListGroupView, GridListGroupView } from '../../Lib/Views/ListGroup';
 import { TextHeading1View } from '../../Lib/Views/TextHeadings';
 import { ToolbarView } from '../../Lib/Views/ToolbarView';
 import { SharedPageView } from '../SharedPageView';
 import { TestCardView } from './TestCardView';
+import { TestGridLinkListItemView } from './TestGridLinkListItemView';
 import { TestGridListItemView } from './TestGridListItemView';
 
 export class MainPageView extends SharedPageView {
     readonly heading: TextHeading1View;
     readonly testCard: TestCardView;
     readonly gridItems: GridListGroupView<TestGridListItemView>;
+    readonly gridLinkItems: GridLinkListGroupView<TestGridLinkListItemView>;
     readonly refreshButton: ButtonCommandView;
     readonly cancelButton: ButtonCommandView;
     readonly saveButton: ButtonCommandView;
@@ -57,6 +59,14 @@ export class MainPageView extends SharedPageView {
             CssLengthUnit.flex(1)
         );
         this.gridItems.setMargin(MarginCss.bottom(3));
+
+        this.gridLinkItems = container.addGridLinkListGroup(TestGridLinkListItemView);
+        this.gridLinkItems.setTemplateColumns(
+            CssLengthUnit.flex(1),
+            CssLengthUnit.flex(1),
+            CssLengthUnit.flex(1)
+        );
+        this.gridLinkItems.setMargin(MarginCss.bottom(3));
         const toolbar = grid.addCell().addView(ToolbarView);
         toolbar.setBackgroundContext(ContextualClass.secondary);
         toolbar.addCssName('bg-opacity-25');

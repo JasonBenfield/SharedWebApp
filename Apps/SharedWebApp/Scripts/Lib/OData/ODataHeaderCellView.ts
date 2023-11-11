@@ -4,7 +4,7 @@ import { TextCss } from "../TextCss";
 import { BasicTextComponentView } from "../Views/BasicTextComponentView";
 import { ColumnView } from "../Views/ColumnView";
 import { ButtonCommandView } from "../Views/Command";
-import { GridCellView, GridRowView } from "../Views/Grid";
+import { BasicGridRowView, GridCellView } from "../Views/Grid";
 import { RowView } from "../Views/RowView";
 import { TextBlockView } from "../Views/TextBlockView";
 
@@ -13,7 +13,7 @@ export class ODataHeaderCellView extends GridCellView {
     private readonly sortCol: ColumnView;
     readonly sortButton: ButtonCommandView;
 
-    constructor(rowView: GridRowView) {
+    constructor(rowView: BasicGridRowView) {
         super(rowView);
         this.stickyAtTop();
         this.addCssName('z-4');
