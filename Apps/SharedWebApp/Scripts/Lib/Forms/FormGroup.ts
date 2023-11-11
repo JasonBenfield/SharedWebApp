@@ -3,12 +3,13 @@ import { TextComponent } from "../Components/TextComponent";
 import { FormGroupView } from "../Views/FormGroup";
 
 export class FormGroup extends BasicComponent {
-    private caption: string;
     private readonly captionText: TextComponent;
+    private caption: string;
 
     constructor(view: FormGroupView) {
         super(view);
         this.captionText = this.addComponent(new TextComponent(view.caption));
+        this.caption = this.captionText.getText();
     }
 
     getCaption() {

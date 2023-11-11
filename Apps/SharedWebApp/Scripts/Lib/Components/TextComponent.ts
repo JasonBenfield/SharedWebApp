@@ -10,6 +10,7 @@ export class TextComponent extends BasicComponent {
 
     constructor(view: BasicComponentView & ITextComponentView) {
         super(view);
+        this.text = view.getText();
     }
 
     get data() { return this._data; }
@@ -19,6 +20,8 @@ export class TextComponent extends BasicComponent {
     show() { this.view.show(); }
 
     hide() { this.view.hide(); }
+
+    getText() { return this.view.getText(); }
 
     setText(text: string) {
         this.text = text;

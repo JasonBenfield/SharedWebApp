@@ -76,6 +76,30 @@ export class FormGroupInputView extends FormGroupView {
     }
 }
 
+export class FormGroupInputGroupView extends FormGroupView {
+    readonly inputGroup: InputGroupView;
+    readonly input: InputView;
+
+    constructor(container: BasicComponentView) {
+        super(container);
+        this.inputGroup = this.valueCell.addView(InputGroupView);
+        this.input = this.inputGroup.prependFormControl(InputView);
+        this.input.styleAsFormControl();
+    }
+}
+
+export class FormGroupSelectGroupView extends FormGroupView {
+    readonly inputGroup: InputGroupView;
+    readonly select: SelectView;
+
+    constructor(container: BasicComponentView) {
+        super(container);
+        this.inputGroup = this.valueCell.addView(InputGroupView);
+        this.select = this.inputGroup.prependFormControl(SelectView);
+        this.select.styleAsFormControl();
+    }
+}
+
 export class FormGroupTextAreaView extends FormGroupView {
     readonly textArea: TextAreaView;
 
@@ -93,6 +117,20 @@ export class FormGroupSelectView extends FormGroupView {
         super(container);
         this.select = this.valueCell.addView(SelectView);
         this.select.styleAsFormControl();
+    }
+}
+
+export class FormGroupAlertView extends FormGroupView {
+    readonly alert: AlertView;
+    readonly messageTextView: BasicTextComponentView;
+
+    constructor(container: BasicComponentView) {
+        super(container);
+        const outer = this.valueCell.addView(BlockView);
+        outer.styleAsFormControl();
+        this.alert = outer.addView(AlertView);
+        this.alert.setMargin(MarginCss.xs(0));
+        this.messageTextView = this.alert.addView(TextBlockView);
     }
 }
 

@@ -127,6 +127,7 @@ export type IClickConfig = (builder: ViewEventActionBuilder) => ViewEventActionB
 export interface ITextComponentView {
     show();
     hide();
+    getText(): string;
     setText(text: string);
     setTitle(title: string);
 }

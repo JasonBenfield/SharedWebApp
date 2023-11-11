@@ -7,7 +7,7 @@ export class CardAlert {
     constructor(private readonly view: CardAlertView) {
         this.alert = new MessageAlert(this.view.alert);
         this.view.hide();
-        this.alert.isVisibleChanged.register(this.onIsVisibleChanged.bind(this));
+        this.alert.when.visibleChanged.then(this.onIsVisibleChanged.bind(this));
     }
 
     private onIsVisibleChanged(isVisible: boolean) {

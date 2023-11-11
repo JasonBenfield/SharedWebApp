@@ -88,6 +88,8 @@ export class LinkCommandView extends LinkView implements ICommandView {
         this.updateMargin();
     }
 
+    getText() { return this.text; }
+
     setText(text: string) {
         this.textSpan.setText(text);
         this.text = text;

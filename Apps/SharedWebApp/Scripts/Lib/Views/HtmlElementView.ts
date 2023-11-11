@@ -101,6 +101,14 @@ export class HtmlElementView {
         this.element.replaceChildren(...viewElements);
     }
 
+    getTitle() {
+        return this.element.attributes['title'] as string || '';
+    }
+
+    getText() {
+        return this.element.innerText;
+    }
+
     setText(text: string) {
         this.element.innerText = text;
     }

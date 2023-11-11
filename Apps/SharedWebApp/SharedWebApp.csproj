@@ -33,13 +33,14 @@
     <None Remove="Scripts\Internal\ODataDemo\ODataDemoRow.ts" />
     <None Remove="Scripts\Internal\ODataDemo\ODataDropdownView.ts" />
     <None Remove="Scripts\Internal\ODataDemo\ODataEmployeeColumnsBuilder.ts" />
-    <None Remove="Scripts\Internal\SharedAppApi.ts" />
+    <None Remove="Scripts\Internal\SharedAppClient.ts" />
     <None Remove="Scripts\Internal\SharedPage.ts" />
     <None Remove="Scripts\Internal\SharedPageView.ts" />
     <None Remove="Scripts\Internal\ViewDemo\DemoGridListGroupItem.ts" />
     <None Remove="Scripts\Internal\ViewDemo\DemoGridListGroupItemView.ts" />
     <None Remove="Scripts\Internal\ViewDemo\MainPage.ts" />
     <None Remove="Scripts\Internal\ViewDemo\MainPageView.ts" />
+    <None Remove="Scripts\Lib\Forms\FormGroupAlert.ts" />
     <None Remove="Scripts\Lib\Http\AppClientQuery.ts" />
     <None Remove="Scripts\Lib\Http\AppVersionDomain.ts" />
     <None Remove="Scripts\Lib\Http\DefaultMenuDefinitions.ts" />
@@ -254,13 +255,16 @@
     <TypeScriptCompile Include="Scripts\Internal\ODataDemo\ODataDemoRow.ts" />
     <TypeScriptCompile Include="Scripts\Internal\ODataDemo\ODataDropdownView.ts" />
     <TypeScriptCompile Include="Scripts\Internal\ODataDemo\ODataEmployeeColumnsBuilder.ts" />
-    <TypeScriptCompile Include="Scripts\Internal\SharedAppApi.ts" />
+    <TypeScriptCompile Include="Scripts\Internal\SharedAppClient.ts" />
     <TypeScriptCompile Include="Scripts\Internal\SharedPage.ts" />
     <TypeScriptCompile Include="Scripts\Internal\SharedPageView.ts" />
     <TypeScriptCompile Include="Scripts\Internal\ViewDemo\DemoGridListGroupItemView.ts" />
     <TypeScriptCompile Include="Scripts\Internal\ViewDemo\DemoGridListGroupItem.ts" />
     <TypeScriptCompile Include="Scripts\Internal\ViewDemo\MainPage.ts" />
     <TypeScriptCompile Include="Scripts\Internal\ViewDemo\MainPageView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Forms\FormGroupAlert.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Lib\Http\AppClientQuery.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Http\AppVersionDomain.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Http\DefaultMenuDefinitions.ts" />
@@ -292,7 +296,7 @@
     <TypeScriptCompile Include="Scripts\Lib\Components\SelectOption.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\TextComponent.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\UserMenuComponent.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\Forms\TextValueFormGroup.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Forms\FormGroupText.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\Types.ts" />
     <TypeScriptCompile Include="Scripts\Lib\NumberRange.ts">
       <SubType>Code</SubType>

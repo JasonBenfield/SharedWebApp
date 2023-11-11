@@ -35,6 +35,9 @@ export class InputControl<TValue> extends BasicComponent {
         this.view.onInput()
             .execute(this.onInputValueChanged.bind(this))
             .subscribe();
+        const initialValue = view.getValue();
+        this.viewValue.setValueFromView(initialValue);
+        this.debouncedOnInputValueChanged.execute();
     }
 
     private onInputValueChanged() {
@@ -74,9 +77,17 @@ export class InputControl<TValue> extends BasicComponent {
         this.view.setValue(inputValue);
     }
 
-    setFocus() {
+    setFocus(delay = 0) {
         if (new DeviceType().canFocus) {
-            this.debouncedSetFocus.execute();
+            if (delay) {
+                new DelayedAction(
+                    () => this.debouncedSetFocus.execute(),
+                    delay
+                ).execute();
+            }
+            else {
+                this.debouncedSetFocus.execute();
+            }
         }
     }
 

@@ -1,10 +1,10 @@
-﻿import { TextConstraintCollection } from "./ConstraintCollection";
+﻿import { SimpleFieldFormGroupInputView } from "../Views/FormGroup";
+import { TextConstraintCollection } from "./ConstraintCollection";
 import { ErrorList } from "./ErrorList";
-import { InputFormGroup } from "./InputFormGroup";
-import { SimpleFieldFormGroupInputView } from "../Views/FormGroup";
+import { SimpleFieldInputFormGroup } from "./SimpleFieldInputFormGroup";
 import { TextToTextViewValue } from "./TextToTextViewValue";
 
-export class TextInputFormGroup extends InputFormGroup<string> {
+export class TextInputFormGroup extends SimpleFieldInputFormGroup<string> {
     readonly constraints = new TextConstraintCollection();
 
     constructor(prefix: string, name: string, view: SimpleFieldFormGroupInputView) {

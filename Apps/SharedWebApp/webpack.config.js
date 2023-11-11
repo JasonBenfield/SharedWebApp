@@ -8,7 +8,8 @@ const entry = {
     gridDemo: './Scripts/Internal/GridDemo/MainPage.ts',
     odataDemo: './Scripts/Internal/ODataDemo/MainPage.ts',
     viewDemo: './Scripts/Internal/ViewDemo/MainPage.ts',
-    fileUploadDemo: './Scripts/Internal/FileUploadDemo/MainPage.ts'
+    fileUploadDemo: './Scripts/Internal/FileUploadDemo/MainPage.ts',
+    formGroupDemo: './Scripts/Internal/FormGroupDemo/MainPage.ts'
 };
 const exportModule = {
     rules: [

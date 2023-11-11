@@ -1,10 +1,10 @@
-﻿import { NumberConstraintCollection } from "./ConstraintCollection";
+﻿import { SimpleFieldFormGroupInputView } from "../Views/FormGroup";
+import { NumberConstraintCollection } from "./ConstraintCollection";
 import { ErrorList } from "./ErrorList";
-import { InputFormGroup } from "./InputFormGroup";
-import { SimpleFieldFormGroupInputView } from "../Views/FormGroup";
+import { SimpleFieldInputFormGroup } from "./SimpleFieldInputFormGroup";
 import { TextToNumberViewValue } from "./TextToNumberViewValue";
 
-export class NumberInputFormGroup extends InputFormGroup<number> {
+export class NumberInputFormGroup extends SimpleFieldInputFormGroup<number> {
     protected readonly viewValue: TextToNumberViewValue;
     readonly constraints = new NumberConstraintCollection();
 

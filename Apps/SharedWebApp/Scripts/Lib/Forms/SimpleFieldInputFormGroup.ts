@@ -4,7 +4,7 @@ import { SimpleFieldFormGroupInputView } from "../Views/FormGroup";
 import { SimpleFieldFormGroup } from "./SimpleFieldFormGroup";
 import { TypedFieldViewValue } from "./TypedFieldViewValue";
 
-export abstract class InputFormGroup<TValue> extends SimpleFieldFormGroup<TValue> {
+export abstract class SimpleFieldInputFormGroup<TValue> extends SimpleFieldFormGroup<TValue> {
     private readonly input: InputControl<TValue>;
 
     private readonly _valueChanged = new DefaultEvent<TValue>(this);

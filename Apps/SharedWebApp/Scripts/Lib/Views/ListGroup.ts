@@ -95,6 +95,8 @@ export class TextListGroupItemView extends ListGroupItemView implements ITextCom
         super(container);
     }
 
+    getText() { return this.elementView.getText(); }
+
     setText(text: string) { this.elementView.setText(text); }
 }
 
@@ -129,6 +131,8 @@ export class TextButtonListGroupItemView extends BasicListGroupItemView implemen
         super(container, 'button');
         this.setTextCss(new TextCss().start());
     }
+
+    getText() { return this.elementView.getText(); }
 
     setText(text: string) { this.elementView.setText(text); }
 }
@@ -182,6 +186,8 @@ export class TextLinkListGroupItemView extends BasicListGroupItemView implements
     setTarget(target: TargetValue) {
         this.setAttr(attr => attr.target = target);
     }
+
+    getText() { return this.elementView.getText(); }
 
     setText(text: string) { this.elementView.setText(text); }
 }

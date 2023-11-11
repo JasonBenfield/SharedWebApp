@@ -6,7 +6,7 @@ import { AppClientQuery } from "../Lib/Http/AppClientQuery";
 import { AppResourceUrl } from "../Lib/Http/AppResourceUrl";
 import { AddEmployeeForm } from "./Employee/AddEmployeeForm";
 
-export class SharedAppApi extends AppClient {
+export class SharedAppClient extends AppClient {
 
     constructor(events: AppClientEvents) {
 		super(events, 'Shared');

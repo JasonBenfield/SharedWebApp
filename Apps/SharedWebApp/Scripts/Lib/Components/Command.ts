@@ -94,6 +94,14 @@ export class AsyncCommand {
         }
     }
 
+    setText(text: string) {
+        this.forEachItem(c => c.setText(text));
+    }
+
+    setTitle(title: string) {
+        this.forEachItem(c => c.setTitle(title));
+    }
+
     async execute() {
         const canExecute = this.canExecute();
         if (canExecute) {

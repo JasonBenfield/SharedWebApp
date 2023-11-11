@@ -35,18 +35,31 @@ export class SelectControl<TValue> extends BasicComponent {
     }
 
     setItems(...items: SelectOption<TValue>[]) {
+        const originalValue = this.getValue();
         this.items.splice(0, this.items.length, ...items);
         this.prependCaption();
         this.updateOptions();
+        this.resetValue(originalValue, items);
     }
 
     setItemCaption(itemCaption: string) {
+        const originalValue = this.getValue();
         if (this.itemCaption) {
             this.items.splice(0, 1);
         }
         this.itemCaption = itemCaption;
         this.prependCaption();
         this.updateOptions();
+        this.resetValue(originalValue, this.items);
+    }
+
+    private resetValue(originalValue: TValue, items: SelectOption<TValue>[]) {
+        if (items.find(item => item.value === originalValue)) {
+            this.setValue(originalValue);
+        }
+        else {
+            this.setValue(this.itemCaption ? null : items[0].value);
+        }
     }
 
     private prependCaption() {

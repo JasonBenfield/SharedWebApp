@@ -71,9 +71,10 @@ export class ListGroup<TItem extends BasicComponent, TItemView extends BasicList
 export class TextListItem extends BasicComponent {
     readonly text: TextComponent;
 
-    constructor(protected readonly view: TextListGroupItemView | TextButtonListGroupItemView | TextLinkListGroupItemView) {
+    constructor(value: string, protected readonly view: TextListGroupItemView | TextButtonListGroupItemView | TextLinkListGroupItemView) {
         super(view);
         this.text = this.addComponent(new TextComponent(view));
+        this.text.setText(value);
     }
 
     makeActive() { this.view.active(); }

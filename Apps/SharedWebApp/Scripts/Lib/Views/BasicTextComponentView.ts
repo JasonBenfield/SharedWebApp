@@ -6,5 +6,9 @@ export class BasicTextComponentView extends BasicComponentView implements ITextC
         super(container, element);
     }
 
+    getText() {
+        return this.elementView.getText();
+    }
+
     setText(text: string) { this.elementView.setText(text); }
 }

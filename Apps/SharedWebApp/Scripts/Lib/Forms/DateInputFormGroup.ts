@@ -1,10 +1,10 @@
-﻿import { DateConstraintCollection } from "./ConstraintCollection";
+﻿import { SimpleFieldFormGroupInputView } from "../Views/FormGroup";
+import { DateConstraintCollection } from "./ConstraintCollection";
 import { ErrorList } from "./ErrorList";
-import { InputFormGroup } from "./InputFormGroup";
-import { SimpleFieldFormGroupInputView } from "../Views/FormGroup";
+import { SimpleFieldInputFormGroup } from "./SimpleFieldInputFormGroup";
 import { TextToDateViewValue } from "./TextToDateViewValue";
 
-export class DateInputFormGroup extends InputFormGroup<Date> {
+export class DateInputFormGroup extends SimpleFieldInputFormGroup<Date> {
     readonly constraints = new DateConstraintCollection();
 
     constructor(prefix: string, name: string, view: SimpleFieldFormGroupInputView) {

@@ -2,9 +2,8 @@
 import { FormGroupTextView } from "../Views/FormGroup";
 import { FormGroup } from "./FormGroup";
 
-export class TextValueFormGroup extends FormGroup {
+export class FormGroupText extends FormGroup {
     private readonly textValue: TextComponent;
-    private value: string;
 
     constructor(view: FormGroupTextView) {
         super(view);
@@ -12,10 +11,9 @@ export class TextValueFormGroup extends FormGroup {
         this.textValue.syncTitleWithText();
     }
 
-    getValue() { this.value; }
+    getValue() { return this.textValue.getText(); }
 
     setValue(value: string) {
-        this.value = value;
         this.textValue.setText(value);
     }
 }

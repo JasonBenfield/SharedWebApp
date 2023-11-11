@@ -1,4 +1,5 @@
 ﻿import { DebouncedAction } from "../DebouncedAction";
+import { DelayedAction } from "../DelayedAction";
 import { DeviceType } from "../DeviceType";
 import { EventSource } from "../Events";
 import { InputView } from "../Views/InputView";
@@ -50,9 +51,17 @@ export class TextAreaControl extends BasicComponent {
         this.view.setValue(value);
     }
 
-    setFocus() {
+    setFocus(delay = 0) {
         if (new DeviceType().canFocus) {
-            this.debouncedSetFocus.execute();
+            if (delay) {
+                new DelayedAction(
+                    () => this.debouncedSetFocus.execute(),
+                    delay
+                ).execute();
+            }
+            else {
+                this.debouncedSetFocus.execute();
+            }
         }
     }
 
