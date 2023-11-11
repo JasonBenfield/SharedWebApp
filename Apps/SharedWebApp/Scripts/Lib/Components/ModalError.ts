@@ -66,7 +66,7 @@ export class ModalErrorGroupComponent extends BasicComponent {
         super(view);
         this.caption = new TextComponent(view.caption);
         this.errors = new ListGroup(view.errors);
-        this.errors.registerItemClicked(this.onErrorClicked.bind(this));
+        this.errors.when.itemClicked.then(this.onErrorClicked.bind(this));
     }
 
     private onErrorClicked(errorListItem: ModalErrorListItem) {

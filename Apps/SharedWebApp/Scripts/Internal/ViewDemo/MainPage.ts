@@ -16,7 +16,7 @@ class MainPage extends SharedPage {
     constructor() {
         super(new MainPageView());
         this.demoGridListGroup = new ListGroup(this.view.demoGridListGroup);
-        this.demoGridListGroup.registerItemClicked(this.onDemoGridListGroupItemClicked.bind(this));
+        this.demoGridListGroup.when.itemClicked.then(this.onDemoGridListGroupItemClicked.bind(this));
         this.demoGridListGroup.setItems(
             new EnumerableRange(1, 10).value(),
             (i, itemView) => new DemoGridListGroupItem(i, itemView)

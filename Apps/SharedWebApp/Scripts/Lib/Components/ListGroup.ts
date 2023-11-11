@@ -1,28 +1,24 @@
-﻿import { DefaultEvent } from "../Events";
+﻿import { EventSource } from "../Events";
 import { BasicListGroupItemView, BasicListGroupView, TextButtonListGroupItemView, TextLinkListGroupItemView, TextListGroupItemView } from "../Views/ListGroup";
 import { BasicComponent } from "./BasicComponent";
 import { TextComponent } from "./TextComponent";
 
+type Events<TItem> = { itemClicked: TItem };
+
 export class ListGroup<TItem extends BasicComponent, TItemView extends BasicListGroupItemView> extends BasicComponent {
     protected readonly view: BasicListGroupView<TItemView>;
-    private itemClicked: DefaultEvent<TItem>;
+    private readonly eventSource = new EventSource<Events<TItem>>(this, { itemClicked: null as TItem });
+    readonly when = this.eventSource.when;
 
     constructor(view: BasicListGroupView<TItemView>) {
         super(view);
+        view.handleClick(this.onItemClick.bind(this));
     }
 
-    registerItemClicked(action: (item: TItem) => void) {
-        if (!this.itemClicked) {
-            this.itemClicked = new DefaultEvent<TItem>(this);
-            this.view.handleClick(this.handleClick.bind(this));
-        }
-        this.itemClicked.register(action);
-    }
-
-    private handleClick(el: HTMLElement) {
+    private onItemClick(el: HTMLElement, evt: JQuery.Event) {
         const item = this.getItemByElement(el);
         if (item) {
-            this.itemClicked.invoke(item);
+            this.eventSource.events.itemClicked.invoke(item);
         }
     }
 

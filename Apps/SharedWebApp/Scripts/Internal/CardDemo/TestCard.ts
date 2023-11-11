@@ -37,7 +37,7 @@ export class TestCard {
             new EnumerableRange(1, 5).value(),
             (i, listItem) => new TestClickableListItem(i, listItem)
         );
-        this.clickableItems.registerItemClicked(this.onClick.bind(this));
+        this.clickableItems.when.itemClicked.then(this.onClick.bind(this));
         this.gridItems = new ListGroup(view.gridItems);
         this.gridItems.setItems(
             new EnumerableRange(1, 5).value(),

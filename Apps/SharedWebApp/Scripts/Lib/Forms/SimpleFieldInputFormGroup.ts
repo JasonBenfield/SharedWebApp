@@ -1,14 +1,15 @@
 ﻿import { InputControl } from "../Components/InputControl";
-import { DefaultEvent } from "../Events";
+import { EventBuilders } from "../Events";
 import { SimpleFieldFormGroupInputView } from "../Views/FormGroup";
 import { SimpleFieldFormGroup } from "./SimpleFieldFormGroup";
 import { TypedFieldViewValue } from "./TypedFieldViewValue";
 
+type Events<TValue> = { valueChanged: TValue };
+
 export abstract class SimpleFieldInputFormGroup<TValue> extends SimpleFieldFormGroup<TValue> {
     private readonly input: InputControl<TValue>;
 
-    private readonly _valueChanged = new DefaultEvent<TValue>(this);
-    readonly valueChanged = this._valueChanged.handler();
+    readonly when: EventBuilders<Events<TValue>>;
 
     constructor(
         prefix: string,
@@ -22,7 +23,7 @@ export abstract class SimpleFieldInputFormGroup<TValue> extends SimpleFieldFormG
         view.input.setViewID(valueName);
         view.input.setViewName(valueName);
         this.input = new InputControl(view.input, viewValue);
-        this.input.when.valueChanged.then(() => this._valueChanged.invoke(this.getValue()));
+        this.when = this.input.when;
     }
 
     getValue() {

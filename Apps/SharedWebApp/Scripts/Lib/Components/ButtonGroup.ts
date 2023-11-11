@@ -1,32 +1,28 @@
-﻿import { DefaultEvent } from "../Events";
+﻿import { EventSource } from "../Events";
 import { ButtonGroupView } from "../Views/ButtonGroupView";
-import { ButtonView } from "../Views/ButtonView";
 import { TextButtonView } from "../Views/TextButtonView";
 import { TextSpanView } from "../Views/TextSpanView";
 import { BasicComponent } from "./BasicComponent";
 import { TextButtonComponent } from "./TextButtonComponent";
 import { TextComponent } from "./TextComponent";
 
+type Events = { buttonClicked: BasicComponent };
+
 export class ButtonGroup extends BasicComponent {
     protected readonly view: ButtonGroupView;
-    private buttonClicked: DefaultEvent<BasicComponent>;
+
+    private readonly eventSource = new EventSource<Events>(this, { buttonClicked: null });
+    readonly when = this.eventSource.when;
 
     constructor(view: ButtonGroupView) {
         super(view);
-    }
-
-    registerButtonClicked(action: (item: BasicComponent) => void) {
-        if (!this.buttonClicked) {
-            this.buttonClicked = new DefaultEvent<TextButtonComponent>(this);
-            this.view.handleClick(this.handleClick.bind(this));
-        }
-        this.buttonClicked.register(action);
+        this.view.handleClick(this.handleClick.bind(this));
     }
 
     private handleClick(el: HTMLElement) {
         const item = this.getComponentByElement(el);
         if (item) {
-            this.buttonClicked.invoke(item);
+            this.eventSource.events.buttonClicked.invoke(item);
         }
     }
 

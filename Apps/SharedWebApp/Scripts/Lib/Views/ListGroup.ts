@@ -8,17 +8,34 @@ import { ViewEventActionBuilder } from "./ViewEventBuilder";
 
 export class BasicListGroupView<TItemView extends BasicListGroupItemView> extends BasicComponentView {
     private itemViewCtor: ViewConstructor<TItemView>;
+    private readonly mouseDownPosition: { x: number, y: number } = { x: 0, y: 0 };
+        ;
 
     protected constructor(container: BasicComponentView, tagName: 'ul' | 'div') {
         super(container, tagName);
         this.addCssName('list-group');
+        this.on('mousedown')
+            .select('.list-group-item')
+            .execute(this.onMouseDown.bind(this))
+            .subscribe();
     }
 
-    handleClick(action: (element: HTMLElement) => void) {
+    private onMouseDown(el: HTMLElement, evt: JQuery.Event) {
+        this.mouseDownPosition.x = evt.clientX;
+        this.mouseDownPosition.y = evt.clientY;
+    }
+
+    handleClick(action: (element: HTMLElement, evt: JQuery.Event) => void) {
         this.on('click')
             .select('.list-group-item')
-            .execute(action)
+            .execute(this.onClick.bind(this, action))
             .subscribe();
+    }
+
+    private onClick(action: (element: HTMLElement, evt: JQuery.Event) => void, el: HTMLElement, evt: JQuery.Event) {
+        if (evt.clientX === this.mouseDownPosition.x && evt.clientY === this.mouseDownPosition.y) {
+            action(el, evt);
+        }
     }
 
     protected setItemViewType(itemViewCtor: ViewConstructor<BasicListGroupItemView>) {

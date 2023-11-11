@@ -16,7 +16,7 @@ export class ODataFooterComponent extends BasicComponent {
     constructor(view: ODataFooterComponentView) {
         super(view);
         this.pageButtonGroup = this.addComponent(new ButtonGroup(view.pageButtonGroup));
-        this.pageButtonGroup.registerButtonClicked(this.onPageButtonClicked.bind(this));
+        this.pageButtonGroup.when.buttonClicked.then(this.onPageButtonClicked.bind(this));
         this.countText = this.addComponent(new TextComponent(this.view.count));
     }
 

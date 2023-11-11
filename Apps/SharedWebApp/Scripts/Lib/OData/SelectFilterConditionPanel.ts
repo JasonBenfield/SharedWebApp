@@ -35,7 +35,7 @@ export class SelectFilterConditionPanel extends BasicComponent implements IPanel
         super(view.body);
         this.panelView = view;
         this.conditionListGroup = new ListGroup(view.conditions);
-        this.conditionListGroup.registerItemClicked(this.onItemClick.bind(this));
+        this.conditionListGroup.when.itemClicked.then(this.onItemClick.bind(this));
         new Command(this.back.bind(this)).add(view.backButton);
     }
 

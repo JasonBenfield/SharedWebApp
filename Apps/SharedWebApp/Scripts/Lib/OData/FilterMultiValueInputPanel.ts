@@ -49,7 +49,7 @@ export class FilterMultiValueInputPanel implements IPanel {
         this.title = new TextComponent(view.title);
         this.alert = new MessageAlert(view.alert);
         this.suggestedValues = new ListGroup(view.suggestedValues);
-        this.suggestedValues.registerItemClicked(this.onSuggestedValueAddClicked.bind(this));
+        this.suggestedValues.when.itemClicked.then(this.onSuggestedValueAddClicked.bind(this));
         this.selectedValues = new ListGroup(view.selectedValues);
         view.handleDeleteButton(this.onSelectedValueDeleteClicked.bind(this));
         this.saveCommand = new Command(this.save.bind(this));
