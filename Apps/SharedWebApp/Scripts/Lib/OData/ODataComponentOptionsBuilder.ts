@@ -1,4 +1,4 @@
-﻿import { GridRowView } from "../Views/Grid";
+﻿import { BasicGridRowView, GridRowView } from "../Views/Grid";
 import { ODataColumn } from "./ODataColumn";
 import { ODataColumnBuilder } from "./ODataColumnBuilder";
 import { ODataColumnViewBuilder } from "./ODataColumnViewBuilder";
@@ -31,8 +31,8 @@ export class ODataFixedColumnsBuilder {
 }
 
 export class ODataComponentOptionsBuilder<TEntity> {
-    private createDataRow: (rowIndex: number, columns: ODataColumn[], record: any, view: GridRowView) => ODataRow =
-        (rowIndex: number, columns: ODataColumn[], record: any, view: GridRowView) => new ODataRow(rowIndex, columns, record, view);
+    private createDataRow: (rowIndex: number, columns: ODataColumn[], record: any, view: BasicGridRowView) => ODataRow =
+        (rowIndex: number, columns: ODataColumn[], record: any, view: BasicGridRowView) => new ODataRow(rowIndex, columns, record, view);
     private odataClient: IODataClient<TEntity>;
     private pageSize: number = 50;
     readonly query = new ODataQueryBuilder();
@@ -51,7 +51,7 @@ export class ODataComponentOptionsBuilder<TEntity> {
         this.endColumns = new ODataFixedColumnsBuilder();
     }
 
-    setCreateDataRow(createDataRow: (rowIndex: number, columns: ODataColumn[], record: any, view: GridRowView) => ODataRow) {
+    setCreateDataRow(createDataRow: (rowIndex: number, columns: ODataColumn[], record: any, view: BasicGridRowView) => ODataRow) {
         this.createDataRow = createDataRow;
         return this;
     }

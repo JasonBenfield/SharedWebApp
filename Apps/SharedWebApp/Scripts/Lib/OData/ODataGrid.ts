@@ -1,7 +1,7 @@
 ﻿import { BasicComponent } from "../Components/BasicComponent";
 import { MessageAlert } from "../Components/MessageAlert";
 import { EventSource } from "../Events";
-import { GridRowView } from "../Views/Grid";
+import { BasicGridRowView } from "../Views/Grid";
 import { ODataCellClickedEventArgs } from "./ODataCellClickedEventArgs";
 import { ODataColumn } from "./ODataColumn";
 import { ODataGridView } from "./ODataGridView";
@@ -41,7 +41,7 @@ export class ODataGrid<TEntity> extends BasicComponent {
 
     constructor(
         view: ODataGridView,
-        private readonly createDataRow: (rowIndex: number, columns: ODataColumn[], record: any, view: GridRowView) => ODataRow
+        private readonly createDataRow: (rowIndex: number, columns: ODataColumn[], record: any, view: BasicGridRowView) => ODataRow
     ) {
         super(view);
         view.on('dragstart')

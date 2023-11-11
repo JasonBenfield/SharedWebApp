@@ -1,4 +1,4 @@
-﻿import { GridRowView } from "../Views/Grid";
+﻿import { BasicGridRowView } from "../Views/Grid";
 import { ODataColumn } from "./ODataColumn";
 import { ISerializableQuery } from "./ODataQueryBuilder";
 import { ODataRow } from "./ODataRow";
@@ -7,7 +7,7 @@ import { IODataClient, ODataColumns, SaveChangesOptions } from "./Types";
 export class ODataComponentOptions<TEntity> {
     constructor(
         readonly id: string,
-        readonly createDataRow: (rowIndex: number, columns: ODataColumn[], record: any, view: GridRowView) => ODataRow,
+        readonly createDataRow: (rowIndex: number, columns: ODataColumn[], record: any, view: BasicGridRowView) => ODataRow,
         readonly odataClient: IODataClient<TEntity>,
         readonly pageSize: number,
         readonly saveChangesOptions: SaveChangesOptions,

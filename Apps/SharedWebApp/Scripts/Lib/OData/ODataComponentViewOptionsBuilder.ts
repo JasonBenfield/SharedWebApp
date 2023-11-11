@@ -1,10 +1,10 @@
-﻿import { GridRowView } from "../Views/Grid";
+﻿import { BasicGridRowView } from "../Views/Grid";
 import { ODataComponentViewOptions } from "./ODataComponentViewOptions";
 
 export class ODataComponentViewOptionsBuilder {
-    private _configureDataRow: (row: GridRowView) => void = () => { };
+    private _configureDataRow: (row: BasicGridRowView) => void = () => { };
 
-    configureDataRow(configureDataRow: (row: GridRowView) => void) {
+    configureDataRow(configureDataRow: (row: BasicGridRowView) => void) {
         this._configureDataRow = configureDataRow;
         return this;
     }

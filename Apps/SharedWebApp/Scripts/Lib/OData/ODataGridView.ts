@@ -3,12 +3,12 @@ import { CssLengthUnit } from "../CssLengthUnit";
 import { MarginCss } from "../MarginCss";
 import { TextCss } from "../TextCss";
 import { BasicComponentView } from "../Views/BasicComponentView";
-import { GridRowView, GridView } from "../Views/Grid";
+import { BasicGridRowView, GridView } from "../Views/Grid";
 import { MessageAlertView } from "../Views/MessageAlertView";
 import { ODataColumnView } from "./ODataColumnView";
 
 export class ODataGridView extends GridView {
-    private _configureDataRow: (row: GridRowView) => void = () => { };
+    private _configureDataRow: (row: BasicGridRowView) => void = () => { };
     private clickSelection: string;
 
     constructor(container: BasicComponentView) {
@@ -17,7 +17,7 @@ export class ODataGridView extends GridView {
         this.setMargin(MarginCss.xs(0));
     }
 
-    configureDataRow(configureDataRow: (row: GridRowView) => void) {
+    configureDataRow(configureDataRow: (row: BasicGridRowView) => void) {
         this._configureDataRow = configureDataRow;
     }
 

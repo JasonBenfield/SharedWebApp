@@ -2,7 +2,7 @@
 import { PaddingCss } from "../PaddingCss";
 import { BasicComponentView } from "../Views/BasicComponentView";
 import { BlockView } from "../Views/BlockView";
-import { GridRowView, GridView } from "../Views/Grid";
+import { BasicGridRowView, GridRowView, GridView } from "../Views/Grid";
 import { MessageAlertView } from "../Views/MessageAlertView";
 import { IconCellView } from './IconCellView';
 import { ModalODataComponentView } from './ModalODataComponentView';
@@ -41,7 +41,7 @@ export class ODataComponentView extends GridView {
         this.modalODataComponent = this.addView(ModalODataComponentView);
     }
 
-    configureDataRow(configureDataRow: (row: GridRowView) => void) {
+    configureDataRow(configureDataRow: (row: BasicGridRowView) => void) {
         this.grid.configureDataRow(configureDataRow);
         return this;
     }
