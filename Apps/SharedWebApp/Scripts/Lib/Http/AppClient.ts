@@ -9,7 +9,7 @@ import { UserCacheGroup } from "./UserCacheGroup";
 import { UserGroup } from "./UserGroup";
 import { XtiUrl } from './XtiUrl';
 
-export type apiConstructor<T extends AppClient> = {
+export type appClientCtor<T extends AppClient> = {
     new(events: AppClientEvents): T;
 };
 
@@ -50,10 +50,12 @@ export class AppClient {
 
     constructor(
         private readonly events: AppClientEvents,
-        app: string
+        app: string,
+        version: string
     ) {
         this.resourceUrl = AppResourceUrl.app(
             app,
+            version,
             XtiUrl.current().path.modifier,
             pageContext.CacheBust
         );

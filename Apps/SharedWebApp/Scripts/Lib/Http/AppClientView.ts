@@ -31,6 +31,26 @@ export class AppClientView<TArgs> {
             model = data;
         }
         const resourceUrl = modifier === undefined || modifier === null
+            ? this.resourceUrl.withCurrentVersion()
+            : this.resourceUrl.withCurrentVersion().withModifier(modifier);
+        const urlBuilder = new UrlBuilder(resourceUrl.url.value());
+        urlBuilder.addQueryFromObject(model);
+        return urlBuilder;
+    }
+
+    getVersionedUrl(data: TArgs) {
+        return this.getVersionedModifierUrl(null, data);
+    }
+
+    getVersionedModifierUrl(modifier: string, data: TArgs) {
+        let model: any;
+        if (typeof data === 'string' || typeof data === 'number' || data instanceof Date) {
+            model = { model: data };
+        }
+        else {
+            model = data;
+        }
+        const resourceUrl = modifier === undefined || modifier === null
             ? this.resourceUrl
             : this.resourceUrl.withModifier(modifier);
         const urlBuilder = new UrlBuilder(resourceUrl.url.value());

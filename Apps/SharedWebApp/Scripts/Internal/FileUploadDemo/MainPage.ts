@@ -1,36 +1,18 @@
-﻿import { AppClientAction } from '../../Lib/Http/AppClientAction';
-import { AppClientEvents } from '../../Lib/Http/AppClientEvents';
-import { AppResourceUrl } from '../../Lib/Http/AppResourceUrl';
-import { AsyncCommand } from '../../Lib/Components/Command';
+﻿import { AsyncCommand } from '../../Lib/Components/Command';
 import { FileInputControl, FileType } from '../../Lib/Components/FileInputControl';
 import { TextComponent } from '../../Lib/Components/TextComponent';
 import { TextLinkComponent } from '../../Lib/Components/TextLinkComponent';
-import { UserMenuComponent } from '../../Lib/Components/UserMenuComponent';
 import { DefaultPageContext } from '../DefaultPageContext';
 import { SharedPage } from '../SharedPage';
 import { CustomUserMenu } from './CustomerUserMenu';
 import { MainPageView } from './MainPageView';
 
-interface IAddProductModel {
-    Name: string;
-    Quantity: number;
-    Price: number;
-    File: File;
-    TimeAdded: Date;
-    Nested: IAddProductNested;
-}
-
-interface IAddProductNested {
-    MoreFiles: File[];
-}
-
 class MainPage extends SharedPage {
-    protected readonly view: MainPageView;
     private readonly fileInput: FileInputControl;
     private readonly link: TextLinkComponent;
 
-    constructor() {
-        super(new MainPageView());
+    constructor(protected readonly view: MainPageView) {
+        super(view);
         new TextComponent(this.view.heading).setText('Card Demo');
         this.fileInput = new FileInputControl(this.view.fileInput);
         this.fileInput.allowMultiple();
@@ -47,27 +29,15 @@ class MainPage extends SharedPage {
     }
 
     private upload() {
-        const action = new AppClientAction<IAddProductModel, {}>(
-            new AppClientEvents(() => { }),
-            AppResourceUrl.app(
-                'Shared',
-                '',
-                pageContext.CacheBust
-            )
-                .withGroup('Employee'),
-            'AddProduct',
-            'AddProduct'
-        );
-        const request: IAddProductModel = {
+        return this.defaultClient.Employee.AddProduct({
             Name: 'Whatever',
             Quantity: 1,
             Price: 1.23,
             File: this.fileInput.getFiles()[0],
             TimeAdded: new Date(),
             Nested: { MoreFiles: this.fileInput.getFiles() }
-        };
-        return action.execute(request, {});
+        });
     }
 }
 new DefaultPageContext().load();
-new MainPage();
+new MainPage(new MainPageView());

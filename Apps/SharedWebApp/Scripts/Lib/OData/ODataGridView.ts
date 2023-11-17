@@ -3,22 +3,29 @@ import { CssLengthUnit } from "../CssLengthUnit";
 import { MarginCss } from "../MarginCss";
 import { TextCss } from "../TextCss";
 import { BasicComponentView } from "../Views/BasicComponentView";
-import { BasicGridRowView, GridView } from "../Views/Grid";
+import { BasicGridRowView, GridView, LinkGridRowView } from "../Views/Grid";
 import { MessageAlertView } from "../Views/MessageAlertView";
 import { ODataColumnView } from "./ODataColumnView";
 
 export class ODataGridView extends GridView {
-    private _configureDataRow: (row: BasicGridRowView) => void = () => { };
-    private clickSelection: string;
+    static defaultAddDataRow = (grid: GridView) => grid.addRow();
+    static addLinkDataRow = (grid: GridView) => grid.addRow(LinkGridRowView);
 
+    private _addDataRow: (grid: GridView) => BasicGridRowView = ODataGridView.defaultAddDataRow;
+    private clickSelection: string;
+    
     constructor(container: BasicComponentView) {
         super(container);
         this.setViewName(ODataGridView.name);
         this.setMargin(MarginCss.xs(0));
     }
 
-    configureDataRow(configureDataRow: (row: BasicGridRowView) => void) {
-        this._configureDataRow = configureDataRow;
+    configureLinkDataRow(addDataRow?: (grid: GridView) => LinkGridRowView) {
+        this.configureDataRow(addDataRow || ODataGridView.addLinkDataRow);
+    }
+
+    configureDataRow(addDataRow: (grid: GridView) => BasicGridRowView) {
+        this._addDataRow = addDataRow;
     }
 
     addToClickSelection(clickSelection: string) {
@@ -55,8 +62,7 @@ export class ODataGridView extends GridView {
     }
 
     addDataRow(columns: ODataColumnView[]) {
-        const row = this.addRow();
-        this._configureDataRow(row);
+        const row = this._addDataRow(this);
         for (const col of columns) {
             const cell = row.addCell(col.dataCellCtor);
             col.configureDataCell(cell);

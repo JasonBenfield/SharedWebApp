@@ -48,6 +48,10 @@ export class XtiPath {
         this.value = new JoinedStrings('/', parts).value();
     }
 
+    withCurrentVersion() {
+        return new XtiPath(this.app, 'Current', this.odata, this.group, this.action, this.modifier);
+    }
+
     withGroup(group: string) {
         return new XtiPath(this.app, this.version, this.odata, group, '', this.modifier);
     }

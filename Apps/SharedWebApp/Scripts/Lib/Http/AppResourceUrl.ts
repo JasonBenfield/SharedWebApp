@@ -4,17 +4,17 @@ import { Url } from "../Url";
 import { AppVersionDomain } from "./AppVersionDomain";
 
 export class AppResourceUrl {
-    static app(appName: string, modifier: string, cacheBust: string) {
+    static app(appName: string, version: string, modifier: string, cacheBust: string) {
         const appVersionDomain = new AppVersionDomain().value(appName);
         return new AppResourceUrl(
             `https://${appVersionDomain.Domain}/`,
-            XtiPath.app(appName, appVersionDomain.Version, modifier),
+            XtiPath.app(appName, version, modifier),
             cacheBust
         );
     }
 
-    static odata(appName: string, modifier: string, cacheBust: string) {
-        return AppResourceUrl.app(appName, modifier, cacheBust).odata();
+    static odata(appName: string, version: string, modifier: string, cacheBust: string) {
+        return AppResourceUrl.app(appName, version, modifier, cacheBust).odata();
     }
 
     readonly url: Url;
@@ -26,12 +26,16 @@ export class AppResourceUrl {
     ) {
         this.url = new UrlBuilder(baseUrl)
             .addPart(path.format())
-            .addQuery('cacheBust', cacheBust)
+            .addQuery('cacheBust', cacheBust || null)
             .url;
     }
 
     get relativeUrl() {
         return new UrlBuilder(`/${this.path.format()}`);
+    }
+
+    withCurrentVersion() {
+        return new AppResourceUrl(this.baseUrl, this.path.withCurrentVersion(), this.cacheBust);
     }
 
     withGroup(group: string) {

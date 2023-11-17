@@ -41,7 +41,7 @@ export class ODataComponentView extends GridView {
         this.modalODataComponent = this.addView(ModalODataComponentView);
     }
 
-    configureDataRow(configureDataRow: (row: BasicGridRowView) => void) {
+    configureDataRow(configureDataRow: (grid: GridView) => BasicGridRowView) {
         this.grid.configureDataRow(configureDataRow);
         return this;
     }

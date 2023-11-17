@@ -34,7 +34,7 @@ export class AppClientQuery<TModel, TEntity> {
         readonly name: string
     ) {
         this.resourceUrl = resourceUrl;
-        this.excelUrl = AppResourceUrl.app(this.resourceUrl.path.app, this.resourceUrl.path.modifier, pageContext.CacheBust)
+        this.excelUrl = AppResourceUrl.app(this.resourceUrl.path.app, this.resourceUrl.path.version, this.resourceUrl.path.modifier, pageContext.CacheBust)
             .withGroup(this.resourceUrl.path.group)
             .withAction('ToExcel')
             .url;

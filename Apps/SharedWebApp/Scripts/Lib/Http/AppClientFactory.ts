@@ -1,7 +1,7 @@
 ﻿import { ModalError } from "../Components/ModalError";
 import { ConsoleLog } from "../ConsoleLog";
 import { ModalErrorView } from "../Views/ModalError";
-import { apiConstructor, AppClient } from "./AppClient";
+import { appClientCtor, AppClient } from "./AppClient";
 import { AppClientEvents } from "./AppClientEvents";
 
 export class AppClientFactory {
@@ -11,7 +11,7 @@ export class AppClientFactory {
         this.modalError = new ModalError(modalError);
     }
 
-    create<TApi extends AppClient>(apiCtor: apiConstructor<TApi>): TApi {
+    create<TApi extends AppClient>(apiCtor: appClientCtor<TApi>): TApi {
         const events = new AppClientEvents((err) => {
             new ConsoleLog().error(err.toString());
             this.modalError.show(err.getErrors(), err.getCaption());
