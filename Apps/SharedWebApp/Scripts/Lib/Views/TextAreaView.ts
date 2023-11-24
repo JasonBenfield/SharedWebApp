@@ -15,6 +15,14 @@ export class TextAreaView extends BasicComponentView {
 
     protected setAttr: (config: (attr: ITextAreaAttributes) => void) => void;
 
+    required() { this.setAttr(a => a.required = true); }
+
+    notRequired() { this.setAttr(a => a.required = false); }
+
+    setCustomValidity(errorMessage: string) {
+        this.textAreaElement.setCustomValidity(errorMessage);
+    }
+
     setRows(rows: number) {
         this.setAttr(attr => attr.rows = rows.toString());
     }

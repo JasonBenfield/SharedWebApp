@@ -38,7 +38,7 @@ export class HtmlElementView {
         for (let i = 0; i < this.element.attributes.length; i++) {
             const attribute = this.element.attributes.item(i);
             const value = attributes[attribute.name];
-            if (!value) {
+            if (value === null || value === undefined || value === false) {
                 this.element.removeAttribute(attribute.name);
             }
         }
@@ -52,12 +52,12 @@ export class HtmlElementView {
         if (value === true) {
             this.element.setAttribute(name, '');
         }
-        else if (value) {
-            const formatted = this.formatValue(value);
-            this.element.setAttribute(name, formatted);
+        else if (value === null || value === undefined || value === false) {
+            this.element.removeAttribute(name);
         }
         else {
-            this.element.removeAttribute(name);
+            const formatted = this.formatValue(value);
+            this.element.setAttribute(name, formatted);
         }
     }
 

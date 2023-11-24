@@ -1,5 +1,6 @@
 ﻿import { SelectControl } from "../Components/SelectControl";
 import { SelectOption } from "../Components/SelectOption";
+import { DebouncedAction } from "../DebouncedAction";
 import { EventBuilders } from "../Events";
 import { SimpleFieldFormGroupSelectView } from "../Views/FormGroup";
 import { ConstraintCollection } from "./ConstraintCollection";
@@ -9,15 +10,39 @@ import { SimpleFieldFormGroup } from "./SimpleFieldFormGroup";
 type Events<TValue> = { valueChanged: TValue };
 
 export class DropDownFormGroup<TValue> extends SimpleFieldFormGroup<TValue> {
-    protected readonly view: SimpleFieldFormGroupSelectView;
     readonly constraints = new ConstraintCollection();
+    private readonly selectControl: SelectControl<TValue>;
     readonly when: EventBuilders<Events<TValue>>;
-    private readonly select: SelectControl<TValue>;
 
-    constructor(prefix: string, name: string, view: SimpleFieldFormGroupSelectView) {
+    constructor(prefix: string, name: string, protected readonly view: SimpleFieldFormGroupSelectView) {
         super(prefix, name, view);
-        this.select = new SelectControl(view.select);
-        this.when = this.select.when;
+        this.selectControl = this.addComponent(new SelectControl(view.select));
+        this.when = this.selectControl.when;
+        this.selectControl.when.valueChanged.then(() => this.debouncedOnValueChanged.execute());
+    }
+
+    makeReadOnly() {
+        const selectedOption = this.selectControl.getSelectedOption();
+        const displayText = selectedOption ? selectedOption.displayText : '';
+        this.selectControl.hide();
+        this.valueTextComponent.show();
+        this.valueTextComponent.setText(displayText);
+    }
+
+    makeEditable() {
+        this.selectControl.show();
+        this.valueTextComponent.hide();
+    }
+
+    private debouncedOnValueChanged = new DebouncedAction(
+        this.onValueChanged.bind(this),
+        700
+    );
+
+    private onValueChanged() {
+        if (this.hasValidated) {
+            this.validate(new ErrorList());
+        }
     }
 
     protected validateConstraints(fieldErrors: ErrorList) {
@@ -25,18 +50,18 @@ export class DropDownFormGroup<TValue> extends SimpleFieldFormGroup<TValue> {
     }
 
     getValue() {
-        return this.select.getValue();
+        return this.selectControl.getValue();
     }
 
     setValue(value: TValue) {
-        this.select.setValue(value);
+        this.selectControl.setValue(value);
     }
 
     setItems(...items: SelectOption<TValue>[]) {
-        this.select.setItems(...items);
+        this.selectControl.setItems(...items);
     }
 
     setItemCaption(itemCaption: string) {
-        this.select.setItemCaption(itemCaption);
+        this.selectControl.setItemCaption(itemCaption);
     }
 }

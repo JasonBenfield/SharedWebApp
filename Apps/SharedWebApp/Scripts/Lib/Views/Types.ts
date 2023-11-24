@@ -55,6 +55,7 @@ export interface ITextAreaAttributes extends IHtmlAttributes {
     disabled?: boolean;
     readonly?: boolean;
     placeholder?: string;
+    required?: boolean;
 }
 
 export interface IInputAttributes extends IHtmlAttributes {
@@ -68,6 +69,12 @@ export interface IInputAttributes extends IHtmlAttributes {
     placeholder?: string;
     accept?: string;
     multiple?: boolean;
+    step?: string;
+    required?: boolean;
+}
+
+export interface ISelectAttributes extends IHtmlAttributes {
+    required?: boolean;
 }
 
 export interface IHtmlStyle {

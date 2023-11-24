@@ -1,4 +1,5 @@
-﻿import { ErrorModel } from "../ErrorModel";
+﻿import { DateOnly } from "../DateOnly";
+import { ErrorModel } from "../ErrorModel";
 import { ConstraintResult } from "./ConstraintResult";
 import { NotWhitespaceConstraint } from "./NotWhitespaceConstraint";
 
@@ -23,15 +24,15 @@ export class ConstraintCollection {
 
     validate(errors: IErrorList, field: IField) {
         if (!this.skipped) {
-            let value = field.getValue();
+            const value = field.getValue();
             if (value === undefined || value === null) {
                 if (!this.isNullAllowed) {
                     errors.add(new ErrorModel('Must not be null', field.getCaption(), field.getName()));
                 }
             }
             else {
-                for (let c of this.constraints) {
-                    let result = c.test(value);
+                for (const c of this.constraints) {
+                    const result = c.test(value);
                     if (!result.isValid) {
                         errors.add(new ErrorModel(result.errorMessage, field.getCaption(), field.getName()));
                         return;
@@ -49,6 +50,21 @@ export class TextConstraintCollection extends ConstraintCollection {
 }
 
 export class DateConstraintCollection extends ConstraintCollection {
+    mustBeOnOrAbove(lowerValue: DateOnly, failureMessage: string) {
+        this.add(new LowerRangeConstraint(lowerValue, true, failureMessage));
+    }
+    mustBeAbove(lowerValue: DateOnly, failureMessage: string) {
+        this.add(new LowerRangeConstraint(lowerValue, false, failureMessage));
+    }
+    mustBeOnOrBelow(upperValue: DateOnly, failureMessage: string) {
+        this.add(new UpperRangeConstraint(upperValue, true, failureMessage));
+    }
+    mustBeBelow(upperValue: DateOnly, failureMessage: string) {
+        this.add(new UpperRangeConstraint(upperValue, false, failureMessage));
+    }
+}
+
+export class DateTimeConstraintCollection extends ConstraintCollection {
     mustBeOnOrAbove(lowerValue: Date, failureMessage: string) {
         this.add(new LowerRangeConstraint(lowerValue, true, failureMessage));
     }
@@ -97,7 +113,18 @@ export class LowerRangeConstraint<T> implements IConstraint {
         if (this.boundValue === undefined || this.boundValue === null) {
             return true;
         }
-        if (value > this.boundValue) {
+        const comparable = value as any;
+        if (comparable.compareTo) {
+            const compareResult = comparable.compareTo(this.boundValue);
+            if (compareResult > 0) {
+                return true;
+            }
+            else if (compareResult === 0) {
+                return this.isIncluded;
+            }
+            return false;
+        }
+        else if (value > this.boundValue) {
             return true;
         }
         if (this.boundValue === value) {
@@ -124,6 +151,17 @@ export class UpperRangeConstraint<T> implements IConstraint {
     private isInRange(value: T) {
         if (this.boundValue === undefined || this.boundValue === null) {
             return true;
+        }
+        const comparable = value as any;
+        if (comparable.compareTo) {
+            const compareResult = comparable.compareTo(this.boundValue);
+            if (compareResult < 0) {
+                return true;
+            }
+            else if (compareResult === 0) {
+                return this.isIncluded;
+            }
+            return false;
         }
         if (value < this.boundValue) {
             return true;

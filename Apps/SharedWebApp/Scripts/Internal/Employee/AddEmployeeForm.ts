@@ -1,4 +1,5 @@
-﻿import { BaseForm } from '../../Lib/Forms/BaseForm';
+﻿import { DateOnly } from '../../Lib/DateOnly';
+import { BaseForm } from '../../Lib/Forms/BaseForm';
 import { DropDownFieldItem } from "../../Lib/Forms/DropDownFieldItem";
 import { AddEmployeeFormView } from './AddEmployeeFormView';
 import { AddressInputField } from './AddressInputField';
@@ -14,10 +15,11 @@ export class AddEmployeeForm extends BaseForm {
         this.EmployeeName.constraints.mustNotBeWhitespace('must not be blank');
         this.BirthDate.setCaption("Birth Date");
         this.BirthDate.constraints.mustNotBeNull();
-        this.BirthDate.constraints.mustBeAbove(new Date(1920, 1, 1), 'must be greater than 1/1/1920');
-        this.BirthDate.constraints.mustBeOnOrBelow(new Date(2000, 1, 1), 'must be less than or equal to 1/1/2000');
+        this.BirthDate.constraints.mustBeAbove(new DateOnly(1920, 0, 1), 'must be greater than 1/1/1920');
+        this.BirthDate.constraints.mustBeOnOrBelow(new DateOnly(2000, 0, 1), 'must be less than or equal to 1/1/2000');
         this.Salary.setCaption("Salary");
         this.Salary.format = '$0,0.00';
+        this.Salary.constraints.mustNotBeNull();
         this.Department.constraints.mustNotBeNull();
         this.Department.setItemCaption("Select...");
         this.Department.setItems(

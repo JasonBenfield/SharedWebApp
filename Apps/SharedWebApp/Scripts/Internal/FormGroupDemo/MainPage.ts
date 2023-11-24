@@ -66,7 +66,7 @@ class MainPage extends SharedPage {
     private async showValues() {
         await this.alert.infoAction(
             'Loading...',
-            () => DelayedAction.delay(5000),
+            () => DelayedAction.delay(1000),
             'In Progress'
         );
         const values = [
@@ -81,6 +81,12 @@ class MainPage extends SharedPage {
         ].map(fg => `${fg.getCaption()}: ${fg.getValue()}`);
         this.valueListGroup.setItems(values, (v, itemView) => new TextListItem(v, itemView));
         this.alert.success('These are the values:');
+        this.demoFormGroupSelect.makeReadOnly();
+        this.demoFormGroupInput.makeReadOnly();
+        this.demoFormGroupTextArea.makeReadOnly();
+        this.demoFormGroupDateInput.makeReadOnly();
+        this.demoFormGroupDateTimeInput.makeReadOnly();
+        this.demoFormGroupTimeInput.makeReadOnly();
     }
 }
 new DefaultPageContext().load();

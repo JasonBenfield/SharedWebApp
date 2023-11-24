@@ -136,4 +136,17 @@ export class DateOnly {
         }
         return false;
     }
+
+    compareTo(other?: DateOnly) {
+        if (other) {
+            if (this._date < other._date) {
+                return -1;
+            }
+            else if (this._date > other._date) {
+                return 1;
+            }
+            return 0;
+        }
+        return -1;
+    }
 }

@@ -1,6 +1,6 @@
 ﻿import { BasicComponentView } from "./BasicComponentView";
 import { BasicTextComponentView } from "./BasicTextComponentView";
-import { IOptionAttributes } from "./Types";
+import { IOptionAttributes, ISelectAttributes } from "./Types";
 
 export class SelectView extends BasicComponentView {
     protected readonly selectElement: HTMLSelectElement;
@@ -8,6 +8,16 @@ export class SelectView extends BasicComponentView {
     constructor(container: BasicComponentView) {
         super(container, 'select');
         this.selectElement = this.elementView.element as HTMLSelectElement;
+    }
+
+    protected setAttr: (config: (attr: ISelectAttributes) => void) => void;
+
+    required() { this.setAttr(a => a.required = true); }
+
+    notRequired() { this.setAttr(a => a.required = false); }
+
+    setCustomValidity(errorMessage: string) {
+        this.selectElement.setCustomValidity(errorMessage);
     }
 
     styleAsFormControl() {

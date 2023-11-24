@@ -65,7 +65,23 @@ export class InputControl<TValue> extends BasicComponent {
         700
     );
 
+    required() {
+        this.view.required();
+    }
+
+    notRequired() {
+        this.view.notRequired();
+    }
+
+    setCustomValidity(message: string) {
+        this.view.setCustomValidity(message);
+    }
+
     isBlank() { return !this.view.getValue(); }
+
+    getTextValue() {
+        return this.view.getValue();
+    }
 
     getValue() {
         return this.viewValue.getValue();

@@ -10,9 +10,17 @@ export class InputView extends BasicComponentView {
         this.inputElement = this.elementView.element as HTMLInputElement;
         this.setType('text');
     }
-
+    
     protected setAttr: (config: (attr: IInputAttributes) => void) => void;
 
+    required() { this.setAttr(a => a.required = true); }
+
+    notRequired() { this.setAttr(a => a.required = false); }
+
+    setCustomValidity(errorMessage: string) {
+        this.inputElement.setCustomValidity(errorMessage);
+    }
+    
     styleAsFormControl() {
         this.addCssName('form-control');
     }
@@ -24,6 +32,8 @@ export class InputView extends BasicComponentView {
     allowMultiple() { this.setAttr(a => a.multiple = true); }
 
     preventMultiple() { this.setAttr(a => a.multiple = false); }
+
+    setStep(step: string) { this.setAttr(a => a.step = step); }
 
     clearAutocomplete() { this.setAutocomplete(null); }
 
@@ -74,7 +84,7 @@ export class InputView extends BasicComponentView {
         this.setAttr(attr => attr.placeholder = placeholder);
     }
 
-    setType(type: 'text' | 'hidden' | 'password' | 'date' | 'number' | 'time' | 'file') {
+    setType(type: 'text' | 'hidden' | 'password' | 'date' | 'number' | 'time' | 'file' | 'email' | 'month' | 'url')  {
         this.setAttr(attr => attr.type = type);
     }
 

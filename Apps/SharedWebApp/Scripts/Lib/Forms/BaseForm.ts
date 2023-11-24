@@ -4,11 +4,12 @@ import { ConsoleLog } from "../ConsoleLog";
 import { ModalError } from "../Components/ModalError";
 import { ErrorModel } from "../ErrorModel";
 import { BaseFormView } from "../Views/BaseFormView";
-import { SimpleFieldFormGroupSelectView } from "../Views/FormGroup";
+import { SimpleFieldFormGroupDateTimeInputView, SimpleFieldFormGroupSelectView } from "../Views/FormGroup";
 import { ErrorList } from "./ErrorList";
 import { FormGroupCollection } from "./FormGroupCollection";
 import { FormSaveResult } from "./FormSaveResult";
 import { SimpleFieldFormGroupInputView } from "../Views/FormGroup";
+import { InputView } from "../Views/InputView";
 
 export class BaseForm {
     private readonly formGroups: FormGroupCollection;
@@ -50,16 +51,20 @@ export class BaseForm {
         return null;
     }
 
-    protected addHiddenTextFormGroup(name: string, view: SimpleFieldFormGroupInputView) {
-        return this.formGroups.addHiddenTextFormGroup(name, view);
+    protected addHiddenText(name: string, view: InputView) {
+        return this.formGroups.addHiddenText(name, view);
     }
 
-    protected addHiddenNumberFormGroup(name: string, view: SimpleFieldFormGroupInputView) {
-        return this.formGroups.addHiddenNumberFormGroup(name, view);
+    protected addHiddenNumber(name: string, view: InputView) {
+        return this.formGroups.addHiddenNumber(name, view);
     }
 
-    protected addHiddenDateFormGroup(name: string, view: SimpleFieldFormGroupInputView) {
-        return this.formGroups.addHiddenDateFormGroup(name, view);
+    protected addHiddenDate(name: string, view: InputView) {
+        return this.formGroups.addHiddenDate(name, view);
+    }
+
+    protected addHiddenDateTime(name: string, view: InputView) {
+        return this.formGroups.addHiddenDateTime(name, view);
     }
 
     protected addTextInputFormGroup(name: string, view: SimpleFieldFormGroupInputView) {
@@ -74,6 +79,10 @@ export class BaseForm {
         return this.formGroups.addDateInputFormGroup(name, view);
     }
 
+    protected addDateTimeInputFormGroup(name: string, view: SimpleFieldFormGroupDateTimeInputView) {
+        return this.formGroups.addDateTimeInputFormGroup(name, view);
+    }
+
     protected addTextDropDownFormGroup(name: string, view: SimpleFieldFormGroupSelectView) {
         return this.formGroups.addTextDropDownFormGroup(name, view);
     }
@@ -86,6 +95,10 @@ export class BaseForm {
         return this.formGroups.addDateDropDownFormGroup(name, view);
     }
 
+    protected addDateTimeDropDownFormGroup(name: string, view: SimpleFieldFormGroupSelectView) {
+        return this.formGroups.addDateTimeDropDownFormGroup(name, view);
+    }
+
     protected addBooleanDropDownFormGroup(name: string, view: SimpleFieldFormGroupSelectView) {
         return this.formGroups.addBooleanDropDownFormGroup(name, view);
     }
@@ -95,11 +108,12 @@ export class BaseForm {
     }
 
     protected addFormGroup<TField extends IField>(formGroup: TField) {
-        return this.formGroups.addFormGroup(formGroup);
+        return this.formGroups.addField(formGroup);
     }
 
     async save<TResult>(action: AppClientAction<any, TResult>) {
         const validationResult = this.validate();
+        this.view.addCssName('was-validated');
         if (validationResult.hasErrors()) {
             const errors = validationResult.values();
             this.modalError.show(errors, `Unable to ${action.friendlyName}`);

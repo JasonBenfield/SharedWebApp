@@ -1,6 +1,8 @@
 ﻿import { InputControl } from "../Components/InputControl";
+import { DebouncedAction } from "../DebouncedAction";
 import { EventBuilders } from "../Events";
 import { SimpleFieldFormGroupInputView } from "../Views/FormGroup";
+import { ErrorList } from "./ErrorList";
 import { SimpleFieldFormGroup } from "./SimpleFieldFormGroup";
 import { TypedFieldViewValue } from "./TypedFieldViewValue";
 
@@ -22,8 +24,36 @@ export abstract class SimpleFieldInputFormGroup<TValue> extends SimpleFieldFormG
         view.caption.setFor(valueName);
         view.input.setViewID(valueName);
         view.input.setViewName(valueName);
-        this.input = new InputControl(view.input, viewValue);
+        this.input = this.addComponent(new InputControl(view.input, viewValue));
         this.when = this.input.when;
+        this.input.when.valueChanged.then(() => this.debouncedOnValueChanged.execute());
+    }
+
+    makeReadOnly(format: (date: TValue) => string) {
+        const value = this.getValue();
+        this.input.hide();
+        this.valueTextComponent.show();
+        this.valueTextComponent.setText(format ? format(value) : this.defaultReadOnlyFormat(value));
+    }
+
+    private defaultReadOnlyFormat(value: TValue) {
+        return value ? value.toString() : '';
+    }
+
+    makeEditable() {
+        this.input.show();
+        this.valueTextComponent.hide();
+    }
+
+    private debouncedOnValueChanged = new DebouncedAction(
+        this.onValueChanged.bind(this),
+        700
+    );
+
+    private onValueChanged() {
+        if (this.hasValidated) {
+            this.validate(new ErrorList());
+        }
     }
 
     getValue() {

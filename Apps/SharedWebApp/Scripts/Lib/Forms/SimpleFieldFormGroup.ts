@@ -1,21 +1,22 @@
-﻿import { ListGroup } from "../Components/ListGroup";
+﻿import { BasicComponent } from "../Components/BasicComponent";
 import { TextComponent } from "../Components/TextComponent";
 import { ErrorModel } from "../ErrorModel";
-import { ErrorListItemView } from "../Views/ErrorListItemView";
+import { JoinedStrings } from "../JoinedStrings";
 import { SimpleFieldFormGroupView } from "../Views/FormGroup";
 import { ErrorList } from "./ErrorList";
-import { ErrorListItem } from "./ErrorListItem";
 
-export abstract class SimpleFieldFormGroup<TValue> implements IField {
+export abstract class SimpleFieldFormGroup<TValue> extends BasicComponent implements IField {
     private readonly name: string;
     private caption: string;
     private readonly captionBlock: TextComponent;
-    private readonly alertList: ListGroup<ErrorListItem, ErrorListItemView>;
+    protected readonly valueTextComponent: TextComponent;
+    protected hasValidated = false;
 
     constructor(prefix: string, name: string, protected readonly view: SimpleFieldFormGroupView) {
+        super(view);
         this.name = prefix ? `${prefix}_${name}` : name;
-        this.captionBlock = new TextComponent(view.caption);
-        this.alertList = new ListGroup(view.alertList);
+        this.captionBlock = this.addComponent(new TextComponent(view.caption));
+        this.valueTextComponent = this.addComponent(new TextComponent(view.valueTextView));
     }
 
     getName() {
@@ -38,20 +39,13 @@ export abstract class SimpleFieldFormGroup<TValue> implements IField {
     getField(name: string) { return this.getName() === name ? this : null; }
 
     setErrors(errors: ErrorModel[]) {
-        this.alertList.setItems(
-            errors,
-            (e, li) => new ErrorListItem(e, li)
-        );
-        if (errors.length > 0) {
-            this.view.showDropDown();
-        }
-        else {
-            this.view.hideDropDown();
-        }
+        const message = new JoinedStrings('\n', errors.map(e => e.Message)).value();
+        this.view.setCustomValidity(message);
     }
 
     clearErrors() {
-        this.setErrors([]);
+        this.view.setCustomValidity('');
+        this.hasValidated = false;
     }
 
     validate(errors: IErrorList) {
@@ -59,6 +53,7 @@ export abstract class SimpleFieldFormGroup<TValue> implements IField {
         this.validateConstraints(fieldErrors);
         this.setErrors(fieldErrors.values());
         errors.merge(fieldErrors);
+        this.hasValidated = true;
     }
 
     protected abstract validateConstraints(fieldErrors: ErrorList);

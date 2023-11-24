@@ -41,6 +41,18 @@ export class TextAreaControl extends BasicComponent {
         700
     );
 
+    required() {
+        this.view.required();
+    }
+
+    notRequired() {
+        this.view.notRequired();
+    }
+
+    setCustomValidity(message: string) {
+        this.view.setCustomValidity(message);
+    }
+
     isBlank() { return !this.view.getValue(); }
 
     getValue() {

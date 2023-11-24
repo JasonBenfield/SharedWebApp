@@ -10,4 +10,16 @@ export class DateInputControl extends InputControl<DateOnly> {
         view.setType('date');
         view.setMaxWidth(CssLengthUnit.em(10));
     }
+
+    required() {
+        this.view.required();
+    }
+
+    notRequired() {
+        this.view.notRequired();
+    }
+
+    setCustomValidity(message: string) {
+        this.view.setCustomValidity(message);
+    }
 }

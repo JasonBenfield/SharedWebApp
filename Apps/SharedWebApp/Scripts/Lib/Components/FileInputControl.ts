@@ -30,6 +30,18 @@ export class FileInputControl extends BasicComponent {
             .subscribe();
     }
 
+    required() {
+        this.view.required();
+    }
+
+    notRequired() {
+        this.view.notRequired();
+    }
+
+    setCustomValidity(message: string) {
+        this.view.setCustomValidity(message);
+    }
+
     private onInputValueChanged() {
         const files = this.getFiles();
         this.eventSource.events.valueChanged.invoke(files);

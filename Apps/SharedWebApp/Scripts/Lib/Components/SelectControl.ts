@@ -20,9 +20,30 @@ export class SelectControl<TValue> extends BasicComponent {
             .subscribe();
     }
 
+    required() {
+        this.view.required();
+    }
+
+    notRequired() {
+        this.view.notRequired();
+    }
+
+    setCustomValidity(message: string) {
+        this.view.setCustomValidity(message);
+    }
+
     getValue() {
-        const selectedIndex = this.view.getSelectedIndex();
-        return selectedIndex > -1 ? this.items[selectedIndex].value : null;
+        const selectedOption = this.getSelectedOption();
+        return selectedOption ? selectedOption.value : null;
+    }
+
+    getSelectedOption() {
+        const selectedIndex = this.getSelectedIndex();
+        return selectedIndex > -1 ? this.items[selectedIndex] : null;
+    }
+    
+    getSelectedIndex() {
+        return this.view.getSelectedIndex();
     }
 
     setValue(value: TValue, comparer: (x: TValue, y: TValue) => boolean = SelectControl.defaultComparer<TValue>) {
@@ -73,7 +94,9 @@ export class SelectControl<TValue> extends BasicComponent {
         const options = this.view.replaceOptions(this.items.length);
         let i = 0;
         for (const item of this.items) {
-            options[i].setText(item.displayText);
+            const option = options[i];
+            option.setValue(item.value === null || item.value === undefined ? '' : `${item.value}`);
+            option.setText(item.displayText);
             i++;
         }
     }

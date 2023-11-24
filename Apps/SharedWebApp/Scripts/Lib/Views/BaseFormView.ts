@@ -1,8 +1,9 @@
 ﻿import { CssLengthUnit } from "../CssLengthUnit";
 import { DelayedAction } from "../DelayedAction";
 import { BasicComponentView } from "./BasicComponentView";
-import { FormGroupGridView, FormGroupView, SimpleFieldFormGroupInputView, SimpleFieldFormGroupSelectView } from "./FormGroup";
+import { FormGroupGridView, FormGroupView, SimpleFieldFormGroupDateTimeInputView, SimpleFieldFormGroupInputView, SimpleFieldFormGroupSelectView } from "./FormGroup";
 import { FormView } from "./FormView";
+import { InputView } from "./InputView";
 import { ModalErrorView } from "./ModalError";
 import { ViewConstructor } from "./Types";
 
@@ -30,19 +31,18 @@ export class BaseFormView extends FormView {
             .subscribe();
     }
 
-    addHiddenInputFormGroup() {
-        const formGroup = this.addInputFormGroup();
-        this.hideFormGroup(formGroup);
-        return formGroup;
+    addHiddenInput() {
+        const inputView = this.addView(InputView);
+        inputView.setType('hidden');
+        return inputView;
     }
-
-    private hideFormGroup(formGroup: SimpleFieldFormGroupInputView) {
-        formGroup.input.setType('hidden');
-        formGroup.hide();
-    }
-
+    
     addInputFormGroup() {
         return this.addFormGroup(SimpleFieldFormGroupInputView);
+    }
+
+    addDateTimeInputFormGroup() {
+        return this.addFormGroup(SimpleFieldFormGroupDateTimeInputView);
     }
 
     addDropDownFormGroup() {

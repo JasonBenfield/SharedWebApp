@@ -1,5 +1,6 @@
 ﻿import { ComplexFieldFormGroupView } from "../Views/ComplexFieldFormGroupView";
-import { SimpleFieldFormGroupInputView, SimpleFieldFormGroupSelectView } from "../Views/FormGroup";
+import { SimpleFieldFormGroupDateTimeInputView, SimpleFieldFormGroupInputView, SimpleFieldFormGroupSelectView } from "../Views/FormGroup";
+import { InputView } from "../Views/InputView";
 import { FormGroup } from "./FormGroup";
 import { FormGroupCollection } from "./FormGroupCollection";
 
@@ -34,16 +35,20 @@ export class ComplexFieldFormGroup extends FormGroup implements IField {
         this.formGroups.forEach(action);
     }
 
-    protected addHiddenTextFormGroup(name: string, view: SimpleFieldFormGroupInputView) {
-        return this.formGroups.addHiddenTextFormGroup(name, view);
+    protected addHiddenText(name: string, view: InputView) {
+        return this.formGroups.addHiddenText(name, view);
     }
 
-    protected addHiddenNumberFormGroup(name: string, view: SimpleFieldFormGroupInputView) {
-        return this.formGroups.addHiddenNumberFormGroup(name, view);
+    protected addHiddenNumber(name: string, view: InputView) {
+        return this.formGroups.addHiddenNumber(name, view);
     }
 
-    protected addHiddenDateFormGroup(name: string, view: SimpleFieldFormGroupInputView) {
-        return this.formGroups.addHiddenDateFormGroup(name, view);
+    protected addHiddenDate(name: string, view: InputView) {
+        return this.formGroups.addHiddenDate(name, view);
+    }
+
+    protected addHiddenDateTime(name: string, view: InputView) {
+        return this.formGroups.addHiddenDateTime(name, view);
     }
 
     protected addTextInputFormGroup(name: string, view: SimpleFieldFormGroupInputView) {
@@ -58,6 +63,10 @@ export class ComplexFieldFormGroup extends FormGroup implements IField {
         return this.formGroups.addDateInputFormGroup(name, view);
     }
 
+    protected addDateTimeInputFormGroup(name: string, view: SimpleFieldFormGroupDateTimeInputView) {
+        return this.formGroups.addDateTimeInputFormGroup(name, view);
+    }
+
     protected addTextDropDownFormGroup(name: string, view: SimpleFieldFormGroupSelectView) {
         return this.formGroups.addTextDropDownFormGroup(name, view);
     }
@@ -70,6 +79,10 @@ export class ComplexFieldFormGroup extends FormGroup implements IField {
         return this.formGroups.addDateDropDownFormGroup(name, view);
     }
 
+    protected addDateTimeDropDownFormGroup(name: string, view: SimpleFieldFormGroupSelectView) {
+        return this.formGroups.addDateTimeDropDownFormGroup(name, view);
+    }
+
     protected addBooleanDropDownFormGroup(name: string, view: SimpleFieldFormGroupSelectView) {
         return this.formGroups.addBooleanDropDownFormGroup(name, view);
     }
@@ -79,7 +92,7 @@ export class ComplexFieldFormGroup extends FormGroup implements IField {
     }
 
     protected addFormGroup<TFormGroup extends IField>(name: string, formGroup: TFormGroup) {
-        return this.formGroups.addFormGroup(formGroup);
+        return this.formGroups.addField(formGroup);
     }
 
     clearErrors() {
