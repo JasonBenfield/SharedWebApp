@@ -38,9 +38,9 @@ export class ODataQueryBuilder {
 
     constructor(serialized?: ISerializableQuery) {
         this.apply = new ODataQueryApplyBuilder();
-        this.select = new ODataQuerySelectBuilder(serialized && serialized.select);
-        this.filter = new ODataQueryFilterBuilder(serialized && serialized.filter);
-        this.orderBy = new ODataQueryOrderByBuilder(serialized && serialized.orderBy);
+        this.select = new ODataQuerySelectBuilder(serialized && serialized.select, []);
+        this.filter = new ODataQueryFilterBuilder(serialized && serialized.filter, []);
+        this.orderBy = new ODataQueryOrderByBuilder(serialized && serialized.orderBy, []);
     }
 
     skip(skip: number) {
@@ -120,9 +120,9 @@ export class ODataQuerySelectBuilder {
     private readonly requiredFields: string[] = [];
     private readonly fields: ISelectField[] = [];
 
-    constructor(serialized?: ISerializableSelect) {
+    constructor(serialized: ISerializableSelect, columns: ODataColumn[]) {
         if (serialized) {
-            this.fields.splice(0, 0, ...serialized.fields);
+            this.fromSerialized(serialized, columns);
         }
     }
 
@@ -143,9 +143,12 @@ export class ODataQuerySelectBuilder {
         return this;
     }
 
-    fromSerialized(serialized: ISerializableSelect) {
+    fromSerialized(serialized: ISerializableSelect, columns: ODataColumn[]) {
         for (const field of serialized.fields) {
-            this.addField(field);
+            const column = columns.find(c => c.columnName.toLowerCase() === field.field.toLowerCase());
+            if (column) {
+                this.addField(field);
+            }
         }
     }
 
@@ -243,14 +246,19 @@ export class ODataQuerySelectBuilder {
 export class ODataQueryOrderByBuilder {
     private readonly fields: IOrderByField[] = [];
 
-    constructor(serialized?: ISerializableOrderBy) {
+    constructor(serialized: ISerializableOrderBy, columns: ODataColumn[]) {
         if (serialized) {
-            this.fromSerialized(serialized);
+            this.fromSerialized(serialized, columns);
         }
     }
 
-    fromSerialized(serialized: ISerializableOrderBy) {
-        this.fields.splice(0, 0, ...serialized.fields)
+    fromSerialized(serialized: ISerializableOrderBy, columns: ODataColumn[]) {
+        for (const field of serialized.fields) {
+            const column = columns.find(c => field.field.toLowerCase() === c.columnName.toLowerCase());
+            if (column) {
+                this.fields.splice(0, 0, field);
+            }
+        }
     }
 
     clear() {
@@ -305,7 +313,7 @@ export class ODataQueryApplyBuilder {
     private readonly clauses: ApplyClauseType[] = [];
 
     addFilter() {
-        const filter = new ODataQueryFilterBuilder();
+        const filter = new ODataQueryFilterBuilder(null, []);
         this.clauses.push(filter);
         return filter;
     }

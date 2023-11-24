@@ -91,6 +91,25 @@ export class TimeSpan {
         return TimeSpan.fromTicks(Math.round(this.totalTicks / 600000000) * 600000000);
     }
 
+    equals(other: TimeSpan) {
+        if (other) {
+            return this.days === other.days &&
+                this.hours === other.hours &&
+                this.minutes === other.minutes &&
+                this.seconds === other.seconds &&
+                this.ticks === other.ticks;
+        }
+        return false;
+    }
+
+    toJSON() {
+        const hours = this.hours.toString().padStart(2, '0');
+        const minutes = this.minutes.toString().padStart(2, '0');
+        const seconds = this.seconds.toString().padStart(2, '0');
+        const ticks = this.ticks.toString().padStart(7, '0');
+        return `${this.days}.${hours}:${minutes}:${seconds}.${ticks}`;
+    }
+
     toString() {
         let str = '';
         if (this.days > 0) {

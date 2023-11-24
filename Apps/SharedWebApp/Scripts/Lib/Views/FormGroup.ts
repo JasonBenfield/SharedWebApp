@@ -8,6 +8,7 @@ import { AlertView } from "./AlertView";
 import { BasicComponentView } from "./BasicComponentView";
 import { BasicTextComponentView } from "./BasicTextComponentView";
 import { BlockView } from "./BlockView";
+import { DateTimeInputView } from "./DateTimeInputView";
 import { DropdownButtonView, DropdownMenuView } from "./Dropdown";
 import { ErrorListItemView } from "./ErrorListItemView";
 import { FaIconView } from "./FaIconView";
@@ -19,6 +20,7 @@ import { SelectView } from "./SelectView";
 import { TextAreaView } from "./TextAreaView";
 import { TextBlockView } from "./TextBlockView";
 import { TextLabelView } from "./TextLabelView";
+import { TimeInputView } from "./TimeInputView";
 import { ViewConstructor } from "./Types";
 
 export class FormGroupGridView extends GridView {
@@ -117,6 +119,26 @@ export class FormGroupSelectView extends FormGroupView {
         super(container);
         this.select = this.valueCell.addView(SelectView);
         this.select.styleAsFormControl();
+    }
+}
+
+export class FormGroupTimeInputView extends FormGroupView {
+    readonly timeInput: TimeInputView;
+
+    constructor(container: BasicComponentView) {
+        super(container);
+        this.timeInput = this.valueCell.addView(TimeInputView);
+        this.timeInput.styleAsFormControl();
+    }
+}
+
+export class FormGroupDateTimeInputView extends FormGroupView {
+    readonly dateTimeInput: DateTimeInputView;
+
+    constructor(container: BasicComponentView) {
+        super(container);
+        this.dateTimeInput = this.valueCell.addView(DateTimeInputView);
+        this.dateTimeInput.styleAsFormControl();
     }
 }
 

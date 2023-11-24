@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SharedWebApp.Api;
-using XTI_App.Api;
 
 namespace SharedWebApp.Controllers;
 

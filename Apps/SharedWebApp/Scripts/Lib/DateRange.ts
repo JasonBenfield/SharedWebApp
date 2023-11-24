@@ -1,22 +1,22 @@
-﻿import { FormattedDate } from "./FormattedDate";
+﻿import { DateOnly } from "./DateOnly";
 import { ISerializableValueRangeBound, ValueRangeBound } from "./ValueRangeBound";
 
 export interface ISerializableDateRange {
-    readonly start: ISerializableValueRangeBound<Date>;
-    readonly end: ISerializableValueRangeBound<Date>;
+    readonly start: ISerializableValueRangeBound<DateOnly>;
+    readonly end: ISerializableValueRangeBound<DateOnly>;
 }
 
 export class DateRange {
     static deserialize(serialized: ISerializableDateRange) {
         return serialized
             ? new DateRange(
-                ValueRangeBound.deserialize<Date>(serialized.start),
-                ValueRangeBound.deserialize<Date>(serialized.end)
+                ValueRangeBound.deserialize<DateOnly>(serialized.start),
+                ValueRangeBound.deserialize<DateOnly>(serialized.end)
             )
             : null;
     }
 
-    constructor(readonly start: ValueRangeBound<Date>, readonly end: ValueRangeBound<Date>) {
+    constructor(readonly start: ValueRangeBound<DateOnly>, readonly end: ValueRangeBound<DateOnly>) {
         if (start && !start.value) {
             this.start = null;
         }
@@ -35,16 +35,16 @@ export class DateRange {
 
     format() {
         let str = '';
-        const adjustedStartDate = this.start ? new Date(this.start.value.getTime()) : null;
+        const adjustedStartDate = this.start ? this.start.value.copy() : null;
         if (adjustedStartDate && !this.start.isIncluded) {
-            adjustedStartDate.setDate(adjustedStartDate.getDate() + 1);
+            adjustedStartDate.setDate(adjustedStartDate.date + 1);
         }
-        const adjustedEndDate = this.end ? new Date(this.end.value.getTime()) : null;
+        const adjustedEndDate = this.end ? this.end.value.copy() : null;
         if (adjustedEndDate && !this.end.isIncluded) {
-            adjustedEndDate.setDate(adjustedEndDate.getDate() - 1);
+            adjustedEndDate.setDate(adjustedEndDate.date - 1);
         }
-        if (adjustedStartDate && adjustedEndDate && adjustedStartDate.getTime() === adjustedEndDate.getTime()) {
-            const dateText = new FormattedDate(adjustedStartDate).formatDate();
+        if (adjustedStartDate && adjustedEndDate && adjustedStartDate.equals(adjustedEndDate)) {
+            const dateText = adjustedStartDate.format();
             str += `On ${dateText}`;
         }
         else {
@@ -56,7 +56,7 @@ export class DateRange {
                 else {
                     prefix = 'After';
                 }
-                const startDateText = new FormattedDate(this.start.value).formatDate();
+                const startDateText = this.start.value.format();
                 str += `${prefix} ${startDateText}`;
             }
             if (this.end && this.end.value) {
@@ -70,7 +70,7 @@ export class DateRange {
                 else {
                     prefix = 'Before';
                 }
-                const endDateText = new FormattedDate(this.end.value).formatDate();
+                const endDateText = this.end.value.format();
                 str += `${prefix} ${endDateText}`;
             }
         }

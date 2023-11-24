@@ -1,4 +1,5 @@
-﻿import { DateRange } from "../DateRange";
+﻿import { DateOnly } from "../DateOnly";
+import { DateRange } from "../DateRange";
 import { NumberRange } from "../NumberRange";
 import { RelativeDateRange } from "../RelativeDateRange";
 import { FilterAbsoluteDateRange, FilterAbsoluteNumberRange, FilterConditionFunction, FilterConditionOperation, FilterField, FilterFieldFunction, FilterRelativeDateRange, FilterStringValue, FilterValue, ODataQueryFilterBuilder } from "./ODataQueryFilterBuilder";
@@ -19,7 +20,7 @@ export class FilterSelectionEqual implements FilterSelection {
     applyToQuery(
         filter: ODataQueryFilterBuilder,
         field: FilterField | FilterFieldFunction,
-        value: number | Date | number[] | Date[]
+        value: number | DateOnly | number[] | DateOnly[]
     ) {
         filter.add(FilterConditionOperation.equal(field, new FilterValue(value)));
     }
@@ -35,7 +36,7 @@ export class FilterSelectionNotEqual implements FilterSelection {
     applyToQuery(
         filter: ODataQueryFilterBuilder,
         field: FilterField | FilterFieldFunction,
-        value: number | Date | number[] | Date[]
+        value: number | DateOnly | number[] | DateOnly[]
     ) {
         filter.add(FilterConditionOperation.notEqual(field, new FilterValue(value)));
     }
@@ -51,7 +52,7 @@ export class FilterSelectionGreaterThan implements FilterSelection {
     applyToQuery(
         filter: ODataQueryFilterBuilder,
         field: FilterField | FilterFieldFunction,
-        value: number | Date
+        value: number | DateOnly
     ) {
         filter.add(FilterConditionOperation.greaterThan(field, new FilterValue(value)));
     }
@@ -67,7 +68,7 @@ export class FilterSelectionLessThan implements FilterSelection {
     applyToQuery(
         filter: ODataQueryFilterBuilder,
         field: FilterField | FilterFieldFunction,
-        value: number | Date
+        value: number | DateOnly
     ) {
         filter.add(FilterConditionOperation.lessThan(field, new FilterValue(value)));
     }
@@ -83,7 +84,7 @@ export class FilterSelectionGreaterThanOrEqual implements FilterSelection {
     applyToQuery(
         filter: ODataQueryFilterBuilder,
         field: FilterField | FilterFieldFunction,
-        value: number | Date
+        value: number | DateOnly
     ) {
         filter.add(FilterConditionOperation.greaterThanOrEqual(field, new FilterValue(value)));
     }
@@ -99,7 +100,7 @@ export class FilterSelectionLessThanOrEqual implements FilterSelection {
     applyToQuery(
         filter: ODataQueryFilterBuilder,
         field: FilterField,
-        value: number | Date
+        value: number | DateOnly
     ) {
         filter.add(FilterConditionOperation.lessThanOrEqual(field, new FilterValue(value)));
     }

@@ -1,10 +1,12 @@
 ﻿import { TextComponent } from '../../Lib/Components/TextComponent';
-import { ApiODataClient } from '../../Lib/OData/ApiODataClient';
 import { NumberValueFormatter } from '../../Lib/OData/NumberValueFormatter';
 import { ODataCellClickedEventArgs } from '../../Lib/OData/ODataCellClickedEventArgs';
 import { ODataColumn } from '../../Lib/OData/ODataColumn';
 import { ODataComponent } from '../../Lib/OData/ODataComponent';
 import { ODataComponentOptionsBuilder } from '../../Lib/OData/ODataComponentOptionsBuilder';
+import { ODataRefreshedEventArgs } from '../../Lib/OData/ODataRefreshedEventArgs';
+import { Url } from '../../Lib/Url';
+import { UrlBuilder } from '../../Lib/UrlBuilder';
 import { GridRowView } from '../../Lib/Views/Grid';
 import { DefaultPageContext } from '../DefaultPageContext';
 import { SharedPage } from '../SharedPage';
@@ -14,6 +16,7 @@ import { ODataEmployeeColumnsBuilder } from './ODataEmployeeColumnsBuilder';
 
 class MainPage extends SharedPage {
     protected readonly view: MainPageView;
+    private readonly odataComponent: ODataComponent<IEmployee>;
 
     constructor() {
         super(new MainPageView());
@@ -34,18 +37,51 @@ class MainPage extends SharedPage {
         //options.disableSelectColumns();
         //options.disableFilter();
         //options.disableSort();
-        const odataClient = new ApiODataClient(this.defaultClient.EmployeeQuery, {});
-        options.setODataClient(odataClient);
+        options.setDefaultODataClient(this.sharedClient.EmployeeQuery, { args: {} });
         options.setCreateDataRow(
             (rowIndex: number, columns: ODataColumn[], record: any, view: GridRowView) =>
                 new ODataDemoRow(rowIndex, columns, record, view)
         );
         options.endColumns.add('Action', this.view.btnGroupColumn);
         options.endColumns.add('Dropdown', this.view.dropdownColumn);
-        const odataComponent = new ODataComponent(this.view.odataComponentView, options.build());
-        //odataComponent.hideFooter();
-        odataComponent.when.dataCellClicked.then(this.onDataCellClick.bind(this));
-        odataComponent.refresh();
+        this.odataComponent = new ODataComponent(this.view.odataComponentView, options.build());
+        //this.odataComponent.hideFooter();
+        this.odataComponent.when.dataCellClicked.then(this.onDataCellClick.bind(this));
+        this.odataComponent.when.refreshed.then(this.onRefreshed.bind(this));
+        const page = Url.current().getQueryValue('page');
+        if (page) {
+            this.odataComponent.setCurrentPage(Number(page));
+        }
+        this.odataComponent.refresh();
+        const url1 = Url.current();
+        console.log(`[${new Date().toISOString()}] page load ${url1.value()}`);
+        window.onpopstate = this.onPopState.bind(this);
+    }
+
+    private onPopState() {
+        const url1 = Url.current();
+        console.log(`[${new Date().toISOString()}] pop state ${url1.value()}`);
+        //const pageText = Url.current().getQueryValue('page');
+        //const page = pageText ? Number(pageText) : 1;
+        //if (page !== this.odataComponent.pageNumber) {
+        //    this.odataComponent.setCurrentPage(page);
+        //    this.odataComponent.refresh();
+        //}
+    }
+
+    private onRefreshed(args: ODataRefreshedEventArgs) {
+        const page = args.page > 1 ? args.page.toString() : '';
+        const url = UrlBuilder.current();
+        const queryPage = url.getQueryValue('page');
+        if (page !== queryPage) {
+            if (page) {
+                url.replaceQuery('page', page);
+            }
+            else {
+                url.removeQuery('page');
+            }
+            history.replaceState({}, '', url.value());
+        }
     }
 
     private onDataCellClick(args: ODataCellClickedEventArgs) {

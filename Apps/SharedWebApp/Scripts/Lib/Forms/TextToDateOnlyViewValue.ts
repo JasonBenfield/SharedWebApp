@@ -1,10 +1,11 @@
-﻿import { TypedFieldViewValue } from "./TypedFieldViewValue";
+﻿import { DateOnly } from "../DateOnly";
+import { TypedFieldViewValue } from "./TypedFieldViewValue";
 
-export class TextToDateViewValue extends TypedFieldViewValue<string, Date> {
+export class TextToDateOnlyViewValue extends TypedFieldViewValue<string, DateOnly> {
     protected _fromView(value: string) {
         if (value) {
             const match = /^(?<Year>\d{4})-(?<Month>\d{2})-(?<Day>\d{2})$/.exec(value);
-            return new Date(
+            return new DateOnly(
                 Number(match.groups.Year),
                 Number(match.groups.Month) - 1,
                 Number(match.groups.Day)

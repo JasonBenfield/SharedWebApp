@@ -17,12 +17,14 @@ import { ODataHeaderCell } from "./ODataHeaderCell";
 import { ODataHeaderCellView } from "./ODataHeaderCellView";
 import { ODataPage } from "./ODataPage";
 import { ODataQueryBuilder } from "./ODataQueryBuilder";
+import { ISerializableFilter } from "./ODataQueryFilterBuilder";
+import { ODataRefreshedEventArgs } from "./ODataRefreshedEventArgs";
 import { SourceType } from "./SourceType";
 import { IODataClient, SaveChangesOptions } from "./Types";
 
 type Events = {
     dataCellClicked: ODataCellClickedEventArgs;
-    refreshed: any;
+    refreshed: ODataRefreshedEventArgs;
 };
 
 export class ODataComponent<TEntity> {
@@ -33,7 +35,7 @@ export class ODataComponent<TEntity> {
     private readonly selectionColumn: ODataColumn;
     private readonly columns: ODataColumnAccessor;
     private readonly query: ODataQueryBuilder;
-    private readonly currentPage: ODataPage;
+    private readonly _currentPage: ODataPage;
     private readonly footerComponent: ODataFooterComponent;
     private readonly refreshCommand: AsyncCommand;
     private readonly excelCommand: AsyncCommand;
@@ -47,7 +49,7 @@ export class ODataComponent<TEntity> {
         this,
         {
             dataCellClicked: null as ODataCellClickedEventArgs,
-            refreshed: null as any
+            refreshed: null as ODataRefreshedEventArgs
         }
     );
     readonly when = this.eventSource.when;
@@ -83,28 +85,29 @@ export class ODataComponent<TEntity> {
             const serializedSelect = localStorage.getItem(this.getStorageSelectKey());
             if (serializedSelect) {
                 this.query.select.clear();
-                this.query.select.fromSerialized(JSON.parse(serializedSelect));
+                this.query.select.fromSerialized(JSON.parse(serializedSelect), this.columns.values());
             }
         }
         if (options.saveChangesOptions.filter) {
             const serializedFilter = localStorage.getItem(this.getStorageFilterKey());
             if (serializedFilter) {
                 this.query.filter.clear();
-                this.query.filter.fromSerialized(JSON.parse(serializedFilter));
+                const deserialized = JSON.parse(serializedFilter) as ISerializableFilter;
+                this.query.filter.fromSerialized(deserialized, this.columns.values());
             }
         }
         if (options.saveChangesOptions.orderby) {
             const serializedOrderBy = localStorage.getItem(this.getStorageOrderByKey());
             if (serializedOrderBy) {
                 this.query.orderBy.clear();
-                this.query.orderBy.fromSerialized(JSON.parse(serializedOrderBy));
+                this.query.orderBy.fromSerialized(JSON.parse(serializedOrderBy), this.columns.values());
             }
         }
         this.grid = new ODataGrid(view.grid, options.createDataRow);
         this.alert = new MessageAlert(view.alert);
         this.modalODataComponent = new ModalODataComponent(this.query, this.columns, view.modalODataComponent);
-        this.currentPage = new ODataPage(options.pageSize);
-        this.currentPage.pageChanged(1, this.query);
+        this._currentPage = new ODataPage(options.pageSize);
+        this._currentPage.pageChanged(1, this.query);
         this.footerComponent = new ODataFooterComponent(this.view.footerComponent);
         this.refreshCommand = new AsyncCommand(this._refresh.bind(this));
         this.refreshCommand.add(this.view.footerComponent.addRefreshButton());
@@ -116,6 +119,8 @@ export class ODataComponent<TEntity> {
         this.grid.when.headerCellDropped.then(this.onHeaderCellDropped.bind(this));
         this.grid.when.dataCellClicked.then(this.onDataCellClicked.bind(this));
     }
+
+    get pageNumber() { return this._currentPage.page; }
 
     private exportToExcel() {
         this.odataClient.toExcel(this.query.buildToExcel());
@@ -159,8 +164,15 @@ export class ODataComponent<TEntity> {
     }
 
     private onPageRequested(page: number) {
-        this.currentPage.pageChanged(page, this.query);
+        this._currentPage.pageChanged(page, this.query);
         this.refresh();
+    }
+
+    setCurrentPage(page: number) {
+        if (!page || Number.isNaN(page) || page < 0) {
+            page = 1;
+        }
+        this._currentPage.pageChanged(page, this.query);
     }
 
     showFooter() {
@@ -197,37 +209,45 @@ export class ODataComponent<TEntity> {
             this.alert.danger(err ? err.toString() : 'An Error Occurred');
             return;
         }
-        this.currentPage.countChanged(result.count);
-        const gridColumns: ODataColumn[] = [];
-        if (this.options.canSelectColumns) {
-            gridColumns.push(this.selectionColumn);
+        this._currentPage.countChanged(result.count);
+        if (result.count > 0 && this.pageNumber > this._currentPage.numberOfPages) {
+            this._currentPage.pageChanged(this._currentPage.numberOfPages, this.query);
+            await this._refresh();
         }
-        gridColumns.push(...this.options.startColumns);
-        const selectedColumnNames = this.query.select.getExplicitlySelected();
-        gridColumns.push(...this.columns.columns(selectedColumnNames));
-        gridColumns.push(...this.options.endColumns);
-        this.grid.setData(gridColumns, result.records);
-        this.footerComponent.setPaging(
-            this.currentPage.page,
-            this.currentPage.numberOfPages
-        );
-        this.footerComponent.setCount(
-            this.currentPage.startRecord,
-            this.currentPage.startRecord + result.records.length - 1,
-            result.count
-        );
-        this.grid.filterChanged(this.query.filter);
-        this.grid.orderByChanged(this.query.orderBy);
-        if (this.saveChangesOptions.select) {
-            localStorage.setItem(this.getStorageSelectKey(), JSON.stringify(this.query.select.serialize()));
+        else {
+            const gridColumns: ODataColumn[] = [];
+            if (this.options.canSelectColumns) {
+                gridColumns.push(this.selectionColumn);
+            }
+            gridColumns.push(...this.options.startColumns);
+            const selectedColumnNames = this.query.select.getExplicitlySelected();
+            gridColumns.push(...this.columns.columns(selectedColumnNames));
+            gridColumns.push(...this.options.endColumns);
+            this.grid.setData(gridColumns, result.records);
+            this.footerComponent.setPaging(
+                this._currentPage.page,
+                this._currentPage.numberOfPages
+            );
+            this.footerComponent.setCount(
+                this._currentPage.startRecord,
+                this._currentPage.startRecord + result.records.length - 1,
+                result.count
+            );
+            this.grid.filterChanged(this.query.filter);
+            this.grid.orderByChanged(this.query.orderBy);
+            if (this.saveChangesOptions.select) {
+                localStorage.setItem(this.getStorageSelectKey(), JSON.stringify(this.query.select.serialize()));
+            }
+            if (this.saveChangesOptions.filter) {
+                localStorage.setItem(this.getStorageFilterKey(), JSON.stringify(this.query.filter.serialize()));
+            }
+            if (this.saveChangesOptions.orderby) {
+                localStorage.setItem(this.getStorageOrderByKey(), JSON.stringify(this.query.orderBy.serialize()));
+            }
+            this.eventSource.events.refreshed.invoke(
+                new ODataRefreshedEventArgs(this._currentPage.page)
+            );
         }
-        if (this.saveChangesOptions.filter) {
-            localStorage.setItem(this.getStorageFilterKey(), JSON.stringify(this.query.filter.serialize()));
-        }
-        if (this.saveChangesOptions.orderby) {
-            localStorage.setItem(this.getStorageOrderByKey(), JSON.stringify(this.query.orderBy.serialize()));
-        }
-        this.eventSource.events.refreshed.invoke();
     }
 
     private getStorageSelectKey() {

@@ -1,9 +1,10 @@
 ﻿import { ContextualClass } from '../../Lib/ContextualClass';
 import { CssLengthUnit } from '../../Lib/CssLengthUnit';
 import { FlexCss } from '../../Lib/FlexCss';
+import { MarginCss } from '../../Lib/MarginCss';
 import { BlockView } from '../../Lib/Views/BlockView';
 import { ButtonCommandView } from '../../Lib/Views/Command';
-import { FormGroupAlertView, FormGroupGridView, FormGroupInputView, FormGroupSelectView, FormGroupTextAreaView, FormGroupTextView } from '../../Lib/Views/FormGroup';
+import { FormGroupAlertView, FormGroupDateTimeInputView, FormGroupGridView, FormGroupInputView, FormGroupSelectView, FormGroupTextAreaView, FormGroupTextView, FormGroupTimeInputView } from '../../Lib/Views/FormGroup';
 import { ListGroupView, TextListGroupItemView } from '../../Lib/Views/ListGroup';
 import { MessageAlertView } from '../../Lib/Views/MessageAlertView';
 import { TextHeading1View } from '../../Lib/Views/TextHeadings';
@@ -16,6 +17,9 @@ export class MainPageView extends SharedPageView {
     readonly demoFormGroupSelectView: FormGroupSelectView;
     readonly demoFormGroupTextAreaView: FormGroupTextAreaView;
     readonly demoFormGroupTextView: FormGroupTextView;
+    readonly demoFormGroupDateInputView: FormGroupInputView;
+    readonly demoFormGroupTimeInputView: FormGroupTimeInputView;
+    readonly demoFormGroupDateTimeInputView: FormGroupDateTimeInputView;
     readonly showButton: ButtonCommandView;
     readonly alertView: MessageAlertView;
     readonly valueListView: ListGroupView<TextListGroupItemView>;
@@ -35,14 +39,20 @@ export class MainPageView extends SharedPageView {
         this.heading.setText('Form Groups');
         const formGroupContainer = flexColumn.addView(FormGroupGridView);
         this.demoFormGroupInputView = formGroupContainer.addFormGroup(FormGroupInputView);
+        this.demoFormGroupInputView.input.setType('time');
         this.demoFormGroupAlertView = formGroupContainer.addFormGroup(FormGroupAlertView);
         this.demoFormGroupSelectView = formGroupContainer.addFormGroup(FormGroupSelectView);
         this.demoFormGroupTextAreaView = formGroupContainer.addFormGroup(FormGroupTextAreaView);
         this.demoFormGroupTextView = formGroupContainer.addFormGroup(FormGroupTextView);
+        this.demoFormGroupDateInputView = formGroupContainer.addFormGroup(FormGroupInputView);
+        this.demoFormGroupTimeInputView = formGroupContainer.addFormGroup(FormGroupTimeInputView);
+        this.demoFormGroupDateTimeInputView = formGroupContainer.addFormGroup(FormGroupDateTimeInputView);
+        formGroupContainer.setMargin(MarginCss.bottom(3));
         this.showButton = flexColumn.addView(BlockView).addView(ButtonCommandView);
         this.showButton.setWidth(CssLengthUnit.percentage(50));
         this.showButton.setText('Show Values');
         this.showButton.useOutlineStyle(ContextualClass.primary);
+        this.showButton.setMargin(MarginCss.bottom(3));
         this.alertView = flexColumn.addView(MessageAlertView);
         this.valueListView = flexColumn.addListGroup(TextListGroupItemView);
     }

@@ -1,6 +1,7 @@
 ﻿import 'mocha';
 import { expect } from 'chai';
 import { RelativeDateRange, RelativeDayOffset, RelativeMonthOffset, RelativeYearOffset } from '../Lib/RelativeDateRange';
+import { DateOnly } from '../Lib/DateOnly';
 
 describe('Relative Date Range', () => { 
     it('Previous Day', function () {
@@ -8,9 +9,9 @@ describe('Relative Date Range', () => {
             new RelativeDayOffset(-1),
             new RelativeDayOffset(0)
         );
-        const dateRange = relativeDateRange.toDateRange(new Date(2022, 5, 22));
-        expect(dateRange.start.value.toLocaleDateString()).to.equal('6/21/2022');
-        expect(dateRange.end.value.toLocaleDateString()).to.equal('6/22/2022');
+        const dateRange = relativeDateRange.toDateRange(new DateOnly(2022, 5, 22));
+        expect(dateRange.start.value.toLocaleString()).to.equal('6/21/2022');
+        expect(dateRange.end.value.toLocaleString()).to.equal('6/22/2022');
         expect(dateRange.end.isIncluded).to.be.false;
     });
     it('Previous Month', function () {
@@ -18,9 +19,9 @@ describe('Relative Date Range', () => {
             new RelativeMonthOffset(-1, 1),
             new RelativeMonthOffset(0, 'month-end')
         );
-        const dateRange = relativeDateRange.toDateRange(new Date(2022, 5, 22));
-        expect(dateRange.start.value.toLocaleDateString()).to.equal('5/1/2022');
-        expect(dateRange.end.value.toLocaleDateString()).to.equal('6/1/2022');
+        const dateRange = relativeDateRange.toDateRange(new DateOnly(2022, 5, 22));
+        expect(dateRange.start.value.toLocaleString()).to.equal('5/1/2022');
+        expect(dateRange.end.value.toLocaleString()).to.equal('6/1/2022');
         expect(dateRange.end.isIncluded).to.be.false;
     });
     it('Previous Year', function () {
@@ -28,9 +29,9 @@ describe('Relative Date Range', () => {
             new RelativeYearOffset(-1, 0, 1),
             new RelativeYearOffset(0, 11, 'month-end')
         );
-        const dateRange = relativeDateRange.toDateRange(new Date(2022, 5, 22));
-        expect(dateRange.start.value.toLocaleDateString()).to.equal('1/1/2021');
-        expect(dateRange.end.value.toLocaleDateString()).to.equal('1/1/2022');
+        const dateRange = relativeDateRange.toDateRange(new DateOnly(2022, 5, 22));
+        expect(dateRange.start.value.toLocaleString()).to.equal('1/1/2021');
+        expect(dateRange.end.value.toLocaleString()).to.equal('1/1/2022');
         expect(dateRange.end.isIncluded).to.be.false;
     });
     it('Two Months Ago Until Two Days Ago', function () {
@@ -39,9 +40,9 @@ describe('Relative Date Range', () => {
             new RelativeDayOffset(-2),
             false
         );
-        const dateRange = relativeDateRange.toDateRange(new Date(2022, 5, 22));
-        expect(dateRange.start.value.toLocaleDateString()).to.equal('4/22/2022');
-        expect(dateRange.end.value.toLocaleDateString()).to.equal('6/21/2022');
+        const dateRange = relativeDateRange.toDateRange(new DateOnly(2022, 5, 22));
+        expect(dateRange.start.value.toLocaleString()).to.equal('4/22/2022');
+        expect(dateRange.end.value.toLocaleString()).to.equal('6/21/2022');
         expect(dateRange.end.isIncluded).to.be.false;
     });
 });

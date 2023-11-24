@@ -5,10 +5,13 @@ import { SelectOption } from '../../Lib/Components/SelectOption';
 import { ContextualClass } from '../../Lib/ContextualClass';
 import { DelayedAction } from '../../Lib/DelayedAction';
 import { FormGroupAlert } from '../../Lib/Forms/FormGroupAlert';
+import { FormGroupDateInput } from '../../Lib/Forms/FormGroupDateInput';
+import { FormGroupDateTimeInput } from '../../Lib/Forms/FormGroupDateTimeInput';
 import { FormGroupInput } from '../../Lib/Forms/FormGroupInput';
 import { FormGroupSelect } from '../../Lib/Forms/FormGroupSelect';
 import { FormGroupText } from '../../Lib/Forms/FormGroupText';
 import { FormGroupTextArea } from '../../Lib/Forms/FormGroupTextArea';
+import { FormGroupTimeInput } from '../../Lib/Forms/FormGroupTimeInput';
 import { TextToTextViewValue } from '../../Lib/Forms/TextToTextViewValue';
 import { TextListGroupItemView } from '../../Lib/Views/ListGroup';
 import { DefaultPageContext } from '../DefaultPageContext';
@@ -21,6 +24,9 @@ class MainPage extends SharedPage {
     private readonly demoFormGroupSelect: FormGroupSelect<string>;
     private readonly demoFormGroupTextArea: FormGroupTextArea;
     private readonly demoFormGroupText: FormGroupText;
+    private readonly demoFormGroupDateInput: FormGroupDateInput;
+    private readonly demoFormGroupTimeInput: FormGroupTimeInput;
+    private readonly demoFormGroupDateTimeInput: FormGroupDateTimeInput;
     private readonly alert: MessageAlert;
     private readonly valueListGroup: ListGroup<TextListItem, TextListGroupItemView>;
 
@@ -45,6 +51,12 @@ class MainPage extends SharedPage {
         this.demoFormGroupText = new FormGroupText(view.demoFormGroupTextView);
         this.demoFormGroupText.setCaption('Text Field');
         this.demoFormGroupText.setValue('Text Value');
+        this.demoFormGroupDateInput = new FormGroupDateInput(view.demoFormGroupDateInputView);
+        this.demoFormGroupDateInput.setCaption('Date Field');
+        this.demoFormGroupTimeInput = new FormGroupTimeInput(view.demoFormGroupTimeInputView);
+        this.demoFormGroupTimeInput.setCaption('Time Input Field');
+        this.demoFormGroupDateTimeInput = new FormGroupDateTimeInput(view.demoFormGroupDateTimeInputView);
+        this.demoFormGroupDateTimeInput.setCaption('Date Time Input Field');
         this.alert = new MessageAlert(view.alertView);
         this.alert.info('Click "Show Values"', 'Instructions');
         this.valueListGroup = new ListGroup(view.valueListView);
@@ -58,12 +70,15 @@ class MainPage extends SharedPage {
             'In Progress'
         );
         const values = [
-            `${this.demoFormGroupInput.getCaption()}: ${this.demoFormGroupInput.getValue()}`,
-            `${this.demoFormGroupAlert.getCaption()}: ${this.demoFormGroupAlert.getValue()}`,
-            `${this.demoFormGroupSelect.getCaption()}: ${this.demoFormGroupSelect.getValue()}`,
-            `${this.demoFormGroupTextArea.getCaption()}: ${this.demoFormGroupTextArea.getValue()}`,
-            `${this.demoFormGroupText.getCaption()}: ${this.demoFormGroupText.getValue()}`,
-        ];
+            this.demoFormGroupInput,
+            this.demoFormGroupAlert,
+            this.demoFormGroupSelect,
+            this.demoFormGroupTextArea,
+            this.demoFormGroupText,
+            this.demoFormGroupDateInput,
+            this.demoFormGroupTimeInput,
+            this.demoFormGroupDateTimeInput
+        ].map(fg => `${fg.getCaption()}: ${fg.getValue()}`);
         this.valueListGroup.setItems(values, (v, itemView) => new TextListItem(v, itemView));
         this.alert.success('These are the values:');
     }

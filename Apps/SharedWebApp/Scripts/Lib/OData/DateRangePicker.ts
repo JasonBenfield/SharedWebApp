@@ -1,22 +1,23 @@
 ﻿import { BasicComponent } from "../Components/BasicComponent";
 import { BooleanInputControl } from "../Components/BooleanInputControl";
 import { InputControl } from "../Components/InputControl";
+import { DateOnly } from "../DateOnly";
 import { DateRange } from "../DateRange";
-import { TextToDateViewValue } from "../Forms/TextToDateViewValue";
+import { DebouncedAction } from "../DebouncedAction";
+import { EventSource } from '../Events';
+import { TextToDateOnlyViewValue } from "../Forms/TextToDateOnlyViewValue";
 import { ValueRangeBound } from "../ValueRangeBound";
 import { ValueRangePickerView } from "./ValueRangePickerView";
-import { EventSource } from '../Events';
-import { DebouncedAction } from "../DebouncedAction";
 
 type Events = { valueChanged: DateRange };
 
 export class DateRangePicker extends BasicComponent {
     protected readonly view: ValueRangePickerView;
     private readonly fromCheck: BooleanInputControl;
-    private readonly from: InputControl<Date>;
+    private readonly from: InputControl<DateOnly>;
     private readonly fromInclude: BooleanInputControl;
     private readonly toCheck: BooleanInputControl;
-    private readonly to: InputControl<Date>;
+    private readonly to: InputControl<DateOnly>;
     private readonly toInclude: BooleanInputControl;
 
     private readonly eventSource = new EventSource<Events>(this, { valueChanged: null as DateRange });
@@ -25,11 +26,11 @@ export class DateRangePicker extends BasicComponent {
     constructor(view: ValueRangePickerView) {
         super(view);
         this.fromCheck = this.addComponent(new BooleanInputControl(view.fromCheckInput));
-        this.from = this.addComponent(new InputControl<Date>(view.fromInput, new TextToDateViewValue()));
+        this.from = this.addComponent(new InputControl<DateOnly>(view.fromInput, new TextToDateOnlyViewValue()));
         view.fromInput.setType('date');
         this.fromInclude = this.addComponent(new BooleanInputControl(view.fromIncludeInput));
         this.toCheck = this.addComponent(new BooleanInputControl(view.toCheckInput));
-        this.to = this.addComponent(new InputControl<Date>(view.toInput, new TextToDateViewValue()));
+        this.to = this.addComponent(new InputControl<DateOnly>(view.toInput, new TextToDateOnlyViewValue()));
         view.toInput.setType('date');
         this.toInclude = this.addComponent(new BooleanInputControl(view.toIncludeInput));
         this.fromCheck.when.valueChanged.then(this.onFromCheckChanged.bind(this));

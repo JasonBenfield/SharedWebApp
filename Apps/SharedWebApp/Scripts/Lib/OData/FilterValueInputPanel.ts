@@ -2,8 +2,10 @@
 import { Command } from "../Components/Command";
 import { InputControl } from "../Components/InputControl";
 import { TextComponent } from "../Components/TextComponent";
+import { DateOnly } from "../DateOnly";
 import { DelayedAction } from "../DelayedAction";
 import { MultiViewValue } from "../Forms/MultiViewValue";
+import { TextToDateOnlyViewValue } from "../Forms/TextToDateOnlyViewValue";
 import { TextToDateViewValue } from "../Forms/TextToDateViewValue";
 import { TextToNumberViewValue } from "../Forms/TextToNumberViewValue";
 import { TextToTextViewValue } from "../Forms/TextToTextViewValue";
@@ -27,8 +29,8 @@ export class FilterValueInputPanel implements IPanel {
     private readonly title: TextComponent;
     private readonly operation: TextComponent;
     private options: FilterColumnOptionsBuilder;
-    private readonly input: InputControl<number | string | Date>;
-    private viewValue: MultiViewValue<string, number | string | Date>;
+    private readonly input: InputControl<number | string | DateOnly>;
+    private viewValue: MultiViewValue<string, number | string | DateOnly>;
     private readonly saveCommand: Command;
 
     constructor(private readonly view: FilterValueInputPanelView) {
@@ -80,7 +82,7 @@ export class FilterValueInputPanel implements IPanel {
             this.view.valueInput.setType('text');
         }
         else if (options.column.sourceType.isDate()) {
-            this.viewValue.setViewValue(new TextToDateViewValue());
+            this.viewValue.setViewValue(new TextToDateOnlyViewValue());
             this.view.valueInput.setType('date');
         }
         else {

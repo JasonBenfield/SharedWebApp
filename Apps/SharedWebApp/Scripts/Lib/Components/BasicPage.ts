@@ -7,7 +7,7 @@ import { UserMenuComponent } from "./UserMenuComponent";
 export class BasicPage {
     protected readonly userMenu: UserMenuComponent;
 
-    constructor(protected readonly defaultClient: AppClient, protected readonly view: BasicPageView) {
+    constructor(private readonly defaultClient: AppClient, protected readonly view: BasicPageView) {
         new TextComponent(view.appTitle).setText(pageContext.AppTitle);
         new TextComponent(view.pageTitle).setText(pageContext.PageTitle);
         const environmentName = new TextComponent(view.environmentName);

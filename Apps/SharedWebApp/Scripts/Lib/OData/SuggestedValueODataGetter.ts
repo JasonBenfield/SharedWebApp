@@ -1,4 +1,5 @@
-﻿import { ODataQueryBuilder } from "./ODataQueryBuilder";
+﻿import { ODataColumn } from "./ODataColumn";
+import { ODataQueryBuilder } from "./ODataQueryBuilder";
 import { FilterConditionFunction, FilterConditionOperation, FilterField, FilterStringValue } from "./ODataQueryFilterBuilder";
 import { IODataClient, ISuggestedValueGetter } from "./Types";
 

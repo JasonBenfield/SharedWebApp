@@ -26,6 +26,7 @@ builder.Services.AddScoped<SharedAppApiFactory>();
 builder.Services.AddScoped<AppApiFactory>(sp => sp.GetRequiredService<SharedAppApiFactory>());
 builder.Services.AddScoped(sp => (SharedAppApi)sp.GetRequiredService<IAppApi>());
 builder.Services.AddResponseCaching();
+builder.Services.AddSingleton<AppPageModel>();
 builder.Services
     .AddMvc()
     .AddOData(options =>
@@ -69,10 +70,9 @@ app.UseStaticFiles();
 app.UseResponseCaching();
 app.UseRouting();
 app.UseAuthorization();
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
-});
+app.MapControllerRoute
+(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}"
+);
 await app.RunAsync();

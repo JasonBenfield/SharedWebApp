@@ -5,8 +5,10 @@ import { InputControl } from "../Components/InputControl";
 import { ListGroup } from "../Components/ListGroup";
 import { MessageAlert } from "../Components/MessageAlert";
 import { TextComponent } from "../Components/TextComponent";
+import { DateOnly } from "../DateOnly";
 import { DebouncedAction } from "../DebouncedAction";
 import { MultiViewValue } from "../Forms/MultiViewValue";
+import { TextToDateOnlyViewValue } from "../Forms/TextToDateOnlyViewValue";
 import { TextToDateViewValue } from "../Forms/TextToDateViewValue";
 import { TextToNumberViewValue } from "../Forms/TextToNumberViewValue";
 import { TextToTextViewValue } from "../Forms/TextToTextViewValue";
@@ -33,9 +35,9 @@ export class FilterMultiValueInputPanel implements IPanel {
     private readonly awaitable = new Awaitable<Result>();
     private readonly title: TextComponent;
     private options: FilterColumnOptionsBuilder;
-    private readonly input: InputControl<number | string | Date>;
+    private readonly input: InputControl<number | string | DateOnly>;
     private readonly ignoreCaseInput: BooleanInputControl;
-    private viewValue: MultiViewValue<string, number | string | Date>;
+    private viewValue: MultiViewValue<string, number | string | DateOnly>;
     private readonly alert: MessageAlert;
     private readonly suggestedValues: ListGroup<SuggestedValueListItem, SuggestedValueListItemView>;
     private readonly selectedValues: ListGroup<SelectedValueListItem, SelectedValueListItemView>;
@@ -76,14 +78,16 @@ export class FilterMultiValueInputPanel implements IPanel {
     );
 
     private async getSuggestedValues() {
-        const suggestedValues = await this.alert.infoAction(
-            'Loading...',
-            () => this.options.column.suggestedValueGetter.getSuggestedValues(this.input.getValue())
-        );
-        this.suggestedValues.setItems(
-            suggestedValues as string[],
-            (v, itemView) => new SuggestedValueListItem(v, v, itemView)
-        );
+        if (this.options) {
+            const suggestedValues = await this.alert.infoAction(
+                'Loading...',
+                () => this.options.column.suggestedValueGetter.getSuggestedValues(this.input.getValue())
+            );
+            this.suggestedValues.setItems(
+                suggestedValues as string[],
+                (v, itemView) => new SuggestedValueListItem(v, v, itemView)
+            );
+        }
     }
 
     private onSuggestedValueAddClicked(item: SuggestedValueListItem) {
@@ -176,7 +180,7 @@ export class FilterMultiValueInputPanel implements IPanel {
             this.view.valueInput.setType('text');
         }
         else if (options.column.sourceType.isDate()) {
-            this.viewValue.setViewValue(new TextToDateViewValue());
+            this.viewValue.setViewValue(new TextToDateOnlyViewValue());
             this.view.valueInput.setType('date');
         }
         else {

@@ -1,5 +1,6 @@
-﻿import { LinkComponent } from "../Components/LinkComponent";
-import { BasicGridRowView, GridRowView, LinkGridRowView } from "../Views/Grid";
+﻿import { AppClientQuery } from "../Http/AppClientQuery";
+import { BasicGridRowView, LinkGridRowView } from "../Views/Grid";
+import { DefaultODataClient } from "./DefaultODataClient";
 import { ODataColumn } from "./ODataColumn";
 import { ODataColumnBuilder } from "./ODataColumnBuilder";
 import { ODataColumnViewBuilder } from "./ODataColumnViewBuilder";
@@ -73,6 +74,10 @@ export class ODataComponentOptionsBuilder<TEntity> {
             return row;
         };
         return this;
+    }
+
+    setDefaultODataClient<TArgs>(clientQuery: AppClientQuery<TArgs, TEntity>, queryArgs: { args: TArgs }) {
+        return this.setODataClient(new DefaultODataClient(clientQuery, queryArgs));
     }
 
     setODataClient(odataClient: IODataClient<TEntity>) {

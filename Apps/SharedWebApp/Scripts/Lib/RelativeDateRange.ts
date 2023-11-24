@@ -1,4 +1,5 @@
-﻿import { DateRange } from "./DateRange";
+﻿import { DateOnly } from "./DateOnly";
+import { DateRange } from "./DateRange";
 import { FormattedDate } from "./FormattedDate";
 import { ValueRangeBound } from "./ValueRangeBound";
 
@@ -64,14 +65,14 @@ export class RelativeYearOffset {
         return `${yearOffsetText} year${pluralized}${type} in ${month} ${dayOfMonth}`;
     }
 
-    toDate(referenceDate: Date) {
+    toDate(referenceDate: DateOnly) {
         return this.dayOfMonth.toDate(
-            new Date(
-                referenceDate.getFullYear() + this.yearOffset,
-                typeof this.month === 'number' ? this.month : referenceDate.getMonth(),
+            new DateOnly(
+                referenceDate.year + this.yearOffset,
+                typeof this.month === 'number' ? this.month : referenceDate.month,
                 1
             ),
-            referenceDate.getDate()
+            referenceDate.date
         );
     }
 
@@ -128,14 +129,14 @@ export class RelativeMonthOffset {
         return `${monthOffsetText} month${pluralized}${type} ${dayOfMonth}`;
     }
 
-    toDate(referenceDate: Date) {
+    toDate(referenceDate: DateOnly) {
         return this.dayOfMonth.toDate(
-            new Date(
-                referenceDate.getFullYear(),
-                referenceDate.getMonth() + this.monthOffset,
+            new DateOnly(
+                referenceDate.year,
+                referenceDate.month + this.monthOffset,
                 1
             ),
-            referenceDate.getDate()
+            referenceDate.date
         );
     }
 
@@ -213,10 +214,10 @@ export class DayOfMonth {
         return formatted;
     }
 
-    toDate(startOfMonth: Date, referenceDay: number) {
-        const result = new Date(
-            startOfMonth.getFullYear(),
-            startOfMonth.getMonth(),
+    toDate(startOfMonth: DateOnly, referenceDay: number) {
+        const result = new DateOnly(
+            startOfMonth.year,
+            startOfMonth.month,
             1
         );
         let dayOfMonth: number;
@@ -229,13 +230,13 @@ export class DayOfMonth {
         else {
             dayOfMonth = this.value;
         }
-        const monthEnd = new Date(
-            result.getFullYear(),
-            result.getMonth() + 1,
+        const monthEnd = new DateOnly(
+            result.year,
+            result.month + 1,
             0
         );
-        if (dayOfMonth > monthEnd.getDate()) {
-            dayOfMonth = monthEnd.getDate();
+        if (dayOfMonth > monthEnd.date) {
+            dayOfMonth = monthEnd.date;
         }
         result.setDate(dayOfMonth);
         return result;
@@ -273,12 +274,9 @@ export class RelativeDayOffset {
         return `${dayOffsetText} day${pluralized}${type}`;
     }
 
-    toDate(referenceDate: Date) {
-        const result = new Date(
-            referenceDate.getFullYear(),
-            referenceDate.getMonth(),
-            referenceDate.getDate() + this.dayOffset
-        );
+    toDate(referenceDate: DateOnly) {
+        const result = referenceDate.copy();
+        result.setDate(result.date + this.dayOffset);
         return result;
     }
 
@@ -347,22 +345,22 @@ export class RelativeDateRange {
         return '';
     }
 
-    toDateRange(referenceDate: Date = new Date()) {
-        const start = this.relativeStart
-            ? new ValueRangeBound(this.relativeStart.toDate(referenceDate), true)
-            : null;
-        const endReferenceDate = this.isEndRelativeToStart && start
-            ? start.value
-            : referenceDate;
-        const endDate = this.relativeEnd
-            ? new Date(this.relativeEnd.toDate(endReferenceDate).getTime())
-            : null;
+    toDateRange(referenceDate: DateOnly = DateOnly.today()) {
+        const start = this.relativeStart ?
+            new ValueRangeBound(this.relativeStart.toDate(referenceDate), true) :
+            null;
+        const endReferenceDate = this.isEndRelativeToStart && start ?
+            start.value :
+            referenceDate;
+        const endDate = this.relativeEnd ?
+            this.relativeEnd.toDate(endReferenceDate) :
+            null;
         if (endDate) {
-            endDate.setDate(endDate.getDate() + 1);
+            endDate.setDate(endDate.date + 1);
         }
-        const end = endDate
-            ? new ValueRangeBound(endDate, false)
-            : null;
+        const end = endDate ?
+            new ValueRangeBound(endDate, false) :
+            null;
         return new DateRange(start, end);
     }
 

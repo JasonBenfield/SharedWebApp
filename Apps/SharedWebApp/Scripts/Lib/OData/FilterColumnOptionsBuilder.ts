@@ -1,4 +1,5 @@
-﻿import { DateRange } from "../DateRange";
+﻿import { DateOnly } from "../DateOnly";
+import { DateRange } from "../DateRange";
 import { NumberRange } from "../NumberRange";
 import { RelativeDateRange } from "../RelativeDateRange";
 import { FilterSelection, FilterSelectionContains, FilterSelectionEndsWith, FilterSelectionEqual, FilterSelectionGreaterThan, FilterSelectionGreaterThanOrEqual, FilterSelectionIsBlank, FilterSelectionIsFalse, FilterSelectionIsNotBlank, FilterSelectionIsTrue, FilterSelectionLessThan, FilterSelectionLessThanOrEqual, FilterSelectionNotEqual, FilterSelections, FilterSelectionStartsWith, FilterSelectionStringEqual, FilterSelectionStringNotEqual } from "./FilterSelection";
@@ -119,7 +120,7 @@ export class FilterColumnOptionsBuilder {
         );
     }
 
-    setValues(value: number[] | Date[]) {
+    setValues(value: number[] | DateOnly[]) {
         if (
             this.selection instanceof FilterSelectionEqual ||
             this.selection instanceof FilterSelectionNotEqual
@@ -133,7 +134,7 @@ export class FilterColumnOptionsBuilder {
         }
     }
 
-    setValue(value: number | Date) {
+    setValue(value: number | DateOnly) {
         if (
             this.selection instanceof FilterSelectionEqual ||
             this.selection instanceof FilterSelectionNotEqual ||

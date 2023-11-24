@@ -1,7 +1,9 @@
-﻿import { DateRange, ISerializableDateRange } from "../DateRange";
+﻿import { DateOnly } from "../DateOnly";
+import { DateRange, ISerializableDateRange } from "../DateRange";
 import { JoinedStrings } from "../JoinedStrings";
 import { ISerializableNumberRange, NumberRange } from "../NumberRange";
 import { ISerializableRelativeDateRange, RelativeDateRange } from "../RelativeDateRange";
+import { ODataColumn } from "./ODataColumn";
 
 export interface IFilterSelectionValue {
     toField(): FilterField | FilterFieldFunction;
@@ -12,7 +14,7 @@ export interface ISerializableFilter {
     conditionClauses: ISerializableFilterPart<ISerializableFilterConditionClause>[];
 }
 
-interface ISerializableFilterPart<T> {
+export interface ISerializableFilterPart<T> {
     type: string;
     value: T;
 }
@@ -43,7 +45,7 @@ type SerializableFilterPart =
     ISerializableFilterConditionClause |
     ISerializableFilterAbsoluteNumberRange;
 
-class FilterPartFactory {
+export class FilterPartFactory {
     static create<T extends FilterPart>(
         serializablePart: ISerializableFilterPart<SerializableFilterPart>
     ): T {
@@ -303,7 +305,7 @@ export class FilterField {
     }
 
     isField(fieldName: string) {
-        return this.fieldName === fieldName;
+        return fieldName && this.fieldName.toLowerCase() === fieldName.toLowerCase();
     }
 
     format() {
@@ -433,7 +435,7 @@ export class FilterFieldFunction {
     }
 }
 
-export type FilterValueType = number | Date | boolean | number[] | Date[];
+export type FilterValueType = number | DateOnly | boolean | number[] | DateOnly[];
 
 interface ISerializableFilterValue {
     readonly value: FilterValueType;
@@ -886,14 +888,14 @@ type ConditionType =
     FilterAbsoluteDateRange |
     FilterAbsoluteNumberRange;
 
-type SerializableConditionType =
+export type SerializableConditionType =
     ISerializableFilterConditionOperation |
     ISerializableFilterConditionFunction |
     ISerializableFilterRelativeDateRange |
     ISerializableFilterAbsoluteDateRange |
     ISerializableFilterAbsoluteNumberRange;
 
-interface ISerializableFilterConditionClause {
+export interface ISerializableFilterConditionClause {
     readonly condition: ISerializableFilterPart<SerializableConditionType>;
     readonly conjunction: ISerializableFilterPart<ISerializableFilterConjunction>;
 }
@@ -946,19 +948,23 @@ export class FilterConditionClause {
 export class ODataQueryFilterBuilder {
     private readonly conditionClauses: FilterConditionClause[] = [];
 
-    constructor(serialized?: ISerializableFilter) {
+    constructor(serialized: ISerializableFilter, private readonly columns: ODataColumn[]) {
         if (serialized) {
-            this.fromSerialized(serialized);
+            this.fromSerialized(serialized, columns);
         }
     }
 
     fromFilter(filter: ODataQueryFilterBuilder) {
-        this.fromSerialized(filter.serialize());
+        this.fromSerialized(filter.serialize(), this.columns);
     }
 
-    fromSerialized(serialized: ISerializableFilter) {
+    fromSerialized(serialized: ISerializableFilter, columns: ODataColumn[]) {
         for (const part of serialized.conditionClauses) {
-            this.conditionClauses.push(FilterPartFactory.create(part));
+            const deserializedCondition = FilterPartFactory.create(part) as FilterConditionClause;
+            const column = this.columns.find(c => deserializedCondition.isField(c.columnName));
+            if (column) {
+                this.conditionClauses.push(deserializedCondition);
+            }
         }
     }
 

@@ -42,8 +42,9 @@ export class SelectControl<TValue> extends BasicComponent {
         this.resetValue(originalValue, items);
     }
 
-    setItemCaption(itemCaption: string) {
+    setItemCaption(itemCaption: string, ...items: SelectOption<TValue>[]) {
         const originalValue = this.getValue();
+        this.items.splice(0, this.items.length, ...items);
         if (this.itemCaption) {
             this.items.splice(0, 1);
         }

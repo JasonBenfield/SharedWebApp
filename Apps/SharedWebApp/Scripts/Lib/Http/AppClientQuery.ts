@@ -8,7 +8,6 @@ import { AppResourceUrl } from "./AppResourceUrl";
 import { ErrorFromHttpResult } from "./ErrorFromHttpResult";
 import { HttpClient } from "./HttpClient";
 import { ODataResult } from "./ODataResult";
-import { ParsedDateObject } from "./ParsedDateObject";
 import { WebPage } from "./WebPage";
 
 interface IODataError {
@@ -66,7 +65,6 @@ export class AppClientQuery<TModel, TEntity> {
         let apiError: AppClientError;
         let rawResult = postResult && postResult.result;
         if (postResult.isSuccessful()) {
-            rawResult = new ParsedDateObject(rawResult).value;
             result = new ODataResult<TEntity>(rawResult.value, rawResult['@odata.count']);
         }
         else {

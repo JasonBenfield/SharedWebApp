@@ -3,7 +3,7 @@ import { AppClientEvents } from "./AppClientEvents";
 import { AppResourceUrl } from "./AppResourceUrl";
 import { ErrorFromHttpResult } from "./ErrorFromHttpResult";
 import { HttpClient } from "./HttpClient";
-import { ParsedDateObject } from "./ParsedDateObject";
+import { ParsedString } from "./ParsedString";
 
 export class AppClientContent<TArgs,TResult> {
     private resourceUrl: AppResourceUrl;
@@ -30,12 +30,7 @@ export class AppClientContent<TArgs,TResult> {
         result = postResult && postResult.result;
         if (postResult.isSuccessful()) {
             if (typeof result === 'string') {
-                if (ParsedDateObject.isDateString(result)) {
-                    result = <any>new Date(Date.parse(result));
-                }
-            }
-            else {
-                result = new ParsedDateObject(result).value;
+                result = new ParsedString(result).value;
             }
         }
         else {

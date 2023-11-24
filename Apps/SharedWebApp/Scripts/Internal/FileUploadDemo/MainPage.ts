@@ -25,11 +25,11 @@ class MainPage extends SharedPage {
     }
 
     protected createUserMenu() {
-        return new CustomUserMenu(this.defaultClient, this.view.userMenu);
+        return new CustomUserMenu(this.sharedClient, this.view.userMenu);
     }
 
     private upload() {
-        return this.defaultClient.Employee.AddProduct({
+        return this.sharedClient.Employee.AddProduct({
             Name: 'Whatever',
             Quantity: 1,
             Price: 1.23,

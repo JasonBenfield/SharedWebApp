@@ -7,7 +7,7 @@ import { MenuItemComponent } from "./MenuItemComponent";
 
 export class MenuComponent extends BasicComponent {
     constructor(
-        private readonly app: AppClient,
+        private readonly appClient: AppClient,
         private readonly menuName: string,
         protected readonly view: (BasicComponentView & IMenuView)
     ) {
@@ -36,8 +36,8 @@ export class MenuComponent extends BasicComponent {
 
     async refresh() {
         let links: ILinkModel[];
-        if (this.app) {
-            links = await this.app.User.GetMenuLinks(this.menuName);
+        if (this.appClient) {
+            links = await this.appClient.User.GetMenuLinks(this.menuName);
         }
         else {
             links = [];

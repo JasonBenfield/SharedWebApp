@@ -1,10 +1,9 @@
-﻿import { TimeSpan } from "../TimeSpan";
-import { AppClientError } from "./AppClientError";
+﻿import { AppClientError } from "./AppClientError";
 import { AppClientEvents } from "./AppClientEvents";
 import { AppResourceUrl } from "./AppResourceUrl";
 import { ErrorFromHttpResult } from "./ErrorFromHttpResult";
 import { HttpClient } from "./HttpClient";
-import { ParsedDateObject } from "./ParsedDateObject";
+import { ParsedString } from "./ParsedString";
 
 export class AppClientAction<TArgs, TResult> {
     private resourceUrl: AppResourceUrl;
@@ -31,15 +30,7 @@ export class AppClientAction<TArgs, TResult> {
         result = postResult && postResult.result && postResult.result.Data;
         if (postResult.isSuccessful()) {
             if (typeof result === 'string') {
-                if (ParsedDateObject.isDateString(result)) {
-                    result = new Date(Date.parse(result)) as any;
-                }
-                else if (TimeSpan.canParse(result)) {
-                    result = TimeSpan.parse(result) as any;
-                }
-            }
-            else {
-                result = new ParsedDateObject(result).value;
+                result = new ParsedString(result).value;
             }
         }
         else {

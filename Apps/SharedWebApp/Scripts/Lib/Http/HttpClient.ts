@@ -1,6 +1,6 @@
 ﻿import { isArray } from "lodash";
 import { serialize } from "object-to-formdata";
-import { JsonText } from "./JsonText";
+import { ParsedJsonText } from "./ParsedJsonText";
 
 export class HttpPostResult {
     constructor(
@@ -42,7 +42,7 @@ export class HttpClient {
         }
         else {
             const isString = typeof data === 'string' && contentType && !contentType.startsWith('application/json');
-            body = isString ? data : new JsonText(data).toString();
+            body = isString ? data : JSON.stringify(data);
         }
         return this.execute('POST', url, body, contentType);
     }
@@ -77,7 +77,7 @@ export class HttpClient {
                         result = oReq.responseText;
                     }
                     else {
-                        result = JSON.parse(oReq.responseText);
+                        result = new ParsedJsonText(oReq.responseText).value;
                     }
                     resolve(new HttpPostResult(result, url, oReq.status, oReq.responseText));
                 }
