@@ -44,4 +44,10 @@ describe('Time Span', () => {
         expect(new TimeSpan(1, 2, 3, 4, 5235555).toNearestSecond().toString()).to.equal('1.02:03:05');
         expect(new TimeSpan(1, 2, 3, 32, 5235555).toNearestMinute().toString()).to.equal('1.02:04');
     });
+    it('Normalize Time Span', function () {
+        expect(new TimeSpan(1, 24, 3, 4).toISOString()).to.equal('2.00:03:04.0000000');
+        expect(new TimeSpan(1, 12, 61, 4).toISOString()).to.equal('1.13:01:04.0000000');
+        expect(new TimeSpan(1, 12, 3, 65).toISOString()).to.equal('1.12:04:05.0000000');
+        expect(new TimeSpan(1, 25, 63, 65).toISOString()).to.equal('2.02:04:05.0000000');
+    });
 });

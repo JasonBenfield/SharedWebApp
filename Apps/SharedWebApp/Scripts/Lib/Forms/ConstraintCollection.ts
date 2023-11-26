@@ -1,5 +1,7 @@
 ﻿import { DateOnly } from "../DateOnly";
+import { DateTimeOffset } from "../DateTimeOffset";
 import { ErrorModel } from "../ErrorModel";
+import { TimeOnly } from "../TimeOnly";
 import { ConstraintResult } from "./ConstraintResult";
 import { NotWhitespaceConstraint } from "./NotWhitespaceConstraint";
 
@@ -65,16 +67,31 @@ export class DateConstraintCollection extends ConstraintCollection {
 }
 
 export class DateTimeConstraintCollection extends ConstraintCollection {
-    mustBeOnOrAbove(lowerValue: Date, failureMessage: string) {
+    mustBeOnOrAbove(lowerValue: DateTimeOffset, failureMessage: string) {
         this.add(new LowerRangeConstraint(lowerValue, true, failureMessage));
     }
-    mustBeAbove(lowerValue: Date, failureMessage: string) {
+    mustBeAbove(lowerValue: DateTimeOffset, failureMessage: string) {
         this.add(new LowerRangeConstraint(lowerValue, false, failureMessage));
     }
-    mustBeOnOrBelow(upperValue: Date, failureMessage: string) {
+    mustBeOnOrBelow(upperValue: DateTimeOffset, failureMessage: string) {
         this.add(new UpperRangeConstraint(upperValue, true, failureMessage));
     }
-    mustBeBelow(upperValue: Date, failureMessage: string) {
+    mustBeBelow(upperValue: DateTimeOffset, failureMessage: string) {
+        this.add(new UpperRangeConstraint(upperValue, false, failureMessage));
+    }
+}
+
+export class TimeConstraintCollection extends ConstraintCollection {
+    mustBeOnOrAbove(lowerValue: TimeOnly, failureMessage: string) {
+        this.add(new LowerRangeConstraint(lowerValue, true, failureMessage));
+    }
+    mustBeAbove(lowerValue: TimeOnly, failureMessage: string) {
+        this.add(new LowerRangeConstraint(lowerValue, false, failureMessage));
+    }
+    mustBeOnOrBelow(upperValue: TimeOnly, failureMessage: string) {
+        this.add(new UpperRangeConstraint(upperValue, true, failureMessage));
+    }
+    mustBeBelow(upperValue: TimeOnly, failureMessage: string) {
         this.add(new UpperRangeConstraint(upperValue, false, failureMessage));
     }
 }

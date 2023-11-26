@@ -6,9 +6,9 @@ import { SelectOption } from "../Components/SelectOption";
 import { TextComponent } from "../Components/TextComponent";
 import { DebouncedAction } from "../DebouncedAction";
 import { EventSource } from '../Events';
-import { FormattedDate } from "../FormattedDate";
 import { TextToNumberViewValue } from "../Forms/TextToNumberViewValue";
-import { DayOfMonth, DaysOfMonth, RelativeDayOffset, RelativeMonthOffset, RelativeOffset, RelativeYearOffset } from "../RelativeDateRange";
+import { Month } from "../Month";
+import { DayOfMonth, DaysOfMonth, MonthOfYear, RelativeDayOffset, RelativeMonthOffset, RelativeOffset, RelativeYearOffset } from "../RelativeDateRange";
 import { RelativeOffsetPickerView } from "./RelativeOffsetPickerView";
 
 enum UnitSelection {
@@ -28,8 +28,8 @@ export class RelativeOffsetPicker extends BasicComponent {
     private readonly offsetUnit: TextComponent;
     private readonly offsetType: TextComponent;
     private isOffsetNegative = false;
-    private readonly months: Date[] = [];
-    private readonly monthSelect: SelectControl<Date>;
+    private readonly months: Month[] = Month.Months;
+    private readonly monthSelect: SelectControl<Month>;
     private readonly daysOfMonth: DaysOfMonth;
     private readonly dayOfMonthSelect: SelectControl<DayOfMonth>;
 
@@ -39,11 +39,11 @@ export class RelativeOffsetPicker extends BasicComponent {
     constructor(view: RelativeOffsetPickerView) {
         super(view);
         this.offsetUnitSelect = this.addComponent(new SelectControl(view.offsetUnitSelect));
-        this.offsetUnitSelect.setItems(
+        this.offsetUnitSelect.setItems([
             new SelectOption(UnitSelection.Days, 'Days'),
             new SelectOption(UnitSelection.Months, 'Months'),
             new SelectOption(UnitSelection.Years, 'Years')
-        );
+        ]);
         this.offsetUnitSelect.when.valueChanged.then(this.onUnitSelectionChanged.bind(this));
         this.noOffsetCheck = this.addComponent(new FormCheck(view.noOffsetCheck));
         this.offsetInput = this.addComponent(new InputControl(view.offsetInput, new TextToNumberViewValue()));
@@ -51,17 +51,14 @@ export class RelativeOffsetPicker extends BasicComponent {
         this.offsetType = new TextComponent(view.offsetType);
         this.offsetIsNegative();
         this.dayOfMonthSelect = this.addComponent(new SelectControl(view.dayOfMonthSelect));
-        for (let month = 0; month < 12; month++) {
-            this.months.push(new Date(2022, month, 1));
-        }
         const monthOptions = this.months.map(
-            m => new SelectOption(m, new FormattedDate(m, { month: 'long' }).formatDate())
+            m => new SelectOption(m, m.formatLongName())
         );
         this.monthSelect = this.addComponent(new SelectControl(view.monthSelect));
-        this.monthSelect.setItems(...monthOptions);
+        this.monthSelect.setItems(monthOptions);
         this.daysOfMonth = new DaysOfMonth();
         const daysOfMonthOptions = this.daysOfMonth.values.map(d => new SelectOption(d, d.format()));
-        this.dayOfMonthSelect.setItems(...daysOfMonthOptions);
+        this.dayOfMonthSelect.setItems(daysOfMonthOptions);
         this.setValue(null);
         this.offsetInput.when.valueChanged.then(this.onOffsetInputChanged.bind(this));
         this.noOffsetCheck.when.valueChanged.then(this.onNoOffsetCheckChanged.bind(this));
@@ -209,7 +206,9 @@ export class RelativeOffsetPicker extends BasicComponent {
                 isNoOffset = relativeOffset.yearOffset === 0;
                 this.noOffsetCheck.setValue(isNoOffset);
                 this.offsetInput.setValue(relativeOffset.yearOffset);
-                this.monthSelect.setValue(this.months[relativeOffset.month]);
+                if (relativeOffset.month instanceof Month) {
+                    this.monthSelect.setValue(relativeOffset.month);
+                }
                 this.dayOfMonthSelect.setValue(this.daysOfMonth.value(relativeOffset.dayOfMonth));
             }
         }
@@ -249,7 +248,7 @@ export class RelativeOffsetPicker extends BasicComponent {
                 relativeOffset = new RelativeMonthOffset(offsetValue, dayOfMonth);
             }
             else if (unitSelection === UnitSelection.Years) {
-                const month = this.monthSelect.getValue().getMonth();
+                const month = this.monthSelect.getValue();
                 const dayOfMonth = this.dayOfMonthSelect.getValue();
                 relativeOffset = new RelativeYearOffset(offsetValue, month, dayOfMonth);
             }

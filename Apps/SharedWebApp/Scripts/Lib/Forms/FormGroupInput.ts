@@ -11,9 +11,10 @@ export class FormGroupInput<TValue> extends FormGroup {
     constructor(view: FormGroupInputView | FormGroupInputGroupView, viewValue: TypedFieldViewValue<string, TValue>) {
         super(view);
         this.inputControl = this.addComponent(new InputControl(view.input, viewValue));
+        this.setLabelFor(this.inputControl);
         this.valueTextComponent = this.addComponent(new TextComponent(view.valueTextView));
     }
-
+    
     makeReadOnly() {
         const value = this.inputControl.getTextValue();
         this.inputControl.hide();
@@ -42,5 +43,17 @@ export class FormGroupInput<TValue> extends FormGroup {
 
     setValue(value: TValue) {
         this.inputControl.setValue(value);
+    }
+
+    setType(type: 'text' | 'hidden' | 'date' | 'number' | 'time' | 'file' | 'email' | 'month' | 'url') {
+        this.inputControl.setType(type);
+    }
+
+    setInputMode(inputmode: 'text' | 'decimal' | 'numeric' | 'tel' | 'search' | 'email' | 'url') {
+        this.inputControl.setInputMode(inputmode);
+    }
+
+    addDataList(...values: TValue[]) {
+        return this.inputControl.addDataList(...values);
     }
 }

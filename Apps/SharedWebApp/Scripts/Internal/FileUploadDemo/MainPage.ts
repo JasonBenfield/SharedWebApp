@@ -2,6 +2,8 @@
 import { FileInputControl, FileType } from '../../Lib/Components/FileInputControl';
 import { TextComponent } from '../../Lib/Components/TextComponent';
 import { TextLinkComponent } from '../../Lib/Components/TextLinkComponent';
+import { DateOnly } from '../../Lib/DateOnly';
+import { DateTimeOffset } from '../../Lib/DateTimeOffset';
 import { DefaultPageContext } from '../DefaultPageContext';
 import { SharedPage } from '../SharedPage';
 import { CustomUserMenu } from './CustomerUserMenu';
@@ -34,7 +36,7 @@ class MainPage extends SharedPage {
             Quantity: 1,
             Price: 1.23,
             File: this.fileInput.getFiles()[0],
-            TimeAdded: new Date(),
+            TimeAdded: DateTimeOffset.now(),
             Nested: { MoreFiles: this.fileInput.getFiles() }
         });
     }

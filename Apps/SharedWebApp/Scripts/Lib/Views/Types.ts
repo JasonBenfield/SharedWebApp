@@ -71,6 +71,7 @@ export interface IInputAttributes extends IHtmlAttributes {
     multiple?: boolean;
     step?: string;
     required?: boolean;
+    list?: string;
 }
 
 export interface ISelectAttributes extends IHtmlAttributes {
@@ -136,6 +137,13 @@ export interface ITextComponentView {
     hide();
     getText(): string;
     setText(text: string);
+    setTitle(title: string);
+}
+
+export interface ILabelView {
+    show();
+    hide();
+    setFor(forTarget: string);
     setTitle(title: string);
 }
 

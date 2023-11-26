@@ -11,9 +11,10 @@ export class FormGroupDateInput extends FormGroup {
     constructor(view: FormGroupInputView | FormGroupInputGroupView) {
         super(view);
         this.dateInputControl = this.addComponent(new DateInputControl(view.input));
+        this.setLabelFor(this.dateInputControl);
         this.valueTextComponent = this.addComponent(new TextComponent(view.valueTextView));
     }
-
+    
     makeReadOnly(format: (date: DateOnly) => string = FormGroupDateInput.defaultReadOnlyFormat) {
         const value = this.dateInputControl.getValue();
         this.dateInputControl.hide();

@@ -7,6 +7,10 @@ export class BasicComponent {
     constructor(protected readonly view: BasicComponentView) {
     }
 
+    getViewID() {
+        return this.view.getViewID();
+    }
+    
     protected getComponentByElement(element: HTMLElement) {
         for (const component of this.components) {
             if (component instanceof BasicComponent && component.hasElement(element)) {
@@ -58,6 +62,11 @@ export class BasicComponent {
             }
             this.components.splice(destinationIndex, 0, component);
         }
+    }
+
+    protected insertComponent(component: BasicComponent, destinationIndex: number) {
+        this.components.splice(destinationIndex, 0, component);
+        return component;
     }
 
     dispose() {

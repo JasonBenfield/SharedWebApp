@@ -1,4 +1,5 @@
-﻿import { AppClient } from "../Lib/Http/AppClient";
+﻿import { DateTimeOffset } from "../Lib/DateTimeOffset";
+import { AppClient } from "../Lib/Http/AppClient";
 import { AppClientAction } from "../Lib/Http/AppClientAction";
 import { AppClientEvents } from "../Lib/Http/AppClientEvents";
 import { AppClientGroup } from "../Lib/Http/AppClientGroup";
@@ -11,7 +12,7 @@ interface IAddProductModel {
 	Quantity: number;
 	Price: number;
 	File: File;
-	TimeAdded: Date;
+	TimeAdded: DateTimeOffset;
 	Nested: IAddProductNested;
 }
 

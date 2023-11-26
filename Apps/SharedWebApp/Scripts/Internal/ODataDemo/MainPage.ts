@@ -48,10 +48,8 @@ class MainPage extends SharedPage {
         //this.odataComponent.hideFooter();
         this.odataComponent.when.dataCellClicked.then(this.onDataCellClick.bind(this));
         this.odataComponent.when.refreshed.then(this.onRefreshed.bind(this));
-        const page = Url.current().getQueryValue('page');
-        if (page) {
-            this.odataComponent.setCurrentPage(Number(page));
-        }
+        const page = Url.current().query.getNumberValue('page');
+        this.odataComponent.setCurrentPage(page);
         this.odataComponent.refresh();
         const url1 = Url.current();
         console.log(`[${new Date().toISOString()}] page load ${url1.value()}`);
@@ -72,7 +70,8 @@ class MainPage extends SharedPage {
     private onRefreshed(args: ODataRefreshedEventArgs) {
         const page = args.page > 1 ? args.page.toString() : '';
         const url = UrlBuilder.current();
-        const queryPage = url.getQueryValue('page');
+        const queryPageValue = url.query.getNumberValue('page');
+        const queryPage = queryPageValue && queryPageValue > 1 ? queryPageValue.toString() : '';
         if (page !== queryPage) {
             if (page) {
                 url.replaceQuery('page', page);

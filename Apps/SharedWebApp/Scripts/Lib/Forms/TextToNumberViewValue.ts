@@ -2,16 +2,23 @@
 import { TypedFieldViewValue } from "./TypedFieldViewValue";
 
 export class TextToNumberViewValue extends TypedFieldViewValue<string, number> {
-    private _format = '';
+    private _formatString = '';
 
-    constructor(format: string = '') {
+    constructor(format?: string) {
         super();
-        this._format = format;
+        this._formatString = format;
     }
 
-    get format() { return this._format; }
+    get format() { return this._formatString; }
 
-    set format(format: string) { this._format = format; }
+    set format(format: string) { this._formatString = format; }
+
+    private defaultFormat(value: number) {
+        if (value === null || value === undefined || Number.isNaN(value)) {
+            return '';
+        }
+        return this._formatString ? new FormattedNumber(value, this._formatString).toString() : value.toString();
+    }
 
     protected _fromView(value: string) {
         let numericValue: number = null;
@@ -28,9 +35,6 @@ export class TextToNumberViewValue extends TypedFieldViewValue<string, number> {
     }
 
     protected _toView(value: number) {
-        if (value === null || value === undefined || Number.isNaN(value)) {
-            return '';
-        }
-        return this.format ? new FormattedNumber(value, this.format).toString() : value.toString();
+        return this.defaultFormat(value);
     }
 }

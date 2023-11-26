@@ -14,12 +14,19 @@ export class FormGroupSelect<TValue> extends FormGroup {
         this.valueTextComponent = this.addComponent(new TextComponent(view.valueTextView));
     }
 
-    makeReadOnly() {
+    makeReadOnly(format?: (option: SelectOption<TValue>) => string) {
         const selectedOption = this.selectControl.getSelectedOption();
-        const displayText = selectedOption ? selectedOption.displayText : '';
+        if (!format) {
+            format = this.defaultFormat;
+        }
+        const displayText = format(selectedOption);
         this.selectControl.hide();
         this.valueTextComponent.show();
         this.valueTextComponent.setText(displayText);
+    }
+
+    private defaultFormat: (option: SelectOption<TValue>) => string = (option) => {
+        return option && option.value ? option.displayText : '';
     }
 
     makeEditable() {
@@ -45,12 +52,29 @@ export class FormGroupSelect<TValue> extends FormGroup {
         this.selectControl.setValue(value);
     }
 
-    setItems(...items: SelectOption<TValue>[]) {
-        this.selectControl.setItems(...items);
+    setItems(items: SelectOption<TValue>[]);
+    setItems(caption: string, items: SelectOption<TValue>[]);
+    setItems(captionOrOptions: string | SelectOption<TValue>[], items?: SelectOption<TValue>[]) {
+        if (typeof captionOrOptions === 'string') {
+            this.selectControl.setItems(captionOrOptions, items);
+        }
+        else {
+            this.selectControl.setItems(captionOrOptions);
+        }
     }
 
     setItemCaption(itemCaption: string) {
         this.selectControl.setItemCaption(itemCaption);
     }
+
+    getSelectedOption() {
+        return this.selectControl.getSelectedOption();
+    }
+
+    getSelectedIndex() {
+        return this.selectControl.getSelectedIndex();
+    }
+
+    get options() { return this.selectControl.options; }
 
 }

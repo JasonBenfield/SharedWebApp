@@ -1,6 +1,7 @@
 ﻿import { EventSource } from "../Events";
 import { BooleanInputView } from "../Views/BooleanInputView";
 import { BasicComponent } from "./BasicComponent";
+import { ComponentID } from "./ComponentID";
 
 export type BooleanInputControlEvents = { valueChanged: boolean };
 
@@ -14,6 +15,7 @@ export class BooleanInputControl extends BasicComponent {
 
     constructor(view: BooleanInputView) {
         super(view);
+        view.setViewID(ComponentID.nextID());
         this.view.onChange()
             .execute(this.onInputValueChanged.bind(this))
             .subscribe();
@@ -35,4 +37,8 @@ export class BooleanInputControl extends BasicComponent {
     protected onDispose() {
         this.eventSource.unregisterAll();
     }
+
+    show() { this.view.show(); }
+
+    hide() { this.view.hide(); }
 }

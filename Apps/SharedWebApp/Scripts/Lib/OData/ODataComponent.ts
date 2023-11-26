@@ -2,6 +2,7 @@
 import { MessageAlert } from "../Components/MessageAlert";
 import { EventSource } from '../Events';
 import { ODataResult } from "../Http/ODataResult";
+import { ParsedJsonText } from "../Http/ParsedJsonText";
 import { ButtonCommandView } from "../Views/Command";
 import { ModalODataComponent } from "./ModalODataComponent";
 import { ODataCell } from "./ODataCell";
@@ -85,14 +86,17 @@ export class ODataComponent<TEntity> {
             const serializedSelect = localStorage.getItem(this.getStorageSelectKey());
             if (serializedSelect) {
                 this.query.select.clear();
-                this.query.select.fromSerialized(JSON.parse(serializedSelect), this.columns.values());
+                this.query.select.fromSerialized(
+                    new ParsedJsonText(serializedSelect).value,
+                    this.columns.values()
+                );
             }
         }
         if (options.saveChangesOptions.filter) {
             const serializedFilter = localStorage.getItem(this.getStorageFilterKey());
             if (serializedFilter) {
                 this.query.filter.clear();
-                const deserialized = JSON.parse(serializedFilter) as ISerializableFilter;
+                const deserialized = new ParsedJsonText(serializedFilter).value as ISerializableFilter;
                 this.query.filter.fromSerialized(deserialized, this.columns.values());
             }
         }
@@ -100,7 +104,7 @@ export class ODataComponent<TEntity> {
             const serializedOrderBy = localStorage.getItem(this.getStorageOrderByKey());
             if (serializedOrderBy) {
                 this.query.orderBy.clear();
-                this.query.orderBy.fromSerialized(JSON.parse(serializedOrderBy), this.columns.values());
+                this.query.orderBy.fromSerialized(new ParsedJsonText(serializedOrderBy).value, this.columns.values());
             }
         }
         this.grid = new ODataGrid(view.grid, options.createDataRow);

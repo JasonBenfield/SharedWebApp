@@ -5,6 +5,7 @@ import { EventSource } from "../Events";
 import { InputView } from "../Views/InputView";
 import { TextAreaView } from "../Views/TextAreaView";
 import { BasicComponent } from "./BasicComponent";
+import { ComponentID } from "./ComponentID";
 
 type Events = { valueChanged: string };
 
@@ -17,6 +18,7 @@ export class TextAreaControl extends BasicComponent {
 
     constructor(protected readonly view: TextAreaView) {
         super(view);
+        view.setViewID(ComponentID.nextID());
         this.debouncedSetFocus = new DebouncedAction(
             () => this.view.setFocus(),
             700

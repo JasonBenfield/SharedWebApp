@@ -3,6 +3,7 @@ import { BooleanInputView } from "./BooleanInputView";
 import { ButtonView } from "./ButtonView";
 import { DropdownComponentView } from "./Dropdown";
 import { InputView } from "./InputView";
+import { InputWithDataListView } from "./InputWithDataListView";
 import { LabelView } from "./LabelView";
 import { SelectView } from "./SelectView";
 import { SpanView } from "./SpanView";
@@ -30,15 +31,15 @@ export class InputGroupView extends BasicComponentView {
         return view as T;
     }
 
-    prependFormControl<T extends InputView | SelectView | BooleanInputView>(ctor: ViewConstructor<T>) {
+    prependFormControl<T extends InputView | InputWithDataListView | SelectView | BooleanInputView>(ctor: ViewConstructor<T>) {
         return this.insertFormControl(0, ctor);
     }
 
-    appendFormControl<T extends InputView | SelectView | BooleanInputView>(ctor: ViewConstructor<T>) {
+    appendFormControl<T extends InputView | InputWithDataListView | SelectView | BooleanInputView>(ctor: ViewConstructor<T>) {
         return this.insertFormControl(this.viewCount, ctor);
     }
 
-    private insertFormControl<T extends InputView | SelectView | BooleanInputView>(index: number, ctor: ViewConstructor<T>) {
+    private insertFormControl<T extends InputView | InputWithDataListView | SelectView | BooleanInputView>(index: number, ctor: ViewConstructor<T>) {
         const control = this.insertView(index, ctor);
         control.addCssName('form-control');
         return control as T;

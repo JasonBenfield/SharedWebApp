@@ -83,6 +83,10 @@ export class BaseForm {
         return this.formGroups.addDateTimeInputFormGroup(name, view);
     }
 
+    protected addTimeInputFormGroup(name: string, view: SimpleFieldFormGroupInputView) {
+        return this.formGroups.addTimeInputFormGroup(name, view);
+    }
+
     protected addTextDropDownFormGroup(name: string, view: SimpleFieldFormGroupSelectView) {
         return this.formGroups.addTextDropDownFormGroup(name, view);
     }

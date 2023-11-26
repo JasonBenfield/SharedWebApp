@@ -43,4 +43,12 @@ export class FormView extends BasicContainerView {
         const form = this.elementView.element as HTMLFormElement;
         form.submit();
     }
+
+    styleAsValidated() {
+        this.addCssName('was-validated');
+    }
+
+    styleAsNotValidated() {
+        this.removeCssName('was-validated');
+    }
 }

@@ -1,18 +1,16 @@
 ﻿import { DateOnly } from "./DateOnly";
 import { DateRange } from "./DateRange";
-import { FormattedDate } from "./FormattedDate";
+import { Month } from "./Month";
 import { ValueRangeBound } from "./ValueRangeBound";
 
 interface ISerializableRelativeYearOffset {
     readonly type: string;
     readonly value: {
         readonly yearOffset: number;
-        readonly month: MonthOfYear;
+        readonly month: number | 'reference-date';
         readonly dayOfMonth: ISerializableDayOfMonth;
     }
 }
-
-export type MonthOfYear = number | 'reference-date';
 
 function formatOrdinalDay(day: number) {
     let suffix = 'th';
@@ -28,18 +26,24 @@ function formatOrdinalDay(day: number) {
     return `${day}${suffix}`;
 }
 
+export type MonthOfYear = Month | 'reference-date';
+
 export class RelativeYearOffset {
     static deserialize(serialized: ISerializableRelativeYearOffset) {
         return new RelativeYearOffset(
             serialized.value.yearOffset,
-            serialized.value.month,
+            serialized.value.month === 'reference-date' ? serialized.value.month : Month.fromIndex(serialized.value.month),
             DayOfMonth.deserialize(serialized.value.dayOfMonth)
         );
     }
-
+    
     readonly dayOfMonth: DayOfMonth;
 
-    constructor(readonly yearOffset: number, readonly month: MonthOfYear, dayOfMonth: DayOfMonth | DayOfMonthValue) {
+    constructor(
+        readonly yearOffset: number,
+        readonly month: MonthOfYear,
+        dayOfMonth: DayOfMonth | DayOfMonthValue
+    ) {
         if (dayOfMonth instanceof DayOfMonth) {
             this.dayOfMonth = dayOfMonth;
         }
@@ -56,9 +60,9 @@ export class RelativeYearOffset {
         }
         const yearOffsetText = yearOffset > 0 ? yearOffset.toString() : 'same';
         const pluralized = yearOffset > 1 ? 's' : '';
-        const month = typeof this.month === 'number'
-            ? new FormattedDate(new Date(2022, this.month, 1), { month: 'long' }).formatDate()
-            : 'reference month';
+        const month = this.month instanceof Month ?
+            this.month.formatLongName() :
+            'reference month';
         const dayOfMonth = typeof this.dayOfMonth.value === 'number'
             ? `on the ${formatOrdinalDay(this.dayOfMonth.value)}`
             : this.dayOfMonth.format().toLowerCase();
@@ -69,7 +73,7 @@ export class RelativeYearOffset {
         return this.dayOfMonth.toDate(
             new DateOnly(
                 referenceDate.year + this.yearOffset,
-                typeof this.month === 'number' ? this.month : referenceDate.month,
+                this.month instanceof Month ? this.month : referenceDate.month,
                 1
             ),
             referenceDate.date
@@ -81,7 +85,7 @@ export class RelativeYearOffset {
             type: RelativeYearOffset.name,
             value: {
                 yearOffset: this.yearOffset,
-                month: this.month,
+                month: this.month instanceof Month ? this.month.index : this.month,
                 dayOfMonth: this.dayOfMonth.serialize()
             }
         } as ISerializableRelativeYearOffset;
@@ -133,7 +137,7 @@ export class RelativeMonthOffset {
         return this.dayOfMonth.toDate(
             new DateOnly(
                 referenceDate.year,
-                referenceDate.month + this.monthOffset,
+                referenceDate.month.add(this.monthOffset),
                 1
             ),
             referenceDate.date
@@ -215,11 +219,6 @@ export class DayOfMonth {
     }
 
     toDate(startOfMonth: DateOnly, referenceDay: number) {
-        const result = new DateOnly(
-            startOfMonth.year,
-            startOfMonth.month,
-            1
-        );
         let dayOfMonth: number;
         if (this.value === 'month-end') {
             dayOfMonth = 31;
@@ -230,16 +229,15 @@ export class DayOfMonth {
         else {
             dayOfMonth = this.value;
         }
-        const monthEnd = new DateOnly(
-            result.year,
-            result.month + 1,
-            0
-        );
+        const monthEnd = DateOnly.monthEnd(startOfMonth.year, startOfMonth.month);
         if (dayOfMonth > monthEnd.date) {
             dayOfMonth = monthEnd.date;
         }
-        result.setDate(dayOfMonth);
-        return result;
+        return new DateOnly(
+            startOfMonth.year,
+            startOfMonth.month,
+            dayOfMonth
+        );
     }
 
     serialize() {
@@ -275,9 +273,7 @@ export class RelativeDayOffset {
     }
 
     toDate(referenceDate: DateOnly) {
-        const result = referenceDate.copy();
-        result.setDate(result.date + this.dayOffset);
-        return result;
+        return referenceDate.addDays(this.dayOffset);
     }
 
     serialize() {
@@ -352,11 +348,11 @@ export class RelativeDateRange {
         const endReferenceDate = this.isEndRelativeToStart && start ?
             start.value :
             referenceDate;
-        const endDate = this.relativeEnd ?
+        let endDate = this.relativeEnd ?
             this.relativeEnd.toDate(endReferenceDate) :
             null;
         if (endDate) {
-            endDate.setDate(endDate.date + 1);
+            endDate = endDate.addDays(1);
         }
         const end = endDate ?
             new ValueRangeBound(endDate, false) :

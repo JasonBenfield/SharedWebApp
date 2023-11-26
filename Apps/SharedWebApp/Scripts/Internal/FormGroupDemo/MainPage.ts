@@ -4,7 +4,11 @@ import { MessageAlert } from '../../Lib/Components/MessageAlert';
 import { SelectOption } from '../../Lib/Components/SelectOption';
 import { ContextualClass } from '../../Lib/ContextualClass';
 import { DelayedAction } from '../../Lib/DelayedAction';
+import { EnumerableRange } from '../../Lib/EnumerableRange';
+import { FormComponent } from '../../Lib/Forms/FormComponent';
 import { FormGroupAlert } from '../../Lib/Forms/FormGroupAlert';
+import { FormGroupBooleanInput } from '../../Lib/Forms/FormGroupBooleanInput';
+import { FormGroupContainer } from '../../Lib/Forms/FormGroupContainer';
 import { FormGroupDateInput } from '../../Lib/Forms/FormGroupDateInput';
 import { FormGroupDateTimeInput } from '../../Lib/Forms/FormGroupDateTimeInput';
 import { FormGroupInput } from '../../Lib/Forms/FormGroupInput';
@@ -12,13 +16,15 @@ import { FormGroupSelect } from '../../Lib/Forms/FormGroupSelect';
 import { FormGroupText } from '../../Lib/Forms/FormGroupText';
 import { FormGroupTextArea } from '../../Lib/Forms/FormGroupTextArea';
 import { FormGroupTimeInput } from '../../Lib/Forms/FormGroupTimeInput';
-import { TextToTextViewValue } from '../../Lib/Forms/TextToTextViewValue';
+import { FormGroupTimeSpanInput } from '../../Lib/Forms/FormGroupTimeSpanInput';
+import { TextToNumberViewValue } from '../../Lib/Forms/TextToNumberViewValue';
 import { TextListGroupItemView } from '../../Lib/Views/ListGroup';
 import { DefaultPageContext } from '../DefaultPageContext';
 import { SharedPage } from '../SharedPage';
 import { MainPageView } from './MainPageView';
 
 class MainPage extends SharedPage {
+    private readonly formGroupContainer: FormGroupContainer;
     private readonly demoFormGroupInput: FormGroupInput<string>;
     private readonly demoFormGroupAlert: FormGroupAlert;
     private readonly demoFormGroupSelect: FormGroupSelect<string>;
@@ -27,36 +33,52 @@ class MainPage extends SharedPage {
     private readonly demoFormGroupDateInput: FormGroupDateInput;
     private readonly demoFormGroupTimeInput: FormGroupTimeInput;
     private readonly demoFormGroupDateTimeInput: FormGroupDateTimeInput;
+    private readonly demoFormGroupTimeSpanInput: FormGroupTimeSpanInput;
+    private readonly demoFormGroupInputWithDataList: FormGroupInput<number>;
+    private readonly demoFormGroupBooleanInput: FormGroupBooleanInput;
     private readonly alert: MessageAlert;
     private readonly valueListGroup: ListGroup<TextListItem, TextListGroupItemView>;
 
     constructor(protected readonly view: MainPageView) {
         super(view);
-        this.demoFormGroupInput = new FormGroupInput(view.demoFormGroupInputView, new TextToTextViewValue());
+        const form = new FormComponent(view.formView);
+        this.formGroupContainer = form.addFormGroups();
+        this.demoFormGroupInput = this.formGroupContainer.addFormGroupTextInput();
+        this.demoFormGroupInput.setType('email');
         this.demoFormGroupInput.setCaption('Input Field');
-        this.demoFormGroupAlert = new FormGroupAlert(view.demoFormGroupAlertView);
+        this.demoFormGroupAlert = this.formGroupContainer.addFormGroupAlert();
         this.demoFormGroupAlert.setCaption('Alert Field');
         this.demoFormGroupAlert.setContext(ContextualClass.danger);
         this.demoFormGroupAlert.setValue('Alert Value!');
-        this.demoFormGroupSelect = new FormGroupSelect(view.demoFormGroupSelectView);
+        this.demoFormGroupSelect = this.formGroupContainer.addFormGroupSelect();
         this.demoFormGroupSelect.setCaption('Select Field');
         this.demoFormGroupSelect.setItemCaption('Select...');
-        this.demoFormGroupSelect.setItems(
+        this.demoFormGroupSelect.setItems([
             new SelectOption('1', 'Option 1'),
             new SelectOption('2', 'Option 2'),
             new SelectOption('3', 'Option 3')
-        );
-        this.demoFormGroupTextArea = new FormGroupTextArea(view.demoFormGroupTextAreaView);
+        ]);
+        this.demoFormGroupTextArea = this.formGroupContainer.addFormGroupTextArea();
         this.demoFormGroupTextArea.setCaption('Text Area Field');
-        this.demoFormGroupText = new FormGroupText(view.demoFormGroupTextView);
+        this.demoFormGroupText = this.formGroupContainer.addFormGroupText();
         this.demoFormGroupText.setCaption('Text Field');
         this.demoFormGroupText.setValue('Text Value');
-        this.demoFormGroupDateInput = new FormGroupDateInput(view.demoFormGroupDateInputView);
+        this.demoFormGroupDateInput = this.formGroupContainer.addFormGroupDateInput();
         this.demoFormGroupDateInput.setCaption('Date Field');
-        this.demoFormGroupTimeInput = new FormGroupTimeInput(view.demoFormGroupTimeInputView);
+        this.demoFormGroupTimeInput = this.formGroupContainer.addFormGroupTimeInput();
         this.demoFormGroupTimeInput.setCaption('Time Input Field');
-        this.demoFormGroupDateTimeInput = new FormGroupDateTimeInput(view.demoFormGroupDateTimeInputView);
+        this.demoFormGroupDateTimeInput = this.formGroupContainer.addFormGroupDateTimeInput();
         this.demoFormGroupDateTimeInput.setCaption('Date Time Input Field');
+        this.demoFormGroupTimeSpanInput = this.formGroupContainer.addFormGroupTimeSpanInput();
+        this.demoFormGroupTimeSpanInput.setCaption('Time Span Input Field');
+        this.demoFormGroupInputWithDataList = this.formGroupContainer.addFormGroupInput(new TextToNumberViewValue('0.0'));
+        this.demoFormGroupInputWithDataList.setCaption('Input With Data List Field');
+        this.demoFormGroupInputWithDataList.addDataList(
+            ...new EnumerableRange(4, 15).value()
+        );
+        this.demoFormGroupTimeSpanInput.setCaption('Time Span Input Field');
+        this.demoFormGroupBooleanInput = this.formGroupContainer.addFormGroupBooleanInput();
+        this.demoFormGroupBooleanInput.setCaption('Boolean Field');
         this.alert = new MessageAlert(view.alertView);
         this.alert.info('Click "Show Values"', 'Instructions');
         this.valueListGroup = new ListGroup(view.valueListView);
@@ -69,16 +91,8 @@ class MainPage extends SharedPage {
             () => DelayedAction.delay(1000),
             'In Progress'
         );
-        const values = [
-            this.demoFormGroupInput,
-            this.demoFormGroupAlert,
-            this.demoFormGroupSelect,
-            this.demoFormGroupTextArea,
-            this.demoFormGroupText,
-            this.demoFormGroupDateInput,
-            this.demoFormGroupTimeInput,
-            this.demoFormGroupDateTimeInput
-        ].map(fg => `${fg.getCaption()}: ${fg.getValue()}`);
+        const values = this.formGroupContainer.getFormGroups().
+            map(fg => `${fg.getCaption()}: ${fg.getValue()}`);
         this.valueListGroup.setItems(values, (v, itemView) => new TextListItem(v, itemView));
         this.alert.success('These are the values:');
         this.demoFormGroupSelect.makeReadOnly();
@@ -87,6 +101,8 @@ class MainPage extends SharedPage {
         this.demoFormGroupDateInput.makeReadOnly();
         this.demoFormGroupDateTimeInput.makeReadOnly();
         this.demoFormGroupTimeInput.makeReadOnly();
+        this.demoFormGroupTimeInput.makeEditable();
+        this.demoFormGroupTimeSpanInput.makeReadOnly();
     }
 }
 new DefaultPageContext().load();

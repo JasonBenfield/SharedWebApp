@@ -2,6 +2,7 @@
 import { InputView } from "../Views/InputView";
 import { BasicComponent } from "./BasicComponent";
 import { EventSource } from "../Events";
+import { ComponentID } from "./ComponentID";
 
 export class FileType {
     static readonly anyImage = new FileType('image/*');
@@ -24,6 +25,7 @@ export class FileInputControl extends BasicComponent {
 
     constructor(protected readonly view: InputView) {
         super(view);
+        view.setViewID(ComponentID.nextID());
         view.setType('file');
         view.on('change')
             .execute(this.onInputValueChanged.bind(this))

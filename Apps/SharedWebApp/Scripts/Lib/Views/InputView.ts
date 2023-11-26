@@ -1,5 +1,8 @@
 ﻿import { ContextualClass } from "../ContextualClass";
 import { BasicComponentView } from "./BasicComponentView";
+import { BasicContainerView } from "./BasicContainerView";
+import { BooleanInputView } from "./BooleanInputView";
+import { DataListView } from "./DataListView";
 import { IInputAttributes } from "./Types";
 
 export class InputView extends BasicComponentView {
@@ -10,7 +13,7 @@ export class InputView extends BasicComponentView {
         this.inputElement = this.elementView.element as HTMLInputElement;
         this.setType('text');
     }
-    
+
     protected setAttr: (config: (attr: IInputAttributes) => void) => void;
 
     required() { this.setAttr(a => a.required = true); }
@@ -20,7 +23,7 @@ export class InputView extends BasicComponentView {
     setCustomValidity(errorMessage: string) {
         this.inputElement.setCustomValidity(errorMessage);
     }
-    
+
     styleAsFormControl() {
         this.addCssName('form-control');
     }
@@ -40,6 +43,8 @@ export class InputView extends BasicComponentView {
     setAutocompleteOff() { this.setAutocomplete('off'); }
 
     setAutocompleteNewPassword() { this.setAutocomplete('new-password'); }
+
+    setList(list: string) { this.setAttr(a => a.list = list); }
 
     private setAutocomplete(autocomplete: string) {
         this.setAttr(attr => attr.autocomplete = autocomplete);
@@ -84,7 +89,7 @@ export class InputView extends BasicComponentView {
         this.setAttr(attr => attr.placeholder = placeholder);
     }
 
-    setType(type: 'text' | 'hidden' | 'password' | 'date' | 'number' | 'time' | 'file' | 'email' | 'month' | 'url')  {
+    setType(type: 'text' | 'hidden' | 'password' | 'date' | 'number' | 'time' | 'file' | 'email' | 'month' | 'url') {
         this.setAttr(attr => attr.type = type);
     }
 
@@ -110,4 +115,21 @@ export class InputView extends BasicComponentView {
 
     onInput() { return this.on('input change'); }
 
+    addDataListView() {
+        return InputView.getDataListContainer().addView(DataListView);
+    }
+
+    static dataListContainer: BasicContainerView;
+
+    static getDataListContainer() {
+        if (!InputView.dataListContainer) {
+            let dataListContainerEl = document.getElementById('dataListContainer');
+            if (!dataListContainerEl) {
+                dataListContainerEl = document.body.appendChild(document.createElement('div'));
+                dataListContainerEl.id = 'dataListContainer';
+            }
+            InputView.dataListContainer = new BasicContainerView(null, dataListContainerEl);
+        }
+        return InputView.dataListContainer;
+    }
 }

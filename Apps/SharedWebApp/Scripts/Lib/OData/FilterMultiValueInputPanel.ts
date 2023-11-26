@@ -9,7 +9,6 @@ import { DateOnly } from "../DateOnly";
 import { DebouncedAction } from "../DebouncedAction";
 import { MultiViewValue } from "../Forms/MultiViewValue";
 import { TextToDateOnlyViewValue } from "../Forms/TextToDateOnlyViewValue";
-import { TextToDateViewValue } from "../Forms/TextToDateViewValue";
 import { TextToNumberViewValue } from "../Forms/TextToNumberViewValue";
 import { TextToTextViewValue } from "../Forms/TextToTextViewValue";
 import { FilterColumnOptionsBuilder } from "./FilterColumnOptionsBuilder";

@@ -28,6 +28,10 @@ export class BooleanInputView extends BasicComponentView {
         this.setCss('border', borderCss);
     }
 
+    styleAsFormControl() {
+        this.addCssName('form-control');
+    }
+    
     private getBorderCss(border: ContextualClass) {
         return border === ContextualClass.default ? '' : border.append('border');
     }

@@ -30,10 +30,6 @@ export class TimeSpan {
         return null;
     }
 
-    static dateDiff(date1: Date, date2: Date) {
-        return TimeSpan.fromMilliseconds(date1.getTime() - date2.getTime());
-    }
-
     static fromDays(value: number) {
         return TimeSpan.fromMinutes(value * 24);
     }
@@ -69,8 +65,34 @@ export class TimeSpan {
 
     readonly milliseconds: number;
     private readonly totalTicks;
+    readonly days: number;
+    readonly hours: number;
+    readonly minutes: number;
+    readonly seconds: number;
+    readonly ticks: number;
 
-    constructor(readonly days: number, readonly hours: number, readonly minutes: number, readonly seconds: number, readonly ticks: number) {
+    constructor(days: number, hours: number, minutes?: number, seconds?: number, ticks?: number) {
+        this.days = days || 0;
+        this.hours = hours || 0;
+        this.minutes = minutes || 0;
+        this.seconds = seconds || 0;
+        this.ticks = ticks || 0;
+        if (this.ticks >= 10000000) {
+            this.seconds += Math.floor(this.ticks / 10000000.0);
+            this.ticks = this.ticks % 10000000.0;
+        }
+        if (this.seconds >= 60) {
+            this.minutes += Math.floor(this.seconds / 60.0);
+            this.seconds = this.seconds % 60.0;
+        }
+        if (this.minutes >= 60) {
+            this.hours += Math.floor(this.minutes / 60.0);
+            this.minutes = this.minutes % 60.0;
+        }
+        if (this.hours >= 24) {
+            this.days += Math.floor(this.hours / 24.0);
+            this.hours = this.hours % 24.0;
+        }
         this.milliseconds = Math.floor(ticks / 10000);
         this.totalTicks = this.days * 864000000000 +
             this.hours * 36000000000 +
@@ -91,6 +113,10 @@ export class TimeSpan {
         return TimeSpan.fromTicks(Math.round(this.totalTicks / 600000000) * 600000000);
     }
 
+    isZero() {
+        return !this.days && !this.hours && !this.minutes && !this.seconds && !this.ticks;
+    }
+
     equals(other: TimeSpan) {
         if (other) {
             return this.days === other.days &&
@@ -103,6 +129,10 @@ export class TimeSpan {
     }
 
     toJSON() {
+        return this.toISOString();
+    }
+
+    toISOString() {
         const hours = this.hours.toString().padStart(2, '0');
         const minutes = this.minutes.toString().padStart(2, '0');
         const seconds = this.seconds.toString().padStart(2, '0');
@@ -110,33 +140,65 @@ export class TimeSpan {
         return `${this.days}.${hours}:${minutes}:${seconds}.${ticks}`;
     }
 
-    toString() {
-        let str = '';
-        if (this.days > 0) {
-            str += `${this.days}.`;
-        }
-        if (this.hours || this.minutes) {
-            const hours = this.hours.toString().padStart(2, '0');
-            const minutes = this.minutes.toString().padStart(2, '0');
-            str += `${hours}:${minutes}`;
-        }
-        if (this.seconds > 0 || this.ticks > 0) {
-            if (this.hours || this.minutes) {
-                str += `:${this.seconds.toString().padStart(2, '0')}`;
+    format() {
+        let formatted: string;
+        if (this.days || this.hours || this.minutes || this.seconds || this.milliseconds) {
+            if (this.days && !this.hours && !this.minutes && !this.seconds && !this.milliseconds) {
+                formatted = `${this.days} day`;
+                if (this.days > 1) {
+                    formatted += 's';
+                }
+            }
+            else if (!this.days && this.hours && !this.minutes && !this.seconds && !this.milliseconds) {
+                formatted = `${this.hours} hr`;
+                if (this.hours > 1) {
+                    formatted += 's';
+                }
+            }
+            else if (!this.days && !this.hours && this.minutes && !this.seconds && !this.milliseconds) {
+                formatted = `${this.minutes} min`;
+                if (this.minutes > 1) {
+                    formatted += 's';
+                }
+            }
+            else if (!this.days && !this.hours && !this.minutes && this.seconds && !this.milliseconds) {
+                formatted = `${this.seconds} sec`;
+                if (this.seconds > 1) {
+                    formatted += 's';
+                }
+            }
+            else if (!this.days && !this.hours && !this.minutes && !this.seconds && this.milliseconds) {
+                formatted = `${this.milliseconds} ms`;
             }
             else {
-                str += `${this.seconds.toString()}`;
+                if (this.days) {
+                    formatted = `${this.days}.`;
+                }
+                else {
+                    formatted = '';
+                }
+                formatted += `${this.hours.toString().padStart(2, '0')}:${this.minutes.toString().padStart(2, '0')}`;
+                if (this.seconds || this.ticks) {
+                    formatted += `:${this.seconds.toString().padStart(2, '0')}`;
+                    if (this.ticks) {
+                        const remainder = this.ticks % 10000;
+                        if (remainder) {
+                            formatted += `.${this.ticks.toString().padStart(7, '0')}`;
+                        }
+                        else {
+                            formatted += `.${this.milliseconds.toString().padStart(3, '0')}`;
+                        }
+                    }
+                }
             }
         }
-        if (this.ticks > 0) {
-            const ticks = this.ticks % 10000 === 0
-                ? this.milliseconds.toString().padStart(3, '0')
-                : this.ticks.toString().padStart(7, '0');
-            str += `.${ticks}`;
+        else {
+            formatted = '';
         }
-        if (!this.days && !this.hours && !this.minutes) {
-            str += ' s';
-        }
-        return str;
+        return formatted;
+    }
+
+    toString() {
+        return this.format();
     }
 }

@@ -45,7 +45,7 @@ export class BasicComponentView {
     hasElement(element: HTMLElement) {
         return this.elementView.hasElement(element);
     }
-
+    
     protected setAttr(config: (attr: IHtmlAttributes) => void) {
         config(this.attr);
         const attr = Object.create(this.attr);
@@ -71,8 +71,16 @@ export class BasicComponentView {
 
     get offsetWidth() { return this.elementView.offsetWidth; }
 
+    getViewID() {
+        return this.elementView.getViewID();
+    }
+
     setViewID(id: string) {
         this.setAttr(attr => attr.id = id);
+    }
+
+    getViewName() {
+        return this.elementView.getViewName();
     }
 
     setViewName(name: string) {

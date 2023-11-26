@@ -1,4 +1,4 @@
-﻿import { SimpleFieldFormGroupDateTimeInputView, SimpleFieldFormGroupInputView, SimpleFieldFormGroupSelectView } from "../Views/FormGroup";
+﻿import { SimpleFieldFormGroupDateTimeInputView, SimpleFieldFormGroupInputView, SimpleFieldFormGroupSelectView, SimpleFieldFormGroupTimeSpanInputView } from "../Views/FormGroup";
 import { InputView } from "../Views/InputView";
 import { BooleanDropDownFormGroup } from "./BooleanDropDownFormGroup";
 import { DateDropDownFormGroup } from "./DateDropDownFormGroup";
@@ -12,9 +12,15 @@ import { NumberInputFormGroup } from "./NumberInputFormGroup";
 import { TextDropDownFormGroup } from "./TextDropDownFormGroup";
 import { TextInputFormGroup } from "./TextInputFormGroup";
 import { TextToDateOnlyViewValue } from "./TextToDateOnlyViewValue";
-import { TextToDateViewValue } from "./TextToDateViewValue";
+import { TextToDateTimeViewValue } from "./TextToDateTimeViewValue";
 import { TextToNumberViewValue } from "./TextToNumberViewValue";
 import { TextToTextViewValue } from "./TextToTextViewValue";
+import { TextToTimeOnlyViewValue } from "./TextToTimeOnlyViewValue";
+import { TextToTimeSpanViewValue } from "./TextToTimeSpanViewValue";
+import { TimeDropDownFormGroup } from "./TimeDropDownFormGroup";
+import { TimeInputFormGroup } from "./TimeInputFormGroup";
+import { TimeSpanDropDownFormGroup } from "./TimeSpanDropDownFormGroup";
+import { TimeSpanInputFormGroup } from "./TimeSpanInputFormGroup";
 
 export class FormGroupCollection {
     readonly values: IField[] = [];
@@ -39,7 +45,15 @@ export class FormGroupCollection {
     }
 
     addHiddenDateTime(name: string, view: InputView) {
-        return this.addField(new HiddenInputField(this.name, name, view, new TextToDateViewValue()));
+        return this.addField(new HiddenInputField(this.name, name, view, new TextToDateTimeViewValue()));
+    }
+
+    addHiddenTime(name: string, view: InputView) {
+        return this.addField(new HiddenInputField(this.name, name, view, new TextToTimeOnlyViewValue()));
+    }
+
+    addHiddenTimeSpan(name: string, view: InputView) {
+        return this.addField(new HiddenInputField(this.name, name, view, new TextToTimeSpanViewValue()));
     }
 
     addTextInputFormGroup(name: string, view: SimpleFieldFormGroupInputView) {
@@ -58,6 +72,14 @@ export class FormGroupCollection {
         return this.addField(new DateTimeInputFormGroup(this.name, name, view));
     }
 
+    addTimeSpanInputFormGroup(name: string, view: SimpleFieldFormGroupTimeSpanInputView) {
+        return this.addField(new TimeSpanInputFormGroup(this.name, name, view));
+    }
+
+    addTimeInputFormGroup(name: string, view: SimpleFieldFormGroupInputView) {
+        return this.addField(new TimeInputFormGroup(this.name, name, view));
+    }
+
     addTextDropDownFormGroup(name: string, view: SimpleFieldFormGroupSelectView) {
         return this.addField(new TextDropDownFormGroup(this.name, name, view));
     }
@@ -72,6 +94,14 @@ export class FormGroupCollection {
 
     addDateTimeDropDownFormGroup(name: string, view: SimpleFieldFormGroupSelectView) {
         return this.addField(new DateTimeDropDownFormGroup(this.name, name, view));
+    }
+
+    addTimeDropDownFormGroup(name: string, view: SimpleFieldFormGroupSelectView) {
+        return this.addField(new TimeDropDownFormGroup(this.name, name, view));
+    }
+
+    addTimeSpanDropDownFormGroup(name: string, view: SimpleFieldFormGroupSelectView) {
+        return this.addField(new TimeSpanDropDownFormGroup(this.name, name, view));
     }
 
     addBooleanDropDownFormGroup(name: string, view: SimpleFieldFormGroupSelectView) {

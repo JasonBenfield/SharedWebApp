@@ -10,9 +10,10 @@ export class FormGroupTextArea extends FormGroup {
     constructor(view: FormGroupTextAreaView) {
         super(view);
         this.textAreaControl = this.addComponent(new TextAreaControl(view.textArea));
+        this.setLabelFor(this.textAreaControl);
         this.valueTextComponent = this.addComponent(new TextComponent(view.valueTextView));
     }
-
+    
     makeReadOnly() {
         const value = this.textAreaControl.getValue();
         this.textAreaControl.hide();

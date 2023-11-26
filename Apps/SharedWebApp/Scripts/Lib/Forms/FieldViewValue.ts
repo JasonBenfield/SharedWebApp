@@ -19,9 +19,11 @@
         return value;
     }
 
-    toView() {
-        return this._toView(this.value);
+    toView(value?: any) {
+        return this._toView(value === undefined ? this.value : value);
     }
 
-    protected _toView(value: any) { return value; }
+    protected _toView(value: any) {
+        return `${value}`;
+    }
 }

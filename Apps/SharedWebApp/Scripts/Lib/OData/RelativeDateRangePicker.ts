@@ -95,12 +95,8 @@ export class RelativeDateRangePicker extends BasicComponent {
     );
 
     getValue() {
-        const relativeStart = this.fromCheck.getValue()
-            ? this.from.getValue()
-            : null;
-        const relativeEnd = this.toCheck.getValue()
-            ? this.to.getValue()
-            : null;
+        const relativeStart = this.fromCheck.getValue() ? this.from.getValue() : null;
+        const relativeEnd = this.toCheck.getValue() ? this.to.getValue() : null;
         return new RelativeDateRange(
             relativeStart,
             relativeEnd,

@@ -21,7 +21,7 @@ export class SelectView extends BasicComponentView {
     }
 
     styleAsFormControl() {
-        this.addCssName('form-control');
+        this.addCssName('form-select');
     }
 
     options() { return this.getViews() as SelectOptionView[]; }
@@ -52,12 +52,7 @@ export class SelectView extends BasicComponentView {
         }
         return options;
     }
-
-    replaceOptions(howMany?: number) {
-        this.disposeAllViews();
-        return this.addOptions(howMany);
-    }
-
+    
     onChange() { return this.on('change'); }
 }
 

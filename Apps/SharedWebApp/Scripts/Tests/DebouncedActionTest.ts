@@ -18,11 +18,11 @@ describe('Debounced Action', () => {
             debouncedAction.execute();
             timesExecuted++;
         }
-        await DelayedAction.delay(11);
+        await DelayedAction.delay(15);
         expect(timesExecuted).to.be.at.least(2);
         expect(counter).to.equal(1);
         debouncedAction.execute();
-        await DelayedAction.delay(11);
+        await DelayedAction.delay(15);
         expect(counter).to.equal(2);
     });
     it('Debounced action with promise', async () => {

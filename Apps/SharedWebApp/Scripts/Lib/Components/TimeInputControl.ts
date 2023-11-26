@@ -11,6 +11,8 @@ export class TimeInputControl extends InputControl<TimeOnly> {
         view.setMaxWidth(CssLengthUnit.em(10));
     }
 
+    setType: (type: 'time') => void;
+
     required() {
         this.view.required();
     }

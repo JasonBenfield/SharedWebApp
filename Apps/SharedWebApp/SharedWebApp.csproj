@@ -42,6 +42,7 @@
     <None Remove="Scripts\Internal\ViewDemo\DemoGridListGroupItemView.ts" />
     <None Remove="Scripts\Internal\ViewDemo\MainPage.ts" />
     <None Remove="Scripts\Internal\ViewDemo\MainPageView.ts" />
+    <None Remove="Scripts\Lib\Components\DataListOption.ts" />
     <None Remove="Scripts\Lib\Forms\FormGroupAlert.ts" />
     <None Remove="Scripts\Lib\Http\AppClientQuery.ts" />
     <None Remove="Scripts\Lib\Http\AppVersionDomain.ts" />
@@ -212,6 +213,7 @@
     <None Remove="Scripts\Lib\Views\UserMenuView.ts" />
     <None Remove="Scripts\Lib\Views\ViewEventBuilder.ts" />
     <None Remove="Scripts\Tests\DateOnlyTest.ts" />
+    <None Remove="Scripts\Tests\DateTimeOffsetTest.ts" />
     <None Remove="Scripts\Tests\ParsedJsonTextTest.ts" />
     <None Remove="Scripts\Tests\RelativeDateRangeTest.ts" />
     <None Remove="Scripts\Tests\TimeOnlyTest.ts" />
@@ -272,6 +274,9 @@
     <TypeScriptCompile Include="Scripts\Internal\ViewDemo\DemoGridListGroupItem.ts" />
     <TypeScriptCompile Include="Scripts\Internal\ViewDemo\MainPage.ts" />
     <TypeScriptCompile Include="Scripts\Internal\ViewDemo\MainPageView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\DataListOption.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Lib\Forms\FormGroupAlert.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -514,6 +519,9 @@
     <TypeScriptCompile Include="Scripts\Lib\Views\Types.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\UserMenuView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\ViewEventBuilder.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Tests\DateTimeOffsetTest.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Tests\TimeOnlyTest.ts">

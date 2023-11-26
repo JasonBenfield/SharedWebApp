@@ -1,10 +1,11 @@
 ﻿import { DateTimeInputControl } from "../Components/DateTimeInputControl";
+import { DateTimeOffset } from "../DateTimeOffset";
 import { SimpleFieldFormGroupDateTimeInputView } from "../Views/FormGroup";
 import { DateTimeConstraintCollection } from "./ConstraintCollection";
 import { ErrorList } from "./ErrorList";
 import { SimpleFieldFormGroup } from "./SimpleFieldFormGroup";
 
-export class DateTimeInputFormGroup extends SimpleFieldFormGroup<Date> {
+export class DateTimeInputFormGroup extends SimpleFieldFormGroup<DateTimeOffset> {
     readonly constraints = new DateTimeConstraintCollection();
     private readonly dateTimeInputControl: DateTimeInputControl;
 
@@ -17,8 +18,12 @@ export class DateTimeInputFormGroup extends SimpleFieldFormGroup<Date> {
         return this.dateTimeInputControl.getValue();
     }
 
-    setValue(value: Date) {
+    setValue(value: DateTimeOffset) {
         this.dateTimeInputControl.setValue(value);
+    }
+
+    protected setCustomValidity(errorMessage: string) {
+        this.dateTimeInputControl.setCustomValidity(errorMessage);
     }
 
     protected validateConstraints(fieldErrors: ErrorList) {

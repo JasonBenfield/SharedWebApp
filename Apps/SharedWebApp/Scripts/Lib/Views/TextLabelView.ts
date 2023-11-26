@@ -1,8 +1,8 @@
 ﻿import { BasicComponentView } from "./BasicComponentView";
 import { BasicTextComponentView } from "./BasicTextComponentView";
-import { ILabelAttributes } from "./Types";
+import { ILabelAttributes, ILabelView } from "./Types";
 
-export class TextLabelView extends BasicTextComponentView {
+export class TextLabelView extends BasicTextComponentView implements ILabelView {
     constructor(container: BasicComponentView) {
         super(container, 'label');
     }

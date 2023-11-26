@@ -5,6 +5,8 @@ import { EventSource } from "../Events";
 import { TypedFieldViewValue } from "../Forms/TypedFieldViewValue";
 import { InputView } from "../Views/InputView";
 import { BasicComponent } from "./BasicComponent";
+import { ComponentID } from "./ComponentID";
+import { DataListComponent } from "./DataListComponent";
 
 type Events<TValue> = { valueChanged: TValue };
 
@@ -21,6 +23,7 @@ export class InputControl<TValue> extends BasicComponent {
         private readonly viewValue: TypedFieldViewValue<string, TValue>
     ) {
         super(view);
+        view.setViewID(ComponentID.nextID());
         new DelayedAction(
             () => {
                 const rawValue = this.view.getValue();
@@ -57,14 +60,14 @@ export class InputControl<TValue> extends BasicComponent {
                 }
             }
             const currentValue = this.getValue();
-            if (this.getValue() !== this.previousValue) {
+            if (currentValue !== this.previousValue) {
                 this.eventSource.events.valueChanged.invoke(currentValue);
                 this.previousValue = currentValue;
             }
         },
         700
     );
-
+    
     required() {
         this.view.required();
     }
@@ -77,12 +80,33 @@ export class InputControl<TValue> extends BasicComponent {
         this.view.setCustomValidity(message);
     }
 
+    setType(type: 'text' | 'hidden' | 'date' | 'number' | 'time' | 'file' | 'email' | 'month' | 'url') {
+        this.view.setType(type);
+    }
+
+    setInputMode(inputmode: 'text' | 'decimal' | 'numeric' | 'tel' | 'search' | 'email' | 'url') {
+        this.view.setInputMode(inputmode);
+    }
+
     isBlank() { return !this.view.getValue(); }
+
+    setList(list: DataListComponent<TValue>) {
+        this.view.setList(list.getViewID());
+    }
+
+    addDataList(...values: TValue[]) {
+        const dataListView = this.view.addDataListView();
+        const dataList = new DataListComponent<TValue>(dataListView, this.viewValue);
+        this.setList(dataList);
+        dataList.setOptions(...values);
+        this.addComponent(dataList);
+        return dataList;
+    }
 
     getTextValue() {
         return this.view.getValue();
     }
-
+    
     getValue() {
         return this.viewValue.getValue();
     }

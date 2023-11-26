@@ -2,12 +2,12 @@
 import { BasicComponent } from "./BasicComponent";
 import { SelectOption } from "./SelectOption";
 import { EventSource } from '../Events';
+import { SelectOptionComponent } from "./SelectOptionComponent";
 
 type Events<TValue> = { valueChanged: TValue };
 
 export class SelectControl<TValue> extends BasicComponent {
     protected readonly view: SelectView;
-    private readonly items: SelectOption<TValue>[] = [];
     private itemCaption: string;
 
     private readonly eventSource = new EventSource<Events<TValue>>(this, { valueChanged: null as TValue });
@@ -39,15 +39,19 @@ export class SelectControl<TValue> extends BasicComponent {
 
     getSelectedOption() {
         const selectedIndex = this.getSelectedIndex();
-        return selectedIndex > -1 ? this.items[selectedIndex] : null;
+        return selectedIndex > -1 ? this.options[selectedIndex] : null;
     }
-    
+
+    get options() { return this.getComponents().map(c => c.option); }
+
+    protected getComponents: () => SelectOptionComponent<TValue>[];
+
     getSelectedIndex() {
         return this.view.getSelectedIndex();
     }
 
     setValue(value: TValue, comparer: (x: TValue, y: TValue) => boolean = SelectControl.defaultComparer<TValue>) {
-        const selectedIndex = this.items.findIndex(o => comparer(o.value, value));
+        const selectedIndex = this.options.findIndex(o => comparer(o.value, value));
         this.view.setSelectedIndex(selectedIndex);
     }
 
@@ -55,48 +59,54 @@ export class SelectControl<TValue> extends BasicComponent {
         return x === y;
     }
 
-    setItems(...items: SelectOption<TValue>[]) {
+    setItems(items: SelectOption<TValue>[]);
+    setItems(caption: string, items: SelectOption<TValue>[]);
+    setItems(captionOrOptions: string | SelectOption<TValue>[], items?: SelectOption<TValue>[]) {
         const originalValue = this.getValue();
-        this.items.splice(0, this.items.length, ...items);
-        this.prependCaption();
-        this.updateOptions();
-        this.resetValue(originalValue, items);
-    }
-
-    setItemCaption(itemCaption: string, ...items: SelectOption<TValue>[]) {
-        const originalValue = this.getValue();
-        this.items.splice(0, this.items.length, ...items);
-        if (this.itemCaption) {
-            this.items.splice(0, 1);
+        if (typeof captionOrOptions === 'string') {
+            this.prependCaption(captionOrOptions, items);
+            this.updateOptions(items);
+            this.resetValue(originalValue, items);
+            this.itemCaption = captionOrOptions;
         }
+        else {
+            this.prependCaption(this.itemCaption, captionOrOptions);
+            this.updateOptions(captionOrOptions);
+            this.resetValue(originalValue, captionOrOptions);
+        }
+    }
+    
+    setItemCaption(itemCaption: string) {
+        const originalValue = this.getValue();
+        const options = this.itemCaption ? this.options.slice(1) : this.options;
+        this.prependCaption(itemCaption, options);
+        this.updateOptions(options);
+        this.resetValue(originalValue, options);
         this.itemCaption = itemCaption;
-        this.prependCaption();
-        this.updateOptions();
-        this.resetValue(originalValue, this.items);
     }
 
-    private resetValue(originalValue: TValue, items: SelectOption<TValue>[]) {
-        if (items.find(item => item.value === originalValue)) {
+    private resetValue(originalValue: TValue, options: SelectOption<TValue>[]) {
+        if (options.find(item => item.value === originalValue)) {
             this.setValue(originalValue);
         }
         else {
-            this.setValue(this.itemCaption ? null : items[0].value);
+            this.setValue(this.itemCaption ? null : options[0].value);
         }
     }
 
-    private prependCaption() {
-        if (this.itemCaption) {
-            this.items.splice(0, 0, new SelectOption<TValue>(null, this.itemCaption));
+    private prependCaption(itemCaption: string, options: SelectOption<TValue>[]) {
+        if (itemCaption) {
+            options.splice(0, 0, new SelectOption<TValue>(null, this.itemCaption));
         }
     }
 
-    private updateOptions() {
-        const options = this.view.replaceOptions(this.items.length);
+    private updateOptions(options: SelectOption<TValue>[]) {
+        this.clearComponents();
+        const optionViews = this.view.addOptions(options.length);
         let i = 0;
-        for (const item of this.items) {
-            const option = options[i];
-            option.setValue(item.value === null || item.value === undefined ? '' : `${item.value}`);
-            option.setText(item.displayText);
+        for (const option of options) {
+            const optionView = optionViews[i];
+            this.addComponent(new SelectOptionComponent(option, optionView));
             i++;
         }
     }

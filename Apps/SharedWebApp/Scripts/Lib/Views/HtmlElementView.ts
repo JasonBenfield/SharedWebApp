@@ -31,6 +31,14 @@ export class HtmlElementView {
 
     get offsetWidth() { return this.element.offsetWidth; }
 
+    getViewID() {
+        return this.element.id || '';
+    }
+
+    getViewName() {
+        return this.element.attributes['name'] || '';
+    }
+
     setAttributes(attributes: any) {
         if (!attributes) {
             attributes = {};

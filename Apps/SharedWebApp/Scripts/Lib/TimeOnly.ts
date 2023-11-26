@@ -1,4 +1,4 @@
-﻿import { FormattedTimeOnly } from "./FormattedTimeOnly";
+﻿import { Month } from "./Month";
 import { TimeSpan } from "./TimeSpan";
 
 export class TimeOnly {
@@ -30,8 +30,11 @@ export class TimeOnly {
             null;
     }
 
-    private readonly _date: Date;
-    
+    private readonly _hours: number;
+    private readonly _minutes: number;
+    private readonly _seconds: number;
+    private readonly _milliseconds: number;
+
     constructor(hours: number, minutes: number, seconds?: number, milliseconds?: number) {
         const date = new Date();
         if (!seconds) {
@@ -43,7 +46,7 @@ export class TimeOnly {
         if (milliseconds > 999) {
             milliseconds = Math.floor(Number(milliseconds.toString().padEnd(7, '0')) / 10000.0);
         }
-        this._date = new Date(
+        const refDate = new Date(
             date.getFullYear(),
             date.getMonth(),
             date.getDate(),
@@ -52,54 +55,89 @@ export class TimeOnly {
             seconds,
             milliseconds
         );
+        this._hours = refDate.getHours();
+        this._minutes = refDate.getMinutes();
+        this._seconds = refDate.getSeconds();
+        this._milliseconds = refDate.getMilliseconds();
     }
 
-    get hours() { return this._date.getHours(); }
+    get hours() { return this._hours; }
 
-    get minutes() { return this._date.getMinutes(); }
+    get minutes() { return this._minutes; }
 
-    get seconds() { return this._date.getSeconds(); }
+    get seconds() { return this._seconds; }
 
-    get milliseconds() { return this._date.getMilliseconds(); }
+    get milliseconds() { return this._milliseconds; }
 
-    copy() {
-        return new TimeOnly(this.hours, this.minutes, this.seconds, this.milliseconds);
-    }
-
-    add(timeSpan: TimeSpan) {
-        const timeOnly = this.copy();
-        timeOnly.setHours(timeOnly.hours + timeSpan.hours);
-        timeOnly.setMinutes(timeOnly.minutes + timeSpan.minutes);
-        timeOnly.setSeconds(timeOnly.seconds + timeSpan.seconds);
-        timeOnly.setMilliseconds(timeOnly.milliseconds + timeSpan.milliseconds);
-        return timeOnly;
-    }
-
-    sub(timeSpan: TimeSpan) {
-        const timeOnly = this.copy();
-        timeOnly.setHours(timeOnly.hours - timeSpan.hours);
-        timeOnly.setMinutes(timeOnly.minutes - timeSpan.minutes);
-        timeOnly.setSeconds(timeOnly.seconds - timeSpan.seconds);
-        timeOnly.setMilliseconds(timeOnly.milliseconds - timeSpan.milliseconds);
-        return timeOnly;
+    toDate(): Date;
+    toDate(year: number, month: Month, date: number): Date;
+    toDate(year?: number, month?: Month, date?: number) {
+        const now = new Date();
+        return new Date(
+            year ? year : now.getFullYear(),
+            month ? month.index : now.getMonth(),
+            date ? date : now.getDate(),
+            this.hours,
+            this.minutes,
+            this.seconds,
+            this.milliseconds
+        );
     }
     
-    setHours(hours: number) {
-        return this._date.setHours(hours);
+    addHours(hours: number) {
+        return new TimeOnly(
+            this.hours + hours,
+            this.minutes,
+            this.seconds,
+            this.milliseconds
+        );
     }
 
-    setMinutes(minutes: number) {
-        return this._date.setMinutes(minutes);
+    addMinutes(minutes: number) {
+        return new TimeOnly(
+            this.hours,
+            this.minutes + minutes,
+            this.seconds,
+            this.milliseconds
+        );
     }
 
-    setSeconds(seconds: number) {
-        return this._date.setSeconds(seconds);
+    addSeconds(seconds: number) {
+        return new TimeOnly(
+            this.hours,
+            this.minutes,
+            this.seconds + seconds,
+            this.milliseconds
+        );
     }
 
-    setMilliseconds(milliseconds: number) {
-        return this._date.setMilliseconds(milliseconds);
+    addMilliseconds(milliseconds: number) {
+        return new TimeOnly(
+            this.hours,
+            this.minutes,
+            this.seconds,
+            this.milliseconds + milliseconds
+        );
     }
 
+    addTimeSpan(timeSpan: TimeSpan) {
+        return new TimeOnly(
+            this.hours + timeSpan.hours,
+            this.minutes + timeSpan.minutes,
+            this.seconds + timeSpan.seconds,
+            this.milliseconds + timeSpan.milliseconds
+        );
+    }
+
+    subTimeSpan(timeSpan: TimeSpan) {
+        return new TimeOnly(
+            this.hours - timeSpan.hours,
+            this.minutes - timeSpan.minutes,
+            this.seconds - timeSpan.seconds,
+            this.milliseconds - timeSpan.milliseconds
+        );
+    }
+    
     toISOString() {
         const hoursText = this.hours.toString().padStart(2, '0');
         const minutesText = this.minutes.toString().padStart(2, '0');
@@ -110,7 +148,7 @@ export class TimeOnly {
     }
 
     toLocaleString() {
-        return this._date.toLocaleTimeString();
+        return this.toDate().toLocaleTimeString();
     }
 
     toJSON() {
@@ -118,15 +156,67 @@ export class TimeOnly {
     }
 
     format(options?: Intl.DateTimeFormatOptions) {
-        return new FormattedTimeOnly(this._date, options).formatTime();
+        if (!options) {
+            options = { hour: 'numeric', minute: '2-digit' };
+        }
+        return this.toDate().toLocaleTimeString([], options);
     }
 
     equals(other: TimeOnly) {
         if (other) {
+            if (this === other) {
+                return true;
+            }
             return this.hours === other.hours && this.minutes === other.minutes &&
                 this.seconds === other.seconds && this.milliseconds === other.milliseconds;
         }
         return false;
+    }
+
+    compareTo(other: TimeOnly) {
+        let result: number;
+        if (other) {
+            if (this === other) {
+                result = 0;
+            }
+            else if (this.hours > other.hours) {
+                result = 1;
+            }
+            else if (this.hours < other.hours) {
+                result = -1;
+            }
+            else if (this.hours === other.hours) {
+                if (this.minutes > other.minutes) {
+                    result = 1;
+                }
+                else if (this.minutes < other.minutes) {
+                    result = -1;
+                }
+                else if (this.minutes === other.minutes) {
+                    if (this.seconds > other.seconds) {
+                        result = 1;
+                    }
+                    else if (this.seconds < other.seconds) {
+                        result = -1;
+                    }
+                    else if (this.seconds === other.seconds) {
+                        if (this.milliseconds > other.milliseconds) {
+                            result = 1;
+                        }
+                        else if (this.milliseconds < other.milliseconds) {
+                            result = -1;
+                        }
+                        else {
+                            result = 0;
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            result = -1;
+        }
+        return result;
     }
 
     toString() {

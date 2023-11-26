@@ -45,6 +45,10 @@ export class DropDownFormGroup<TValue> extends SimpleFieldFormGroup<TValue> {
         }
     }
 
+    protected setCustomValidity(errorMessage: string) {
+        this.selectControl.setCustomValidity(errorMessage);
+    }
+
     protected validateConstraints(fieldErrors: ErrorList) {
         this.constraints.validate(fieldErrors, this);
     }
@@ -57,11 +61,28 @@ export class DropDownFormGroup<TValue> extends SimpleFieldFormGroup<TValue> {
         this.selectControl.setValue(value);
     }
 
-    setItems(...items: SelectOption<TValue>[]) {
-        this.selectControl.setItems(...items);
+    setItems(items: SelectOption<TValue>[]);
+    setItems(caption: string, items: SelectOption<TValue>[]);
+    setItems(captionOrOptions: string | SelectOption<TValue>[], items?: SelectOption<TValue>[]) {
+        if (typeof captionOrOptions === 'string') {
+            this.selectControl.setItems(captionOrOptions, items);
+        }
+        else {
+            this.selectControl.setItems(captionOrOptions);
+        }
     }
 
     setItemCaption(itemCaption: string) {
         this.selectControl.setItemCaption(itemCaption);
     }
+
+    getSelectedOption() {
+        return this.selectControl.getSelectedOption();
+    }
+
+    getSelectedIndex() {
+        return this.selectControl.getSelectedIndex();
+    }
+
+    get options() { return this.selectControl.options; }
 }

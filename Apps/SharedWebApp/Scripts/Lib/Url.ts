@@ -10,53 +10,33 @@ export class Url {
 
     constructor(baseUrl: string) {
         this.url = baseUrl;
-        let hashIndex = this.url.indexOf('#');
-        this._hash = new UrlHash(hashIndex > -1 ? this.url.substr(hashIndex + 1) : '');
+        const hashIndex = this.url.indexOf('#');
+        this._hash = new UrlHash(hashIndex > -1 ? this.url.substring(hashIndex + 1) : '');
         if (hashIndex > -1) {
-            this.url = this.url.substr(0, hashIndex);
+            this.url = this.url.substring(0, hashIndex);
         }
-        let queryIndex = this.url.indexOf('?');
-        this._query = new UrlQuery(queryIndex > -1 ? this.url.substr(queryIndex + 1) : '');
+        const queryIndex = this.url.indexOf('?');
+        this._query = new UrlQuery(queryIndex > -1 ? this.url.substring(queryIndex + 1) : '');
         if (queryIndex > -1) {
-            this.url = this.url.substr(0, queryIndex);
+            this.url = this.url.substring(0, queryIndex);
         }
     }
-
-    hasQuery(name: string) {
-        return this._query.hasQuery(name);
-    }
-
+    
     get query() {
         return this._query;
     }
-
-    getQueryValue(name: string) {
-        return this._query.getValue(name);
-    }
-
-    getQueryValues() {
-        return this._query.getValues();
-    }
-
+    
     get hash() {
         return this._hash;
     }
-
-    hasHash(name: string) {
-        return this._hash.hasQuery(name);
-    }
-
-    getHashValue(name: string) {
-        return this._hash.getValue(name);
-    }
-
+    
     value() {
         let url = this.url;
-        let queryString = this._query.toString();
+        const queryString = this._query.toString();
         if (queryString) {
             url += `?${queryString}`;
         }
-        let hashString = this._hash.toString();
+        const hashString = this._hash.toString();
         if (hashString) {
             url += `#${hashString}`;
         }

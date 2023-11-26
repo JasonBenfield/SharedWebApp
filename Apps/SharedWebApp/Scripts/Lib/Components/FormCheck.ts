@@ -2,12 +2,14 @@
 import { FormCheckView } from "../Views/FormCheckView";
 import { BasicComponent } from "./BasicComponent";
 import { BooleanInputControl, BooleanInputControlEvents } from "./BooleanInputControl";
+import { ComponentID } from "./ComponentID";
+import { LabelComponent } from "./LabelComponent";
 import { TextComponent } from "./TextComponent";
 
 export class FormCheck extends BasicComponent {
     protected readonly view: FormCheckView;
-    readonly booleanInput: BooleanInputControl;
-    readonly labelText: TextComponent;
+    private readonly booleanInput: BooleanInputControl;
+    private readonly labelText: TextComponent;
 
     readonly when: EventBuilders<BooleanInputControlEvents>;
 
@@ -15,6 +17,8 @@ export class FormCheck extends BasicComponent {
         super(view);
         this.booleanInput = this.addComponent(new BooleanInputControl(view.input));
         this.when = this.booleanInput.when;
+        const labelComponent = this.addComponent(new LabelComponent(view.label));
+        labelComponent.setFor(this.booleanInput);
         this.labelText = this.addComponent(new TextComponent(view.labelText));
     }
 

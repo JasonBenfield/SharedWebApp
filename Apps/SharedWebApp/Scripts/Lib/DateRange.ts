@@ -35,13 +35,13 @@ export class DateRange {
 
     format() {
         let str = '';
-        const adjustedStartDate = this.start ? this.start.value.copy() : null;
+        let adjustedStartDate = this.start ? this.start.value : null;
         if (adjustedStartDate && !this.start.isIncluded) {
-            adjustedStartDate.setDate(adjustedStartDate.date + 1);
+            adjustedStartDate = adjustedStartDate.addDays(-1);
         }
-        const adjustedEndDate = this.end ? this.end.value.copy() : null;
+        let adjustedEndDate = this.end ? this.end.value : null;
         if (adjustedEndDate && !this.end.isIncluded) {
-            adjustedEndDate.setDate(adjustedEndDate.date - 1);
+            adjustedEndDate = adjustedEndDate.addDays(1);
         }
         if (adjustedStartDate && adjustedEndDate && adjustedStartDate.equals(adjustedEndDate)) {
             const dateText = adjustedStartDate.format();

@@ -3,10 +3,8 @@ import { Command } from "../Components/Command";
 import { InputControl } from "../Components/InputControl";
 import { TextComponent } from "../Components/TextComponent";
 import { DateOnly } from "../DateOnly";
-import { DelayedAction } from "../DelayedAction";
 import { MultiViewValue } from "../Forms/MultiViewValue";
 import { TextToDateOnlyViewValue } from "../Forms/TextToDateOnlyViewValue";
-import { TextToDateViewValue } from "../Forms/TextToDateViewValue";
 import { TextToNumberViewValue } from "../Forms/TextToNumberViewValue";
 import { TextToTextViewValue } from "../Forms/TextToTextViewValue";
 import { FilterColumnOptionsBuilder } from "./FilterColumnOptionsBuilder";
@@ -27,7 +25,6 @@ class Result {
 export class FilterValueInputPanel implements IPanel {
     private readonly awaitable = new Awaitable<Result>();
     private readonly title: TextComponent;
-    private readonly operation: TextComponent;
     private options: FilterColumnOptionsBuilder;
     private readonly input: InputControl<number | string | DateOnly>;
     private viewValue: MultiViewValue<string, number | string | DateOnly>;
@@ -37,7 +34,6 @@ export class FilterValueInputPanel implements IPanel {
         this.viewValue = new MultiViewValue(new TextToTextViewValue());
         this.input = new InputControl(view.valueInput, this.viewValue);
         this.title = new TextComponent(this.view.title);
-        this.operation = new TextComponent(this.view.operation);
         this.saveCommand = new Command(this.save.bind(this));
         this.saveCommand.add(view.saveButton);
         view.form

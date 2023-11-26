@@ -1,5 +1,9 @@
-﻿import { JoinedStrings } from "./JoinedStrings";
+﻿import { DateOnly } from "./DateOnly";
+import { DateTimeOffset } from "./DateTimeOffset";
+import { JoinedStrings } from "./JoinedStrings";
 import { NamedValue } from "./NamedValue";
+import { TimeOnly } from "./TimeOnly";
+import { TimeSpan } from "./TimeSpan";
 
 export class UrlHash {
     constructor(hash: string | NamedValue[]) {
@@ -30,6 +34,39 @@ export class UrlHash {
 
     getValues() {
         return this.hashValues;
+    }
+
+    getNumberValue(name: string) {
+        const text = this.getValue(name);
+        return text ? Number(text) : null;
+    }
+
+    getBooleanValue(name: string) {
+        let text = this.getValue(name);
+        if (text) {
+            text = text.toLowerCase();
+        }
+        return text === 'true' || text === 'yes' || text === 'y' || text === '1';
+    }
+
+    getDateTimeValue(name: string) {
+        const text = this.getValue(name);
+        return DateTimeOffset.canParse(text) ? DateTimeOffset.parse(text) : null;
+    }
+
+    getDateValue(name: string) {
+        const text = this.getValue(name);
+        return DateOnly.canParse(text) ? DateOnly.parse(text) : null;
+    }
+
+    getTimeValue(name: string) {
+        const text = this.getValue(name);
+        return TimeOnly.canParse(text) ? TimeOnly.parse(text) : null;
+    }
+
+    getTimeSpanValue(name: string) {
+        const text = this.getValue(name);
+        return TimeSpan.canParse(text) ? TimeSpan.parse(text) : null;
     }
 
     getValue(name: string) {

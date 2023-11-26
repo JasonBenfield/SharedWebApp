@@ -40,8 +40,10 @@ export abstract class SimpleFieldFormGroup<TValue> extends BasicComponent implem
 
     setErrors(errors: ErrorModel[]) {
         const message = new JoinedStrings('\n', errors.map(e => e.Message)).value();
-        this.view.setCustomValidity(message);
+        this.setCustomValidity(message);
     }
+
+    protected abstract setCustomValidity(errorMessage: string);
 
     clearErrors() {
         this.view.setCustomValidity('');

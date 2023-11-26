@@ -1,5 +1,9 @@
 ﻿import { NamedValue } from "./NamedValue";
 import { JoinedStrings } from "./JoinedStrings";
+import { TimeSpan } from "./TimeSpan";
+import { TimeOnly } from "./TimeOnly";
+import { DateOnly } from "./DateOnly";
+import { DateTimeOffset } from "./DateTimeOffset";
 
 export class UrlQuery {
     constructor(query: string | NamedValue[]) {
@@ -17,6 +21,39 @@ export class UrlQuery {
 
     getValues() {
         return this.queryValues;
+    }
+
+    getNumberValue(name: string) {
+        const text = this.getValue(name);
+        return text ? Number(text) : null;
+    }
+
+    getBooleanValue(name: string) {
+        let text = this.getValue(name);
+        if (text) {
+            text = text.toLowerCase();
+        }
+        return text === 'true' || text === 'yes' || text === 'y' || text === '1';
+    }
+
+    getDateTimeValue(name: string) {
+        const text = this.getValue(name);
+        return DateTimeOffset.canParse(text) ? DateTimeOffset.parse(text) : null;
+    }
+
+    getDateValue(name: string) {
+        const text = this.getValue(name);
+        return DateOnly.canParse(text) ? DateOnly.parse(text) : null;
+    }
+
+    getTimeValue(name: string) {
+        const text = this.getValue(name);
+        return TimeOnly.canParse(text) ? TimeOnly.parse(text) : null;
+    }
+
+    getTimeSpanValue(name: string) {
+        const text = this.getValue(name);
+        return TimeSpan.canParse(text) ? TimeSpan.parse(text) : null;
     }
 
     getValue(name: string) {

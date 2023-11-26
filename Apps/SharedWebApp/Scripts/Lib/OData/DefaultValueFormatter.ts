@@ -1,4 +1,6 @@
-﻿import { FormattedDate } from "../FormattedDate";
+﻿import { DateOnly } from "../DateOnly";
+import { DateTimeOffset } from "../DateTimeOffset";
+import { TimeOnly } from "../TimeOnly";
 import { TimeSpan } from "../TimeSpan";
 import { ODataColumn } from "./ODataColumn";
 import { IValueFormatter } from "./Types";
@@ -14,17 +16,19 @@ export class DefaultValueFormatter implements IValueFormatter {
                 }
                 else {
                     if (value.getHours() || value.getMinutes() || value.getSeconds()) {
-                        formatted = new FormattedDate(
-                            value,
-                            {
-                                year: '2-digit', month: 'numeric', day: 'numeric',
-                                hour: 'numeric', minute: '2-digit'
-                            }
-                        ).formatDateTime();
+                        formatted = value.toLocaleString();
                     }
                     else {
                         formatted = value.toLocaleDateString();
                     }
+                }
+            }
+            else if (value instanceof DateOnly || value instanceof DateTimeOffset) {
+                if (value.isMaxYear) {
+                    formatted = '';
+                }
+                else {
+                    formatted = value.format();
                 }
             }
             else if (typeof value === 'number') {
@@ -34,7 +38,10 @@ export class DefaultValueFormatter implements IValueFormatter {
                 formatted = value;
             }
             else if (value instanceof TimeSpan) {
-                formatted = value.toNearestMillisecond().toString();
+                formatted = value.format();
+            }
+            else if (value instanceof TimeOnly) {
+                formatted = value.format();
             }
             else if (value) {
                 if (value instanceof Object && 'displayText' in value) {

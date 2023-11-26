@@ -13,7 +13,6 @@ import { ModalODataPanelView } from "./ModalODataPanelView";
 
 export class FilterValueInputPanelView extends ModalODataPanelView {
     readonly title: BasicTextComponentView;
-    readonly operation: BasicTextComponentView;
     private readonly ignoreCaseFormCheck: FormCheckView;
     readonly ignoreCaseInput: BooleanInputView;
     readonly valueInput: InputView;
@@ -26,8 +25,6 @@ export class FilterValueInputPanelView extends ModalODataPanelView {
         this.title = this.header.addView(TextHeading1View);
         this.form = this.body.addView(FormView);
         this.form.addOffscreenSubmit();
-        this.operation = this.form.addView(TextHeading3View);
-        this.operation.setMargin(MarginCss.bottom(3));
         this.ignoreCaseFormCheck = this.form.addView(FormCheckView);
         this.ignoreCaseFormCheck.setMargin(MarginCss.bottom(3));
         this.ignoreCaseFormCheck.styleAsSwitch();

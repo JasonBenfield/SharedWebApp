@@ -9,7 +9,7 @@ import { TypedFieldViewValue } from "./TypedFieldViewValue";
 type Events<TValue> = { valueChanged: TValue };
 
 export abstract class SimpleFieldInputFormGroup<TValue> extends SimpleFieldFormGroup<TValue> {
-    private readonly input: InputControl<TValue>;
+    private readonly inputControl: InputControl<TValue>;
 
     readonly when: EventBuilders<Events<TValue>>;
 
@@ -21,17 +21,17 @@ export abstract class SimpleFieldInputFormGroup<TValue> extends SimpleFieldFormG
     ) {
         super(prefix, name, view);
         const valueName = this.getName();
-        view.caption.setFor(valueName);
+        view.captionLabel.setFor(valueName);
         view.input.setViewID(valueName);
         view.input.setViewName(valueName);
-        this.input = this.addComponent(new InputControl(view.input, viewValue));
-        this.when = this.input.when;
-        this.input.when.valueChanged.then(() => this.debouncedOnValueChanged.execute());
+        this.inputControl = this.addComponent(new InputControl(view.input, viewValue));
+        this.when = this.inputControl.when;
+        this.inputControl.when.valueChanged.then(() => this.debouncedOnValueChanged.execute());
     }
 
     makeReadOnly(format: (date: TValue) => string) {
         const value = this.getValue();
-        this.input.hide();
+        this.inputControl.hide();
         this.valueTextComponent.show();
         this.valueTextComponent.setText(format ? format(value) : this.defaultReadOnlyFormat(value));
     }
@@ -41,7 +41,7 @@ export abstract class SimpleFieldInputFormGroup<TValue> extends SimpleFieldFormG
     }
 
     makeEditable() {
-        this.input.show();
+        this.inputControl.show();
         this.valueTextComponent.hide();
     }
 
@@ -56,25 +56,29 @@ export abstract class SimpleFieldInputFormGroup<TValue> extends SimpleFieldFormG
         }
     }
 
+    protected setCustomValidity(errorMessage: string) {
+        this.inputControl.setCustomValidity(errorMessage);
+    }
+
     getValue() {
-        return this.input.getValue();
+        return this.inputControl.getValue();
     }
 
     setValue(value: TValue) {
-        this.input.setValue(value);
+        this.inputControl.setValue(value);
     }
 
     setMaxLength(maxLength: number) {
-        this.input.setMaxLength(maxLength);
+        this.inputControl.setMaxLength(maxLength);
     }
 
     protect() {
-        this.input.protect();
+        this.inputControl.protect();
     }
 
     setFocus() {
-        this.input.setFocus();
+        this.inputControl.setFocus();
     }
 
-    blur() { this.input.blur(); }
+    blur() { this.inputControl.blur(); }
 }
