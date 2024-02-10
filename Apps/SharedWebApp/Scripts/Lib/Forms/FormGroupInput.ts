@@ -10,7 +10,7 @@ export class FormGroupInput<TValue> extends FormGroup {
 
     constructor(view: FormGroupInputView | FormGroupInputGroupView, viewValue: TypedFieldViewValue<string, TValue>) {
         super(view);
-        this.inputControl = this.addComponent(new InputControl(view.input, viewValue));
+        this.inputControl = this.addComponent(new InputControl(view.inputView, viewValue));
         this.setLabelFor(this.inputControl);
         this.valueTextComponent = this.addComponent(new TextComponent(view.valueTextView));
     }

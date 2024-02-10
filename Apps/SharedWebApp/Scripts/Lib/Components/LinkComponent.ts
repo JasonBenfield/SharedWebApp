@@ -1,17 +1,16 @@
 ﻿import { Url } from "../Url";
 import { UrlBuilder } from "../UrlBuilder";
-import { BasicComponentView } from "../Views/BasicComponentView";
-import { ILinkView } from "../Views/Types";
+import { LinkComponentView } from "../Views/Types";
 import { BasicComponent } from "./BasicComponent";
 
 export class LinkComponent extends BasicComponent {
     static readonly doNothing = 'javascript:;';
 
-    protected readonly view: BasicComponentView & ILinkView;
+    protected readonly view: LinkComponentView;
     private _data: any;
     private href: string;
 
-    constructor(view: BasicComponentView & ILinkView) {
+    constructor(view: LinkComponentView) {
         super(view);
         this.setHrefToDoNothing();
     }
@@ -39,6 +38,10 @@ export class LinkComponent extends BasicComponent {
 
     setTargetToBlank() {
         this.view.setTarget('_blank');
+    }
+
+    setTargetToDefault() {
+        this.view.setTarget(null);
     }
 
     show() { this.view.show(); }

@@ -1,4 +1,5 @@
-﻿import { Month } from "./Month";
+﻿import { DateTimeFormatOptions } from "./DateTimeFormatOptions";
+import { Month } from "./Month";
 import { TimeSpan } from "./TimeSpan";
 
 export class TimeOnly {
@@ -21,7 +22,7 @@ export class TimeOnly {
     }
 
     static now() {
-        return TimeOnly.fromDateTime(new Date());
+        return TimeOnly.fromDateTime(new Date())!;
     }
 
     static fromDateTime(date: Date) {
@@ -83,7 +84,7 @@ export class TimeOnly {
             this.milliseconds
         );
     }
-    
+
     addHours(hours: number) {
         return new TimeOnly(
             this.hours + hours,
@@ -137,7 +138,7 @@ export class TimeOnly {
             this.milliseconds - timeSpan.milliseconds
         );
     }
-    
+
     toISOString() {
         const hoursText = this.hours.toString().padStart(2, '0');
         const minutesText = this.minutes.toString().padStart(2, '0');
@@ -155,14 +156,14 @@ export class TimeOnly {
         return this.toISOString();
     }
 
-    format(options?: Intl.DateTimeFormatOptions) {
-        if (!options) {
-            options = { hour: 'numeric', minute: '2-digit' };
-        }
-        return this.toDate().toLocaleTimeString([], options);
+    format(options?: DateTimeFormatOptions | Intl.DateTimeFormatOptions) {
+        const timeOptions = options instanceof DateTimeFormatOptions ?
+            options :
+            new DateTimeFormatOptions(options);
+        return this.toDate().toLocaleTimeString([], timeOptions.getTimeOptions());
     }
 
-    equals(other: TimeOnly) {
+    equals(other: TimeOnly | null | undefined) {
         if (other) {
             if (this === other) {
                 return true;
@@ -173,7 +174,7 @@ export class TimeOnly {
         return false;
     }
 
-    compareTo(other: TimeOnly) {
+    compareTo(other: TimeOnly | null | undefined) {
         let result: number;
         if (other) {
             if (this === other) {

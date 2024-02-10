@@ -44,6 +44,7 @@
     <None Remove="Scripts\Internal\ViewDemo\MainPageView.ts" />
     <None Remove="Scripts\Lib\Components\DataListOption.ts" />
     <None Remove="Scripts\Lib\Forms\FormGroupAlert.ts" />
+    <None Remove="Scripts\Lib\Forms\FormGroupLink.ts" />
     <None Remove="Scripts\Lib\Http\AppClientQuery.ts" />
     <None Remove="Scripts\Lib\Http\AppVersionDomain.ts" />
     <None Remove="Scripts\Lib\Http\DefaultMenuDefinitions.ts" />
@@ -164,6 +165,7 @@
     <None Remove="Scripts\Lib\Views\BasicTextComponentView.ts" />
     <None Remove="Scripts\Lib\Views\BlockQuoteView.ts" />
     <None Remove="Scripts\Lib\Views\BlockView.ts" />
+    <None Remove="Scripts\Lib\Views\BlockWithTextView.ts" />
     <None Remove="Scripts\Lib\Views\ButtonGroupView.ts" />
     <None Remove="Scripts\Lib\Views\ButtonWrapper.ts" />
     <None Remove="Scripts\Lib\Views\Card.ts" />
@@ -182,6 +184,7 @@
     <None Remove="Scripts\Lib\Views\InsView.ts" />
     <None Remove="Scripts\Lib\Views\LabelView.ts" />
     <None Remove="Scripts\Lib\Views\LinkView.ts" />
+    <None Remove="Scripts\Lib\Views\LinkWithTextView.ts" />
     <None Remove="Scripts\Lib\Views\ListGroup.ts" />
     <None Remove="Scripts\Lib\Views\ListItemView.ts" />
     <None Remove="Scripts\Lib\Views\MarkView.ts" />
@@ -221,13 +224,13 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="XTI_App.Fakes" Version="1.8.40-dev231118172153455" />
-    <PackageReference Include="XTI_Core.Extensions" Version="1.10.21-dev231118105150033" />
+    <PackageReference Include="XTI_App.Fakes" Version="1.8.40-dev231207071608318" />
+    <PackageReference Include="XTI_Core.Extensions" Version="1.10.21-dev231124105119373" />
     <PackageReference Include="XTI_TempLog.Fakes" Version="1.2.32-dev231118171446792" />
-    <PackageReference Include="XTI_WebApp.Extensions" Version="1.8.40-dev231118172153455" />
-    <PackageReference Include="XTI_WebApp.Fakes" Version="1.8.40-dev231118172153455" />
-    <PackageReference Include="XTI_WebApp.RCL" Version="1.8.40-dev231118172153455" />
-    <PackageReference Include="XTI_WebApp.TagHelpers" Version="1.8.40-dev231118172153455" />
+    <PackageReference Include="XTI_WebApp.Extensions" Version="1.8.40-dev231207071608318" />
+    <PackageReference Include="XTI_WebApp.Fakes" Version="1.8.40-dev231207071608318" />
+    <PackageReference Include="XTI_WebApp.RCL" Version="1.8.40-dev231207071608318" />
+    <PackageReference Include="XTI_WebApp.TagHelpers" Version="1.8.40-dev231207071608318" />
   </ItemGroup>
   
   <ItemGroup>
@@ -278,6 +281,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Lib\Forms\FormGroupAlert.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Forms\FormGroupLink.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Lib\Http\AppClientQuery.ts" />
@@ -369,6 +375,12 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Lib\ValueRangeBound.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\BasicComponentWrapper.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\BlockWithTextView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\LinkWithTextView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Lib\Views\MarkView.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

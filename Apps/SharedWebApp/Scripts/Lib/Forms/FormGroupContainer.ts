@@ -1,11 +1,13 @@
 import { BasicComponent } from "../Components/BasicComponent";
-import { FormGroupGridView, FormGroupView } from "../Views/FormGroup";
+import { FormGroupAlertView, FormGroupBooleanInputView, FormGroupDateTimeInputView, FormGroupInputView, FormGroupLinkView, FormGroupSelectView, FormGroupTextAreaView, FormGroupTextView, FormGroupTimeSpanInputView } from "../Views/FormGroup";
+import { FormGroupContainerView } from "../Views/FormGroupContainerView";
 import { FormGroup } from "./FormGroup";
 import { FormGroupAlert } from "./FormGroupAlert";
 import { FormGroupBooleanInput } from "./FormGroupBooleanInput";
 import { FormGroupDateInput } from "./FormGroupDateInput";
 import { FormGroupDateTimeInput } from "./FormGroupDateTimeInput";
 import { FormGroupInput } from "./FormGroupInput";
+import { FormGroupLink } from "./FormGroupLink";
 import { FormGroupSelect } from "./FormGroupSelect";
 import { FormGroupText } from "./FormGroupText";
 import { FormGroupTextArea } from "./FormGroupTextArea";
@@ -16,7 +18,7 @@ import { TextToTextViewValue } from "./TextToTextViewValue";
 import { TypedFieldViewValue } from "./TypedFieldViewValue";
 
 export class FormGroupContainer extends BasicComponent {
-    constructor(protected readonly view: FormGroupGridView) {
+    constructor(protected readonly view: FormGroupContainerView) {
         super(view);
     }
 
@@ -24,95 +26,59 @@ export class FormGroupContainer extends BasicComponent {
         return this.getComponents().filter(c => c instanceof FormGroup) as FormGroup[];
     }
 
-    addFormGroupSelect<TValue>() {
-        return this.addFormGroup(
-            (container) => container.addFormGroupSelectView(),
-            (fgView) => new FormGroupSelect<TValue>(fgView)
-        );
+    addFormGroupSelect<TValue>(view: FormGroupSelectView) {
+        return this.addFormGroup(new FormGroupSelect<TValue>(view));
     }
 
-    addFormGroupTextInput(transform?: (v: string) => string) {
-        return this.addFormGroup(
-            (container) => container.addFormGroupInputView(),
-            (fgView) => new FormGroupInput(fgView, new TextToTextViewValue(transform))
-        );
+    addFormGroupTextInput(view: FormGroupInputView, transform?: (v: string) => string) {
+        return this.addFormGroup(new FormGroupInput(view, new TextToTextViewValue(transform)));
     }
 
-    addFormGroupNumberInput(format?: string) {
-        return this.addFormGroup(
-            (container) => container.addFormGroupInputView(),
-            (fgView) => new FormGroupInput(fgView, new TextToNumberViewValue(format))
-        );
+    addFormGroupNumberInput(view: FormGroupInputView, format?: string) {
+        return this.addFormGroup(new FormGroupInput(view, new TextToNumberViewValue(format)));
     }
 
-    addFormGroupBooleanInput() {
-        return this.addFormGroup(
-            (container) => container.addFormGroupBooleanInputView(),
-            (fgView) => new FormGroupBooleanInput(fgView)
-        );
+    addFormGroupBooleanInput(view: FormGroupBooleanInputView) {
+        return this.addFormGroup(new FormGroupBooleanInput(view));
     }
 
-    addFormGroupInput<TValue>(viewValue: TypedFieldViewValue<string, TValue>) {
-        return this.addFormGroup(
-            (container) => container.addFormGroupInputView(),
-            (fgView) => new FormGroupInput(fgView, viewValue)
-        );
-    }
-    
-    addFormGroupDateInput() {
-        return this.addFormGroup(
-            (container) => container.addFormGroupInputView(),
-            (fgView) => new FormGroupDateInput(fgView)
-        );
+    addFormGroupInput<TValue>(view: FormGroupInputView, viewValue: TypedFieldViewValue<string, TValue>) {
+        return this.addFormGroup(new FormGroupInput<TValue>(view, viewValue));
     }
 
-    addFormGroupTimeInput() {
-        return this.addFormGroup(
-            (container) => container.addFormGroupInputView(),
-            (fgView) => new FormGroupTimeInput(fgView)
-        );
+    addFormGroupDateInput(view: FormGroupInputView) {
+        return this.addFormGroup(new FormGroupDateInput(view));
     }
 
-    addFormGroupDateTimeInput() {
-        return this.addFormGroup(
-            (container) => container.addFormGroupDateTimeInputView(),
-            (fgView) => new FormGroupDateTimeInput(fgView)
-        );
+    addFormGroupTimeInput(view: FormGroupInputView) {
+        return this.addFormGroup(new FormGroupTimeInput(view));
     }
 
-    addFormGroupTimeSpanInput() {
-        return this.addFormGroup(
-            (container) => container.addFormGroupTimeSpanInputView(),
-            (fgView) => new FormGroupTimeSpanInput(fgView)
-        );
+    addFormGroupDateTimeInput(view: FormGroupDateTimeInputView) {
+        return this.addFormGroup(new FormGroupDateTimeInput(view));
     }
 
-    addFormGroupText() {
-        return this.addFormGroup(
-            (container) => container.addFormGroupTextView(),
-            (fgView) => new FormGroupText(fgView)
-        );
+    addFormGroupTimeSpanInput(view: FormGroupTimeSpanInputView) {
+        return this.addFormGroup(new FormGroupTimeSpanInput(view));
     }
 
-    addFormGroupTextArea() {
-        return this.addFormGroup(
-            (container) => container.addFormGroupTextAreaView(),
-            (fgView) => new FormGroupTextArea(fgView)
-        );
+    addFormGroupText(view: FormGroupTextView) {
+        return this.addFormGroup(new FormGroupText(view));
     }
 
-    addFormGroupAlert() {
-        return this.addFormGroup(
-            (container) => container.addFormGroupAlertView(),
-            (fgView) => new FormGroupAlert(fgView)
-        );
+    addFormGroupTextArea(view: FormGroupTextAreaView) {
+        return this.addFormGroup(new FormGroupTextArea(view));
     }
 
-    addFormGroup<TFormGroup extends FormGroup, TView extends FormGroupView>(
-        createView: (containerView: FormGroupGridView) => TView,
-        createFormGroup: (fgView: TView) => TFormGroup
-    ) {
-        const formGroupView = createView(this.view);
-        return this.addComponent(createFormGroup(formGroupView));
+    addFormGroupAlert(view: FormGroupAlertView) {
+        return this.addFormGroup(new FormGroupAlert(view));
+    }
+
+    addFormGroupLink(view: FormGroupLinkView) {
+        return this.addFormGroup(new FormGroupLink(view));
+    }
+
+    addFormGroup<T extends FormGroup>(formGroup: T) {
+        return this.addComponent(formGroup);
     }
 }

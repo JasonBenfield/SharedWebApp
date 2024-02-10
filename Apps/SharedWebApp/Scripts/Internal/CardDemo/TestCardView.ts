@@ -1,16 +1,14 @@
-﻿import { CardAlertView } from "../../Lib/Views/Card";
-import { CardTitleHeaderView } from "../../Lib/Views/Card";
-import { CardView } from "../../Lib/Views/Card";
-import { TextBlockView } from "../../Lib/Views/TextBlockView";
-import { ButtonListGroupView, GridListGroupView, ListGroupItemView, ListGroupView } from "../../Lib/Views/ListGroup";
+﻿import { CssLengthUnit } from "../../Lib/CssLengthUnit";
 import { BasicComponentView } from "../../Lib/Views/BasicComponentView";
-import { TestClickableListItemView } from "./TestClickableItemView";
-import { TestListItemView } from "./TestListItemView";
 import { BasicTextComponentView } from "../../Lib/Views/BasicTextComponentView";
+import { CardAlertView, CardTitleHeaderView, CardView } from "../../Lib/Views/Card";
+import { FormGroupContainerView } from "../../Lib/Views/FormGroupContainerView";
+import { ButtonListGroupView, GridListGroupView, ListGroupItemView, ListGroupView } from "../../Lib/Views/ListGroup";
 import { TextAreaView } from "../../Lib/Views/TextAreaView";
-import { FormGroupGridView, FormGroupTextAreaView } from "../../Lib/Views/FormGroup";
+import { TextBlockView } from "../../Lib/Views/TextBlockView";
+import { TestClickableListItemView } from "./TestClickableItemView";
 import { TestGridListItemView } from "./TestGridListItemView";
-import { CssLengthUnit } from "../../Lib/CssLengthUnit";
+import { TestListItemView } from "./TestListItemView";
 
 export class TestCardView extends CardView {
     readonly cardTitleHeader: CardTitleHeaderView;
@@ -30,8 +28,8 @@ export class TestCardView extends CardView {
             .addView(TextBlockView);
         this.testItems = this.addListGroup(TestListItemView);
         this.clickableItems = this.addButtonListGroup(TestClickableListItemView);
-        const formGroups = this.addView(FormGroupGridView);
-        const formGroup = formGroups.addFormGroup(FormGroupTextAreaView);
+        const formGroups = this.addView(FormGroupContainerView);
+        const formGroup = formGroups.addFormGroupTextAreaView();
         formGroup.caption.setText('Text Area');
         this.textArea = formGroup.textArea;
         this.textArea.setRows(3);

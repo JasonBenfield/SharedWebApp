@@ -2,12 +2,12 @@
 import { ODataColumn } from "./ODataColumn";
 import { ISerializableQuery } from "./ODataQueryBuilder";
 import { ODataRow } from "./ODataRow";
-import { IODataClient, ODataColumns, SaveChangesOptions } from "./Types";
+import { IODataClient, ODataColumns, Queryable, SaveChangesOptions } from "./Types";
 
 export class ODataComponentOptions<TEntity> {
     constructor(
         readonly id: string,
-        readonly createDataRow: (rowIndex: number, columns: ODataColumn[], record: any, view: BasicGridRowView) => ODataRow,
+        readonly createDataRow: (rowIndex: number, columns: ODataColumn[], record: Queryable<TEntity>, view: BasicGridRowView) => ODataRow,
         readonly odataClient: IODataClient<TEntity>,
         readonly pageSize: number,
         readonly saveChangesOptions: SaveChangesOptions,

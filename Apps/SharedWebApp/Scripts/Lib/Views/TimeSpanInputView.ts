@@ -2,8 +2,6 @@ import { BasicComponentView } from "./BasicComponentView";
 import { BasicTextComponentView } from "./BasicTextComponentView";
 import { InputGroupView } from "./InputGroupView";
 import { InputView } from "./InputView";
-import { InputWithDataListView } from "./InputWithDataListView";
-import { SelectView } from "./SelectView";
 import { TextSpanView } from "./TextSpanView";
 
 export class TimeSpanInputView extends InputGroupView {

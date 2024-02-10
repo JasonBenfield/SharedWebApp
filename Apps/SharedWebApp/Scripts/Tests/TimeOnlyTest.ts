@@ -17,4 +17,11 @@ describe('TimeOnly', () => {
         expect(new TimeOnly(8, 5, 3, 132).equals(new TimeOnly(8, 5, 3, 132))).to.be.true;
         expect(new TimeOnly(8, 5, 3, 132).equals(new TimeOnly(8, 5, 3, 1))).to.be.false;
     });
+    it('Compare To', function () {
+        const now = TimeOnly.now();
+        expect(now.compareTo(now.addHours(1))).to.be.lessThan(0);
+        expect(now.compareTo(now.addHours(-1))).to.be.greaterThan(0);
+        expect(now.compareTo(new TimeOnly(now.hours, now.minutes, now.seconds, now.milliseconds))).to.equal(0);
+        expect(now.compareTo(null)).to.be.lessThan(0);
+    });
 });

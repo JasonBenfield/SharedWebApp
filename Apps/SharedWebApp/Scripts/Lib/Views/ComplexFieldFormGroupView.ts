@@ -1,31 +1,33 @@
-﻿import { CssLengthUnit } from "../CssLengthUnit";
-import { BasicComponentView } from "./BasicComponentView";
-import { FormGroupGridView, FormGroupView, SimpleFieldFormGroupInputView, SimpleFieldFormGroupSelectView } from "./FormGroup";
+﻿import { BasicComponentView } from "./BasicComponentView";
+import { FormGroupView, SimpleFieldFormGroupDateTimeInputView, SimpleFieldFormGroupInputView, SimpleFieldFormGroupSelectView, SimpleFieldFormGroupTimeSpanInputView } from "./FormGroup";
+import { FormGroupContainerView } from "./FormGroupContainerView";
+import { InputView } from "./InputView";
 import { ViewConstructor } from "./Types";
 
 export class ComplexFieldFormGroupView extends FormGroupView {
-    private readonly grid: FormGroupGridView;
+    private readonly formGroupContainerView: FormGroupContainerView;
 
     constructor(container: BasicComponentView) {
         super(container);
-        this.grid = this.valueCell.addView(FormGroupGridView);
-        this.grid.layout();
-        this.grid.setTemplateColumns(CssLengthUnit.auto(), CssLengthUnit.flex(1));
+        this.formGroupContainerView = this.valueCell.addView(FormGroupContainerView);
     }
 
-    addHiddenInputFormGroup() {
-        const formGroup = this.addInputFormGroup();
-        this.hideFormGroup(formGroup);
-        return formGroup;
-    }
-
-    private hideFormGroup(formGroup: SimpleFieldFormGroupInputView) {
-        formGroup.input.setType('hidden');
-        formGroup.hide();
+    addHiddenInput() {
+        const inputView = this.addView(InputView);
+        inputView.setType('hidden');
+        return inputView;
     }
 
     addInputFormGroup() {
         return this.addFormGroup(SimpleFieldFormGroupInputView);
+    }
+
+    addDateTimeInputFormGroup() {
+        return this.addFormGroup(SimpleFieldFormGroupDateTimeInputView);
+    }
+
+    addTimeSpanInputFormGroup() {
+        return this.addFormGroup(SimpleFieldFormGroupTimeSpanInputView);
     }
 
     addDropDownFormGroup() {
@@ -33,6 +35,6 @@ export class ComplexFieldFormGroupView extends FormGroupView {
     }
 
     addFormGroup<TView extends FormGroupView>(ctor: ViewConstructor<TView>) {
-        return this.grid.addFormGroup<TView>(ctor);
+        return this.formGroupContainerView.addFormGroup<TView>(ctor);
     }
 }

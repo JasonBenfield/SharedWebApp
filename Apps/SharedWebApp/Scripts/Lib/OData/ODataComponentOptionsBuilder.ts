@@ -11,7 +11,7 @@ import { ODataRow } from "./ODataRow";
 import { SourceType } from "./SourceType";
 import { SuggestedValueListGetter } from "./SuggestedValueListGetter";
 import { SuggestedValueODataGetter } from "./SuggestedValueODataGetter";
-import { IODataClient, SaveChangesOptions } from "./Types";
+import { IODataClient, Queryable, SaveChangesOptions } from "./Types";
 
 export type IODataColumnsBuilder<TEntity> = {
     [K in keyof TEntity]: ODataColumnBuilder;
@@ -34,16 +34,16 @@ export class ODataFixedColumnsBuilder {
 }
 
 export class ODataComponentOptionsBuilder<TEntity> {
-    static defaultCreateDataRow =
-        (rowIndex: number, columns: ODataColumn[], record: any, view: BasicGridRowView) =>
+    private readonly defaultCreateDataRow =
+        (rowIndex: number, columns: ODataColumn[], record: Queryable<TEntity>, view: BasicGridRowView) =>
             new ODataRow(rowIndex, columns, record, view);
-    static defaultCreateLinkRow =
-        (rowIndex: number, columns: ODataColumn[], record: any, view: LinkGridRowView) =>
+    private readonly defaultCreateLinkRow =
+        (rowIndex: number, columns: ODataColumn[], record: Queryable<TEntity>, view: LinkGridRowView) =>
             new ODataLinkRow(rowIndex, columns, record, view);
 
     private createDataRow:
-        (rowIndex: number, columns: ODataColumn[], record: any, view: BasicGridRowView) => ODataRow =
-        ODataComponentOptionsBuilder.defaultCreateDataRow;
+        (rowIndex: number, columns: ODataColumn[], record: Queryable<TEntity>, view: BasicGridRowView) => ODataRow =
+        this.defaultCreateDataRow;
     private odataClient: IODataClient<TEntity>;
     private pageSize: number = 50;
     readonly query = new ODataQueryBuilder();
@@ -62,14 +62,14 @@ export class ODataComponentOptionsBuilder<TEntity> {
         this.endColumns = new ODataFixedColumnsBuilder();
     }
 
-    setCreateDataRow(createDataRow: (rowIndex: number, columns: ODataColumn[], record: any, view: BasicGridRowView) => ODataRow) {
+    setCreateDataRow(createDataRow: (rowIndex: number, columns: ODataColumn[], record: Queryable<TEntity>, view: BasicGridRowView) => ODataRow) {
         this.createDataRow = createDataRow;
         return this;
     }
 
-    setCreateLinkRow(configureLinkRow: (rowIndex: number, columns: ODataColumn[], record: any, row: ODataRow) => void) {
+    setCreateLinkRow(configureLinkRow: (rowIndex: number, columns: ODataColumn[], record: Queryable<TEntity>, row: ODataLinkRow) => void) {
         this.createDataRow = (rowIndex: number, columns: ODataColumn[], record: any, view: LinkGridRowView) => {
-            const row = ODataComponentOptionsBuilder.defaultCreateLinkRow(rowIndex, columns, record, view);
+            const row = this.defaultCreateLinkRow(rowIndex, columns, record, view);
             configureLinkRow(rowIndex, columns, record, row);
             return row;
         };

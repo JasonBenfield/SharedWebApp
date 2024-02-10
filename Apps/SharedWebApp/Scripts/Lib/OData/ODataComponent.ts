@@ -80,7 +80,7 @@ export class ODataComponent<TEntity> {
             .disableMove()
             .build();
         this.options.endColumns.push(columnEnd);
-        this.query = new ODataQueryBuilder(options.defaultQuery);
+        this.query = new ODataQueryBuilder(options.defaultQuery, this.columns.values());
         this.query.select.addRequiredFields(this.columns.requiredDatabaseColumns());
         if (options.saveChangesOptions.select) {
             const serializedSelect = localStorage.getItem(this.getStorageSelectKey());

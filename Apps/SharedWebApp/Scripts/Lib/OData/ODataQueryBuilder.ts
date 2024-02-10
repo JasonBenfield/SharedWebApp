@@ -36,11 +36,11 @@ export class ODataQueryBuilder {
     private _skip: number;
     private _top: number;
 
-    constructor(serialized?: ISerializableQuery) {
+    constructor(serialized?: ISerializableQuery, columns?: ODataColumn[]) {
         this.apply = new ODataQueryApplyBuilder();
-        this.select = new ODataQuerySelectBuilder(serialized && serialized.select, []);
-        this.filter = new ODataQueryFilterBuilder(serialized && serialized.filter, []);
-        this.orderBy = new ODataQueryOrderByBuilder(serialized && serialized.orderBy, []);
+        this.select = new ODataQuerySelectBuilder(serialized && serialized.select, columns || []);
+        this.filter = new ODataQueryFilterBuilder(serialized && serialized.filter, columns || []);
+        this.orderBy = new ODataQueryOrderByBuilder(serialized && serialized.orderBy, columns || []);
     }
 
     skip(skip: number) {

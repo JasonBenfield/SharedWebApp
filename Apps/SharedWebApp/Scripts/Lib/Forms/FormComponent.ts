@@ -1,7 +1,7 @@
-import { FormView } from "../Views/FormView";
-import { EventSource } from "../Events";
-import { FormGroupGridView } from "../Views/FormGroup";
 import { BasicComponent } from "../Components/BasicComponent";
+import { EventSource } from "../Events";
+import { FormGroupContainerView } from "../Views/FormGroupContainerView";
+import { FormView } from "../Views/FormView";
 import { FormGroupContainer } from "./FormGroupContainer";
 
 type Events = { submitted: boolean };
@@ -31,9 +31,8 @@ export class FormComponent extends BasicComponent {
         this.eventSource.events.submitted.invoke();
     }
 
-    addFormGroups() {
-        const containerView = this.view.addView(FormGroupGridView);
-        const container = new FormGroupContainer(containerView);
+    addFormGroupContainer(view: FormGroupContainerView) {
+        const container = new FormGroupContainer(view);
         this.addComponent(container);
         return container;
     }

@@ -43,7 +43,7 @@ export class BasicPageView {
     constructor() {
         const rootView = new RootView();
         const grid = rootView.addView(GridView);
-        grid.layout();
+        grid.styleAsLayout();
         grid.addCssName('h-100');
         grid.setTemplateRows(CssLengthUnit.auto(), CssLengthUnit.flex(1));
         this.topBanner = grid.addCell(GridCellView)

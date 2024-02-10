@@ -3,13 +3,13 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "lib": [ "es2018", "dom" ],
+    "lib": [ "ES2020", "dom" ],
     "module": "commonjs",
     "strictNullChecks": false,
     "noEmitOnError": true,
     "removeComments": false,
     "sourceMap": true,
-    "target": "es6",
+    "target": "ES2020",
     "importHelpers": true,
     "typeRoots": [
       "../../node_modules/@types"

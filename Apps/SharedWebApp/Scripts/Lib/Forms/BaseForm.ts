@@ -4,7 +4,7 @@ import { ConsoleLog } from "../ConsoleLog";
 import { ModalError } from "../Components/ModalError";
 import { ErrorModel } from "../ErrorModel";
 import { BaseFormView } from "../Views/BaseFormView";
-import { SimpleFieldFormGroupDateTimeInputView, SimpleFieldFormGroupSelectView } from "../Views/FormGroup";
+import { SimpleFieldFormGroupDateTimeInputView, SimpleFieldFormGroupSelectView, SimpleFieldFormGroupTimeSpanInputView } from "../Views/FormGroup";
 import { ErrorList } from "./ErrorList";
 import { FormGroupCollection } from "./FormGroupCollection";
 import { FormSaveResult } from "./FormSaveResult";
@@ -67,6 +67,14 @@ export class BaseForm {
         return this.formGroups.addHiddenDateTime(name, view);
     }
 
+    protected addHiddenTime(name: string, view: InputView) {
+        return this.formGroups.addHiddenTime(name, view);
+    }
+
+    protected addHiddenTimeSpan(name: string, view: InputView) {
+        return this.formGroups.addHiddenTimeSpan(name, view);
+    }
+
     protected addTextInputFormGroup(name: string, view: SimpleFieldFormGroupInputView) {
         return this.formGroups.addTextInputFormGroup(name, view);
     }
@@ -87,6 +95,10 @@ export class BaseForm {
         return this.formGroups.addTimeInputFormGroup(name, view);
     }
 
+    protected addTimeSpanInputFormGroup(name: string, view: SimpleFieldFormGroupTimeSpanInputView) {
+        return this.formGroups.addTimeSpanInputFormGroup(name, view);
+    }
+
     protected addTextDropDownFormGroup(name: string, view: SimpleFieldFormGroupSelectView) {
         return this.formGroups.addTextDropDownFormGroup(name, view);
     }
@@ -101,6 +113,14 @@ export class BaseForm {
 
     protected addDateTimeDropDownFormGroup(name: string, view: SimpleFieldFormGroupSelectView) {
         return this.formGroups.addDateTimeDropDownFormGroup(name, view);
+    }
+
+    protected addTimeDropDownFormGroup(name: string, view: SimpleFieldFormGroupSelectView) {
+        return this.formGroups.addTimeDropDownFormGroup(name, view);
+    }
+
+    protected addTimeSpanDropDownFormGroup(name: string, view: SimpleFieldFormGroupSelectView) {
+        return this.formGroups.addTimeSpanDropDownFormGroup(name, view);
     }
 
     protected addBooleanDropDownFormGroup(name: string, view: SimpleFieldFormGroupSelectView) {

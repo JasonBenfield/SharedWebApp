@@ -56,6 +56,6 @@ export class BlockView extends BasicContainerView {
     }
 
     styleAsFormControl() {
-        this.addCssName('form-control-plaintext');
+        this.addCssName('form-control-text');
     }
 }

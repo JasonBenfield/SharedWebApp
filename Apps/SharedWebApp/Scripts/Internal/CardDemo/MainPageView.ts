@@ -25,7 +25,7 @@ export class MainPageView extends SharedPageView {
     constructor() {
         super();
         const grid = this.addView(GridView);
-        grid.layout();
+        grid.styleAsLayout();
         grid.setTemplateRows(CssLengthUnit.auto(), CssLengthUnit.flex(1), CssLengthUnit.auto());
         grid.height100();
 

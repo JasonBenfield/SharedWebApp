@@ -1,13 +1,13 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "lib": [ "es2018", "dom" ],
+    "lib": [ "ES2020", "dom" ],
     "module": "CommonJS",
     "noImplicitAny": false,
     "noEmitOnError": true,
     "removeComments": false,
     "sourceMap": true,
-    "target": "ES6",
+    "target": "ES2020",
     "importHelpers": true,
     "typeRoots": [
       "../../node_modules/@types"

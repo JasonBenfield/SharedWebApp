@@ -1,14 +1,13 @@
-﻿import { BasicComponentView } from "../Views/BasicComponentView";
-import { ITextComponentView } from "../Views/Types";
+﻿import { TextComponentView } from "../Views/Types";
 import { BasicComponent } from "./BasicComponent";
 
 export class TextComponent extends BasicComponent {
-    protected readonly view: BasicComponentView & ITextComponentView;
+    protected readonly view: TextComponentView;
     private text: string;
     private formatTitle: (text: string) => string;
     private _data: any;
 
-    constructor(view: BasicComponentView & ITextComponentView) {
+    constructor(view: TextComponentView) {
         super(view);
         this.text = view.getText();
     }

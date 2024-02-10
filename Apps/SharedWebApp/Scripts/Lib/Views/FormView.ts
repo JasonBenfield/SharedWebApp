@@ -1,13 +1,30 @@
 ﻿import { BasicComponentView } from "./BasicComponentView";
 import { BasicContainerView } from "./BasicContainerView";
 import { ButtonCommandView } from "./Command";
-import { IFormAttributes, TargetValue } from "./Types";
+import { FormGroupContainerView } from "./FormGroupContainerView";
+import { IFormAttributes, TargetValue, ViewConstructor } from "./Types";
 
 export class FormView extends BasicContainerView {
+
     constructor(container: BasicComponentView) {
         super(container, 'form');
         this.setAction("#");
         this.setMethod('POST');
+    }
+
+    configureFormGroupContainers(configure: (fgc: FormGroupContainerView) => void) {
+        for (const formGroupContainer of this.getViews()) {
+            if (formGroupContainer instanceof FormGroupContainerView) {
+                configure(formGroupContainer);
+            }
+        }
+    }
+
+    addFormGroupContainer<T extends FormGroupContainerView>(ctor?: ViewConstructor<T>) {
+        if (!ctor) {
+            ctor = FormGroupContainerView as any;
+        }
+        return this.addView(ctor);
     }
 
     onSubmit() { return this.on('submit'); }

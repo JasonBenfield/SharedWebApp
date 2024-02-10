@@ -1,20 +1,19 @@
-﻿import { CssLengthUnit } from "../CssLengthUnit";
-import { DelayedAction } from "../DelayedAction";
+﻿import { DelayedAction } from "../DelayedAction";
 import { BasicComponentView } from "./BasicComponentView";
-import { FormGroupGridView, FormGroupView, SimpleFieldFormGroupDateTimeInputView, SimpleFieldFormGroupInputView, SimpleFieldFormGroupSelectView } from "./FormGroup";
+import { FormGroupView, SimpleFieldFormGroupDateTimeInputView, SimpleFieldFormGroupInputView, SimpleFieldFormGroupSelectView, SimpleFieldFormGroupTimeSpanInputView } from "./FormGroup";
+import { FormGroupContainerView } from "./FormGroupContainerView";
 import { FormView } from "./FormView";
 import { InputView } from "./InputView";
 import { ModalErrorView } from "./ModalError";
 import { ViewConstructor } from "./Types";
 
 export class BaseFormView extends FormView {
-    private readonly grid: FormGroupGridView;
+    private readonly formGroupContainerView: FormGroupContainerView;
     readonly modalError: ModalErrorView;
 
     constructor(container: BasicComponentView) {
         super(container);
-        this.grid = this.addView(FormGroupGridView);
-        this.grid.setTemplateColumns(CssLengthUnit.auto(), CssLengthUnit.flex(1));
+        this.formGroupContainerView = this.addView(FormGroupContainerView);
         this.modalError = this.addView(ModalErrorView);
     }
 
@@ -36,7 +35,7 @@ export class BaseFormView extends FormView {
         inputView.setType('hidden');
         return inputView;
     }
-    
+
     addInputFormGroup() {
         return this.addFormGroup(SimpleFieldFormGroupInputView);
     }
@@ -45,11 +44,15 @@ export class BaseFormView extends FormView {
         return this.addFormGroup(SimpleFieldFormGroupDateTimeInputView);
     }
 
+    addTimeSpanInputFormGroup() {
+        return this.addFormGroup(SimpleFieldFormGroupTimeSpanInputView);
+    }
+
     addDropDownFormGroup() {
         return this.addFormGroup(SimpleFieldFormGroupSelectView);
     }
 
     addFormGroup<TView extends FormGroupView>(ctor: ViewConstructor<TView>) {
-        return this.grid.addFormGroup<TView>(ctor);
+        return this.formGroupContainerView.addFormGroup<TView>(ctor);
     }
 }

@@ -29,7 +29,7 @@ export class SelectFieldsPanelView extends ModalODataPanelView {
             .configure(h1 => h1.setText('Select'));
         this.body.height100();
         const layoutGrid = this.body.addView(GridView);
-        layoutGrid.layout();
+        layoutGrid.styleAsLayout();
         layoutGrid.height100();
         layoutGrid.setTemplateRows(
             CssLengthUnit.auto(),

@@ -10,7 +10,7 @@ export class FormGroupDateInput extends FormGroup {
 
     constructor(view: FormGroupInputView | FormGroupInputGroupView) {
         super(view);
-        this.dateInputControl = this.addComponent(new DateInputControl(view.input));
+        this.dateInputControl = this.addComponent(new DateInputControl(view.inputView));
         this.setLabelFor(this.dateInputControl);
         this.valueTextComponent = this.addComponent(new TextComponent(view.valueTextView));
     }

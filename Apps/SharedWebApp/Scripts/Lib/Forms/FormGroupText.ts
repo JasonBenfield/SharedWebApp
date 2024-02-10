@@ -7,7 +7,7 @@ export class FormGroupText extends FormGroup {
 
     constructor(view: FormGroupTextView) {
         super(view);
-        this.textValue = this.addComponent(new TextComponent(view.textValue));
+        this.textValue = this.addComponent(new TextComponent(view.valueTextView));
         this.textValue.syncTitleWithText();
     }
 

@@ -78,7 +78,7 @@ export class GridView extends BasicComponentView {
 
     borderless() { this.addCssName('grid-borderless'); }
 
-    layout() { this.addCssName('grid-layout'); }
+    styleAsLayout() { this.addCssName('grid-layout'); }
 
     height100() { this.addCssName('h-100'); }
 

@@ -1,3 +1,4 @@
+import { DateTimeFormatOptions } from "./DateTimeFormatOptions";
 import { Month } from "./Month";
 import { TimeOnly } from "./TimeOnly";
 import { TimeSpan } from "./TimeSpan";
@@ -30,7 +31,9 @@ export class DateOnly {
         return result;
     }
 
-    static today() { return DateOnly.fromDate(new Date()); }
+    static today() {
+        return DateOnly.fromDate(new Date())!;
+    }
 
     static fromDate(date: Date) {
         return date ?
@@ -66,6 +69,10 @@ export class DateOnly {
     get day() { return this._refDate.getDay(); }
 
     get isMaxYear() { return this.year >= 9999; }
+
+    isAfterToday() {
+        return this.compareTo(DateOnly.today()) > 1;
+    }
 
     toDate(timeOnly?: TimeOnly) {
         return new Date(
@@ -125,20 +132,16 @@ export class DateOnly {
         return this.toISOString();
     }
 
-    format(options?: Intl.DateTimeFormatOptions) {
-        const dateOptions: Intl.DateTimeFormatOptions = { month: 'numeric', day: 'numeric', year: '2-digit' };
-        if (options) {
-            dateOptions.day = options.day;
-            dateOptions.weekday = options.weekday;
-            dateOptions.year = options.year;
-            dateOptions.month = options.month;
-        }
-        return this.toDate().toLocaleDateString([], dateOptions);
+    format(options?: DateTimeFormatOptions | Intl.DateTimeFormatOptions) {
+        const dateOptions = options instanceof DateTimeFormatOptions ?
+            options :
+            new DateTimeFormatOptions(options);
+        return this.toDate().toLocaleDateString([], dateOptions.getDateOptions());
     }
 
     toString() { return this.format(); }
 
-    equals(other?: DateOnly) {
+    equals(other: DateOnly | null | undefined) {
         if (other) {
             if (this === other) {
                 return true;
@@ -150,7 +153,7 @@ export class DateOnly {
         return false;
     }
 
-    compareTo(other?: DateOnly) {
+    compareTo(other: DateOnly | null | undefined) {
         if (other) {
             if (this._year < other._year) {
                 return -1;

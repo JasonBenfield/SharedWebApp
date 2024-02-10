@@ -5,21 +5,7 @@ import { ButtonView } from "./ButtonView";
 import { FaIconView } from "./FaIconView";
 import { LinkView } from "./LinkView";
 import { TextSpanView } from "./TextSpanView";
-
-export interface ICommandView {
-    readonly icon: FaIconView;
-    positionIconRight();
-    setText(text: string);
-    setTitle(text: string);
-    setContext(contextualClass: ContextualClass);
-    setActive();
-    setInactive();
-    show();
-    hide();
-    enable();
-    disable();
-    handleClick(action: () => void);
-}
+import { ICommandView } from "./Types";
 
 export class ButtonCommandView extends ButtonView implements ICommandView {
     readonly icon: FaIconView;
@@ -76,7 +62,7 @@ export class LinkCommandView extends LinkView implements ICommandView {
 
     constructor(container: BasicComponentView) {
         super(container);
-        this.icon = this.addView(FaIconView);
+        this.icon = this.addIcon();
         this.textSpan = this.addView(TextSpanView);
         this.addCssName('btn');
         this.setContext(ContextualClass.default);

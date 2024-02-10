@@ -1,4 +1,5 @@
 import { DateOnly } from "./DateOnly";
+import { DateTimeFormatOptions } from "./DateTimeFormatOptions";
 import { Month } from "./Month";
 import { TimeOnly } from "./TimeOnly";
 import { TimeSpan } from "./TimeSpan";
@@ -11,10 +12,12 @@ export class DateTimeOffset {
     }
 
     static parse(text: string) {
-        return DateTimeOffset.canParse(text) ? DateTimeOffset.fromDate(new Date(Date.parse(text))) : null;
+        return DateTimeOffset.canParse(text) ?
+            DateTimeOffset.fromDate(new Date(Date.parse(text))) :
+            null;
     }
 
-    static now() { return DateTimeOffset.fromDate(new Date()); }
+    static now() { return DateTimeOffset.fromDate(new Date())!; }
 
     static fromDate(date: Date) {
         if (date) {
@@ -40,22 +43,21 @@ export class DateTimeOffset {
     static UTC(year: number, month: Month, date: number, hour?: number, minute?: number, second?: number, millisecond?: number): DateTimeOffset {
         const utc = Date.UTC(year, month.index, date, hour || 0, minute || 0, second || 0, millisecond || 0);
         const utcDate = new Date(utc);
-        return DateTimeOffset.fromDate(utcDate);
+        return DateTimeOffset.fromDate(utcDate)!;
     }
 
-
-
-
     static create(date: DateOnly, time: TimeOnly) {
-        return new DateTimeOffset(
-            date.year,
-            date.month,
-            date.date,
-            time.hours,
-            time.minutes,
-            time.seconds,
-            time.milliseconds
-        );
+        return date && time ?
+            new DateTimeOffset(
+                date.year,
+                date.month,
+                date.date,
+                time.hours,
+                time.minutes,
+                time.seconds,
+                time.milliseconds
+            ) :
+            null;
     }
 
     private readonly refDate: Date;
@@ -101,6 +103,11 @@ export class DateTimeOffset {
     get timeZoneOffset() { return this._timeZoneOffset; }
 
     get isMaxYear() { return this._year >= 9999; }
+
+    isInFuture() {
+        const result = this.compareTo(DateTimeOffset.now());
+        return result > 0;
+    }
 
     toDate() {
         return new Date(this.refDate.getTime());
@@ -236,39 +243,47 @@ export class DateTimeOffset {
 
     toLocaleTimeString() { return this.refDate.toLocaleTimeString(); }
 
-    format(options?: Intl.DateTimeFormatOptions) {
-        if (options) {
-            return this.refDate.toLocaleString([], options);
+    format(options?: DateTimeFormatOptions | Intl.DateTimeFormatOptions) {
+        let dateTimeOptions: DateTimeFormatOptions;
+        if (options instanceof DateTimeFormatOptions) {
+            dateTimeOptions = options;
         }
-        const formattedDate = this.formatDate(options);
-        if (this.hours || this.minutes || this.seconds || this.milliseconds) {
-            const formattedTime = this.formatTime(options);
+        else {
+            dateTimeOptions = new DateTimeFormatOptions(options);
+        }
+        const formattedDate = this.formatDate(dateTimeOptions);
+        if (dateTimeOptions.isTimeIncludedWhenMidnight || this.hours || this.minutes || this.seconds || this.milliseconds) {
+            const formattedTime = this.formatTime(dateTimeOptions);
             return `${formattedDate} ${formattedTime}`;
         }
         return formattedDate;
     }
 
-    formatDate(options?: Intl.DateTimeFormatOptions) {
-        if (!options) {
-            options = {
-                month: 'numeric', day: 'numeric', year: '2-digit'
-            }
+    formatDate(options?: DateTimeFormatOptions | Intl.DateTimeFormatOptions) {
+        let dateOptions: DateTimeFormatOptions;
+        if (options instanceof DateTimeFormatOptions) {
+            dateOptions = options;
         }
-        return this.refDate.toLocaleDateString([], options);
+        else {
+            dateOptions = new DateTimeFormatOptions(options);
+        }
+        return this.refDate.toLocaleDateString([], dateOptions.getDateOptions());
     }
 
-    formatTime(options?: Intl.DateTimeFormatOptions) {
-        if (!options) {
-            options = {
-                hour: 'numeric', minute: '2-digit'
-            }
+    formatTime(options?: DateTimeFormatOptions | Intl.DateTimeFormatOptions) {
+        let timeOptions: DateTimeFormatOptions;
+        if (options instanceof DateTimeFormatOptions) {
+            timeOptions = options;
         }
-        return this.refDate.toLocaleTimeString([], options);
+        else {
+            timeOptions = new DateTimeFormatOptions(options);
+        }
+        return this.refDate.toLocaleTimeString([], timeOptions.getTimeOptions());
     }
 
     toString() { return this.toLocaleString(); }
 
-    equals(other: DateTimeOffset | Date) {
+    equals(other: DateTimeOffset | Date | null) {
         if (other) {
             let otherDate: Date;
             if (other instanceof DateTimeOffset) {
@@ -282,7 +297,7 @@ export class DateTimeOffset {
         return false;
     }
 
-    compareTo(other: DateTimeOffset | Date) {
+    compareTo(other: DateTimeOffset | Date | null) {
         if (other) {
             let otherDate: Date;
             if (other instanceof DateTimeOffset) {
@@ -299,6 +314,6 @@ export class DateTimeOffset {
             }
             return 0;
         }
-        return false;
+        return -1;
     }
 }

@@ -1,5 +1,4 @@
-﻿import { CssLengthUnit } from "../CssLengthUnit";
-import { MarginCss } from "../MarginCss";
+﻿import { MarginCss } from "../MarginCss";
 import { TextCss } from "../TextCss";
 import { AlertView } from "./AlertView";
 import { BasicComponentView } from "./BasicComponentView";
@@ -7,72 +6,16 @@ import { BasicTextComponentView } from "./BasicTextComponentView";
 import { BlockView } from "./BlockView";
 import { BooleanInputView } from "./BooleanInputView";
 import { DateTimeInputView } from "./DateTimeInputView";
-import { GridCellView, GridView } from "./Grid";
+import { GridCellView } from "./Grid";
 import { InputGroupView } from "./InputGroupView";
 import { InputView } from "./InputView";
 import { LabelView } from "./LabelView";
+import { LinkView } from "./LinkView";
 import { SelectView } from "./SelectView";
 import { TextAreaView } from "./TextAreaView";
 import { TextBlockView } from "./TextBlockView";
+import { TextSpanView } from "./TextSpanView";
 import { TimeSpanInputView } from "./TimeSpanInputView";
-import { ViewConstructor } from "./Types";
-
-export class FormGroupGridView extends GridView {
-    constructor(container: BasicComponentView) {
-        super(container);
-        this.layout();
-        this.setTemplateColumns(CssLengthUnit.auto(), CssLengthUnit.flex(1));
-    }
-
-    configureFormGroups(configure: (fg: FormGroupView) => void) {
-        for (const formGroup of this.getViews()) {
-            if (formGroup instanceof FormGroupView) {
-                configure(formGroup);
-            }
-        }
-    }
-
-    addFormGroupTextView() {
-        return this.addFormGroup(FormGroupTextView);
-    }
-
-    addFormGroupInputView() {
-        return this.addFormGroup(FormGroupInputView);
-    }
-    
-    addFormGroupTextAreaView() {
-        return this.addFormGroup(FormGroupTextAreaView);
-    }
-
-    addFormGroupInputGroupView() {
-        return this.addFormGroup(FormGroupInputGroupView);
-    }
-
-    addFormGroupSelectView() {
-        return this.addFormGroup(FormGroupSelectView);
-    }
-
-    addFormGroupDateTimeInputView() {
-        return this.addFormGroup(FormGroupDateTimeInputView);
-    }
-
-    addFormGroupTimeSpanInputView() {
-        return this.addFormGroup(FormGroupTimeSpanInputView);
-    }
-
-    addFormGroupAlertView() {
-        return this.addFormGroup(FormGroupAlertView);
-    }
-
-    addFormGroupBooleanInputView() {
-        const formGroup = this.addFormGroup(FormGroupBooleanInputView);
-        return formGroup;
-    }
-
-    addFormGroup<T extends FormGroupView>(ctor?: ViewConstructor<T>) {
-        return this.addView(ctor || FormGroupView) as T;
-    }
-}
 
 export class FormGroupView extends BasicComponentView {
     readonly captionCell: GridCellView;
@@ -88,8 +31,8 @@ export class FormGroupView extends BasicComponentView {
         this.captionCell = this.addView(GridCellView);
         this.captionCell.setTextCss(new TextCss().end().bold());
         this.captionLabel = this.captionCell.addView(LabelView);
+        this.captionLabel.addCssName('col-form-label');
         this.caption = this.captionLabel.addView(TextBlockView);
-        this.caption.addCssName('col-form-label');
         this.valueCell = this.addView(GridCellView);
     }
 
@@ -99,24 +42,36 @@ export class FormGroupView extends BasicComponentView {
 }
 
 export class FormGroupTextView extends FormGroupView {
-    readonly textValue: BasicTextComponentView;
+    readonly valueTextView: BasicTextComponentView;
 
     constructor(container: BasicComponentView) {
         super(container);
         const textValue = this.valueCell.addView(TextBlockView);
         textValue.styleAsFormControl();
-        this.textValue = textValue;
+        this.valueTextView = textValue;
+    }
+}
+
+export class FormGroupLinkView extends FormGroupView {
+    readonly linkView: LinkView;
+    readonly valueTextView: BasicTextComponentView;
+
+    constructor(container: BasicComponentView) {
+        super(container);
+        this.linkView = this.valueCell.addView(LinkView);
+        this.valueTextView = this.linkView.addView(TextSpanView);
+        this.linkView.addCssName('form-control-link');
     }
 }
 
 export class FormGroupInputView extends FormGroupView {
-    readonly input: InputView;
+    readonly inputView: InputView;
     readonly valueTextView: TextBlockView;
 
     constructor(container: BasicComponentView) {
         super(container);
-        this.input = this.valueCell.addView(InputView);
-        this.input.styleAsFormControl();
+        this.inputView = this.valueCell.addView(InputView);
+        this.inputView.styleAsFormControl();
         this.valueTextView = this.valueCell.addView(TextBlockView);
         this.valueTextView.styleAsFormControl();
         this.valueTextView.hide();
@@ -124,15 +79,15 @@ export class FormGroupInputView extends FormGroupView {
 }
 
 export class FormGroupInputGroupView extends FormGroupView {
-    readonly inputGroup: InputGroupView;
-    readonly input: InputView;
+    readonly inputGroupView: InputGroupView;
+    readonly inputView: InputView;
     readonly valueTextView: TextBlockView;
 
     constructor(container: BasicComponentView) {
         super(container);
-        this.inputGroup = this.valueCell.addView(InputGroupView);
-        this.input = this.inputGroup.prependFormControl(InputView);
-        this.input.styleAsFormControl();
+        this.inputGroupView = this.valueCell.addView(InputGroupView);
+        this.inputView = this.inputGroupView.prependFormControl(InputView);
+        this.inputView.styleAsFormControl();
         this.valueTextView = this.valueCell.addView(TextBlockView);
         this.valueTextView.styleAsFormControl();
         this.valueTextView.hide();
@@ -253,7 +208,7 @@ export abstract class SimpleFieldFormGroupView extends FormGroupView {
         this.valueTextView.styleAsFormControl();
         this.valueTextView.hide();
     }
-    
+
     abstract setCustomValidity(errorMessage: string);
 }
 
@@ -265,7 +220,7 @@ export class SimpleFieldFormGroupInputView extends SimpleFieldFormGroupView {
         const inputGroup = this.addView(InputGroupView);
         this.input = inputGroup.prependFormControl(InputView);
     }
-    
+
     setCustomValidity(errorMessage: string) {
         this.input.setCustomValidity(errorMessage);
         this.input.setTitle(errorMessage);

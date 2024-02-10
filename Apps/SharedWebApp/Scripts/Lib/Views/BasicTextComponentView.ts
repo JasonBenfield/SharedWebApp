@@ -13,4 +13,8 @@ export class BasicTextComponentView extends BasicComponentView implements ITextC
     setText(text: string) {
         this.elementView.setText(text);
     }
+
+    styleAsUserSelectAll() {
+        this.addCssName('user-select-all');
+    }
 }

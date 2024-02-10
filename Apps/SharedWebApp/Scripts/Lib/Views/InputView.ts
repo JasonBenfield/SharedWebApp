@@ -1,7 +1,6 @@
 ﻿import { ContextualClass } from "../ContextualClass";
 import { BasicComponentView } from "./BasicComponentView";
 import { BasicContainerView } from "./BasicContainerView";
-import { BooleanInputView } from "./BooleanInputView";
 import { DataListView } from "./DataListView";
 import { IInputAttributes } from "./Types";
 

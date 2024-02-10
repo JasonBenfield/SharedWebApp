@@ -2,7 +2,7 @@
 import { expect } from 'chai';
 import { TimeSpan } from '../Lib/TimeSpan';
 
-describe('Time Span', () => { 
+describe('Time Span', () => {
     it('Time Span from Milliseconds', function () {
         const dateStart = new Date(2022, 6, 21, 7, 0, 0, 0);
         const dateEnd = new Date(2022, 6, 21, 9, 30, 2, 0);
@@ -49,5 +49,12 @@ describe('Time Span', () => {
         expect(new TimeSpan(1, 12, 61, 4).toISOString()).to.equal('1.13:01:04.0000000');
         expect(new TimeSpan(1, 12, 3, 65).toISOString()).to.equal('1.12:04:05.0000000');
         expect(new TimeSpan(1, 25, 63, 65).toISOString()).to.equal('2.02:04:05.0000000');
+    });
+    it('Compare To', function () {
+        const ts = new TimeSpan(1, 2, 3, 4);
+        expect(ts.compareTo(ts.add(TimeSpan.fromHours(1)))).to.be.lessThan(0);
+        expect(ts.compareTo(ts.sub(TimeSpan.fromHours(1)))).to.be.greaterThan(0);
+        expect(ts.compareTo(new TimeSpan(1, 2, 3, 4))).to.equal(0);
+        expect(ts.compareTo(null)).to.be.lessThan(0);
     });
 });

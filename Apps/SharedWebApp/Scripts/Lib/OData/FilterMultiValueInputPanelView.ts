@@ -39,7 +39,7 @@ export class FilterMultiValueInputPanelView extends ModalODataPanelView {
         this.title = this.header.addView(TextHeading1View);
         this.body.height100();
         const layoutGrid = this.body.addView(GridView);
-        layoutGrid.layout();
+        layoutGrid.styleAsLayout();
         layoutGrid.height100();
         layoutGrid.setTemplateRows(
             CssLengthUnit.auto(),

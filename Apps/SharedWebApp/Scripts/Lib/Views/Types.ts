@@ -1,5 +1,7 @@
-﻿import { BasicComponentView } from "./BasicComponentView";
+﻿import { ContextualClass } from "../ContextualClass";
+import { BasicComponentView } from "./BasicComponentView";
 import { LinkCommandView } from "./Command";
+import { FaIconView } from "./FaIconView";
 import { HtmlElementView } from "./HtmlElementView";
 import { ViewEventActionBuilder } from "./ViewEventBuilder";
 
@@ -139,6 +141,29 @@ export interface ITextComponentView {
     setText(text: string);
     setTitle(title: string);
 }
+
+export type TextComponentView = BasicComponentView & ITextComponentView;
+
+export type LinkComponentView = BasicComponentView & ILinkView;
+
+export type TextLinkComponentView = BasicComponentView & ITextComponentView & ILinkView;
+
+export interface ICommandView {
+    readonly icon: FaIconView;
+    positionIconRight();
+    setText(text: string);
+    setTitle(text: string);
+    setContext(contextualClass: ContextualClass);
+    setActive();
+    setInactive();
+    show();
+    hide();
+    enable();
+    disable();
+    handleClick(action: () => void);
+}
+
+export type CommandView = BasicComponentView & ICommandView;
 
 export interface ILabelView {
     show();

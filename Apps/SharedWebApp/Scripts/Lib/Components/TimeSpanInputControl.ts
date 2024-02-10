@@ -137,7 +137,6 @@ export class TimeSpanInputControl extends BasicComponent {
         const minute = this.isMinuteIncluded ? this.minuteInputControl.getValue() : 0;
         const second = this.isSecondIncluded ? this.secondInputControl.getValue() : 0;
         const millisecond = this.isMillisecondIncluded ? this.millisecondInputControl.getValue() : 0;
-        console.log(`TimeSpanInputControl: day=${day},hour=${hour},minute=${minute},second=${second},millisecond=${millisecond}`);
         if (
             day === null || day === undefined ||
             hour === null || hour === undefined ||
@@ -145,7 +144,6 @@ export class TimeSpanInputControl extends BasicComponent {
             second === null || second === undefined ||
             millisecond === null || millisecond === undefined
         ) {
-            console.log(`TimeSpanInputControl: value is null`);
             return null;
         }
         const value = new TimeSpan(day, hour, minute, second, millisecond * 10000);

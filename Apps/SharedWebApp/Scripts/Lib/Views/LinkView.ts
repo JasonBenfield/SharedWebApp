@@ -1,5 +1,6 @@
 ﻿import { BasicComponentView } from "./BasicComponentView";
 import { BasicContainerView } from "./BasicContainerView";
+import { FaIconView } from "./FaIconView";
 import { ILinkAttributes, ILinkView, TargetValue } from "./Types";
 
 export class LinkView extends BasicContainerView implements ILinkView {
@@ -21,4 +22,11 @@ export class LinkView extends BasicContainerView implements ILinkView {
         this.on('click').execute(action).subscribe();
     }
 
+    addIcon() {
+        return this.addView(FaIconView);
+    }
+
+    prependIcon() {
+        return this.insertView(0, FaIconView);
+    }
 }

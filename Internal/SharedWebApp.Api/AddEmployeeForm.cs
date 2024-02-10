@@ -23,7 +23,7 @@ public sealed class AddEmployeeForm : Form
     }
 
     public InputField<string> EmployeeName { get; }
-    public InputField<DateTimeOffset?> BirthDate { get; }
+    public InputField<DateOnly?> BirthDate { get; }
     public InputField<decimal?> Salary { get; }
     public DropDownField<int?> Department { get; }
     public AddressInput Address { get; }

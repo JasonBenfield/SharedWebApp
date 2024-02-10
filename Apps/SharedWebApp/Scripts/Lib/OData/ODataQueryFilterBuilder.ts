@@ -1,8 +1,10 @@
 ﻿import { DateOnly } from "../DateOnly";
 import { DateRange, ISerializableDateRange } from "../DateRange";
+import { DateTimeOffset } from "../DateTimeOffset";
 import { JoinedStrings } from "../JoinedStrings";
 import { ISerializableNumberRange, NumberRange } from "../NumberRange";
 import { ISerializableRelativeDateRange, RelativeDateRange } from "../RelativeDateRange";
+import { TimeOnly } from "../TimeOnly";
 import { ODataColumn } from "./ODataColumn";
 
 export interface IFilterSelectionValue {
@@ -459,6 +461,15 @@ export class FilterValue {
         if (this.value instanceof Date) {
             return `${this.value.toLocaleDateString()}`;
         }
+        if (this.value instanceof DateTimeOffset) {
+            return `${this.value.toLocaleString()}`;
+        }
+        if (this.value instanceof DateOnly) {
+            return `${this.value.toLocaleString()}`;
+        }
+        if (this.value instanceof TimeOnly) {
+            return `${this.value.toLocaleString()}`;
+        }
         return this.toQuery();
     }
 
@@ -476,6 +487,15 @@ export class FilterValue {
             query = this.value.toString();
         }
         else if (this.value instanceof Date) {
+            query = `${this.value.toISOString()}`;
+        }
+        else if (this.value instanceof DateTimeOffset) {
+            query = `${this.value.toISOString()}`;
+        }
+        else if (this.value instanceof DateOnly) {
+            query = `${this.value.toISOString()}`;
+        }
+        else if (this.value instanceof TimeOnly) {
             query = `${this.value.toISOString()}`;
         }
         else {

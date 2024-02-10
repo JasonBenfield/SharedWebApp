@@ -31,7 +31,7 @@ export class TimeSpan {
     }
 
     static fromDays(value: number) {
-        return TimeSpan.fromMinutes(value * 24);
+        return TimeSpan.fromHours(value * 24);
     }
 
     static fromHours(value: number) {
@@ -117,15 +117,56 @@ export class TimeSpan {
         return !this.days && !this.hours && !this.minutes && !this.seconds && !this.ticks;
     }
 
-    equals(other: TimeSpan) {
+    add(other: TimeSpan) {
+        return new TimeSpan(
+            this.days + other.days,
+            this.hours + other.hours,
+            this.minutes + other.minutes,
+            this.seconds + other.seconds,
+            this.ticks + other.ticks
+        );
+    }
+
+    sub(other: TimeSpan) {
+        return new TimeSpan(
+            this.days - other.days,
+            this.hours - other.hours,
+            this.minutes - other.minutes,
+            this.seconds - other.seconds,
+            this.ticks - other.ticks
+        );
+    }
+
+    equals(other: TimeSpan | null | undefined) {
         if (other) {
-            return this.days === other.days &&
-                this.hours === other.hours &&
-                this.minutes === other.minutes &&
-                this.seconds === other.seconds &&
-                this.ticks === other.ticks;
+            if (this === other) {
+                return true;
+            }
+            return this.totalTicks === other.totalTicks;
         }
         return false;
+    }
+
+    compareTo(other: TimeSpan | null | undefined) {
+        let result: number;
+        if (other) {
+            if (this === other) {
+                result = 0;
+            }
+            else if (this.totalTicks > other.totalTicks) {
+                result = 1;
+            }
+            else if (this.totalTicks < other.totalTicks) {
+                result = -1;
+            }
+            else {
+                result = 0;
+            }
+        }
+        else {
+            result = -1;
+        }
+        return result;
     }
 
     toJSON() {

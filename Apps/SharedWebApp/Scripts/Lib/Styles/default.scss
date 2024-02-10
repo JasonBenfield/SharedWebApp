@@ -117,3 +117,14 @@ body {
 .dropdown-menu > ul > li {
     list-style: none;
 }
+
+.form-control-link, .form-control-text {
+    display: block;
+    width: 100%;
+    padding: 0.375rem 0;
+    margin-bottom: 0;
+    line-height: 1.5;
+    background-color: transparent;
+    border: solid transparent;
+    border-width: var(--bs-border-width) 0;
+}

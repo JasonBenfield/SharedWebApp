@@ -3,6 +3,7 @@ import 'mocha';
 import { DateTimeOffset } from '../Lib/DateTimeOffset';
 import { Month } from '../Lib/Month';
 import { TimeSpan } from '../Lib/TimeSpan';
+import { DateTimeFormatOptions } from '../Lib/DateTimeFormatOptions';
 
 describe('DateTimeOffset', () => {
     it('Parse DateTimeOffset', function () {
@@ -24,11 +25,34 @@ describe('DateTimeOffset', () => {
     });
     it('Add days', function () {
         const dateTime1 = DateTimeOffset.parse('2023-09-01T10:48:01.345')!;
-        console.log(`dateTime1: ${dateTime1}`);
         const nextDay = dateTime1.addDays(1);
-        console.log(`nextDay: ${nextDay}`);
         expect(nextDay.equals(new DateTimeOffset(2023, Month.September, 2, 10, 48, 1, 345))).to.be.true;
     });
+    it('Add Months', function () {
+        expect(new DateTimeOffset(2023, Month.August, 20, 21, 31).addMonths(1).format()).to.equal('9/20/23 9:31 PM');
+        expect(new DateTimeOffset(2023, Month.July, 31, 21, 31).addMonths(-1).format()).to.equal('7/1/23 9:31 PM');
+        expect(new DateTimeOffset(2023, Month.January, 1, 21, 31).addMonths(-1).format()).to.equal('12/1/22 9:31 PM');
+        expect(new DateTimeOffset(2022, Month.December, 31, 21, 31).addMonths(1).format()).to.equal('1/31/23 9:31 PM');
+    });
+    it('Add Years', function () {
+        expect(new DateTimeOffset(2023, Month.August, 20, 21, 31).addYears(1).format()).to.equal('8/20/24 9:31 PM');
+        expect(new DateTimeOffset(2023, Month.July, 31, 21, 31).addYears(-1).format()).to.equal('7/31/22 9:31 PM');
+    });
+    it('Add Time Span', function () {
+        expect(new DateTimeOffset(2023, Month.August, 20, 11, 15).addTimeSpan(TimeSpan.fromDays(1)).format()).to.equal('8/21/23 11:15 AM');
+        expect(new DateTimeOffset(2023, Month.August, 20, 11, 15).addTimeSpan(TimeSpan.fromHours(1)).format()).to.equal('8/20/23 12:15 PM');
+        expect(new DateTimeOffset(2023, Month.August, 20, 11, 15).addTimeSpan(TimeSpan.fromMinutes(5)).format()).to.equal('8/20/23 11:20 AM');
+        expect(new DateTimeOffset(2023, Month.August, 20, 11, 15).addTimeSpan(TimeSpan.fromSeconds(15)).format(new DateTimeFormatOptions().use2DigitSeconds())).to.equal('8/20/23 11:15:15 AM');
+        expect(new DateTimeOffset(2023, Month.August, 20, 11, 15).addTimeSpan(TimeSpan.fromMilliseconds(234)).format(new DateTimeFormatOptions().use2DigitSeconds().useMilliseconds(3))).to.equal('8/20/23 11:15:00.234 AM');
+    });
+    it('Sub Time Span', function () {
+        expect(new DateTimeOffset(2023, Month.August, 20, 11, 15).subTimeSpan(TimeSpan.fromDays(1)).format()).to.equal('8/19/23 11:15 AM');
+        expect(new DateTimeOffset(2023, Month.August, 20, 11, 15).subTimeSpan(TimeSpan.fromHours(1)).format()).to.equal('8/20/23 10:15 AM');
+        expect(new DateTimeOffset(2023, Month.August, 20, 11, 15).subTimeSpan(TimeSpan.fromMinutes(5)).format()).to.equal('8/20/23 11:10 AM');
+        expect(new DateTimeOffset(2023, Month.August, 20, 11, 15).subTimeSpan(TimeSpan.fromSeconds(15)).format(new DateTimeFormatOptions().use2DigitSeconds())).to.equal('8/20/23 11:14:45 AM');
+        expect(new DateTimeOffset(2023, Month.August, 20, 11, 15).subTimeSpan(TimeSpan.fromMilliseconds(234)).format(new DateTimeFormatOptions().use2DigitSeconds().useMilliseconds(3))).to.equal('8/20/23 11:14:59.766 AM');
+    });
+
     it('Minus', function () {
         const dateTime1 = DateTimeOffset.parse('2023-09-01T10:48:01.3451234')!;
         const dateTime2 = DateTimeOffset.parse('2023-09-01T09:48:01.3451234')!;
@@ -51,5 +75,12 @@ describe('DateTimeOffset', () => {
     it('Default formatting for Date only', function () {
         const date = new DateTimeOffset(2021, Month.January, 17, 0, 0, 0, 0);
         expect(date.format()).to.equal('1/17/21');
+    });
+    it('Compare To', function () {
+        const now = DateTimeOffset.now();
+        expect(now.compareTo(now.addDays(1))).to.be.lessThan(0);
+        expect(now.compareTo(now.addDays(-1))).to.be.greaterThan(0);
+        expect(now.compareTo(new DateTimeOffset(now.year, now.month, now.date, now.hours, now.minutes, now.seconds, now.milliseconds))).to.equal(0);
+        expect(now.compareTo(null)).to.be.lessThan(0);
     });
 });
