@@ -1,0 +1,51 @@
+{
+  "name": "@jasonbenfield/sharedwebapp",
+  "version": "1.1.0",
+  "description": "",
+  "main": "./main.js",
+  "typings": "./index.d.ts",
+  "scripts": {
+    "test": "mocha -r ts-node/register 'Scripts/Tests/**/*.ts'"
+  },
+  "author": "",
+  "repository": "github:JasonBenfield/SharedWebApp",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.4.2",
+    "@popperjs/core": "^2.11.6",
+    "@types/jquery": "^3.5.1",
+    "@types/lodash": "^4.14.195",
+    "@types/node": "^20.3.1",
+    "@types/numeral": "0.0.28",
+    "bootstrap": "^5.3.2",
+    "jquery": "^3.7.1",
+    "lodash": "^4.17.21",
+    "numeral": "^2.0.6",
+    "object-to-formdata": "^4.5.1",
+    "tslib": "^2.6.2"
+  },
+  "devDependencies": {
+    "@types/bootstrap": "^5.2.10",
+    "@types/chai": "^4.3.11",
+    "@types/mocha": "^10.0.6",
+    "chai": "^4.3.10",
+    "css-loader": "^6.8.1",
+    "file-loader": "^6.2.0",
+    "fork-ts-checker-webpack-plugin": "^7.2.13",
+    "html-loader": "^4.2.0",
+    "mini-css-extract-plugin": "^2.7.6",
+    "mocha": "^10.2.0",
+    "resolve-url-loader": "^5.0.0",
+    "sass": "^1.69.5",
+    "sass-loader": "^14.1.1",
+    "style-loader": "^3.3.3",
+    "ts-loader": "^9.5.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.3.3",
+    "webpack": "^5.90.3",
+    "webpack-cli": "^5.1.4"
+  }
+}
