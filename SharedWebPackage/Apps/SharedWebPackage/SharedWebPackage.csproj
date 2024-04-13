@@ -1,0 +1,554 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+	  <Nullable>enable</Nullable>
+	  <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <JavaScriptTestRoot>Scripts\Tests\</JavaScriptTestRoot>
+    <JavaScriptTestFramework>mocha</JavaScriptTestFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Exports\**" />
+    <Content Remove="Exports\**" />
+    <EmbeddedResource Remove="Exports\**" />
+    <None Remove="Exports\**" />
+    <TypeScriptCompile Remove="Exports\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Scripts\Internal\CardDemo\TestClickableItem.ts" />
+    <None Remove="Scripts\Internal\CardDemo\TestClickableItemView.ts" />
+    <None Remove="Scripts\Internal\CardDemo\TestGridLinkListItem.ts" />
+    <None Remove="Scripts\Internal\CardDemo\TestGridLinkListItemView.ts" />
+    <None Remove="Scripts\Internal\CardDemo\TestGridListItem.ts" />
+    <None Remove="Scripts\Internal\CardDemo\TestGridListItemView.ts" />
+    <None Remove="Scripts\Internal\CardDemo\TestListItem.ts" />
+    <None Remove="Scripts\Internal\CardDemo\TestListItemView.ts" />
+    <None Remove="Scripts\Internal\DefaultPageContext.ts" />
+    <None Remove="Scripts\Internal\GridDemo\DemoGrid.ts" />
+    <None Remove="Scripts\Internal\ODataDemo\index.d.ts" />
+    <None Remove="Scripts\Internal\ODataDemo\ODataButtonGroupCellView.ts" />
+    <None Remove="Scripts\Internal\ODataDemo\ODataDemoRow.ts" />
+    <None Remove="Scripts\Internal\ODataDemo\ODataDropdownView.ts" />
+    <None Remove="Scripts\Internal\ODataDemo\ODataEmployeeColumnsBuilder.ts" />
+    <None Remove="Scripts\Internal\SharedAppClient.ts" />
+    <None Remove="Scripts\Internal\SharedPage.ts" />
+    <None Remove="Scripts\Internal\SharedPageView.ts" />
+    <None Remove="Scripts\Internal\ViewDemo\DemoGridListGroupItem.ts" />
+    <None Remove="Scripts\Internal\ViewDemo\DemoGridListGroupItemView.ts" />
+    <None Remove="Scripts\Internal\ViewDemo\MainPage.ts" />
+    <None Remove="Scripts\Internal\ViewDemo\MainPageView.ts" />
+    <None Remove="Scripts\Lib\Components\DataListOption.ts" />
+    <None Remove="Scripts\Lib\Forms\FormGroupAlert.ts" />
+    <None Remove="Scripts\Lib\Forms\FormGroupLink.ts" />
+    <None Remove="Scripts\Lib\Http\AppClientQuery.ts" />
+    <None Remove="Scripts\Lib\Http\AppVersionDomain.ts" />
+    <None Remove="Scripts\Lib\Http\DefaultMenuDefinitions.ts" />
+    <None Remove="Scripts\Lib\Http\ErrorFromHttpResult.ts" />
+    <None Remove="Scripts\Lib\Http\ODataResult.ts" />
+    <None Remove="Scripts\Lib\Http\UserMenuDefinition.ts" />
+    <None Remove="Scripts\Lib\BorderCss.ts" />
+    <None Remove="Scripts\Lib\Components\BasicComponent.ts" />
+    <None Remove="Scripts\Lib\Components\BasicPage.ts" />
+    <None Remove="Scripts\Lib\Components\BasicPanelComponent.ts" />
+    <None Remove="Scripts\Lib\Components\BooleanInputControl.ts" />
+    <None Remove="Scripts\Lib\Components\ButtonGroup.ts" />
+    <None Remove="Scripts\Lib\Components\FileInputControl.ts" />
+    <None Remove="Scripts\Lib\Components\FormCheck.ts" />
+    <None Remove="Scripts\Lib\Components\InputControl.ts" />
+    <None Remove="Scripts\Lib\Components\ListGroup.ts" />
+    <None Remove="Scripts\Lib\Components\MenuComponent.ts" />
+    <None Remove="Scripts\Lib\Components\MenuItemComponent.ts" />
+    <None Remove="Scripts\Lib\Components\ModalConfirm.ts" />
+    <None Remove="Scripts\Lib\Components\ModalError.ts" />
+    <None Remove="Scripts\Lib\Components\SelectControl.ts" />
+    <None Remove="Scripts\Lib\Components\SelectOption.ts" />
+    <None Remove="Scripts\Lib\Components\TextAreaControl.ts" />
+    <None Remove="Scripts\Lib\Components\TextButtonComponent.ts" />
+    <None Remove="Scripts\Lib\Components\TextComponent.ts" />
+    <None Remove="Scripts\Lib\Components\TextValueFormGroup.ts" />
+    <None Remove="Scripts\Lib\Components\Types.ts" />
+    <None Remove="Scripts\Lib\Components\UserMenuComponent.ts" />
+    <None Remove="Scripts\Lib\DateRange.ts" />
+    <None Remove="Scripts\Lib\FlexCss.ts" />
+    <None Remove="Scripts\Lib\Forms\ErrorListItem.ts" />
+    <None Remove="Scripts\Lib\Forms\ErrorListItemView.ts" />
+    <None Remove="Scripts\Lib\Forms\MultiViewValue.ts" />
+    <None Remove="Scripts\Lib\JustifyContentCss.ts" />
+    <None Remove="Scripts\Lib\NumberRange.ts" />
+    <None Remove="Scripts\Lib\OData\AbsoluteDateRangePanel.ts" />
+    <None Remove="Scripts\Lib\OData\AbsoluteNumberRangePanel.ts" />
+    <None Remove="Scripts\Lib\OData\AvailableFIeldListItem.ts" />
+    <None Remove="Scripts\Lib\OData\AvailableFieldListItemView.ts" />
+    <None Remove="Scripts\Lib\OData\BooleanIconCell.ts" />
+    <None Remove="Scripts\Lib\OData\DateRangePicker.ts" />
+    <None Remove="Scripts\Lib\OData\DefaultODataClient.ts" />
+    <None Remove="Scripts\Lib\OData\DefaultValueFormatter.ts" />
+    <None Remove="Scripts\Lib\OData\FilterColumnOptionsBuilder.ts" />
+    <None Remove="Scripts\Lib\OData\FilterConditionClauseComponent.ts" />
+    <None Remove="Scripts\Lib\OData\FilterConditionClauseView.ts" />
+    <None Remove="Scripts\Lib\OData\FilterConditionLinkView.ts" />
+    <None Remove="Scripts\Lib\OData\FilterMultiValueInputPanel.ts" />
+    <None Remove="Scripts\Lib\OData\FilterMultiValueInputPanelView.ts" />
+    <None Remove="Scripts\Lib\OData\FilterValueInputPanel.ts" />
+    <None Remove="Scripts\Lib\OData\FilterValueInputPanelView.ts" />
+    <None Remove="Scripts\Lib\OData\FilterWorkflow.ts" />
+    <None Remove="Scripts\Lib\OData\FilterWorkflowView.ts" />
+    <None Remove="Scripts\Lib\OData\IconCellView.ts" />
+    <None Remove="Scripts\Lib\OData\ModalODataComponent.ts" />
+    <None Remove="Scripts\Lib\OData\ModalODataComponentView.ts" />
+    <None Remove="Scripts\Lib\OData\ModalODataPanelView.ts" />
+    <None Remove="Scripts\Lib\OData\NumberRangePicker.ts" />
+    <None Remove="Scripts\Lib\OData\NumberValueFormatter.ts" />
+    <None Remove="Scripts\Lib\OData\ODataCell.ts" />
+    <None Remove="Scripts\Lib\OData\ODataCellClickedEventArgs.ts" />
+    <None Remove="Scripts\Lib\OData\ODataColumn.ts" />
+    <None Remove="Scripts\Lib\OData\ODataColumnAccessor.ts" />
+    <None Remove="Scripts\Lib\OData\ODataColumnBuilder.ts" />
+    <None Remove="Scripts\Lib\OData\ODataColumnView.ts" />
+    <None Remove="Scripts\Lib\OData\ODataColumnViewBuilder.ts" />
+    <None Remove="Scripts\Lib\OData\ODataComponent.ts" />
+    <None Remove="Scripts\Lib\OData\ODataComponentOptions.ts" />
+    <None Remove="Scripts\Lib\OData\ODataComponentOptionsBuilder.ts" />
+    <None Remove="Scripts\Lib\OData\ODataComponentView.ts" />
+    <None Remove="Scripts\Lib\OData\ODataComponentViewOptions.ts" />
+    <None Remove="Scripts\Lib\OData\ODataComponentViewOptionsBuilder.ts" />
+    <None Remove="Scripts\Lib\OData\ODataFooterComponent.ts" />
+    <None Remove="Scripts\Lib\OData\ODataFooterComponentView.ts" />
+    <None Remove="Scripts\Lib\OData\ODataGrid.ts" />
+    <None Remove="Scripts\Lib\OData\ODataGridView.ts" />
+    <None Remove="Scripts\Lib\OData\ODataHeaderCell.ts" />
+    <None Remove="Scripts\Lib\OData\ODataHeaderCellView.ts" />
+    <None Remove="Scripts\Lib\OData\ODataHeaderRow.ts" />
+    <None Remove="Scripts\Lib\OData\ODataPage.ts" />
+    <None Remove="Scripts\Lib\OData\ODataQueryBuilder.ts" />
+    <None Remove="Scripts\Lib\OData\ODataQueryFilterBuilder.ts" />
+    <None Remove="Scripts\Lib\OData\ODataQueryFilterPartFactory.ts" />
+    <None Remove="Scripts\Lib\OData\ODataRow.ts" />
+    <None Remove="Scripts\Lib\OData\ODataTextCell.ts" />
+    <None Remove="Scripts\Lib\OData\ODataTextCellView.ts" />
+    <None Remove="Scripts\Lib\OData\RelativeDateRangePanel.ts" />
+    <None Remove="Scripts\Lib\OData\RelativeDateRangePanelView.ts" />
+    <None Remove="Scripts\Lib\OData\RelativeDateRangePicker.ts" />
+    <None Remove="Scripts\Lib\OData\RelativeDateRangePickerView.ts" />
+    <None Remove="Scripts\Lib\OData\RelativeOffsetPicker.ts" />
+    <None Remove="Scripts\Lib\OData\RelativeOffsetPickerView.ts" />
+    <None Remove="Scripts\Lib\OData\SelectedFIeldListItem.ts" />
+    <None Remove="Scripts\Lib\OData\SelectedFieldListItemView.ts" />
+    <None Remove="Scripts\Lib\OData\SelectedValueListItemView.ts" />
+    <None Remove="Scripts\Lib\OData\SelectFieldsPanel.ts" />
+    <None Remove="Scripts\Lib\OData\SelectFieldsPanelView.ts" />
+    <None Remove="Scripts\Lib\OData\SelectFilterAppendPanel.ts" />
+    <None Remove="Scripts\Lib\OData\SelectFilterAppendPanelView.ts" />
+    <None Remove="Scripts\Lib\OData\SelectFilterConditionPanel.ts" />
+    <None Remove="Scripts\Lib\OData\SelectFilterConditionPanelView.ts" />
+    <None Remove="Scripts\Lib\OData\SourceType.ts" />
+    <None Remove="Scripts\Lib\OData\SuggestedValueListGetter.ts" />
+    <None Remove="Scripts\Lib\OData\SuggestedValueListItem.ts" />
+    <None Remove="Scripts\Lib\OData\SuggestedValueListItemView.ts" />
+    <None Remove="Scripts\Lib\OData\SuggestedValueODataGetter.ts" />
+    <None Remove="Scripts\Lib\OData\Types.ts" />
+    <None Remove="Scripts\Lib\OData\ValueRangePanelView.ts" />
+    <None Remove="Scripts\Lib\OData\ValueRangePickerView.ts" />
+    <None Remove="Scripts\Lib\Position.ts" />
+    <None Remove="Scripts\Lib\RelativeDateRange.ts" />
+    <None Remove="Scripts\Lib\TimeOnly.ts" />
+    <None Remove="Scripts\Lib\TimeSpan.ts" />
+    <None Remove="Scripts\Lib\ValueRangeBound.ts" />
+    <None Remove="Scripts\Lib\Views\BasicComponentView.ts" />
+    <None Remove="Scripts\Lib\Views\BasicComponentWrapper.ts" />
+    <None Remove="Scripts\Lib\Views\BasicContainerView.ts" />
+    <None Remove="Scripts\Lib\Views\BasicTextComponentView.ts" />
+    <None Remove="Scripts\Lib\Views\BlockQuoteView.ts" />
+    <None Remove="Scripts\Lib\Views\BlockView.ts" />
+    <None Remove="Scripts\Lib\Views\BlockWithTextView.ts" />
+    <None Remove="Scripts\Lib\Views\ButtonGroupView.ts" />
+    <None Remove="Scripts\Lib\Views\ButtonWrapper.ts" />
+    <None Remove="Scripts\Lib\Views\Card.ts" />
+    <None Remove="Scripts\Lib\Views\ColumnView.ts" />
+    <None Remove="Scripts\Lib\Views\CssFontBuilder.ts" />
+    <None Remove="Scripts\Lib\Views\DelView.ts" />
+    <None Remove="Scripts\Lib\Views\Dropdown.ts" />
+    <None Remove="Scripts\Lib\Views\FormCheckView.ts" />
+    <None Remove="Scripts\Lib\Views\FormGroup.ts" />
+    <None Remove="Scripts\Lib\Views\FormView.ts" />
+    <None Remove="Scripts\Lib\Views\Grid.ts" />
+    <None Remove="Scripts\Lib\Views\Headings.ts" />
+    <None Remove="Scripts\Lib\Views\HorizontalRuleView.ts" />
+    <None Remove="Scripts\Lib\Views\HtmlElementView.ts" />
+    <None Remove="Scripts\Lib\Views\IconView.ts" />
+    <None Remove="Scripts\Lib\Views\InsView.ts" />
+    <None Remove="Scripts\Lib\Views\LabelView.ts" />
+    <None Remove="Scripts\Lib\Views\LinkView.ts" />
+    <None Remove="Scripts\Lib\Views\LinkWithTextView.ts" />
+    <None Remove="Scripts\Lib\Views\ListGroup.ts" />
+    <None Remove="Scripts\Lib\Views\ListItemView.ts" />
+    <None Remove="Scripts\Lib\Views\MarkView.ts" />
+    <None Remove="Scripts\Lib\Views\ModalError.ts" />
+    <None Remove="Scripts\Lib\Views\NavView.ts" />
+    <None Remove="Scripts\Lib\Views\RootView.ts" />
+    <None Remove="Scripts\Lib\Views\RowView.ts" />
+    <None Remove="Scripts\Lib\Views\SelectedValueListItem.ts" />
+    <None Remove="Scripts\Lib\Views\SelectView.ts" />
+    <None Remove="Scripts\Lib\Views\SmallView.ts" />
+    <None Remove="Scripts\Lib\Views\SpanView.ts" />
+    <None Remove="Scripts\Lib\Views\Table.ts" />
+    <None Remove="Scripts\Lib\Views\TextAreaView.ts" />
+    <None Remove="Scripts\Lib\Views\TextBlockQuoteView.ts" />
+    <None Remove="Scripts\Lib\Views\TextBlockView.ts" />
+    <None Remove="Scripts\Lib\Views\TextDelView.ts" />
+    <None Remove="Scripts\Lib\Views\TextEmView.ts" />
+    <None Remove="Scripts\Lib\Views\TextHeadings.ts" />
+    <None Remove="Scripts\Lib\Views\TextInsView.ts" />
+    <None Remove="Scripts\Lib\Views\TextLabelView.ts" />
+    <None Remove="Scripts\Lib\Views\TextLinkView.ts" />
+    <None Remove="Scripts\Lib\Views\TextMarkView.ts" />
+    <None Remove="Scripts\Lib\Views\TextPreView.ts" />
+    <None Remove="Scripts\Lib\Views\TextSmallView.ts" />
+    <None Remove="Scripts\Lib\Views\TextSpanView.ts" />
+    <None Remove="Scripts\Lib\Views\TextStrongView.ts" />
+    <None Remove="Scripts\Lib\Views\Types.ts" />
+    <None Remove="Scripts\Lib\Views\UnorderedListView.ts" />
+    <None Remove="Scripts\Lib\Views\UserMenuView.ts" />
+    <None Remove="Scripts\Lib\Views\ViewEventBuilder.ts" />
+    <None Remove="Scripts\Tests\DateOnlyTest.ts" />
+    <None Remove="Scripts\Tests\DateTimeOffsetTest.ts" />
+    <None Remove="Scripts\Tests\ParsedJsonTextTest.ts" />
+    <None Remove="Scripts\Tests\RelativeDateRangeTest.ts" />
+    <None Remove="Scripts\Tests\TimeOnlyTest.ts" />
+    <None Remove="Scripts\Tests\TimeSpanTest.ts" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="XTI_App.Fakes" Version="1.8.40" />
+    <PackageReference Include="XTI_Core.Extensions" Version="1.10.21" />
+    <PackageReference Include="XTI_TempLog.Fakes" Version="1.2.32" />
+    <PackageReference Include="XTI_WebApp.Extensions" Version="1.8.40" />
+    <PackageReference Include="XTI_WebApp.Fakes" Version="1.8.40" />
+    <PackageReference Include="XTI_WebApp.RCL" Version="1.8.40" />
+    <PackageReference Include="XTI_WebApp.TagHelpers" Version="1.8.40" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+    <Folder Include="wwwroot\styles\css\webfonts\" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\Internal\SharedWebApp.Api\SharedWebApp.Api.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <TypeScriptCompile Include="Scripts\Internal\CardDemo\TestGridLinkListItemView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Internal\CardDemo\TestGridLinkListItem.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Internal\CardDemo\TestGridListItemView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Internal\CardDemo\TestGridListItem.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Internal\CardDemo\TestListItemView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Internal\CardDemo\TestListItem.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Internal\CardDemo\TestClickableItem.ts" />
+    <TypeScriptCompile Include="Scripts\Internal\CardDemo\TestClickableItemView.ts" />
+    <TypeScriptCompile Include="Scripts\Internal\DefaultPageContext.ts" />
+    <TypeScriptCompile Include="Scripts\Internal\GridDemo\DemoGrid.ts" />
+    <TypeScriptCompile Include="Scripts\Internal\ODataDemo\index.d.ts" />
+    <TypeScriptCompile Include="Scripts\Internal\ODataDemo\ODataButtonGroupCellView.ts" />
+    <TypeScriptCompile Include="Scripts\Internal\ODataDemo\ODataDemoRow.ts" />
+    <TypeScriptCompile Include="Scripts\Internal\ODataDemo\ODataDropdownView.ts" />
+    <TypeScriptCompile Include="Scripts\Internal\ODataDemo\ODataEmployeeColumnsBuilder.ts" />
+    <TypeScriptCompile Include="Scripts\Internal\SharedAppClient.ts" />
+    <TypeScriptCompile Include="Scripts\Internal\SharedPage.ts" />
+    <TypeScriptCompile Include="Scripts\Internal\SharedPageView.ts" />
+    <TypeScriptCompile Include="Scripts\Internal\ViewDemo\DemoGridListGroupItemView.ts" />
+    <TypeScriptCompile Include="Scripts\Internal\ViewDemo\DemoGridListGroupItem.ts" />
+    <TypeScriptCompile Include="Scripts\Internal\ViewDemo\MainPage.ts" />
+    <TypeScriptCompile Include="Scripts\Internal\ViewDemo\MainPageView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\DataListOption.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Forms\FormGroupAlert.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Forms\FormGroupLink.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Http\AppClientQuery.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Http\AppVersionDomain.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Http\DefaultMenuDefinitions.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Http\ErrorFromHttpResult.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Http\ODataResult.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Http\UserMenuDefinition.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\BorderCss.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\BasicComponent.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\BasicPanelComponent.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\BooleanInputControl.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Components\FileInputControl.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\MenuComponent.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\MenuItemComponent.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\TextAreaControl.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Components\TextButtonComponent.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\ButtonGroup.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\FormCheck.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\InputControl.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\ListGroup.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\ModalConfirm.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\ModalError.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\BasicPage.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\SelectControl.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\SelectOption.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\TextComponent.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\UserMenuComponent.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Forms\FormGroupText.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\Types.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\NumberRange.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\DateRange.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\FlexCss.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Forms\ErrorListItem.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Forms\MultiViewValue.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\AbsoluteNumberRangePanel.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\OData\DefaultODataClient.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\BooleanIconCell.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\FilterMultiValueInputPanelView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\OData\FilterMultiValueInputPanel.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\OData\NumberRangePicker.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\OData\FilterConditionClauseComponent.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\FilterConditionClauseView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ModalODataPanelView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\AvailableFIeldListItem.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\OData\AvailableFieldListItemView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataComponentViewOptions.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataComponentViewOptionsBuilder.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\SelectedValueListItemView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\SuggestedValueListGetter.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\SuggestedValueListItem.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\SuggestedValueListItemView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\SuggestedValueODataGetter.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ValueRangePanelView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\OData\AbsoluteDateRangePanel.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\OData\RelativeDateRangePicker.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\RelativeDateRangePickerView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\RelativeOffsetPicker.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\RelativeOffsetPickerView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\RelativeDateRangePanel.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\RelativeDateRangePanelView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\DateRangePicker.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ValueRangePickerView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Position.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\TimeOnly.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\ValueRangeBound.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\BasicComponentWrapper.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\BlockWithTextView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\LinkWithTextView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\MarkView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\DelView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\InsView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\ButtonGroupView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\ButtonWrapper.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\ErrorListItemView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\JustifyContentCss.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\FilterColumnOptionsBuilder.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\FilterValueInputPanel.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\FilterValueInputPanelView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\FilterWorkflow.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\FilterWorkflowView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ModalODataComponent.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ModalODataComponentView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\NumberValueFormatter.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataCell.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataCellClickedEventArgs.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataColumnAccessor.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataColumnView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataColumnViewBuilder.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataFooterComponent.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataFooterComponentView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataGridView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\DefaultValueFormatter.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataHeaderCell.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataHeaderCellView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataPage.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataQueryBuilder.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataHeaderRow.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataQueryFilterBuilder.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataRow.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataTextCell.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataTextCellView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\IconCellView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\SelectedFieldListItem.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\SelectedFieldListItemView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\SelectFieldsPanel.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\SelectFieldsPanelView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\SelectFilterAppendPanel.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\SelectFilterAppendPanelView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\SelectFilterConditionPanel.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\SelectFilterConditionPanelView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\SourceType.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\Types.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataColumn.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataColumnBuilder.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataComponent.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataComponentOptions.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataComponentOptionsBuilder.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataComponentView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\ODataGrid.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\RelativeDateRange.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\TimeSpan.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\BasicComponentView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\BasicContainerView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\BasicTextComponentView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\Card.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\Dropdown.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\FormCheckView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\FormGroup.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\FormView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\ColumnView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\Grid.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\IconView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\LabelView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\ListGroup.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\ModalError.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\NavView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\RowView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\OData\SelectedValueListItem.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\SelectView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\BlockQuoteView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\Table.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\TextAreaView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\TextBlockQuoteView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\TextInsView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\TextMarkView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\TextEmView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\TextPreView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\TextStrongView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\TextLabelView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\TextLinkView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\LinkView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\ListItemView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\TextDelView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\TextSmallView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\UnorderedListView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\SmallView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\SpanView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\BlockView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\HorizontalRuleView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\TextSpanView.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\TextHeadings.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Views\Headings.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\HtmlElementView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\RootView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\TextBlockView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\Types.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\UserMenuView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Views\ViewEventBuilder.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Tests\DateTimeOffsetTest.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Tests\TimeOnlyTest.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Tests\ParsedJsonTextTest.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Tests\RelativeDateRangeTest.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Tests\DateOnlyTest.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Tests\TimeSpanTest.ts" />
+  </ItemGroup>
+  
+</Project>

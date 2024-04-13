@@ -1,0 +1,229 @@
+﻿@import "./grid-variants.scss";
+
+.grid {
+    display: grid;
+    margin-bottom: $spacer;
+    color: $table-color;
+    vertical-align: $table-cell-vertical-align;
+    border-color: $table-border-color;
+
+    > .grid-row > .grid-cell, > .grid-cell {
+        border-top: calc(2 * $table-border-width) solid $table-group-separator-color;
+    }
+}
+
+.grid-cell {
+    padding: $table-cell-padding-y $table-cell-padding-x;
+    background-color: var(--xti-grid-bg);
+    border-bottom-width: $table-border-width;
+    box-shadow: inset 0 0 0 9999px var(--xti-grid-accent-bg);
+}
+
+.grid-row, .form-group {
+    padding: $table-cell-padding-y $table-cell-padding-x;
+    color: $list-group-color;
+    background-color: $list-group-bg;
+    border-bottom-width: $table-border-width;
+    box-shadow: inset 0 0 0 9999px var(--xti-grid-accent-bg);
+
+    .grid-cell {
+        padding: inherit;
+        background-color: inherit;
+        border: inherit;
+        box-shadow: inherit;
+        margin: inherit;
+    }
+}
+
+.grid-bordered {
+    > .grid-row > .grid-cell, > .grid-cell {
+        border-width: $table-border-width 0;
+    }
+}
+
+.grid-borderless, .grid-layout {
+    > .grid-row > .grid-cell, > .grid-cell {
+        border-bottom-width: 0;
+        border-top-width: 0;
+    }
+}
+
+.grid.grid-layout {
+    margin: 0;
+
+    > .grid-cell {
+        padding: 0;
+    }
+}
+
+.grid-row-action {
+    > .grid-cell {
+        cursor: pointer;
+        color: $list-group-action-color;
+        text-align: inherit;
+
+        &:hover,
+        &:focus {
+            z-index: 1; // Place hover/focus items above their siblings for proper border styling
+            color: $list-group-action-hover-color;
+            text-decoration: none;
+            background-color: $list-group-hover-bg;
+        }
+
+        &:active {
+            color: $list-group-action-active-color;
+            background-color: $list-group-action-active-bg;
+        }
+    }
+}
+
+@each $state, $value in $table-variants {
+    @include grid-variant($state, $value);
+}
+
+@each $state, $value in $theme-colors {
+    $grid-row-variant-bg: shift-color($value, $list-group-item-bg-scale);
+    $grid-row-variant-color: shift-color($value, $list-group-item-color-scale);
+
+    @include grid-row-variant($state, $grid-row-variant-bg, $grid-row-variant-color);
+}
+
+.list-group.grid {
+    // No need to set list-style: none; since .list-group-item is block level
+    padding-left: 0; // reset padding because ul and ol
+    margin-bottom: 0;
+    @include border-radius($list-group-border-radius);
+}
+
+.grid {
+    > .list-group-item {
+        padding-top: $list-group-item-padding-y;
+        padding-bottom: $list-group-item-padding-y;
+        padding-left: 0;
+        padding-right: 0;
+        text-decoration: if($link-decoration == none, null, none);
+        background-color: var(--#{$prefix}list-group-bg);
+        color: var(--#{$prefix}list-group-color);
+        border-left: 0;
+        border-right: 0;
+        border-top: $list-group-border-width solid var(--#{$prefix}list-group-border-color);
+        border-bottom: $list-group-border-width solid var(--#{$prefix}list-group-border-color);
+
+        & > .grid-cell {
+            padding: inherit;
+            background-color: inherit;
+            border: inherit;
+            box-shadow: inherit;
+            padding-left: calc($list-group-item-padding-x / 2);
+            padding-right: calc($list-group-item-padding-x / 2);
+            border-radius: 0;
+        }
+
+        & > .grid-cell:first-child {
+            padding-left: $list-group-item-padding-x;
+            border-left: $list-group-border-width solid var(--#{$prefix}list-group-border-color);
+        }
+
+        & > .grid-cell:last-child {
+            padding-right: $list-group-item-padding-x;
+            border-right: $list-group-border-width solid var(--#{$prefix}list-group-border-color);
+        }
+
+        &:first-child {
+            & > .grid-cell:first-child {
+                border-top-left-radius: var(--bs-border-radius);
+            }
+
+            & > .grid-cell:last-child {
+                border-top-right-radius: var(--bs-border-radius);
+            }
+        }
+
+        &:last-child {
+            & > .grid-cell:first-child {
+                border-bottom-left-radius: var(--bs-border-radius);
+            }
+
+            & > .grid-cell:last-child {
+                border-bottom-right-radius: var(--bs-border-radius);
+            }
+        }
+
+        &.disabled,
+        &:disabled {
+            color: $list-group-disabled-color;
+            pointer-events: none;
+            background-color: $list-group-disabled-bg;
+        }
+        // Include both here for `<a>`s and `<button>`s
+        &.active {
+            z-index: 2; // Place active items above their siblings for proper border styling
+            color: $list-group-active-color;
+            background-color: $list-group-active-bg;
+            border-color: $list-group-active-border-color;
+        }
+
+        & + & {
+            border-top-width: 0;
+
+            &.active {
+                margin-top: -$list-group-border-width;
+                border-top-width: $list-group-border-width;
+            }
+        }
+    }
+}
+
+.list-group.grid.list-group-flush {
+    @include border-radius(0);
+
+    &:first-child {
+        & > .grid-cell:first-child {
+            border-top-left-radius: 0;
+        }
+
+        & > .grid-cell:last-child {
+            border-top-right-radius: 0;
+        }
+    }
+
+    &:last-child {
+        & > .grid-cell:first-child {
+            border-bottom-left-radius: 0;
+        }
+
+        & > .grid-cell:last-child {
+            border-bottom-right-radius: 0;
+        }
+    }
+
+    > .list-group-item {
+        border-width: 0 0 $list-group-border-width;
+
+        &:first-child {
+            border-top-width: 0;
+        }
+
+        &:last-child {
+            border-bottom-width: 0;
+        }
+    }
+}
+
+@each $state, $value in $theme-colors {
+
+    .grid {
+        .list-group-item-#{$state} {
+            --#{$prefix}list-group-color: var(--#{$prefix}#{$state}-text-emphasis);
+            --#{$prefix}list-group-bg: var(--#{$prefix}#{$state}-bg-subtle);
+            --#{$prefix}list-group-border-color: var(--#{$prefix}#{$state}-border-subtle);
+            --#{$prefix}list-group-action-hover-color: var(--#{$prefix}emphasis-color);
+            --#{$prefix}list-group-action-hover-bg: var(--#{$prefix}#{$state}-border-subtle);
+            --#{$prefix}list-group-action-active-color: var(--#{$prefix}emphasis-color);
+            --#{$prefix}list-group-action-active-bg: var(--#{$prefix}#{$state}-border-subtle);
+            --#{$prefix}list-group-active-color: var(--#{$prefix}#{$state}-bg-subtle);
+            --#{$prefix}list-group-active-bg: var(--#{$prefix}#{$state}-text-emphasis);
+            --#{$prefix}list-group-active-border-color: var(--#{$prefix}#{$state}-text-emphasis);
+        }
+    }
+}
