@@ -74,15 +74,7 @@ export class HttpClient {
                     let result: any;
                     let contentType = (oReq.getResponseHeader('content-type') || '').toLowerCase();
                     if (method === 'GET' || contentType.indexOf('application/json') === -1) {
-                        try {
-                            result = new ParsedJsonText(oReq.responseText).value;
-                            if (!result.Data) {
-                                result = oReq.responseText;
-                            }
-                        }
-                        catch {
-                            result = oReq.responseText;
-                        }
+                        result = oReq.responseText;
                     }
                     else {
                         result = new ParsedJsonText(oReq.responseText).value;

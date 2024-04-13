@@ -54,8 +54,8 @@ var template = apiFactory.CreateTemplate().ToModel();
 var fakeApp = appContext.AddApp(template);
 appContext.SetCurrentApp(fakeApp);
 var userContext = sp.GetRequiredService<FakeUserContext>();
-var userContextModel = userContext.AddUser(new AppUserName("Jason.Benfield"));
-userContext.SetCurrentUser(userContextModel.User.UserName);
+var user = userContext.AddUser(new AppUserName("Jason.Benfield"));
+userContext.SetCurrentUser(user.UserName);
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();

@@ -13,7 +13,8 @@ public sealed class SharedAppApi : WebAppApiWrapper
             (
                 SharedInfo.AppKey,
                 user,
-                ResourceAccess.AllowAnonymous()
+                ResourceAccess.AllowAnonymous(),
+                ""
             ),
             sp
         )
