@@ -1,7 +1,5 @@
-import { DateOnly } from "../DateOnly";
 import { DateTimeOffset } from "../DateTimeOffset";
 import { EventSource } from "../Events";
-import { TimeOnly } from "../TimeOnly";
 import { DateTimeInputView } from "../Views/DateTimeInputView";
 import { BasicComponent } from "./BasicComponent";
 import { ComponentID } from "./ComponentID";

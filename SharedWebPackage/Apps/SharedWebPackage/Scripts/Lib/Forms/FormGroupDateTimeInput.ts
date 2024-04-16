@@ -1,16 +1,22 @@
 import { DateTimeInputControl } from "../Components/DateTimeInputControl";
 import { TextComponent } from "../Components/TextComponent";
 import { DateTimeOffset } from "../DateTimeOffset";
+import { EventBuilders } from "../Events";
 import { FormGroupDateTimeInputView } from "../Views/FormGroup";
 import { FormGroup } from "./FormGroup";
+
+type Events = { valueChanged: DateTimeOffset };
 
 export class FormGroupDateTimeInput extends FormGroup {
     private readonly inputControl: DateTimeInputControl;
     private readonly valueTextComponent: TextComponent;
 
+    readonly when: EventBuilders<Events>;
+
     constructor(view: FormGroupDateTimeInputView) {
         super(view);
         this.inputControl = this.addComponent(new DateTimeInputControl(view.dateTimeInput));
+        this.when = this.inputControl.when;
         this.setLabelFor(this.inputControl);
         this.valueTextComponent = this.addComponent(new TextComponent(view.valueTextView));
     }
