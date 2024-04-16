@@ -44,6 +44,8 @@ export class FormGroupTextArea extends FormGroup {
         this.textAreaControl.setCustomValidity(message);
     }
 
+    setFocus(delay = 0) { this.textAreaControl.setFocus(delay); }
+
     getValue() { return this.textAreaControl.getValue(); }
 
     setValue(value: string) {
