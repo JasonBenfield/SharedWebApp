@@ -104,15 +104,15 @@ export class FormGroupInputGroupView extends FormGroupView {
 }
 
 export class FormGroupSelectGroupView extends FormGroupView {
-    readonly inputGroup: InputGroupView;
-    readonly select: SelectView;
+    readonly inputGroupView: InputGroupView;
+    readonly selectView: SelectView;
     readonly valueTextView: TextBlockView;
 
     constructor(container: BasicComponentView) {
         super(container);
-        this.inputGroup = this.valueCell.addView(InputGroupView);
-        this.select = this.inputGroup.prependFormControl(SelectView);
-        this.select.styleAsFormControl();
+        this.inputGroupView = this.valueCell.addView(InputGroupView);
+        this.selectView = this.inputGroupView.prependFormControl(SelectView);
+        this.selectView.styleAsFormControl();
         this.valueTextView = this.valueCell.addView(TextBlockView);
         this.valueTextView.styleAsFormControl();
         this.valueTextView.hide();
@@ -120,13 +120,13 @@ export class FormGroupSelectGroupView extends FormGroupView {
 }
 
 export class FormGroupTextAreaView extends FormGroupView {
-    readonly textArea: TextAreaView;
+    readonly textAreaView: TextAreaView;
     readonly valueTextView: TextBlockView;
 
     constructor(container: BasicComponentView) {
         super(container);
-        this.textArea = this.valueCell.addView(TextAreaView);
-        this.textArea.styleAsFormControl();
+        this.textAreaView = this.valueCell.addView(TextAreaView);
+        this.textAreaView.styleAsFormControl();
         this.valueTextView = this.valueCell.addView(TextBlockView);
         this.valueTextView.styleAsFormControl();
         this.valueTextView.hide();
@@ -153,13 +153,13 @@ export class FormGroupBooleanInputView extends FormGroupView {
 }
 
 export class FormGroupSelectView extends FormGroupView {
-    readonly select: SelectView;
+    readonly selectView: SelectView;
     readonly valueTextView: TextBlockView;
 
     constructor(container: BasicComponentView) {
         super(container);
-        this.select = this.valueCell.addView(SelectView);
-        this.select.styleAsFormControl();
+        this.selectView = this.valueCell.addView(SelectView);
+        this.selectView.styleAsFormControl();
         this.valueTextView = this.valueCell.addView(TextBlockView);
         this.valueTextView.styleAsFormControl();
         this.valueTextView.hide();
@@ -167,13 +167,13 @@ export class FormGroupSelectView extends FormGroupView {
 }
 
 export class FormGroupDateTimeInputView extends FormGroupView {
-    readonly dateTimeInput: DateTimeInputView;
+    readonly dateTimeInputView: DateTimeInputView;
     readonly valueTextView: TextBlockView;
 
     constructor(container: BasicComponentView) {
         super(container);
-        this.dateTimeInput = this.valueCell.addView(DateTimeInputView);
-        this.dateTimeInput.styleAsFormControl();
+        this.dateTimeInputView = this.valueCell.addView(DateTimeInputView);
+        this.dateTimeInputView.styleAsFormControl();
         this.valueTextView = this.valueCell.addView(TextBlockView);
         this.valueTextView.styleAsFormControl();
         this.valueTextView.hide();
@@ -181,13 +181,13 @@ export class FormGroupDateTimeInputView extends FormGroupView {
 }
 
 export class FormGroupTimeSpanInputView extends FormGroupView {
-    readonly timeSpanInput: TimeSpanInputView;
+    readonly timeSpanInputView: TimeSpanInputView;
     readonly valueTextView: TextBlockView;
 
     constructor(container: BasicComponentView) {
         super(container);
-        this.timeSpanInput = this.valueCell.addView(TimeSpanInputView);
-        this.timeSpanInput.styleAsFormControl();
+        this.timeSpanInputView = this.valueCell.addView(TimeSpanInputView);
+        this.timeSpanInputView.styleAsFormControl();
         this.valueTextView = this.valueCell.addView(TextBlockView);
         this.valueTextView.styleAsFormControl();
         this.valueTextView.hide();
@@ -195,16 +195,16 @@ export class FormGroupTimeSpanInputView extends FormGroupView {
 }
 
 export class FormGroupAlertView extends FormGroupView {
-    readonly alert: AlertView;
+    readonly alertView: AlertView;
     readonly messageTextView: BasicTextComponentView;
 
     constructor(container: BasicComponentView) {
         super(container);
         const outer = this.valueCell.addView(BlockView);
         outer.styleAsFormControl();
-        this.alert = outer.addView(AlertView);
-        this.alert.setMargin(MarginCss.xs(0));
-        this.messageTextView = this.alert.addView(TextBlockView);
+        this.alertView = outer.addView(AlertView);
+        this.alertView.setMargin(MarginCss.xs(0));
+        this.messageTextView = this.alertView.addView(TextBlockView);
     }
 }
 
@@ -222,45 +222,46 @@ export abstract class SimpleFieldFormGroupView extends FormGroupView {
 }
 
 export class SimpleFieldFormGroupInputView extends SimpleFieldFormGroupView {
-    readonly input: InputView;
+    readonly inputView: InputView;
 
     constructor(container: BasicComponentView) {
         super(container);
         const inputGroup = this.valueCell.addView(InputGroupView);
-        this.input = inputGroup.prependFormControl(InputView);
+        this.inputView = inputGroup.prependFormControl(InputView);
     }
 
     setCustomValidity(errorMessage: string) {
-        this.input.setCustomValidity(errorMessage);
-        this.input.setTitle(errorMessage);
+        this.inputView.setCustomValidity(errorMessage);
+        this.inputView.setTitle(errorMessage);
     }
 }
 
 export class SimpleFieldFormGroupDateTimeInputView extends SimpleFieldFormGroupView {
-    readonly dateTimeInput: DateTimeInputView;
+    readonly dateTimeInputView: DateTimeInputView;
 
     constructor(container: BasicComponentView) {
         super(container);
-        this.dateTimeInput = this.valueCell.addView(DateTimeInputView);
+        this.dateTimeInputView = this.valueCell.addView(DateTimeInputView);
     }
 
     setCustomValidity(errorMessage: string) {
-        this.dateTimeInput.dateInputView.setCustomValidity(errorMessage);
-        this.dateTimeInput.setTitle(errorMessage);
+        this.dateTimeInputView.dateInputView.setCustomValidity(errorMessage);
+        this.dateTimeInputView.setTitle(errorMessage);
     }
 }
 
 export class SimpleFieldFormGroupSelectView extends SimpleFieldFormGroupView {
-    readonly select: SelectView;
+    readonly selectView: SelectView;
 
     constructor(container: BasicComponentView) {
         super(container);
-        this.select = this.valueCell.addView(SelectView);
+        this.selectView = this.valueCell.addView(SelectView);
+        this.selectView.styleAsFormControl();
     }
 
     setCustomValidity(errorMessage: string) {
-        this.select.setCustomValidity(errorMessage);
-        this.select.setTitle(errorMessage);
+        this.selectView.setCustomValidity(errorMessage);
+        this.selectView.setTitle(errorMessage);
     }
 }
 

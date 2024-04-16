@@ -31,7 +31,7 @@ export class TestCardView extends CardView {
         const formGroups = this.addView(FormGroupContainerView);
         const formGroup = formGroups.addFormGroupTextAreaView();
         formGroup.caption.setText('Text Area');
-        this.textArea = formGroup.textArea;
+        this.textArea = formGroup.textAreaView;
         this.textArea.setRows(3);
         this.gridItems = this.addGridListGroup(TestGridListItemView);
         this.gridItems.setTemplateColumns(
