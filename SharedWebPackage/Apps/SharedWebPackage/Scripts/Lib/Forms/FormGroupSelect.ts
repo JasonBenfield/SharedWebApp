@@ -1,16 +1,22 @@
 import { SelectControl } from "../Components/SelectControl";
 import { SelectOption } from "../Components/SelectOption";
 import { TextComponent } from "../Components/TextComponent";
+import { EventBuilders } from "../Events";
 import { FormGroupSelectGroupView, FormGroupSelectView } from "../Views/FormGroup";
 import { FormGroup } from "./FormGroup";
+
+type Events<TValue> = { valueChanged: TValue };
 
 export class FormGroupSelect<TValue> extends FormGroup {
     private readonly selectControl: SelectControl<TValue>;
     private readonly valueTextComponent: TextComponent;
 
+    readonly when: EventBuilders<Events<TValue>>;
+
     constructor(view: FormGroupSelectView | FormGroupSelectGroupView) {
         super(view);
         this.selectControl = this.addComponent(new SelectControl(view.select));
+        this.when = this.selectControl.when;
         this.valueTextComponent = this.addComponent(new TextComponent(view.valueTextView));
     }
 

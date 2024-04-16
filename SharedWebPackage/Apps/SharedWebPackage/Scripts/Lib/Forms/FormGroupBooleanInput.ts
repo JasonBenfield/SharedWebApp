@@ -1,15 +1,21 @@
 import { BooleanInputControl } from "../Components/BooleanInputControl";
 import { TextComponent } from "../Components/TextComponent";
+import { EventBuilders } from "../Events";
 import { FormGroupBooleanInputView } from "../Views/FormGroup";
 import { FormGroup } from "./FormGroup";
+
+type Events = { valueChanged: boolean };
 
 export class FormGroupBooleanInput extends FormGroup {
     private readonly inputControl: BooleanInputControl;
     private readonly valueTextComponent: TextComponent;
 
+    readonly when: EventBuilders<Events>;
+
     constructor(view: FormGroupBooleanInputView) {
         super(view);
         this.inputControl = this.addComponent(new BooleanInputControl(view.inputView));
+        this.when = this.inputControl.when;
         this.setLabelFor(this.inputControl);
         this.valueTextComponent = this.addComponent(new TextComponent(view.valueTextView));
     }
