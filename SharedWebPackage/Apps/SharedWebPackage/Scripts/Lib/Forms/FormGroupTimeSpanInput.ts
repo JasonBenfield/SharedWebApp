@@ -87,6 +87,8 @@ export class FormGroupTimeSpanInput extends FormGroup {
         this.inputControl.setCustomValidity(message);
     }
 
+    setFocus(delay = 0) { this.inputControl.setFocus(delay); }
+
     getValue() { return this.inputControl.getValue(); }
 
     setValue(value: TimeSpan) {

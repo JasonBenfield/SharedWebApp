@@ -44,6 +44,10 @@ export class FormGroupInput<TValue> extends FormGroup {
     setCustomValidity(message: string) {
         this.inputControl.setCustomValidity(message);
     }
+
+    setFocus(delay = 0) { this.inputControl.setFocus(delay); }
+
+    protect() { this.inputControl.protect(); }
     
     getValue() { return this.inputControl.getValue(); }
 

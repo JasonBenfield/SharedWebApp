@@ -193,6 +193,24 @@ export class TimeSpanInputControl extends BasicComponent {
         this.view.setTitle(message);
     }
 
+    setFocus(delay = 0) {
+        if (this.isDayIncluded) {
+            this.dayInputControl.setFocus(delay);
+        }
+        else if (this.isHourIncluded) {
+            this.hourInputControl.setFocus(delay);
+        }
+        else if (this.isMinuteIncluded) {
+            this.minuteInputControl.setFocus(delay);
+        }
+        else if (this.isSecondIncluded) {
+            this.secondInputControl.setFocus(delay);
+        }
+        else if (this.isMillisecondIncluded) {
+            this.millisecondInputControl.setFocus(delay);
+        }
+    }
+
     show() { this.view.show(); }
 
     hide() { this.view.hide(); }
