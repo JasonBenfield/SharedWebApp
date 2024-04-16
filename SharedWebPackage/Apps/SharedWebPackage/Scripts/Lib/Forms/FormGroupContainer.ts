@@ -11,6 +11,7 @@ import { FormGroupLink } from "./FormGroupLink";
 import { FormGroupSelect } from "./FormGroupSelect";
 import { FormGroupText } from "./FormGroupText";
 import { FormGroupTextArea } from "./FormGroupTextArea";
+import { FormGroupTextInput } from "./FormGroupTextInput";
 import { FormGroupTimeInput } from "./FormGroupTimeInput";
 import { FormGroupTimeSpanInput } from "./FormGroupTimeSpanInput";
 import { TextToNumberViewValue } from "./TextToNumberViewValue";
@@ -31,7 +32,7 @@ export class FormGroupContainer extends BasicComponent {
     }
 
     addFormGroupTextInput(view: FormGroupInputView, transform?: (v: string) => string) {
-        return this.addFormGroup(new FormGroupInput(view, new TextToTextViewValue(transform)));
+        return this.addFormGroup(new FormGroupTextInput(view, new TextToTextViewValue(transform)));
     }
 
     addFormGroupNumberInput(view: FormGroupInputView, format?: string) {
