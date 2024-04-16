@@ -1,16 +1,22 @@
 import { TextComponent } from "../Components/TextComponent";
 import { TimeSpanInputControl } from "../Components/TimeSpanInputControl";
+import { EventBuilders } from "../Events";
 import { TimeSpan } from "../TimeSpan";
 import { FormGroupTimeSpanInputView } from "../Views/FormGroup";
 import { FormGroup } from "./FormGroup";
+
+type Events = { valueChanged: TimeSpan };
 
 export class FormGroupTimeSpanInput extends FormGroup {
     private readonly inputControl: TimeSpanInputControl;
     private readonly valueTextComponent: TextComponent;
 
+    readonly when: EventBuilders<Events>;
+
     constructor(view: FormGroupTimeSpanInputView) {
         super(view);
         this.inputControl = this.addComponent(new TimeSpanInputControl(view.timeSpanInput));
+        this.when = this.inputControl.when;
         this.setLabelFor(this.inputControl);
         this.valueTextComponent = this.addComponent(new TextComponent(view.valueTextView));
     }

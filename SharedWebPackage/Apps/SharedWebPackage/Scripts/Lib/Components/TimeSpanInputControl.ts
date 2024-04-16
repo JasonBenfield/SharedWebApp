@@ -5,6 +5,9 @@ import { TimeSpanInputView } from "../Views/TimeSpanInputView";
 import { BasicComponent } from "./BasicComponent";
 import { InputControl } from "./InputControl";
 import { TextComponent } from "./TextComponent";
+import { EventSource } from "../Events";
+
+type Events = { valueChanged: TimeSpan };
 
 export class TimeSpanInputControl extends BasicComponent {
     private readonly dayInputControl: InputControl<number>;
@@ -22,6 +25,9 @@ export class TimeSpanInputControl extends BasicComponent {
     private isMinuteIncluded = true;
     private isSecondIncluded = true;
     private isMillisecondIncluded = true;
+
+    private readonly eventSource = new EventSource<Events>(this, { valueChanged: null as TimeSpan });
+    readonly when = this.eventSource.when;
 
     constructor(protected readonly view: TimeSpanInputView) {
         super(view);
@@ -51,6 +57,16 @@ export class TimeSpanInputControl extends BasicComponent {
         this.millisecondCaptionTextComponent = this.addComponent(new TextComponent(view.millisecondCaptionTextView));
         this.millisecondCaptionTextComponent.setText('ms');
         this.millisecondCaptionTextComponent.setText('milliseconds');
+        this.dayInputControl.when.valueChanged.then(this.onValueChanged.bind(this));
+        this.hourInputControl.when.valueChanged.then(this.onValueChanged.bind(this));
+        this.minuteInputControl.when.valueChanged.then(this.onValueChanged.bind(this));
+        this.secondInputControl.when.valueChanged.then(this.onValueChanged.bind(this));
+        this.millisecondInputControl.when.valueChanged.then(this.onValueChanged.bind(this));
+    }
+
+    private onValueChanged() {
+        const value = this.getValue();
+        this.eventSource.events.valueChanged.invoke(value);
     }
 
     getViewID() { return this.dayInputControl.getViewID(); }

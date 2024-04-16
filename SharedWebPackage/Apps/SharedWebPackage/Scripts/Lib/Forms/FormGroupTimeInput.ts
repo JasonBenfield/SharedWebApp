@@ -1,20 +1,26 @@
 import { TextComponent } from "../Components/TextComponent";
 import { TimeInputControl } from "../Components/TimeInputControl";
+import { EventBuilders } from "../Events";
 import { TimeOnly } from "../TimeOnly";
 import { FormGroupInputView } from "../Views/FormGroup";
 import { FormGroup } from "./FormGroup";
+
+type Events = { valueChanged: TimeOnly };
 
 export class FormGroupTimeInput extends FormGroup {
     private readonly inputControl: TimeInputControl;
     private readonly valueTextComponent: TextComponent;
 
+    readonly when: EventBuilders<Events>;
+
     constructor(view: FormGroupInputView | FormGroupInputView) {
         super(view);
         this.inputControl = this.addComponent(new TimeInputControl(view.inputView));
+        this.when = this.inputControl.when;
         this.setLabelFor(this.inputControl);
         this.valueTextComponent = this.addComponent(new TextComponent(view.valueTextView));
     }
-    
+
     makeReadOnly(format: (time: TimeOnly) => string = FormGroupTimeInput.defaultReadOnlyFormat) {
         const value = this.inputControl.getValue();
         this.inputControl.hide();

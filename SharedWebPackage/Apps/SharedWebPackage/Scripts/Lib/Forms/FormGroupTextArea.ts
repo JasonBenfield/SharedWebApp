@@ -1,15 +1,21 @@
 import { TextAreaControl } from "../Components/TextAreaControl";
 import { TextComponent } from "../Components/TextComponent";
+import { EventBuilders } from "../Events";
 import { FormGroupTextAreaView } from "../Views/FormGroup";
 import { FormGroup } from "./FormGroup";
+
+type Events = { valueChanged: string };
 
 export class FormGroupTextArea extends FormGroup {
     private readonly textAreaControl: TextAreaControl;
     private readonly valueTextComponent: TextComponent;
 
+    readonly when: EventBuilders<Events>;
+
     constructor(view: FormGroupTextAreaView) {
         super(view);
         this.textAreaControl = this.addComponent(new TextAreaControl(view.textArea));
+        this.when = this.textAreaControl.when;
         this.setLabelFor(this.textAreaControl);
         this.valueTextComponent = this.addComponent(new TextComponent(view.valueTextView));
     }

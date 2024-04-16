@@ -1,16 +1,22 @@
 import { DateInputControl } from "../Components/DateInputControl";
 import { TextComponent } from "../Components/TextComponent";
 import { DateOnly } from "../DateOnly";
+import { EventBuilders } from "../Events";
 import { FormGroupInputGroupView, FormGroupInputView } from "../Views/FormGroup";
 import { FormGroup } from "./FormGroup";
+
+type Events = { valueChanged: DateOnly };
 
 export class FormGroupDateInput extends FormGroup {
     private readonly dateInputControl: DateInputControl;
     private readonly valueTextComponent: TextComponent;
 
+    readonly when: EventBuilders<Events>;
+
     constructor(view: FormGroupInputView | FormGroupInputGroupView) {
         super(view);
         this.dateInputControl = this.addComponent(new DateInputControl(view.inputView));
+        this.when = this.dateInputControl.when;
         this.setLabelFor(this.dateInputControl);
         this.valueTextComponent = this.addComponent(new TextComponent(view.valueTextView));
     }
