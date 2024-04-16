@@ -1,5 +1,6 @@
 import { DateOnly } from "./DateOnly";
 import { DateTimeFormatOptions } from "./DateTimeFormatOptions";
+import { DayOfWeek } from "./DayOfWeek";
 import { Month } from "./Month";
 import { TimeOnly } from "./TimeOnly";
 import { TimeSpan } from "./TimeSpan";
@@ -91,6 +92,15 @@ export class DateTimeOffset {
     get month() { return this._month; }
 
     get date() { return this._date; }
+
+    private _dayOfWeek: DayOfWeek;
+
+    get dayOfWeek() {
+        if (!this._dayOfWeek) {
+            this._dayOfWeek = DayOfWeek.fromValue(this.refDate.getDay());
+        }
+        return this._dayOfWeek;
+    }
 
     get hours() { return this._hours; }
 

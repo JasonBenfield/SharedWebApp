@@ -215,6 +215,7 @@
     <None Remove="Scripts\Lib\Views\UnorderedListView.ts" />
     <None Remove="Scripts\Lib\Views\UserMenuView.ts" />
     <None Remove="Scripts\Lib\Views\ViewEventBuilder.ts" />
+    <None Remove="Scripts\Tests\AppClientViewTest.ts" />
     <None Remove="Scripts\Tests\DateOnlyTest.ts" />
     <None Remove="Scripts\Tests\DateTimeOffsetTest.ts" />
     <None Remove="Scripts\Tests\ParsedJsonTextTest.ts" />
@@ -531,6 +532,9 @@
     <TypeScriptCompile Include="Scripts\Lib\Views\Types.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\UserMenuView.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Views\ViewEventBuilder.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Tests\AppClientViewTest.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="Scripts\Tests\DateTimeOffsetTest.ts">

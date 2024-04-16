@@ -138,7 +138,7 @@ export class UrlQueryBuilder {
                 if (obj.hasOwnProperty(prop)) {
                     const k = prefix ? `${prefix}[${prop}]` : prop;
                     const propValue = obj[prop];
-                    if (propValue !== null && typeof propValue === "object" && !(propValue instanceof Date)) {
+                    if (propValue !== null && typeof propValue === "object" && !this.isKnownObject(propValue)) {
                         this._addQueryFromObject(propValue, k)
                     }
                     else {
@@ -147,6 +147,10 @@ export class UrlQueryBuilder {
                 }
             }
         }
+    }
+
+    private isKnownObject(obj: any) {
+        return obj instanceof Date || obj instanceof DateOnly || obj instanceof DateTimeOffset || obj instanceof TimeOnly || obj instanceof TimeSpan;
     }
 
     addQueryString(query: string) {

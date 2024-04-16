@@ -5,6 +5,7 @@ import { DateTimeFormatOptions } from '../Lib/DateTimeFormatOptions';
 import { DateTimeOffset } from '../Lib/DateTimeOffset';
 import { Month } from '../Lib/Month';
 import { TimeSpan } from '../Lib/TimeSpan';
+import { DayOfWeek } from '../Lib/DayOfWeek';
 
 describe('DateOnly', () => {
     it('Parse DateOnly', function () {
@@ -13,6 +14,8 @@ describe('DateOnly', () => {
         expect(dateOnly1.month).to.equal(Month.September);
         expect(dateOnly1.date).to.equal(1);
         expect(dateOnly1.isMaxYear).to.be.false;
+        expect(dateOnly1.dayOfWeek.equals(DayOfWeek.Friday)).to.be.true;
+        expect(dateOnly1.dayOfWeek.equals(DayOfWeek.Saturday)).to.be.false;
 
         const maxDateOnly = DateOnly.max();
         expect(maxDateOnly.year).to.equal(9999);

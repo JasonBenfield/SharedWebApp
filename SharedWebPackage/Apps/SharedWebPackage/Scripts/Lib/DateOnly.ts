@@ -1,4 +1,5 @@
 import { DateTimeFormatOptions } from "./DateTimeFormatOptions";
+import { DayOfWeek } from "./DayOfWeek";
 import { Month } from "./Month";
 import { TimeOnly } from "./TimeOnly";
 import { TimeSpan } from "./TimeSpan";
@@ -66,7 +67,15 @@ export class DateOnly {
     get year() { return this._year; }
     get month() { return this._month; }
     get date() { return this._date; }
-    get day() { return this._refDate.getDay(); }
+
+    private _dayOfWeek: DayOfWeek;
+
+    get dayOfWeek() {
+        if (!this._dayOfWeek) {
+            this._dayOfWeek = DayOfWeek.fromValue(this._refDate.getDay());
+        }
+        return this._dayOfWeek;
+    }
 
     get isMaxYear() { return this.year >= 9999; }
 
