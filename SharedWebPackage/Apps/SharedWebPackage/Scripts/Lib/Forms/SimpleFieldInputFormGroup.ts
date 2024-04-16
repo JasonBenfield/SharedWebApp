@@ -76,8 +76,8 @@ export abstract class SimpleFieldInputFormGroup<TValue> extends SimpleFieldFormG
         this.inputControl.protect();
     }
 
-    setFocus() {
-        this.inputControl.setFocus();
+    setFocus(delay = 0) {
+        this.inputControl.setFocus(delay);
     }
 
     blur() { this.inputControl.blur(); }
