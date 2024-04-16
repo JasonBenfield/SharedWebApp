@@ -15,7 +15,7 @@ export class FormGroupSelect<TValue> extends FormGroup {
 
     constructor(view: FormGroupSelectView | FormGroupSelectGroupView) {
         super(view);
-        this.selectControl = this.addComponent(new SelectControl(view.select));
+        this.selectControl = this.addComponent(new SelectControl(view.selectView));
         this.when = this.selectControl.when;
         this.valueTextComponent = this.addComponent(new TextComponent(view.valueTextView));
     }

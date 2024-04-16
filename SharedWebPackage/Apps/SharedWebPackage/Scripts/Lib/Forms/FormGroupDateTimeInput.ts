@@ -15,7 +15,7 @@ export class FormGroupDateTimeInput extends FormGroup {
 
     constructor(view: FormGroupDateTimeInputView) {
         super(view);
-        this.inputControl = this.addComponent(new DateTimeInputControl(view.dateTimeInput));
+        this.inputControl = this.addComponent(new DateTimeInputControl(view.dateTimeInputView));
         this.when = this.inputControl.when;
         this.setLabelFor(this.inputControl);
         this.valueTextComponent = this.addComponent(new TextComponent(view.valueTextView));

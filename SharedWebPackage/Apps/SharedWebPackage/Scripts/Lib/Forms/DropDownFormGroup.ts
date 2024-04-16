@@ -16,7 +16,7 @@ export class DropDownFormGroup<TValue> extends SimpleFieldFormGroup<TValue> {
 
     constructor(prefix: string, name: string, protected readonly view: SimpleFieldFormGroupSelectView) {
         super(prefix, name, view);
-        this.selectControl = this.addComponent(new SelectControl(view.select));
+        this.selectControl = this.addComponent(new SelectControl(view.selectView));
         this.when = this.selectControl.when;
         this.selectControl.when.valueChanged.then(() => this.debouncedOnValueChanged.execute());
     }

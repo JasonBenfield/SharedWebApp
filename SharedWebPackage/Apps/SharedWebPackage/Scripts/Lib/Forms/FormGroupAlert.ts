@@ -12,7 +12,7 @@ export class FormGroupAlert extends FormGroup {
     }
 
     setContext(context: ContextualClass) {
-        this.view.alert.setContext(context);
+        this.view.alertView.setContext(context);
     }
 
     getValue() { return this.messageTextComponent.getText(); }

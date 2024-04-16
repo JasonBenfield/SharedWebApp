@@ -11,7 +11,7 @@ export class TimeInputFormGroup extends SimpleFieldFormGroup<TimeOnly> {
 
     constructor(prefix: string, name: string, view: SimpleFieldFormGroupInputView) {
         super(prefix, name, view);
-        this.timeInputControl = new TimeInputControl(view.input);
+        this.timeInputControl = new TimeInputControl(view.inputView);
     }
 
     getValue() {

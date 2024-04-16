@@ -11,7 +11,7 @@ export class DateTimeInputFormGroup extends SimpleFieldFormGroup<DateTimeOffset>
 
     constructor(prefix: string, name: string, view: SimpleFieldFormGroupDateTimeInputView) {
         super(prefix, name, view);
-        this.dateTimeInputControl = new DateTimeInputControl(view.dateTimeInput);
+        this.dateTimeInputControl = new DateTimeInputControl(view.dateTimeInputView);
     }
 
     getValue() {
