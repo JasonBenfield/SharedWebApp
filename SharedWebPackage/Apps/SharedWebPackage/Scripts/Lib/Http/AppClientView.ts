@@ -1,5 +1,5 @@
-﻿import { AppResourceUrl } from "./AppResourceUrl";
-import { UrlBuilder } from "../UrlBuilder";
+﻿import { UrlBuilder } from "../UrlBuilder";
+import { AppResourceUrl } from "./AppResourceUrl";
 import { WebPage } from "./WebPage";
 
 export class AppClientView<TArgs> {
@@ -24,7 +24,8 @@ export class AppClientView<TArgs> {
 
     getModifierUrl(modifier: string, data: TArgs) {
         let model: any;
-        if (typeof data === 'string' || typeof data === 'number' || data instanceof Date) {
+        const obj: any = data;
+        if (typeof obj === 'string' || typeof obj === 'number' || 'toJSON' in obj) {
             model = { model: data };
         }
         else {

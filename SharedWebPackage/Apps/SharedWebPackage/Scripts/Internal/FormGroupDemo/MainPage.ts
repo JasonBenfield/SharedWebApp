@@ -3,6 +3,7 @@ import { ListGroup, TextListItem } from '../../Lib/Components/ListGroup';
 import { MessageAlert } from '../../Lib/Components/MessageAlert';
 import { SelectOption } from '../../Lib/Components/SelectOption';
 import { ContextualClass } from '../../Lib/ContextualClass';
+import { DateOnly } from '../../Lib/DateOnly';
 import { DateTimeOffset } from '../../Lib/DateTimeOffset';
 import { DelayedAction } from '../../Lib/DelayedAction';
 import { EnumerableRange } from '../../Lib/EnumerableRange';
@@ -20,6 +21,9 @@ import { FormGroupTextArea } from '../../Lib/Forms/FormGroupTextArea';
 import { FormGroupTimeInput } from '../../Lib/Forms/FormGroupTimeInput';
 import { FormGroupTimeSpanInput } from '../../Lib/Forms/FormGroupTimeSpanInput';
 import { TextToNumberViewValue } from '../../Lib/Forms/TextToNumberViewValue';
+import { AppClientView } from '../../Lib/Http/AppClientView';
+import { AppResourceUrl } from '../../Lib/Http/AppResourceUrl';
+import { Month } from '../../Lib/Month';
 import { TextListGroupItemView } from '../../Lib/Views/ListGroup';
 import { DefaultPageContext } from '../DefaultPageContext';
 import { SharedPage } from '../SharedPage';
@@ -101,6 +105,16 @@ class MainPage extends SharedPage {
         this.alert.info('Click "Show Values"', 'Instructions');
         this.valueListGroup = new ListGroup(view.valueListView);
         new AsyncCommand(this.showValues.bind(this)).add(view.showButton);
+        const appResourceUrl = AppResourceUrl.app('Fake', 'Current', '', '');
+        const args = {
+            DateValue: new DateOnly(2024, Month.April, 16),
+            DateTimeValue: new DateTimeOffset(2024, Month.April, 16, 18, 30)
+        }
+        const appClientView = new AppClientView<typeof args>(appResourceUrl, 'DoSomething');
+        const url = appClientView.getModifierUrl('', args).value();
+        console.log(url);
+        console.log(`Today: ${DateOnly.today().dayOfWeek.displayText}`);
+        console.log(`Yesterday: ${DateTimeOffset.now().addDays(-1).dayOfWeek.displayText}`);
     }
 
     private onChange(value) {

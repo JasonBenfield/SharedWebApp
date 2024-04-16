@@ -4,6 +4,7 @@ import { DateTimeOffset } from '../Lib/DateTimeOffset';
 import { Month } from '../Lib/Month';
 import { TimeSpan } from '../Lib/TimeSpan';
 import { DateTimeFormatOptions } from '../Lib/DateTimeFormatOptions';
+import { DayOfWeek } from '../Lib/DayOfWeek';
 
 describe('DateTimeOffset', () => {
     it('Parse DateTimeOffset', function () {
@@ -16,6 +17,8 @@ describe('DateTimeOffset', () => {
         expect(dateTime1.seconds).to.equal(1);
         expect(dateTime1.milliseconds).to.equal(345);
         expect(dateTime1.isMaxYear).to.be.false;
+        expect(dateTime1.dayOfWeek.equals(DayOfWeek.Friday)).to.be.true;
+        expect(dateTime1.dayOfWeek.equals(DayOfWeek.Saturday)).to.be.false;
 
         const maxDateTime = DateTimeOffset.parse('9999-12-31 23:59:59.9999999 +00:00')!;
         expect(maxDateTime.year).to.equal(9999);
