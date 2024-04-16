@@ -15,7 +15,7 @@ export class FormGroupTimeSpanInput extends FormGroup {
 
     constructor(view: FormGroupTimeSpanInputView) {
         super(view);
-        this.inputControl = this.addComponent(new TimeSpanInputControl(view.timeSpanInput));
+        this.inputControl = this.addComponent(new TimeSpanInputControl(view.timeSpanInputView));
         this.when = this.inputControl.when;
         this.setLabelFor(this.inputControl);
         this.valueTextComponent = this.addComponent(new TextComponent(view.valueTextView));

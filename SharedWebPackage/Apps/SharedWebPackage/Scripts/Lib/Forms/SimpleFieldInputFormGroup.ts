@@ -22,9 +22,9 @@ export abstract class SimpleFieldInputFormGroup<TValue> extends SimpleFieldFormG
         super(prefix, name, view);
         const valueName = this.getName();
         view.captionLabel.setFor(valueName);
-        view.input.setViewID(valueName);
-        view.input.setViewName(valueName);
-        this.inputControl = this.addComponent(new InputControl(view.input, viewValue));
+        view.inputView.setViewID(valueName);
+        view.inputView.setViewName(valueName);
+        this.inputControl = this.addComponent(new InputControl(view.inputView, viewValue));
         this.when = this.inputControl.when;
         this.inputControl.when.valueChanged.then(() => this.debouncedOnValueChanged.execute());
     }
