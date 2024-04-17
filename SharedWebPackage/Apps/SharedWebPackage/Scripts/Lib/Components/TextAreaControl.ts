@@ -63,6 +63,7 @@ export class TextAreaControl extends BasicComponent {
 
     setValue(value: string) {
         this.view.setValue(value);
+        this.previousValue = value;
     }
 
     setFocus(delay = 0) {

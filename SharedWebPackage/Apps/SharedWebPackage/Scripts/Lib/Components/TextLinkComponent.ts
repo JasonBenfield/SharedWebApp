@@ -1,7 +1,6 @@
 ﻿import { Url } from "../Url";
 import { UrlBuilder } from "../UrlBuilder";
-import { BasicComponentView } from "../Views/BasicComponentView";
-import { ILinkView, ITextComponentView, TextLinkComponentView } from "../Views/Types";
+import { TextLinkComponentView } from "../Views/Types";
 import { TextComponent } from "./TextComponent";
 
 export class TextLinkComponent extends TextComponent {
