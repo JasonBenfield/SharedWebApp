@@ -1,6 +1,4 @@
-﻿import { LinkComponent } from "../Components/LinkComponent";
-import { TextComponent } from "../Components/TextComponent";
-import { TextLinkComponent } from "../Components/TextLinkComponent";
+﻿import { TextLinkComponent } from "../Components/TextLinkComponent";
 import { Url } from "../Url";
 import { UrlBuilder } from "../UrlBuilder";
 import { FormGroupLinkView } from "../Views/FormGroup";
