@@ -115,6 +115,7 @@ export class InputControl<TValue> extends BasicComponent {
         this.viewValue.setValue(value);
         const inputValue = this.viewValue.toView();
         this.view.setValue(inputValue);
+        this.previousValue = value;
     }
 
     setFocus(delay = 0) {
