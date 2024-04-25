@@ -16,4 +16,8 @@ export class AddressInputField extends ComplexFieldFormGroup {
     readonly City = this.addTextInputFormGroup('City', this.view.City);
     readonly State = this.addTextInputFormGroup('State', this.view.State);
     readonly Zip = this.addNumberInputFormGroup('Zip', this.view.Zip);
+
+    setFocus() {
+        this.Line1.setFocus();
+    }
 }
