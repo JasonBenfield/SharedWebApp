@@ -2,6 +2,7 @@
 import { MessageAlert } from '../../Lib/Components/MessageAlert';
 import { TextComponent } from '../../Lib/Components/TextComponent';
 import { ConsoleLog } from '../../Lib/ConsoleLog';
+import { DeviceType } from '../../Lib/DeviceType';
 import { DefaultPageContext } from '../DefaultPageContext';
 import { SharedPage } from '../SharedPage';
 import { AddEmployeeForm } from './AddEmployeeForm';
@@ -22,6 +23,8 @@ class MainPage extends SharedPage {
         this.saveCommand = new AsyncCommand(this.save.bind(this));
         this.saveCommand.add(this.view.saveButton);
         this.test();
+        DeviceType.instance.canFocus = true;
+        this.addEmployeeForm.Address.setFocus();
     }
 
     private onFormSubmit() {
