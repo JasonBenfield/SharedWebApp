@@ -18,6 +18,14 @@ export class DateTimeOffset {
             null;
     }
 
+    static fromDateOnly(date: DateOnly) {
+        return DateTimeOffset.create(date, new TimeOnly(0, 0));
+    }
+
+    static today() {
+        return DateTimeOffset.create(DateOnly.today(), new TimeOnly(0, 0));
+    }
+
     static now() { return DateTimeOffset.fromDate(new Date())!; }
 
     static fromDate(date: Date) {
@@ -293,10 +301,13 @@ export class DateTimeOffset {
 
     toString() { return this.toLocaleString(); }
 
-    equals(other: DateTimeOffset | Date | null) {
+    equals(other: DateTimeOffset | DateOnly | Date | null) {
         if (other) {
             let otherDate: Date;
-            if (other instanceof DateTimeOffset) {
+            if (other instanceof DateOnly) {
+                otherDate = DateTimeOffset.fromDateOnly(other).refDate;
+            }
+            else if (other instanceof DateTimeOffset) {
                 otherDate = other.refDate;
             }
             else {
@@ -307,10 +318,13 @@ export class DateTimeOffset {
         return false;
     }
 
-    compareTo(other: DateTimeOffset | Date | null) {
+    compareTo(other: DateTimeOffset | DateOnly | Date | null) {
         if (other) {
             let otherDate: Date;
-            if (other instanceof DateTimeOffset) {
+            if (other instanceof DateOnly) {
+                otherDate = DateTimeOffset.fromDateOnly(other).refDate;
+            }
+            else if (other instanceof DateTimeOffset) {
                 otherDate = other.refDate;
             }
             else {
@@ -326,4 +340,6 @@ export class DateTimeOffset {
         }
         return -1;
     }
+
+    valueOf() { return this.refDate.valueOf(); }
 }

@@ -67,7 +67,7 @@ export class TextAreaControl extends BasicComponent {
     }
 
     setFocus(delay = 0) {
-        if (new DeviceType().canFocus) {
+        if (DeviceType.instance.canFocus) {
             if (delay) {
                 new DelayedAction(
                     () => this.debouncedSetFocus.execute(),

@@ -220,6 +220,10 @@ export class TimeOnly {
         return result;
     }
 
+    valueOf() {
+        return this.hours * 10000000 + this.minutes * 100000 + this.seconds * 1000 + this.milliseconds;
+    }
+
     toString() {
         return this.format();
     }

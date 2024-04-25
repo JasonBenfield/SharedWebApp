@@ -186,4 +186,6 @@ export class DateOnly {
         }
         return -1;
     }
+
+    valueOf() { return this._date.valueOf(); }
 }

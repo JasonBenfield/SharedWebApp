@@ -5,7 +5,10 @@ namespace SharedWebApp.Controllers;
 
 public sealed class EmployeeController : Controller
 {
-    public IActionResult Index() => View();
+    public IActionResult Index(EmployeeIndexRequest request)
+    {
+        return View();
+    }
 
     public IActionResult FileUploadDemo() => View("FileUploadDemo");
 
