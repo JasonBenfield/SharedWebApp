@@ -3,6 +3,10 @@ import { MessageAlert } from '../../Lib/Components/MessageAlert';
 import { TextComponent } from '../../Lib/Components/TextComponent';
 import { ConsoleLog } from '../../Lib/ConsoleLog';
 import { DeviceType } from '../../Lib/DeviceType';
+import { AppClientView } from '../../Lib/Http/AppClientView';
+import { AppResourceUrl } from '../../Lib/Http/AppResourceUrl';
+import { AppVersionDomain } from '../../Lib/Http/AppVersionDomain';
+import { WebPage } from '../../Lib/Http/WebPage';
 import { DefaultPageContext } from '../DefaultPageContext';
 import { SharedPage } from '../SharedPage';
 import { AddEmployeeForm } from './AddEmployeeForm';
@@ -25,6 +29,14 @@ class MainPage extends SharedPage {
         this.test();
         DeviceType.instance.canFocus = true;
         this.addEmployeeForm.Address.setFocus();
+        AppVersionDomain.instance.addDomain({
+            App: 'Shared',
+            Version: 'Current',
+            Domain: 'development.guinevere.com:44303'
+        });
+        var index = new AppClientView(AppResourceUrl.app('Shared', 'Current', '', '').withGroup('Employee'), 'Index');
+        console.log(index.getUrl({ Numbers: [1, 2, 3] }).value());
+        index.open({ Numbers: [4, 7, 9, 12] });
     }
 
     private onFormSubmit() {

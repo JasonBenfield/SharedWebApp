@@ -169,6 +169,8 @@ export class TimeSpan {
         return result;
     }
 
+    valueOf() { return this.totalTicks; }
+
     toJSON() {
         return this.toISOString();
     }

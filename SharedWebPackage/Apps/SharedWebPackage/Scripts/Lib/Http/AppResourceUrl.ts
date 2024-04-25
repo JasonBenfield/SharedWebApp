@@ -5,7 +5,7 @@ import { AppVersionDomain } from "./AppVersionDomain";
 
 export class AppResourceUrl {
     static app(appName: string, version: string, modifier: string, cacheBust: string) {
-        const appVersionDomain = new AppVersionDomain().value(appName);
+        const appVersionDomain = AppVersionDomain.instance.value(appName);
         return new AppResourceUrl(
             `https://${appVersionDomain.Domain}/`,
             XtiPath.app(appName, version, modifier),

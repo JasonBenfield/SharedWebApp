@@ -3,7 +3,7 @@ using XTI_WebApp.Api;
 
 namespace SharedWebApp.Api;
 
-internal sealed class EmployeeIndexAction : AppAction<EmptyRequest, WebViewResult>
+internal sealed class EmployeeIndexAction : AppAction<EmployeeIndexRequest, WebViewResult>
 {
     private readonly WebViewResultFactory viewFactory;
 
@@ -12,6 +12,6 @@ internal sealed class EmployeeIndexAction : AppAction<EmptyRequest, WebViewResul
         this.viewFactory = viewFactory;
     }
 
-    public Task<WebViewResult> Execute(EmptyRequest model, CancellationToken stoppingToken) =>
+    public Task<WebViewResult> Execute(EmployeeIndexRequest model, CancellationToken stoppingToken) =>
         Task.FromResult(viewFactory.Default("employee", "Employee"));
 }
