@@ -22,6 +22,10 @@ export class DateTimeOffset {
         return DateTimeOffset.create(date, new TimeOnly(0, 0));
     }
 
+    static max() {
+        return DateTimeOffset.UTC(9999, Month.December, 31, 23, 59, 59);
+    }
+
     static today() {
         return DateTimeOffset.create(DateOnly.today(), new TimeOnly(0, 0));
     }

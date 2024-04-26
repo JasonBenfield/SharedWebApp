@@ -90,7 +90,11 @@ export class SelectControl<TValue> extends BasicComponent {
             this.setValue(originalValue);
         }
         else {
-            this.setValue(this.itemCaption ? null : options[0].value);
+            let defaultValue: TValue = null;
+            if (!this.itemCaption && options.length > 0) {
+                defaultValue = options[0].value;
+            }
+            this.setValue(defaultValue);
         }
     }
 

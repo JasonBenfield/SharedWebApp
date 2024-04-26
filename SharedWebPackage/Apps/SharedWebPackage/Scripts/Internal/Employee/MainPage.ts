@@ -2,6 +2,8 @@
 import { MessageAlert } from '../../Lib/Components/MessageAlert';
 import { TextComponent } from '../../Lib/Components/TextComponent';
 import { ConsoleLog } from '../../Lib/ConsoleLog';
+import { DateOnly } from '../../Lib/DateOnly';
+import { DateTimeOffset } from '../../Lib/DateTimeOffset';
 import { DeviceType } from '../../Lib/DeviceType';
 import { AppClientView } from '../../Lib/Http/AppClientView';
 import { AppResourceUrl } from '../../Lib/Http/AppResourceUrl';
@@ -34,9 +36,19 @@ class MainPage extends SharedPage {
             Version: 'Current',
             Domain: 'development.guinevere.com:44303'
         });
-        var index = new AppClientView(AppResourceUrl.app('Shared', 'Current', '', '').withGroup('Employee'), 'Index');
-        console.log(index.getUrl({ Numbers: [1, 2, 3] }).value());
-        index.open({ Numbers: [4, 7, 9, 12] });
+        console.log(`DateOnly.today() < DateOnly.today().addDays(1): ${DateOnly.today() < DateOnly.today().addDays(1)}`);
+        console.log(`DateOnly.today() > DateOnly.today().addDays(1): ${DateOnly.today() > DateOnly.today().addDays(1)}`);
+        console.log(`DateOnly.today().addDays(1) > DateOnly.today(): ${DateOnly.today().addDays(1) > DateOnly.today()}`);
+        console.log(`DateOnly.today().addDays(1) < DateOnly.today(): ${DateOnly.today().addDays(1) < DateOnly.today()}`);
+        console.log(`DateOnly.today() <= DateOnly.today(): ${DateOnly.today() <= DateOnly.today()}`);
+        console.log(`DateOnly.today() >= DateOnly.today(): ${DateOnly.today() >= DateOnly.today()}`);
+
+        console.log(`DateTimeOffset.today() < DateTimeOffset.today().addDays(1): ${DateTimeOffset.today() < DateTimeOffset.today().addDays(1)}`);
+        console.log(`DateTimeOffset.today() > DateTimeOffset.today().addDays(1): ${DateTimeOffset.today() > DateTimeOffset.today().addDays(1)}`);
+        console.log(`DateTimeOffset.today().addDays(1) > DateTimeOffset.today(): ${DateTimeOffset.today().addDays(1) > DateTimeOffset.today()}`);
+        console.log(`DateTimeOffset.today().addDays(1) < DateTimeOffset.today(): ${DateTimeOffset.today().addDays(1) < DateTimeOffset.today()}`);
+        console.log(`DateTimeOffset.today() <= DateTimeOffset.today(): ${DateTimeOffset.today() <= DateTimeOffset.today()}`);
+        console.log(`DateTimeOffset.today() >= DateTimeOffset.today(): ${DateTimeOffset.today() >= DateTimeOffset.today()}`);
     }
 
     private onFormSubmit() {
