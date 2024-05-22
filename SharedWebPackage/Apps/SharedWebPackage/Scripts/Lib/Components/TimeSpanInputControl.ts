@@ -148,21 +148,27 @@ export class TimeSpanInputControl extends BasicComponent {
     }
 
     getValue() {
-        const day = this.isDayIncluded ? this.dayInputControl.getValue() : 0;
-        const hour = this.isHourIncluded ? this.hourInputControl.getValue() : 0;
-        const minute = this.isMinuteIncluded ? this.minuteInputControl.getValue() : 0;
-        const second = this.isSecondIncluded ? this.secondInputControl.getValue() : 0;
-        const millisecond = this.isMillisecondIncluded ? this.millisecondInputControl.getValue() : 0;
+        const day = this.isDayIncluded ? this.dayInputControl.getValue() : null;
+        const hour = this.isHourIncluded ? this.hourInputControl.getValue() : null;
+        const minute = this.isMinuteIncluded ? this.minuteInputControl.getValue() : null;
+        const second = this.isSecondIncluded ? this.secondInputControl.getValue() : null;
+        const millisecond = this.isMillisecondIncluded ? this.millisecondInputControl.getValue() : null;
         if (
-            day === null || day === undefined ||
-            hour === null || hour === undefined ||
-            minute === null || minute === undefined ||
-            second === null || second === undefined ||
-            millisecond === null || millisecond === undefined
+            (day === null || day === undefined) &&
+            (hour === null || hour === undefined) &&
+            (minute === null || minute === undefined) &&
+            (second === null || second === undefined) &&
+            (millisecond === null || millisecond === undefined)
         ) {
             return null;
         }
-        const value = new TimeSpan(day, hour, minute, second, millisecond * 10000);
+        const value = new TimeSpan(
+            day || 0,
+            hour || 0,
+            minute || 0,
+            second || 0,
+            (millisecond || 0) * 10000
+        );
         console.log(`TimeSpanInputControl: value=${value.format()}`);
         return value;
     }
