@@ -24,13 +24,8 @@ export class InputControl<TValue> extends BasicComponent {
     ) {
         super(view);
         view.setViewID(ComponentID.nextID());
-        new DelayedAction(
-            () => {
-                const rawValue = this.view.getValue();
-                this.viewValue.setValueFromView(rawValue);
-            },
-            100
-        ).execute();
+        viewValue.setValueFromView('');
+        this.previousValue = viewValue.getValue();
         this.debouncedSetFocus = new DebouncedAction(
             () => this.view.setFocus(),
             700
@@ -38,8 +33,10 @@ export class InputControl<TValue> extends BasicComponent {
         this.view.onInput()
             .execute(this.onInputValueChanged.bind(this))
             .subscribe();
-        const initialValue = view.getValue();
-        this.viewValue.setValueFromView(initialValue);
+        const initialValue = this.view.getValue();
+        if (initialValue) {
+            viewValue.setValueFromView(initialValue);
+        }
         this.debouncedOnInputValueChanged.execute();
     }
 
@@ -67,7 +64,7 @@ export class InputControl<TValue> extends BasicComponent {
         },
         700
     );
-    
+
     required() {
         this.view.required();
     }
@@ -106,7 +103,7 @@ export class InputControl<TValue> extends BasicComponent {
     getTextValue() {
         return this.view.getValue();
     }
-    
+
     getValue() {
         return this.viewValue.getValue();
     }

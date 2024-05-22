@@ -1,5 +1,6 @@
 import { DateTimeOffset } from "../DateTimeOffset";
 import { EventSource } from "../Events";
+import { TimeOnly } from "../TimeOnly";
 import { DateTimeInputView } from "../Views/DateTimeInputView";
 import { BasicComponent } from "./BasicComponent";
 import { ComponentID } from "./ComponentID";
@@ -52,8 +53,8 @@ export class DateTimeInputControl extends BasicComponent {
 
     getValue() {
         const date = this.dateInputControl.getValue();
-        const time = this.timeInputControl.getValue();
-        return date && time ?
+        const time = this.timeInputControl.getValue() || new TimeOnly(0, 0);
+        return date ?
             DateTimeOffset.create(date, time) :
             null;
     }

@@ -31,7 +31,7 @@ export class AddEmployeeForm extends BaseForm {
         this.Address.setCaption('Address');
     }
 
-    readonly EmployeeName = this.addTextInputFormGroup('Name', this.view.EmployeeName);
+    readonly EmployeeName = this.addTextInputFormGroup('EmployeeName', this.view.EmployeeName);
     readonly BirthDate = this.addDateInputFormGroup('BirthDate', this.view.BirthDate);
     readonly Salary = this.addNumberInputFormGroup('Salary', this.view.Salary);
     readonly Department = this.addNumberDropDownFormGroup('Department', this.view.Department);
