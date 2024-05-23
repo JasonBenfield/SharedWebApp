@@ -5,6 +5,8 @@ import { InputView } from "../Views/InputView";
 import { InputControl } from "./InputControl";
 
 export class TimeInputControl extends InputControl<TimeOnly> {
+    private step = '60';
+
     constructor(view: InputView) {
         super(view, new TextToTimeOnlyViewValue());
         view.setType('time');
@@ -26,13 +28,19 @@ export class TimeInputControl extends InputControl<TimeOnly> {
     }
 
     setValue(value: TimeOnly) {
-        if (value.seconds) {
-            this.view.setStep('1');
+        if (value && value.seconds) {
+            this.setTimeStep('1');
         }
         else {
-            this.view.setStep('60');
+            this.setTimeStep('60');
         }
         super.setValue(value);
     }
 
+    private setTimeStep(step: string) {
+        if (this.step !== step) {
+            this.view.setStep(step);
+            this.step = step;
+        }
+    }
 }
