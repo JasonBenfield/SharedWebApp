@@ -68,4 +68,8 @@ export class DateTimeInputControl extends BasicComponent {
     show() { this.view.show(); }
 
     hide() { this.view.hide(); }
+
+    protected onDipose() {
+        this.eventSource.unregisterAll();
+    }
 }

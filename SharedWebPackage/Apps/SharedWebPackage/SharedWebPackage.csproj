@@ -71,7 +71,6 @@
     <None Remove="Scripts\Lib\Components\TextButtonComponent.ts" />
     <None Remove="Scripts\Lib\Components\TextComponent.ts" />
     <None Remove="Scripts\Lib\Components\TextValueFormGroup.ts" />
-    <None Remove="Scripts\Lib\Components\Types.ts" />
     <None Remove="Scripts\Lib\Components\UserMenuComponent.ts" />
     <None Remove="Scripts\Lib\DateRange.ts" />
     <None Remove="Scripts\Lib\FlexCss.ts" />
@@ -318,7 +317,6 @@
     <TypeScriptCompile Include="Scripts\Lib\Components\TextComponent.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\UserMenuComponent.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Forms\FormGroupText.ts" />
-    <TypeScriptCompile Include="Scripts\Lib\Components\Types.ts" />
     <TypeScriptCompile Include="Scripts\Lib\NumberRange.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

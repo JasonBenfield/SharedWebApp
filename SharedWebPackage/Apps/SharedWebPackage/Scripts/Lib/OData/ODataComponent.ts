@@ -269,4 +269,8 @@ export class ODataComponent<TEntity> {
     private getStorageKey(type: string) {
         return `odata_${pageContext.UserName}_${this.id}_${type}`;
     }
+
+    protected onDipose() {
+        this.eventSource.unregisterAll();
+    }
 }

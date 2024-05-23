@@ -303,7 +303,7 @@ export class DateTimeOffset {
         return this.refDate.toLocaleTimeString([], timeOptions.getTimeOptions());
     }
 
-    toString() { return this.toLocaleString(); }
+    toString() { return this.format(); }
 
     equals(other: DateTimeOffset | DateOnly | Date | null) {
         if (other) {

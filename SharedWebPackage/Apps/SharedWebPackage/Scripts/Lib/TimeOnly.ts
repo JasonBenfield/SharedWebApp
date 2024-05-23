@@ -70,6 +70,14 @@ export class TimeOnly {
 
     get milliseconds() { return this._milliseconds; }
 
+    stripSeconds() {
+        return new TimeOnly(this.hours, this.minutes, 0, 0);
+    }
+
+    stripMilliseconds() {
+        return new TimeOnly(this.hours, this.minutes, this.seconds, 0);
+    }
+
     toDate(): Date;
     toDate(year: number, month: Month, date: number): Date;
     toDate(year?: number, month?: Month, date?: number) {

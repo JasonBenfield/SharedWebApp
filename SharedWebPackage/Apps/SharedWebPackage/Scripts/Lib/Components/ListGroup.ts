@@ -62,6 +62,10 @@ export class ListGroup<TItem extends BasicComponent, TItemView extends BasicList
     moveItem(item: BasicComponent, destinationIndex: number) {
         this.moveComponent(item, destinationIndex)
     }
+
+    protected onDipose() {
+        this.eventSource.unregisterAll();
+    }
 }
 
 export class TextListItem extends BasicComponent {
