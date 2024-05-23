@@ -71,4 +71,8 @@ export class FileInputControl extends BasicComponent {
     clear() {
         this.view.setValue('');
     }
+
+    protected onDipose() {
+        this.eventSource.unregisterAll();
+    }
 }

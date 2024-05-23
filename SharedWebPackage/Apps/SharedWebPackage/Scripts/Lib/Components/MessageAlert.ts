@@ -109,4 +109,8 @@ export class MessageAlert extends BasicComponent {
             this.eventSource.events.visibleChanged.invoke(false);
         }
     }
+
+    protected onDipose() {
+        this.eventSource.unregisterAll();
+    }
 }

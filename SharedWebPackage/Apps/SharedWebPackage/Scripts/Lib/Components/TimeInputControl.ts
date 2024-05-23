@@ -24,4 +24,15 @@ export class TimeInputControl extends InputControl<TimeOnly> {
     setCustomValidity(message: string) {
         this.view.setCustomValidity(message);
     }
+
+    setValue(value: TimeOnly) {
+        if (value.seconds) {
+            this.view.setStep('1');
+        }
+        else {
+            this.view.setStep('60');
+        }
+        super.setValue(value);
+    }
+
 }

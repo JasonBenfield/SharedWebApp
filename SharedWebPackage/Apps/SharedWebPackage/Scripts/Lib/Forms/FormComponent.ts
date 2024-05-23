@@ -36,4 +36,8 @@ export class FormComponent extends BasicComponent {
         this.addComponent(container);
         return container;
     }
+
+    protected onDipose() {
+        this.eventSource.unregisterAll();
+    }
 }
