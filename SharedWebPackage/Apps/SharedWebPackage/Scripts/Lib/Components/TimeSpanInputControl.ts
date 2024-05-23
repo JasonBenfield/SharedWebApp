@@ -169,7 +169,6 @@ export class TimeSpanInputControl extends BasicComponent {
             second || 0,
             (millisecond || 0) * 10000
         );
-        console.log(`TimeSpanInputControl: value=${value.format()}`);
         return value;
     }
 
@@ -220,4 +219,8 @@ export class TimeSpanInputControl extends BasicComponent {
     show() { this.view.show(); }
 
     hide() { this.view.hide(); }
+
+    protected onDipose() {
+        this.eventSource.unregisterAll();
+    }
 }

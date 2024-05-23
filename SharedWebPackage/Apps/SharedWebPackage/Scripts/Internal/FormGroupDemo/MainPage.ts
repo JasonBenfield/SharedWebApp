@@ -84,6 +84,9 @@ class MainPage extends SharedPage {
         this.demoFormGroupDateTimeInput = this.formGroupContainer.addFormGroupDateTimeInput(view.demoFormGroupDateTimeInputView);
         this.demoFormGroupDateTimeInput.setCaption('Date Time Input Field');
         this.demoFormGroupDateTimeInput.when.valueChanged.then(this.onChange.bind(this));
+        const dateTimeValue = DateTimeOffset.parse('2024-01-04T14:59:11+00:00');
+        this.demoFormGroupDateTimeInput.setValue(dateTimeValue);
+        console.log(this.demoFormGroupDateTimeInput.getValue().toISOString());
         this.demoFormGroupTimeSpanInput = this.formGroupContainer.addFormGroupTimeSpanInput(view.demoFormGroupTimeSpanInputView);
         this.demoFormGroupTimeSpanInput.setCaption('Time Span Input Field');
         this.demoFormGroupTimeSpanInput.when.valueChanged.then(this.onChange.bind(this));

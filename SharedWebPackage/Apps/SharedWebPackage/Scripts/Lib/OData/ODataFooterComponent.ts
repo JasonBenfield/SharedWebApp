@@ -83,4 +83,7 @@ export class ODataFooterComponent extends BasicComponent {
         this.countText.setText(countText);
     }
 
+    protected onDipose() {
+        this.eventSource.unregisterAll();
+    }
 }
