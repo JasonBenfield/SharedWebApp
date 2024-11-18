@@ -132,3 +132,36 @@ a.dropdown-item {
     border: solid transparent;
     border-width: var(--bs-border-width) 0;
 }
+
+.form-group-list-view .grid .grid-cell:first-child {
+    padding-left: 0;
+}
+
+
+.form-group-grid {
+    grid-template-columns: 1fr;
+
+    .form-group {
+        margin-bottom: 0;
+
+        .form-group-caption-cell {
+            font-weight: bold;
+            text-align: start;
+        }
+    }
+}
+
+@media (min-width: 576px) {
+    .form-group-grid {
+        grid-template-columns: auto 1fr;
+
+        .form-group {
+            margin-bottom: 1rem !important;
+
+            .form-group-caption-cell {
+                font-weight: bold;
+                text-align: end;
+            }
+        }
+    }
+}

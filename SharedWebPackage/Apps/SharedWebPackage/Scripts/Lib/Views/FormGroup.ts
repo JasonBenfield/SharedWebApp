@@ -28,9 +28,8 @@ export class FormGroupView extends BasicComponentView {
         super(container, 'div');
         this.addCssName('d-contents');
         this.addCssName('form-group');
-        this.setMargin(MarginCss.bottom(3));
         this.captionCell = this.addView(GridCellView);
-        this.captionCell.setTextCss(new TextCss().end().bold());
+        this.captionCell.addCssName('form-group-caption-cell');
         this.captionLabel = this.captionCell.addView(LabelView);
         this.captionLabel.addCssName('col-form-label');
         this.caption = this.captionLabel.addView(TextBlockView);

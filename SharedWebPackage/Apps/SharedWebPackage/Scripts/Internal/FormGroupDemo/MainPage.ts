@@ -30,6 +30,9 @@ import { DefaultPageContext } from '../DefaultPageContext';
 import { SharedPage } from '../SharedPage';
 import { MainPageView } from './MainPageView';
 import { FormGroupFormCheck } from '../../Lib/Forms/FormGroupFormCheck';
+import { FormGroupGridListGroup } from '../../Lib/Forms/FormGroupGridListGroup';
+import { TestGridListItem } from '../CardDemo/TestGridListItem';
+import { TestGridListItemView } from '../CardDemo/TestGridListItemView';
 
 class MainPage extends SharedPage {
     private readonly formGroupContainer: FormGroupContainer;
@@ -47,6 +50,7 @@ class MainPage extends SharedPage {
     private readonly demoFormGroupLink: FormGroupLink;
     private readonly demoFormGroupFileInput: FormGroupFileInput;
     private readonly demoFormGroupFormCheck: FormGroupFormCheck;
+    private readonly demoFormGroupGridListGroup: FormGroupGridListGroup<TestGridListItem, TestGridListItemView>;
     private readonly alert: MessageAlert;
     private readonly changeAlert: MessageAlert;
     private readonly valueListGroup: ListGroup<TextListItem, TextListGroupItemView>;
@@ -115,6 +119,12 @@ class MainPage extends SharedPage {
         this.demoFormGroupFormCheck.when.valueChanged.then(this.onChange.bind(this));
         this.demoFormGroupFormCheck.setCaption("Form Check");
         this.demoFormGroupFormCheck.setText("Switch");
+        this.demoFormGroupGridListGroup = this.formGroupContainer.addFormGroupGridListGroup(view.demoFormGroupGridListGroupView);
+        this.demoFormGroupGridListGroup.setCaption("Grid List Group");
+        this.demoFormGroupGridListGroup.setItems(
+            [1, 2, 3, 4, 5],
+            (i, itemView) => new TestGridListItem(i, itemView)
+        );
         this.alert = new MessageAlert(view.alertView);
         this.alert.info('Click "Show Values"', 'Instructions');
         this.valueListGroup = new ListGroup(view.valueListView);

@@ -10,7 +10,7 @@ export class ButtonContainerView extends BlockView {
         super(container);
         this.addCssName('d-grid');
         this.addCssName('gap-3');
-        this.addCssName('col-6');
+        this.addCssName('col-12 col-sm-6');
     }
 
     addButtonCommand<T extends ButtonCommandView>(viewCtor?: ViewConstructor<T>) {
