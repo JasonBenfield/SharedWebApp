@@ -29,4 +29,8 @@ export class LinkView extends BasicContainerView implements ILinkView {
     prependIcon() {
         return this.insertView(0, FaIconView);
     }
+
+    scrollIntoView() {
+        this.elementView.element.scrollIntoView();
+    }
 }

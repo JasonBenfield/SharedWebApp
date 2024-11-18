@@ -74,4 +74,8 @@ export class FormGroupContainerView extends BasicComponentView {
         const formGroupView = this.addView(ctor) as T;
         return formGroupView;
     }
+
+    scrollIntoView(arg?: boolean | ScrollIntoViewOptions) {
+        this.elementView.scrollIntoView(arg);
+    }
 }

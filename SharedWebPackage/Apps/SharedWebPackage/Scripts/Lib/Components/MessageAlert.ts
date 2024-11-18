@@ -1,5 +1,6 @@
 ﻿import { ContextualClass } from '../ContextualClass';
 import { DebouncedAction } from '../DebouncedAction';
+import { DelayedAction } from '../DelayedAction';
 import { EventSource } from '../Events';
 import { MessageAlertView } from '../Views/MessageAlertView';
 import { BasicComponent } from './BasicComponent';
@@ -14,6 +15,7 @@ export class MessageAlert extends BasicComponent implements IMessageAlert {
     private _message: string;
     private readonly headingTextComponent: TextComponent;
     private readonly messageTextComponent: TextComponent;
+    private isAutoScrollEnabled = true;
 
     private readonly eventSource = new EventSource<Events>(this, { visibleChanged: null });
     readonly when = this.eventSource.when;
@@ -26,7 +28,14 @@ export class MessageAlert extends BasicComponent implements IMessageAlert {
         this._heading = view.headingTextView.getText();
         this.messageTextComponent = this.addComponent(new TextComponent(view.messageTextView));
         this._message = view.messageTextView.getText();
+    }
 
+    enableAutoScrollIntoView() {
+        this.isAutoScrollEnabled = true;
+    }
+
+    disableAutoScrollIntoView() {
+        this.isAutoScrollEnabled = false;
     }
 
     get heading() { return this._heading; }
@@ -123,6 +132,9 @@ export class MessageAlert extends BasicComponent implements IMessageAlert {
         this.messageTextComponent.setText(message);
         if (message || heading) {
             this.view.show();
+            if (this.isAutoScrollEnabled && (message || heading)) {
+                new DelayedAction(() => this.view.scrollIntoView(true), 100).execute();
+            }
             this.eventSource.events.visibleChanged.invoke(true);
         }
         else {

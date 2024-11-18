@@ -2,6 +2,7 @@
 import { CssLengthUnit } from '../../Lib/CssLengthUnit';
 import { FlexCss } from '../../Lib/FlexCss';
 import { MarginCss } from '../../Lib/MarginCss';
+import { PaddingCss } from '../../Lib/PaddingCss';
 import { BlockView } from '../../Lib/Views/BlockView';
 import { ButtonCommandView } from '../../Lib/Views/Command';
 import { FormGroupAlertView, FormGroupBooleanInputView, FormGroupDateTimeInputView, FormGroupInputView, FormGroupLinkView, FormGroupSelectView, FormGroupTextAreaView, FormGroupTextView, FormGroupTimeSpanInputView, FormGroupView } from '../../Lib/Views/FormGroup';
@@ -40,10 +41,18 @@ export class MainPageView extends SharedPageView {
         super();
         const flexColumn = this.addView(BlockView)
             .configure(c => {
-                c.addCssName('container');
-                c.setFlexCss(new FlexCss().column());
                 c.height100();
-                c.scrollable();
+                c.addCssName('container');
+                c.positionRelative();
+            })
+            .addView(BlockView)
+            .configure(b => {
+                b.positionAbsoluteFill();
+                b.scrollable();
+            })
+            .addView(BlockView)
+            .configure(b => {
+                b.setPadding(PaddingCss.top(3));
             });
         this.heading = flexColumn
             .addView(BlockView)

@@ -68,4 +68,8 @@ export class FormView extends BasicContainerView {
     styleAsNotValidated() {
         this.removeCssName('was-validated');
     }
+
+    scrollIntoView(arg?: boolean | ScrollIntoViewOptions) {
+        this.elementView.scrollIntoView(arg);
+    }
 }
