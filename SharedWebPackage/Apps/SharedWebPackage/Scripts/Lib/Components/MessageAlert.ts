@@ -20,10 +20,10 @@ export class MessageAlert extends BasicComponent {
     constructor(view: MessageAlertView) {
         super(view);
         view.hide();
-        this.headingTextComponent = new TextComponent(view.headingTextView);
+        this.headingTextComponent = this.addComponent(new TextComponent(view.headingTextView));
         this.headingTextComponent.hide();
         this._heading = view.headingTextView.getText();
-        this.messageTextComponent = new TextComponent(view.messageTextView);
+        this.messageTextComponent = this.addComponent(new TextComponent(view.messageTextView));
         this._message = view.messageTextView.getText();
 
     }

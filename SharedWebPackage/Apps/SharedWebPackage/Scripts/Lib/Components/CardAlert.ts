@@ -1,12 +1,14 @@
 ﻿import { MessageAlert } from "./MessageAlert";
 import { CardAlertView } from "../Views/Card";
+import { BasicComponent } from "./BasicComponent";
 
-export class CardAlert {
+export class CardAlert extends BasicComponent {
     readonly alert: MessageAlert;
 
-    constructor(private readonly view: CardAlertView) {
-        this.alert = new MessageAlert(this.view.alert);
-        this.view.hide();
+    constructor(protected readonly view: CardAlertView) {
+        super(view);
+        this.alert = this.addComponent(new MessageAlert(view.alert));
+        view.hide();
         this.alert.when.visibleChanged.then(this.onIsVisibleChanged.bind(this));
     }
 

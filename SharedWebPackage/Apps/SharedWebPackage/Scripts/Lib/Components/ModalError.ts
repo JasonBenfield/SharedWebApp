@@ -65,7 +65,7 @@ export class ModalErrorGroupComponent extends BasicComponent {
     constructor(view: ModalErrorGroupView) {
         super(view);
         this.caption = new TextComponent(view.caption);
-        this.errors = new ListGroup(view.errors);
+        this.errors = new ListGroup(view.errorListView);
         this.errors.when.itemClicked.then(this.onErrorClicked.bind(this));
     }
 
@@ -82,6 +82,12 @@ export class ModalErrorGroupComponent extends BasicComponent {
         }
         this.caption.setText(caption);
         const anyCaptions = errors.filter(e => Boolean(e.Caption)).length > 0;
+        if (anyCaptions) {
+            this.view.styleAsTwoTemplateColumns();
+        }
+        else {
+            this.view.styleAsOneTemplateColumn();
+        }
         this.errors.setItems(
             errors,
             (e, itemView) =>
