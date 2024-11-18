@@ -46,26 +46,42 @@ export class ModalErrorView extends ModalComponentView {
 export class ModalErrorGroupView extends BlockView {
     private readonly hr: HorizontalRuleView;
     readonly caption: TextHeading4View;
-    readonly errors: GridListGroupView<ModalErrorListItemView>;
+    readonly errorListView: GridListGroupView<ModalErrorListItemView>;
 
     constructor(container: BasicComponentView) {
         super(container);
         this.hr = this.addView(HorizontalRuleView);
         this.caption = this.addView(TextHeading4View);
         this.caption.addCssName('alert-heading');
-        this.errors = this.addGridListGroup(ModalErrorListItemView);
-        this.errors.setTemplateColumns(CssLengthUnit.auto(), CssLengthUnit.flex(1));
+        this.errorListView = this.addGridListGroup(ModalErrorListItemView);
+        this.styleAsTwoTemplateColumns();
     }
 
     showHR() { this.hr.show(); }
 
     hideHR() { this.hr.hide(); }
+
+    styleAsOneTemplateColumn() {
+        ModalErrorListItemView.setOneTemplateColumn(this.errorListView);
+    }
+
+    styleAsTwoTemplateColumns() {
+        ModalErrorListItemView.setTwoTemplateColumns(this.errorListView);
+    }
 }
 
 export class ModalErrorListItemView extends GridListGroupItemView {
     private readonly captionCol: GridCellView;
     readonly caption: TextBlockView;
     readonly message: TextBlockView;
+
+    static setTwoTemplateColumns(list: GridListGroupView<ModalErrorListItemView>) {
+        list.setTemplateColumns(CssLengthUnit.auto(), CssLengthUnit.flex(1));
+    }
+
+    static setOneTemplateColumn(list: GridListGroupView<ModalErrorListItemView>) {
+        list.setTemplateColumns(CssLengthUnit.flex(1));
+    }
 
     constructor(container: BasicComponentView) {
         super(container);
