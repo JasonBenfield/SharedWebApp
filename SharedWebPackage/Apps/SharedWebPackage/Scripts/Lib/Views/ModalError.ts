@@ -33,14 +33,6 @@ export class ModalErrorView extends ModalComponentView {
         this.okButton.setText('OK');
         this.okButton.setContext(ContextualClass.danger);
     }
-
-    errorGroup() {
-        return this.body.addView(ModalErrorGroupView);
-    }
-
-    clearErrorGroups() {
-        this.body.disposeAllViews();
-    }
 }
 
 export class ModalErrorGroupView extends BlockView {

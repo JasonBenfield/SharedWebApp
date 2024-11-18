@@ -104,4 +104,8 @@ export class FormGroupContainer extends BasicComponent {
     addFormGroup<T extends FormGroup>(formGroup: T) {
         return this.addComponent(formGroup);
     }
+
+    show() { this.view.show(); }
+
+    hide() { this.view.hide(); }
 }

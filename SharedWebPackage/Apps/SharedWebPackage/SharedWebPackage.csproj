@@ -277,6 +277,8 @@
     <TypeScriptCompile Include="Scripts\Internal\ViewDemo\DemoGridListGroupItem.ts" />
     <TypeScriptCompile Include="Scripts\Internal\ViewDemo\MainPage.ts" />
     <TypeScriptCompile Include="Scripts\Internal\ViewDemo\MainPageView.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\SingleComponentTypeContainer.ts" />
+    <TypeScriptCompile Include="Scripts\Lib\Components\BasicComponentContainer.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Components\DataListOption.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

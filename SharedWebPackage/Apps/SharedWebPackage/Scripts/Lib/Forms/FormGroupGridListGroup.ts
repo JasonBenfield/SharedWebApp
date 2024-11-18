@@ -53,4 +53,8 @@ export class FormGroupGridListGroup<TItem extends BasicComponent, TItemView exte
     moveItem(item: BasicComponent, destinationIndex: number) {
         this.moveComponent(item, destinationIndex);
     }
+
+    getValue() {
+        return this.getItems();
+    }
 }

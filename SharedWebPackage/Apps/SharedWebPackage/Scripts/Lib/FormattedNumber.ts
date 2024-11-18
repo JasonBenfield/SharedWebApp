@@ -7,7 +7,7 @@ export class FormattedNumber implements IFormattable {
 
     private readonly formatted: string;
 
-    constructor(value: number, format: string) {
+    constructor(readonly value: number, format: string) {
         this.formatted = numeral(value).format(format);
     }
 
