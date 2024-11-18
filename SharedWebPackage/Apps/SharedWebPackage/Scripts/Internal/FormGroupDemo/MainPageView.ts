@@ -1,16 +1,18 @@
 ﻿import { ContextualClass } from '../../Lib/ContextualClass';
 import { CssLengthUnit } from '../../Lib/CssLengthUnit';
-import { FlexCss } from '../../Lib/FlexCss';
 import { MarginCss } from '../../Lib/MarginCss';
 import { PaddingCss } from '../../Lib/PaddingCss';
 import { BlockView } from '../../Lib/Views/BlockView';
+import { ButtonContainerView } from '../../Lib/Views/ButtonContainerView';
 import { ButtonCommandView } from '../../Lib/Views/Command';
 import { FormGroupAlertView, FormGroupBooleanInputView, FormGroupDateTimeInputView, FormGroupFormCheckView, FormGroupInputView, FormGroupLinkView, FormGroupSelectView, FormGroupTextAreaView, FormGroupTextView, FormGroupTimeSpanInputView, FormGroupView } from '../../Lib/Views/FormGroup';
 import { FormGroupContainerView } from '../../Lib/Views/FormGroupContainerView';
+import { FormGroupGridListGroupView } from '../../Lib/Views/FormGroupGridListGroupView';
 import { FormView } from '../../Lib/Views/FormView';
 import { ListGroupView, TextListGroupItemView } from '../../Lib/Views/ListGroup';
 import { MessageAlertView } from '../../Lib/Views/MessageAlertView';
 import { TextHeading1View } from '../../Lib/Views/TextHeadings';
+import { TestGridListItemView } from '../CardDemo/TestGridListItemView';
 import { SharedPageView } from '../SharedPageView';
 
 export class MainPageView extends SharedPageView {
@@ -32,12 +34,13 @@ export class MainPageView extends SharedPageView {
     readonly demoFormGroupLinkView: FormGroupLinkView;
     readonly demoFormGroupFileInputView: FormGroupInputView;
     readonly demoFormGroupFormCheckView: FormGroupFormCheckView;
+    readonly demoFormGroupGridListGroupView: FormGroupGridListGroupView<TestGridListItemView>;
 
     readonly showButton: ButtonCommandView;
     readonly alertView: MessageAlertView;
     readonly changeAlertView: MessageAlertView;
     readonly valueListView: ListGroupView<TextListGroupItemView>;
-    
+
     constructor() {
         super();
         const flexColumn = this.addView(BlockView)
@@ -78,8 +81,9 @@ export class MainPageView extends SharedPageView {
         this.demoFormGroupTimeSpanInputView = this.formGroupContainerView.addFormGroupTimeSpanInputView();
         this.demoFormGroupFileInputView = this.formGroupContainerView.addFormGroupInputView();
         this.demoFormGroupFormCheckView = this.formGroupContainerView.addFormGroupFormCheckView();
-        this.showButton = flexColumn.addView(BlockView).addView(ButtonCommandView);
-        this.showButton.setWidth(CssLengthUnit.percentage(50));
+        this.demoFormGroupGridListGroupView = this.formGroupContainerView.addFormGroupGridListGroupView(TestGridListItemView);
+        TestGridListItemView.setTemplateColumns(this.demoFormGroupGridListGroupView);
+        this.showButton = flexColumn.addView(ButtonContainerView).addButtonCommand();
         this.showButton.setText('Show Values');
         this.showButton.useOutlineStyle(ContextualClass.primary);
         this.showButton.setMargin(MarginCss.bottom(3));

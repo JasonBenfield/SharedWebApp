@@ -34,10 +34,6 @@ export class TestCardView extends CardView {
         this.textArea = formGroup.textAreaView;
         this.textArea.setRows(3);
         this.gridItems = this.addGridListGroup(TestGridListItemView);
-        this.gridItems.setTemplateColumns(
-            CssLengthUnit.flex(1),
-            CssLengthUnit.flex(1),
-            CssLengthUnit.flex(1)
-        );
+        TestGridListItemView.setTemplateColumns(this.gridItems);
     }
 }

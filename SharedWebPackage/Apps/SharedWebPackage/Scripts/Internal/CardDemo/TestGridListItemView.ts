@@ -1,12 +1,22 @@
-﻿import { BasicComponentView } from "../../Lib/Views/BasicComponentView";
+﻿import { CssLengthUnit } from "../../Lib/CssLengthUnit";
+import { BasicComponentView } from "../../Lib/Views/BasicComponentView";
 import { BasicTextComponentView } from "../../Lib/Views/BasicTextComponentView";
-import { GridListGroupItemView } from "../../Lib/Views/ListGroup";
+import { FormGroupGridListGroupView } from "../../Lib/Views/FormGroupGridListGroupView";
+import { GridListGroupItemView, GridListGroupView } from "../../Lib/Views/ListGroup";
 import { TextBlockView } from "../../Lib/Views/TextBlockView";
 
 export class TestGridListItemView extends GridListGroupItemView {
     readonly cell1: BasicTextComponentView;
     readonly cell2: BasicTextComponentView;
     readonly cell3: BasicTextComponentView;
+
+    static setTemplateColumns(list: GridListGroupView<TestGridListItemView> | FormGroupGridListGroupView<TestGridListItemView>) {
+        list.setTemplateColumns(
+            CssLengthUnit.flex(1),
+            CssLengthUnit.flex(1),
+            CssLengthUnit.flex(1)
+        );
+    }
 
     constructor(container: BasicComponentView) {
         super(container);

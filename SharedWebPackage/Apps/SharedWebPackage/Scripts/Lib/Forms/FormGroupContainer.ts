@@ -1,6 +1,8 @@
 import { BasicComponent } from "../Components/BasicComponent";
 import { FormGroupAlertView, FormGroupBooleanInputView, FormGroupDateTimeInputView, FormGroupFormCheckView, FormGroupInputView, FormGroupLinkView, FormGroupPreformattedView, FormGroupSelectView, FormGroupTextAreaView, FormGroupTextView, FormGroupTimeSpanInputView } from "../Views/FormGroup";
 import { FormGroupContainerView } from "../Views/FormGroupContainerView";
+import { FormGroupGridListGroupView } from "../Views/FormGroupGridListGroupView";
+import { GridListGroupItemView } from "../Views/ListGroup";
 import { FormGroup } from "./FormGroup";
 import { FormGroupAlert } from "./FormGroupAlert";
 import { FormGroupBooleanInput } from "./FormGroupBooleanInput";
@@ -8,6 +10,7 @@ import { FormGroupDateInput } from "./FormGroupDateInput";
 import { FormGroupDateTimeInput } from "./FormGroupDateTimeInput";
 import { FormGroupFileInput } from "./FormGroupFileInput";
 import { FormGroupFormCheck } from "./FormGroupFormCheck";
+import { FormGroupGridListGroup } from "./FormGroupGridListGroup";
 import { FormGroupInput } from "./FormGroupInput";
 import { FormGroupLink } from "./FormGroupLink";
 import { FormGroupSelect } from "./FormGroupSelect";
@@ -87,6 +90,10 @@ export class FormGroupContainer extends BasicComponent {
 
     addFormGroupLink(view: FormGroupLinkView) {
         return this.addFormGroup(new FormGroupLink(view));
+    }
+
+    addFormGroupGridListGroup<TItem extends BasicComponent, TItemView extends GridListGroupItemView>(view: FormGroupGridListGroupView<TItemView>) {
+        return this.addFormGroup(new FormGroupGridListGroup<TItem, TItemView>(view));
     }
 
     addFormGroup<T extends FormGroup>(formGroup: T) {
