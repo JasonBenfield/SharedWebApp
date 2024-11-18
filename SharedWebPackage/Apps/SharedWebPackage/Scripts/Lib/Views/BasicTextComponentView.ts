@@ -17,4 +17,8 @@ export class BasicTextComponentView extends BasicComponentView implements ITextC
     styleAsUserSelectAll() {
         this.addCssName('user-select-all');
     }
+
+    scrollIntoView(arg?: boolean | ScrollIntoViewOptions) {
+        this.elementView.scrollIntoView(arg);
+    }
 }

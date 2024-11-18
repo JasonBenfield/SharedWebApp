@@ -13,6 +13,14 @@ export class CardAlert extends BasicComponent implements IMessageAlert {
         this.alert.when.visibleChanged.then(this.onIsVisibleChanged.bind(this));
     }
 
+    enableAutoScrollIntoView() {
+        this.alert.enableAutoScrollIntoView();
+    }
+
+    disableAutoScrollIntoView() {
+        this.alert.disableAutoScrollIntoView();
+    }
+
     get heading() { return this.alert.heading; }
     get message() { return this.alert.message; }
     get hasMessage() { return this.alert.hasMessage; }

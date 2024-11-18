@@ -39,6 +39,10 @@ export class FormGroupView extends BasicComponentView {
     addCell() {
         return this.addView(GridCellView);
     }
+
+    scrollIntoView(arg?: boolean | ScrollIntoViewOptions) {
+        this.elementView.scrollIntoView(arg);
+    }
 }
 
 export class FormGroupTextView extends FormGroupView {

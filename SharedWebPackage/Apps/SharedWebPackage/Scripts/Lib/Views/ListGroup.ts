@@ -56,6 +56,10 @@ export class BasicListGroupView<TItemView extends BasicListGroupItemView> extend
     addListGroupItems(howMany: number) {
         return this.addViews(howMany, this.itemViewCtor);
     }
+
+    scrollIntoView(arg?: boolean | ScrollIntoViewOptions) {
+        this.elementView.scrollIntoView(arg);
+    }
 }
 
 export class BasicListGroupItemView extends BasicComponentView {

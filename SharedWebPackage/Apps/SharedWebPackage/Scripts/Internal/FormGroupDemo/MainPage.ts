@@ -122,6 +122,7 @@ class MainPage extends SharedPage {
         console.log(url);
         console.log(`Today: ${DateOnly.today().dayOfWeek.displayText}`);
         console.log(`Yesterday: ${DateTimeOffset.now().addDays(-1).dayOfWeek.displayText}`);
+        this.view.demoFormGroupFileInputView.scrollIntoView(true);
     }
 
     private onChange(value) {
@@ -146,6 +147,9 @@ class MainPage extends SharedPage {
         this.demoFormGroupTimeInput.makeReadOnly();
         this.demoFormGroupTimeInput.makeEditable();
         this.demoFormGroupTimeSpanInput.makeReadOnly();
+        //this.view.demoFormGroupFileInputView.scrollIntoView();
+        this.view.demoFormGroupAlertView.scrollIntoView(true);
+        //this.view.demoFormGroupAlertView.scrollIntoView();
     }
 }
 new DefaultPageContext().load();
