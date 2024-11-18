@@ -13,7 +13,14 @@ export class FormGroupText extends FormGroup {
 
     getValue() { return this.textValue.getText(); }
 
-    setValue(value: string) {
+    setValue(textOrFormattable: string | IFormattable) {
+        let value: string;
+        if (typeof textOrFormattable === "string") {
+            value = textOrFormattable;
+        }
+        else {
+            value = textOrFormattable.format();
+        }
         this.textValue.setText(value);
     }
 

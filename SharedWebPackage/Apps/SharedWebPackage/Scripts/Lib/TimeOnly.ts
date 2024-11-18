@@ -2,7 +2,7 @@
 import { Month } from "./Month";
 import { TimeSpan } from "./TimeSpan";
 
-export class TimeOnly {
+export class TimeOnly implements IFormattable {
 
     private static readonly regex1 = /^(?<hours>\d{1,2}):(?<minutes>\d{1,2}):?(?<seconds>\d{1,2})?(\.(?<ticks>\d+))?$/;
 

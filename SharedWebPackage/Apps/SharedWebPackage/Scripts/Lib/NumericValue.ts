@@ -1,4 +1,4 @@
-﻿export class NumericValue implements INumericValue {
+﻿export class NumericValue implements INumericValue, IFormattable {
     constructor(
         public readonly Value: number,
         public readonly DisplayText: string
@@ -32,6 +32,8 @@
     private normalizeDisplayText(displayText: string) {
         return displayText.replace(/\s+/g, '').toLowerCase();
     }
+
+    format() { return this.DisplayText; }
 
     toString() {
         return `${this.constructor.name} ${this.Value} ${this.DisplayText}`;

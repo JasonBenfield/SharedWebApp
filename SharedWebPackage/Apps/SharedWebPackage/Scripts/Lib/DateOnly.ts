@@ -4,7 +4,7 @@ import { Month } from "./Month";
 import { TimeOnly } from "./TimeOnly";
 import { TimeSpan } from "./TimeSpan";
 
-export class DateOnly {
+export class DateOnly implements IFormattable {
     private static readonly dateOnlyRegex = /^(?<Year>\d{4})-(?<Month>\d{2})-(?<Date>\d{2})$/;
 
     static canParse(text: string) {

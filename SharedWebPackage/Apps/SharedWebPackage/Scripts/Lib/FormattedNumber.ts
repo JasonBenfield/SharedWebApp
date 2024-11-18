@@ -1,6 +1,6 @@
 ﻿import numeral = require("numeral");
 
-export class FormattedNumber {
+export class FormattedNumber implements IFormattable {
     static currency(value: number) {
         return new FormattedNumber(value, '$0,0.00');
     }
@@ -11,7 +11,9 @@ export class FormattedNumber {
         this.formatted = numeral(value).format(format);
     }
 
+    format() { return this.formatted; }
+
     toString() {
-        return this.formatted;
+        return this.format();
     }
 }
