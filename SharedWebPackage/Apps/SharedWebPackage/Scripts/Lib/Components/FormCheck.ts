@@ -2,7 +2,6 @@
 import { FormCheckView } from "../Views/FormCheckView";
 import { BasicComponent } from "./BasicComponent";
 import { BooleanInputControl, BooleanInputControlEvents } from "./BooleanInputControl";
-import { ComponentID } from "./ComponentID";
 import { LabelComponent } from "./LabelComponent";
 import { TextComponent } from "./TextComponent";
 
@@ -21,6 +20,8 @@ export class FormCheck extends BasicComponent {
         labelComponent.setFor(this.booleanInput);
         this.labelText = this.addComponent(new TextComponent(view.labelText));
     }
+
+    getCheckboxViewID() { return this.booleanInput.getViewID(); }
 
     getValue() { return this.booleanInput.getValue(); }
 

@@ -6,6 +6,7 @@ import { BasicTextComponentView } from "./BasicTextComponentView";
 import { BlockView } from "./BlockView";
 import { BooleanInputView } from "./BooleanInputView";
 import { DateTimeInputView } from "./DateTimeInputView";
+import { FormCheckView } from "./FormCheckView";
 import { GridCellView } from "./Grid";
 import { InputGroupView } from "./InputGroupView";
 import { InputView } from "./InputView";
@@ -150,6 +151,22 @@ export class FormGroupBooleanInputView extends FormGroupView {
         formCheckView.setMargin(MarginCss.top(2));
         this.inputView = formCheckView.addView(BooleanInputView);
         this.inputView.addCssName('form-check-input');
+        this.valueTextView = this.valueCell.addView(TextBlockView);
+        this.valueTextView.styleAsFormControl();
+        this.valueTextView.hide();
+    }
+}
+
+export class FormGroupFormCheckView extends FormGroupView {
+    readonly formCheckView: FormCheckView;
+    readonly valueTextView: TextBlockView;
+
+    constructor(container: BasicComponentView) {
+        super(container);
+        this.captionLabel.addCssName('form-check-label');
+        this.formCheckView = this.valueCell.addView(FormCheckView);
+        this.formCheckView.setMargin(MarginCss.top(2));
+        this.formCheckView.styleAsSwitch();
         this.valueTextView = this.valueCell.addView(TextBlockView);
         this.valueTextView.styleAsFormControl();
         this.valueTextView.hide();
