@@ -25,7 +25,10 @@ export class AppClientView<TArgs> {
     getModifierUrl(modifier: string, data: TArgs) {
         let model: any;
         const obj: any = data;
-        if (typeof obj === 'string' || typeof obj === 'number' || 'toJSON' in obj) {
+        if (obj === undefined || obj === null) {
+            model = obj;
+        }
+        else if (typeof obj === 'string' || typeof obj === 'number' || 'toJSON' in obj) {
             model = { model: data };
         }
         else {
@@ -45,7 +48,10 @@ export class AppClientView<TArgs> {
 
     getVersionedModifierUrl(modifier: string, data: TArgs) {
         let model: any;
-        if (typeof data === 'string' || typeof data === 'number' || data instanceof Date) {
+        if (data === undefined || data === null) {
+            model = data;
+        }
+        else if (typeof data === 'string' || typeof data === 'number' || data instanceof Date) {
             model = { model: data };
         }
         else {

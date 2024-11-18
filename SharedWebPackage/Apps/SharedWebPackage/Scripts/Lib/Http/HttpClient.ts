@@ -1,6 +1,7 @@
 ﻿import { isArray } from "lodash";
 import { serialize } from "object-to-formdata";
 import { ParsedJsonText } from "./ParsedJsonText";
+import { DateOnly, DateTimeOffset, TimeOnly, TimeSpan } from "../Common";
 
 export class HttpPostResult {
     constructor(
@@ -32,6 +33,7 @@ export class HttpClient {
             hasFiles = this.hasFiles(data);
         }
         if (hasFiles) {
+            data = this.prepareSerialize(data);
             body = serialize(
                 data,
                 {
@@ -45,6 +47,37 @@ export class HttpClient {
             body = isString ? data : JSON.stringify(data);
         }
         return this.execute('POST', url, body, contentType);
+    }
+
+    private prepareSerialize(data) {
+        if (data && !(data instanceof File)) {
+            if (data instanceof DateTimeOffset) {
+                data = data.toISOString();
+            }
+            else if (data instanceof DateOnly) {
+                data = data.toISOString();
+            }
+            else if (data instanceof TimeOnly) {
+                data = data.toISOString();
+            }
+            else if (data instanceof TimeSpan) {
+                data = data.toISOString();
+            }
+            else if (data instanceof Date) {
+                data = data.toISOString();
+            }
+            else if (Array.isArray(data)) {
+                for (let i = 0; i < data.length; i++) {
+                    data[i] = this.prepareSerialize(data[i]);
+                }
+            }
+            else if (typeof data !== "string" && typeof data !== "boolean" && typeof data !== "number") {
+                for (const prop in data) {
+                    data[prop] = this.prepareSerialize(data[prop]);
+                }
+            }
+        }
+        return data;
     }
 
     private hasFiles(data) {
