@@ -1,5 +1,5 @@
 import { BasicComponent } from "../Components/BasicComponent";
-import { FormGroupAlertView, FormGroupBooleanInputView, FormGroupDateTimeInputView, FormGroupInputView, FormGroupLinkView, FormGroupPreformattedView, FormGroupSelectView, FormGroupTextAreaView, FormGroupTextView, FormGroupTimeSpanInputView } from "../Views/FormGroup";
+import { FormGroupAlertView, FormGroupBooleanInputView, FormGroupDateTimeInputView, FormGroupFormCheckView, FormGroupInputView, FormGroupLinkView, FormGroupPreformattedView, FormGroupSelectView, FormGroupTextAreaView, FormGroupTextView, FormGroupTimeSpanInputView } from "../Views/FormGroup";
 import { FormGroupContainerView } from "../Views/FormGroupContainerView";
 import { FormGroup } from "./FormGroup";
 import { FormGroupAlert } from "./FormGroupAlert";
@@ -7,6 +7,7 @@ import { FormGroupBooleanInput } from "./FormGroupBooleanInput";
 import { FormGroupDateInput } from "./FormGroupDateInput";
 import { FormGroupDateTimeInput } from "./FormGroupDateTimeInput";
 import { FormGroupFileInput } from "./FormGroupFileInput";
+import { FormGroupFormCheck } from "./FormGroupFormCheck";
 import { FormGroupInput } from "./FormGroupInput";
 import { FormGroupLink } from "./FormGroupLink";
 import { FormGroupSelect } from "./FormGroupSelect";
@@ -42,6 +43,10 @@ export class FormGroupContainer extends BasicComponent {
 
     addFormGroupBooleanInput(view: FormGroupBooleanInputView) {
         return this.addFormGroup(new FormGroupBooleanInput(view));
+    }
+
+    addFormGroupFormCheck(view: FormGroupFormCheckView) {
+        return this.addFormGroup(new FormGroupFormCheck(view));
     }
 
     addFormGroupInput<TValue>(view: FormGroupInputView, viewValue: TypedFieldViewValue<string, TValue>) {

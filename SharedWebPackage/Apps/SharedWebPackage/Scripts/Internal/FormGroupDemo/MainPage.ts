@@ -29,6 +29,7 @@ import { TextListGroupItemView } from '../../Lib/Views/ListGroup';
 import { DefaultPageContext } from '../DefaultPageContext';
 import { SharedPage } from '../SharedPage';
 import { MainPageView } from './MainPageView';
+import { FormGroupFormCheck } from '../../Lib/Forms/FormGroupFormCheck';
 
 class MainPage extends SharedPage {
     private readonly formGroupContainer: FormGroupContainer;
@@ -45,6 +46,7 @@ class MainPage extends SharedPage {
     private readonly demoFormGroupBooleanInput: FormGroupBooleanInput;
     private readonly demoFormGroupLink: FormGroupLink;
     private readonly demoFormGroupFileInput: FormGroupFileInput;
+    private readonly demoFormGroupFormCheck: FormGroupFormCheck;
     private readonly alert: MessageAlert;
     private readonly changeAlert: MessageAlert;
     private readonly valueListGroup: ListGroup<TextListItem, TextListGroupItemView>;
@@ -108,6 +110,10 @@ class MainPage extends SharedPage {
         this.demoFormGroupLink.setTargetToBlank();
         this.demoFormGroupFileInput = this.formGroupContainer.addFormGroupFileInput(view.demoFormGroupFileInputView);
         this.demoFormGroupFileInput.setCaption("Select File");
+        this.demoFormGroupFormCheck = this.formGroupContainer.addFormGroupFormCheck(view.demoFormGroupFormCheckView);
+        this.demoFormGroupFormCheck.when.valueChanged.then(this.onChange.bind(this));
+        this.demoFormGroupFormCheck.setCaption("Form Check");
+        this.demoFormGroupFormCheck.setText("Switch");
         this.alert = new MessageAlert(view.alertView);
         this.alert.info('Click "Show Values"', 'Instructions');
         this.valueListGroup = new ListGroup(view.valueListView);

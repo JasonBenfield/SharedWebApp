@@ -133,7 +133,7 @@ export class MessageAlert extends BasicComponent implements IMessageAlert {
         if (message || heading) {
             this.view.show();
             if (this.isAutoScrollEnabled && (message || heading)) {
-                new DelayedAction(() => this.view.scrollIntoView(true), 100).execute();
+                this.view.scrollIntoView(true);
             }
             this.eventSource.events.visibleChanged.invoke(true);
         }

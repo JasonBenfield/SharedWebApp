@@ -5,7 +5,7 @@ import { MarginCss } from '../../Lib/MarginCss';
 import { PaddingCss } from '../../Lib/PaddingCss';
 import { BlockView } from '../../Lib/Views/BlockView';
 import { ButtonCommandView } from '../../Lib/Views/Command';
-import { FormGroupAlertView, FormGroupBooleanInputView, FormGroupDateTimeInputView, FormGroupInputView, FormGroupLinkView, FormGroupSelectView, FormGroupTextAreaView, FormGroupTextView, FormGroupTimeSpanInputView, FormGroupView } from '../../Lib/Views/FormGroup';
+import { FormGroupAlertView, FormGroupBooleanInputView, FormGroupDateTimeInputView, FormGroupFormCheckView, FormGroupInputView, FormGroupLinkView, FormGroupSelectView, FormGroupTextAreaView, FormGroupTextView, FormGroupTimeSpanInputView, FormGroupView } from '../../Lib/Views/FormGroup';
 import { FormGroupContainerView } from '../../Lib/Views/FormGroupContainerView';
 import { FormView } from '../../Lib/Views/FormView';
 import { ListGroupView, TextListGroupItemView } from '../../Lib/Views/ListGroup';
@@ -31,6 +31,7 @@ export class MainPageView extends SharedPageView {
     readonly demoFormGroupBooleanInputView: FormGroupBooleanInputView;
     readonly demoFormGroupLinkView: FormGroupLinkView;
     readonly demoFormGroupFileInputView: FormGroupInputView;
+    readonly demoFormGroupFormCheckView: FormGroupFormCheckView;
 
     readonly showButton: ButtonCommandView;
     readonly alertView: MessageAlertView;
@@ -76,6 +77,7 @@ export class MainPageView extends SharedPageView {
         this.demoFormGroupTimeInputView = this.formGroupContainerView.addFormGroupInputView();
         this.demoFormGroupTimeSpanInputView = this.formGroupContainerView.addFormGroupTimeSpanInputView();
         this.demoFormGroupFileInputView = this.formGroupContainerView.addFormGroupInputView();
+        this.demoFormGroupFormCheckView = this.formGroupContainerView.addFormGroupFormCheckView();
         this.showButton = flexColumn.addView(BlockView).addView(ButtonCommandView);
         this.showButton.setWidth(CssLengthUnit.percentage(50));
         this.showButton.setText('Show Values');
