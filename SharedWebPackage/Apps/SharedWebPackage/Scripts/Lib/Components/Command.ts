@@ -39,7 +39,7 @@ export class AsyncCommand {
 
     activate() {
         this.forEachItem(c => {
-            if ('setActive' in c) {
+            if ("setActive" in c) {
                 c.setActive();
             }
         });
@@ -47,7 +47,7 @@ export class AsyncCommand {
 
     deactivate() {
         this.forEachItem(c => {
-            if ('setInactive' in c) {
+            if ("setInactive" in c) {
                 c.setInactive();
             }
         });
@@ -130,7 +130,7 @@ export class AsyncCommand {
 
     private icons(action: (i: FaIconView) => void) {
         this.forEachItem(c => {
-            if ('icon' in c) {
+            if ("icon" in c) {
                 action(c.icon);
             }
         });
