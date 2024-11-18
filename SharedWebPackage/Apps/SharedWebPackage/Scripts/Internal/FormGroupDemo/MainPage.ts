@@ -58,8 +58,7 @@ class MainPage extends SharedPage {
         this.demoFormGroupInput.setCaption('Input Field');
         this.demoFormGroupAlert = this.formGroupContainer.addFormGroupAlert(view.demoFormGroupAlertView);
         this.demoFormGroupAlert.setCaption('Alert Field');
-        this.demoFormGroupAlert.setContext(ContextualClass.danger);
-        this.demoFormGroupAlert.setValue('Alert Value!');
+        this.demoFormGroupAlert.primary("Alert Value!");
         this.demoFormGroupSelect = this.formGroupContainer.addFormGroupSelect(view.demoFormGroupSelectView);
         this.demoFormGroupSelect.setCaption('Select Field');
         this.demoFormGroupSelect.setItemCaption('Select...');

@@ -4,10 +4,11 @@ import { EventSource } from '../Events';
 import { MessageAlertView } from '../Views/MessageAlertView';
 import { BasicComponent } from './BasicComponent';
 import { TextComponent } from './TextComponent';
+import { IMessageAlert } from './Types';
 
 type Events = { visibleChanged: boolean };
 
-export class MessageAlert extends BasicComponent {
+export class MessageAlert extends BasicComponent implements IMessageAlert {
     protected readonly view: MessageAlertView
     private _heading: string;
     private _message: string;
@@ -39,20 +40,20 @@ export class MessageAlert extends BasicComponent {
     }
 
     clear() {
-        this.setMessage('', '');
+        this.setMessage("", "");
     }
 
-    success(message: string, heading = '') {
+    success(message: string, heading = "") {
         this.view.setContext(ContextualClass.success);
         this.setMessage(message, heading);
     }
 
-    info(message: string, heading = '') {
+    info(message: string, heading = "") {
         this.view.setContext(ContextualClass.info);
         this.setMessage(message, heading);
     }
 
-    async infoAction<TResult>(message: string, a: () => Promise<TResult>, heading = '') {
+    async infoAction<TResult>(message: string, a: () => Promise<TResult>, heading = "") {
         let result: TResult;
         this.info(message, heading);
         try {
@@ -64,13 +65,33 @@ export class MessageAlert extends BasicComponent {
         return result;
     }
 
-    warning(message: string, heading = '') {
+    warning(message: string, heading = "") {
         this.view.setContext(ContextualClass.warning);
         this.setMessage(message, heading);
     }
 
-    danger(message: string, heading = '') {
+    danger(message: string, heading = "") {
         this.view.setContext(ContextualClass.danger);
+        this.setMessage(message, heading);
+    }
+
+    dark(message: string, heading = "") {
+        this.view.setContext(ContextualClass.dark);
+        this.setMessage(message, heading);
+    }
+
+    light(message: string, heading = "") {
+        this.view.setContext(ContextualClass.light);
+        this.setMessage(message, heading);
+    }
+
+    primary(message: string, heading = "") {
+        this.view.setContext(ContextualClass.primary);
+        this.setMessage(message, heading);
+    }
+
+    secondary(message: string, heading = "") {
+        this.view.setContext(ContextualClass.secondary);
         this.setMessage(message, heading);
     }
 
