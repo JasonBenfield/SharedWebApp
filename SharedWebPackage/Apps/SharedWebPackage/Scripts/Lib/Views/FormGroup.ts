@@ -16,6 +16,7 @@ import { SelectView } from "./SelectView";
 import { TextAreaView } from "./TextAreaView";
 import { TextBlockView } from "./TextBlockView";
 import { TextPreView } from "./TextPreView";
+import { TextStackView } from "./TextStackView";
 import { TimeSpanInputView } from "./TimeSpanInputView";
 
 export class FormGroupView extends BasicComponentView {
@@ -53,6 +54,17 @@ export class FormGroupTextView extends FormGroupView {
         const textValue = this.valueCell.addView(TextBlockView);
         textValue.styleAsFormControl();
         this.valueTextView = textValue;
+    }
+}
+
+export class FormGroupTextStackView extends FormGroupView {
+    readonly textStackView: TextStackView;
+
+    constructor(container: BasicComponentView) {
+        super(container);
+        const block = this.valueCell.addView(BlockView);
+        block.styleAsFormControl();
+        this.textStackView = block.addView(TextStackView);
     }
 }
 

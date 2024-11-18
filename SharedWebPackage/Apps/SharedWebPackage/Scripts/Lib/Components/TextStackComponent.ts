@@ -17,14 +17,14 @@ export class TextStackComponent extends BasicComponent {
 
     clearTextValues() { this.clearComponents(); }
 
-    setTextValues(textValues: string[]) {
+    setTextValues(...textValues: string[]) {
         this.clearTextValues();
         for (const textValue of textValues) {
             this.addTextValue(textValue);
         }
     }
 
-    addTextValue(text: string = '', createView: (view: TextStackView) => BasicComponentView & ITextComponentView = TextStackComponent.defaultCreateTextView) {
+    addTextValue(text: string = "", createView: (view: TextStackView) => BasicComponentView & ITextComponentView = TextStackComponent.defaultCreateTextView) {
         const textView = createView(this.view);
         const textComponent = this.addComponent(new TextComponent(textView));
         textComponent.setText(text);

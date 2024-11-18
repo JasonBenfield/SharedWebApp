@@ -1,5 +1,5 @@
 import { BasicComponent } from "../Components/BasicComponent";
-import { FormGroupAlertView, FormGroupBooleanInputView, FormGroupDateTimeInputView, FormGroupFormCheckView, FormGroupInputView, FormGroupLinkView, FormGroupPreformattedView, FormGroupSelectView, FormGroupTextAreaView, FormGroupTextView, FormGroupTimeSpanInputView } from "../Views/FormGroup";
+import { FormGroupAlertView, FormGroupBooleanInputView, FormGroupDateTimeInputView, FormGroupFormCheckView, FormGroupInputView, FormGroupLinkView, FormGroupPreformattedView, FormGroupSelectView, FormGroupTextAreaView, FormGroupTextStackView, FormGroupTextView, FormGroupTimeSpanInputView } from "../Views/FormGroup";
 import { FormGroupContainerView } from "../Views/FormGroupContainerView";
 import { FormGroupGridListGroupView } from "../Views/FormGroupGridListGroupView";
 import { GridListGroupItemView } from "../Views/ListGroup";
@@ -17,6 +17,7 @@ import { FormGroupSelect } from "./FormGroupSelect";
 import { FormGroupText } from "./FormGroupText";
 import { FormGroupTextArea } from "./FormGroupTextArea";
 import { FormGroupTextInput } from "./FormGroupTextInput";
+import { FormGroupTextStack } from "./FormGroupTextStack";
 import { FormGroupTimeInput } from "./FormGroupTimeInput";
 import { FormGroupTimeSpanInput } from "./FormGroupTimeSpanInput";
 import { TextToNumberViewValue } from "./TextToNumberViewValue";
@@ -90,6 +91,10 @@ export class FormGroupContainer extends BasicComponent {
 
     addFormGroupLink(view: FormGroupLinkView) {
         return this.addFormGroup(new FormGroupLink(view));
+    }
+
+    addFormGroupTextStack(view: FormGroupTextStackView) {
+        return this.addFormGroup(new FormGroupTextStack(view));
     }
 
     addFormGroupGridListGroup<TItem extends BasicComponent, TItemView extends GridListGroupItemView>(view: FormGroupGridListGroupView<TItemView>) {

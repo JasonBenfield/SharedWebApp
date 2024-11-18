@@ -286,6 +286,7 @@
     <TypeScriptCompile Include="Scripts\Lib\Forms\FormGroupLink.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="Scripts\Lib\Forms\FormGroupTextStack.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Http\AppClientQuery.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Http\AppVersionDomain.ts" />
     <TypeScriptCompile Include="Scripts\Lib\Http\DefaultMenuDefinitions.ts" />

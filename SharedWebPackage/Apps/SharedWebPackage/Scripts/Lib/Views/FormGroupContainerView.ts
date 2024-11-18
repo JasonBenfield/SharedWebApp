@@ -1,6 +1,6 @@
 import { CssLengthUnit } from "../CssLengthUnit";
 import { BasicComponentView } from "./BasicComponentView";
-import { FormGroupAlertView, FormGroupBooleanInputView, FormGroupDateTimeInputView, FormGroupFormCheckView, FormGroupInputGroupView, FormGroupInputView, FormGroupLinkView, FormGroupPreformattedView, FormGroupSelectView, FormGroupTextAreaView, FormGroupTextView, FormGroupTimeSpanInputView, FormGroupView } from "./FormGroup";
+import { FormGroupAlertView, FormGroupBooleanInputView, FormGroupDateTimeInputView, FormGroupFormCheckView, FormGroupInputGroupView, FormGroupInputView, FormGroupLinkView, FormGroupPreformattedView, FormGroupSelectView, FormGroupTextAreaView, FormGroupTextStackView, FormGroupTextView, FormGroupTimeSpanInputView, FormGroupView } from "./FormGroup";
 import { FormGroupGridListGroupView } from "./FormGroupGridListGroupView";
 import { GridTemplateCss, GridTemplateCssValue } from "./Grid";
 import { GridListGroupItemView } from "./ListGroup";
@@ -31,6 +31,10 @@ export class FormGroupContainerView extends BasicComponentView {
 
     addFormGroupTextView() {
         return this.addFormGroup(FormGroupTextView);
+    }
+
+    addFormGroupTextStackView() {
+        return this.addFormGroup(FormGroupTextStackView);
     }
 
     addFormGroupPreformattedView() {

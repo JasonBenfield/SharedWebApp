@@ -5,7 +5,7 @@ import { PaddingCss } from '../../Lib/PaddingCss';
 import { BlockView } from '../../Lib/Views/BlockView';
 import { ButtonContainerView } from '../../Lib/Views/ButtonContainerView';
 import { ButtonCommandView } from '../../Lib/Views/Command';
-import { FormGroupAlertView, FormGroupBooleanInputView, FormGroupDateTimeInputView, FormGroupFormCheckView, FormGroupInputView, FormGroupLinkView, FormGroupSelectView, FormGroupTextAreaView, FormGroupTextView, FormGroupTimeSpanInputView, FormGroupView } from '../../Lib/Views/FormGroup';
+import { FormGroupAlertView, FormGroupBooleanInputView, FormGroupDateTimeInputView, FormGroupFormCheckView, FormGroupInputView, FormGroupLinkView, FormGroupSelectView, FormGroupTextAreaView, FormGroupTextStackView, FormGroupTextView, FormGroupTimeSpanInputView, FormGroupView } from '../../Lib/Views/FormGroup';
 import { FormGroupContainerView } from '../../Lib/Views/FormGroupContainerView';
 import { FormGroupGridListGroupView } from '../../Lib/Views/FormGroupGridListGroupView';
 import { FormView } from '../../Lib/Views/FormView';
@@ -34,6 +34,7 @@ export class MainPageView extends SharedPageView {
     readonly demoFormGroupLinkView: FormGroupLinkView;
     readonly demoFormGroupFileInputView: FormGroupInputView;
     readonly demoFormGroupFormCheckView: FormGroupFormCheckView;
+    readonly demoFormGroupTextStackView: FormGroupTextStackView;
     readonly demoFormGroupGridListGroupView: FormGroupGridListGroupView<TestGridListItemView>;
 
     readonly showButton: ButtonCommandView;
@@ -82,6 +83,7 @@ export class MainPageView extends SharedPageView {
         this.demoFormGroupFileInputView = this.formGroupContainerView.addFormGroupInputView();
         this.demoFormGroupFormCheckView = this.formGroupContainerView.addFormGroupFormCheckView();
         this.demoFormGroupGridListGroupView = this.formGroupContainerView.addFormGroupGridListGroupView(TestGridListItemView);
+        this.demoFormGroupTextStackView = this.formGroupContainerView.addFormGroupTextStackView();
         TestGridListItemView.setTemplateColumns(this.demoFormGroupGridListGroupView);
         this.showButton = flexColumn.addView(ButtonContainerView).addButtonCommand();
         this.showButton.setText('Show Values');

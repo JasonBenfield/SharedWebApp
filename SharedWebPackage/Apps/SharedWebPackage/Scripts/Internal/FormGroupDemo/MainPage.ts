@@ -33,6 +33,7 @@ import { FormGroupFormCheck } from '../../Lib/Forms/FormGroupFormCheck';
 import { FormGroupGridListGroup } from '../../Lib/Forms/FormGroupGridListGroup';
 import { TestGridListItem } from '../CardDemo/TestGridListItem';
 import { TestGridListItemView } from '../CardDemo/TestGridListItemView';
+import { FormGroupTextStack } from '../../Lib/Forms/FormGroupTextStack';
 
 class MainPage extends SharedPage {
     private readonly formGroupContainer: FormGroupContainer;
@@ -50,6 +51,7 @@ class MainPage extends SharedPage {
     private readonly demoFormGroupLink: FormGroupLink;
     private readonly demoFormGroupFileInput: FormGroupFileInput;
     private readonly demoFormGroupFormCheck: FormGroupFormCheck;
+    private readonly demoFormGroupTextStack: FormGroupTextStack;
     private readonly demoFormGroupGridListGroup: FormGroupGridListGroup<TestGridListItem, TestGridListItemView>;
     private readonly alert: MessageAlert;
     private readonly changeAlert: MessageAlert;
@@ -125,6 +127,9 @@ class MainPage extends SharedPage {
             [1, 2, 3, 4, 5],
             (i, itemView) => new TestGridListItem(i, itemView)
         );
+        this.demoFormGroupTextStack = this.formGroupContainer.addFormGroupTextStack(view.demoFormGroupTextStackView);
+        this.demoFormGroupTextStack.setCaption("Text Stack");
+        this.demoFormGroupTextStack.setValue("Item 1", "Item 2", "Item 3");
         this.alert = new MessageAlert(view.alertView);
         this.alert.info('Click "Show Values"', 'Instructions');
         this.valueListGroup = new ListGroup(view.valueListView);
