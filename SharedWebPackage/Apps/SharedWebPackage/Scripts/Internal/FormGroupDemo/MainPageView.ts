@@ -29,6 +29,7 @@ export class MainPageView extends SharedPageView {
     readonly demoFormGroupInputWithDataListView: FormGroupInputView;
     readonly demoFormGroupBooleanInputView: FormGroupBooleanInputView;
     readonly demoFormGroupLinkView: FormGroupLinkView;
+    readonly demoFormGroupFileInputView: FormGroupInputView;
 
     readonly showButton: ButtonCommandView;
     readonly alertView: MessageAlertView;
@@ -65,6 +66,7 @@ export class MainPageView extends SharedPageView {
         this.demoFormGroupTextView = this.formGroupContainerView.addFormGroupTextView();
         this.demoFormGroupTimeInputView = this.formGroupContainerView.addFormGroupInputView();
         this.demoFormGroupTimeSpanInputView = this.formGroupContainerView.addFormGroupTimeSpanInputView();
+        this.demoFormGroupFileInputView = this.formGroupContainerView.addFormGroupInputView();
         this.showButton = flexColumn.addView(BlockView).addView(ButtonCommandView);
         this.showButton.setWidth(CssLengthUnit.percentage(50));
         this.showButton.setText('Show Values');

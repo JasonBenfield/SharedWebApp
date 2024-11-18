@@ -20,6 +20,7 @@ import { FormGroupText } from '../../Lib/Forms/FormGroupText';
 import { FormGroupTextArea } from '../../Lib/Forms/FormGroupTextArea';
 import { FormGroupTimeInput } from '../../Lib/Forms/FormGroupTimeInput';
 import { FormGroupTimeSpanInput } from '../../Lib/Forms/FormGroupTimeSpanInput';
+import { FormGroupFileInput } from '../../Lib/Forms/FormGroupFileInput';
 import { TextToNumberViewValue } from '../../Lib/Forms/TextToNumberViewValue';
 import { AppClientView } from '../../Lib/Http/AppClientView';
 import { AppResourceUrl } from '../../Lib/Http/AppResourceUrl';
@@ -43,6 +44,7 @@ class MainPage extends SharedPage {
     private readonly demoFormGroupInputWithDataList: FormGroupInput<number>;
     private readonly demoFormGroupBooleanInput: FormGroupBooleanInput;
     private readonly demoFormGroupLink: FormGroupLink;
+    private readonly demoFormGroupFileInput: FormGroupFileInput;
     private readonly alert: MessageAlert;
     private readonly changeAlert: MessageAlert;
     private readonly valueListGroup: ListGroup<TextListItem, TextListGroupItemView>;
@@ -104,6 +106,8 @@ class MainPage extends SharedPage {
         this.demoFormGroupLink.setValue('Click Here');
         this.demoFormGroupLink.setHref('https://example.com');
         this.demoFormGroupLink.setTargetToBlank();
+        this.demoFormGroupFileInput = this.formGroupContainer.addFormGroupFileInput(view.demoFormGroupFileInputView);
+        this.demoFormGroupFileInput.setCaption("Select File");
         this.alert = new MessageAlert(view.alertView);
         this.alert.info('Click "Show Values"', 'Instructions');
         this.valueListGroup = new ListGroup(view.valueListView);
