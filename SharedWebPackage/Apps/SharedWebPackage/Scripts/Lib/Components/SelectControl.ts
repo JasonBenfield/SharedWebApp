@@ -100,7 +100,7 @@ export class SelectControl<TValue> extends BasicComponent {
 
     private prependCaption(itemCaption: string, options: SelectOption<TValue>[]) {
         if (itemCaption) {
-            options.splice(0, 0, new SelectOption<TValue>(null, this.itemCaption));
+            options.splice(0, 0, new SelectOption<TValue>(null, itemCaption));
         }
     }
 
