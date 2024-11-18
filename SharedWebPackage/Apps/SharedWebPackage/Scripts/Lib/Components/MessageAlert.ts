@@ -1,6 +1,5 @@
 ﻿import { ContextualClass } from '../ContextualClass';
 import { DebouncedAction } from '../DebouncedAction';
-import { DelayedAction } from '../DelayedAction';
 import { EventSource } from '../Events';
 import { MessageAlertView } from '../Views/MessageAlertView';
 import { BasicComponent } from './BasicComponent';

@@ -65,8 +65,9 @@ class MainPage extends SharedPage {
         this.demoFormGroupAlert.primary("Alert Value!");
         this.demoFormGroupSelect = this.formGroupContainer.addFormGroupSelect(view.demoFormGroupSelectView);
         this.demoFormGroupSelect.setCaption('Select Field');
-        this.demoFormGroupSelect.setItemCaption('Select...');
-        this.demoFormGroupSelect.setItems([
+        this.demoFormGroupSelect.setItems(
+            "Select...",
+            [
             new SelectOption('1', 'Option 1'),
             new SelectOption('2', 'Option 2'),
             new SelectOption('3', 'Option 3')
