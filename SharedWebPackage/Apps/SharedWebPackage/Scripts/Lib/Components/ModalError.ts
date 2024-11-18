@@ -1,4 +1,5 @@
-﻿import { ErrorModel } from "../ErrorModel";
+﻿import { DelayedAction } from "../DelayedAction";
+import { ErrorModel } from "../ErrorModel";
 import { EventSource } from "../Events";
 import { BasicContainerView } from "../Views/BasicContainerView";
 import { ModalErrorGroupView, ModalErrorListItemView, ModalErrorView } from "../Views/ModalError";
@@ -34,17 +35,18 @@ export class ModalError extends BasicComponent {
         this.clearErrors();
     }
 
-    show(errors: ErrorModel[], caption: string = '') {
+    show(errors: ErrorModel[], caption: string = "") {
         const group = this.errorGroupComponentContainer.add();
         group.when.errorSelected.then(this.onErrorSelected.bind(this));
         group.load(caption, errors, this.errorGroupComponentContainer.getComponents().length === 1);
         if (errors.length === 1) {
-            this.title.setText('An error occurred');
+            this.title.setText("An error occurred");
         }
         else {
-            this.title.setText('Errors occurred');
+            this.title.setText("Errors occurred");
         }
         this.view.showModal();
+        new DelayedAction(() => this.view.okButton.setFocus(), 1000).execute();
     }
 
     hide() {
