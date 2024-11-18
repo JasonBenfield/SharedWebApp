@@ -6,6 +6,7 @@ import { FormGroupAlert } from "./FormGroupAlert";
 import { FormGroupBooleanInput } from "./FormGroupBooleanInput";
 import { FormGroupDateInput } from "./FormGroupDateInput";
 import { FormGroupDateTimeInput } from "./FormGroupDateTimeInput";
+import { FormGroupFileInput } from "./FormGroupFileInput";
 import { FormGroupInput } from "./FormGroupInput";
 import { FormGroupLink } from "./FormGroupLink";
 import { FormGroupSelect } from "./FormGroupSelect";
@@ -45,6 +46,10 @@ export class FormGroupContainer extends BasicComponent {
 
     addFormGroupInput<TValue>(view: FormGroupInputView, viewValue: TypedFieldViewValue<string, TValue>) {
         return this.addFormGroup(new FormGroupInput<TValue>(view, viewValue));
+    }
+
+    addFormGroupFileInput(view: FormGroupInputView) {
+        return this.addFormGroup(new FormGroupFileInput(view));
     }
 
     addFormGroupDateInput(view: FormGroupInputView) {
