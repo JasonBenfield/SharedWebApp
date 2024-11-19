@@ -33,4 +33,8 @@ export class TextStackView extends BasicComponentView {
     addTextView<TView extends TextStackItemView>(ctor: ViewConstructor<TView>) {
         return this.addView(ctor);
     }
+
+    scrollIntoView(arg?: boolean | ScrollIntoViewOptions) {
+        this.elementView.scrollIntoView(arg);
+    }
 }

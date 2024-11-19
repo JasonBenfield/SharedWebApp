@@ -1,4 +1,5 @@
 ﻿import * as $ from 'jquery';
+import { DelayedAction } from '../DelayedAction';
 
 interface IElementEvent {
     evtName: string;
@@ -123,6 +124,10 @@ export class HtmlElementView {
 
     hasElement(element: HTMLElement) {
         return this.element.contains(element);
+    }
+
+    scrollIntoView(arg?: boolean | ScrollIntoViewOptions) {
+        new DelayedAction(() => this.element.scrollIntoView(arg), 1).execute();
     }
 
     on(evtName: string, selector: string, action: (sourceElement: HTMLElement, evt: JQuery.Event) => void) {

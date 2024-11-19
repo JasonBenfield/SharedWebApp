@@ -17,7 +17,10 @@ export class LabelComponent extends BasicComponent {
 
     hide() { this.view.hide(); }
 
-    setFor(component: BasicComponent) {
-        this.view.setFor(component.getViewID());
+    setFor(componentOrViewID: BasicComponent | string) {
+        const viewID = typeof componentOrViewID === "string" ?
+            componentOrViewID :
+            componentOrViewID.getViewID();
+        this.view.setFor(viewID);
     }
 }

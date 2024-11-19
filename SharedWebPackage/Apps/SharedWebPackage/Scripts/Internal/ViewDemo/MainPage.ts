@@ -4,6 +4,7 @@ import { ModalError } from '../../Lib/Components/ModalError';
 import { ModalMessageAlert } from '../../Lib/Components/ModalMessageAlert';
 import { ErrorModel } from "../../Lib/ErrorModel";
 import { EnumerableRange } from "../../Lib/EnumerableRange";
+import { ResponsiveWindowSize, ResponsiveWindow } from "../../Lib/ResponsiveWindow";
 import { SharedPage } from "../SharedPage";
 import { DemoGridListGroupItem } from "./DemoGridListGroupItem";
 import { DemoGridListGroupItemView } from "./DemoGridListGroupItemView";
@@ -11,18 +12,27 @@ import { MainPageView } from "./MainPageView";
 import { DefaultPageContext } from "../DefaultPageContext";
 
 class MainPage extends SharedPage {
-    protected readonly view: MainPageView;
     private readonly demoGridListGroup: ListGroup<DemoGridListGroupItem, DemoGridListGroupItemView>;
+    private readonly modalError: ModalError;
 
-    constructor() {
-        super(new MainPageView());
-        this.demoGridListGroup = new ListGroup(this.view.demoGridListGroup);
+    constructor(protected readonly view: MainPageView) {
+        super(view);
+        this.modalError = new ModalError(view.modalError);
+        this.modalError.when.errorSelected.then(error => alert(`Error clicked: ${error.Message}`));
+        this.demoGridListGroup = new ListGroup(view.demoGridListGroup);
         this.demoGridListGroup.when.itemClicked.then(this.onDemoGridListGroupItemClicked.bind(this));
         this.demoGridListGroup.setItems(
             new EnumerableRange(1, 10).value(),
             (i, itemView) => new DemoGridListGroupItem(i, itemView)
         );
         this.load();
+        ResponsiveWindow.instance.when.sizeChanged.then(this.onWindowResize.bind(this));
+    }
+
+    private onWindowResize(size: ResponsiveWindowSize) {
+        if (size.hasBreakpointChanged) {
+            alert(`New breakpoint '${size.breakpoint}'`);
+        }
     }
 
     private async load() {
@@ -33,18 +43,17 @@ class MainPage extends SharedPage {
             modalAlert.alert(a => a.info('Hello!'));
         }
         else {
-            const modalError = new ModalError(this.view.modalError);
-            modalError.when.errorSelected.then(error => alert(`Error clicked: ${error.Message}`));
-            modalError.show(
+            this.modalError.show(
                 [
                     new ErrorModel('Confirm Cancelled'),
                     new ErrorModel('Some other error')
                 ],
                 'Confirmation Cancelled'
             );
-            modalError.show(
+            this.modalError.show(
                 [
-                    new ErrorModel('Another Error')
+                    new ErrorModel('This has a caption', 'Another Error'),
+                    new ErrorModel('Error with no caption')
                 ],
                 'More Errors'
             );
@@ -60,4 +69,4 @@ class MainPage extends SharedPage {
     }
 }
 new DefaultPageContext().load();
-new MainPage();
+new MainPage(new MainPageView());

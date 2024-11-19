@@ -58,4 +58,8 @@ export class BlockView extends BasicContainerView {
     styleAsFormControl() {
         this.addCssName('form-control-text');
     }
+
+    scrollIntoView(arg?: boolean | ScrollIntoViewOptions) {
+        this.elementView.scrollIntoView(arg);
+    }
 }

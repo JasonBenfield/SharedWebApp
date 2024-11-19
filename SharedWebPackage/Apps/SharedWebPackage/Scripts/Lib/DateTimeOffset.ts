@@ -5,7 +5,7 @@ import { Month } from "./Month";
 import { TimeOnly } from "./TimeOnly";
 import { TimeSpan } from "./TimeSpan";
 
-export class DateTimeOffset {
+export class DateTimeOffset implements IFormattable {
     private static readonly regex = /^\d{4}-\d{2}-\d{2}[T\s]\d{2}:\d{2}:\d{2}(\.\d{0,7})?(\s*([\+\-]\d{2}:\d{2})|Z)?$/;
 
     static canParse(text: string) {

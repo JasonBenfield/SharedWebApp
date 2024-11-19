@@ -20,6 +20,7 @@ import { FormGroupText } from '../../Lib/Forms/FormGroupText';
 import { FormGroupTextArea } from '../../Lib/Forms/FormGroupTextArea';
 import { FormGroupTimeInput } from '../../Lib/Forms/FormGroupTimeInput';
 import { FormGroupTimeSpanInput } from '../../Lib/Forms/FormGroupTimeSpanInput';
+import { FormGroupFileInput } from '../../Lib/Forms/FormGroupFileInput';
 import { TextToNumberViewValue } from '../../Lib/Forms/TextToNumberViewValue';
 import { AppClientView } from '../../Lib/Http/AppClientView';
 import { AppResourceUrl } from '../../Lib/Http/AppResourceUrl';
@@ -28,6 +29,11 @@ import { TextListGroupItemView } from '../../Lib/Views/ListGroup';
 import { DefaultPageContext } from '../DefaultPageContext';
 import { SharedPage } from '../SharedPage';
 import { MainPageView } from './MainPageView';
+import { FormGroupFormCheck } from '../../Lib/Forms/FormGroupFormCheck';
+import { FormGroupGridListGroup } from '../../Lib/Forms/FormGroupGridListGroup';
+import { TestGridListItem } from '../CardDemo/TestGridListItem';
+import { TestGridListItemView } from '../CardDemo/TestGridListItemView';
+import { FormGroupTextStack } from '../../Lib/Forms/FormGroupTextStack';
 
 class MainPage extends SharedPage {
     private readonly formGroupContainer: FormGroupContainer;
@@ -43,6 +49,10 @@ class MainPage extends SharedPage {
     private readonly demoFormGroupInputWithDataList: FormGroupInput<number>;
     private readonly demoFormGroupBooleanInput: FormGroupBooleanInput;
     private readonly demoFormGroupLink: FormGroupLink;
+    private readonly demoFormGroupFileInput: FormGroupFileInput;
+    private readonly demoFormGroupFormCheck: FormGroupFormCheck;
+    private readonly demoFormGroupTextStack: FormGroupTextStack;
+    private readonly demoFormGroupGridListGroup: FormGroupGridListGroup<TestGridListItem, TestGridListItemView>;
     private readonly alert: MessageAlert;
     private readonly changeAlert: MessageAlert;
     private readonly valueListGroup: ListGroup<TextListItem, TextListGroupItemView>;
@@ -58,12 +68,12 @@ class MainPage extends SharedPage {
         this.demoFormGroupInput.setCaption('Input Field');
         this.demoFormGroupAlert = this.formGroupContainer.addFormGroupAlert(view.demoFormGroupAlertView);
         this.demoFormGroupAlert.setCaption('Alert Field');
-        this.demoFormGroupAlert.setContext(ContextualClass.danger);
-        this.demoFormGroupAlert.setValue('Alert Value!');
+        this.demoFormGroupAlert.primary("Alert Value!");
         this.demoFormGroupSelect = this.formGroupContainer.addFormGroupSelect(view.demoFormGroupSelectView);
         this.demoFormGroupSelect.setCaption('Select Field');
-        this.demoFormGroupSelect.setItemCaption('Select...');
-        this.demoFormGroupSelect.setItems([
+        this.demoFormGroupSelect.setItems(
+            "Select...",
+            [
             new SelectOption('1', 'Option 1'),
             new SelectOption('2', 'Option 2'),
             new SelectOption('3', 'Option 3')
@@ -105,6 +115,21 @@ class MainPage extends SharedPage {
         this.demoFormGroupLink.setValue('Click Here');
         this.demoFormGroupLink.setHref('https://example.com');
         this.demoFormGroupLink.setTargetToBlank();
+        this.demoFormGroupFileInput = this.formGroupContainer.addFormGroupFileInput(view.demoFormGroupFileInputView);
+        this.demoFormGroupFileInput.setCaption("Select File");
+        this.demoFormGroupFormCheck = this.formGroupContainer.addFormGroupFormCheck(view.demoFormGroupFormCheckView);
+        this.demoFormGroupFormCheck.when.valueChanged.then(this.onChange.bind(this));
+        this.demoFormGroupFormCheck.setCaption("Form Check");
+        this.demoFormGroupFormCheck.setText("Switch");
+        this.demoFormGroupGridListGroup = this.formGroupContainer.addFormGroupGridListGroup(view.demoFormGroupGridListGroupView);
+        this.demoFormGroupGridListGroup.setCaption("Grid List Group");
+        this.demoFormGroupGridListGroup.setItems(
+            [1, 2, 3, 4, 5],
+            (i, itemView) => new TestGridListItem(i, itemView)
+        );
+        this.demoFormGroupTextStack = this.formGroupContainer.addFormGroupTextStack(view.demoFormGroupTextStackView);
+        this.demoFormGroupTextStack.setCaption("Text Stack");
+        this.demoFormGroupTextStack.setValue("Item 1", "Item 2", "Item 3");
         this.alert = new MessageAlert(view.alertView);
         this.alert.info('Click "Show Values"', 'Instructions');
         this.valueListGroup = new ListGroup(view.valueListView);
@@ -119,6 +144,7 @@ class MainPage extends SharedPage {
         console.log(url);
         console.log(`Today: ${DateOnly.today().dayOfWeek.displayText}`);
         console.log(`Yesterday: ${DateTimeOffset.now().addDays(-1).dayOfWeek.displayText}`);
+        this.view.demoFormGroupFileInputView.scrollIntoView(true);
     }
 
     private onChange(value) {
@@ -143,6 +169,9 @@ class MainPage extends SharedPage {
         this.demoFormGroupTimeInput.makeReadOnly();
         this.demoFormGroupTimeInput.makeEditable();
         this.demoFormGroupTimeSpanInput.makeReadOnly();
+        //this.view.demoFormGroupFileInputView.scrollIntoView();
+        this.view.demoFormGroupAlertView.scrollIntoView(true);
+        //this.view.demoFormGroupAlertView.scrollIntoView();
     }
 }
 new DefaultPageContext().load();

@@ -1,5 +1,5 @@
 ﻿
-export class TimeSpan {
+export class TimeSpan implements IFormattable {
 
     private static readonly regex1 = /^(?<days>\d+\.)?(?<hours>\d{1,2}):(?<minutes>\d{1,2}):?(?<seconds>\d{1,2})?(\.(?<ticks>\d+))?$/;
     private static readonly regex2 = /^PT(?<seconds>\d+)\.(?<ticks>\d{1,7})S$/;

@@ -16,6 +16,10 @@ declare type FlexWraps = 'wrap' | 'nowrap' | 'wrap-reverse';
 
 declare type ContentJustifications = 'start' | 'end' | 'center' | 'between' | 'around' | 'evenly';
 
+interface IFormattable {
+    format(): string;
+}
+
 interface ICssClass {
     toString(): string;
 }

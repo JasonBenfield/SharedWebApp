@@ -6,6 +6,7 @@ import { BasicTextComponentView } from "./BasicTextComponentView";
 import { BlockView } from "./BlockView";
 import { BooleanInputView } from "./BooleanInputView";
 import { DateTimeInputView } from "./DateTimeInputView";
+import { FormCheckView } from "./FormCheckView";
 import { GridCellView } from "./Grid";
 import { InputGroupView } from "./InputGroupView";
 import { InputView } from "./InputView";
@@ -15,6 +16,7 @@ import { SelectView } from "./SelectView";
 import { TextAreaView } from "./TextAreaView";
 import { TextBlockView } from "./TextBlockView";
 import { TextPreView } from "./TextPreView";
+import { TextStackView } from "./TextStackView";
 import { TimeSpanInputView } from "./TimeSpanInputView";
 
 export class FormGroupView extends BasicComponentView {
@@ -27,9 +29,8 @@ export class FormGroupView extends BasicComponentView {
         super(container, 'div');
         this.addCssName('d-contents');
         this.addCssName('form-group');
-        this.setMargin(MarginCss.bottom(3));
         this.captionCell = this.addView(GridCellView);
-        this.captionCell.setTextCss(new TextCss().end().bold());
+        this.captionCell.addCssName('form-group-caption-cell');
         this.captionLabel = this.captionCell.addView(LabelView);
         this.captionLabel.addCssName('col-form-label');
         this.caption = this.captionLabel.addView(TextBlockView);
@@ -38,6 +39,10 @@ export class FormGroupView extends BasicComponentView {
 
     addCell() {
         return this.addView(GridCellView);
+    }
+
+    scrollIntoView(arg?: boolean | ScrollIntoViewOptions) {
+        this.elementView.scrollIntoView(arg);
     }
 }
 
@@ -49,6 +54,17 @@ export class FormGroupTextView extends FormGroupView {
         const textValue = this.valueCell.addView(TextBlockView);
         textValue.styleAsFormControl();
         this.valueTextView = textValue;
+    }
+}
+
+export class FormGroupTextStackView extends FormGroupView {
+    readonly textStackView: TextStackView;
+
+    constructor(container: BasicComponentView) {
+        super(container);
+        const block = this.valueCell.addView(BlockView);
+        block.styleAsFormControl();
+        this.textStackView = block.addView(TextStackView);
     }
 }
 
@@ -146,6 +162,22 @@ export class FormGroupBooleanInputView extends FormGroupView {
         formCheckView.setMargin(MarginCss.top(2));
         this.inputView = formCheckView.addView(BooleanInputView);
         this.inputView.addCssName('form-check-input');
+        this.valueTextView = this.valueCell.addView(TextBlockView);
+        this.valueTextView.styleAsFormControl();
+        this.valueTextView.hide();
+    }
+}
+
+export class FormGroupFormCheckView extends FormGroupView {
+    readonly formCheckView: FormCheckView;
+    readonly valueTextView: TextBlockView;
+
+    constructor(container: BasicComponentView) {
+        super(container);
+        this.captionLabel.addCssName('form-check-label');
+        this.formCheckView = this.valueCell.addView(FormCheckView);
+        this.formCheckView.setMargin(MarginCss.top(2));
+        this.formCheckView.styleAsSwitch();
         this.valueTextView = this.valueCell.addView(TextBlockView);
         this.valueTextView.styleAsFormControl();
         this.valueTextView.hide();

@@ -4,15 +4,17 @@ import { EventSource } from '../Events';
 import { MessageAlertView } from '../Views/MessageAlertView';
 import { BasicComponent } from './BasicComponent';
 import { TextComponent } from './TextComponent';
+import { IMessageAlert } from './Types';
 
 type Events = { visibleChanged: boolean };
 
-export class MessageAlert extends BasicComponent {
+export class MessageAlert extends BasicComponent implements IMessageAlert {
     protected readonly view: MessageAlertView
     private _heading: string;
     private _message: string;
     private readonly headingTextComponent: TextComponent;
     private readonly messageTextComponent: TextComponent;
+    private isAutoScrollEnabled = true;
 
     private readonly eventSource = new EventSource<Events>(this, { visibleChanged: null });
     readonly when = this.eventSource.when;
@@ -20,12 +22,19 @@ export class MessageAlert extends BasicComponent {
     constructor(view: MessageAlertView) {
         super(view);
         view.hide();
-        this.headingTextComponent = new TextComponent(view.headingTextView);
+        this.headingTextComponent = this.addComponent(new TextComponent(view.headingTextView));
         this.headingTextComponent.hide();
         this._heading = view.headingTextView.getText();
-        this.messageTextComponent = new TextComponent(view.messageTextView);
+        this.messageTextComponent = this.addComponent(new TextComponent(view.messageTextView));
         this._message = view.messageTextView.getText();
+    }
 
+    enableAutoScrollIntoView() {
+        this.isAutoScrollEnabled = true;
+    }
+
+    disableAutoScrollIntoView() {
+        this.isAutoScrollEnabled = false;
     }
 
     get heading() { return this._heading; }
@@ -39,20 +48,20 @@ export class MessageAlert extends BasicComponent {
     }
 
     clear() {
-        this.setMessage('', '');
+        this.setMessage("", "");
     }
 
-    success(message: string, heading = '') {
+    success(message: string, heading = "") {
         this.view.setContext(ContextualClass.success);
         this.setMessage(message, heading);
     }
 
-    info(message: string, heading = '') {
+    info(message: string, heading = "") {
         this.view.setContext(ContextualClass.info);
         this.setMessage(message, heading);
     }
 
-    async infoAction<TResult>(message: string, a: () => Promise<TResult>, heading = '') {
+    async infoAction<TResult>(message: string, a: () => Promise<TResult>, heading = "") {
         let result: TResult;
         this.info(message, heading);
         try {
@@ -64,13 +73,33 @@ export class MessageAlert extends BasicComponent {
         return result;
     }
 
-    warning(message: string, heading = '') {
+    warning(message: string, heading = "") {
         this.view.setContext(ContextualClass.warning);
         this.setMessage(message, heading);
     }
 
-    danger(message: string, heading = '') {
+    danger(message: string, heading = "") {
         this.view.setContext(ContextualClass.danger);
+        this.setMessage(message, heading);
+    }
+
+    dark(message: string, heading = "") {
+        this.view.setContext(ContextualClass.dark);
+        this.setMessage(message, heading);
+    }
+
+    light(message: string, heading = "") {
+        this.view.setContext(ContextualClass.light);
+        this.setMessage(message, heading);
+    }
+
+    primary(message: string, heading = "") {
+        this.view.setContext(ContextualClass.primary);
+        this.setMessage(message, heading);
+    }
+
+    secondary(message: string, heading = "") {
+        this.view.setContext(ContextualClass.secondary);
         this.setMessage(message, heading);
     }
 
@@ -102,6 +131,9 @@ export class MessageAlert extends BasicComponent {
         this.messageTextComponent.setText(message);
         if (message || heading) {
             this.view.show();
+            if (this.isAutoScrollEnabled && (message || heading)) {
+                this.view.scrollIntoView(true);
+            }
             this.eventSource.events.visibleChanged.invoke(true);
         }
         else {

@@ -15,7 +15,7 @@ export class FormGroup extends BasicComponent {
         this.caption = this.captionText.getText();
     }
     
-    protected setLabelFor(component: BasicComponent) {
+    protected setLabelFor(component: BasicComponent | string) {
         this.labelComponent.setFor(component);
     }
 

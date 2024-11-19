@@ -44,15 +44,16 @@ export class BasicComponent {
         return component;
     }
 
-    protected removeComponent(component: BasicComponent | AsyncCommand) {
+    protected removeComponent<T extends BasicComponent | AsyncCommand>(component: T) {
         component.dispose();
         const index = this._components.indexOf(component);
         if (index > -1) {
             this._components.splice(index, 1);
         }
+        return component;
     }
 
-    protected moveComponent(component: BasicComponent, destinationIndex: number) {
+    protected moveComponent<T extends BasicComponent>(component: T, destinationIndex: number) {
         this.view.moveChildView(component.view, destinationIndex);
         const sourceIndex = this._components.indexOf(component);
         if (sourceIndex > -1 && sourceIndex !== destinationIndex) {
@@ -62,9 +63,10 @@ export class BasicComponent {
             }
             this._components.splice(destinationIndex, 0, component);
         }
+        return component;
     }
 
-    protected insertComponent(component: BasicComponent, destinationIndex: number) {
+    protected insertComponent<T extends BasicComponent | AsyncCommand>(component: T, destinationIndex: number) {
         this._components.splice(destinationIndex, 0, component);
         return component;
     }

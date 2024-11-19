@@ -1,17 +1,23 @@
 import { BasicComponent } from "../Components/BasicComponent";
-import { FormGroupAlertView, FormGroupBooleanInputView, FormGroupDateTimeInputView, FormGroupInputView, FormGroupLinkView, FormGroupPreformattedView, FormGroupSelectView, FormGroupTextAreaView, FormGroupTextView, FormGroupTimeSpanInputView } from "../Views/FormGroup";
+import { FormGroupAlertView, FormGroupBooleanInputView, FormGroupDateTimeInputView, FormGroupFormCheckView, FormGroupInputView, FormGroupLinkView, FormGroupPreformattedView, FormGroupSelectView, FormGroupTextAreaView, FormGroupTextStackView, FormGroupTextView, FormGroupTimeSpanInputView } from "../Views/FormGroup";
 import { FormGroupContainerView } from "../Views/FormGroupContainerView";
+import { FormGroupGridListGroupView } from "../Views/FormGroupGridListGroupView";
+import { GridListGroupItemView } from "../Views/ListGroup";
 import { FormGroup } from "./FormGroup";
 import { FormGroupAlert } from "./FormGroupAlert";
 import { FormGroupBooleanInput } from "./FormGroupBooleanInput";
 import { FormGroupDateInput } from "./FormGroupDateInput";
 import { FormGroupDateTimeInput } from "./FormGroupDateTimeInput";
+import { FormGroupFileInput } from "./FormGroupFileInput";
+import { FormGroupFormCheck } from "./FormGroupFormCheck";
+import { FormGroupGridListGroup } from "./FormGroupGridListGroup";
 import { FormGroupInput } from "./FormGroupInput";
 import { FormGroupLink } from "./FormGroupLink";
 import { FormGroupSelect } from "./FormGroupSelect";
 import { FormGroupText } from "./FormGroupText";
 import { FormGroupTextArea } from "./FormGroupTextArea";
 import { FormGroupTextInput } from "./FormGroupTextInput";
+import { FormGroupTextStack } from "./FormGroupTextStack";
 import { FormGroupTimeInput } from "./FormGroupTimeInput";
 import { FormGroupTimeSpanInput } from "./FormGroupTimeSpanInput";
 import { TextToNumberViewValue } from "./TextToNumberViewValue";
@@ -43,8 +49,16 @@ export class FormGroupContainer extends BasicComponent {
         return this.addFormGroup(new FormGroupBooleanInput(view));
     }
 
+    addFormGroupFormCheck(view: FormGroupFormCheckView) {
+        return this.addFormGroup(new FormGroupFormCheck(view));
+    }
+
     addFormGroupInput<TValue>(view: FormGroupInputView, viewValue: TypedFieldViewValue<string, TValue>) {
         return this.addFormGroup(new FormGroupInput<TValue>(view, viewValue));
+    }
+
+    addFormGroupFileInput(view: FormGroupInputView) {
+        return this.addFormGroup(new FormGroupFileInput(view));
     }
 
     addFormGroupDateInput(view: FormGroupInputView) {
@@ -79,7 +93,19 @@ export class FormGroupContainer extends BasicComponent {
         return this.addFormGroup(new FormGroupLink(view));
     }
 
+    addFormGroupTextStack(view: FormGroupTextStackView) {
+        return this.addFormGroup(new FormGroupTextStack(view));
+    }
+
+    addFormGroupGridListGroup<TItem extends BasicComponent, TItemView extends GridListGroupItemView>(view: FormGroupGridListGroupView<TItemView>) {
+        return this.addFormGroup(new FormGroupGridListGroup<TItem, TItemView>(view));
+    }
+
     addFormGroup<T extends FormGroup>(formGroup: T) {
         return this.addComponent(formGroup);
     }
+
+    show() { this.view.show(); }
+
+    hide() { this.view.hide(); }
 }

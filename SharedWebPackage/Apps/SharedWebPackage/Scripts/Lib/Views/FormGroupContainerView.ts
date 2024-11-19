@@ -1,7 +1,9 @@
 import { CssLengthUnit } from "../CssLengthUnit";
 import { BasicComponentView } from "./BasicComponentView";
-import { FormGroupAlertView, FormGroupBooleanInputView, FormGroupDateTimeInputView, FormGroupInputGroupView, FormGroupInputView, FormGroupLinkView, FormGroupPreformattedView, FormGroupSelectView, FormGroupTextAreaView, FormGroupTextView, FormGroupTimeSpanInputView, FormGroupView } from "./FormGroup";
+import { FormGroupAlertView, FormGroupBooleanInputView, FormGroupDateTimeInputView, FormGroupFormCheckView, FormGroupInputGroupView, FormGroupInputView, FormGroupLinkView, FormGroupPreformattedView, FormGroupSelectView, FormGroupTextAreaView, FormGroupTextStackView, FormGroupTextView, FormGroupTimeSpanInputView, FormGroupView } from "./FormGroup";
+import { FormGroupGridListGroupView } from "./FormGroupGridListGroupView";
 import { GridTemplateCss, GridTemplateCssValue } from "./Grid";
+import { GridListGroupItemView } from "./ListGroup";
 import { ViewConstructor } from "./Types";
 
 export class FormGroupContainerView extends BasicComponentView {
@@ -10,7 +12,8 @@ export class FormGroupContainerView extends BasicComponentView {
         this.addCssName('grid');
         this.addCssName('grid-borderless');
         this.addCssName('grid-layout');
-        this.setTemplateColumns(CssLengthUnit.auto(), CssLengthUnit.flex(1));
+        this.addCssName('form-group-grid');
+        //this.setTemplateColumns(CssLengthUnit.auto(), CssLengthUnit.flex(1));
     }
 
     setTemplateColumns(...columns: GridTemplateCss[]) {
@@ -28,6 +31,10 @@ export class FormGroupContainerView extends BasicComponentView {
 
     addFormGroupTextView() {
         return this.addFormGroup(FormGroupTextView);
+    }
+
+    addFormGroupTextStackView() {
+        return this.addFormGroup(FormGroupTextStackView);
     }
 
     addFormGroupPreformattedView() {
@@ -70,8 +77,20 @@ export class FormGroupContainerView extends BasicComponentView {
         return this.addFormGroup(FormGroupBooleanInputView);
     }
 
+    addFormGroupFormCheckView() {
+        return this.addFormGroup(FormGroupFormCheckView);
+    }
+
+    addFormGroupGridListGroupView<TItemView extends GridListGroupItemView>(itemCtor: ViewConstructor<TItemView>) {
+        return FormGroupGridListGroupView.addTo(this, itemCtor);
+    }
+
     addFormGroup<T extends FormGroupView>(ctor: ViewConstructor<T>) {
         const formGroupView = this.addView(ctor) as T;
         return formGroupView;
+    }
+
+    scrollIntoView(arg?: boolean | ScrollIntoViewOptions) {
+        this.elementView.scrollIntoView(arg);
     }
 }

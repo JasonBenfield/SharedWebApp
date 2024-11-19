@@ -51,7 +51,7 @@ var sp = app.Services.CreateScope().ServiceProvider;
 var appContext = sp.GetRequiredService<FakeAppContext>();
 var apiFactory = sp.GetRequiredService<SharedAppApiFactory>();
 var template = apiFactory.CreateTemplate().ToModel();
-var fakeApp = appContext.AddApp(template);
+var fakeApp = appContext.RegisterApp(template);
 appContext.SetCurrentApp(fakeApp);
 var userContext = sp.GetRequiredService<FakeUserContext>();
 var user = userContext.AddUser(new AppUserName("Jason.Benfield"));

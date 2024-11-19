@@ -22,9 +22,14 @@ export class TextComponent extends BasicComponent {
 
     getText() { return this.view.getText(); }
 
-    setText(text: string) {
-        this.text = text;
-        this.view.setText(text);
+    setText(textOrFormattable: string | IFormattable) {
+        if (typeof textOrFormattable === "string") {
+            this.text = textOrFormattable;
+        }
+        else {
+            this.text = textOrFormattable.format();
+        }
+        this.view.setText(this.text);
     }
 
     setTitle(title: string) { this.view.setTitle(title); }

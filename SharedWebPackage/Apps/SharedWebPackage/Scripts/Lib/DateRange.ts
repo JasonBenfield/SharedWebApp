@@ -6,7 +6,7 @@ export interface ISerializableDateRange {
     readonly end: ISerializableValueRangeBound<DateOnly>;
 }
 
-export class DateRange {
+export class DateRange implements IFormattable {
     static deserialize(serialized: ISerializableDateRange) {
         return serialized
             ? new DateRange(

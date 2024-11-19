@@ -3,6 +3,7 @@ import { ListGroup } from "../../Lib/Components/ListGroup";
 import { MessageAlert } from '../../Lib/Components/MessageAlert';
 import { TextAreaControl } from '../../Lib/Components/TextAreaControl';
 import { TextComponent } from '../../Lib/Components/TextComponent';
+import { IMessageAlert } from "../../Lib/Components/Types";
 import { DelayedAction } from '../../Lib/DelayedAction';
 import { EnumerableRange } from '../../Lib/EnumerableRange';
 import { TestCardView } from "./TestCardView";
@@ -15,7 +16,7 @@ import { TestListItemView } from "./TestListItemView";
 
 export class TestCard {
     private readonly cardTitleHeader: TextComponent;
-    private readonly alert: MessageAlert;
+    private readonly alert: IMessageAlert;
     private readonly testItems: ListGroup<TestListItem, TestListItemView>;
     private readonly clickableItems: ListGroup<TestClickableListItem, TestClickableListItemView>;
     private readonly gridItems: ListGroup<TestGridListItem, TestGridListItemView>;
@@ -24,7 +25,7 @@ export class TestCard {
     constructor(private readonly view: TestCardView) {
         this.cardTitleHeader = new TextComponent(this.view.cardTitleHeader);
         this.cardTitleHeader.setText('This is the Title');
-        this.alert = new CardAlert(this.view.alert).alert;
+        this.alert = new CardAlert(this.view.alert);
         new TextComponent(view.manualItem).setText('Test List Item');
         this.testItems = new ListGroup(this.view.testItems);
         this.clickableItems = new ListGroup(this.view.clickableItems);
