@@ -18,7 +18,7 @@
     "@popperjs/core": "^2.11.6",
     "@types/jquery": "^3.5.1",
     "@types/lodash": "^4.14.195",
-    "@types/node": "^20.3.1",
+    "@types/node": "^22.9.0",
     "@types/numeral": "0.0.28",
     "bootstrap": "^5.3.3",
     "jquery": "^3.7.1",

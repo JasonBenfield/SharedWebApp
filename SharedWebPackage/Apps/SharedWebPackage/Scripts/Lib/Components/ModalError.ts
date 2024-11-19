@@ -1,4 +1,5 @@
 ﻿import { DelayedAction } from "../DelayedAction";
+import { DeviceType } from "../DeviceType";
 import { ErrorModel } from "../ErrorModel";
 import { EventSource } from "../Events";
 import { BasicContainerView } from "../Views/BasicContainerView";
@@ -46,7 +47,14 @@ export class ModalError extends BasicComponent {
             this.title.setText("Errors occurred");
         }
         this.view.showModal();
-        new DelayedAction(() => this.view.okButton.setFocus(), 1000).execute();
+        new DelayedAction(
+            () => {
+                if (DeviceType.instance.canFocus) {
+                    this.view.okButton.setFocus();
+                }
+            },
+            1000
+        ).execute();
     }
 
     hide() {
