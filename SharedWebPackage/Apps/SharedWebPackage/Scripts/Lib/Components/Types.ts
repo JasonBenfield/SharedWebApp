@@ -12,7 +12,7 @@ export interface IMessageAlert {
     info(message: string);
     info(message: string, heading: string);
 
-    infoAction<TResult>(message: string, a: () => Promise<TResult>);
+    infoAction<TResult>(message: string, a: () => Promise<TResult>): Promise<TResult>;
     infoAction<TResult>(message: string, a: () => Promise<TResult>, heading: string): Promise<TResult>;
 
     warning(message: string);
