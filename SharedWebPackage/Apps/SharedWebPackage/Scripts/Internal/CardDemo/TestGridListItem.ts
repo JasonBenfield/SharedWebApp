@@ -1,9 +1,21 @@
 ﻿import { BasicComponent } from "../../Lib/Components/BasicComponent";
+import { ListGroupFooter } from "../../Lib/Components/ListGroupFooter";
+import { ListGroupHeader } from "../../Lib/Components/ListGroupHeader";
 import { TextComponent } from "../../Lib/Components/TextComponent";
-import { ContextualClass } from "../../Lib/ContextualClass";
 import { TestGridListItemView } from "./TestGridListItemView";
 
 export class TestGridListItem extends BasicComponent {
+
+    static header(itemView: TestGridListItemView) {
+        itemView.styleAsHeader();
+        return new ListGroupHeader(itemView);
+    }
+
+    static footer(itemView: TestGridListItemView) {
+        itemView.styleAsFooter();
+        return new ListGroupFooter(itemView);
+    }
+
     constructor(i: number, view: TestGridListItemView) {
         super(view);
         new TextComponent(view.cell1).setText(`Cell ${i}, 1`);
