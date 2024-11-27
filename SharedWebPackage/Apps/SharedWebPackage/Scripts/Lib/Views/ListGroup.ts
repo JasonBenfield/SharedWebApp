@@ -8,6 +8,8 @@ import { ViewEventActionBuilder } from "./ViewEventBuilder";
 
 export class BasicListGroupView<TItemView extends BasicListGroupItemView> extends BasicComponentView {
     private itemViewCtor: ViewConstructor<TItemView>;
+    private headerViewCtor: ViewConstructor<BasicListGroupItemView>;
+    private footerViewCtor: ViewConstructor<BasicListGroupItemView>;
     private readonly mouseDownPosition: { x: number, y: number } = { x: 0, y: 0 };
 
     protected constructor(container: BasicComponentView, tagName: 'ul' | 'div') {
@@ -41,12 +43,28 @@ export class BasicListGroupView<TItemView extends BasicListGroupItemView> extend
         this.itemViewCtor = itemViewCtor as ViewConstructor<TItemView>;
     }
 
+    setHeaderViewType(headerViewCtor: ViewConstructor<BasicListGroupItemView>) {
+        this.headerViewCtor = headerViewCtor as ViewConstructor<TItemView>;
+    }
+
+    setFooterViewType(footerViewCtor: ViewConstructor<BasicListGroupItemView>) {
+        this.footerViewCtor = footerViewCtor as ViewConstructor<TItemView>;
+    }
+
     makeFlush() {
         this.addCssName('list-group-flush');
     }
 
     insertListGroupItem(index: number) {
         return this.insertView(index, this.itemViewCtor);
+    }
+
+    addListGroupHeader() {
+        return this.addView(this.headerViewCtor || this.itemViewCtor);
+    }
+
+    addListGroupFooter() {
+        return this.addView(this.footerViewCtor || this.itemViewCtor);
     }
 
     addListGroupItem() {
@@ -96,6 +114,10 @@ export class ListGroupView<TItemView extends ListGroupItemView> extends BasicLis
     protected configureClick(b: ViewEventActionBuilder) {
         return b.select('li');
     }
+
+    setHeaderViewType: (headerViewCtor: ViewConstructor<ListGroupItemView>) => void;
+
+    setFooterViewType: (footerViewCtor: ViewConstructor<ListGroupItemView>) => void;
 
     addListGroupItem: (ctor?: ViewConstructor<TItemView>) => TItemView;
 
