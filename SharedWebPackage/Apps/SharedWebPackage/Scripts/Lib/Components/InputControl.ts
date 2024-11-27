@@ -24,7 +24,7 @@ export class InputControl<TValue> extends BasicComponent {
     ) {
         super(view);
         view.setViewID(ComponentID.nextID());
-        viewValue.setValueFromView('');
+        viewValue.setValueFromView("");
         this.previousValue = viewValue.getValue();
         this.debouncedSetFocus = new DebouncedAction(
             () => this.view.setFocus(),
@@ -48,8 +48,8 @@ export class InputControl<TValue> extends BasicComponent {
 
     private debouncedOnInputValueChanged = new DebouncedAction(
         () => {
-            const currentRawValue = this.view.getValue();
             if (!this.view.hasFocus()) {
+                const currentRawValue = this.view.getValue();
                 const newViewValue = this.viewValue.toView();
                 if (newViewValue !== currentRawValue) {
                     this.view.setValue(newViewValue);
