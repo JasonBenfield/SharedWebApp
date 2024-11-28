@@ -1,5 +1,10 @@
 
 export interface IMessageAlert {
+
+    enableAutoScrollIntoView();
+
+    disableAutoScrollIntoView();
+
     get heading(): string;
     get message(): string;
     get hasMessage(): boolean;
