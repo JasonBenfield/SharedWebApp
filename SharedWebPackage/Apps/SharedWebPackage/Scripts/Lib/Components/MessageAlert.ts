@@ -14,7 +14,7 @@ export class MessageAlert extends BasicComponent implements IMessageAlert {
     private _message: string;
     private readonly headingTextComponent: TextComponent;
     private readonly messageTextComponent: TextComponent;
-    private isAutoScrollEnabled = true;
+    private isAutoScrollEnabled = false;
 
     private readonly eventSource = new EventSource<Events>(this, { visibleChanged: null });
     readonly when = this.eventSource.when;
