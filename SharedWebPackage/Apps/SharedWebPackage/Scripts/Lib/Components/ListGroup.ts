@@ -63,10 +63,8 @@ export class ListGroup<TItem extends BasicComponent, TItemView extends BasicList
         createItem?: (sourceItem: TSourceItem, itemView: TItemView) => TItem
     ) {
         this.clearItems();
-        if (this._factory) {
-            if (!createItem) {
-                createItem = this._factory.createItem;
-            }
+        if (!createItem && this._factory) {
+            createItem = this._factory.createItem.bind(this._factory);
         }
         const items: TItem[] = [];
         if (this._factory && this._factory.createHeader) {

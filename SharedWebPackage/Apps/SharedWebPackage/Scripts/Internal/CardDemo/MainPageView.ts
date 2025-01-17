@@ -9,6 +9,7 @@ import { GridLinkListGroupView, GridListGroupView } from '../../Lib/Views/ListGr
 import { TextHeading1View } from '../../Lib/Views/TextHeadings';
 import { ToolbarView } from '../../Lib/Views/ToolbarView';
 import { SharedPageView } from '../SharedPageView';
+import { TestCard2View } from './TestCard2View';
 import { TestCardView } from './TestCardView';
 import { TestGridLinkListItemView } from './TestGridLinkListItemView';
 import { TestGridListItemView } from './TestGridListItemView';
@@ -16,6 +17,7 @@ import { TestGridListItemView } from './TestGridListItemView';
 export class MainPageView extends SharedPageView {
     readonly heading: TextHeading1View;
     readonly testCard: TestCardView;
+    readonly testCard2: TestCard2View;
     readonly gridItems: GridListGroupView<TestGridListItemView>;
     readonly gridLinkItems: GridLinkListGroupView<TestGridLinkListItemView>;
     readonly refreshButton: ButtonCommandView;
@@ -52,6 +54,8 @@ export class MainPageView extends SharedPageView {
             });
         this.testCard = container.addView(TestCardView);
         this.testCard.setMargin(MarginCss.bottom(3));
+        this.testCard2 = container.addView(TestCard2View);
+        this.testCard2.setMargin(MarginCss.bottom(3));
         this.gridItems = container.addGridListGroup(TestGridListItemView);
         this.gridItems.setTemplateColumns(
             CssLengthUnit.flex(1),
