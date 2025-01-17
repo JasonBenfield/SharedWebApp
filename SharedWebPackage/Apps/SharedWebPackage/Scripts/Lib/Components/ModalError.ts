@@ -117,7 +117,7 @@ export class ModalErrorGroupComponent extends BasicComponent {
         );
     }
 
-    protected onDipose() {
+    protected onDispose() {
         this.eventSource.unregisterAll();
     }
 }

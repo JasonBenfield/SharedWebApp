@@ -36,7 +36,7 @@ export class FilterConditionClauseComponent extends BasicComponent {
         this.eventSource.events.deleteClicked.invoke(this.conditionClause);
     }
 
-    protected onDipose() {
+    protected onDispose() {
         this.eventSource.unregisterAll();
     }
 }

@@ -142,7 +142,7 @@ export class MessageAlert extends BasicComponent implements IMessageAlert {
         }
     }
 
-    protected onDipose() {
+    protected onDispose() {
         this.eventSource.unregisterAll();
     }
 }
