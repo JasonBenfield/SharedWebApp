@@ -175,24 +175,6 @@
 }
 
 .list-group.grid.list-group-flush {
-    @include border-radius(0);
-
-    > .list-group-item:first-child > .grid-cell:first-child {
-        border-top-left-radius: 0;
-    }
-
-    > .list-group-item:first-child > .grid-cell:last-child {
-        border-top-right-radius: 0;
-    }
-
-    > .list-group-item:last-child > .grid-cell:first-child {
-        border-bottom-left-radius: 0;
-    }
-
-    > .list-group-item:last-child > .grid-cell:last-child {
-        border-bottom-right-radius: 0;
-    }
-
     > .list-group-item {
         border-width: 0 0 $list-group-border-width;
 
@@ -203,6 +185,30 @@
         &:last-child {
             border-bottom-width: 0;
         }
+    }
+}
+
+.list-group.grid.list-group-flush:not(:first-child) {
+    @include border-radius(0);
+
+    > .list-group-item:first-child > .grid-cell:first-child {
+        border-top-left-radius: 0;
+    }
+
+    > .list-group-item:first-child > .grid-cell:last-child {
+        border-top-right-radius: 0;
+    }
+}
+
+.list-group.grid.list-group-flush:not(:last-child) {
+    @include border-radius(0);
+
+    > .list-group-item:last-child > .grid-cell:first-child {
+        border-bottom-left-radius: 0;
+    }
+
+    > .list-group-item:last-child > .grid-cell:last-child {
+        border-bottom-right-radius: 0;
     }
 }
 

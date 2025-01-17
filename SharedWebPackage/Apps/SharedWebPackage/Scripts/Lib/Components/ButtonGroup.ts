@@ -50,7 +50,7 @@ export class ButtonGroup extends BasicComponent {
         this.removeComponent(itemToRemove);
     }
 
-    protected onDipose() {
+    protected onDispose() {
         this.eventSource.unregisterAll();
     }
 }

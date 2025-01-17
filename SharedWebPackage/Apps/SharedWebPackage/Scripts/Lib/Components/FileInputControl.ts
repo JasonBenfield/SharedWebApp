@@ -72,7 +72,7 @@ export class FileInputControl extends BasicComponent {
         this.view.setValue('');
     }
 
-    protected onDipose() {
+    protected onDispose() {
         this.eventSource.unregisterAll();
     }
 }

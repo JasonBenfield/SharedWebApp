@@ -36,5 +36,6 @@ export class TestCardView extends CardView {
         this.textArea.setRows(3);
         this.gridItems = this.addGridListGroup(TestGridListItemView);
         TestGridListItemView.setTemplateColumns(this.gridItems);
+        //this.addCardBody().addView(TextBlockView).setText("Grid should be flush");
     }
 }

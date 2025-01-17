@@ -119,7 +119,7 @@ export class SelectControl<TValue> extends BasicComponent {
 
     hide() { this.view.hide(); }
 
-    protected onDipose() {
+    protected onDispose() {
         this.eventSource.unregisterAll();
     }
 }

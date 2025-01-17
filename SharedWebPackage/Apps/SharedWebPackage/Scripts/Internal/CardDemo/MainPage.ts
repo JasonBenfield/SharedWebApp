@@ -6,6 +6,7 @@ import { DefaultPageContext } from '../DefaultPageContext';
 import { SharedPage } from '../SharedPage';
 import { MainPageView } from './MainPageView';
 import { TestCard } from './TestCard';
+import { TestCard2 } from './TestCard2';
 import { TestGridLinkListItem } from './TestGridLinkListItem';
 import { TestGridLinkListItemView } from './TestGridLinkListItemView';
 import { TestGridListItem } from './TestGridListItem';
@@ -14,6 +15,7 @@ import { TestGridListItemView } from './TestGridListItemView';
 class MainPage extends SharedPage {
     protected readonly view: MainPageView;
     private readonly testCard: TestCard;
+    private readonly testCard2: TestCard2;
     private readonly gridItems: ListGroup<TestGridListItem, TestGridListItemView>;
     private readonly gridLinkItems: ListGroup<TestGridLinkListItem, TestGridLinkListItemView>;
 
@@ -21,6 +23,7 @@ class MainPage extends SharedPage {
         super(new MainPageView());
         new TextComponent(this.view.heading).setText('Card Demo');
         this.testCard = new TestCard(this.view.testCard);
+        this.testCard2 = new TestCard2(this.view.testCard2);
         this.gridItems = new ListGroup(this.view.gridItems);
         this.gridItems.setItems(
             new EnumerableRange(10, 3).value(),

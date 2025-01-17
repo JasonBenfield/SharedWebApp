@@ -63,27 +63,27 @@ export class ListGroup<TItem extends BasicComponent, TItemView extends BasicList
         createItem?: (sourceItem: TSourceItem, itemView: TItemView) => TItem
     ) {
         this.clearItems();
-        if (this._factory) {
-            if (!createItem) {
-                createItem = this._factory.createItem;
-            }
-        }
         const items: TItem[] = [];
-        if (this._factory && this._factory.createHeader) {
-            const headerView = this.view.addListGroupHeader();
-            const header = this._factory.createHeader(headerView);
-            this._header = this.addComponent(header);
-        }
-        if (createItem) {
-            for (const sourceItem of sourceItems) {
-                const item = this.addItem<TSourceItem>(sourceItem, createItem);
-                items.push(item);
+        if (sourceItems.length > 0) {
+            if (this._factory && this._factory.createHeader) {
+                const headerView = this.view.addListGroupHeader();
+                const header = this._factory.createHeader(headerView);
+                this._header = this.addComponent(header);
             }
-        }
-        if (this._factory && this._factory.createFooter) {
-            const footerView = this.view.addListGroupFooter();
-            const footer = this._factory.createFooter(footerView);
-            this._footer = this.addComponent(footer);
+            if (!createItem && this._factory) {
+                createItem = this._factory.createItem.bind(this._factory);
+            }
+            if (createItem) {
+                for (const sourceItem of sourceItems) {
+                    const item = this.addItem<TSourceItem>(sourceItem, createItem);
+                    items.push(item);
+                }
+            }
+            if (this._factory && this._factory.createFooter) {
+                const footerView = this.view.addListGroupFooter();
+                const footer = this._factory.createFooter(footerView);
+                this._footer = this.addComponent(footer);
+            }
         }
         return items;
     }
@@ -126,7 +126,7 @@ export class ListGroup<TItem extends BasicComponent, TItemView extends BasicList
         this.moveComponent(item, destinationIndex)
     }
 
-    protected onDipose() {
+    protected onDispose() {
         this.eventSource.unregisterAll();
     }
 }

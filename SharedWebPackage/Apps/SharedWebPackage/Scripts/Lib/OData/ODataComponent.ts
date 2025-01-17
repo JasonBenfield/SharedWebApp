@@ -270,7 +270,7 @@ export class ODataComponent<TEntity> {
         return `odata_${pageContext.UserName}_${this.id}_${type}`;
     }
 
-    protected onDipose() {
+    protected onDispose() {
         this.eventSource.unregisterAll();
     }
 }

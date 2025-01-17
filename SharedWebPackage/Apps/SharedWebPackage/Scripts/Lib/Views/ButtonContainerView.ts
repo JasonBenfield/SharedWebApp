@@ -8,9 +8,9 @@ import { ViewConstructor } from "./Types";
 export class ButtonContainerView extends BlockView {
     constructor(container: BasicComponentView) {
         super(container);
-        this.addCssName('d-grid');
-        this.addCssName('gap-3');
-        this.addCssName('col-12 col-sm-6');
+        this.addCssName("d-grid");
+        this.addCssName("gap-3");
+        this.addCssName("col-12 col-sm-6");
     }
 
     addButtonCommand<T extends ButtonCommandView>(viewCtor?: ViewConstructor<T>) {
@@ -18,6 +18,7 @@ export class ButtonContainerView extends BlockView {
             viewCtor = ButtonCommandView as any;
         }
         const button = this.addView(viewCtor);
+        button.icon.makeFixedWidth();
         button.setTextCss(new TextCss().start());
         button.useOutlineStyle(ContextualClass.primary);
         return button;
@@ -28,6 +29,7 @@ export class ButtonContainerView extends BlockView {
             viewCtor = LinkCommandView as any;
         }
         const button = this.addView(viewCtor);
+        button.icon.makeFixedWidth();
         button.setTextCss(new TextCss().start());
         button.useOutlineStyle(ContextualClass.primary);
         return button;

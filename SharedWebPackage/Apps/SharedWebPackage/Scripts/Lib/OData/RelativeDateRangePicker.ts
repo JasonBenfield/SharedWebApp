@@ -124,7 +124,7 @@ export class RelativeDateRangePicker extends BasicComponent {
         }
     }
 
-    protected onDipose() {
+    protected onDispose() {
         this.eventSource.unregisterAll();
     }
 }

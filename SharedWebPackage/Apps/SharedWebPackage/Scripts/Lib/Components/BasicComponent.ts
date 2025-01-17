@@ -74,8 +74,11 @@ export class BasicComponent {
     dispose() {
         this.clearComponents();
         this.view.dispose();
+        this.onDispose();
         this.onDipose();
     }
+
+    protected onDispose() { }
 
     protected onDipose() { }
 }
