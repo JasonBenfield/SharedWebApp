@@ -5,7 +5,7 @@ import { SimpleFieldInputFormGroup } from "./SimpleFieldInputFormGroup";
 import { TextToNumberViewValue } from "./TextToNumberViewValue";
 
 export class NumberInputFormGroup extends SimpleFieldInputFormGroup<number> {
-    protected readonly viewValue: TextToNumberViewValue;
+    declare protected readonly viewValue: TextToNumberViewValue;
     readonly constraints = new NumberConstraintCollection();
 
     constructor(prefix: string, name: string, view: SimpleFieldFormGroupInputView) {

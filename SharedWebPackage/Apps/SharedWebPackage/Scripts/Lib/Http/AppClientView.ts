@@ -28,7 +28,7 @@ export class AppClientView<TArgs> {
         if (obj === undefined || obj === null) {
             model = obj;
         }
-        else if (typeof obj === 'string' || typeof obj === 'number' || 'toJSON' in obj) {
+        else if (typeof obj === "string" || typeof obj === "number" || "toJSON" in obj) {
             model = { model: data };
         }
         else {
@@ -51,7 +51,7 @@ export class AppClientView<TArgs> {
         if (data === undefined || data === null) {
             model = data;
         }
-        else if (typeof data === 'string' || typeof data === 'number' || data instanceof Date) {
+        else if (typeof data === "string" || typeof data === "number" || data instanceof Date) {
             model = { model: data };
         }
         else {

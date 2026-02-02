@@ -11,7 +11,7 @@ import { SingleComponentTypeContainer } from "./SingleComponentTypeContainer";
 import { TextComponent } from "./TextComponent";
 
 export class ModalError extends BasicComponent {
-    protected readonly view: ModalErrorView;
+    declare protected readonly view: ModalErrorView;
     private readonly title: TextComponent;
     private readonly errorGroupComponentContainer: SingleComponentTypeContainer<ModalErrorGroupComponent, ModalErrorGroupView>;
     private readonly events = { errorSelected: null as ErrorModel };
@@ -76,7 +76,7 @@ export class ModalError extends BasicComponent {
 }
 
 export class ModalErrorGroupComponent extends BasicComponent {
-    protected readonly view: ModalErrorGroupView
+    declare protected readonly view: ModalErrorGroupView
     private readonly caption: TextComponent;
     private readonly errors: ListGroup<ModalErrorListItem, ModalErrorListItemView>;
 

@@ -2,7 +2,7 @@
 import { BooleanInputControl } from "../Components/BooleanInputControl";
 import { InputControl } from "../Components/InputControl";
 import { DebouncedAction } from "../DebouncedAction";
-import { EventSource } from '../Events';
+import { EventSource } from "../Events";
 import { TextToNumberViewValue } from "../Forms/TextToNumberViewValue";
 import { NumberRange } from "../NumberRange";
 import { ValueRangeBound } from "../ValueRangeBound";
@@ -11,7 +11,7 @@ import { ValueRangePickerView } from "./ValueRangePickerView";
 type Events = { valueChanged: NumberRange };
 
 export class NumberRangePicker extends BasicComponent {
-    protected readonly view: ValueRangePickerView;
+    declare protected readonly view: ValueRangePickerView;
     private readonly fromCheck: BooleanInputControl;
     private readonly from: InputControl<number>;
     private readonly fromInclude: BooleanInputControl;

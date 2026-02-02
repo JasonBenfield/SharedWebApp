@@ -16,7 +16,7 @@ export interface IListGroupFactory<TItem extends BasicComponent, TItemView exten
 }
 
 export class ListGroup<TItem extends BasicComponent, TItemView extends BasicListGroupItemView> extends BasicComponent {
-    protected readonly view: BasicListGroupView<TItemView>;
+    declare protected readonly view: BasicListGroupView<TItemView>;
     private _header: BasicComponent;
     private _footer: BasicComponent;
     private readonly eventSource = new EventSource<Events<TItem>>(this, { itemClicked: null as TItem, headerClicked: null, footerClicked: null });

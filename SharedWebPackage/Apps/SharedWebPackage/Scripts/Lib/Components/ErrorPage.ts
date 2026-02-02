@@ -5,7 +5,7 @@ import { ErrorPageView } from '../Views/ErrorPageView';
 declare let serverError: IErrorModel;
 
 export class ErrorPage extends BasicPage {
-    protected readonly view: ErrorPageView;
+    declare protected readonly view: ErrorPageView;
 
     constructor() {
         super(null, new ErrorPageView());

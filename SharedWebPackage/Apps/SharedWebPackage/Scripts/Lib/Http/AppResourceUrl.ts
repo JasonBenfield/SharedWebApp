@@ -26,7 +26,7 @@ export class AppResourceUrl {
     ) {
         this.url = new UrlBuilder(baseUrl)
             .addPart(path.format())
-            .addQuery('cacheBust', cacheBust || null)
+            .addQuery("v", cacheBust || null)
             .url;
     }
 

@@ -1,15 +1,14 @@
 ﻿import { BasicComponent } from "../Components/BasicComponent";
-import { AsyncCommand, Command } from "../Components/Command";
+import { Command } from "../Components/Command";
 import { TextComponent } from "../Components/TextComponent";
-import { FilterColumnOptionsBuilder } from "./FilterColumnOptionsBuilder";
+import { EventSource } from "../Events";
 import { FilterConditionClauseView } from "./FilterConditionClauseView";
 import { FilterConditionClause } from "./ODataQueryFilterBuilder";
-import { EventSource } from '../Events';
 
 export type Events = { deleteClicked: FilterConditionClause }
 
 export class FilterConditionClauseComponent extends BasicComponent {
-    protected readonly view: FilterConditionClauseView;
+    declare protected readonly view: FilterConditionClauseView;
     private readonly condition: TextComponent;
     private conditionClause: FilterConditionClause;
     private readonly deleteCommand: Command;

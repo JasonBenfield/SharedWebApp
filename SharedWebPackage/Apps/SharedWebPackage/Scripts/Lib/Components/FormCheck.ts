@@ -6,7 +6,7 @@ import { LabelComponent } from "./LabelComponent";
 import { TextComponent } from "./TextComponent";
 
 export class FormCheck extends BasicComponent {
-    protected readonly view: FormCheckView;
+    declare protected readonly view: FormCheckView;
     private readonly booleanInput: BooleanInputControl;
     private readonly labelText: TextComponent;
 

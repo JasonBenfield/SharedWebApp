@@ -6,7 +6,7 @@ import { TextComponent } from "./TextComponent";
 export class TextLinkComponent extends TextComponent {
     static readonly doNothing = 'javascript:;';
 
-    protected readonly view: TextLinkComponentView;
+    declare protected readonly view: TextLinkComponentView;
     private href: string;
 
     constructor(view: TextLinkComponentView) {

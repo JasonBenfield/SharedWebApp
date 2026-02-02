@@ -12,7 +12,7 @@ import { ValueRangePickerView } from "./ValueRangePickerView";
 type Events = { valueChanged: DateRange };
 
 export class DateRangePicker extends BasicComponent {
-    protected readonly view: ValueRangePickerView;
+    declare protected readonly view: ValueRangePickerView;
     private readonly fromCheck: BooleanInputControl;
     private readonly from: InputControl<DateOnly>;
     private readonly fromInclude: BooleanInputControl;

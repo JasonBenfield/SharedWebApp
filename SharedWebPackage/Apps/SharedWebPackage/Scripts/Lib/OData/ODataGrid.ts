@@ -25,7 +25,7 @@ export class HeaderCellDroppedEventArgs {
 }
 
 export class ODataGrid<TEntity> extends BasicComponent {
-    protected readonly view: ODataGridView;
+    declare protected readonly view: ODataGridView;
     private readonly eventSource = new EventSource<Events>(
         this,
         {

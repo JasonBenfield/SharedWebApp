@@ -11,7 +11,7 @@ import { DataListComponent } from "./DataListComponent";
 type Events<TValue> = { valueChanged: TValue };
 
 export class InputControl<TValue> extends BasicComponent {
-    protected readonly view: InputView;
+    declare protected readonly view: InputView;
     private readonly debouncedSetFocus: DebouncedAction;
     private previousValue: TValue;
 

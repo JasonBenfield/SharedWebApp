@@ -33,14 +33,16 @@ export class ModalMessageAlert {
         }
     }
 
-    setBackdrop(backdrop: boolean | 'static') {
+    setBackdrop(backdrop: boolean | "static") {
         this.view.setBackdrop(backdrop);
     }
 
-    async alert(action: (a: MessageAlert) => void) {
+    close() { this.ok(); }
+
+    alert(action: (a: MessageAlert) => void) {
         action(this._alert);
         this.view.showModal();
-        await this.awaitable.start();
+        return this.awaitable.start();
     }
 
     private ok() {

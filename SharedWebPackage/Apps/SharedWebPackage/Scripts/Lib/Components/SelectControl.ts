@@ -7,7 +7,7 @@ import { SelectOptionComponent } from "./SelectOptionComponent";
 type Events<TValue> = { valueChanged: TValue };
 
 export class SelectControl<TValue> extends BasicComponent {
-    protected readonly view: SelectView;
+    declare protected readonly view: SelectView;
     private itemCaption: string;
 
     private readonly eventSource = new EventSource<Events<TValue>>(this, { valueChanged: null as TValue });

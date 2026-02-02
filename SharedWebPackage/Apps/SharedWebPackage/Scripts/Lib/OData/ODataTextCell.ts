@@ -6,7 +6,7 @@ import { ODataTextCellView } from "./ODataTextCellView";
 import { IValueFormatter } from "./Types";
 
 export class ODataTextCell extends ODataCell {
-    protected readonly view: ODataTextCellView;
+    declare protected readonly view: ODataTextCellView;
 
     constructor(
         rowIndex: number,

@@ -2,7 +2,7 @@
 import { BasicComponent } from "./BasicComponent";
 
 export class TextComponent extends BasicComponent {
-    protected readonly view: TextComponentView;
+    declare protected readonly view: TextComponentView;
     private text: string;
     private formatTitle: (text: string) => string;
     private _data: any;

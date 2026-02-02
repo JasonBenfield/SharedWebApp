@@ -6,7 +6,7 @@ import { EventSource } from "../Events";
 import { ODataFooterComponentView } from "./ODataFooterComponentView";
 
 export class ODataFooterComponent extends BasicComponent {
-    protected readonly view: ODataFooterComponentView;
+    declare protected readonly view: ODataFooterComponentView;
     private readonly pageButtonGroup: ButtonGroup;
     private readonly countText: TextComponent;
     private readonly _events = { pageRequested: null as number };

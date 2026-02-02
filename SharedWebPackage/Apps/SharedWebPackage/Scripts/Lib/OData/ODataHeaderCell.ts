@@ -4,7 +4,7 @@ import { ODataColumn } from "./ODataColumn";
 import { ODataHeaderCellView } from "./ODataHeaderCellView";
 
 export class ODataHeaderCell extends ODataCell {
-    protected readonly view: ODataHeaderCellView;
+    declare protected readonly view: ODataHeaderCellView;
 
     constructor(column: ODataColumn, view: ODataHeaderCellView) {
         super(0, column, null, view);

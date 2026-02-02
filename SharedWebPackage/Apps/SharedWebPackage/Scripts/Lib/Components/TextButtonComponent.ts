@@ -2,7 +2,7 @@
 import { TextComponent } from "./TextComponent";
 
 export class TextButtonComponent extends TextComponent {
-    protected readonly view: TextButtonView;
+    declare protected readonly view: TextButtonView;
 
     constructor(view: TextButtonView) {
         super(view);

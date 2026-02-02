@@ -7,18 +7,18 @@ import { IButtonAttributes } from "./Types";
 export class ButtonWrapper extends BasicComponentWrapper {
     constructor(container: BasicComponentView, element: HtmlElementView) {
         super(container, element);
-        this.setAttr(attr => attr.type = 'button');
-        this.addCssName('btn');
+        this.setAttr(attr => attr.type = "button");
+        this.addCssName("btn");
     }
 
-    setAttr: (config: (attr: IButtonAttributes) => void) => void;
+    declare setAttr: (config: (attr: IButtonAttributes) => void) => void;
 
     handleClick(action: () => void) {
-        this.on('click').execute(action).subscribe();
+        this.on("click").execute(action).subscribe();
     }
 
     changeTypeToSubmit() {
-        this.setAttr(attr => attr.type = 'submit');
+        this.setAttr(attr => attr.type = "submit");
     }
 
     enable() { this.setAttr(a => a.disabled = false); }
@@ -26,31 +26,31 @@ export class ButtonWrapper extends BasicComponentWrapper {
     disable() { this.setAttr(a => a.disabled = true); }
 
     setContext(context: ContextualClass) {
-        this.setCss('button-context', this.getContextCss(context, false));
+        this.setCss("button-context", this.getContextCss(context, false));
     }
 
     useOutlineStyle(context: ContextualClass) {
-        this.setCss('button-context', this.getContextCss(context, true));
+        this.setCss("button-context", this.getContextCss(context, true));
     }
 
     private getContextCss(context: ContextualClass, isOutline: boolean) {
-        return context ? context.append(isOutline ? 'btn-outline' : 'btn') : '';
+        return context ? context.append(isOutline ? "btn-outline" : "btn") : "";
     }
 
     setActive() {
-        this.updateActiveCss('active');
+        this.updateActiveCss("active");
     }
 
     setInactive() {
-        this.updateActiveCss('');
+        this.updateActiveCss("");
     }
 
     private updateActiveCss(active: string) {
-        this.setCss('active', active);
+        this.setCss("active", active);
     }
 
     makeOffscreenSubmit() {
-        this.addCssName('offscreen');
+        this.addCssName("offscreen");
         this.changeTypeToSubmit();
     }
 }

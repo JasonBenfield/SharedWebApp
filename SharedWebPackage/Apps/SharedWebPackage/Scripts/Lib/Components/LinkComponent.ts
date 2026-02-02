@@ -6,7 +6,7 @@ import { BasicComponent } from "./BasicComponent";
 export class LinkComponent extends BasicComponent {
     static readonly doNothing = 'javascript:;';
 
-    protected readonly view: LinkComponentView;
+    declare protected readonly view: LinkComponentView;
     private _data: any;
     private href: string;
 

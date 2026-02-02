@@ -162,6 +162,22 @@ export class DateOnly implements IFormattable {
         return false;
     }
 
+    isOnOrAfter(other: DateOnly | null | undefined) {
+        return this.compareTo(other) >= 0;
+    }
+
+    isAfter(other: DateOnly | null | undefined) {
+        return this.compareTo(other) > 0;
+    }
+
+    isOnOrBefore(other: DateOnly | null | undefined) {
+        return this.compareTo(other) <= 0;
+    }
+
+    isBefore(other: DateOnly | null | undefined) {
+        return this.compareTo(other) < 0;
+    }
+
     compareTo(other: DateOnly | null | undefined) {
         if (other) {
             if (this._year < other._year) {

@@ -14,7 +14,7 @@ export class MenuItemComponent extends BasicComponent {
         if (linkModel.Url) {
             this.link.setHref(
                 new UrlBuilder(linkModel.Url)
-                    .addQuery('CacheBust', pageContext.CacheBust)
+                    .addQuery("v", pageContext.CacheBust)
                     .value()
             );
         }

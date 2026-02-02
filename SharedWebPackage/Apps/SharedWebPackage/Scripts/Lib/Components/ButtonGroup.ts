@@ -9,7 +9,7 @@ import { TextComponent } from "./TextComponent";
 type Events = { buttonClicked: BasicComponent };
 
 export class ButtonGroup extends BasicComponent {
-    protected readonly view: ButtonGroupView;
+    declare protected readonly view: ButtonGroupView;
 
     private readonly eventSource = new EventSource<Events>(this, { buttonClicked: null });
     readonly when = this.eventSource.when;

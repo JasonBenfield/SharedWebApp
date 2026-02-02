@@ -322,6 +322,22 @@ export class DateTimeOffset implements IFormattable {
         return false;
     }
 
+    isOnOrAfter(other: DateTimeOffset | DateOnly | Date | null) {
+        return this.compareTo(other) >= 0;
+    }
+
+    isAfter(other: DateTimeOffset | DateOnly | Date | null) {
+        return this.compareTo(other) > 0;
+    }
+
+    isOnOrBefore(other: DateTimeOffset | DateOnly | Date | null) {
+        return this.compareTo(other) <= 0;
+    }
+
+    isBefore(other: DateTimeOffset | DateOnly | Date | null) {
+        return this.compareTo(other) < 0;
+    }
+
     compareTo(other: DateTimeOffset | DateOnly | Date | null) {
         if (other) {
             let otherDate: Date;

@@ -8,7 +8,7 @@ import { DebouncedAction } from "../DebouncedAction";
 import { EventSource } from '../Events';
 import { TextToNumberViewValue } from "../Forms/TextToNumberViewValue";
 import { Month } from "../Month";
-import { DayOfMonth, DaysOfMonth, MonthOfYear, RelativeDayOffset, RelativeMonthOffset, RelativeOffset, RelativeYearOffset } from "../RelativeDateRange";
+import { DayOfMonth, DaysOfMonth, RelativeDayOffset, RelativeMonthOffset, RelativeOffset, RelativeYearOffset } from "../RelativeDateRange";
 import { RelativeOffsetPickerView } from "./RelativeOffsetPickerView";
 
 enum UnitSelection {
@@ -21,7 +21,7 @@ enum UnitSelection {
 type Events = { valueChanged: RelativeOffset };
 
 export class RelativeOffsetPicker extends BasicComponent {
-    protected readonly view: RelativeOffsetPickerView;
+    declare protected readonly view: RelativeOffsetPickerView;
     private readonly offsetUnitSelect: SelectControl<UnitSelection>;
     private readonly noOffsetCheck: FormCheck;
     private readonly offsetInput: InputControl<number>;

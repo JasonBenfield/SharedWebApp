@@ -57,7 +57,7 @@ export class AppClient {
             app,
             version,
             XtiUrl.current().path.modifier,
-            pageContext.CacheBust
+            version
         );
         this.User = this.addGroup((evts, resourceUrl) => new UserGroup(evts, resourceUrl));
         this.UserCache = this.addGroup((evts, resourceUrl) => new UserCacheGroup(evts, resourceUrl));

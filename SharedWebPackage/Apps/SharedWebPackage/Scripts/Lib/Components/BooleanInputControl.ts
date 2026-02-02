@@ -6,7 +6,7 @@ import { ComponentID } from "./ComponentID";
 export type BooleanInputControlEvents = { valueChanged: boolean };
 
 export class BooleanInputControl extends BasicComponent {
-    protected readonly view: BooleanInputView;
+    declare protected readonly view: BooleanInputView;
     private readonly eventSource = new EventSource<BooleanInputControlEvents>(
         this,
         { valueChanged: null as boolean }

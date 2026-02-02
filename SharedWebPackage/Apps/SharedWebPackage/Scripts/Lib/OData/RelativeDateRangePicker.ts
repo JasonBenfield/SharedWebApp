@@ -9,7 +9,7 @@ import { DebouncedAction } from "../DebouncedAction";
 type Events = { valueChanged: RelativeDateRange };
 
 export class RelativeDateRangePicker extends BasicComponent {
-    protected readonly view: RelativeDateRangePickerView;
+    declare protected readonly view: RelativeDateRangePickerView;
     private readonly fromCheck: FormCheck;
     private readonly from: RelativeOffsetPicker;
     private readonly toCheck: FormCheck;

@@ -4,7 +4,7 @@ import { ODataColumn } from "./ODataColumn";
 import { AvailableFieldListItemView } from "./AvailableFieldListItemView";
 
 export class AvailableFieldListItem extends BasicComponent {
-    protected readonly view: AvailableFieldListItemView;
+    declare protected readonly view: AvailableFieldListItemView;
 
     constructor(readonly column: ODataColumn, view: AvailableFieldListItemView) {
         super(view);

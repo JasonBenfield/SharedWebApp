@@ -4,7 +4,7 @@ import { ODataCell } from "./ODataCell";
 import { ODataColumn } from "./ODataColumn";
 
 export class ODataRow extends BasicComponent {
-    protected readonly view: BasicGridRowView;
+    declare protected readonly view: BasicGridRowView;
 
     constructor(rowIndex: number, columns: ODataColumn[], record: any, view: BasicGridRowView) {
         super(view);

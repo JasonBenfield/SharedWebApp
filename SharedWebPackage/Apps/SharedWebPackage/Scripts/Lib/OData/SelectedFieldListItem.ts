@@ -4,7 +4,7 @@ import { ODataColumn } from "./ODataColumn";
 import { SelectedFieldListItemView } from "./SelectedFieldListItemView";
 
 export class SelectedFieldListItem extends BasicComponent {
-    protected readonly view: SelectedFieldListItemView;
+    declare protected readonly view: SelectedFieldListItemView;
 
     constructor(readonly column: ODataColumn, view: SelectedFieldListItemView) {
         super(view);

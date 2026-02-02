@@ -9,7 +9,7 @@ import { IMessageAlert } from './Types';
 type Events = { visibleChanged: boolean };
 
 export class MessageAlert extends BasicComponent implements IMessageAlert {
-    protected readonly view: MessageAlertView
+    declare protected readonly view: MessageAlertView
     private _heading: string;
     private _message: string;
     private readonly headingTextComponent: TextComponent;

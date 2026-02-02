@@ -35,7 +35,7 @@ export class AppClientQuery<TModel, TEntity> {
         this.resourceUrl = resourceUrl;
         this.excelUrl = AppResourceUrl.app(this.resourceUrl.path.app, this.resourceUrl.path.version, this.resourceUrl.path.modifier, pageContext.CacheBust)
             .withGroup(this.resourceUrl.path.group)
-            .withAction('ToExcel')
+            .withAction("ToExcel")
             .url;
     }
 
@@ -54,21 +54,21 @@ export class AppClientQuery<TModel, TEntity> {
 
     async execute(odataQuery: string, model: TModel, errorOptions: IActionErrorOptions) {
         const url = this.url();
-        url.addPart('$query');
+        url.addPart("$query");
         url.addQueryFromObject(model);
         const postResult = await new HttpClient().post(
             url.value(),
             odataQuery,
-            'text/plain'
+            "text/plain"
         );
         let result: ODataResult<TEntity>;
         let apiError: AppClientError;
         let rawResult = postResult && postResult.result;
         if (postResult.isSuccessful()) {
-            result = new ODataResult<TEntity>(rawResult.value, rawResult['@odata.count']);
+            result = new ODataResult<TEntity>(rawResult.value, rawResult["@odata.count"]);
         }
-        else if (typeof postResult.result === 'string') {
-            apiError = new ErrorFromHttpResult(postResult, 'Get', errorOptions).value;
+        else if (typeof postResult.result === "string") {
+            apiError = new ErrorFromHttpResult(postResult, "Get", errorOptions).value;
             if (apiError) {
                 if (!errorOptions.preventDefault) {
                     this.events.handleError(apiError);
@@ -77,7 +77,7 @@ export class AppClientQuery<TModel, TEntity> {
             }
         }
         else if (postResult.result && postResult.result.Data) {
-            apiError = new ErrorFromHttpResult(postResult, 'Get', errorOptions).value;
+            apiError = new ErrorFromHttpResult(postResult, "Get", errorOptions).value;
             if (apiError) {
                 if (!errorOptions.preventDefault) {
                     this.events.handleError(apiError);
@@ -107,18 +107,18 @@ export class AppClientQuery<TModel, TEntity> {
                         messageParts.push(sourceError.innerError.stacktrace);
                     }
                 }
-                const message = new JoinedStrings('\r\n', messageParts).value();
+                const message = new JoinedStrings("\r\n", messageParts).value();
                 apiError = new AppClientError(
                     [
                         new ErrorModel(message)
                     ],
                     postResult.status,
-                    'Get',
-                    errorOptions.caption || ''
+                    "Get",
+                    errorOptions.caption || ""
                 );
             }
             else {
-                apiError = new ErrorFromHttpResult(postResult, 'Get', errorOptions).value;
+                apiError = new ErrorFromHttpResult(postResult, "Get", errorOptions).value;
                 if (apiError) {
                     if (!errorOptions.preventDefault) {
                         this.events.handleError(apiError);
