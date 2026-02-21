@@ -4,7 +4,7 @@ import { SharedPage } from '../SharedPage';
 import { MainPageView } from './MainPageView';
 
 class MainPage extends SharedPage {
-    protected readonly view: MainPageView;
+    declare protected readonly view: MainPageView;
 
     constructor() {
         super(new MainPageView());

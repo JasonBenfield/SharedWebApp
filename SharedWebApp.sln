@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.32002.185
+# Visual Studio Version 18
+VisualStudioVersion = 18.3.11505.172
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{594CCB44-34E7-433A-A6EC-75C2A92EEE40}"
 	ProjectSection(SolutionItems) = preProject
@@ -20,6 +20,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedWebApp.Api", "SharedW
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedWebPackage", "SharedWebPackage\Apps\SharedWebPackage\SharedWebPackage.csproj", "{2DBE9A10-56C1-42EA-BD3C-A1C2F4826600}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "XtiCoreWebPackage", "XtiCoreWebPackage", "{C4DA0A6F-0599-450C-8E9E-2A76F0CB391D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{E9CDC6EA-696F-4AAF-9F6C-D33A4C6B075D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XtiCoreWebPackage", "XtiCoreWebPackage\Apps\XtiCoreWebPackage\XtiCoreWebPackage.csproj", "{40C41524-FB9B-C002-A6A6-5C42CB86E3E1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +40,10 @@ Global
 		{2DBE9A10-56C1-42EA-BD3C-A1C2F4826600}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2DBE9A10-56C1-42EA-BD3C-A1C2F4826600}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2DBE9A10-56C1-42EA-BD3C-A1C2F4826600}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40C41524-FB9B-C002-A6A6-5C42CB86E3E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40C41524-FB9B-C002-A6A6-5C42CB86E3E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40C41524-FB9B-C002-A6A6-5C42CB86E3E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40C41524-FB9B-C002-A6A6-5C42CB86E3E1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -43,6 +53,8 @@ Global
 		{07DDF4A9-2096-42FA-B286-CDAC9C17C4D6} = {4D6ACA47-B88F-43DB-B14F-F23AEE88DAA1}
 		{423ACA6D-F724-4D22-95E7-A8AEF84A0455} = {07DDF4A9-2096-42FA-B286-CDAC9C17C4D6}
 		{2DBE9A10-56C1-42EA-BD3C-A1C2F4826600} = {AEA62026-C16B-48A4-B6D1-69015ED04C33}
+		{E9CDC6EA-696F-4AAF-9F6C-D33A4C6B075D} = {C4DA0A6F-0599-450C-8E9E-2A76F0CB391D}
+		{40C41524-FB9B-C002-A6A6-5C42CB86E3E1} = {E9CDC6EA-696F-4AAF-9F6C-D33A4C6B075D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F07C5A3B-9E59-420A-B490-64150430F3D8}

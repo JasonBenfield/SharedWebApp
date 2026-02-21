@@ -1,0 +1,32 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "lib": [ "ES2022", "dom" ],
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "noImplicitAny": true,
+    "noEmitOnError": true,
+    "removeComments": false,
+    "sourceMap": true,
+    "target": "es2022",
+    "importHelpers": true,
+    "baseUrl": ".",
+    "typeRoots": [
+      "../../node_modules/@types"
+    ]
+  },
+  "include": [
+    "./**/*.ts",
+    "../Lib/**/*.d.ts",
+    "../../node_modules/@jasonbenfield/**/*.d.ts"
+  ],
+  "exclude": [
+    "Imports",
+    "node_modules",
+    "wwwroot"
+  ]
+}

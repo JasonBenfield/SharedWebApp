@@ -1,5 +1,4 @@
 ﻿import { MarginCss } from "../MarginCss";
-import { TextCss } from "../TextCss";
 import { AlertView } from "./AlertView";
 import { BasicComponentView } from "./BasicComponentView";
 import { BasicTextComponentView } from "./BasicTextComponentView";
