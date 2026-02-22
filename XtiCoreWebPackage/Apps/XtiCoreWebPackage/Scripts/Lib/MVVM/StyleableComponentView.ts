@@ -8,15 +8,14 @@ export class StyleableComponentView extends ComponentView {
         super(createElement);
     }
 
-    addToParent(parent: HTMLElement) {
-        super.addToParent(parent);
+    addToDom(parent: HTMLElement) {
+        super.addToDom(parent);
         const element = this.element;
         if (element) {
             for (const key in this._attributes) {
                 const value = this._attributes[key];
                 if (value !== undefined && value !== null) {
                     element.setAttribute(key, this._attributes[key]);
-                    console.log(`set element attribute ${key} to '${this._attributes[key]}'`);
                 }
             }
         }

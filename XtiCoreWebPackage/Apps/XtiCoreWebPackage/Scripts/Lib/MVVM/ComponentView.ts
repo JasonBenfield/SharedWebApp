@@ -9,12 +9,11 @@ export interface IComponentView {
     show(): void;
     hide(): void;
     dispose(): void;
-    addToParent(parent: HTMLElement): void;
-    removeFromParent(): void;
+    addToDom(parent: HTMLElement): void;
+    removeFromDom(): void;
 }
 
 export class ComponentView implements IComponentView {
-
     private readonly _eventManager = new EventManager<EventLayout>({
         postAddElement: null,
         preRemoveElement: null
@@ -29,33 +28,36 @@ export class ComponentView implements IComponentView {
 
     get element() { return this._element; }
 
+    get parent() { return this._parent; }
+
     get isVisible() { return this._isVisible; }
 
     show() {
-        if (!this._isVisible) {
+        this._isVisible = true;
+        if (!this.element) {
             const parent = this._parent;
             if (parent) {
-                this.addToParent(parent);
+                this.addToDom(parent);
             }
-            this._isVisible = true;
         }
     }
 
     hide() {
-        if (this._isVisible) {
+        const element = this.element;
+        if (element) {
             const parent = this._parent;
             if (parent) {
-                this.removeFromParent();
+                this.removeFromDom();
             }
-            this._isVisible = false;
         }
+        this._isVisible = false;
     }
 
-    addToParent(parent: HTMLElement) {
+    addToDom(parent: HTMLElement) {
+        this._parent = parent;
         if (this._isVisible) {
-            const element = this.createElement();
+            const element = this._element || this.createElement();
             this._element = element;
-            this._parent = parent;
             parent.appendChild(element);
             this._eventManager.events.postAddElement.invoke({
                 element: element
@@ -63,7 +65,7 @@ export class ComponentView implements IComponentView {
         }
     }
 
-    removeFromParent() {
+    removeFromDom() {
         this._removeElement();
     }
 
@@ -77,13 +79,10 @@ export class ComponentView implements IComponentView {
     private _removeElement() {
         const element = this._element;
         if (element) {
-            const parent = element.parentElement;
-            if (parent) {
-                this._eventManager.events.preRemoveElement.invoke({
-                    element: element
-                });
-                parent.removeChild(element);
-            }
+            this._eventManager.events.preRemoveElement.invoke({
+                element: element
+            });
+            element.remove();
         }
         this._element = null;
     }

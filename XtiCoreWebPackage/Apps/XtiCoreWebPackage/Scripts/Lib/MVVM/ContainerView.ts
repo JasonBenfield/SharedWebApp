@@ -29,11 +29,26 @@ export class ContainerView extends StyleableComponentView implements IContainerV
 
     constructor(createElement: () => HTMLElement) {
         super(createElement);
-        this._childViewManager = new ChildViewManager(this);
+        this._childViewManager = new ChildViewManager();
+    }
+
+    addToDom(parent: HTMLElement) {
+        super.addToDom(parent);
+        this._childViewManager.addChildViewsToDom(this.element);
+    }
+
+    removeFromDom() {
+        this._childViewManager.removeChildViewsFromDom();
+        super.removeFromDom();
     }
 
     addChildView<T extends IComponentView>(view: T) {
-        return this._childViewManager.addChildView(view);
+        view = this._childViewManager.addChildView(view);
+        const element = this.element;
+        if (element) {
+            view.addToDom(element);
+        }
+        return view;
     }
 
     removeAllChildViews() {
@@ -45,7 +60,7 @@ export class ContainerView extends StyleableComponentView implements IContainerV
     }
 
     dispose() {
-        super.dispose();
         this._childViewManager.dispose();
+        super.dispose();
     }
 }

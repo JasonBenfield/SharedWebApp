@@ -1,3 +1,4 @@
+import { DelayedAction } from "../DelayedAction";
 import { ContainerView } from "./ContainerView";
 
 export interface IMvvmOptions {
@@ -35,6 +36,12 @@ export class MvvmPage {
         readonly options: MvvmOptions
     ) {
     }
+
+    async show() {
+        this.view.addToDom(document.body);
+        await DelayedAction.delay(this.options.debouncedViewModelChangedWait + 1);
+        this.view.show();
+    }
 }
 
 class RootView extends ContainerView {
@@ -42,7 +49,6 @@ class RootView extends ContainerView {
 
     private constructor() {
         super(() => document.createElement("div"));
-        this.setAttributes({ "style": "display: content;" });
-        this.addToParent(document.body);
+        this.setAttributes({ "id": "mvvmRoot", "style": "display: content;" });
     }
 }

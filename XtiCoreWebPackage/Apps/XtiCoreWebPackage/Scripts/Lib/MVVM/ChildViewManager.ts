@@ -1,34 +1,24 @@
-import { ComponentView, ComponentViewEventArgs } from "./ComponentView";
-import { IComponentView } from "./Types";
+import { IComponentView } from "./ComponentView";
 
 export class ChildViewManager {
     private readonly _views: IComponentView[] = [];
 
-    constructor(private readonly _view: ComponentView) {
-        _view.when.postAddElement.then(this.onElementAdded.bind(this));
-        _view.when.preRemoveElement.then(this.onElementRemoved.bind(this));
-    }
-
-    private onElementAdded(evt: CustomEvent<ComponentViewEventArgs>) {
-        for (const view of this._views) {
-            view.addToParent(evt.detail.element);
+    addChildViewsToDom(element: HTMLElement | null) {
+        if (element) {
+            for (const view of this._views) {
+                view.addToDom(element);
+            }
         }
     }
 
-    private onElementRemoved() {
+    removeChildViewsFromDom() {
         for (const view of this._views) {
-            view.removeFromParent();
+            view.removeFromDom();
         }
     }
 
     addChildView<T extends IComponentView>(view: T) {
         this._views.push(view);
-        const element = this._view.element;
-        if (element) {
-            for (const view of this._views) {
-                view.addToParent(element);
-            }
-        }
         return view;
     }
 

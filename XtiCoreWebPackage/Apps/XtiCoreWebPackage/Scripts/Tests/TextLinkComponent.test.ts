@@ -1,10 +1,10 @@
 
 import { afterAll, describe, expect, test } from "@jest/globals";
 import { DelayedAction } from "../Lib/DelayedAction";
-import { LinkComponent, LinkComponentView, LinkComponentViewModel } from "../Lib/MVVM/LinkComponent";
 import { MvvmOptions, MvvmPage } from "../Lib/MVVM/MvvmPage";
+import { TextLinkComponent, TextLinkComponentView, TextLinkComponentViewModel } from "../Lib/MVVM/TextLinkComponent";
 
-const linkElementID = "linkEl";
+const linkElementID = "textLinkEl";
 const mvvmPage = MvvmPage.create(new MvvmOptions({
     debouncedViewModelChangedWait: 1
 }));
@@ -13,10 +13,11 @@ afterAll(() => {
     mvvmPage.view.removeAllChildViews();
 });
 
-describe("Link Component", () => {
+describe("Text Link Component", () => {
     test("sets element attributes when view model changes", async () => {
         const { linkComponent } = createLinkComponent(
-            new LinkComponentViewModel({
+            new TextLinkComponentViewModel({
+                text: "Initial Text",
                 href: "https://example.com/1",
                 title: "Initial Title",
                 target: ""
@@ -26,10 +27,12 @@ describe("Link Component", () => {
         const element = document.getElementById(linkElementID) as HTMLAnchorElement;
         expect(element?.href).toBe("https://example.com/1");
         expect(element?.title).toBe("Initial Title");
+        linkComponent.text = "Updated Text";
         linkComponent.href = "https://example.com/2";
         linkComponent.title = "Updated Title";
         linkComponent.setTargetToBlank();
         await waitForChangeNotifications();
+        expect(element?.innerText).toBe("Updated Text");
         expect(element?.href).toBe("https://example.com/2");
         expect(element?.title).toBe("Updated Title");
         expect(element?.target).toBe("_blank");
@@ -37,13 +40,13 @@ describe("Link Component", () => {
     });
 });
 
-function createLinkComponent(linkViewModel = new LinkComponentViewModel()) {
-    const linkView = mvvmPage.view.addChildView(new LinkComponentView());
+function createLinkComponent(linkViewModel = new TextLinkComponentViewModel()) {
+    const linkView = mvvmPage.view.addChildView(new TextLinkComponentView());
     linkView.setID(linkElementID);
     return {
         linkViewModel: linkViewModel,
         linkView: linkView,
-        linkComponent: new LinkComponent(linkViewModel, linkView)
+        linkComponent: new TextLinkComponent(linkViewModel, linkView)
     };
 }
 

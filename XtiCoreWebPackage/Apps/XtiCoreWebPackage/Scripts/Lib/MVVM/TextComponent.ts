@@ -49,14 +49,15 @@ export class TextComponentView extends StyleableComponentView implements ITextCo
 
     setText(text: string) {
         this._text = text;
-        const element = this.element;
-        if (element) {
-            element.innerText = text;
-        }
+        this.updateElementText();
     }
 
-    addToParent(parent: HTMLElement) {
-        super.addToParent(parent);
+    addToDom(parent: HTMLElement) {
+        super.addToDom(parent);
+        this.updateElementText();
+    }
+
+    private updateElementText() {
         const element = this.element;
         if (element) {
             element.innerText = this._text;

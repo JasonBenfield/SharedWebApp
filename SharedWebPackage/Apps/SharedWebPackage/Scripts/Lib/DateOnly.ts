@@ -203,5 +203,5 @@ export class DateOnly implements IFormattable {
         return -1;
     }
 
-    valueOf() { return this._date.valueOf(); }
+    valueOf() { return this._refDate.valueOf(); }
 }

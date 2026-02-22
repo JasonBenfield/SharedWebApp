@@ -11,6 +11,7 @@ class MainPage {
         const formGroup = new ReadonlyFormGroup(pageViewModel.formGroup, pageView.formGroupView);
         formGroup.setCaption("Caption 1");
         formGroup.setValue("Value 1");
+        mvvmPage.show();
     }
 }
 

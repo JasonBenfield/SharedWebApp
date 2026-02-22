@@ -1,9 +1,9 @@
 import { Component } from "./Component";
 import { IComponentView } from "./ComponentView";
 import { ComponentViewModel, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
-import { StyleableComponentView } from "./StyleableComponentView";
+import { ContainerView } from "./ContainerView";
 
-type LinkTargetType = "" | "_blank";
+export type LinkTargetType = "" | "_blank";
 
 export class LinkComponentViewModel extends ComponentViewModel {
     constructor(initializer: ComponentViewModelInitializer<LinkComponentViewModel> = {}) {
@@ -29,7 +29,7 @@ export interface ILinkComponentView extends IComponentView {
     setTitle(title: string): void;
 }
 
-export class LinkComponentView extends StyleableComponentView implements ILinkComponentView {
+export class LinkComponentView extends ContainerView implements ILinkComponentView {
     constructor() {
         super(() => document.createElement("a"));
     }

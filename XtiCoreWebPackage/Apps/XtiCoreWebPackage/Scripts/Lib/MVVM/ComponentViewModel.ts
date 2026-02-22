@@ -48,7 +48,7 @@ export class ComponentViewModel {
 
     get changes() { return this._changes; }
 
-    private _isVisible = false;
+    private _isVisible = true;
 
     get isVisible() { return this._isVisible; }
 

@@ -1,10 +1,10 @@
 import { ChildViewManager } from "./ChildViewManager";
+import { IComponentView } from "./ComponentView";
+import { ComponentViewModel } from "./ComponentViewModel";
 import { CompositeComponent } from "./CompositeComponent";
 import { ContainerView } from "./ContainerView";
 import { StyleableComponentView } from "./StyleableComponentView";
-import { TextComponent, TextComponentView, TextComponentViewModel } from "./TextComponent";
-import { IComponentView, ITextComponentView } from "./Types";
-import { ComponentViewModel, ObservableChanges } from "./ComponentViewModel";
+import { ITextComponentView, TextComponent, TextComponentView, TextComponentViewModel } from "./TextComponent";
 
 export interface IReadonlyFormGroupView extends IComponentView {
     readonly caption: ITextComponentView;
@@ -20,11 +20,21 @@ export class ReadonlyFormGroupView extends StyleableComponentView implements IRe
 
     constructor() {
         super(() => document.createElement("div"));
-        this._childViewManager = new ChildViewManager(this);
+        this._childViewManager = new ChildViewManager();
         this.captionBlockView = this._childViewManager.addChildView(ContainerView.block());
         this.caption = this.captionBlockView.addChildView(TextComponentView.label());
         this.valueBlockView = this._childViewManager.addChildView(ContainerView.block());
         this.value = this.valueBlockView.addChildView(TextComponentView.block());
+    }
+
+    addToDom(parent: HTMLElement) {
+        super.addToDom(parent);
+        this._childViewManager.addChildViewsToDom(this.element);
+    }
+
+    removeFromDom() {
+        this._childViewManager.removeChildViewsFromDom();
+        super.removeFromDom();
     }
 }
 
@@ -40,7 +50,7 @@ export interface IReadonlyFormGroup {
 
 export class ReadonlyFormGroup extends CompositeComponent<IReadonlyFormGroup> {
     constructor(
-        protected readonly viewModel: ReadonlyFormGroupViewModel,
+        viewModel: ReadonlyFormGroupViewModel,
         view: IReadonlyFormGroupView
     ) {
         super(
@@ -54,10 +64,10 @@ export class ReadonlyFormGroup extends CompositeComponent<IReadonlyFormGroup> {
     }
 
     setCaption(caption: string) {
-        this.viewModel.caption.text = caption;
+        this.layout.caption.text = caption;
     }
 
     setValue(value: string) {
-        this.viewModel.value.text = value;
+        this.layout.value.text = value;
     }
 }

@@ -44,6 +44,15 @@ export class Component {
         }
     }
 
+
+    show() {
+        this.viewModel.isVisible = true;
+    }
+
+    hide() {
+        this.viewModel.isVisible = false;
+    }
+
     dispose() {
         this.viewModel.dispose();
         this.view.dispose();
