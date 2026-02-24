@@ -1,58 +1,28 @@
 import { Component } from "./Component";
-import { IComponentView } from "./ComponentView";
-import { ComponentViewModel, ComponentViewModelInitializer, IComponentFactory, ObservableChanges } from "./ComponentViewModel";
-import { ILinkView, ILinkViewModel, LinkComponentChangeHandler, LinkTargetType } from "./LinkComponent";
-import { ITextView, ITextViewModel, TextChangeHandler, TextComponentView, TitleChangeHandler } from "./TextComponent";
-import { ITitleViewModel } from "./Types";
+import { ComponentView, IComponentView } from "./ComponentView";
+import { ComponentViewModel, ComponentViewModelInitializer } from "./ComponentViewModel";
+import { ILinkView, ILinkViewModel, LinkComponentChangeHandler, LinkViewMixin, LinkViewModelMixin } from "./LinkComponent";
+import { StyleableComponentViewMixin } from "./StyleableComponentView";
+import { ITextView, ITextViewModel, TextChangeHandler, TextViewMixin, TextViewModelMixin, TitleChangeHandler, TitleViewModelMixin } from "./TextComponent";
+import { ITitleView, ITitleViewModel } from "./Types";
 
 export type ITextLinkComponentViewModel = ComponentViewModel & ITextViewModel & ITitleViewModel & ILinkViewModel;
 
-class TextLinkComponentFactory implements IComponentFactory {
-    create(viewModel: TextLinkComponentViewModel, view: ITextLinkComponentView) {
-        return new TextLinkComponent(viewModel, view);
-    }
-}
-
-export class TextLinkComponentViewModel extends ComponentViewModel implements ILinkViewModel, ITextViewModel, ITitleViewModel {
+export class TextLinkComponentViewModel extends TextViewModelMixin(LinkViewModelMixin(TitleViewModelMixin(ComponentViewModel))) {
     constructor(initializer: ComponentViewModelInitializer<TextLinkComponentViewModel> = {}) {
         super(initializer);
-        this.setComponentFactory(new TextLinkComponentFactory());
     }
 
-    private _text = "";
-    get text() { return this._text; }
-    set text(text: string) { this._text = text; }
-
-    private _target: LinkTargetType = "";
-    get target() { return this._target; }
-    set target(target: LinkTargetType) { this._target = target; }
-
-    private _href = "";
-    get href() { return this._href; }
-    set href(href: string) { this._href = href; }
-
-    private _title = "";
-    get title() { return this._title; }
-    set title(title: string) { this._title = title; }
-
-    declare createComponent: (view: ITextLinkComponentView) => TextLinkComponent;
+    createComponent(view: ITextLinkComponentView) {
+        return new TextLinkComponent(this, view);
+    }
 }
 
-export type ITextLinkComponentView = IComponentView & ILinkView & ITextView;
+export type ITextLinkComponentView = IComponentView & ITitleView & ILinkView & ITextView;
 
-export class TextLinkComponentView extends TextComponentView implements ITextLinkComponentView {
+export class TextLinkComponentView extends TextViewMixin(LinkViewMixin(StyleableComponentViewMixin(ComponentView))) implements ITextLinkComponentView {
     constructor() {
-        super(() => document.createElement("a"));
-    }
-
-    declare setTitle: (title: string) => void;
-
-    setHref(href: string) {
-        this.setAttribute("href", href);
-    }
-
-    setTarget(target: string) {
-        this.setAttribute("target", target === "" ? null : target);
+        super("a");
     }
 }
 

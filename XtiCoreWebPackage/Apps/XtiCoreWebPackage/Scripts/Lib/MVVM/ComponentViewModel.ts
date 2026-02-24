@@ -13,12 +13,6 @@ export interface IComponentFactory {
     create(viewModel: ComponentViewModel, view: IComponentView): Component;
 }
 
-class ComponentFactory implements IComponentFactory {
-    create(viewModel: ComponentViewModel, view: IComponentView) {
-        return new Component(viewModel, view);
-    }
-}
-
 export class ComponentViewModel {
 
     private readonly _eventManager = new EventManager<EventLayout>({
@@ -27,7 +21,6 @@ export class ComponentViewModel {
     readonly when = this._eventManager.when;
 
     private readonly _changes: ObservableChanges<typeof this> = {};
-    private _componentFactory: IComponentFactory = new ComponentFactory();
 
     constructor(initializer: ComponentViewModelInitializer<ComponentViewModel> = {}) {
         const proxy = new Proxy(
@@ -67,13 +60,8 @@ export class ComponentViewModel {
 
     set isVisible(isVisible: boolean) { this._isVisible = isVisible; }
 
-    protected setComponentFactory(componentFactory: IComponentFactory) {
-        this._componentFactory = componentFactory;
-    }
-
-
     createComponent(view: IComponentView) {
-        return this._componentFactory.create(this, view);
+        return new Component(this, view);
     }
 
     dispose() {

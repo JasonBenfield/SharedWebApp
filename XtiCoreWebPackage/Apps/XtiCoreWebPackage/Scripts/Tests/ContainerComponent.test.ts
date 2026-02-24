@@ -55,30 +55,30 @@ describe("Container Component", () => {
         component.dispose();
     });
     test("should show/hide child views", async () => {
-        const { viewModel, component } = createComponent();
+        const { component } = createComponent();
         await mvvmPage.show();
-        viewModel.level1_2.isVisible = false;
+        component.level1_2.hide();
         await waitForChangeNotifications();
 
         expect(document.getElementById(level1_1ElementID)).not.toBeNull();
         expect(document.getElementById(level1_2ElementID)).toBeNull();
 
-        viewModel.level1_1.level2_2.isVisible = false;
-        viewModel.level1_2.isVisible = true;
+        component.level1_1.level2_2.hide();
+        component.level1_2.show();
         await waitForChangeNotifications();
         expect(document.getElementById(level1_1ElementID)).not.toBeNull();
         expect(document.getElementById(level2_1ElementID)).not.toBeNull();
         expect(document.getElementById(level2_2ElementID)).toBeNull();
         expect(document.getElementById(level1_2ElementID)).not.toBeNull();
 
-        viewModel.level1_1.isVisible = false;
-        viewModel.level1_1.level2_2.isVisible = true;
+        component.level1_1.hide();
+        component.level1_1.level2_2.show();
         await waitForChangeNotifications();
         expect(document.getElementById(level1_1ElementID)).toBeNull();
         expect(document.getElementById(level2_2ElementID)).toBeNull();
         expect(document.getElementById(level1_2ElementID)).not.toBeNull();
 
-        viewModel.level1_1.isVisible = true;
+        component.level1_1.show();
         await waitForChangeNotifications();
         expect(document.getElementById(level1_1ElementID)).not.toBeNull();
         expect(document.getElementById(level2_1ElementID)).not.toBeNull();
@@ -88,13 +88,15 @@ describe("Container Component", () => {
 });
 
 function createComponent(options: { isVisible: boolean } = { isVisible: true }) {
-    const view = new CompositeComponentView(() => createDiv(containerElementID), {
-        level1_1: new CompositeComponentView(() => createDiv(level1_1ElementID), {
-            level2_1: new ComponentView(() => createDiv(level2_1ElementID)),
-            level2_2: new ComponentView(() => createDiv(level2_2ElementID))
-        }),
-        level1_2: new ComponentView(() => createDiv(level1_2ElementID))
-    });
+    const view = new CompositeComponentView(() => createDiv(containerElementID))
+        .compose({
+            level1_1: new CompositeComponentView(() => createDiv(level1_1ElementID))
+                .compose({
+                    level2_1: new ComponentView(() => createDiv(level2_1ElementID)),
+                    level2_2: new ComponentView(() => createDiv(level2_2ElementID))
+                }),
+            level1_2: new ComponentView(() => createDiv(level1_2ElementID))
+        });
     mvvmPage.view.addChildView(view);
     const viewModel = CompositeComponentViewModel.create({
         level1_1: CompositeComponentViewModel.create({

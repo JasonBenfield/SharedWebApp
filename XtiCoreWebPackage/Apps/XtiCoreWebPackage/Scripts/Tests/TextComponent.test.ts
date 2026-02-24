@@ -1,12 +1,17 @@
 import { afterAll, describe, expect, test } from "@jest/globals";
 import { DelayedAction } from "../Lib/DelayedAction";
+import { ComponentView } from "../Lib/MVVM/ComponentView";
 import { MvvmOptions, MvvmPage } from "../Lib/MVVM/MvvmPage";
-import { TextComponent, TextComponentView, TextComponentViewModel } from "../Lib/MVVM/TextComponent";
+import { StyleableComponentViewMixin } from "../Lib/MVVM/StyleableComponentView";
+import { TextComponentViewModel, TextViewMixin, TitleViewMixin } from "../Lib/MVVM/TextComponent";
 
 const textElementID = "textEl";
 const mvvmPage = MvvmPage.create(new MvvmOptions({
     debouncedViewModelChangedWait: 1
 }));
+
+
+const ComponentFromMixin = TextViewMixin(TitleViewMixin(StyleableComponentViewMixin(ComponentView)));
 
 afterAll(() => {
     mvvmPage.view.removeAllChildViews();
@@ -34,7 +39,7 @@ describe("Text Component", () => {
 });
 
 function createTextComponent(textViewModel = new TextComponentViewModel()) {
-    const textView = mvvmPage.view.addChildView(TextComponentView.block());
+    const textView = mvvmPage.view.addChildView(new ComponentFromMixin("div"));
     textView.setID(textElementID);
     return {
         textViewModel: textViewModel,

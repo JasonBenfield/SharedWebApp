@@ -39,7 +39,7 @@ describe("Link Component", () => {
 });
 
 function createLinkComponent(linkViewModel = new LinkComponentViewModel()) {
-    const linkView = mvvmPage.view.addChildView(LinkComponentView.create({
+    const linkView = mvvmPage.view.addChildView(new LinkComponentView().compose({
         text: TextComponentView.block()
     }));
     linkView.setID(linkElementID);

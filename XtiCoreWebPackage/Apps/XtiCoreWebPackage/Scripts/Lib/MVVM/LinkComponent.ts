@@ -1,10 +1,10 @@
 import { Component, IComponentChangeHandler } from "./Component";
-import { IComponentView } from "./ComponentView";
-import { ComponentViewModel, ComponentViewModelInitializer, IComponentFactory, ObservableChanges } from "./ComponentViewModel";
-import { CompositeComponentView, CompositeViewModelTemplate, ICompositeComponentView, ViewLayout } from "./CompositeComponent";
-import { ContainerComponentView } from "./ContainerView";
-import { TitleChangeHandler } from "./TextComponent";
-import { ITitleView, ITitleViewModel } from "./Types";
+import { ComponentView, IComponentView } from "./ComponentView";
+import { ComponentViewModel, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
+import { CompositeComponentViewMixin } from "./CompositeComponent";
+import { IStyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
+import { TitleChangeHandler, TitleViewModelMixin } from "./TextComponent";
+import { Constructor, ITitleView, ITitleViewModel } from "./Types";
 
 export type LinkTargetType = "" | "_blank";
 
@@ -18,31 +18,26 @@ export interface ILinkViewModel {
 
 export type ILinkComponentViewModel = ComponentViewModel & ILinkViewModel & ITitleViewModel;
 
-class LinkComponentFactory implements IComponentFactory {
-    create(viewModel: LinkComponentViewModel, view: ILinkComponentView) {
-        return new LinkComponent(viewModel, view);
-    }
+export function LinkViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T) {
+    return class extends Base implements ILinkViewModel {
+        private _href = "";
+        get href() { return this._href; }
+        set href(href: string) { this._href = href; }
+
+        private _target: LinkTargetType = "";
+        get target() { return this._target; }
+        set target(target: LinkTargetType) { this._target = target; }
+    };
 }
 
-export class LinkComponentViewModel extends ComponentViewModel implements ITitleViewModel, ILinkViewModel {
+export class LinkComponentViewModel extends LinkViewModelMixin(TitleViewModelMixin(ComponentViewModel)) {
     constructor(initializer: ComponentViewModelInitializer<LinkComponentViewModel> = {}) {
         super(initializer);
-        this.setComponentFactory(new LinkComponentFactory());
     }
 
-    private _href = "";
-    get href() { return this._href; }
-    set href(href: string) { this._href = href; }
-
-    private _target: LinkTargetType = "";
-    get target() { return this._target; }
-    set target(target: LinkTargetType) { this._target = target; }
-
-    private _title = "";
-    get title() { return this._title; }
-    set title(title: string) { this._title = title; }
-
-    declare createComponent: (view: ILinkComponentView) => LinkComponent;
+    createComponent(view: ILinkComponentView) {
+        return new LinkComponent(this, view);
+    }
 }
 
 export interface ILinkView {
@@ -50,47 +45,28 @@ export interface ILinkView {
     setTarget(target: string | null): void;
 }
 
-export type ILinkComponentView = IComponentView & ILinkView & ITitleView;
+export function LinkViewMixin<T extends Constructor<IStyleableComponentView>>(Base: T) {
+    return class extends Base implements ILinkView {
+        setHref(href: string) {
+            this.setAttributes({ "href": href });
+        }
 
-export class LinkComponentView<TLayout, TPublicLayout> extends CompositeComponentView<TLayout, TPublicLayout> implements ILinkComponentView {
-    static create<TLayout extends CompositeViewModelTemplate<TLayout>>(
-        layout: ViewLayout<TLayout>
-    ): ICompositeComponentView<TLayout, TLayout> & ILinkView;
-    static create<TLayout extends CompositeViewModelTemplate<TLayout>, TPublicLayout>(
-        layout: ViewLayout<TLayout>,
-        toPublicLayout: (layout: TLayout) => TPublicLayout
-    ): ICompositeComponentView<TLayout, TPublicLayout> & ILinkView;
-    static create<TLayout extends CompositeViewModelTemplate<TLayout>, TPublicLayout>(
-        layout: ViewLayout<TLayout>,
-        toPublicLayout?: (layout: TLayout) => TPublicLayout
-    ) {
-        const view: any = new LinkComponentView(
-            layout,
-            toPublicLayout || ((l) => l as TPublicLayout)
-        );
-        return view as ICompositeComponentView<TLayout, TPublicLayout> & ILinkView;
-    }
+        setTarget(target: string) {
+            this.setAttributes({ "target": target === "" ? null : target });
+        }
+    };
+}
 
-    constructor(
-        layout: TLayout,
-        toPublicLayout: (layout: TLayout) => TPublicLayout = ((l: TLayout) => (<any>l) as TPublicLayout)
-    ) {
-        super(() => document.createElement("a"), layout, toPublicLayout);
-    }
+export type ILinkComponentView = IComponentView & ITitleView & ILinkView;
 
-    declare setTitle: (title: string) => void;
-
-    setHref(href: string) {
-        this.setAttribute("href", href);
-    }
-
-    setTarget(target: string) {
-        this.setAttribute("target", target === "" ? null : target);
+export class LinkComponentView extends CompositeComponentViewMixin(LinkViewMixin(StyleableComponentViewMixin(ComponentView))) {
+    constructor() {
+        super("a");
     }
 }
 
 export class LinkComponentChangeHandler implements IComponentChangeHandler {
-    constructor(private readonly view: ILinkComponentView) {
+    constructor(private readonly view: ILinkView) {
     }
 
     handleChanges(changes: ObservableChanges<ComponentViewModel & ILinkComponentViewModel>) {

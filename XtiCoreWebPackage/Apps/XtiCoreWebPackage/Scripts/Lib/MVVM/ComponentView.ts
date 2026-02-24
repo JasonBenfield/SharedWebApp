@@ -14,16 +14,45 @@ export interface IComponentView {
 }
 
 export class ComponentView implements IComponentView {
+    static block() {
+        return new ComponentView("div");
+    }
+
+    static span() {
+        return new ComponentView("span");
+    }
+
+    static label() {
+        return new ComponentView("label");
+    }
+
+    static heading(size: 1 | 2 | 3 | 4 | 5 | 6) {
+        return new ComponentView(`h${size}`);
+    }
+
     private readonly _eventManager = new EventManager<EventLayout>({
         postAddElement: null,
         preRemoveElement: null
     });
     readonly when = this._eventManager.when;
+    private readonly createElement: () => HTMLElement;
     private _element: HTMLElement | null = null;
     private _parent: HTMLElement | null = null;
     private _isVisible = true;
 
-    constructor(private readonly createElement: () => HTMLElement) {
+    constructor();
+    constructor(tagName: string);
+    constructor(createElement: () => HTMLElement);
+    constructor(tagNameOrCreateElement?: string | (() => HTMLElement)) {
+        if (!tagNameOrCreateElement) {
+            this.createElement = () => document.createElement("div");
+        }
+        else if (typeof tagNameOrCreateElement === "string") {
+            this.createElement = () => document.createElement(tagNameOrCreateElement);
+        }
+        else {
+            this.createElement = tagNameOrCreateElement;
+        }
     }
 
     get element() { return this._element; }

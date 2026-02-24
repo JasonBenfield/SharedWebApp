@@ -16,3 +16,5 @@ export interface ITitleViewModel {
     get title(): string;
     set title(title: string);
 }
+
+export type Constructor<T = {}> = new (...args: any[]) => T;

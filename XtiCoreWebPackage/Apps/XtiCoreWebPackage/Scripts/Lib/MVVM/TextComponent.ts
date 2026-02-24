@@ -1,8 +1,8 @@
 import { Component, IComponentChangeHandler } from "./Component";
 import { ComponentView, IComponentView } from "./ComponentView";
 import { ComponentViewModel, ComponentViewModelInitializer, IComponentFactory, ObservableChanges } from "./ComponentViewModel";
-import { StyleableComponentView } from "./StyleableComponentView";
-import { ITitleView, ITitleViewModel } from "./Types";
+import { IStyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
+import { Constructor, ITitleView, ITitleViewModel } from "./Types";
 
 export interface ITextViewModel {
     get text(): string;
@@ -11,35 +11,59 @@ export interface ITextViewModel {
 
 export type ITextComponentView = IComponentView & ITextView & ITitleView;
 
-class TextComponentFactory implements IComponentFactory {
-    create(viewModel: TextComponentViewModel, view: ITextComponentView) {
-        return new TextComponent(viewModel, view);
-    }
+export function TitleViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T) {
+    return class extends Base implements ITitleViewModel {
+        private _title = "";
+        get title() { return this._title; }
+        set title(title: string) { this._title = title; }
+    };
 }
 
-export class TextComponentViewModel extends ComponentViewModel implements ITextViewModel, ITitleViewModel {
+export function TextViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T) {
+    return class extends Base implements ITextViewModel {
+        private _text = "";
+        get text() { return this._text; }
+        set text(text: string) { this._text = text; }
+    };
+}
+
+export class TextComponentViewModel extends TextViewModelMixin(TitleViewModelMixin(ComponentViewModel)) implements ITextViewModel {
     constructor(initializer: ComponentViewModelInitializer<TextComponentViewModel> = {}) {
         super(initializer);
-        this.setComponentFactory(new TextComponentFactory());
     }
 
-    private _text = "";
-    get text() { return this._text; }
-    set text(text: string) { this._text = text; }
-
-    private _title = "";
-    get title() { return this._title; }
-    set title(title: string) { this._title = title; }
-
-    declare createComponent: (view: ITextComponentView) => TextComponent;
+    createComponent(view: ITextComponentView) {
+        return new TextComponent(this, view);
+    }
 }
 
-type Constructor<T = {}> = new (...args: any[]) => T;
-
-function TitleViewMixin<T extends Constructor<StyleableComponentView>>(Base: T) {
-    return class extends Base {
+export function TitleViewMixin<T extends Constructor<IStyleableComponentView>>(Base: T) {
+    return class extends Base implements ITitleView {
         setTitle(title: string) {
             this.setAttributes({ "title": title });
+        }
+    };
+}
+
+export function TextViewMixin<T extends Constructor<ComponentView>>(Base: T) {
+    return class extends Base implements ITextView {
+        private _text = "";
+
+        setText(text: string) {
+            this._text = text;
+            this.updateElementText();
+        }
+
+        addToDom(parent: HTMLElement) {
+            super.addToDom(parent);
+            this.updateElementText();
+        }
+
+        private updateElementText() {
+            const element = this.element;
+            if (element) {
+                element.innerText = this._text;
+            }
         }
     };
 }
@@ -48,49 +72,24 @@ export interface ITextView {
     setText(text: string): void;
 }
 
-export class TextComponentView extends StyleableComponentView implements ITextView {
+export class TextComponentView extends TextViewMixin(TitleViewMixin(StyleableComponentViewMixin(ComponentView))) implements ITextView {
     static block() {
-        return new TextComponentView(() => document.createElement("div"));
+        return new TextComponentView("div");
     }
 
     static span() {
-        return new TextComponentView(() => document.createElement("span"));
+        return new TextComponentView("span");
     }
 
     static label() {
-        return new TextComponentView(() => document.createElement("label"));
+        return new TextComponentView("label");
     }
 
     static heading(size: 1 | 2 | 3 | 4 | 5 | 6) {
-        return new TextComponentView(() => document.createElement(`h${size}`));
+        return new TextComponentView(`h${size}`);
     }
 
-    private _text = "";
-
-    constructor(createElement: () => HTMLElement) {
-        super(createElement);
-    }
-
-    declare setTitle: (title: string) => void;
-
-    setText(text: string) {
-        this._text = text;
-        this.updateElementText();
-    }
-
-    addToDom(parent: HTMLElement) {
-        super.addToDom(parent);
-        this.updateElementText();
-    }
-
-    private updateElementText() {
-        const element = this.element;
-        if (element) {
-            element.innerText = this._text;
-        }
-    }
 }
-
 
 export class TextChangeHandler implements IComponentChangeHandler {
     constructor(private readonly view: ITextComponentView) {
