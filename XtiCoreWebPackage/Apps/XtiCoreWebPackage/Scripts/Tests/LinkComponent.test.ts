@@ -1,8 +1,9 @@
 
 import { afterAll, describe, expect, test } from "@jest/globals";
 import { DelayedAction } from "../Lib/DelayedAction";
-import { LinkComponent, LinkComponentView, LinkComponentViewModel } from "../Lib/MVVM/LinkComponent";
+import { LinkComponentView, LinkComponentViewModel } from "../Lib/MVVM/LinkComponent";
 import { MvvmOptions, MvvmPage } from "../Lib/MVVM/MvvmPage";
+import { TextComponentView } from "../Lib/MVVM/TextComponent";
 
 const linkElementID = "linkEl";
 const mvvmPage = MvvmPage.create(new MvvmOptions({
@@ -38,12 +39,14 @@ describe("Link Component", () => {
 });
 
 function createLinkComponent(linkViewModel = new LinkComponentViewModel()) {
-    const linkView = mvvmPage.view.addChildView(new LinkComponentView());
+    const linkView = mvvmPage.view.addChildView(LinkComponentView.create({
+        text: TextComponentView.block()
+    }));
     linkView.setID(linkElementID);
     return {
         linkViewModel: linkViewModel,
         linkView: linkView,
-        linkComponent: new LinkComponent(linkViewModel, linkView)
+        linkComponent: linkViewModel.createComponent(linkView)
     };
 }
 

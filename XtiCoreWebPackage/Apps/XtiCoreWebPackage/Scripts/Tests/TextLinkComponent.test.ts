@@ -46,7 +46,7 @@ function createLinkComponent(linkViewModel = new TextLinkComponentViewModel()) {
     return {
         linkViewModel: linkViewModel,
         linkView: linkView,
-        linkComponent: new TextLinkComponent(linkViewModel, linkView)
+        linkComponent: linkViewModel.createComponent(linkView)
     };
 }
 

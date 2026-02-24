@@ -1,11 +1,26 @@
-import { Component } from "./Component";
-import { IComponentView } from "./ComponentView";
-import { ComponentViewModel, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
+import { Component, IComponentChangeHandler } from "./Component";
+import { ComponentView, IComponentView } from "./ComponentView";
+import { ComponentViewModel, ComponentViewModelInitializer, IComponentFactory, ObservableChanges } from "./ComponentViewModel";
 import { StyleableComponentView } from "./StyleableComponentView";
+import { ITitleView, ITitleViewModel } from "./Types";
 
-export class TextComponentViewModel extends ComponentViewModel {
+export interface ITextViewModel {
+    get text(): string;
+    set text(text: string);
+}
+
+export type ITextComponentView = IComponentView & ITextView & ITitleView;
+
+class TextComponentFactory implements IComponentFactory {
+    create(viewModel: TextComponentViewModel, view: ITextComponentView) {
+        return new TextComponent(viewModel, view);
+    }
+}
+
+export class TextComponentViewModel extends ComponentViewModel implements ITextViewModel, ITitleViewModel {
     constructor(initializer: ComponentViewModelInitializer<TextComponentViewModel> = {}) {
         super(initializer);
+        this.setComponentFactory(new TextComponentFactory());
     }
 
     private _text = "";
@@ -15,14 +30,25 @@ export class TextComponentViewModel extends ComponentViewModel {
     private _title = "";
     get title() { return this._title; }
     set title(title: string) { this._title = title; }
+
+    declare createComponent: (view: ITextComponentView) => TextComponent;
 }
 
-export interface ITextComponentView extends IComponentView {
+type Constructor<T = {}> = new (...args: any[]) => T;
+
+function TitleViewMixin<T extends Constructor<StyleableComponentView>>(Base: T) {
+    return class extends Base {
+        setTitle(title: string) {
+            this.setAttributes({ "title": title });
+        }
+    };
+}
+
+export interface ITextView {
     setText(text: string): void;
-    setTitle(title: string): void;
 }
 
-export class TextComponentView extends StyleableComponentView implements ITextComponentView {
+export class TextComponentView extends StyleableComponentView implements ITextView {
     static block() {
         return new TextComponentView(() => document.createElement("div"));
     }
@@ -65,19 +91,37 @@ export class TextComponentView extends StyleableComponentView implements ITextCo
     }
 }
 
-export class TextComponent extends Component {
-    constructor(protected readonly viewModel: TextComponentViewModel, protected readonly view: ITextComponentView) {
-        super(viewModel, view);
+
+export class TextChangeHandler implements IComponentChangeHandler {
+    constructor(private readonly view: ITextComponentView) {
     }
 
-    protected handleChanges(changes: ObservableChanges<TextComponentViewModel>) {
-        super.handleChanges(changes);
+    handleChanges(changes: ObservableChanges<ComponentViewModel & ITextViewModel>) {
         if (changes.text) {
             this.view.setText(changes.text.value);
         }
+    }
+}
+
+export class TitleChangeHandler implements IComponentChangeHandler {
+    constructor(private readonly view: IComponentView & ITitleView) {
+    }
+
+    handleChanges(changes: ObservableChanges<ComponentViewModel & ITitleViewModel>) {
         if (changes.title) {
             this.view.setTitle(changes.title.value);
         }
+    }
+}
+
+export class TextComponent extends Component {
+    constructor(protected readonly viewModel: TextComponentViewModel, protected readonly view: ITextComponentView) {
+        super(
+            viewModel,
+            view,
+            new TitleChangeHandler(view),
+            new TextChangeHandler(view)
+        );
     }
 
     get text() { return this.viewModel.text; }

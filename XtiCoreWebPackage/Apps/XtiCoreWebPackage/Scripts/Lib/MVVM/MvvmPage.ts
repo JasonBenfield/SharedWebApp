@@ -1,5 +1,5 @@
 import { DelayedAction } from "../DelayedAction";
-import { ContainerView } from "./ContainerView";
+import { ContainerComponentView } from "./ContainerView";
 
 export interface IMvvmOptions {
     debouncedViewModelChangedWait: number;
@@ -44,7 +44,7 @@ export class MvvmPage {
     }
 }
 
-class RootView extends ContainerView {
+class RootView extends ContainerComponentView {
     static readonly instance = new RootView();
 
     private constructor() {

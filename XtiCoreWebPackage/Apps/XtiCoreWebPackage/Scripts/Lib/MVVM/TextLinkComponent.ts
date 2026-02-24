@@ -1,11 +1,22 @@
 import { Component } from "./Component";
-import { ComponentViewModel, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
-import { ILinkComponentView, LinkTargetType } from "./LinkComponent";
-import { ITextComponentView, TextComponentView } from "./TextComponent";
+import { IComponentView } from "./ComponentView";
+import { ComponentViewModel, ComponentViewModelInitializer, IComponentFactory, ObservableChanges } from "./ComponentViewModel";
+import { ILinkView, ILinkViewModel, LinkComponentChangeHandler, LinkTargetType } from "./LinkComponent";
+import { ITextView, ITextViewModel, TextChangeHandler, TextComponentView, TitleChangeHandler } from "./TextComponent";
+import { ITitleViewModel } from "./Types";
 
-export class TextLinkComponentViewModel extends ComponentViewModel {
+export type ITextLinkComponentViewModel = ComponentViewModel & ITextViewModel & ITitleViewModel & ILinkViewModel;
+
+class TextLinkComponentFactory implements IComponentFactory {
+    create(viewModel: TextLinkComponentViewModel, view: ITextLinkComponentView) {
+        return new TextLinkComponent(viewModel, view);
+    }
+}
+
+export class TextLinkComponentViewModel extends ComponentViewModel implements ILinkViewModel, ITextViewModel, ITitleViewModel {
     constructor(initializer: ComponentViewModelInitializer<TextLinkComponentViewModel> = {}) {
         super(initializer);
+        this.setComponentFactory(new TextLinkComponentFactory());
     }
 
     private _text = "";
@@ -23,9 +34,11 @@ export class TextLinkComponentViewModel extends ComponentViewModel {
     private _title = "";
     get title() { return this._title; }
     set title(title: string) { this._title = title; }
+
+    declare createComponent: (view: ITextLinkComponentView) => TextLinkComponent;
 }
 
-export type ITextLinkComponentView = ILinkComponentView & ITextComponentView;
+export type ITextLinkComponentView = IComponentView & ILinkView & ITextView;
 
 export class TextLinkComponentView extends TextComponentView implements ITextLinkComponentView {
     constructor() {
@@ -45,25 +58,13 @@ export class TextLinkComponentView extends TextComponentView implements ITextLin
 
 export class TextLinkComponent extends Component {
     constructor(protected readonly viewModel: TextLinkComponentViewModel, view: ITextLinkComponentView) {
-        super(viewModel, view);
-    }
-
-    declare protected readonly view: ITextLinkComponentView;
-
-    protected handleChanges(changes: ObservableChanges<TextLinkComponentViewModel>) {
-        super.handleChanges(changes);
-        if (changes.text) {
-            this.view.setText(changes.text.value);
-        }
-        if (changes.title) {
-            this.view.setTitle(changes.title.value);
-        }
-        if (changes.href) {
-            this.view.setHref(changes.href.value);
-        }
-        if (changes.target) {
-            this.view.setTarget(changes.target.value);
-        }
+        super(
+            viewModel,
+            view,
+            new TitleChangeHandler(view),
+            new TextChangeHandler(view),
+            new LinkComponentChangeHandler(view)
+        );
     }
 
     get text() { return this.viewModel.text; }

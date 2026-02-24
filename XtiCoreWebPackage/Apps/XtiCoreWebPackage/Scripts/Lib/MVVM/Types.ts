@@ -7,3 +7,12 @@ export interface IHtmlAttributes {
     draggable?: string;
     opacity?: string;
 }
+
+export interface ITitleView {
+    setTitle(title: string): void;
+}
+
+export interface ITitleViewModel {
+    get title(): string;
+    set title(title: string);
+}

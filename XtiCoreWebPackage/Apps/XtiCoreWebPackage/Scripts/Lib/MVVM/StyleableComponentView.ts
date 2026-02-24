@@ -1,7 +1,7 @@
 import { ComponentView } from "./ComponentView";
-import { IHtmlAttributes } from "./Types";
+import { IHtmlAttributes, ITitleView } from "./Types";
 
-export class StyleableComponentView extends ComponentView {
+export class StyleableComponentView extends ComponentView implements ITitleView {
     private readonly _attributes: { [name: string]: string } = {};
 
     constructor(createElement: () => HTMLElement) {

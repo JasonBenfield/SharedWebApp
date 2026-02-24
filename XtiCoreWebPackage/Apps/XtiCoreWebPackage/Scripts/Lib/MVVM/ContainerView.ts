@@ -2,27 +2,27 @@ import { ChildViewManager } from "./ChildViewManager";
 import { IComponentView } from "./ComponentView";
 import { StyleableComponentView } from "./StyleableComponentView";
 
-export interface IContainerView extends IComponentView {
+export interface IContainerComponentView extends IComponentView {
     addChildView<T extends IComponentView>(view: T): void;
     removeAllChildViews(): void;
     removeChildView(view: IComponentView): void;
 }
 
-export class ContainerView extends StyleableComponentView implements IContainerView {
+export class ContainerComponentView extends StyleableComponentView implements IContainerComponentView {
     static block() {
-        return new ContainerView(() => document.createElement("div"));
+        return new ContainerComponentView(() => document.createElement("div"));
     }
 
     static span() {
-        return new ContainerView(() => document.createElement("span"));
+        return new ContainerComponentView(() => document.createElement("span"));
     }
 
     static label() {
-        return new ContainerView(() => document.createElement("label"));
+        return new ContainerComponentView(() => document.createElement("label"));
     }
 
     static heading(size: 1 | 2 | 3 | 4 | 5 | 6) {
-        return new ContainerView(() => document.createElement(`h${size}`));
+        return new ContainerComponentView(() => document.createElement(`h${size}`));
     }
 
     private readonly _childViewManager: ChildViewManager;

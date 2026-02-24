@@ -1,8 +1,8 @@
 
-import { expect, describe, test, afterAll } from "@jest/globals";
+import { afterAll, describe, expect, test } from "@jest/globals";
 import { DelayedAction } from "../Lib/DelayedAction";
 import { MvvmOptions, MvvmPage } from "../Lib/MVVM/MvvmPage";
-import { ReadonlyFormGroup, ReadonlyFormGroupView, ReadonlyFormGroupViewModel } from "../Lib/MVVM/ReadonlyFormGroup";
+import { ReadonlyFormGroupView, ReadonlyFormGroupViewModel } from "../Lib/MVVM/ReadonlyFormGroup";
 
 const formGroupElementID = "formGroupEl";
 const mvvmPage = MvvmPage.create(new MvvmOptions({
@@ -26,12 +26,12 @@ describe("Readonly Form Group", () => {
 });
 
 function createReadonlyFormGroup(formGroupViewModel = new ReadonlyFormGroupViewModel()) {
-    const formGroupView = mvvmPage.view.addChildView(new ReadonlyFormGroupView());
+    const formGroupView = mvvmPage.view.addChildView(ReadonlyFormGroupView.create());
     formGroupView.setID(formGroupElementID);
     return {
         formGroupViewModel: formGroupViewModel,
         formGroupView: formGroupView,
-        formGroup: new ReadonlyFormGroup(formGroupViewModel, formGroupView)
+        formGroup: formGroupViewModel.createComponent(formGroupView)
     };
 }
 

@@ -1,46 +1,59 @@
-import { ChildViewManager } from "./ChildViewManager";
+import { Component } from "./Component";
 import { IComponentView } from "./ComponentView";
-import { ComponentViewModel } from "./ComponentViewModel";
-import { CompositeComponent } from "./CompositeComponent";
-import { ContainerView } from "./ContainerView";
-import { StyleableComponentView } from "./StyleableComponentView";
+import { ComponentViewModel, IComponentFactory } from "./ComponentViewModel";
+import { CompositeComponentView } from "./CompositeComponent";
 import { ITextComponentView, TextComponent, TextComponentView, TextComponentViewModel } from "./TextComponent";
 
-export interface IReadonlyFormGroupView extends IComponentView {
+export interface IReadonlyFormGroupView {
     readonly caption: ITextComponentView;
     readonly value: ITextComponentView;
 }
 
-export class ReadonlyFormGroupView extends StyleableComponentView implements IReadonlyFormGroupView {
-    private readonly _childViewManager: ChildViewManager;
-    readonly captionBlockView: ContainerView;
-    readonly caption: TextComponentView;
-    readonly valueBlockView: ContainerView;
-    readonly value: TextComponentView;
+function createLayout() {
+    return {
+        captionContainer: CompositeComponentView.block({
+            caption: TextComponentView.block()
+        }),
+        valueContainer: CompositeComponentView.block({
+            value: TextComponentView.block()
+        })
+    };
+}
 
-    constructor() {
-        super(() => document.createElement("div"));
-        this._childViewManager = new ChildViewManager();
-        this.captionBlockView = this._childViewManager.addChildView(ContainerView.block());
-        this.caption = this.captionBlockView.addChildView(TextComponentView.label());
-        this.valueBlockView = this._childViewManager.addChildView(ContainerView.block());
-        this.value = this.valueBlockView.addChildView(TextComponentView.block());
-    }
+function toPublicLayout(layout: ReturnType<typeof createLayout>) {
+    const formGroup: IReadonlyFormGroupView = {
+        caption: layout.captionContainer.caption,
+        value: layout.valueContainer.value
+    };
+    return formGroup;
+}
 
-    addToDom(parent: HTMLElement) {
-        super.addToDom(parent);
-        this._childViewManager.addChildViewsToDom(this.element);
-    }
-
-    removeFromDom() {
-        this._childViewManager.removeChildViewsFromDom();
-        super.removeFromDom();
+export class ReadonlyFormGroupView {
+    static create() {
+        return CompositeComponentView.block(
+            createLayout(),
+            toPublicLayout
+        );
     }
 }
 
+class ReadonlyFormGroupFactory implements IComponentFactory {
+    create(viewModel: ReadonlyFormGroupViewModel, view: IComponentView & IReadonlyFormGroupView) {
+        return new ReadonlyFormGroup(viewModel, view);
+    }
+
+}
+
 export class ReadonlyFormGroupViewModel extends ComponentViewModel {
+    constructor() {
+        super();
+        this.setComponentFactory(new ReadonlyFormGroupFactory());
+    }
+
     readonly caption = new TextComponentViewModel();
     readonly value = new TextComponentViewModel();
+
+    declare createComponent: (view: IComponentView & IReadonlyFormGroupView) => ReadonlyFormGroup;
 }
 
 export interface IReadonlyFormGroup {
@@ -48,26 +61,21 @@ export interface IReadonlyFormGroup {
     readonly value: TextComponent;
 }
 
-export class ReadonlyFormGroup extends CompositeComponent<IReadonlyFormGroup> {
-    constructor(
-        viewModel: ReadonlyFormGroupViewModel,
-        view: IReadonlyFormGroupView
-    ) {
-        super(
-            viewModel,
-            view,
-            {
-                caption: new TextComponent(viewModel.caption, view.caption),
-                value: new TextComponent(viewModel.value, view.value)
-            }
-        );
+export class ReadonlyFormGroup extends Component {
+    constructor(viewModel: ReadonlyFormGroupViewModel, view: IComponentView & IReadonlyFormGroupView) {
+        super(viewModel, view);
+        this.caption = new TextComponent(viewModel.caption, view.caption);
+        this.value = new TextComponent(viewModel.value, view.value);
     }
 
+    readonly caption: TextComponent;
+    readonly value: TextComponent;
+
     setCaption(caption: string) {
-        this.layout.caption.text = caption;
+        this.caption.text = caption;
     }
 
     setValue(value: string) {
-        this.layout.value.text = value;
+        this.value.text = value;
     }
 }

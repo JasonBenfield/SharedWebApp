@@ -3,11 +3,36 @@ import { MvvmPage } from "./MvvmPage";
 import { ObservableChanges, ComponentViewModel } from "./ComponentViewModel";
 import { IComponentView } from "./ComponentView";
 
+export interface IComponentChangeHandler {
+    handleChanges(changes: ObservableChanges<ComponentViewModel>): void;
+}
+
+export class ComponentChangeHandler {
+    constructor(protected readonly view: IComponentView) {
+    }
+
+    handleChanges(changes: ObservableChanges<ComponentViewModel>) {
+        if (changes.isVisible) {
+            if (changes.isVisible.value) {
+                this.view.show();
+            }
+            else {
+                this.view.hide();
+            }
+        }
+    }
+}
+
 export class Component {
     private readonly _changes: ObservableChanges<ComponentViewModel> = {};
+    private readonly _changeHandlers: IComponentChangeHandler[] = [];
 
-    constructor(protected readonly viewModel: ComponentViewModel, protected readonly view: IComponentView) {
+    constructor(protected readonly viewModel: ComponentViewModel, protected readonly view: IComponentView, ...changeHandlers: IComponentChangeHandler[]) {
         this.viewModel.when.propertyChanged.then(this.onViewModelChanged.bind(this));
+        this._changeHandlers.push(new ComponentChangeHandler(view));
+        for (const changeHandler of changeHandlers) {
+            this._changeHandlers.push(changeHandler);
+        }
         this.handleChanges(viewModel.changes);
     }
 
@@ -33,14 +58,9 @@ export class Component {
         MvvmPage.get().options.debouncedViewModelChangedWait
     );
 
-    protected handleChanges(changes: ObservableChanges<ComponentViewModel>) {
-        if (changes.isVisible) {
-            if (changes.isVisible.value) {
-                this.view.show();
-            }
-            else {
-                this.view.hide();
-            }
+    private handleChanges(changes: ObservableChanges<ComponentViewModel>) {
+        for (const handler of this._changeHandlers) {
+            handler.handleChanges(changes);
         }
     }
 
