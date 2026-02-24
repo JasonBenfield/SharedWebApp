@@ -26,7 +26,8 @@ describe("Readonly Form Group", () => {
 });
 
 function createReadonlyFormGroup(formGroupViewModel = new ReadonlyFormGroupViewModel()) {
-    const formGroupView = mvvmPage.view.addChildView(ReadonlyFormGroupView.create());
+    const formGroupView = ReadonlyFormGroupView.create();// new ReadonlyFormGroupView().compose();
+    mvvmPage.view.addChildView(formGroupView);
     formGroupView.setID(formGroupElementID);
     return {
         formGroupViewModel: formGroupViewModel,

@@ -29,10 +29,19 @@ function toPublicLayout(layout: ReturnType<typeof createLayout>) {
     return formGroup;
 }
 
-export class ReadonlyFormGroupView {
+export class ReadonlyFormGroupView extends CompositeComponentView {
     static create() {
-        return CompositeComponentView.block().compose(createLayout(), toPublicLayout);
+        return new ReadonlyFormGroupView().compose();
     }
+
+    private constructor() {
+        super("div");
+    }
+
+    compose() {
+        return super.compose(createLayout(), toPublicLayout);
+    }
+
 }
 
 export interface IReadonlyFormGroupViewModel {
@@ -40,16 +49,26 @@ export interface IReadonlyFormGroupViewModel {
     value: TextComponentViewModel
 }
 
-export class ReadonlyFormGroupViewModel extends ComponentViewModel {
-    readonly caption= new TextComponentViewModel();
-    readonly value = new TextComponentViewModel();
+export class ReadonlyFormGroupViewModel extends ComponentViewModel implements IReadonlyFormGroupViewModel {
+    readonly caption: TextComponentViewModel;
+    readonly value: TextComponentViewModel;
 
-    createComponent(view: IComponentView) {
+    constructor() {
+        super();
+        this.caption = new TextComponentViewModel();
+        this.value = new TextComponentViewModel();
+    }
+
+    createComponent(view: IComponentView): ReadonlyFormGroup {
         return new ReadonlyFormGroup(this, view);
     }
 }
 
 export class ReadonlyFormGroup extends CompositeComponent<ComponentViewModel & IReadonlyFormGroupViewModel> {
+    constructor(viewModel: ComponentViewModel & IReadonlyFormGroupViewModel, view: IComponentView) {
+        super(viewModel, view);
+    }
+
     setCaption(caption: string) {
         this.composite.caption.text = caption;
     }

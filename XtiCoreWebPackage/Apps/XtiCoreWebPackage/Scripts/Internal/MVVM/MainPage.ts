@@ -1,5 +1,5 @@
-﻿import { ReadonlyFormGroup, ReadonlyFormGroupView, ReadonlyFormGroupViewModel } from "../../Lib/MVVM/ReadonlyFormGroup";
-import { MvvmPage } from "../../Lib/MVVM/MvvmPage";
+﻿import { MvvmPage } from "../../Lib/MVVM/MvvmPage";
+import { ReadonlyFormGroup, ReadonlyFormGroupView, ReadonlyFormGroupViewModel } from "../../Lib/MVVM/ReadonlyFormGroup";
 
 const mvvmPage = MvvmPage.get();
 
@@ -16,10 +16,10 @@ class MainPage {
 }
 
 class MainPageView {
-    readonly formGroupView: ReadonlyFormGroupView;
+    readonly formGroupView = ReadonlyFormGroupView.create();
 
     constructor() {
-        this.formGroupView = mvvmPage.view.addChildView(new ReadonlyFormGroupView());
+        mvvmPage.view.addChildView(this.formGroupView);
     }
 }
 

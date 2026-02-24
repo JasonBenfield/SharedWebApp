@@ -31,8 +31,9 @@ export class CompositeComponentViewModel<T extends CompositeViewModelTemplate<T>
         return (<any>this) as (CompositeComponentViewModel<T> & T);
     }
 
-    createComponent(view: IComponentView) {
-        return new CompositeComponent(this, view);
+    createComponent(view: IComponentView): CompositeComponent<this> & CompositeComponentLayout<ComponentViewModel & T> {
+        const component: any = CompositeComponent.create(this, view);
+        return component;
     }
 }
 
@@ -41,20 +42,20 @@ export type CompositeComponentLayout<TViewModel extends ComponentViewModel> = {
 }
 
 export class CompositeComponent<TViewModel extends ComponentViewModel & CompositeViewModelTemplate<TViewModel>> extends Component {
-    //static create(viewModel: TViewModel, view: IComponentView) {
-    //    return new CompositeComponent(viewModel, view) as (CompositeComponent & CompositeComponentLayout<TViewModel>);
-    //}
+    static create<TViewModel extends ComponentViewModel & CompositeViewModelTemplate<TViewModel>>(viewModel: TViewModel, view: IComponentView) {
+        return new CompositeComponent(viewModel, view) as (CompositeComponent<TViewModel> & CompositeComponentLayout<TViewModel>);
+    }
 
     private readonly _components: Component[] = [];
     protected readonly composite: CompositeComponentLayout<TViewModel>;
 
-    constructor(viewModel: TViewModel, view: IComponentView) {
+    protected constructor(viewModel: TViewModel, view: IComponentView) {
         super(viewModel, view);
         const component: any = this;
-        for (const key in this.viewModel) {
-            const childView = Reflect.get(this.view, key);
+        for (const key in viewModel) {
+            const childView: any = Reflect.get(view, key);
             if (childView && childView instanceof ComponentView) {
-                const childViewModel = Reflect.get(this.viewModel, key);
+                const childViewModel: any = Reflect.get(viewModel, key);
                 if (childViewModel && childViewModel instanceof ComponentViewModel) {
                     const childComponent = childViewModel.createComponent(childView);
                     this.addComponent(childComponent);
@@ -62,7 +63,7 @@ export class CompositeComponent<TViewModel extends ComponentViewModel & Composit
                 }
             }
         }
-        this.composite = this as CompositeComponentLayout<TViewModel>;
+        this.composite = component as CompositeComponentLayout<TViewModel>;
     }
 
     protected addComponent<TComponentController extends Component>(c: TComponentController) {

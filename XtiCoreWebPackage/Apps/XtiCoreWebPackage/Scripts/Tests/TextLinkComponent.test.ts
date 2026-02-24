@@ -25,8 +25,10 @@ describe("Text Link Component", () => {
         );
         await mvvmPage.show();
         const element = document.getElementById(linkElementID) as HTMLAnchorElement;
+        expect(element?.innerText).toBe("Initial Text");
         expect(element?.href).toBe("https://example.com/1");
         expect(element?.title).toBe("Initial Title");
+        expect(element?.target).toBe("");
         linkComponent.text = "Updated Text";
         linkComponent.href = "https://example.com/2";
         linkComponent.title = "Updated Title";

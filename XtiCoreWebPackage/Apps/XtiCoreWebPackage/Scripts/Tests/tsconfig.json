@@ -1,5 +1,5 @@
 {
-  "compileOnSave": true,
+  "compileOnSave": false,
   "compilerOptions": {
     "lib": [ "ES2022", "dom" ],
     "module": "commonjs",
