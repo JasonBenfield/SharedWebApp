@@ -1,5 +1,5 @@
 import { DelayedAction } from "../DelayedAction";
-import { ContainerComponentView } from "./ContainerView";
+import { ContainerComponentView } from "./ContainerComponentView";
 
 export interface IMvvmOptions {
     debouncedViewModelChangedWait: number;
@@ -32,14 +32,13 @@ export class MvvmPage {
     }
 
     private constructor(
-        readonly view: RootView,
+        readonly view: ContainerComponentView,
         readonly options: MvvmOptions
     ) {
     }
 
     async show() {
-        this.view.addToDom(document.body);
-        await DelayedAction.delay(this.options.debouncedViewModelChangedWait + 1);
+        await DelayedAction.delay(this.options.debouncedViewModelChangedWait + 100);
         this.view.show();
     }
 }
@@ -48,7 +47,10 @@ class RootView extends ContainerComponentView {
     static readonly instance = new RootView();
 
     private constructor() {
-        super(() => document.createElement("div"));
+        const rootElement = document.body.appendChild(document.createElement("div"));
+        super(() => rootElement);
         this.setAttributes({ "id": "mvvmRoot", "style": "display: content;" });
+        this.hide();
+        this.addToDom(-1);
     }
 }

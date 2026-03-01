@@ -1,98 +1,125 @@
 import { ComponentViewModel } from "./ComponentViewModel";
+import { EventManager } from "./EventManager";
+
+type EventLayout<TViewModel extends ComponentViewModel> = {
+    arrayChanged: ObservableArrayChange<TViewModel>[];
+}
 
 export class ObservableArray<TViewModel extends ComponentViewModel> {
-    private static readonly arrayChangedEventType = "arrayChanged";
+    private readonly _eventManager = new EventManager<EventLayout<TViewModel>>({
+        arrayChanged: null
+    });
+    readonly when = this._eventManager.when;
 
     private readonly _values: TViewModel[] = [];
-    private readonly _eventTarget = new EventTarget();
-    private readonly _eventListeners: EventListener[] = [];
 
-    get values() { return this._values.map(vm => vm); }
+    get length() { return this._values.length; }
+
+    getValues() { return this._values.map(vm => vm); }
 
     push(...values: TViewModel[]) {
-        const length = this._values.length;
+        let i = this._values.length;
         this._values.push(...values);
-        const eventTarget = this._eventTarget;
-        if (eventTarget) {
-            const changes: ObservableArrayChange<TViewModel>[] = [];
-            for (let i = 0; i < values.length; i++) {
-                changes.push(
-                    new ObservableArrayChange(
-                        this,
-                        "add",
-                        length + i,
-                        values[i]
-                    )
-                )
-            }
-            eventTarget.dispatchEvent(
-                new CustomEvent(
-                    ObservableArray.arrayChangedEventType,
-                    {
-                        detail: changes
-                    }
+        const changes: ObservableArrayChange<TViewModel>[] = [];
+        for (const value of values) {
+            changes.push(
+                new ObservableArrayChange(
+                    this,
+                    "add",
+                    i,
+                    value,
+                    -1
                 )
             );
+            i++;
         }
+        this._eventManager.events.arrayChanged.invoke(changes);
     }
 
     splice(startIndex: number, deleteCount: number, ...values: TViewModel[]) {
         const deletedValues = this._values.splice(startIndex, deleteCount, ...values);
-        const length = this._values.length;
-        this._values.push(...values);
-        const eventTarget = this._eventTarget;
-        if (eventTarget) {
-            const changes: ObservableArrayChange<TViewModel>[] = [];
-            for (let i = startIndex; i < deleteCount; i++) {
+        const changes: ObservableArrayChange<TViewModel>[] = [];
+        let i = startIndex;
+        for (const value of deletedValues) {
+            changes.push(
+                new ObservableArrayChange(
+                    this,
+                    "remove",
+                    -1,
+                    value,
+                    i
+                )
+            );
+            i++;
+        }
+        i = startIndex;
+        for (const value of values) {
+            changes.push(
+                new ObservableArrayChange(
+                    this,
+                    "add",
+                    i,
+                    value,
+                    -1
+                )
+            );
+            i++;
+        }
+        this._eventManager.events.arrayChanged.invoke(changes);
+    }
+
+    replaceWith(...updatedValues: TViewModel[]) {
+        const changes: ObservableArrayChange<TViewModel>[] = [];
+        const originalValues = this._values.map(v => v);
+        for (let i = 0; i < updatedValues.length; i++) {
+            const updatedValue = updatedValues[i];
+            if (originalValues[i] !== updatedValue) {
+                const originalIndex = originalValues.indexOf(updatedValue);
+                if (originalIndex > -1) {
+                    changes.push(
+                        new ObservableArrayChange(
+                            this,
+                            "move",
+                            i,
+                            updatedValue,
+                            originalIndex
+                        )
+                    );
+                }
+                else {
+                    changes.push(
+                        new ObservableArrayChange(
+                            this,
+                            "insert",
+                            i,
+                            updatedValue,
+                            originalIndex
+                        )
+                    );
+                }
+            }
+        }
+        for (let i = 0; i < originalValues.length; i++) {
+            const originalValue = originalValues[i];
+            const updatedIndex = updatedValues.indexOf(originalValue);
+            if (updatedIndex < 0) {
                 changes.push(
                     new ObservableArrayChange(
                         this,
                         "remove",
-                        i,
-                        deletedValues[i]
+                        -1,
+                        originalValue,
+                        i
                     )
-                )
+                );
             }
-            for (let i = 0; i < values.length; i++) {
-                changes.push(
-                    new ObservableArrayChange(
-                        this,
-                        "add",
-                        length + i,
-                        values[i]
-                    )
-                )
-            }
-            eventTarget.dispatchEvent(
-                new CustomEvent(
-                    ObservableArray.arrayChangedEventType,
-                    {
-                        detail: changes
-                    }
-                )
-            );
         }
-    }
-
-
-    registerArrayChangedEvent(eventListener: EventListener) {
-        this._eventListeners.push(eventListener);
-        this._eventTarget.addEventListener(ObservableArray.arrayChangedEventType, eventListener);
-    }
-
-    unregisterArrayChangedEvent(eventListener: EventListener) {
-        this._eventTarget.removeEventListener(ObservableArray.arrayChangedEventType, eventListener);
-        const index = this._eventListeners.indexOf(eventListener);
-        if (index > -1) {
-            this._eventListeners.splice(index, 1);
-        }
+        this._values.splice(0, this._values.length, ...updatedValues);
+        this._eventManager.events.arrayChanged.invoke(changes);
     }
 
     dispose() {
-        for (const eventListener of this._eventListeners) {
-            this._eventTarget.removeEventListener(ObservableArray.arrayChangedEventType, eventListener);
-        }
-        this._eventListeners.splice(0, this._eventListeners.length);
+        this._eventManager.dispose();
         for (const value of this._values) {
             value.dispose();
         }
@@ -103,9 +130,10 @@ export class ObservableArray<TViewModel extends ComponentViewModel> {
 export class ObservableArrayChange<TViewModel extends ComponentViewModel> {
     constructor(
         readonly target: any,
-        readonly action: "add" | "remove",
+        readonly action: "add" | "insert" | "remove" | "move",
         readonly index: number,
-        readonly item: TViewModel
+        readonly item: TViewModel,
+        readonly originalIndex: number
     ) {
     }
 }

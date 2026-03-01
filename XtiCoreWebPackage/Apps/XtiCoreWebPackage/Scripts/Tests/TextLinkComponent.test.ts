@@ -1,21 +1,33 @@
 
-import { afterAll, describe, expect, test } from "@jest/globals";
+import { afterEach, beforeEach, describe, expect, test } from "@jest/globals";
 import { DelayedAction } from "../Lib/DelayedAction";
+import { ContainerComponent } from "../Lib/MVVM/ContainerComponent";
+import { ContainerComponentView } from "../Lib/MVVM/ContainerComponentView";
 import { MvvmOptions, MvvmPage } from "../Lib/MVVM/MvvmPage";
 import { TextLinkComponent, TextLinkComponentView, TextLinkComponentViewModel } from "../Lib/MVVM/TextLinkComponent";
+import { ComponentViewModel } from "../Lib/MVVM/ComponentViewModel";
 
 const linkElementID = "textLinkEl";
 const mvvmPage = MvvmPage.create(new MvvmOptions({
     debouncedViewModelChangedWait: 1
 }));
 
-afterAll(() => {
+let containerView: ContainerComponentView | null = null;
+let containerComponent: ContainerComponent | null = null;
+
+beforeEach(() => {
+    containerView = mvvmPage.view.addChildView(ContainerComponentView.block());
+    containerComponent = new ContainerComponent(new ComponentViewModel(), containerView);
+});
+
+afterEach(() => {
+    containerComponent?.dispose();
     mvvmPage.view.removeAllChildViews();
 });
 
 describe("Text Link Component", () => {
     test("sets element attributes when view model changes", async () => {
-        const { linkComponent } = createLinkComponent(
+        const { component } = createLinkComponent(
             new TextLinkComponentViewModel({
                 text: "Initial Text",
                 href: "https://example.com/1",
@@ -25,30 +37,32 @@ describe("Text Link Component", () => {
         );
         await mvvmPage.show();
         const element = document.getElementById(linkElementID) as HTMLAnchorElement;
+        expect(element?.tagName).toBe("A");
         expect(element?.innerText).toBe("Initial Text");
         expect(element?.href).toBe("https://example.com/1");
         expect(element?.title).toBe("Initial Title");
         expect(element?.target).toBe("");
-        linkComponent.text = "Updated Text";
-        linkComponent.href = "https://example.com/2";
-        linkComponent.title = "Updated Title";
-        linkComponent.setTargetToBlank();
+        component.text = "Updated Text";
+        component.href = "https://example.com/2";
+        component.title = "Updated Title";
+        component.setTargetToBlank();
         await waitForChangeNotifications();
         expect(element?.innerText).toBe("Updated Text");
         expect(element?.href).toBe("https://example.com/2");
         expect(element?.title).toBe("Updated Title");
         expect(element?.target).toBe("_blank");
-        linkComponent.dispose();
+        component.dispose();
     });
 });
 
 function createLinkComponent(linkViewModel = new TextLinkComponentViewModel()) {
-    const linkView = mvvmPage.view.addChildView(new TextLinkComponentView());
+    const linkView = containerView!.addChildView(new TextLinkComponentView());
     linkView.setID(linkElementID);
+    const component = containerComponent!.addComponent(new TextLinkComponent(linkViewModel, linkView));
     return {
-        linkViewModel: linkViewModel,
-        linkView: linkView,
-        linkComponent: linkViewModel.createComponent(linkView)
+        viewModel: linkViewModel,
+        view: linkView,
+        component: component
     };
 }
 

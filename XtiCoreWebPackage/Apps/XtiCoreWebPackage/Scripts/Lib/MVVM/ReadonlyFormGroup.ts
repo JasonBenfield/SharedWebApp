@@ -1,18 +1,22 @@
-import { IComponentView } from "./ComponentView";
+import { IComponentFactory } from "./ComponentFactory";
+import { ComponentView } from "./ComponentView";
 import { ComponentViewModel } from "./ComponentViewModel";
-import { CompositeComponent, CompositeComponentView } from "./CompositeComponent";
-import { ITextComponentView, TextComponentView, TextComponentViewModel } from "./TextComponent";
+import { CompositeComponent, CompositeComponentLayout, CompositeComponentView, CompositeComponentViewMixin } from "./CompositeComponent";
+import { StyleableComponentViewMixin } from "./StyleableComponentView";
+import { BaseTextComponentView, TextComponentView, TextComponentViewModel } from "./TextComponent";
 
 export interface IReadonlyFormGroupView {
-    readonly caption: ITextComponentView;
-    readonly value: ITextComponentView;
+    readonly caption: BaseTextComponentView;
+    readonly value: BaseTextComponentView;
 }
+
+export type BaseReadonlyFormGroupView = ComponentView & IReadonlyFormGroupView;
 
 function createLayout() {
     return {
         captionContainer: CompositeComponentView.block()
             .compose({
-                caption: TextComponentView.block()
+                caption: TextComponentView.label()
             }),
         valueContainer: CompositeComponentView.block()
             .compose({
@@ -29,7 +33,7 @@ function toPublicLayout(layout: ReturnType<typeof createLayout>) {
     return formGroup;
 }
 
-export class ReadonlyFormGroupView extends CompositeComponentView {
+export class ReadonlyFormGroupView extends CompositeComponentViewMixin(StyleableComponentViewMixin(ComponentView)) {
     static create() {
         return new ReadonlyFormGroupView().compose();
     }
@@ -58,22 +62,31 @@ export class ReadonlyFormGroupViewModel extends ComponentViewModel implements IR
         this.caption = new TextComponentViewModel();
         this.value = new TextComponentViewModel();
     }
-
-    createComponent(view: IComponentView): ReadonlyFormGroup {
-        return new ReadonlyFormGroup(this, view);
-    }
 }
 
 export class ReadonlyFormGroup extends CompositeComponent<ComponentViewModel & IReadonlyFormGroupViewModel> {
-    constructor(viewModel: ComponentViewModel & IReadonlyFormGroupViewModel, view: IComponentView) {
+    static create(viewModel: ComponentViewModel & IReadonlyFormGroupViewModel, view: BaseReadonlyFormGroupView) {
+        return new ReadonlyFormGroup(viewModel, view) as ReadonlyFormGroup & CompositeComponentLayout<ComponentViewModel & IReadonlyFormGroupViewModel>;
+    }
+
+    private readonly composition: CompositeComponentLayout<ComponentViewModel & IReadonlyFormGroupViewModel>;
+
+    constructor(viewModel: ComponentViewModel & IReadonlyFormGroupViewModel, view: BaseReadonlyFormGroupView) {
         super(viewModel, view);
+        this.composition = (<any>this) as CompositeComponentLayout<ComponentViewModel & IReadonlyFormGroupViewModel>;
     }
 
     setCaption(caption: string) {
-        this.composite.caption.text = caption;
+        this.composition.caption.text = caption;
     }
 
     setValue(value: string) {
-        this.composite.value.text = value;
+        this.composition.value.text = value;
+    }
+}
+
+export class ReadonlyFormGroupComponentFactory implements IComponentFactory {
+    create(viewModel: ComponentViewModel & IReadonlyFormGroupViewModel, view: BaseReadonlyFormGroupView) {
+        return new ReadonlyFormGroup(viewModel, view);
     }
 }

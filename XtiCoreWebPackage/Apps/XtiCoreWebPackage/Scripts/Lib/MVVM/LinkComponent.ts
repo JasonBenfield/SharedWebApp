@@ -1,9 +1,10 @@
 import { Component, IComponentChangeHandler } from "./Component";
-import { ComponentView, IComponentView } from "./ComponentView";
+import { IComponentFactory } from "./ComponentFactory";
+import { ComponentView } from "./ComponentView";
 import { ComponentViewModel, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
 import { CompositeComponentViewMixin } from "./CompositeComponent";
 import { IStyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
-import { TitleChangeHandler, TitleViewModelMixin } from "./TextComponent";
+import { TitleChangeHandler, TitleComponentMixin, TitleViewModelMixin } from "./TextComponent";
 import { Constructor, ITitleView, ITitleViewModel } from "./Types";
 
 export type LinkTargetType = "" | "_blank";
@@ -16,7 +17,7 @@ export interface ILinkViewModel {
     set target(target: string);
 }
 
-export type ILinkComponentViewModel = ComponentViewModel & ILinkViewModel & ITitleViewModel;
+export type BaseLinkComponentViewModel = ComponentViewModel & ILinkViewModel & ITitleViewModel;
 
 export function LinkViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T) {
     return class extends Base implements ILinkViewModel {
@@ -35,7 +36,7 @@ export class LinkComponentViewModel extends LinkViewModelMixin(TitleViewModelMix
         super(initializer);
     }
 
-    createComponent(view: ILinkComponentView) {
+    createComponent(view: BaseLinkComponentView) {
         return new LinkComponent(this, view);
     }
 }
@@ -57,7 +58,7 @@ export function LinkViewMixin<T extends Constructor<IStyleableComponentView>>(Ba
     };
 }
 
-export type ILinkComponentView = IComponentView & ITitleView & ILinkView;
+export type BaseLinkComponentView = ComponentView & ITitleView & ILinkView;
 
 export class LinkComponentView extends CompositeComponentViewMixin(LinkViewMixin(StyleableComponentViewMixin(ComponentView))) {
     constructor() {
@@ -69,7 +70,7 @@ export class LinkComponentChangeHandler implements IComponentChangeHandler {
     constructor(private readonly view: ILinkView) {
     }
 
-    handleChanges(changes: ObservableChanges<ComponentViewModel & ILinkComponentViewModel>) {
+    handleChanges(changes: ObservableChanges<ComponentViewModel & BaseLinkComponentViewModel>) {
         if (changes.href) {
             this.view.setHref(changes.href.value);
         }
@@ -80,10 +81,32 @@ export class LinkComponentChangeHandler implements IComponentChangeHandler {
 
 }
 
-export class LinkComponent extends Component {
+export function LinkComponentMixin<T extends Constructor<Component>>(Base: T) {
+    return class extends Base {
+        declare protected readonly viewModel: BaseLinkComponentViewModel;
+
+        get href() { return this.viewModel.href; }
+
+        set href(href: string) {
+            this.viewModel.href = href;
+        }
+
+        get isTargetBlank() { return this.viewModel.target === "_blank"; }
+
+        setTargetToBlank() {
+            this.viewModel.target = "_blank";
+        }
+
+        setTargetToDefault() {
+            this.viewModel.target = "";
+        }
+    };
+}
+
+export class LinkComponent extends LinkComponentMixin(TitleComponentMixin(Component)) {
     constructor(
-        protected readonly viewModel: ILinkComponentViewModel,
-        protected readonly view: ILinkComponentView
+        protected readonly viewModel: BaseLinkComponentViewModel,
+        protected readonly view: BaseLinkComponentView
     ) {
         super(
             viewModel,
@@ -92,26 +115,10 @@ export class LinkComponent extends Component {
             new LinkComponentChangeHandler(view)
         );
     }
+}
 
-    get href() { return this.viewModel.href; }
-
-    set href(href: string) {
-        this.viewModel.href = href;
-    }
-
-    get title() { return this.viewModel.title; }
-
-    set title(title: string) {
-        this.viewModel.title = title;
-    }
-
-    get isTargetBlank() { return this.viewModel.target === "_blank"; }
-
-    setTargetToBlank() {
-        this.viewModel.target = "_blank";
-    }
-
-    setTargetToDefault() {
-        this.viewModel.target = "";
+export class LinkComponentFactory implements IComponentFactory {
+    create(viewModel: BaseLinkComponentViewModel, view: BaseLinkComponentView) {
+        return new LinkComponent(viewModel, view);
     }
 }

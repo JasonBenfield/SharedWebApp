@@ -5,8 +5,8 @@ export function StyleableComponentViewMixin<T extends Constructor<ComponentView>
     return class extends Base implements IStyleableComponentView {
         private readonly _attributes: { [name: string]: string } = {};
 
-        addToDom(parent: HTMLElement) {
-            super.addToDom(parent);
+        protected addToDom(index: number) {
+            super.addToDom(index);
             const element = this.element;
             if (element) {
                 for (const key in this._attributes) {

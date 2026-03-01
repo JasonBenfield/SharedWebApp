@@ -1,19 +1,5 @@
-import { EventManager } from "./EventManager";
 
-type EventLayout = {
-    postAddElement: ComponentViewEventArgs;
-    preRemoveElement: ComponentViewEventArgs;
-}
-
-export interface IComponentView {
-    show(): void;
-    hide(): void;
-    dispose(): void;
-    addToDom(parent: HTMLElement): void;
-    removeFromDom(): void;
-}
-
-export class ComponentView implements IComponentView {
+export class ComponentView {
     static block() {
         return new ComponentView("div");
     }
@@ -30,14 +16,10 @@ export class ComponentView implements IComponentView {
         return new ComponentView(`h${size}`);
     }
 
-    private readonly _eventManager = new EventManager<EventLayout>({
-        postAddElement: null,
-        preRemoveElement: null
-    });
-    readonly when = this._eventManager.when;
     private readonly createElement: () => HTMLElement;
     private _element: HTMLElement | null = null;
-    private _parent: HTMLElement | null = null;
+    private _parentView: ComponentView | null = null;
+    private readonly _views: ComponentView[] = [];
     private _isVisible = true;
 
     constructor();
@@ -57,24 +39,21 @@ export class ComponentView implements IComponentView {
 
     get element() { return this._element; }
 
-    get parent() { return this._parent; }
+    get parentView() { return this._parentView; }
 
     get isVisible() { return this._isVisible; }
 
     show() {
         this._isVisible = true;
-        if (!this.element) {
-            const parent = this._parent;
-            if (parent) {
-                this.addToDom(parent);
-            }
-        }
+        const parentView = this._parentView;
+        const index = parentView ? parentView._views.indexOf(this) : -1;
+        this.addToDom(index);
     }
 
     hide() {
         const element = this.element;
         if (element) {
-            const parent = this._parent;
+            const parent = this._parentView;
             if (parent) {
                 this.removeFromDom();
             }
@@ -82,41 +61,152 @@ export class ComponentView implements IComponentView {
         this._isVisible = false;
     }
 
-    addToDom(parent: HTMLElement) {
-        this._parent = parent;
+    protected addChildView<T extends ComponentView>(view: T) {
+        if (Object.is(this, view)) {
+            throw new Error("Cannot add view to itself");
+        }
+        return this.insertChildView<T>(view, -1);
+    }
+
+    protected insertChildView<T extends ComponentView>(view: T, index: number) {
+        if (Object.is(this, view)) {
+            throw new Error("Cannot insert view into itself");
+        }
+        view._parentView = this;
+        this._views.push(view);
+        view.addToDom(index);
+        return view;
+    }
+
+    protected removeAllChildViews() {
+        for (const view of this._views) {
+            view.dispose();
+        }
+        this._views.splice(0, this._views.length);
+    }
+
+    protected removeChildView(view: ComponentView) {
+        const views = this._views;
+        if (views) {
+            const index = this._views.indexOf(view);
+            if (index > -1) {
+                this._views.splice(index, 1);
+            }
+        }
+        view.dispose();
+    }
+
+    protected addToDom(index: number) {
         if (this._isVisible) {
-            const element = this._element || this.createElement();
-            this._element = element;
-            parent.appendChild(element);
-            this._eventManager.events.postAddElement.invoke({
-                element: element
-            });
+            let element = this._element;
+            if (!element) {
+                this._element = this.createElement();
+                element = this._element;
+            }
+            const parentElement = this._parentView?.element;
+            if (parentElement) {
+                if (this._parentView?.constructor.name === "ListComponentView") {
+                    console.log(`before addToDom: ${this._parentView?.element?.outerHTML}`);
+                }
+                if (index >= 0) {
+                    const refElement = this.getReferenceElement(index);
+                    if (refElement && refElement !== element) {
+                        console.log(`insertBefore element: ${element.id}, parentElement: ${parentElement.id}, refElement: ${refElement.id}, index: ${index}`);
+                        element.before(refElement);
+                    }
+                    else {
+                        console.log(`appendChild element: ${element.id}, parentElement: ${parentElement.id}, index: ${index}`);
+                        parentElement.appendChild(element);
+                    }
+                }
+                else {
+                    console.log(`appendChild element: ${element.id}, parentElement: ${parentElement.id}, index: ${index}`);
+                    parentElement.appendChild(element);
+                }
+                if (this._parentView?.constructor.name === "ListComponentView") {
+                    console.log(`after addToDom: ${this._parentView?.element?.outerHTML}`);
+                }
+            }
+            let childIndex = 0;
+            for (const view of this._views) {
+                if (view.isVisible) {
+                    view.addToDom(childIndex);
+                    childIndex++;
+                }
+            }
         }
     }
 
-    removeFromDom() {
+    private getReferenceElement(index: number) {
+        let refElement: HTMLElement | null = null;
+        const parentView = this._parentView;
+        if (parentView) {
+            for (let i = index; i < parentView._views.length; i++) {
+                refElement = parentView._views[i].element;
+                if (refElement) {
+                    break;
+                }
+            }
+        }
+        return refElement;
+    }
+
+    moveTo(toIndex: number) {
+        const parentView = this._parentView;
+        if (parentView) {
+            parentView.moveChildView(this, toIndex);
+        }
+    }
+
+    private moveChildView(view: ComponentView, toIndex: number) {
+        const index = this._views.indexOf(view);
+        if (index > -1 && index !== toIndex) {
+            this._views.splice(index, 1);
+            this._views.splice(toIndex > index ? toIndex - 1 : toIndex, 0, view);
+            view.moveElement(toIndex);
+        }
+    }
+
+    private moveElement(toIndex: number) {
+        if (this._isVisible) {
+            const element = this._element;
+            const parentElement = this._parentView?.element;
+            if (element && parentElement) {
+                const refElement = this.getReferenceElement(toIndex);
+                if (refElement !== element) {
+                    if (refElement) {
+                        element.before(refElement);
+                    }
+                    else {
+                        parentElement.appendChild(element);
+                    }
+                }
+            }
+        }
+    }
+
+    private removeFromDom() {
         this._removeElement();
     }
 
+    private _isDisposed = false;
+
     dispose() {
+        for (const view of this._views) {
+            view.dispose();
+        }
+        this._views.splice(0, this._views.length);
         this._removeElement();
-        this._eventManager.dispose();
         this._isVisible = false;
-        this._parent = null;
+        this._parentView = null;
+        this._isDisposed = true;
     }
 
     private _removeElement() {
         const element = this._element;
-        if (element) {
-            this._eventManager.events.preRemoveElement.invoke({
-                element: element
-            });
+        if (element && element.parentElement) {
             element.remove();
         }
         this._element = null;
     }
 }
-
-export interface ComponentViewEventArgs {
-    element: HTMLElement;
-} 

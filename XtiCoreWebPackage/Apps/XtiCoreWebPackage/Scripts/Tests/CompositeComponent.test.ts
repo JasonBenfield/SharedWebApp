@@ -1,9 +1,11 @@
 
-import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
+import { afterEach, beforeEach, describe, expect, test } from "@jest/globals";
 import { DelayedAction } from "../Lib/DelayedAction";
 import { ComponentView } from "../Lib/MVVM/ComponentView";
 import { ComponentViewModel } from "../Lib/MVVM/ComponentViewModel";
-import { CompositeComponentView, CompositeComponentViewModel } from "../Lib/MVVM/CompositeComponent";
+import { CompositeComponent, CompositeComponentView, CompositeComponentViewModel } from "../Lib/MVVM/CompositeComponent";
+import { ContainerComponent } from "../Lib/MVVM/ContainerComponent";
+import { ContainerComponentView } from "../Lib/MVVM/ContainerComponentView";
 import { MvvmOptions, MvvmPage } from "../Lib/MVVM/MvvmPage";
 
 const mvvmPage = MvvmPage.create(new MvvmOptions({
@@ -22,11 +24,16 @@ const level1_2ElementID = "level1_2El";
 const level2_1ElementID = "level2_1El";
 const level2_2ElementID = "level2_2El";
 
-beforeAll(() => {
-    mvvmPage.view.removeAllChildViews();
+let containerView: ContainerComponentView | null = null;
+let containerComponent: ContainerComponent | null = null;
+
+beforeEach(() => {
+    containerView = mvvmPage.view.addChildView(ContainerComponentView.block());
+    containerComponent = new ContainerComponent(new ComponentViewModel(), containerView);
 });
 
-afterAll(() => {
+afterEach(() => {
+    containerComponent?.dispose();
     mvvmPage.view.removeAllChildViews();
 });
 
@@ -48,11 +55,10 @@ describe("Container Component", () => {
         component.dispose();
     });
     test("should not add to dom when not visible", async () => {
-        const { component } = createComponent({ isVisible: false });
+        createComponent({ isVisible: false });
         await mvvmPage.show();
         const containerEl = document.getElementById(containerElementID);
         expect(containerEl).toBeNull();
-        component.dispose();
     });
     test("should show/hide child views", async () => {
         const { component } = createComponent();
@@ -82,22 +88,10 @@ describe("Container Component", () => {
         await waitForChangeNotifications();
         expect(document.getElementById(level1_1ElementID)).not.toBeNull();
         expect(document.getElementById(level2_1ElementID)).not.toBeNull();
-
-        component.dispose();
     });
 });
 
 function createComponent(options: { isVisible: boolean } = { isVisible: true }) {
-    const view = new CompositeComponentView(() => createDiv(containerElementID))
-        .compose({
-            level1_1: new CompositeComponentView(() => createDiv(level1_1ElementID))
-                .compose({
-                    level2_1: new ComponentView(() => createDiv(level2_1ElementID)),
-                    level2_2: new ComponentView(() => createDiv(level2_2ElementID))
-                }),
-            level1_2: new ComponentView(() => createDiv(level1_2ElementID))
-        });
-    mvvmPage.view.addChildView(view);
     const viewModel = CompositeComponentViewModel.create({
         level1_1: CompositeComponentViewModel.create({
             level2_1: new ComponentViewModel(),
@@ -105,7 +99,18 @@ function createComponent(options: { isVisible: boolean } = { isVisible: true }) 
         }),
         level1_2: new ComponentViewModel()
     });
-    const component = viewModel.createComponent(view);
+    const view = containerView!.addChildView(
+        new CompositeComponentView(() => createDiv(containerElementID))
+            .compose({
+                level1_1: new CompositeComponentView(() => createDiv(level1_1ElementID))
+                    .compose({
+                        level2_1: new ComponentView(() => createDiv(level2_1ElementID)),
+                        level2_2: new ComponentView(() => createDiv(level2_2ElementID))
+                    }),
+                level1_2: new ComponentView(() => createDiv(level1_2ElementID))
+            })
+    );
+    const component = containerComponent!.addComponent(CompositeComponent.createComposite(viewModel, view));
     if (options.isVisible) {
         component.show();
     }
@@ -120,5 +125,5 @@ function createComponent(options: { isVisible: boolean } = { isVisible: true }) 
 }
 
 function waitForChangeNotifications() {
-    return DelayedAction.delay(5);
+    return DelayedAction.delay(100);
 }

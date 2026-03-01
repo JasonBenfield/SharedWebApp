@@ -23,14 +23,19 @@
 
 
 	<ItemGroup>
+	  <None Remove="Scripts\Lib\MVVM\CompositeComponent.js" />
+	</ItemGroup>
+
+
+	<ItemGroup>
 	  <TypeScriptCompile Remove="Scripts\Internal\MVVM\MainPage.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\DebouncedAction.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\DelayedAction.ts" />
-	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\AttributeManager.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\Component.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\ComponentView.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\ComponentViewModel.ts" />
-	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\ContainerView.ts" />
+	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\ContainerComponent.ts" />
+	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\ContainerComponentView.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\LinkComponent.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\MvvmPage.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\ObservableArray.ts" />

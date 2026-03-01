@@ -1,8 +1,11 @@
-import { ChildViewManager } from "./ChildViewManager";
 import { Component } from "./Component";
-import { ComponentView, IComponentView } from "./ComponentView";
+import { IComponentFactory } from "./ComponentFactory";
+import { ComponentView } from "./ComponentView";
 import { ComponentViewModel } from "./ComponentViewModel";
+import { BaseLinkComponentView, LinkComponent, LinkComponentViewModel } from "./LinkComponent";
 import { StyleableComponentViewMixin } from "./StyleableComponentView";
+import { BaseTextComponentView, TextComponent, TextComponentViewModel } from "./TextComponent";
+import { BaseTextLinkComponentView, TextLinkComponent, TextLinkComponentViewModel } from "./TextLinkComponent";
 import { Constructor } from "./Types";
 
 export type CompositeViewModelProperties<T> = {
@@ -19,7 +22,7 @@ export class CompositeComponentViewModel<T extends CompositeViewModelTemplate<T>
         return vm as CompositeComponentViewModel<T> & CompositeViewModelTemplate<T>;
     }
 
-    constructor(layout: T) {
+    protected constructor(layout: T) {
         super();
         const vm: any = this;
         for (const key in layout) {
@@ -30,54 +33,47 @@ export class CompositeComponentViewModel<T extends CompositeViewModelTemplate<T>
         }
         return (<any>this) as (CompositeComponentViewModel<T> & T);
     }
-
-    createComponent(view: IComponentView): CompositeComponent<this> & CompositeComponentLayout<ComponentViewModel & T> {
-        const component: any = CompositeComponent.create(this, view);
-        return component;
-    }
 }
 
 export type CompositeComponentLayout<TViewModel extends ComponentViewModel> = {
-    [K in keyof TViewModel]: TViewModel[K] extends ComponentViewModel ? ReturnType<TViewModel[K]["createComponent"]> : Component
+    [K in keyof TViewModel]: TViewModel[K] extends TextLinkComponentViewModel ? TextLinkComponent :
+    TViewModel[K] extends TextComponentViewModel ? TextComponent :
+    TViewModel[K] extends CompositeComponentViewModel<TViewModel[K]> ? CompositeComponent<TViewModel[K]> & CompositeComponentLayout<TViewModel[K]> :
+    Component;
 }
 
-export class CompositeComponent<TViewModel extends ComponentViewModel & CompositeViewModelTemplate<TViewModel>> extends Component {
-    static create<TViewModel extends ComponentViewModel & CompositeViewModelTemplate<TViewModel>>(viewModel: TViewModel, view: IComponentView) {
-        return new CompositeComponent(viewModel, view) as (CompositeComponent<TViewModel> & CompositeComponentLayout<TViewModel>);
+export class CompositeComponentFactory implements IComponentFactory {
+    create<TViewModel extends ComponentViewModel>(viewModel: TViewModel, view: ComponentView): Component {
+        return viewModel instanceof TextLinkComponentViewModel ? new TextLinkComponent(viewModel, view as BaseTextLinkComponentView) :
+            viewModel instanceof TextComponentViewModel ? new TextComponent(viewModel, view as BaseTextComponentView) :
+                viewModel instanceof LinkComponentViewModel ? new LinkComponent(viewModel, view as BaseLinkComponentView) :
+                    viewModel instanceof CompositeComponentViewModel ? CompositeComponent.createComposite(viewModel, view, this) :
+                        new Component(viewModel, view);
     }
 
-    private readonly _components: Component[] = [];
-    protected readonly composite: CompositeComponentLayout<TViewModel>;
+}
+export class CompositeComponent<TViewModel extends ComponentViewModel & CompositeViewModelTemplate<TViewModel>> extends Component {
+    static createComposite<TViewModel extends ComponentViewModel & CompositeViewModelTemplate<TViewModel>>(viewModel: TViewModel, view: ComponentView, componentFactory: IComponentFactory = new CompositeComponentFactory()) {
+        return new CompositeComponent(viewModel, view, componentFactory) as CompositeComponent<TViewModel> & CompositeComponentLayout<TViewModel>;
+    }
 
-    protected constructor(viewModel: TViewModel, view: IComponentView) {
+    protected constructor(viewModel: TViewModel, view: ComponentView, componentFactory: IComponentFactory = new CompositeComponentFactory()) {
         super(viewModel, view);
         const component: any = this;
-        for (const key in viewModel) {
-            const childView: any = Reflect.get(view, key);
+        const factory = componentFactory;
+        for (const key in this.viewModel) {
+            const childView: any = Reflect.get(this.view, key);
             if (childView && childView instanceof ComponentView) {
-                const childViewModel: any = Reflect.get(viewModel, key);
+                const childViewModel: any = Reflect.get(this.viewModel, key);
                 if (childViewModel && childViewModel instanceof ComponentViewModel) {
-                    const childComponent = childViewModel.createComponent(childView);
+                    const childComponent = factory.create(childViewModel, childView);
                     this.addComponent(childComponent);
                     component[key] = childComponent;
                 }
             }
         }
-        this.composite = component as CompositeComponentLayout<TViewModel>;
     }
 
-    protected addComponent<TComponentController extends Component>(c: TComponentController) {
-        this._components.push(c);
-        return c;
-    }
-
-    dispose() {
-        for (const component of this._components) {
-            component.dispose();
-        }
-        this._components.splice(0, this._components.length);
-        super.dispose();
-    }
 }
 
 export interface ICompositeComponentView {
@@ -86,15 +82,13 @@ export interface ICompositeComponentView {
 
 export function CompositeComponentViewMixin<T extends Constructor<ComponentView>>(Base: T) {
     return class extends Base implements ICompositeComponentView {
-        private readonly _childViewManager = new ChildViewManager();
-
         compose<TLayout>(layout: TLayout): this & TLayout;
         compose<TLayout, TPublicLayout>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout): this & TPublicLayout;
         compose<TLayout, TPublicLayout>(layout: TLayout, toPublicLayout?: (l: TLayout) => TPublicLayout) {
             for (const key in layout) {
                 const childView = layout[key];
                 if (childView && childView instanceof ComponentView) {
-                    this._childViewManager.addChildView(childView);
+                    this.addChildView(childView);
                 }
             }
             const view: any = this;
@@ -104,25 +98,6 @@ export function CompositeComponentViewMixin<T extends Constructor<ComponentView>
                 view[key] = childView;
             }
             return this;
-        }
-
-        addToDom(parent: HTMLElement) {
-            super.addToDom(parent);
-            this._childViewManager.addChildViewsToDom(this.element);
-        }
-
-        removeFromDom() {
-            this._childViewManager.removeChildViewsFromDom();
-            super.removeFromDom();
-        }
-
-        removeAllChildViews() {
-            this._childViewManager.removeAllChildViews();
-        }
-
-        dispose() {
-            this._childViewManager.dispose();
-            super.dispose();
         }
     };
 }

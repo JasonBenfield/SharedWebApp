@@ -1,5 +1,3 @@
-import { Component } from "./Component";
-import { IComponentView } from "./ComponentView";
 import { EventManager } from "./EventManager";
 import { ObservableArray } from "./ObservableArray";
 
@@ -8,10 +6,6 @@ type EventLayout = {
 }
 
 export type ComponentViewModelInitializer<TViewModel extends ComponentViewModel> = Partial<ComponentViewModelData<TViewModel>>;
-
-export interface IComponentFactory {
-    create(viewModel: ComponentViewModel, view: IComponentView): Component;
-}
 
 export class ComponentViewModel {
 
@@ -59,10 +53,6 @@ export class ComponentViewModel {
     get isVisible() { return this._isVisible; }
 
     set isVisible(isVisible: boolean) { this._isVisible = isVisible; }
-
-    createComponent(view: IComponentView) {
-        return new Component(this, view);
-    }
 
     dispose() {
         this._eventManager.dispose();

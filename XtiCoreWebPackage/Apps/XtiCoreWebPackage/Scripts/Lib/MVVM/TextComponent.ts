@@ -1,6 +1,7 @@
 import { Component, IComponentChangeHandler } from "./Component";
-import { ComponentView, IComponentView } from "./ComponentView";
-import { ComponentViewModel, ComponentViewModelInitializer, IComponentFactory, ObservableChanges } from "./ComponentViewModel";
+import { IComponentFactory } from "./ComponentFactory";
+import { ComponentView } from "./ComponentView";
+import { ComponentViewModel, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
 import { IStyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
 import { Constructor, ITitleView, ITitleViewModel } from "./Types";
 
@@ -9,7 +10,7 @@ export interface ITextViewModel {
     set text(text: string);
 }
 
-export type ITextComponentView = IComponentView & ITextView & ITitleView;
+export type BaseTextComponentView = ComponentView & ITextView & ITitleView;
 
 export function TitleViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T) {
     return class extends Base implements ITitleViewModel {
@@ -27,12 +28,14 @@ export function TextViewModelMixin<T extends Constructor<ComponentViewModel>>(Ba
     };
 }
 
+export type BaseTextComponentViewModel = ComponentViewModel & ITextViewModel & ITitleViewModel;
+
 export class TextComponentViewModel extends TextViewModelMixin(TitleViewModelMixin(ComponentViewModel)) implements ITextViewModel {
     constructor(initializer: ComponentViewModelInitializer<TextComponentViewModel> = {}) {
         super(initializer);
     }
 
-    createComponent(view: ITextComponentView) {
+    createComponent(view: BaseTextComponentView) {
         return new TextComponent(this, view);
     }
 }
@@ -54,8 +57,8 @@ export function TextViewMixin<T extends Constructor<ComponentView>>(Base: T) {
             this.updateElementText();
         }
 
-        addToDom(parent: HTMLElement) {
-            super.addToDom(parent);
+        protected addToDom(index: number) {
+            super.addToDom(index);
             this.updateElementText();
         }
 
@@ -92,7 +95,7 @@ export class TextComponentView extends TextViewMixin(TitleViewMixin(StyleableCom
 }
 
 export class TextChangeHandler implements IComponentChangeHandler {
-    constructor(private readonly view: ITextComponentView) {
+    constructor(private readonly view: BaseTextComponentView) {
     }
 
     handleChanges(changes: ObservableChanges<ComponentViewModel & ITextViewModel>) {
@@ -103,7 +106,7 @@ export class TextChangeHandler implements IComponentChangeHandler {
 }
 
 export class TitleChangeHandler implements IComponentChangeHandler {
-    constructor(private readonly view: IComponentView & ITitleView) {
+    constructor(private readonly view: ComponentView & ITitleView) {
     }
 
     handleChanges(changes: ObservableChanges<ComponentViewModel & ITitleViewModel>) {
@@ -113,8 +116,32 @@ export class TitleChangeHandler implements IComponentChangeHandler {
     }
 }
 
-export class TextComponent extends Component {
-    constructor(protected readonly viewModel: TextComponentViewModel, protected readonly view: ITextComponentView) {
+export function TitleComponentMixin<T extends Constructor<Component>>(Base: T) {
+    return class extends Base {
+        declare protected readonly viewModel: ComponentViewModel & ITitleViewModel;
+
+        get title() { return this.viewModel.title; }
+
+        set title(title: string) {
+            this.viewModel.title = title;
+        }
+    };
+}
+
+export function TextComponentMixin<T extends Constructor<Component>>(Base: T) {
+    return class extends Base {
+        declare protected readonly viewModel: ComponentViewModel & ITextViewModel;
+
+        get text() { return this.viewModel.text; }
+
+        set text(text: string) {
+            this.viewModel.text = text;
+        }
+    };
+}
+
+export class TextComponent extends TextComponentMixin(TitleComponentMixin(Component)) {
+    constructor(protected readonly viewModel: BaseTextComponentViewModel, protected readonly view: BaseTextComponentView) {
         super(
             viewModel,
             view,
@@ -122,16 +149,10 @@ export class TextComponent extends Component {
             new TextChangeHandler(view)
         );
     }
+}
 
-    get text() { return this.viewModel.text; }
-
-    set text(text: string) {
-        this.viewModel.text = text;
-    }
-
-    get title() { return this.viewModel.title; }
-
-    set title(title: string) {
-        this.viewModel.title = title;
+export class TextComponentFactory implements IComponentFactory {
+    create(viewModel: BaseTextComponentViewModel, view: BaseTextComponentView) {
+        return new TextComponent(viewModel, view);
     }
 }
