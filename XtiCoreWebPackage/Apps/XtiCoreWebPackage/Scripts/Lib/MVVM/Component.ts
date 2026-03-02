@@ -66,6 +66,10 @@ export class Component {
         }
     }
 
+    protected getComponents() {
+        return Array.from(this._components);
+    }
+
     hasViewModel(otherViewModel: ComponentViewModel) {
         return this.viewModel === otherViewModel;
     }
@@ -131,15 +135,12 @@ export class Component {
         }
     }
 
-    private _isDisposed = false;
-
     dispose() {
         const components = this._components.splice(0, this._components.length);
         for (const component of components) {
             component.dispose();
         }
-        this.viewModel.dispose(); 
+        this.viewModel.dispose();
         this.view.dispose();
-        this._isDisposed = true;
     }
 }

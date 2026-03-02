@@ -1,13 +1,15 @@
-import { ComponentViewModel } from "./ComponentViewModel";
+import { ComponentViewModel, PropertyChange } from "./ComponentViewModel";
 import { EventManager } from "./EventManager";
 
 type EventLayout<TViewModel extends ComponentViewModel> = {
     arrayChanged: ObservableArrayChange<TViewModel>[];
+    propertyChanged: { [name: string]: PropertyChange };
 }
 
 export class ObservableArray<TViewModel extends ComponentViewModel> {
     private readonly _eventManager = new EventManager<EventLayout<TViewModel>>({
-        arrayChanged: null
+        arrayChanged: null,
+        propertyChanged: null
     });
     readonly when = this._eventManager.when;
 
@@ -15,13 +17,14 @@ export class ObservableArray<TViewModel extends ComponentViewModel> {
 
     get length() { return this._values.length; }
 
-    getValues() { return this._values.map(vm => vm); }
+    getValues() { return Array.from(this._values); }
 
     push(...values: TViewModel[]) {
         let i = this._values.length;
         this._values.push(...values);
         const changes: ObservableArrayChange<TViewModel>[] = [];
         for (const value of values) {
+            value.notify(this._eventManager);
             changes.push(
                 new ObservableArrayChange(
                     this,
@@ -36,30 +39,31 @@ export class ObservableArray<TViewModel extends ComponentViewModel> {
         this._eventManager.events.arrayChanged.invoke(changes);
     }
 
-    splice(startIndex: number, deleteCount: number, ...values: TViewModel[]) {
-        const deletedValues = this._values.splice(startIndex, deleteCount, ...values);
+    splice(startIndex: number, deleteCount: number, ...addedValues: TViewModel[]) {
+        const removedValues = this._values.splice(startIndex, deleteCount, ...addedValues);
         const changes: ObservableArrayChange<TViewModel>[] = [];
         let i = startIndex;
-        for (const value of deletedValues) {
+        for (const removedValue of removedValues) {
             changes.push(
                 new ObservableArrayChange(
                     this,
                     "remove",
                     -1,
-                    value,
+                    removedValue,
                     i
                 )
             );
             i++;
         }
         i = startIndex;
-        for (const value of values) {
+        for (const addedValue of addedValues) {
+            addedValue.notify(this._eventManager);
             changes.push(
                 new ObservableArrayChange(
                     this,
                     "add",
                     i,
-                    value,
+                    addedValue,
                     -1
                 )
             );
@@ -70,7 +74,7 @@ export class ObservableArray<TViewModel extends ComponentViewModel> {
 
     replaceWith(...updatedValues: TViewModel[]) {
         const changes: ObservableArrayChange<TViewModel>[] = [];
-        const originalValues = this._values.map(v => v);
+        const originalValues = Array.from(this._values);
         for (let i = 0; i < updatedValues.length; i++) {
             const updatedValue = updatedValues[i];
             if (originalValues[i] !== updatedValue) {
@@ -87,6 +91,7 @@ export class ObservableArray<TViewModel extends ComponentViewModel> {
                     );
                 }
                 else {
+                    updatedValue.notify(this._eventManager);
                     changes.push(
                         new ObservableArrayChange(
                             this,
@@ -120,10 +125,10 @@ export class ObservableArray<TViewModel extends ComponentViewModel> {
 
     dispose() {
         this._eventManager.dispose();
-        for (const value of this._values) {
+        const values = this._values.splice(0, this._values.length);
+        for (const value of values) {
             value.dispose();
         }
-        this._values.splice(0, this._values.length);
     }
 }
 

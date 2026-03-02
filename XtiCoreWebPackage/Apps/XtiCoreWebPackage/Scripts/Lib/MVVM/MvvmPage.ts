@@ -38,19 +38,23 @@ export class MvvmPage {
     }
 
     async show() {
-        await DelayedAction.delay(this.options.debouncedViewModelChangedWait + 100);
+        await DelayedAction.delay(this.options.debouncedViewModelChangedWait + 10);
         this.view.show();
     }
 }
 
 class RootView extends ContainerComponentView {
     static readonly instance = new RootView();
+    private static readonly rootElement: HTMLElement | null = null;
+
+    private static getRootElement() {
+        return RootView.rootElement || document.body.appendChild(document.createElement("div"));
+    }
 
     private constructor() {
-        const rootElement = document.body.appendChild(document.createElement("div"));
-        super(() => rootElement);
+        super(RootView.getRootElement);
+        this.isParentRequired = false;
         this.setAttributes({ "id": "mvvmRoot", "style": "display: content;" });
         this.hide();
-        this.addToDom(-1);
     }
 }

@@ -1,7 +1,8 @@
+import { ConsoleLogger } from "../ConsoleLogger";
 import { DebouncedAction } from "../DebouncedAction";
 import { Component } from "./Component";
 import { ComponentView } from "./ComponentView";
-import { ComponentViewModel } from "./ComponentViewModel";
+import { ComponentViewModel, ObservableChanges } from "./ComponentViewModel";
 import { MvvmPage } from "./MvvmPage";
 import { ObservableArray, ObservableArrayChange } from "./ObservableArray";
 import { StyleableComponentViewMixin } from "./StyleableComponentView";
@@ -210,39 +211,58 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
     private isHeaderVisibilityAutomated: boolean;
     readonly footer: TFooterComponent;
     private isFooterVisibilityAutomated: boolean;
+    private hasRegisteredItemPropertyChanged = false;
 
     constructor(options: IListComponentOptions<TSource, THeaderComponent, TItemComponent, TFooterComponent>) {
-        super(options.viewModel, options.view);
+        const viewModel = options.viewModel;
+        const view = options.view;
+        super(viewModel, view);
         this.itemFactory = options.itemFactory;
         this.itemUpdater = options.itemUpdater;
         this.isHeaderVisibilityAutomated = options.isHeaderVisibilityAutomated;
         this.isFooterVisibilityAutomated = options.isFooterVisibilityAutomated;
-        const headerViewModel = options.headerFactory.createItemViewModel();
-        const headerView = options.headerFactory.createItemView(options.view.createItemElement.bind(options.view), headerViewModel);
-        options.view.addItem(headerView);
-        this.header = this.addComponent(options.headerFactory.createItemComponent(headerViewModel, headerView));
-        if (this.isHeaderVisibilityAutomated && options.viewModel.items.length > 0) {
+        const headerFactory = options.headerFactory;
+        const headerViewModel = headerFactory.createItemViewModel();
+        const headerView = headerFactory.createItemView(view.createItemElement.bind(view), headerViewModel);
+        view.addItem(headerView);
+        this.header = this.addComponent(headerFactory.createItemComponent(headerViewModel, headerView));
+        if (this.isHeaderVisibilityAutomated && viewModel.items.length > 0) {
             this.header.show();
         }
         else {
             this.header.hide();
         }
         let i = 1;
-        for (const itemVM of options.viewModel.items.getValues()) {
+        for (const itemVM of viewModel.items.getValues()) {
             this.insertItemComponent(itemVM, i);
             i++;
         }
-        const footerViewModel = options.footerFactory.createItemViewModel();
-        const footerView = options.footerFactory.createItemView(options.view.createItemElement.bind(options.view), footerViewModel);
-        options.view.addItem(footerView);
-        this.footer = this.addComponent(options.footerFactory.createItemComponent(footerViewModel, footerView));
-        if (this.isFooterVisibilityAutomated && options.viewModel.items.length > 0) {
+        const footerFactory = options.footerFactory;
+        const footerViewModel = footerFactory.createItemViewModel();
+        const footerView = footerFactory.createItemView(view.createItemElement.bind(view), footerViewModel);
+        view.addItem(footerView);
+        this.footer = this.addComponent(footerFactory.createItemComponent(footerViewModel, footerView));
+        if (this.isFooterVisibilityAutomated && viewModel.items.length > 0) {
             this.footer.show();
         }
         else {
             this.footer.hide();
         }
-        options.viewModel.items.when.arrayChanged.then(this.handleItemsChanged.bind(this));
+        viewModel.items.when.arrayChanged.then(this.handleItemsChanged.bind(this));
+        this.registerItemPropertyChanged();
+    }
+
+    private registerItemPropertyChanged() {
+        if (!this.hasRegisteredItemPropertyChanged && (this.isHeaderVisibilityAutomated || this.isFooterVisibilityAutomated)) {
+            this.viewModel.items.when.propertyChanged.then(this.handleItemPropertyChanged.bind(this));
+            this.hasRegisteredItemPropertyChanged = true;
+        }
+    }
+
+    private handleItemPropertyChanged(evt: CustomEvent<ObservableChanges<ComponentViewModel>>) {
+        if (evt.detail.isVisible) {
+            this.updateHeaderAndFooterVisibility();
+        }
     }
 
     private handleItemsChanged(evt: CustomEvent<ObservableArrayChange<ComponentViewModel>[]>) {
@@ -274,6 +294,7 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
 
     automateHeaderVisibility() {
         this.isHeaderVisibilityAutomated = true;
+        this.registerItemPropertyChanged();
     }
 
     manualHeaderVisibility() {
@@ -282,6 +303,7 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
 
     automateFooterVisibility() {
         this.isFooterVisibilityAutomated = true;
+        this.registerItemPropertyChanged();
     }
 
     manualFooterVisibility() {
@@ -305,6 +327,10 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
         }
     }
 
+    getItems() {
+        return this.getComponents().filter(c => c !== this.header && c !== this.footer) as TItemComponent[];
+    }
+
     addItem(sourceItem: TSource) {
         this.addItems(sourceItem);
     }
@@ -312,12 +338,12 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
     addItems(...sourceItems: TSource[]) {
         const itemViewModels = sourceItems.map(item => this.createItemViewModel(item));
         this.viewModel.items.push(...itemViewModels);
-        this.updateHeaderVisibility();
+        this.updateHeaderAndFooterVisibility();
     }
 
     removeAllItems() {
         this.viewModel.items.splice(0, this.viewModel.items.length);
-        this.updateHeaderVisibility();
+        this.updateHeaderAndFooterVisibility();
     }
 
     setItems(...sourceItems: TSource[]) {
@@ -337,7 +363,7 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
         else {
             this.viewModel.items.splice(0, this.viewModel.items.length);
         }
-        this.updateHeaderVisibility();
+        this.updateHeaderAndFooterVisibility();
     }
 
     addOrUpdateItems(...sourceItems: TSource[]) {
@@ -353,7 +379,7 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
             this.itemUpdater.updateFrom(sourceItem, itemViewModel);
         }
         this.viewModel.items.replaceWith(...itemViewModels);
-        this.updateHeaderVisibility();
+        this.updateHeaderAndFooterVisibility();
     }
 
     private createItemViewModel(sourceItem: TSource) {
@@ -362,25 +388,26 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
         return itemViewModel;
     }
 
-    private updateHeaderVisibility() {
-        if (this.viewModel.items.length > 0) {
-            if (this.isHeaderVisibilityAutomated) {
-                this.header.show();
+    private updateHeaderAndFooterVisibility() {
+        if (this.isHeaderVisibilityAutomated || this.isFooterVisibilityAutomated) {
+            if (this.viewModel.items.getValues().filter(item => item.isVisible).length > 0) {
+                if (this.isHeaderVisibilityAutomated) {
+                    this.header.show();
+                }
+                if (this.isFooterVisibilityAutomated) {
+                    this.footer.show();
+                }
             }
-            if (this.isFooterVisibilityAutomated) {
-                this.footer.show();
-            }
-        }
-        else {
-            if (this.isHeaderVisibilityAutomated) {
-                this.header.hide();
-            }
-            if (this.isFooterVisibilityAutomated) {
-                this.footer.hide();
+            else {
+                if (this.isHeaderVisibilityAutomated) {
+                    this.header.hide();
+                }
+                if (this.isFooterVisibilityAutomated) {
+                    this.footer.hide();
+                }
             }
         }
     }
-
 }
 
 export interface IListItemFactory<TComponent extends Component> {

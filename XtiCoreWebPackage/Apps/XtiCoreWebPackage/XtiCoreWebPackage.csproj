@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
@@ -20,12 +20,6 @@
 	<ItemGroup>
 		<TypeScriptCompile Include="Scripts\**\*.ts" />
 	</ItemGroup>
-
-
-	<ItemGroup>
-	  <None Remove="Scripts\Lib\MVVM\CompositeComponent.js" />
-	</ItemGroup>
-
 
 	<ItemGroup>
 	  <TypeScriptCompile Remove="Scripts\Internal\MVVM\MainPage.ts" />

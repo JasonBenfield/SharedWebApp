@@ -1,3 +1,4 @@
+import { ConsoleLogger } from "../ConsoleLogger";
 
 export class ComponentView {
     static block() {
@@ -21,6 +22,7 @@ export class ComponentView {
     private _parentView: ComponentView | null = null;
     private readonly _views: ComponentView[] = [];
     private _isVisible = true;
+    protected isParentRequired = true;
 
     constructor();
     constructor(tagName: string);
@@ -39,8 +41,6 @@ export class ComponentView {
 
     get element() { return this._element; }
 
-    get parentView() { return this._parentView; }
-
     get isVisible() { return this._isVisible; }
 
     show() {
@@ -51,13 +51,7 @@ export class ComponentView {
     }
 
     hide() {
-        const element = this.element;
-        if (element) {
-            const parent = this._parentView;
-            if (parent) {
-                this.removeFromDom();
-            }
-        }
+        this._removeElement();
         this._isVisible = false;
     }
 
@@ -73,8 +67,13 @@ export class ComponentView {
             throw new Error("Cannot insert view into itself");
         }
         view._parentView = this;
-        this._views.push(view);
         view.addToDom(index);
+        if (index > -1) {
+            this._views.splice(index, 0, view);
+        }
+        else {
+            this._views.push(view);
+        }
         return view;
     }
 
@@ -98,38 +97,38 @@ export class ComponentView {
 
     protected addToDom(index: number) {
         if (this._isVisible) {
-            let element = this._element;
-            if (!element) {
-                this._element = this.createElement();
-                element = this._element;
-            }
             const parentElement = this._parentView?.element;
             if (parentElement) {
-                if (this._parentView?.constructor.name === "ListComponentView") {
-                    console.log(`before addToDom: ${this._parentView?.element?.outerHTML}`);
+                let element = this._element;
+                if (!element) {
+                    this._element = this.createElement();
+                    element = this._element;
                 }
                 if (index >= 0) {
                     const refElement = this.getReferenceElement(index);
-                    if (refElement && refElement !== element) {
-                        console.log(`insertBefore element: ${element.id}, parentElement: ${parentElement.id}, refElement: ${refElement.id}, index: ${index}`);
-                        element.before(refElement);
+                    if (refElement) {
+                        if (refElement !== element) {
+                            parentElement.insertBefore(element, refElement);
+                        }
                     }
                     else {
-                        console.log(`appendChild element: ${element.id}, parentElement: ${parentElement.id}, index: ${index}`);
                         parentElement.appendChild(element);
                     }
                 }
-                else {
-                    console.log(`appendChild element: ${element.id}, parentElement: ${parentElement.id}, index: ${index}`);
+                else if (element.parentElement !== parentElement) {
                     parentElement.appendChild(element);
                 }
-                if (this._parentView?.constructor.name === "ListComponentView") {
-                    console.log(`after addToDom: ${this._parentView?.element?.outerHTML}`);
+            }
+            else if (!this.isParentRequired) {
+                let element = this._element;
+                if (!element) {
+                    this._element = this.createElement();
+                    element = this._element;
                 }
             }
-            let childIndex = 0;
-            for (const view of this._views) {
-                if (view.isVisible) {
+            if (parentElement || !this.isParentRequired) {
+                let childIndex = 0;
+                for (const view of this._views) {
                     view.addToDom(childIndex);
                     childIndex++;
                 }
@@ -137,14 +136,27 @@ export class ComponentView {
         }
     }
 
+    private formatElement(element: HTMLElement | null | undefined) {
+        const elementText = element?.innerText || "";
+        return `${element?.outerHTML} ${elementText}`.trim();
+    }
+
     private getReferenceElement(index: number) {
         let refElement: HTMLElement | null = null;
+        let elementIndex = index;
         const parentView = this._parentView;
-        if (parentView) {
-            for (let i = index; i < parentView._views.length; i++) {
-                refElement = parentView._views[i].element;
-                if (refElement) {
-                    break;
+        const parentElement = parentView?._element;
+        if (parentView && parentElement) {
+            const views = parentView._views;
+            for (let i = 0; i < index; i++) {
+                if (!views[i].isVisible) {
+                    elementIndex--;
+                }
+            }
+            if (elementIndex > -1) {
+                const childElement = parentElement.children[elementIndex];
+                if (childElement instanceof HTMLElement) {
+                    refElement = childElement;
                 }
             }
         }
@@ -173,33 +185,24 @@ export class ComponentView {
             const parentElement = this._parentView?.element;
             if (element && parentElement) {
                 const refElement = this.getReferenceElement(toIndex);
-                if (refElement !== element) {
-                    if (refElement) {
-                        element.before(refElement);
-                    }
-                    else {
-                        parentElement.appendChild(element);
-                    }
+                if (refElement) {
+                    parentElement.insertBefore(element, refElement);
+                }
+                else if (element.parentElement !== parentElement) {
+                    parentElement.appendChild(element);
                 }
             }
         }
     }
 
-    private removeFromDom() {
-        this._removeElement();
-    }
-
-    private _isDisposed = false;
-
     dispose() {
-        for (const view of this._views) {
+        const views = this._views.splice(0, this._views.length);
+        for (const view of views) {
             view.dispose();
         }
-        this._views.splice(0, this._views.length);
         this._removeElement();
         this._isVisible = false;
         this._parentView = null;
-        this._isDisposed = true;
     }
 
     private _removeElement() {

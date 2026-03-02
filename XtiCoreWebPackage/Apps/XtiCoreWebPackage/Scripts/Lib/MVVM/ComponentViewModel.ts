@@ -32,7 +32,7 @@ export class ComponentViewModel {
                         );
                         const changes = this._changes as any;
                         changes[property] = change;
-                        this._eventManager.events.propertyChanged.invoke({
+                        this._eventManager.events.propertyChanged?.invoke({
                             [property]: change
                         });
                     }
@@ -54,7 +54,20 @@ export class ComponentViewModel {
 
     set isVisible(isVisible: boolean) { this._isVisible = isVisible; }
 
+    notify<TOtherEvents>(otherEventManager: EventManager<TOtherEvents>) {
+        this._eventManager.notify(otherEventManager);
+    }
+
     dispose() {
+        for (const key in this) {
+            const propertyValue = Reflect.get(this, key);
+            if (propertyValue instanceof ComponentViewModel) {
+                propertyValue.dispose();
+            }
+            else if (propertyValue instanceof ObservableArray) {
+                propertyValue.dispose();
+            }
+        }
         this._eventManager.dispose();
     }
 }
@@ -67,6 +80,7 @@ type excludedViewModelProperties =
     "changes" |
     "manager" |
     "when" |
+    "notify" |
     "dispose" |
     "createComponent" |
     "setComponentFactory";

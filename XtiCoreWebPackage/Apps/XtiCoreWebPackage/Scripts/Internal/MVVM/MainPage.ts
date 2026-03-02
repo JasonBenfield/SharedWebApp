@@ -1,5 +1,6 @@
-﻿import { CompositeComponentView } from "../../Lib/MVVM/CompositeComponent";
-import { ListComponent, ListComponentOptionsBuilder, ListComponentView, ListComponentViewModel, ListItemFactory, TextViewModelUpdater } from "../../Lib/MVVM/ListComponent";
+﻿import { ComponentViewModel } from "../../Lib/MVVM/ComponentViewModel";
+import { CompositeComponent, CompositeComponentView } from "../../Lib/MVVM/CompositeComponent";
+import { IViewModelUpdater, ListComponent, ListComponentOptionsBuilder, ListComponentView, ListComponentViewModel, ListItemFactory, TextViewModelUpdater } from "../../Lib/MVVM/ListComponent";
 import { MvvmPage } from "../../Lib/MVVM/MvvmPage";
 import { ReadonlyFormGroup, ReadonlyFormGroupView, ReadonlyFormGroupViewModel } from "../../Lib/MVVM/ReadonlyFormGroup";
 import { TextComponent, TextComponentView, TextComponentViewModel } from "../../Lib/MVVM/TextComponent";
@@ -12,11 +13,10 @@ class MainPage {
         const pageView = mvvmPage.view.addChildView(
             new CompositeComponentView().compose({
                 formGroup: ReadonlyFormGroupView.create(),
-                textListHeader: TextComponentView.heading(3),
-                textList: ListComponentView.unorderedList()
+                textList: ListComponentView.unorderedList(),
+                compositeList: ListComponentView.unorderedList()
             })
         );
-        pageView.textListHeader.setText("Text List:");
         const pageViewModel = new MainPageViewModel();
 
         const formGroup = new ReadonlyFormGroup(pageViewModel.formGroup, pageView.formGroup);
@@ -44,16 +44,71 @@ class MainPage {
                 })
                 .build(new TextViewModelUpdater())
         );
-        textListComponent.header.text = "Header";
+        textListComponent.header.text = "Text List Header";
         textListComponent.setItems("Test 1", "Test 2", "Test 3");
-        textListComponent.footer.text = "Footer";
+        textListComponent.footer.text = "Text List Footer";
+        const compositeListComponent = new ListComponent(
+            new ListComponentOptionsBuilder(pageViewModel.compositeList, pageView.compositeList)
+                .withHeaderFactory(
+                    () => new ListItemFactory(() => new TextComponentViewModel())
+                        .withView((createItemElement) => new TextComponentView(createItemElement))
+                        .withComponent((itemVM, itemView) => new TextComponent(itemVM, itemView))
+                )
+                .withFooterFactory(
+                    () => new ListItemFactory(() => new TextComponentViewModel())
+                        .withView((createItemElement) => new TextComponentView(createItemElement))
+                        .withComponent((itemVM, itemView) => new TextComponent(itemVM, itemView))
+                )
+                .withItemFactory(() => new ListItemFactory(() => new TestItemComponentViewModel())
+                    .withView((createItemElement) => new CompositeComponentView(createItemElement).compose({
+                        id: TextComponentView.label(),
+                        value: new TextComponentView()
+                    })
+                    )
+                    .withComponent((itemVM, itemView) => {
+                        return CompositeComponent.createComposite(itemVM, itemView);
+                    })
+                )
+                .build(new TestItemViewModelUpdater())
+        );
+        compositeListComponent.header.text = "Composite List Header";
+        compositeListComponent.setItems(new TestItem(1, "Test 1"), new TestItem(2, "Test 2"), new TestItem(3, "Test 3"), new TestItem(4, "Test 4"));
+        compositeListComponent.footer.text = "Composite List Footer";
         mvvmPage.show();
     }
+}
+
+class TestItem {
+    constructor(readonly id: number, readonly value: string) {
+    }
+}
+
+class TestItemComponentViewModel extends ComponentViewModel {
+    private _sourceKey: number = 0;
+    get sourceID() { return this._sourceKey; }
+    set sourceID(sourceKey: number) { this._sourceKey = sourceKey; }
+
+    readonly id = new TextComponentViewModel();
+    readonly value = new TextComponentViewModel();
+}
+
+class TestItemViewModelUpdater implements IViewModelUpdater<TestItem, TestItemComponentViewModel> {
+    isMatch(source: TestItem, viewModel: TestItemComponentViewModel): boolean {
+        return source.id === viewModel.sourceID;
+    }
+
+    updateFrom(source: TestItem, viewModel: TestItemComponentViewModel): void {
+        viewModel.sourceID = source.id;
+        viewModel.id.text = source.id.toString();
+        viewModel.value.text = source.value;
+    }
+
 }
 
 class MainPageViewModel {
     readonly formGroup = new ReadonlyFormGroupViewModel();
     readonly textList = new ListComponentViewModel<TextComponentViewModel>();
+    readonly compositeList = new ListComponentViewModel<TestItemComponentViewModel>();
 }
 
 new MainPage();

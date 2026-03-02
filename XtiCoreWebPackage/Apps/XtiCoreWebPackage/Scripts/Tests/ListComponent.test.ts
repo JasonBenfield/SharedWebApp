@@ -9,6 +9,7 @@ import { ContainerComponentView } from "../Lib/MVVM/ContainerComponentView";
 import { IViewModelUpdater, ListComponent, ListComponentOptionsBuilder, ListComponentView, ListComponentViewModel, ListItemFactory, TextViewModelUpdater } from "../Lib/MVVM/ListComponent";
 import { MvvmOptions, MvvmPage } from "../Lib/MVVM/MvvmPage";
 import { TextComponent, TextComponentView, TextComponentViewModel } from "../Lib/MVVM/TextComponent";
+import { ConsoleLogger } from "../Lib/ConsoleLogger";
 
 const elementID = "listEl";
 const headerID = "headerEl";
@@ -25,6 +26,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+    ConsoleLogger.value.disable();
     containerComponent?.dispose();
     containerComponent = null;
     mvvmPage.view.removeAllChildViews();
@@ -87,19 +89,16 @@ describe("List Component", () => {
     });
     test("should set items with header", async () => {
         const { component } = createListWithHeader();
-        console.log("HEADER TEST");
         component.header.text = "Header";
         await mvvmPage.show();
         expect(document.getElementById(headerID)).toBeNull();
         component.setItems(new TestItem(1, "Test 1"), new TestItem(2, "Test 2"), new TestItem(3, "Test 3"));
         await waitForChangeNotifications();
-        console.log(`${document.getElementById(elementID)?.outerHTML}`);
         expect(getListItems().length).toBe(4);
-        console.log(getListItemElement(0)?.innerText);
         expect(getListItemElement(0)?.id).toBe(headerID);
         expect(getListItemElement(0)?.innerText).toBe("Header");
         component.header.text = "Changed Header";
-        component.setItems(new TestItem(4, "Test 4"), new TestItem(1, "Test 1"), new TestItem(2, "Test 3"), new TestItem(3, "Test 3"));
+        component.setItems(new TestItem(4, "Test 4"), new TestItem(1, "Test 1"), new TestItem(2, "Test 2"), new TestItem(3, "Test 3"));
         await waitForChangeNotifications();
         expect(getListItems().length).toBe(5);
         expect(getListItemElement(0)?.id).toBe(headerID);
@@ -116,11 +115,9 @@ describe("List Component", () => {
         const { component } = createListWithFooter();
         component.footer.text = "Footer";
         await mvvmPage.show();
-        console.log("FOOTER TEST");
         expect(document.getElementById(footerID)).toBeNull();
         component.setItems(new TestItem(1, "Test 1"), new TestItem(2, "Test 2"), new TestItem(3, "Test 3"));
         await waitForChangeNotifications();
-        console.log(`${document.getElementById(elementID)?.outerHTML}`);
         expect(getListItems().length).toBe(4);
         expect(getListItemElement(3)?.id).toBe(footerID);
         expect(getListItemElement(3)?.innerText).toBe("Footer");
@@ -138,6 +135,51 @@ describe("List Component", () => {
         expect(getListItems().length).toBe(3);
         expect(getListItemElement(2)?.id).toBe(footerID);
     });
+    test("should set items with header and footer", async () => {
+        const { component } = createListWithHeaderAndFooter();
+        component.header.text = "Header";
+        component.footer.text = "Footer";
+        await mvvmPage.show();
+        expect(document.getElementById(headerID)).toBeNull();
+        expect(document.getElementById(footerID)).toBeNull();
+        component.setItems(new TestItem(1, "Test 1"), new TestItem(2, "Test 2"), new TestItem(3, "Test 3"));
+        await waitForChangeNotifications();
+        expect(getListItems().length).toBe(5);
+        expect(getListItemElement(0)?.id).toBe(headerID);
+        expect(getListItemElement(0)?.innerText).toBe("Header");
+        expect(getListItemElement(4)?.id).toBe(footerID);
+        expect(getListItemElement(4)?.innerText).toBe("Footer");
+        component.setItems(new TestItem(4, "Test 4"), new TestItem(1, "Test 1"), new TestItem(2, "Test 3"), new TestItem(3, "Test 3"));
+        component.header.text = "Changed Header";
+        component.footer.text = "Changed Footer";
+        await waitForChangeNotifications();
+        expect(getListItems().length).toBe(6);
+        expect(getListItemElement(0)?.id).toBe(headerID);
+        expect(getListItemElement(0)?.innerText).toBe("Changed Header");
+        expect(getListItemElement(5)?.id).toBe(footerID);
+        expect(getListItemElement(5)?.innerText).toBe("Changed Footer");
+        component.removeAllItems();
+        await waitForChangeNotifications();
+        expect(getListItems().length).toBe(0);
+        component.setItems(new TestItem(1, "Test 1"), new TestItem(2, "Test 2"));
+        await waitForChangeNotifications();
+        expect(getListItems().length).toBe(4);
+        expect(getListItemElement(0)?.id).toBe(headerID);
+        expect(getListItemElement(3)?.id).toBe(footerID);
+    });
+    test("should hide header and footer if all items are hidden", async () => {
+        const { component } = createListWithHeaderAndFooter();
+        component.header.text = "Header";
+        component.footer.text = "Footer";
+        component.setItems(new TestItem(1, "Test 1"), new TestItem(2, "Test 2"), new TestItem(3, "Test 3"));
+        await mvvmPage.show();
+        for (const item of component.getItems()) {
+            item.hide();
+        }
+        await waitForChangeNotifications();
+        expect(document.getElementById(headerID)).toBeNull();
+        expect(document.getElementById(footerID)).toBeNull();
+    });
 });
 
 function getListItemElement(index: number) {
@@ -146,8 +188,12 @@ function getListItemElement(index: number) {
 }
 
 function getListItems() {
-    const listElement = document.getElementById(elementID);
+    const listElement = getListElement();
     return listElement!.getElementsByTagName("li");
+}
+
+function getListElement() {
+    return document.getElementById(elementID);
 }
 
 function getListItemValueElement(index: number) {
@@ -313,6 +359,54 @@ function createListWithFooter() {
     };
 }
 
+function createListWithHeaderAndFooter() {
+    const view = containerView!.addChildView(ListComponentView.unorderedList());
+    view.setID(elementID);
+    const viewModel = new ListComponentViewModel<TestItemComponentViewModel>();
+    const component = containerComponent!.addComponent(
+        new ListComponent(
+            new ListComponentOptionsBuilder(viewModel, view)
+                .withHeaderFactory(
+                    () => new ListItemFactory(() => new TextComponentViewModel())
+                        .withView((createItemElement) => {
+                            const itemView = new TextComponentView(createItemElement);
+                            itemView.setID(headerID);
+                            return itemView;
+                        })
+                        .withComponent((itemVM, itemView) => new TextComponent(itemVM, itemView))
+                )
+                .withFooterFactory(
+                    () => new ListItemFactory(() => new TextComponentViewModel())
+                        .withView((createItemElement) => {
+                            const itemView = new TextComponentView(createItemElement);
+                            itemView.setID(footerID);
+                            return itemView;
+                        })
+                        .withComponent((itemVM, itemView) => new TextComponent(itemVM, itemView))
+                )
+                .withItemFactory(() => new ListItemFactory(() => new TestItemComponentViewModel())
+                    .withView((createItemElement) => {
+                        const view = new CompositeComponentView(createItemElement).compose({
+                            id: TextComponentView.label(),
+                            value: new TextComponentView()
+                        });
+                        view.setID(GeneratedID.next("listItem"))
+                        return view;
+                    })
+                    .withComponent((itemVM, itemView) => {
+                        return CompositeComponent.createComposite(itemVM, itemView);
+                    })
+                )
+                .build(new TestItemViewModelUpdater())
+        )
+    );
+    return {
+        viewModel: viewModel,
+        view: view,
+        component: component
+    };
+}
+
 function waitForChangeNotifications() {
-    return DelayedAction.delay(100);
+    return DelayedAction.delay(10);
 }
