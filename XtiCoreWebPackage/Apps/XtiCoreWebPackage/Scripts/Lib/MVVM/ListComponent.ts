@@ -2,9 +2,9 @@ import { ConsoleLogger } from "../ConsoleLogger";
 import { DebouncedAction } from "../DebouncedAction";
 import { Component } from "./Component";
 import { ComponentView } from "./ComponentView";
-import { ComponentViewModel, ObservableChanges } from "./ComponentViewModel";
+import { ComponentViewModel, ObservableChanges, UpdatedViewModel } from "./ComponentViewModel";
 import { MvvmPage } from "./MvvmPage";
-import { ObservableArray, ObservableArrayChange } from "./ObservableArray";
+import { ObservableArray, ChangedObservableArray, ChangedObservableArrayItem } from "./ObservableArray";
 import { StyleableComponentViewMixin } from "./StyleableComponentView";
 import { BaseTextComponentViewModel } from "./TextComponent";
 import { Constructor } from "./Types";
@@ -204,7 +204,7 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
     declare protected readonly view: BaseListView;
     private readonly itemFactory: IListItemFactory<TItemComponent>;
     private readonly itemUpdater: IViewModelUpdater<TSource, ComponentViewModel>;
-    private readonly _itemChanges: ObservableArrayChange<ComponentViewModel>[] = [];
+    private readonly _itemChanges: ChangedObservableArray<ComponentViewModel>[] = [];
     private readonly _itemComponents: Map<ComponentViewModel, TItemComponent> = new Map();
 
     readonly header: THeaderComponent;
@@ -249,23 +249,23 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
             this.footer.hide();
         }
         viewModel.items.when.arrayChanged.then(this.handleItemsChanged.bind(this));
-        this.registerItemPropertyChanged();
+        this.registerArrayItemChanged();
     }
 
-    private registerItemPropertyChanged() {
+    private registerArrayItemChanged() {
         if (!this.hasRegisteredItemPropertyChanged && (this.isHeaderVisibilityAutomated || this.isFooterVisibilityAutomated)) {
-            this.viewModel.items.when.propertyChanged.then(this.handleItemPropertyChanged.bind(this));
+            this.viewModel.items.when.arrayItemChanged.then(this.handleArrayItemChanged.bind(this));
             this.hasRegisteredItemPropertyChanged = true;
         }
     }
 
-    private handleItemPropertyChanged(evt: CustomEvent<ObservableChanges<ComponentViewModel>>) {
-        if (evt.detail.isVisible) {
+    private handleArrayItemChanged(evt: CustomEvent<ChangedObservableArrayItem<ComponentViewModel>[]>) {
+        if (evt.detail.find(c => c.changes.isVisible)) {
             this.updateHeaderAndFooterVisibility();
         }
     }
 
-    private handleItemsChanged(evt: CustomEvent<ObservableArrayChange<ComponentViewModel>[]>) {
+    private handleItemsChanged(evt: CustomEvent<ChangedObservableArray<ComponentViewModel>[]>) {
         this._itemChanges.push(...evt.detail);
         this.debouncedHandleItemsChanged.execute();
     }
@@ -294,7 +294,7 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
 
     automateHeaderVisibility() {
         this.isHeaderVisibilityAutomated = true;
-        this.registerItemPropertyChanged();
+        this.registerArrayItemChanged();
     }
 
     manualHeaderVisibility() {
@@ -303,7 +303,7 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
 
     automateFooterVisibility() {
         this.isFooterVisibilityAutomated = true;
-        this.registerItemPropertyChanged();
+        this.registerArrayItemChanged();
     }
 
     manualFooterVisibility() {
@@ -390,7 +390,8 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
 
     private updateHeaderAndFooterVisibility() {
         if (this.isHeaderVisibilityAutomated || this.isFooterVisibilityAutomated) {
-            if (this.viewModel.items.getValues().filter(item => item.isVisible).length > 0) {
+            if (this.viewModel.items.getValues().find(item => item.isVisible)) {
+                ConsoleLogger.value.log("any item visible");
                 if (this.isHeaderVisibilityAutomated) {
                     this.header.show();
                 }

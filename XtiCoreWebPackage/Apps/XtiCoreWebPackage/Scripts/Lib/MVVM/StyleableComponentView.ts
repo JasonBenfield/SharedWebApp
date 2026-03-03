@@ -37,7 +37,12 @@ export function StyleableComponentViewMixin<T extends Constructor<ComponentView>
         setAttributes(updatedAttributes: IHtmlAttributes & { [name: string]: string | null }) {
             for (const name in updatedAttributes) {
                 const value = updatedAttributes[name];
-                Reflect.set(this._attributes, name, value);
+                if (value === undefined || value === null) {
+                    delete this._attributes[name];
+                }
+                else {
+                    Reflect.set(this._attributes, name, value);
+                }
             }
             const element = this.element;
             if (element) {

@@ -1,4 +1,4 @@
-import { Component, IComponentChangeHandler } from "./Component";
+import { Component, ComponentChangeHandler } from "./Component";
 import { IComponentFactory } from "./ComponentFactory";
 import { ComponentView } from "./ComponentView";
 import { ComponentViewModel, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
@@ -66,9 +66,7 @@ export class LinkComponentView extends CompositeComponentViewMixin(LinkViewMixin
     }
 }
 
-export class LinkComponentChangeHandler implements IComponentChangeHandler {
-    constructor(private readonly view: ILinkView) {
-    }
+export class LinkComponentChangeHandler extends ComponentChangeHandler<ComponentViewModel & BaseLinkComponentViewModel, ComponentView & ILinkView> {
 
     handleChanges(changes: ObservableChanges<ComponentViewModel & BaseLinkComponentViewModel>) {
         if (changes.href) {
@@ -111,8 +109,8 @@ export class LinkComponent extends LinkComponentMixin(TitleComponentMixin(Compon
         super(
             viewModel,
             view,
-            new TitleChangeHandler(view),
-            new LinkComponentChangeHandler(view)
+            new TitleChangeHandler(viewModel, view),
+            new LinkComponentChangeHandler(viewModel, view)
         );
     }
 }

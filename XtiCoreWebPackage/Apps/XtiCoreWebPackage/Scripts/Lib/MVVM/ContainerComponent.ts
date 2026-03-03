@@ -1,9 +1,9 @@
-import { Component, IComponentChangeHandler } from "./Component";
+import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentViewModel } from "./ComponentViewModel";
 import { ContainerComponentView } from "./ContainerComponentView";
 
 export class ContainerComponent extends Component {
-    constructor(viewModel: ComponentViewModel, view: ContainerComponentView, ...changeHandlers: IComponentChangeHandler[]) {
+    constructor(viewModel: ComponentViewModel, view: ContainerComponentView, ...changeHandlers: ComponentChangeHandler[]) {
         super(viewModel, view, ...changeHandlers);
     }
 

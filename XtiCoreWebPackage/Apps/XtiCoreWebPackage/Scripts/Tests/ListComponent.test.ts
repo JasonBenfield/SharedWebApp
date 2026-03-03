@@ -177,6 +177,7 @@ describe("List Component", () => {
             item.hide();
         }
         await waitForChangeNotifications();
+        await waitForChangeNotifications();
         expect(document.getElementById(headerID)).toBeNull();
         expect(document.getElementById(footerID)).toBeNull();
     });

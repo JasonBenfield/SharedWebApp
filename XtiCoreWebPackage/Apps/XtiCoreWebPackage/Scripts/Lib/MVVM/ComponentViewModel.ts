@@ -2,7 +2,7 @@ import { EventManager } from "./EventManager";
 import { ObservableArray } from "./ObservableArray";
 
 type EventLayout = {
-    propertyChanged: { [name: string]: PropertyChange };
+    propertyChanged: UpdatedViewModel;
 }
 
 export type ComponentViewModelInitializer<TViewModel extends ComponentViewModel> = Partial<ComponentViewModelData<TViewModel>>;
@@ -24,7 +24,7 @@ export class ComponentViewModel {
                     const originalValue = Reflect.get(target, property);
                     if (originalValue !== value) {
                         Reflect.set(target, property, value);
-                        const change = new PropertyChange(
+                        const change = new ChangedProperty(
                             target,
                             property,
                             originalValue,
@@ -33,7 +33,8 @@ export class ComponentViewModel {
                         const changes = this._changes as any;
                         changes[property] = change;
                         this._eventManager.events.propertyChanged?.invoke({
-                            [property]: change
+                            viewModel: this,
+                            changedProperty: change
                         });
                     }
                     return true;
@@ -73,7 +74,7 @@ export class ComponentViewModel {
 }
 
 export interface PropertyChangedEventListener {
-    (evt: CustomEvent<{ [name: string]: PropertyChange }>): void;
+    (evt: CustomEvent<{ [name: string]: ChangedProperty }>): void;
 }
 
 type excludedViewModelProperties =
@@ -96,10 +97,15 @@ export type ComponentViewModelDataKeys<T> = {
 export type ComponentViewModelData<T extends ComponentViewModel> = Pick<T, ComponentViewModelDataKeys<T>>;
 
 export type ObservableChanges<T> = {
-    [Key in ComponentViewModelDataKeys<T>]?: PropertyChange;
+    [Key in ComponentViewModelDataKeys<T>]?: ChangedProperty;
 }
 
-export class PropertyChange {
+export interface UpdatedViewModel {
+    viewModel: ComponentViewModel;
+    changedProperty: ChangedProperty;
+}
+
+export class ChangedProperty {
     constructor(
         readonly target: any,
         readonly propertyName: string,

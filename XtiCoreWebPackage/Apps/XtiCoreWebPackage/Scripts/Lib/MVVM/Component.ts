@@ -1,16 +1,17 @@
 import { DebouncedAction } from "../DebouncedAction";
 import { ComponentView } from "./ComponentView";
-import { ComponentViewModel, ObservableChanges } from "./ComponentViewModel";
+import { ChangedProperty, ComponentViewModel, ObservableChanges, UpdatedViewModel } from "./ComponentViewModel";
 import { MvvmPage } from "./MvvmPage";
 
-export interface IComponentChangeHandler {
-    handleChanges(changes: ObservableChanges<ComponentViewModel>): void;
-}
-
-export class ComponentChangeHandler {
-    constructor(protected readonly view: ComponentView) {
+export abstract class ComponentChangeHandler<TViewModel extends ComponentViewModel, TView extends ComponentView> {
+    constructor(protected readonly viewModel: TViewModel, protected readonly view: TView) {
     }
 
+    abstract handleChanges(changes: ObservableChanges<TViewModel>): void;
+}
+
+export class ComponentVisibilityChangeHandler extends ComponentChangeHandler<ComponentViewModel, ComponentView> {
+    
     handleChanges(changes: ObservableChanges<ComponentViewModel>) {
         if (changes.isVisible) {
             if (changes.isVisible.value) {
@@ -24,32 +25,28 @@ export class ComponentChangeHandler {
 }
 
 export class Component {
-    private readonly _changes: ObservableChanges<ComponentViewModel> = {};
-    private readonly _changeHandlers: IComponentChangeHandler[] = [];
+    private readonly _changes: ObservableChanges<ComponentViewModel> & { [name: string]: ChangedProperty; } = {};
+    private readonly _changeHandlers: ComponentChangeHandler<ComponentViewModel, ComponentView>[] = [];
     private readonly _components: Component[] = [];
     private _parent: Component | null = null;
 
-    constructor(protected readonly viewModel: ComponentViewModel, protected readonly view: ComponentView, ...changeHandlers: IComponentChangeHandler[]) {
+    constructor(protected readonly viewModel: ComponentViewModel, protected readonly view: ComponentView, ...changeHandlers: ComponentChangeHandler<typeof viewModel, typeof view>[]) {
         this.viewModel.when.propertyChanged.then(this.onViewModelChanged.bind(this));
-        this._changeHandlers.push(new ComponentChangeHandler(view));
+        this._changeHandlers.push(new ComponentVisibilityChangeHandler(viewModel, view));
         for (const changeHandler of changeHandlers) {
             this._changeHandlers.push(changeHandler);
         }
         this.handleChanges(viewModel.changes);
     }
 
-    private onViewModelChanged(event: CustomEvent<ObservableChanges<ComponentViewModel>>) {
-        const changes: any = this._changes;
-        const detail: any = event.detail;
-        for (const key in detail) {
-            changes[key] = detail[key];
-        }
+    private onViewModelChanged(event: CustomEvent<UpdatedViewModel>) {
+        this._changes[event.detail.changedProperty.propertyName] = event.detail.changedProperty;
         this.debouncedOnViewModelChanged.execute();
     }
 
     private readonly debouncedOnViewModelChanged = new DebouncedAction(
         () => {
-            const changes: any = this._changes;
+            const changes = this._changes;
             if (changes) {
                 this.handleChanges(changes);
                 for (const key in changes) {

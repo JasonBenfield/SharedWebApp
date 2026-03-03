@@ -6,7 +6,7 @@ type CustomEventTargets<TEvents> = {
     [K in keyof TEvents]: CustomEventTarget<TEvents[K]>;
 }
 
-type CustomEventRegistrations<TEvents> = {
+export type CustomEventRegistrations<TEvents> = {
     [K in keyof TEvents]: CustomEventRegistration<TEvents[K]>;
 }
 

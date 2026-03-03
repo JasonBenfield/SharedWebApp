@@ -1,4 +1,9 @@
-import { ConsoleLogger } from "../ConsoleLogger";
+
+type IHtmlEventListener = (el: HTMLElement, evt: Event) => void;
+
+interface IHtmlEventListeners {
+    [name: string]: IHtmlEventListener;
+}
 
 export class ComponentView {
     static block() {
@@ -19,6 +24,7 @@ export class ComponentView {
 
     private readonly createElement: () => HTMLElement;
     private _element: HTMLElement | null = null;
+    private readonly _htmlEventListeners: IHtmlEventListeners = {};
     private _parentView: ComponentView | null = null;
     private readonly _views: ComponentView[] = [];
     private _isVisible = true;
@@ -42,6 +48,21 @@ export class ComponentView {
     get element() { return this._element; }
 
     get isVisible() { return this._isVisible; }
+
+    protected setEventListener<K extends keyof HTMLElementEventMap>(eventType: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any) {
+        const element = this._element;
+        const listeners: any = this._htmlEventListeners;
+        if (element) {
+            const originalListener = listeners[eventType];
+            if (originalListener) {
+                element.removeEventListener(eventType, originalListener);
+            }
+        }
+        listeners[eventType] = listener;
+        if (element) {
+            element.addEventListener(eventType, listener);
+        }
+    }
 
     show() {
         this._isVisible = true;
@@ -103,6 +124,10 @@ export class ComponentView {
                 if (!element) {
                     this._element = this.createElement();
                     element = this._element;
+                    for (const key in this._htmlEventListeners) {
+                        const listener: any = this._htmlEventListeners[key];
+                        element.addEventListener(key, listener);
+                    }
                 }
                 if (index >= 0) {
                     const refElement = this.getReferenceElement(index);
@@ -134,11 +159,6 @@ export class ComponentView {
                 }
             }
         }
-    }
-
-    private formatElement(element: HTMLElement | null | undefined) {
-        const elementText = element?.innerText || "";
-        return `${element?.outerHTML} ${elementText}`.trim();
     }
 
     private getReferenceElement(index: number) {
@@ -201,14 +221,25 @@ export class ComponentView {
             view.dispose();
         }
         this._removeElement();
+        const keys = Object.keys(this._htmlEventListeners);
+        for (const key of keys) {
+            delete this._htmlEventListeners[key];
+        }
         this._isVisible = false;
         this._parentView = null;
     }
 
     private _removeElement() {
         const element = this._element;
-        if (element && element.parentElement) {
-            element.remove();
+        if (element) {
+            const keys = Object.keys(this._htmlEventListeners);
+            for (const key of keys) {
+                const listener: any = this._htmlEventListeners[key];
+                element.removeEventListener(key, listener);
+            }
+            if (element.parentElement) {
+                element.remove();
+            }
         }
         this._element = null;
     }

@@ -4,12 +4,12 @@ import { ComponentView } from "./ComponentView";
 import { ComponentViewModel, ComponentViewModelInitializer } from "./ComponentViewModel";
 import { ILinkView, ILinkViewModel, LinkComponentChangeHandler, LinkComponentMixin, LinkViewMixin, LinkViewModelMixin } from "./LinkComponent";
 import { StyleableComponentViewMixin } from "./StyleableComponentView";
-import { BaseTextComponentViewModel, ITextView, ITextViewModel, TextChangeHandler, TextComponentMixin, TextViewMixin, TextViewModelMixin, TitleChangeHandler, TitleComponentMixin, TitleViewModelMixin } from "./TextComponent";
+import { BaseTextComponentViewModel, ITextView, ITextViewModel, SynchedTitleChangeHandler, SynchedTitleComponentMixin, SynchedTitleViewModelMixin, TextChangeHandler, TextComponentMixin, TextViewMixin, TextViewModelMixin, TitleChangeHandler, TitleComponentMixin, TitleViewModelMixin } from "./TextComponent";
 import { ITitleView, ITitleViewModel } from "./Types";
 
 export type ITextLinkComponentViewModel = ComponentViewModel & ITextViewModel & ITitleViewModel & ILinkViewModel;
 
-export class TextLinkComponentViewModel extends TextViewModelMixin(LinkViewModelMixin(TitleViewModelMixin(ComponentViewModel))) {
+export class TextLinkComponentViewModel extends SynchedTitleViewModelMixin(TextViewModelMixin(LinkViewModelMixin(TitleViewModelMixin(ComponentViewModel)))) {
     constructor(initializer: ComponentViewModelInitializer<TextLinkComponentViewModel> = {}) {
         super(initializer);
     }
@@ -25,14 +25,15 @@ export class TextLinkComponentView extends TextViewMixin(LinkViewMixin(Styleable
     }
 }
 
-export class TextLinkComponent extends TextComponentMixin(LinkComponentMixin(TitleComponentMixin(Component))) {
+export class TextLinkComponent extends SynchedTitleComponentMixin(TextComponentMixin(LinkComponentMixin(TitleComponentMixin(Component)))) {
     constructor(protected readonly viewModel: BaseTextLinkComponentViewModel, view: BaseTextLinkComponentView) {
         super(
             viewModel,
             view,
-            new TitleChangeHandler(view),
-            new TextChangeHandler(view),
-            new LinkComponentChangeHandler(view)
+            new TitleChangeHandler(viewModel, view),
+            new TextChangeHandler(viewModel, view),
+            new SynchedTitleChangeHandler(viewModel, view),
+            new LinkComponentChangeHandler(viewModel, view)
         );
     }
 }

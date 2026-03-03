@@ -1,4 +1,4 @@
-import { Component, IComponentChangeHandler } from "./Component";
+import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentView } from "./ComponentView";
 import { ComponentViewModel } from "./ComponentViewModel";
 import { StyleableComponentViewMixin } from "./StyleableComponentView";
