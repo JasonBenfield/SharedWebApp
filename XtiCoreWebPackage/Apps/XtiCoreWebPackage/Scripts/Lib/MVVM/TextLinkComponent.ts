@@ -26,7 +26,7 @@ export class TextLinkComponentView extends TextViewMixin(LinkViewMixin(Styleable
 }
 
 export class TextLinkComponent extends SynchedTitleComponentMixin(TextComponentMixin(LinkComponentMixin(TitleComponentMixin(Component)))) {
-    constructor(protected readonly viewModel: BaseTextLinkComponentViewModel, view: BaseTextLinkComponentView) {
+    constructor(viewModel: BaseTextLinkComponentViewModel, view: BaseTextLinkComponentView) {
         super(
             viewModel,
             view,

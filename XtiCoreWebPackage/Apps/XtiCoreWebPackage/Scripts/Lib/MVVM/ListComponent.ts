@@ -2,9 +2,9 @@ import { ConsoleLogger } from "../ConsoleLogger";
 import { DebouncedAction } from "../DebouncedAction";
 import { Component } from "./Component";
 import { ComponentView } from "./ComponentView";
-import { ComponentViewModel, ObservableChanges, UpdatedViewModel } from "./ComponentViewModel";
-import { MvvmPage } from "./MvvmPage";
-import { ObservableArray, ChangedObservableArray, ChangedObservableArrayItem } from "./ObservableArray";
+import { ComponentViewModel } from "./ComponentViewModel";
+import { MvvmOptions } from "./MvvmOptions";
+import { ChangedObservableArray, ChangedObservableArrayItem, ObservableArray } from "./ObservableArray";
 import { StyleableComponentViewMixin } from "./StyleableComponentView";
 import { BaseTextComponentViewModel } from "./TextComponent";
 import { Constructor } from "./Types";
@@ -201,7 +201,7 @@ export class ListComponentOptionsBuilderFromItemFactory<TItemViewModel extends C
 
 export class ListComponent<TSource, THeaderComponent extends Component, TItemComponent extends Component, TFooterComponent extends Component> extends Component {
     declare protected readonly viewModel: BaseListComponentViewModel<ComponentViewModel>;
-    declare protected readonly view: BaseListView;
+    protected readonly view: BaseListView;
     private readonly itemFactory: IListItemFactory<TItemComponent>;
     private readonly itemUpdater: IViewModelUpdater<TSource, ComponentViewModel>;
     private readonly _itemChanges: ChangedObservableArray<ComponentViewModel>[] = [];
@@ -217,6 +217,7 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
         const viewModel = options.viewModel;
         const view = options.view;
         super(viewModel, view);
+        this.view = view;
         this.itemFactory = options.itemFactory;
         this.itemUpdater = options.itemUpdater;
         this.isHeaderVisibilityAutomated = options.isHeaderVisibilityAutomated;
@@ -289,7 +290,7 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
                 }
             }
         },
-        MvvmPage.get().options.debouncedViewModelChangedWait
+        MvvmOptions.value.debouncedViewModelChangedWait
     );
 
     automateHeaderVisibility() {

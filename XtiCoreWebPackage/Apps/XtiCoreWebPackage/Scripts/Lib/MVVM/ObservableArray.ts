@@ -1,7 +1,7 @@
 import { DebouncedAction } from "../DebouncedAction";
 import { ChangedProperty, ComponentViewModel, ObservableChanges, UpdatedViewModel } from "./ComponentViewModel";
 import { EventManager } from "./EventManager";
-import { MvvmPage } from "./MvvmPage";
+import { MvvmOptions } from "./MvvmOptions";
 
 type EventLayout<TViewModel extends ComponentViewModel> = {
     arrayChanged: ChangedObservableArray<TViewModel>[];
@@ -52,7 +52,7 @@ export class ObservableArray<TViewModel extends ComponentViewModel> {
                 this._eventManager.events.arrayItemChanged.invoke(itemChanges);
             }
         },
-        MvvmPage.get().options.debouncedViewModelChangedWait
+        MvvmOptions.value.debouncedViewModelChangedWait
     );
 
     get length() { return this._values.length; }

@@ -1,60 +1,44 @@
+import { ConsoleLogger } from "../ConsoleLogger";
 import { DelayedAction } from "../DelayedAction";
+import { Component } from "./Component";
+import { ComponentView } from "./ComponentView";
 import { ContainerComponentView } from "./ContainerComponentView";
-
-export interface IMvvmOptions {
-    debouncedViewModelChangedWait: number;
-}
-
-export class MvvmOptions {
-    constructor(source?: Partial<IMvvmOptions>) {
-        this._debouncedViewModelChangedWait =
-            source && source.debouncedViewModelChangedWait !== undefined ?
-                source.debouncedViewModelChangedWait :
-                100;
-    }
-
-    private _debouncedViewModelChangedWait = 100;
-    get debouncedViewModelChangedWait() { return this._debouncedViewModelChangedWait; }
-    private set debouncedViewModelChangedWait(debouncedViewModelChangedWait: number) { this._debouncedViewModelChangedWait = debouncedViewModelChangedWait; }
-}
-
-export class MvvmPage {
-    private static _instance: MvvmPage;
-
-    static get() {
-        return MvvmPage._instance || MvvmPage.create();
-    }
-
-    static create(options = new MvvmOptions()) {
-        const instance = new MvvmPage(RootView.instance, options);
-        MvvmPage._instance = instance;
-        return instance;
-    }
-
-    private constructor(
-        readonly view: ContainerComponentView,
-        readonly options: MvvmOptions
-    ) {
-    }
-
-    async show() {
-        await DelayedAction.delay(this.options.debouncedViewModelChangedWait + 10);
-        this.view.show();
-    }
-}
+import { MvvmOptions } from "./MvvmOptions";
 
 class RootView extends ContainerComponentView {
-    static readonly instance = new RootView();
-    private static readonly rootElement: HTMLElement | null = null;
-
-    private static getRootElement() {
-        return RootView.rootElement || document.body.appendChild(document.createElement("div"));
-    }
-
-    private constructor() {
-        super(RootView.getRootElement);
+    constructor() {
+        const rootElement = document.body.appendChild(document.createElement("div"));
+        super(() => rootElement);
         this.isParentRequired = false;
         this.setAttributes({ "id": "mvvmRoot", "style": "display: content;" });
         this.hide();
+    }
+}
+
+export class MvvmPage {
+    private readonly view: ContainerComponentView;
+    private readonly components: Component[] = [];
+
+    constructor() {
+        this.view = new RootView();
+    }
+
+    async show(view: ComponentView, component: Component) {
+        this.view.addChildView(view);
+        this.components.push(component);
+        await this.waitForChangeNotifications();
+        this.view.show();
+    }
+
+    waitForChangeNotifications() {
+        return DelayedAction.delay(MvvmOptions.value.debouncedViewModelChangedWait + 10);
+    }
+
+    reset() {
+        const components = this.components.splice(0, this.components.length);
+        for (const component of components) {
+            component.dispose();
+        }
+        this.view.removeAllChildViews();
     }
 }

@@ -62,7 +62,7 @@ export class CompositeComponent<TViewModel extends ComponentViewModel & Composit
         const component: any = this;
         const factory = componentFactory;
         for (const key in this.viewModel) {
-            const childView: any = Reflect.get(this.view, key);
+            const childView: any = Reflect.get(view, key);
             if (childView && childView instanceof ComponentView) {
                 const childViewModel: any = Reflect.get(this.viewModel, key);
                 if (childViewModel && childViewModel instanceof ComponentViewModel) {

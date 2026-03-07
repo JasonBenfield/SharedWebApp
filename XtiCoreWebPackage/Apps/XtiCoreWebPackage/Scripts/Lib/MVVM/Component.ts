@@ -1,25 +1,44 @@
 import { DebouncedAction } from "../DebouncedAction";
 import { ComponentView } from "./ComponentView";
 import { ChangedProperty, ComponentViewModel, ObservableChanges, UpdatedViewModel } from "./ComponentViewModel";
-import { MvvmPage } from "./MvvmPage";
+import { MvvmOptions } from "./MvvmOptions";
 
 export abstract class ComponentChangeHandler<TViewModel extends ComponentViewModel, TView extends ComponentView> {
-    constructor(protected readonly viewModel: TViewModel, protected readonly view: TView) {
+    private readonly views: TView[];
+
+    constructor(viewModel: TViewModel, view: TView);
+    constructor(viewModel: TViewModel, views: TView[]);
+    constructor(protected readonly viewModel: TViewModel, viewOrViews: TView | (TView[])) {
+        if (Array.isArray(viewOrViews)) {
+            this.views = viewOrViews;
+        }
+        else {
+            this.views = [viewOrViews];
+        }
     }
 
     abstract handleChanges(changes: ObservableChanges<TViewModel>): void;
+
+    protected updateView(action: (v: TView) => void) {
+        for (const view of this.views) {
+            action(view);
+        }
+    }
 }
 
 export class ComponentVisibilityChangeHandler extends ComponentChangeHandler<ComponentViewModel, ComponentView> {
-    
+
     handleChanges(changes: ObservableChanges<ComponentViewModel>) {
         if (changes.isVisible) {
-            if (changes.isVisible.value) {
-                this.view.show();
-            }
-            else {
-                this.view.hide();
-            }
+            const isVisible = changes.isVisible.value;
+            this.updateView(v => {
+                if (isVisible) {
+                    v.show();
+                }
+                else {
+                    v.hide();
+                }
+            });
         }
     }
 }
@@ -28,11 +47,22 @@ export class Component {
     private readonly _changes: ObservableChanges<ComponentViewModel> & { [name: string]: ChangedProperty; } = {};
     private readonly _changeHandlers: ComponentChangeHandler<ComponentViewModel, ComponentView>[] = [];
     private readonly _components: Component[] = [];
+    private readonly views: ComponentView[];
     private _parent: Component | null = null;
 
-    constructor(protected readonly viewModel: ComponentViewModel, protected readonly view: ComponentView, ...changeHandlers: ComponentChangeHandler<typeof viewModel, typeof view>[]) {
+    constructor(
+        protected readonly viewModel: ComponentViewModel,
+        viewOrViews: ComponentView | (ComponentView[]),
+        ...changeHandlers: ComponentChangeHandler<typeof viewModel, ComponentView>[]
+    ) {
         this.viewModel.when.propertyChanged.then(this.onViewModelChanged.bind(this));
-        this._changeHandlers.push(new ComponentVisibilityChangeHandler(viewModel, view));
+        if (Array.isArray(viewOrViews)) {
+            this.views = viewOrViews;
+        }
+        else {
+            this.views = [viewOrViews];
+        }
+        this._changeHandlers.push(new ComponentVisibilityChangeHandler(viewModel, this.views));
         for (const changeHandler of changeHandlers) {
             this._changeHandlers.push(changeHandler);
         }
@@ -54,7 +84,7 @@ export class Component {
                 }
             }
         },
-        MvvmPage.get().options.debouncedViewModelChangedWait
+        MvvmOptions.value.debouncedViewModelChangedWait
     );
 
     private handleChanges(changes: ObservableChanges<ComponentViewModel>) {
@@ -72,7 +102,7 @@ export class Component {
     }
 
     hasView(otherView: ComponentView) {
-        return this.view === otherView;
+        return Boolean(this.views.find(v => v === otherView));
     }
 
     show() {
@@ -114,7 +144,9 @@ export class Component {
         const parent = this._parent;
         if (parent) {
             parent.moveComponent(this, toIndex);
-            this.view.moveTo(toIndex);
+            for (const view of this.views) {
+                view.moveTo(toIndex);
+            }
         }
     }
 
@@ -138,6 +170,9 @@ export class Component {
             component.dispose();
         }
         this.viewModel.dispose();
-        this.view.dispose();
+        const views = this.views.splice(0, this.views.length);
+        for (const view of views) {
+            view.dispose();
+        }
     }
 }

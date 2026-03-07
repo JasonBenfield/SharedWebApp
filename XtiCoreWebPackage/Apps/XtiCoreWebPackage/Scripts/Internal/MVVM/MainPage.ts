@@ -1,22 +1,19 @@
 ﻿import { ComponentViewModel } from "../../Lib/MVVM/ComponentViewModel";
 import { CompositeComponent, CompositeComponentView } from "../../Lib/MVVM/CompositeComponent";
+import { ContainerComponent } from "../../Lib/MVVM/ContainerComponent";
 import { IViewModelUpdater, ListComponent, ListComponentOptionsBuilder, ListComponentView, ListComponentViewModel, ListItemFactory, TextViewModelUpdater } from "../../Lib/MVVM/ListComponent";
-import { MvvmPage } from "../../Lib/MVVM/MvvmPage";
 import { ReadonlyFormGroup, ReadonlyFormGroupView, ReadonlyFormGroupViewModel } from "../../Lib/MVVM/ReadonlyFormGroup";
 import { TextComponent, TextComponentView, TextComponentViewModel } from "../../Lib/MVVM/TextComponent";
-
-const mvvmPage = MvvmPage.get();
+import { AppPage } from "../AppPage";
 
 class MainPage {
 
     constructor() {
-        const pageView = mvvmPage.view.addChildView(
-            new CompositeComponentView().compose({
-                formGroup: ReadonlyFormGroupView.create(),
-                textList: ListComponentView.unorderedList(),
-                compositeList: ListComponentView.unorderedList()
-            })
-        );
+        const pageView = new CompositeComponentView().compose({
+            formGroup: ReadonlyFormGroupView.create(),
+            textList: ListComponentView.unorderedList(),
+            compositeList: ListComponentView.unorderedList()
+        });
         const pageViewModel = new MainPageViewModel();
 
         const formGroup = new ReadonlyFormGroup(pageViewModel.formGroup, pageView.formGroup);
@@ -74,7 +71,16 @@ class MainPage {
         compositeListComponent.header.text = "Composite List Header";
         compositeListComponent.setItems(new TestItem(1, "Test 1"), new TestItem(2, "Test 2"), new TestItem(3, "Test 3"), new TestItem(4, "Test 4"));
         compositeListComponent.footer.text = "Composite List Footer";
-        mvvmPage.show();
+        const pageComponent = new ContainerComponent(new ComponentViewModel(), pageView);
+        pageComponent.addComponents(
+            formGroup,
+            textListComponent,
+            compositeListComponent
+        );
+        AppPage.value.show(
+            pageView,
+            pageComponent
+        );
     }
 }
 

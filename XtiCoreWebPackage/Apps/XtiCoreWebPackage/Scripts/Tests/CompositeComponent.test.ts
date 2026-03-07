@@ -1,16 +1,10 @@
 
-import { afterEach, beforeEach, describe, expect, test } from "@jest/globals";
+import { afterEach, describe, expect, test } from "@jest/globals";
 import { DelayedAction } from "../Lib/DelayedAction";
 import { ComponentView } from "../Lib/MVVM/ComponentView";
 import { ComponentViewModel } from "../Lib/MVVM/ComponentViewModel";
 import { CompositeComponent, CompositeComponentView, CompositeComponentViewModel } from "../Lib/MVVM/CompositeComponent";
-import { ContainerComponent } from "../Lib/MVVM/ContainerComponent";
-import { ContainerComponentView } from "../Lib/MVVM/ContainerComponentView";
-import { MvvmOptions, MvvmPage } from "../Lib/MVVM/MvvmPage";
-
-const mvvmPage = MvvmPage.create(new MvvmOptions({
-    debouncedViewModelChangedWait: 1
-}));
+import { TestPage } from "./TestPage";
 
 function createDiv(id: string) {
     const el = document.createElement("div");
@@ -24,24 +18,15 @@ const level1_2ElementID = "level1_2El";
 const level2_1ElementID = "level2_1El";
 const level2_2ElementID = "level2_2El";
 
-let containerView: ContainerComponentView | null = null;
-let containerComponent: ContainerComponent | null = null;
-
-beforeEach(() => {
-    containerView = mvvmPage.view.addChildView(ContainerComponentView.block());
-    containerComponent = new ContainerComponent(new ComponentViewModel(), containerView);
-});
-
 afterEach(() => {
-    containerComponent?.dispose();
-    mvvmPage.view.removeAllChildViews();
+    TestPage.value.reset();
 });
 
 
 describe("Container Component", () => {
     test("add to dom when visible", async () => {
-        const { component } = createComponent();
-        await mvvmPage.show();
+        const { view, component } = createComponent();
+        await TestPage.value.show(view, component);
         const containerEl = document.getElementById(containerElementID);
         expect(containerEl).not.toBeNull();
         const level1_1El = containerEl?.querySelectorAll(`#${level1_1ElementID}`)[0];
@@ -55,14 +40,14 @@ describe("Container Component", () => {
         component.dispose();
     });
     test("should not add to dom when not visible", async () => {
-        createComponent({ isVisible: false });
-        await mvvmPage.show();
+        const { view, component } = createComponent({ isVisible: false });
+        await TestPage.value.show(view, component);
         const containerEl = document.getElementById(containerElementID);
         expect(containerEl).toBeNull();
     });
     test("should show/hide child views", async () => {
-        const { component } = createComponent();
-        await mvvmPage.show();
+        const { view, component } = createComponent();
+        await TestPage.value.show(view, component);
         component.level1_2.hide();
         await waitForChangeNotifications();
 
@@ -99,18 +84,16 @@ function createComponent(options: { isVisible: boolean } = { isVisible: true }) 
         }),
         level1_2: new ComponentViewModel()
     });
-    const view = containerView!.addChildView(
-        new CompositeComponentView(() => createDiv(containerElementID))
-            .compose({
-                level1_1: new CompositeComponentView(() => createDiv(level1_1ElementID))
-                    .compose({
-                        level2_1: new ComponentView(() => createDiv(level2_1ElementID)),
-                        level2_2: new ComponentView(() => createDiv(level2_2ElementID))
-                    }),
-                level1_2: new ComponentView(() => createDiv(level1_2ElementID))
-            })
-    );
-    const component = containerComponent!.addComponent(CompositeComponent.createComposite(viewModel, view));
+    const view = new CompositeComponentView(() => createDiv(containerElementID))
+        .compose({
+            level1_1: new CompositeComponentView(() => createDiv(level1_1ElementID))
+                .compose({
+                    level2_1: new ComponentView(() => createDiv(level2_1ElementID)),
+                    level2_2: new ComponentView(() => createDiv(level2_2ElementID))
+                }),
+            level1_2: new ComponentView(() => createDiv(level1_2ElementID))
+        });
+    const component = CompositeComponent.createComposite(viewModel, view);
     if (options.isVisible) {
         component.show();
     }

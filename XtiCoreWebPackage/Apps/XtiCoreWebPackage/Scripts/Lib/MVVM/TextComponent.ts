@@ -107,7 +107,8 @@ export class TextComponentView extends TextViewMixin(TitleViewMixin(StyleableCom
 export class TextChangeHandler extends ComponentChangeHandler<ComponentViewModel & ITextViewModel, BaseTextComponentView> {
     handleChanges(changes: ObservableChanges<ComponentViewModel & ITextViewModel>) {
         if (changes.text) {
-            this.view.setText(changes.text.value);
+            const text = changes.text.value;
+            this.updateView(v => v.setText(text));
         }
     }
 }
@@ -115,7 +116,8 @@ export class TextChangeHandler extends ComponentChangeHandler<ComponentViewModel
 export class TitleChangeHandler extends ComponentChangeHandler<ComponentViewModel & ITitleViewModel, ComponentView & ITitleView> {
     handleChanges(changes: ObservableChanges<ComponentViewModel & ITitleViewModel>) {
         if (changes.title) {
-            this.view.setTitle(changes.title.value);
+            const title = changes.title.value;
+            this.updateView(v => v.setTitle(title));
         }
     }
 }
@@ -125,7 +127,8 @@ export class SynchedTitleChangeHandler extends ComponentChangeHandler<BaseTextCo
     handleChanges(changes: ObservableChanges<BaseTextComponentViewModel>) {
         if (changes.text || changes.isTitleSynchedWithText) {
             if (this.viewModel.isTitleSynchedWithText) {
-                this.view.setTitle(this.viewModel.text);
+                const title = this.viewModel.text;
+                this.updateView(v => v.setTitle(title));
             }
         }
     }
@@ -170,7 +173,7 @@ export function SynchedTitleComponentMixin<T extends Constructor<Component>>(Bas
 }
 
 export class TextComponent extends SynchedTitleComponentMixin(TextComponentMixin(TitleComponentMixin(Component))) {
-    constructor(protected readonly viewModel: BaseTextComponentViewModel, protected readonly view: BaseTextComponentView) {
+    constructor(viewModel: BaseTextComponentViewModel, view: BaseTextComponentView) {
         super(
             viewModel,
             view,

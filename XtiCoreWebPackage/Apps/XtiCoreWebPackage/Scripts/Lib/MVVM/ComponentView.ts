@@ -1,3 +1,4 @@
+import { ConsoleLogger } from "../ConsoleLogger";
 
 type IHtmlEventListener = (el: HTMLElement, evt: Event) => void;
 
@@ -61,6 +62,13 @@ export class ComponentView {
         listeners[eventType] = listener;
         if (element) {
             element.addEventListener(eventType, listener);
+        }
+    }
+
+    protected simulateEvent<K extends keyof HTMLElementEventMap>(ev: HTMLElementEventMap[K]) {
+        const element = this._element;
+        if (element) {
+            element.dispatchEvent(ev);
         }
     }
 

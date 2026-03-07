@@ -70,10 +70,12 @@ export class LinkComponentChangeHandler extends ComponentChangeHandler<Component
 
     handleChanges(changes: ObservableChanges<ComponentViewModel & BaseLinkComponentViewModel>) {
         if (changes.href) {
-            this.view.setHref(changes.href.value);
+            const href = changes.href.value;
+            this.updateView(v => v.setHref(href));
         }
         if (changes.target) {
-            this.view.setTarget(changes.target.value);
+            const target = changes.target.value;
+            this.updateView(v => v.setTarget(target));
         }
     }
 
@@ -102,10 +104,7 @@ export function LinkComponentMixin<T extends Constructor<Component>>(Base: T) {
 }
 
 export class LinkComponent extends LinkComponentMixin(TitleComponentMixin(Component)) {
-    constructor(
-        protected readonly viewModel: BaseLinkComponentViewModel,
-        protected readonly view: BaseLinkComponentView
-    ) {
+    constructor(viewModel: BaseLinkComponentViewModel, view: BaseLinkComponentView) {
         super(
             viewModel,
             view,
