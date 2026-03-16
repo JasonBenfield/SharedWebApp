@@ -31,7 +31,7 @@
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\ContainerComponent.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\ContainerComponentView.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\LinkComponent.ts" />
-	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\MvvmPage.ts" />
+	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\MvvmHost.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\ObservableArray.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\ReadonlyFormGroup.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\StyleableComponentView.ts" />

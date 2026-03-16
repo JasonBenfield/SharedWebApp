@@ -272,26 +272,27 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
     }
 
     private readonly debouncedHandleItemsChanged = new DebouncedAction(
-        () => {
-            const changes = this._itemChanges.map(c => c);
-            this._itemChanges.splice(0, this._itemChanges.length);
-            const itemComponents = this._itemComponents;
-            for (const change of changes) {
-                const index = change.index + 1;
-                if (change.action === "add" || change.action === "insert") {
-                    this.insertItemComponent(change.item, index);
-                }
-                else if (change.action === "move") {
-                    const itemComponent = itemComponents.get(change.item);
-                    itemComponent?.moveTo(index);
-                }
-                else if (change.action === "remove") {
-                    this.removeItemComponent(change.item);
-                }
-            }
-        },
+        this.handleStoredItemChanges.bind(this),
         MvvmOptions.value.debouncedViewModelChangedWait
     );
+
+    private handleStoredItemChanges() {
+        const changes = this._itemChanges.splice(0, this._itemChanges.length);
+        const itemComponents = this._itemComponents;
+        for (const change of changes) {
+            const index = change.index + 1;
+            if (change.action === "add" || change.action === "insert") {
+                this.insertItemComponent(change.item, index);
+            }
+            else if (change.action === "move") {
+                const itemComponent = itemComponents.get(change.item);
+                itemComponent?.moveTo(index);
+            }
+            else if (change.action === "remove") {
+                this.removeItemComponent(change.item);
+            }
+        }
+    }
 
     automateHeaderVisibility() {
         this.isHeaderVisibilityAutomated = true;
@@ -329,7 +330,7 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
     }
 
     getItems() {
-        return this.getComponents().filter(c => c !== this.header && c !== this.footer) as TItemComponent[];
+        return this.getChildComponents().filter(c => c !== this.header && c !== this.footer) as TItemComponent[];
     }
 
     addItem(sourceItem: TSource) {
@@ -384,7 +385,7 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
     }
 
     private createItemViewModel(sourceItem: TSource) {
-        let itemViewModel = this.itemFactory.createItemViewModel();
+        const itemViewModel = this.itemFactory.createItemViewModel();
         this.itemUpdater.updateFrom(sourceItem, itemViewModel);
         return itemViewModel;
     }
@@ -392,7 +393,6 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
     private updateHeaderAndFooterVisibility() {
         if (this.isHeaderVisibilityAutomated || this.isFooterVisibilityAutomated) {
             if (this.viewModel.items.getValues().find(item => item.isVisible)) {
-                ConsoleLogger.value.log("any item visible");
                 if (this.isHeaderVisibilityAutomated) {
                     this.header.show();
                 }
@@ -409,6 +409,20 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
                 }
             }
         }
+    }
+
+    immediateHandleChanges() {
+        this.handleStoredItemChanges();
+        this.viewModel.items.immediateHandleChanges();
+        super.immediateHandleChanges();
+    }
+
+    dispose() {
+        this.viewModel.items.when.arrayChanged?.unregister(this.handleItemsChanged.bind(this));
+        this.debouncedHandleItemsChanged.cancel();
+        this.handleStoredItemChanges();
+        this.viewModel.items.immediateHandleChanges();
+        super.dispose();
     }
 }
 

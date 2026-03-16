@@ -1,4 +1,3 @@
-import { ConsoleLogger } from "../ConsoleLogger";
 import { DelayedAction } from "../DelayedAction";
 import { Component } from "./Component";
 import { ComponentView } from "./ComponentView";
@@ -15,23 +14,33 @@ class RootView extends ContainerComponentView {
     }
 }
 
-export class MvvmPage {
+export class MvvmHost {
     private readonly view: ContainerComponentView;
     private readonly components: Component[] = [];
 
     constructor() {
         this.view = new RootView();
+        if (typeof PointerEvent === "undefined") {
+            const win: any = window;
+            win.PointerEvent = MouseEvent;
+        }
     }
 
-    async show(view: ComponentView, component: Component) {
+    show(view: ComponentView, component: Component) {
         this.view.addChildView(view);
         this.components.push(component);
-        await this.waitForChangeNotifications();
         this.view.show();
+        this.immediateHandleChanges();
     }
 
     waitForChangeNotifications() {
         return DelayedAction.delay(MvvmOptions.value.debouncedViewModelChangedWait + 10);
+    }
+
+    immediateHandleChanges() {
+        for (const component of this.components) {
+            component.immediateHandleChanges();
+        }
     }
 
     reset() {

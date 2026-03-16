@@ -27,7 +27,7 @@ export class ComponentView {
     private _element: HTMLElement | null = null;
     private readonly _htmlEventListeners: IHtmlEventListeners = {};
     private _parentView: ComponentView | null = null;
-    private readonly _views: ComponentView[] = [];
+    private readonly childViews: ComponentView[] = [];
     private _isVisible = true;
     protected isParentRequired = true;
 
@@ -46,11 +46,13 @@ export class ComponentView {
         }
     }
 
-    get element() { return this._element; }
+    protected get element() { return this._element; }
+
+    get elementExists() { return Boolean(this._element); }
 
     get isVisible() { return this._isVisible; }
 
-    protected setEventListener<K extends keyof HTMLElementEventMap>(eventType: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any) {
+    protected setEventListener<K extends keyof HTMLElementEventMap>(eventType: K, listener: (ev: HTMLElementEventMap[K]) => void) {
         const element = this._element;
         const listeners: any = this._htmlEventListeners;
         if (element) {
@@ -75,7 +77,7 @@ export class ComponentView {
     show() {
         this._isVisible = true;
         const parentView = this._parentView;
-        const index = parentView ? parentView._views.indexOf(this) : -1;
+        const index = parentView ? parentView.childViews.indexOf(this) : -1;
         this.addToDom(index);
     }
 
@@ -98,27 +100,27 @@ export class ComponentView {
         view._parentView = this;
         view.addToDom(index);
         if (index > -1) {
-            this._views.splice(index, 0, view);
+            this.childViews.splice(index, 0, view);
         }
         else {
-            this._views.push(view);
+            this.childViews.push(view);
         }
         return view;
     }
 
     protected removeAllChildViews() {
-        for (const view of this._views) {
+        for (const view of this.childViews) {
             view.dispose();
         }
-        this._views.splice(0, this._views.length);
+        this.childViews.splice(0, this.childViews.length);
     }
 
     protected removeChildView(view: ComponentView) {
-        const views = this._views;
+        const views = this.childViews;
         if (views) {
-            const index = this._views.indexOf(view);
+            const index = this.childViews.indexOf(view);
             if (index > -1) {
-                this._views.splice(index, 1);
+                this.childViews.splice(index, 1);
             }
         }
         view.dispose();
@@ -161,7 +163,7 @@ export class ComponentView {
             }
             if (parentElement || !this.isParentRequired) {
                 let childIndex = 0;
-                for (const view of this._views) {
+                for (const view of this.childViews) {
                     view.addToDom(childIndex);
                     childIndex++;
                 }
@@ -175,7 +177,7 @@ export class ComponentView {
         const parentView = this._parentView;
         const parentElement = parentView?._element;
         if (parentView && parentElement) {
-            const views = parentView._views;
+            const views = parentView.childViews;
             for (let i = 0; i < index; i++) {
                 if (!views[i].isVisible) {
                     elementIndex--;
@@ -199,10 +201,10 @@ export class ComponentView {
     }
 
     private moveChildView(view: ComponentView, toIndex: number) {
-        const index = this._views.indexOf(view);
+        const index = this.childViews.indexOf(view);
         if (index > -1 && index !== toIndex) {
-            this._views.splice(index, 1);
-            this._views.splice(toIndex > index ? toIndex - 1 : toIndex, 0, view);
+            this.childViews.splice(index, 1);
+            this.childViews.splice(toIndex > index ? toIndex - 1 : toIndex, 0, view);
             view.moveElement(toIndex);
         }
     }
@@ -224,9 +226,9 @@ export class ComponentView {
     }
 
     dispose() {
-        const views = this._views.splice(0, this._views.length);
-        for (const view of views) {
-            view.dispose();
+        const childViews = this.childViews.splice(0, this.childViews.length);
+        for (const childView of childViews) {
+            childView.dispose();
         }
         this._removeElement();
         const keys = Object.keys(this._htmlEventListeners);

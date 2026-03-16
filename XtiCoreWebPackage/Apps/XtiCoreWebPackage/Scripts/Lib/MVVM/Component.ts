@@ -44,11 +44,11 @@ export class ComponentVisibilityChangeHandler extends ComponentChangeHandler<Com
 }
 
 export class Component {
-    private readonly _changes: ObservableChanges<ComponentViewModel> & { [name: string]: ChangedProperty; } = {};
-    private readonly _changeHandlers: ComponentChangeHandler<ComponentViewModel, ComponentView>[] = [];
-    private readonly _components: Component[] = [];
+    private readonly changes: ObservableChanges<ComponentViewModel> & { [name: string]: ChangedProperty; } = {};
+    private readonly changeHandlers: ComponentChangeHandler<ComponentViewModel, ComponentView>[] = [];
+    private readonly childComponents: Component[] = [];
     private readonly views: ComponentView[];
-    private _parent: Component | null = null;
+    private parentComponent: Component | null = null;
 
     constructor(
         protected readonly viewModel: ComponentViewModel,
@@ -62,39 +62,38 @@ export class Component {
         else {
             this.views = [viewOrViews];
         }
-        this._changeHandlers.push(new ComponentVisibilityChangeHandler(viewModel, this.views));
+        this.changeHandlers.push(new ComponentVisibilityChangeHandler(viewModel, this.views));
         for (const changeHandler of changeHandlers) {
-            this._changeHandlers.push(changeHandler);
+            this.changeHandlers.push(changeHandler);
         }
         this.handleChanges(viewModel.changes);
     }
 
     private onViewModelChanged(event: CustomEvent<UpdatedViewModel>) {
-        this._changes[event.detail.changedProperty.propertyName] = event.detail.changedProperty;
+        this.changes[event.detail.changedProperty.propertyName] = event.detail.changedProperty;
         this.debouncedOnViewModelChanged.execute();
     }
 
     private readonly debouncedOnViewModelChanged = new DebouncedAction(
-        () => {
-            const changes = this._changes;
-            if (changes) {
-                this.handleChanges(changes);
-                for (const key in changes) {
-                    delete changes[key];
-                }
-            }
-        },
+        this.handleStoredChanges.bind(this),
         MvvmOptions.value.debouncedViewModelChangedWait
     );
 
+    private handleStoredChanges() {
+        this.handleChanges(Object.assign({}, this.changes));
+        for (const key in this.changes) {
+            delete this.changes[key];
+        }
+    }
+
     private handleChanges(changes: ObservableChanges<ComponentViewModel>) {
-        for (const handler of this._changeHandlers) {
+        for (const handler of this.changeHandlers) {
             handler.handleChanges(changes);
         }
     }
 
-    protected getComponents() {
-        return Array.from(this._components);
+    protected getChildComponents() {
+        return Array.from(this.childComponents);
     }
 
     hasViewModel(otherViewModel: ComponentViewModel) {
@@ -117,8 +116,8 @@ export class Component {
         if (Object.is(this, c)) {
             throw new Error("cannot add component to itself");
         }
-        c._parent = this;
-        this._components.push(c);
+        c.parentComponent = this;
+        this.childComponents.push(c);
         return c;
     }
 
@@ -126,22 +125,22 @@ export class Component {
         if (Object.is(this, c)) {
             throw new Error("cannot add component to itself");
         }
-        c._parent = this;
-        this._components.splice(index, 0, c);
+        c.parentComponent = this;
+        this.childComponents.splice(index, 0, c);
         return c;
     }
 
     protected removeComponent(c: Component) {
-        const index = this._components.indexOf(c);
+        const index = this.childComponents.indexOf(c);
         if (index >= 0) {
-            this._components.splice(index, 1);
+            this.childComponents.splice(index, 1);
             c.dispose();
         }
         return c;
     }
 
     moveTo(toIndex: number) {
-        const parent = this._parent;
+        const parent = this.parentComponent;
         if (parent) {
             parent.moveComponent(this, toIndex);
             for (const view of this.views) {
@@ -154,21 +153,32 @@ export class Component {
         if (Object.is(this, c)) {
             throw new Error("cannot move itself");
         }
-        const index = this._components.indexOf(c);
+        const index = this.childComponents.indexOf(c);
         if (index > -1) {
-            this._components.splice(index, 1);
+            this.childComponents.splice(index, 1);
             if (toIndex > index) {
                 toIndex--;
             }
-            this._components.splice(toIndex, 0, c);
+            this.childComponents.splice(toIndex, 0, c);
         }
     }
 
-    dispose() {
-        const components = this._components.splice(0, this._components.length);
-        for (const component of components) {
-            component.dispose();
+    immediateHandleChanges() {
+        for (const childComponent of this.childComponents) {
+            childComponent.immediateHandleChanges();
         }
+        this.handleStoredChanges();
+    }
+
+    dispose() {
+        this.viewModel.when.propertyChanged?.unregister(this.onViewModelChanged.bind(this));
+        this.debouncedOnViewModelChanged.cancel();
+        this.hide();
+        const childComponents = this.childComponents.splice(0, this.childComponents.length);
+        for (const childComponent of childComponents) {
+            childComponent.dispose();
+        }
+        this.handleStoredChanges();
         this.viewModel.dispose();
         const views = this.views.splice(0, this.views.length);
         for (const view of views) {

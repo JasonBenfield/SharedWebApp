@@ -4,16 +4,13 @@ import { ContainerComponent } from "../../Lib/MVVM/ContainerComponent";
 import { IViewModelUpdater, ListComponent, ListComponentOptionsBuilder, ListComponentView, ListComponentViewModel, ListItemFactory, TextViewModelUpdater } from "../../Lib/MVVM/ListComponent";
 import { ReadonlyFormGroup, ReadonlyFormGroupView, ReadonlyFormGroupViewModel } from "../../Lib/MVVM/ReadonlyFormGroup";
 import { TextComponent, TextComponentView, TextComponentViewModel } from "../../Lib/MVVM/TextComponent";
-import { AppPage } from "../AppPage";
+import { AppHost } from "../AppHost";
+import { ButtonCommandView, Command, CommandOptionsBuilder, CommandViewModel } from "../../Lib/MVVM/Command";
 
 class MainPage {
 
     constructor() {
-        const pageView = new CompositeComponentView().compose({
-            formGroup: ReadonlyFormGroupView.create(),
-            textList: ListComponentView.unorderedList(),
-            compositeList: ListComponentView.unorderedList()
-        });
+        const pageView = createPageView();
         const pageViewModel = new MainPageViewModel();
 
         const formGroup = new ReadonlyFormGroup(pageViewModel.formGroup, pageView.formGroup);
@@ -71,17 +68,39 @@ class MainPage {
         compositeListComponent.header.text = "Composite List Header";
         compositeListComponent.setItems(new TestItem(1, "Test 1"), new TestItem(2, "Test 2"), new TestItem(3, "Test 3"), new TestItem(4, "Test 4"));
         compositeListComponent.footer.text = "Composite List Footer";
+        const command = new Command(
+            new CommandOptionsBuilder(pageViewModel.button)
+                .addView(pageView.buttons.button)
+                .setAction(async () => {
+                    alert("Testing");
+                })
+                .build()
+        );
+        command.setText("Test Button");
         const pageComponent = new ContainerComponent(new ComponentViewModel(), pageView);
         pageComponent.addComponents(
             formGroup,
             textListComponent,
-            compositeListComponent
+            compositeListComponent,
+            command
         );
-        AppPage.value.show(
+        AppHost.value.show(
             pageView,
             pageComponent
         );
     }
+}
+
+function createPageView() {
+    const pageView = new CompositeComponentView().compose({
+        formGroup: ReadonlyFormGroupView.create(),
+        textList: ListComponentView.unorderedList(),
+        compositeList: ListComponentView.unorderedList(),
+        buttons: new CompositeComponentView().compose({
+            button: new ButtonCommandView()
+        })
+    });
+    return pageView;
 }
 
 class TestItem {
@@ -115,6 +134,7 @@ class MainPageViewModel {
     readonly formGroup = new ReadonlyFormGroupViewModel();
     readonly textList = new ListComponentViewModel<TextComponentViewModel>();
     readonly compositeList = new ListComponentViewModel<TestItemComponentViewModel>();
+    readonly button = new CommandViewModel();
 }
 
 new MainPage();

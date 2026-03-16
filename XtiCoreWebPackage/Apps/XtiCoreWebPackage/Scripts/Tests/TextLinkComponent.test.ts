@@ -1,12 +1,12 @@
 
 import { afterEach, describe, expect, test } from "@jest/globals";
 import { TextLinkComponent, TextLinkComponentView, TextLinkComponentViewModel } from "../Lib/MVVM/TextLinkComponent";
-import { TestPage } from "./TestPage";
+import { TestHost } from "./TestHost";
 
 const linkElementID = "textLinkEl";
 
 afterEach(() => {
-    TestPage.value.reset();
+    TestHost.value.reset();
 });
 
 describe("Text Link Component", () => {
@@ -19,7 +19,7 @@ describe("Text Link Component", () => {
                 target: ""
             })
         );
-        await TestPage.value.show(view, component);
+        TestHost.value.show(view, component);
         const element = document.getElementById(linkElementID) as HTMLAnchorElement;
         expect(element?.tagName).toBe("A");
         expect(element?.innerText).toBe("Initial Text");
@@ -30,7 +30,7 @@ describe("Text Link Component", () => {
         component.href = "https://example.com/2";
         component.title = "Updated Title";
         component.setTargetToBlank();
-        await TestPage.value.waitForChangeNotifications();
+        TestHost.value.immediateHandleChanges();
         expect(element?.innerText).toBe("Updated Text");
         expect(element?.href).toBe("https://example.com/2");
         expect(element?.title).toBe("Updated Title");

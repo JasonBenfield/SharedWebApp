@@ -1,3 +1,5 @@
+import { ConsoleLogger } from "../ConsoleLogger";
+import { areValuesEqual } from "./Equatable";
 import { EventManager } from "./EventManager";
 import { ObservableArray } from "./ObservableArray";
 
@@ -22,8 +24,8 @@ export class ComponentViewModel {
             {
                 set: (target: any, property: string, value) => {
                     const originalValue = Reflect.get(target, property);
-                    if (originalValue !== value) {
-                        Reflect.set(target, property, value);
+                    Reflect.set(target, property, value);
+                    if (!areValuesEqual(originalValue, value)) {
                         const change = new ChangedProperty(
                             target,
                             property,
@@ -42,7 +44,8 @@ export class ComponentViewModel {
             }
         );
         for (const key in initializer) {
-            (<any>proxy)[key] = (<any>initializer)[key];
+            const initialValue = Reflect.get(initializer, key);
+            Reflect.set(proxy, key, initialValue);
         }
         return proxy;
     }
@@ -71,10 +74,6 @@ export class ComponentViewModel {
         }
         this._eventManager.dispose();
     }
-}
-
-export interface PropertyChangedEventListener {
-    (evt: CustomEvent<{ [name: string]: ChangedProperty }>): void;
 }
 
 type excludedViewModelProperties =

@@ -2,12 +2,12 @@
 import { afterEach, describe, expect, test } from "@jest/globals";
 import { LinkComponent, LinkComponentView, LinkComponentViewModel } from "../Lib/MVVM/LinkComponent";
 import { TextComponentView } from "../Lib/MVVM/TextComponent";
-import { TestPage } from "./TestPage";
+import { TestHost } from "./TestHost";
 
 const linkElementID = "linkEl";
 
 afterEach(() => {
-    TestPage.value.reset();
+    TestHost.value.reset();
 });
 
 describe("Link Component", () => {
@@ -19,7 +19,7 @@ describe("Link Component", () => {
                 target: ""
             })
         );
-        await TestPage.value.show(view, component);
+        TestHost.value.show(view, component);
         const element = document.getElementById(linkElementID) as HTMLAnchorElement;
         expect(element?.tagName).toBe("A");
         expect(element?.href).toBe("https://example.com/1");
@@ -27,7 +27,7 @@ describe("Link Component", () => {
         component.href = "https://example.com/2";
         component.title = "Updated Title";
         component.setTargetToBlank();
-        await TestPage.value.waitForChangeNotifications();
+        TestHost.value.immediateHandleChanges();
         expect(element?.href).toBe("https://example.com/2");
         expect(element?.title).toBe("Updated Title");
         expect(element?.target).toBe("_blank");

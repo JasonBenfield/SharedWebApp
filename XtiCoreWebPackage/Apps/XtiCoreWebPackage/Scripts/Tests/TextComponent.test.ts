@@ -2,14 +2,14 @@ import { afterEach, describe, expect, test } from "@jest/globals";
 import { ComponentView } from "../Lib/MVVM/ComponentView";
 import { StyleableComponentViewMixin } from "../Lib/MVVM/StyleableComponentView";
 import { TextComponent, TextComponentViewModel, TextViewMixin, TitleViewMixin } from "../Lib/MVVM/TextComponent";
-import { TestPage } from "./TestPage";
+import { TestHost } from "./TestHost";
 
 const textElementID = "textEl";
 
 const ComponentFromMixin = TextViewMixin(TitleViewMixin(StyleableComponentViewMixin(ComponentView)));
 
 afterEach(() => {
-    TestPage.value.reset();
+    TestHost.value.reset();
 });
 
 describe("Text Component", () => {
@@ -20,14 +20,14 @@ describe("Text Component", () => {
                 title: "Initial Title"
             })
         );
-        await TestPage.value.show(view, component);
+        TestHost.value.show(view, component);
         const element = document.getElementById(textElementID);
         expect(element?.tagName).toBe("DIV");
         expect(element?.innerText).toBe("Initial Value");
         expect(element?.title).toBe("Initial Title");
         component.text = "Changed Value";
         component.title = "Changed Title";
-        await TestPage.value.waitForChangeNotifications();
+        TestHost.value.immediateHandleChanges();
         expect(element?.innerText).toBe("Changed Value");
         expect(element?.title).toBe("Changed Title");
         component.dispose();

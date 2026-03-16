@@ -4,7 +4,7 @@ import { DelayedAction } from "../Lib/DelayedAction";
 import { ComponentView } from "../Lib/MVVM/ComponentView";
 import { ComponentViewModel } from "../Lib/MVVM/ComponentViewModel";
 import { CompositeComponent, CompositeComponentView, CompositeComponentViewModel } from "../Lib/MVVM/CompositeComponent";
-import { TestPage } from "./TestPage";
+import { TestHost } from "./TestHost";
 
 function createDiv(id: string) {
     const el = document.createElement("div");
@@ -19,14 +19,14 @@ const level2_1ElementID = "level2_1El";
 const level2_2ElementID = "level2_2El";
 
 afterEach(() => {
-    TestPage.value.reset();
+    TestHost.value.reset();
 });
 
 
 describe("Container Component", () => {
     test("add to dom when visible", async () => {
         const { view, component } = createComponent();
-        await TestPage.value.show(view, component);
+        TestHost.value.show(view, component);
         const containerEl = document.getElementById(containerElementID);
         expect(containerEl).not.toBeNull();
         const level1_1El = containerEl?.querySelectorAll(`#${level1_1ElementID}`)[0];
@@ -41,13 +41,13 @@ describe("Container Component", () => {
     });
     test("should not add to dom when not visible", async () => {
         const { view, component } = createComponent({ isVisible: false });
-        await TestPage.value.show(view, component);
+        TestHost.value.show(view, component);
         const containerEl = document.getElementById(containerElementID);
         expect(containerEl).toBeNull();
     });
     test("should show/hide child views", async () => {
         const { view, component } = createComponent();
-        await TestPage.value.show(view, component);
+        TestHost.value.show(view, component);
         component.level1_2.hide();
         await waitForChangeNotifications();
 
@@ -56,7 +56,7 @@ describe("Container Component", () => {
 
         component.level1_1.level2_2.hide();
         component.level1_2.show();
-        await waitForChangeNotifications();
+        TestHost.value.immediateHandleChanges();
         expect(document.getElementById(level1_1ElementID)).not.toBeNull();
         expect(document.getElementById(level2_1ElementID)).not.toBeNull();
         expect(document.getElementById(level2_2ElementID)).toBeNull();
@@ -64,13 +64,13 @@ describe("Container Component", () => {
 
         component.level1_1.hide();
         component.level1_1.level2_2.show();
-        await waitForChangeNotifications();
+        TestHost.value.immediateHandleChanges();
         expect(document.getElementById(level1_1ElementID)).toBeNull();
         expect(document.getElementById(level2_2ElementID)).toBeNull();
         expect(document.getElementById(level1_2ElementID)).not.toBeNull();
 
         component.level1_1.show();
-        await waitForChangeNotifications();
+        TestHost.value.immediateHandleChanges();
         expect(document.getElementById(level1_1ElementID)).not.toBeNull();
         expect(document.getElementById(level2_1ElementID)).not.toBeNull();
     });

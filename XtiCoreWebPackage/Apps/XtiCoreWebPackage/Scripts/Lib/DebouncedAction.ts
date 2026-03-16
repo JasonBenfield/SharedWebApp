@@ -13,4 +13,6 @@ export class DebouncedAction {
     execute(...args: any[]) {
         return this.debounced(...args);
     }
+
+    cancel() { this.debounced.cancel(); }
 }

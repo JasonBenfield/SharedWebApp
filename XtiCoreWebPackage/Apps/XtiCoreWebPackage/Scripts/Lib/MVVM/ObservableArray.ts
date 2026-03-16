@@ -36,24 +36,26 @@ export class ObservableArray<TViewModel extends ComponentViewModel> {
     }
 
     private readonly debouncedHandlePropertyChanged = new DebouncedAction(
-        () => {
-            const changedItemProperties = this._changedItemProperties.splice(0, this._changedItemProperties.length);
-            if (changedItemProperties.length > 0) {
-                const itemChanges: ChangedObservableArrayItem<TViewModel>[] = [];
-                for (const changedItemProperty of changedItemProperties) {
-                    const viewModel = changedItemProperty.target as TViewModel;
-                    let itemChange = itemChanges.find(c => c.viewModel === viewModel);
-                    if (!itemChange) {
-                        itemChange = new ChangedObservableArrayItem(this, viewModel, {});
-                        itemChanges.push(itemChange);
-                    }
-                    Reflect.set(itemChange.changes, changedItemProperty.propertyName, changedItemProperty);
-                }
-                this._eventManager.events.arrayItemChanged.invoke(itemChanges);
-            }
-        },
+        this.handleStoredChanges.bind(this),
         MvvmOptions.value.debouncedViewModelChangedWait
     );
+
+    private handleStoredChanges() {
+        const changedItemProperties = this._changedItemProperties.splice(0, this._changedItemProperties.length);
+        if (changedItemProperties.length > 0) {
+            const itemChanges: ChangedObservableArrayItem<TViewModel>[] = [];
+            for (const changedItemProperty of changedItemProperties) {
+                const viewModel = changedItemProperty.target as TViewModel;
+                let itemChange = itemChanges.find(c => c.viewModel === viewModel);
+                if (!itemChange) {
+                    itemChange = new ChangedObservableArrayItem(this, viewModel, {});
+                    itemChanges.push(itemChange);
+                }
+                Reflect.set(itemChange.changes, changedItemProperty.propertyName, changedItemProperty);
+            }
+            this._eventManager.events.arrayItemChanged?.invoke(itemChanges);
+        }
+    }
 
     get length() { return this._values.length; }
 
@@ -163,7 +165,13 @@ export class ObservableArray<TViewModel extends ComponentViewModel> {
         this._eventManager.events.arrayChanged.invoke(changes);
     }
 
+    immediateHandleChanges() {
+        this.handleStoredChanges();
+    }
+
     dispose() {
+        this.debouncedHandlePropertyChanged.cancel();
+        this.handleStoredChanges();
         this._itemEventManager.dispose();
         this._eventManager.dispose();
         const values = this._values.splice(0, this._values.length);

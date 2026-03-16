@@ -10,35 +10,82 @@ export type BaseCommandView = ComponentView & ICommandView & ITextView & ITitleV
 
 export class CommandChangeHandler extends ComponentChangeHandler<CommandViewModel, ComponentView & ICommandView> {
     handleChanges(changes: ObservableChanges<CommandViewModel>): void {
-        if (changes.text) {
+        if (changes.isEnabled || changes.isInProgress) {
+            const isEnabled = this.viewModel.isEnabled && !this.viewModel.isInProgress;
+            this.updateView(v => {
+                if (isEnabled) {
+                    v.enable();
+                }
+                else {
+                    v.disable();
+                }
+            });
         }
     }
+}
 
+type CommandAction = () => Promise<any>;
+
+export interface ICommandOptions {
+    viewModel: CommandViewModel,
+    views: BaseCommandView[],
+    action: CommandAction
+}
+
+export class CommandOptionsBuilder {
+    private readonly views: BaseCommandView[] = [];
+    private action: () => Promise<any> = async () => { };
+
+    constructor(private readonly viewModel: CommandViewModel) {
+    }
+
+    addView(view: BaseCommandView) {
+        this.addViews(view);
+        return this;
+    }
+
+    addViews(...views: BaseCommandView[]) {
+        this.views.push(...views);
+        return this;
+    }
+
+    setAction(action: () => Promise<any>) {
+        this.action = action;
+        return this;
+    }
+
+    build() {
+        const options: ICommandOptions = {
+            viewModel: this.viewModel,
+            views: this.views,
+            action: this.action
+        };
+        return options;
+    }
 }
 
 export class Command extends Component {
-    constructor(
-        viewModel: CommandViewModel,
-        view: BaseCommandView,
-        action: () => Promise<any>
-    );
-    constructor(
-        viewModel: CommandViewModel,
-        views: BaseCommandView[],
-        action: () => Promise<any>
-    );
-    constructor(
-        protected readonly viewModel: CommandViewModel,
-        viewOrViews: BaseCommandView | (BaseCommandView[]),
-        private readonly action: () => Promise<any>
-    ) {
-        const views = Array.isArray(viewOrViews) ? viewOrViews : [viewOrViews];
+    declare protected readonly viewModel: CommandViewModel;
+    private readonly action: CommandAction;
+
+    constructor(options: ICommandOptions) {
+        const viewModel = options.viewModel;
+        const views = options.views;
         super(
             viewModel,
             views,
             new TitleChangeHandler(viewModel, views),
-            new TextChangeHandler(viewModel, views)
+            new TextChangeHandler(viewModel, views),
+            new CommandChangeHandler(viewModel, views)
         );
+        this.action = options.action;
+        for (const view of views) {
+            view.when.clicked.then(this.onClick.bind(this));
+        }
+    }
+
+    private onClick() {
+        this.execute();
     }
 
     setText(text: string) {
@@ -50,18 +97,20 @@ export class Command extends Component {
     }
 
     async execute() {
-        this.viewModel.isInProgress = true;
-        try {
-            await this.action();
-        }
-        finally {
-            this.viewModel.isInProgress = false;
+        if (!this.viewModel.isInProgress) {
+            this.viewModel.isInProgress = true;
+            try {
+                await this.action();
+            }
+            finally {
+                this.viewModel.isInProgress = false;
+            }
         }
     }
 }
 
 export class CommandViewModel extends TextViewModelMixin(TitleViewModelMixin(ComponentViewModel)) {
-    private _isEnabled = false;
+    private _isEnabled = true;
     get isEnabled() { return this._isEnabled; }
     set isEnabled(isEnabled: boolean) { this._isEnabled = isEnabled; }
 
@@ -71,20 +120,23 @@ export class CommandViewModel extends TextViewModelMixin(TitleViewModelMixin(Com
 }
 
 type CommandEventLayout = {
-    click: PointerEvent;
+    clicked: PointerEvent;
 }
 
 export interface ICommandView {
     readonly when: CustomEventRegistrations<CommandEventLayout>;
+    enable(): void;
+    disable(): void;
     styleAsInProgress(): void;
     clearStyleAsInProgress(): void;
 }
 
 export class ButtonCommandView extends TitleViewMixin(StyleableComponentViewMixin(ComponentView)) implements ICommandView, ITextView {
     private readonly _eventManager = new EventManager<CommandEventLayout>({
-        click: null
+        clicked: null
     });
     private hasRegisteredEvents = false;
+    private isEnabled = true;
 
     constructor() {
         super("button");
@@ -93,42 +145,50 @@ export class ButtonCommandView extends TitleViewMixin(StyleableComponentViewMixi
 
     readonly text: TextComponentView;
 
+    protected addToDom(index: number) {
+        super.addToDom(index);
+        const element = this.element as HTMLButtonElement;
+        if (element && !this.isEnabled) {
+            element.disabled = true;
+        }
+    }
+
     setText(text: string) {
         this.text.setText(text);
     }
 
     enable() {
-        this.setAttribute("disabled", null);
+        this.isEnabled = true;
+        const element = this.element as HTMLButtonElement;
+        if (element) {
+            element.disabled = false;
+        }
     }
 
     disable() {
-        this.setAttribute("disabled", "");
+        this.isEnabled = false;
+        const element = this.element as HTMLButtonElement;
+        if (element) {
+            element.disabled = true;
+        }
     }
 
     get when() {
         if (!this.hasRegisteredEvents) {
-            this.setEventListener("click", this.handleClickEvent);
+            this.setEventListener(
+                "click",
+                this.handleClickEvent.bind(this) as any
+            );
             this.hasRegisteredEvents = true;
         }
         return this._eventManager.when;
     }
 
     simulateClick() {
-        const evt = new PointerEvent(
-            "pointerup",
-            {
-                pointerId: 1,
-                bubbles: true,
-                cancelable: true,
-                pointerType: "mouse",
-                width: 100,
-                height: 100,
-                isPrimary: true,
-                clientX: 0,
-                clientY: 0
-            }
-        );
-        this.simulateEvent(evt);
+        const element = this.element as HTMLButtonElement;
+        if (element && !element.disabled) {
+            element.click();
+        }
     }
 
     styleAsInProgress() {
@@ -140,6 +200,6 @@ export class ButtonCommandView extends TitleViewMixin(StyleableComponentViewMixi
     }
 
     private handleClickEvent(evt: PointerEvent) {
-        this._eventManager.events.click.invoke(evt);
+        this._eventManager.events.clicked.invoke(evt);
     }
 }

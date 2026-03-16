@@ -14,6 +14,27 @@ type EventTemplate<TEvents> = {
     [K in keyof TEvents]: TEvents[K] | null;
 }
 
+export class CustomUIEvent extends CustomEvent<UIEvent> {
+    constructor(
+        private readonly event: UIEvent,
+        readonly element: HTMLElement
+    ) {
+        super(event.type, { detail: event });
+    }
+
+    preventDefault() {
+        this.event.preventDefault();
+    }
+
+    stopImmediatePropagation() {
+        this.event.stopImmediatePropagation();
+    }
+
+    stopPropagation() {
+        this.event.stopPropagation();
+    }
+}
+
 export class EventManager<TEvents> {
     private readonly _target: EventTarget;
     readonly events: CustomEventTargets<TEvents> = {} as CustomEventTargets<TEvents>;
@@ -23,8 +44,8 @@ export class EventManager<TEvents> {
         this._target = new EventTarget();
         for (const key in template) {
             const event = new CustomEventTarget<any>(key, this._target);
-            this.events[key] = event;
-            this.when[key] = new CustomEventRegistration(event);
+            Reflect.set(this.events, key, event);
+            Reflect.set(this.when, key, new CustomEventRegistration(event));
         }
     }
 
@@ -58,30 +79,34 @@ class CustomEventRegistration<TArgs> {
     then(listener: CustomEventListener<TArgs>) {
         this.event.register(listener);
     }
+
+    unregister(listener: CustomEventListener<TArgs>) {
+        this.event.unregister(listener);
+    }
 }
 
 class CustomEventTarget<TArgs> {
-    private readonly _targets: EventTarget[] = [];
-    private readonly _listeners: CustomEventListener<TArgs>[] = [];
+    private readonly targets: EventTarget[] = [];
+    private readonly listeners: CustomEventListener<TArgs>[] = [];
 
     constructor(
         private readonly type: string,
-        private readonly _target: EventTarget
+        private readonly target: EventTarget
     ) {
-        this._targets.push(this._target);
+        this.targets.push(this.target);
     }
 
     addEventTarget(target: EventTarget) {
-        this._targets.push(target);
+        this.targets.push(target);
     }
 
     register(listener: CustomEventListener<TArgs>) {
-        this._listeners.push(listener);
-        this._target.addEventListener(this.type, listener as EventListener);
+        this.listeners.push(listener);
+        this.target.addEventListener(this.type, listener as EventListener);
     }
 
     invoke(args: TArgs) {
-        for (const target of this._targets) {
+        for (const target of this.targets) {
             target.dispatchEvent(
                 new CustomEvent(
                     this.type,
@@ -94,18 +119,18 @@ class CustomEventTarget<TArgs> {
     }
 
     unregister(listener: CustomEventListener<TArgs>) {
-        const index = this._listeners.indexOf(listener);
+        const index = this.listeners.indexOf(listener);
         if (index > -1) {
-            this._listeners.splice(index, 1);
+            this.listeners.splice(index, 1);
         }
-        this._target.removeEventListener(this.type, listener as EventListener);
+        this.target.removeEventListener(this.type, listener as EventListener);
     }
 
     dispose() {
-        const listeners = this._listeners.splice(0, this._listeners.length);
+        const listeners = this.listeners.splice(0, this.listeners.length);
         for (const listener of listeners) {
-            this._target.removeEventListener(this.type, listener as EventListener);
+            this.target.removeEventListener(this.type, listener as EventListener);
         }
-        this._targets.splice(0, this._targets.length);
+        this.targets.splice(0, this.targets.length);
     }
 }
