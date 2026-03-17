@@ -1,3 +1,4 @@
+import { ConsoleLogger } from "../ConsoleLogger";
 import { DebouncedAction } from "../DebouncedAction";
 import { ComponentView } from "./ComponentView";
 import { ChangedProperty, ComponentViewModel, ObservableChanges, UpdatedViewModel } from "./ComponentViewModel";
@@ -80,13 +81,14 @@ export class Component {
     );
 
     private handleStoredChanges() {
-        this.handleChanges(Object.assign({}, this.changes));
+        const storedChanges = Object.assign({}, this.changes);
         for (const key in this.changes) {
             delete this.changes[key];
         }
+        this.handleChanges(storedChanges);
     }
 
-    private handleChanges(changes: ObservableChanges<ComponentViewModel>) {
+    protected handleChanges(changes: ObservableChanges<ComponentViewModel>) {
         for (const handler of this.changeHandlers) {
             handler.handleChanges(changes);
         }
@@ -167,7 +169,11 @@ export class Component {
         for (const childComponent of this.childComponents) {
             childComponent.immediateHandleChanges();
         }
-        this.handleStoredChanges();
+        let i = 0;
+        while (i < 5 && Object.keys(this.changes).length > 0) {
+            this.handleStoredChanges();
+            i++;
+        }
     }
 
     dispose() {

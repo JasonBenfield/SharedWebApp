@@ -1,6 +1,9 @@
+import { ConsoleLogger } from "../ConsoleLogger";
+import { FormattedNumber } from "../FormattedNumber";
 import { Component, ComponentChangeHandler } from "./Component";
 import { ChangedProperty, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
 import { areValuesEqual, IEquatable } from "./Equatable";
+import { EventManager } from "./EventManager";
 import { FocusableComponentMixin, HasFocusProperty } from "./FocusableComponent";
 import { InputComponentChangeHandler, InputComponentView, InputComponentViewModel, InputTextValue } from "./InputComponent";
 
@@ -60,6 +63,54 @@ export class TransformedInputBuilder<TValue> {
     }
 }
 
+export class TransformedNumberInput implements ITransformedInput<number> {
+    private _textValueWhenZero = "";
+    private _formatString = "";
+    private _valueWhenNaN = 0;
+    private _numberOfDecimals = -1;
+
+    setNumberOfDecimals(numberOfDecimals: number) {
+        this._numberOfDecimals = numberOfDecimals;
+        return this;
+    }
+
+    fromView(textValue: string) {
+        let value = Number.parseFloat(textValue.replace(/[A-Z,|$]+/ig, ""));
+        if (Number.isNaN(value)) {
+            value = this._valueWhenNaN;
+        }
+        else if (this._numberOfDecimals > -1) {
+            const powerOfTen = Math.pow(10, this._numberOfDecimals);
+            value = Math.round((value + Number.EPSILON) * powerOfTen) / powerOfTen;
+        }
+        return value;
+    }
+
+    setTextValueWhenZero(textValue: string) {
+        this._textValueWhenZero = textValue;
+        return this;
+    }
+
+    setFormatString(formatString: string) {
+        this._formatString = formatString;
+        return this;
+    }
+
+    toView(value: number) {
+        let textValue: string;
+        if (value === 0) {
+            textValue = this._textValueWhenZero;
+        }
+        else if (this._formatString) {
+            textValue = new FormattedNumber(value, this._formatString).format();
+        }
+        else {
+            textValue = value.toLocaleString();
+        }
+        return textValue;
+    }
+}
+
 export class TransformedInputComponentChangeHandler<TValue> extends ComponentChangeHandler<TransformedInputComponentViewModel<TValue>, InputComponentView> {
     constructor(
         viewModel: TransformedInputComponentViewModel<TValue>,
@@ -73,7 +124,10 @@ export class TransformedInputComponentChangeHandler<TValue> extends ComponentCha
         if (changes.transformedValue) {
             const transformedValue: TransformedInputValue<TValue> = changes.transformedValue.value;
             const textValue = this.transformedInput.toView(transformedValue.value);
-            this.viewModel.textValue = new InputTextValue(textValue, transformedValue.isFromUI);
+            this.viewModel.textValue = new InputTextValue(
+                textValue,
+                transformedValue.isFromUI ? this.viewModel.hasFocus.value : false
+            );
         }
         if (changes.textValue) {
             const textValue: InputTextValue = changes.textValue.value;
@@ -81,20 +135,35 @@ export class TransformedInputComponentChangeHandler<TValue> extends ComponentCha
                 const value = this.transformedInput.fromView(textValue.value);
                 this.viewModel.transformedValue = new TransformedInputValue(value, true);
             }
-            if (!textValue.isFromUI || !this.viewModel.hasFocus.value) {
+            else {
                 this.updateView(v => v.setTextValue(textValue.value));
             }
         }
         if (changes.hasFocus) {
             const hasFocus: HasFocusProperty = changes.hasFocus.value;
-            if (!hasFocus.value) {
-                this.updateView(v => v.setTextValue(this.viewModel.textValue.value));
+            if (!hasFocus.value && this.viewModel.textValue.isFromUI) {
+                const value = this.transformedInput.fromView(this.viewModel.textValue.value);
+                const textValue = this.transformedInput.toView(value);
+                this.viewModel.textValue = new InputTextValue(textValue);
             }
+        }
+        if (changes.placeholder) {
+            const placeholder: string = changes.placeholder.value;
+            this.updateView(v => v.setPlaceholder(placeholder));
         }
     }
 }
 
+type TransformedInputComponentEventLayout<TValue> = {
+    valueChanged: TValue
+};
+
 export class TransformedInputComponent<TValue> extends FocusableComponentMixin(Component) {
+    private readonly eventManager = new EventManager<TransformedInputComponentEventLayout<TValue>>({
+        valueChanged: null
+    });
+    readonly when = this.eventManager.when;
+
     constructor(
         protected readonly viewModel: TransformedInputComponentViewModel<TValue>,
         protected readonly view: InputComponentView,
@@ -103,27 +172,34 @@ export class TransformedInputComponent<TValue> extends FocusableComponentMixin(C
         super(
             viewModel,
             view,
-            new InputComponentChangeHandler(viewModel, view),
             new TransformedInputComponentChangeHandler(viewModel, view, transformedInput)
         );
-        view.when.textValueInput.then(this.onTextValueChanged.bind(this));
-        view.when.focused.then(this.onFocus.bind(this));
-        view.when.blurred.then(this.onBlur.bind(this));
+        view.when.textValueInput.then(this.onTextValueChangedFromUI.bind(this));
+        view.when.focused.then(this.onFocusFromUI.bind(this));
+        view.when.blurred.then(this.onBlurFromUI.bind(this));
     }
 
-    private onTextValueChanged() {
+    private onTextValueChangedFromUI() {
         const textValue = this.view.getTextValue();
         if (this.view.elementExists) {
             this.viewModel.textValue = new InputTextValue(textValue, true);
         }
     }
 
-    private onFocus() {
+    private onFocusFromUI() {
         this.viewModel.hasFocus = new HasFocusProperty(true, true);
     }
 
-    private onBlur() {
+    private onBlurFromUI() {
         this.viewModel.hasFocus = new HasFocusProperty(false, true);
+    }
+
+    protected handleChanges(changes: ObservableChanges<TransformedInputComponentViewModel<TValue>>) {
+        super.handleChanges(changes);
+        if (changes.transformedValue) {
+            const value: TransformedInputValue<TValue> = changes.transformedValue.value;
+            this.eventManager?.events.valueChanged.invoke(value.value);
+        }
     }
 
     get value() { return this.viewModel.transformedValue.value; }
@@ -133,4 +209,9 @@ export class TransformedInputComponent<TValue> extends FocusableComponentMixin(C
 
     get placeholder() { return this.viewModel.placeholder; }
     set placeholder(placeholder: string) { this.viewModel.placeholder = placeholder; }
+
+    dispose() {
+        this.eventManager.dispose();
+        super.dispose();
+    }
 }

@@ -1,4 +1,4 @@
-import { IFocusableViewModel } from "./FocusableComponent";
+import { HasFocusProperty, IFocusableViewModel } from "./FocusableComponent";
 
 export class CurrentFocused {
     static readonly value = new CurrentFocused();
@@ -17,7 +17,7 @@ export class CurrentFocused {
     focused(focused: IFocusableViewModel) {
         const currentFocused = this.currentFocused;
         if (currentFocused && (!focused.hasFocus || currentFocused !== focused)) {
-            currentFocused.hasFocus = false;
+            currentFocused.hasFocus = new HasFocusProperty(false, false);
             this.currentFocused = null;
         }
         if (focused.hasFocus) {

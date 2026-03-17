@@ -1,4 +1,3 @@
-import { ConsoleLogger } from "../ConsoleLogger";
 import { DebouncedAction } from "../DebouncedAction";
 import { Component } from "./Component";
 import { ComponentView } from "./ComponentView";

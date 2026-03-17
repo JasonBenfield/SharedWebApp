@@ -1,4 +1,3 @@
-import { ConsoleLogger } from "../ConsoleLogger";
 import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentView } from "./ComponentView";
 import { ComponentViewModel, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
@@ -72,8 +71,23 @@ export class InputComponentView extends FocusableViewMixin(StyleableComponentVie
         return element ? element.value : "";
     }
 
+    protected addToDom(index: number) {
+        super.addToDom(index);
+        this.setInputValue();
+    }
+
+    private textValue = "";
+
     setTextValue(textValue: string) {
-        this.setAttribute("value", textValue);
+        this.textValue = textValue;
+        this.setInputValue();
+    }
+
+    private setInputValue() {
+        const element = this.inputElement;
+        if (element) {
+            element.value = this.textValue;
+        }
     }
 
     setPlaceholder(placeholder: string) {
@@ -125,6 +139,7 @@ export class InputComponentView extends FocusableViewMixin(StyleableComponentVie
     }
 
     simulateFocusEvent() {
+        this.setFocus();
         const element = this.inputElement;
         if (element) {
             element.dispatchEvent(
@@ -137,6 +152,7 @@ export class InputComponentView extends FocusableViewMixin(StyleableComponentVie
     }
 
     simulateBlurEvent() {
+        this.blur();
         const element = this.inputElement;
         if (element) {
             element.dispatchEvent(
@@ -168,7 +184,16 @@ export class InputComponentChangeHandler extends ComponentChangeHandler<InputCom
     }
 }
 
+type InputComponentEventLayout = {
+    textValueChanged: string
+};
+
 export class InputComponent extends FocusableComponentMixin(Component) {
+    private readonly eventManager = new EventManager<InputComponentEventLayout>({
+        textValueChanged: null
+    });
+    readonly when = this.eventManager.when;
+
     constructor(
         protected readonly viewModel: InputComponentViewModel,
         protected readonly view: InputComponentView
@@ -178,23 +203,31 @@ export class InputComponent extends FocusableComponentMixin(Component) {
             view,
             new InputComponentChangeHandler(viewModel, view)
         );
-        view.when.textValueInput.then(this.onTextValueChanged.bind(this));
-        view.when.focused.then(this.onFocus.bind(this));
-        view.when.blurred.then(this.onBlur.bind(this));
+        view.when.textValueInput.then(this.onTextValueChangedFromUI.bind(this));
+        view.when.focused.then(this.onFocusFromUI.bind(this));
+        view.when.blurred.then(this.onBlurFromUI.bind(this));
     }
 
-    private onTextValueChanged() {
+    protected handleChanges(changes: ObservableChanges<InputComponentViewModel>) {
+        super.handleChanges(changes);
+        if (changes.textValue) {
+            const textValue: InputTextValue = changes.textValue.value;
+            this.eventManager?.events.textValueChanged.invoke(textValue.value);
+        }
+    }
+
+    private onTextValueChangedFromUI() {
         const textValue = this.view.getTextValue();
         if (this.view.elementExists) {
             this.viewModel.textValue = new InputTextValue(textValue, true);
         }
     }
 
-    private onFocus() {
+    private onFocusFromUI() {
         this.viewModel.hasFocus = new HasFocusProperty(true, true);
     }
 
-    private onBlur() {
+    private onBlurFromUI() {
         this.viewModel.hasFocus = new HasFocusProperty(false, true);
     }
 
@@ -203,4 +236,9 @@ export class InputComponent extends FocusableComponentMixin(Component) {
 
     get placeholder() { return this.viewModel.placeholder; }
     set placeholder(placeholder: string) { this.viewModel.placeholder = placeholder; }
+
+    dispose() {
+        this.eventManager.dispose();
+        super.dispose();
+    }
 }

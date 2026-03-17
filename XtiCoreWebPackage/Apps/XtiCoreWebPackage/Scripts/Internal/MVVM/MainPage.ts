@@ -6,11 +6,15 @@ import { ReadonlyFormGroup, ReadonlyFormGroupView, ReadonlyFormGroupViewModel } 
 import { TextComponent, TextComponentView, TextComponentViewModel } from "../../Lib/MVVM/TextComponent";
 import { AppHost } from "../AppHost";
 import { ButtonCommandView, Command, CommandOptionsBuilder, CommandViewModel } from "../../Lib/MVVM/Command";
+import { ComponentView } from "../../Lib/MVVM/ComponentView";
+import { InputComponentView } from "../../Lib/MVVM/InputComponent";
+import { TransformedInputBuilder, TransformedInputComponent, TransformedInputComponentViewModel, TransformedNumberInput } from "../../Lib/MVVM/TransformedInputComponent";
+import { FormattedNumber } from "../../Lib/FormattedNumber";
 
 class MainPage {
 
     constructor() {
-        const pageView = createPageView();
+        const pageView = new MainPageView();
         const pageViewModel = new MainPageViewModel();
 
         const formGroup = new ReadonlyFormGroup(pageViewModel.formGroup, pageView.formGroup);
@@ -77,12 +81,26 @@ class MainPage {
                 .build()
         );
         command.setText("Test Button");
+        const input = new TransformedInputComponent(
+            pageViewModel.input,
+            pageView.input,
+            new TransformedNumberInput()
+                .setNumberOfDecimals(2)
+                .setFormatString(FormattedNumber.currencyFormatString)
+        );
+        const inputResult = new TextComponent(pageViewModel.inputResult, pageView.inputResult);
+        input.when.valueChanged.then(evt => {
+            inputResult.text = evt.detail.toLocaleString();
+        });
+
         const pageComponent = new ContainerComponent(new ComponentViewModel(), pageView);
         pageComponent.addComponents(
             formGroup,
             textListComponent,
             compositeListComponent,
-            command
+            command,
+            input,
+            inputResult
         );
         AppHost.value.show(
             pageView,
@@ -91,16 +109,17 @@ class MainPage {
     }
 }
 
-function createPageView() {
-    const pageView = new CompositeComponentView().compose({
-        formGroup: ReadonlyFormGroupView.create(),
-        textList: ListComponentView.unorderedList(),
-        compositeList: ListComponentView.unorderedList(),
-        buttons: new CompositeComponentView().compose({
+class MainPageView extends ComponentView {
+    readonly formGroup = this.addChildView(ReadonlyFormGroupView.create());
+    readonly textList = this.addChildView(ListComponentView.unorderedList());
+    readonly compositeList = this.addChildView(ListComponentView.unorderedList());
+    readonly buttons = this.addChildView(
+        new CompositeComponentView().compose({
             button: new ButtonCommandView()
         })
-    });
-    return pageView;
+    );
+    readonly input = this.addChildView(new InputComponentView());
+    readonly inputResult = this.addChildView(new TextComponentView());
 }
 
 class TestItem {
@@ -135,6 +154,8 @@ class MainPageViewModel {
     readonly textList = new ListComponentViewModel<TextComponentViewModel>();
     readonly compositeList = new ListComponentViewModel<TestItemComponentViewModel>();
     readonly button = new CommandViewModel();
+    readonly input = new TransformedInputComponentViewModel(0);
+    readonly inputResult = new TextComponentViewModel();
 }
 
 new MainPage();

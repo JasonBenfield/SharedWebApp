@@ -35,6 +35,8 @@
   },
   "dependencies": {
     "@types/lodash": "^4.17.23",
-    "lodash": "^4.17.23"
+    "@types/numeral": "^2.0.5",
+    "lodash": "^4.17.23",
+    "numeral": "^2.0.6"
   }
 }
