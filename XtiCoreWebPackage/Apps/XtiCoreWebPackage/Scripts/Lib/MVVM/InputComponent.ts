@@ -3,8 +3,9 @@ import { ComponentView } from "./ComponentView";
 import { ComponentViewModel, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
 import { IEquatable } from "./Equatable";
 import { EventManager } from "./EventManager";
-import { FocusableComponentMixin, FocusableViewMixin, FocusableViewModelMixin, HasFocusProperty } from "./FocusableComponent";
+import { FocusableComponentChangeHandler, FocusableComponentMixin, FocusableViewMixin, FocusableViewModelMixin, HasFocusProperty } from "./FocusableComponent";
 import { StyleableComponentViewMixin } from "./StyleableComponentView";
+import { UniqueComponentChangeHandler, UniqueComponentMixin, UniqueViewModelMixin } from "./UniqueComponent";
 
 export class InputTextValue implements IEquatable {
     constructor(readonly value: string, readonly isFromUI = false) {
@@ -26,7 +27,7 @@ export class InputTextValue implements IEquatable {
     }
 }
 
-export class InputComponentViewModel extends FocusableViewModelMixin(ComponentViewModel) {
+export class InputComponentViewModel extends UniqueViewModelMixin(FocusableViewModelMixin(ComponentViewModel)) {
     constructor(initialTextValue: string = "", initializer: Omit<ComponentViewModelInitializer<InputComponentViewModel>, "textValue"> = {}) {
         super(initializer);
         this.textValue = new InputTextValue(initialTextValue);
@@ -188,7 +189,7 @@ type InputComponentEventLayout = {
     textValueChanged: string
 };
 
-export class InputComponent extends FocusableComponentMixin(Component) {
+export class InputComponent extends UniqueComponentMixin(FocusableComponentMixin(Component)) {
     private readonly eventManager = new EventManager<InputComponentEventLayout>({
         textValueChanged: null
     });
@@ -201,6 +202,8 @@ export class InputComponent extends FocusableComponentMixin(Component) {
         super(
             viewModel,
             view,
+            new UniqueComponentChangeHandler(viewModel, view),
+            new FocusableComponentChangeHandler(viewModel, view),
             new InputComponentChangeHandler(viewModel, view)
         );
         view.when.textValueInput.then(this.onTextValueChangedFromUI.bind(this));

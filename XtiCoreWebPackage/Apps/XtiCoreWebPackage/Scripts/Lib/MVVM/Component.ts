@@ -1,8 +1,11 @@
-import { ConsoleLogger } from "../ConsoleLogger";
 import { DebouncedAction } from "../DebouncedAction";
 import { ComponentView } from "./ComponentView";
 import { ChangedProperty, ComponentViewModel, ObservableChanges, UpdatedViewModel } from "./ComponentViewModel";
 import { MvvmOptions } from "./MvvmOptions";
+
+export interface IComponentFactory<TComponent extends Component> {
+    create(): TComponent;
+}
 
 export abstract class ComponentChangeHandler<TViewModel extends ComponentViewModel, TView extends ComponentView> {
     private readonly views: TView[];

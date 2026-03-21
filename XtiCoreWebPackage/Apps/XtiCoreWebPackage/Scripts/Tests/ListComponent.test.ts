@@ -3,7 +3,7 @@ import { afterEach, describe, expect, test } from "@jest/globals";
 import { ConsoleLogger } from "../Lib/ConsoleLogger";
 import { GeneratedID } from "../Lib/GeneratedID";
 import { ComponentViewModel } from "../Lib/MVVM/ComponentViewModel";
-import { CompositeComponent, CompositeComponentView } from "../Lib/MVVM/CompositeComponent";
+import { CompositeComponentBuilder, CompositeComponentViewBuilder } from "../Lib/MVVM/CompositeComponent";
 import { IViewModelUpdater, ListComponent, ListComponentOptionsBuilder, ListComponentView, ListComponentViewModel, ListItemFactory, TextViewModelUpdater } from "../Lib/MVVM/ListComponent";
 import { TextComponent, TextComponentView, TextComponentViewModel } from "../Lib/MVVM/TextComponent";
 import { TestHost } from "./TestHost";
@@ -241,17 +241,8 @@ function createListWithCompositeItems() {
     const component = new ListComponent(
         new ListComponentOptionsBuilder(viewModel, view)
             .withItemFactory(() => new ListItemFactory(() => new TestItemComponentViewModel())
-                .withView((createItemElement) => {
-                    const view = new CompositeComponentView(createItemElement).compose({
-                        id: TextComponentView.label(),
-                        value: new TextComponentView()
-                    });
-                    view.setID(GeneratedID.next("listItem"))
-                    return view;
-                })
-                .withComponent((itemVM, itemView) => {
-                    return CompositeComponent.createComposite(itemVM, itemView);
-                })
+                .withView(createCompositeItemView)
+                .withComponent(createCompositeItemComponent)
             )
             .build(new TestItemViewModelUpdater())
     );
@@ -278,17 +269,8 @@ function createListWithHeader() {
                     .withComponent((itemVM, itemView) => new TextComponent(itemVM, itemView))
             )
             .withItemFactory(() => new ListItemFactory(() => new TestItemComponentViewModel())
-                .withView((createItemElement) => {
-                    const view = new CompositeComponentView(createItemElement).compose({
-                        id: TextComponentView.label(),
-                        value: new TextComponentView()
-                    });
-                    view.setID(GeneratedID.next("listItem"))
-                    return view;
-                })
-                .withComponent((itemVM, itemView) => {
-                    return CompositeComponent.createComposite(itemVM, itemView);
-                })
+                .withView(createCompositeItemView)
+                .withComponent(createCompositeItemComponent)
             )
             .build(new TestItemViewModelUpdater())
     );
@@ -315,17 +297,8 @@ function createListWithFooter() {
                     .withComponent((itemVM, itemView) => new TextComponent(itemVM, itemView))
             )
             .withItemFactory(() => new ListItemFactory(() => new TestItemComponentViewModel())
-                .withView((createItemElement) => {
-                    const view = new CompositeComponentView(createItemElement).compose({
-                        id: TextComponentView.label(),
-                        value: new TextComponentView()
-                    });
-                    view.setID(GeneratedID.next("listItem"))
-                    return view;
-                })
-                .withComponent((itemVM, itemView) => {
-                    return CompositeComponent.createComposite(itemVM, itemView);
-                })
+                .withView(createCompositeItemView)
+                .withComponent(createCompositeItemComponent)
             )
             .build(new TestItemViewModelUpdater())
     );
@@ -361,17 +334,8 @@ function createListWithHeaderAndFooter() {
                     .withComponent((itemVM, itemView) => new TextComponent(itemVM, itemView))
             )
             .withItemFactory(() => new ListItemFactory(() => new TestItemComponentViewModel())
-                .withView((createItemElement) => {
-                    const view = new CompositeComponentView(createItemElement).compose({
-                        id: TextComponentView.label(),
-                        value: new TextComponentView()
-                    });
-                    view.setID(GeneratedID.next("listItem"))
-                    return view;
-                })
-                .withComponent((itemVM, itemView) => {
-                    return CompositeComponent.createComposite(itemVM, itemView);
-                })
+                .withView(createCompositeItemView)
+                .withComponent(createCompositeItemComponent)
             )
             .build(new TestItemViewModelUpdater())
     );
@@ -380,4 +344,23 @@ function createListWithHeaderAndFooter() {
         view: view,
         component: component
     };
+}
+
+function createCompositeItemView(createItemElement: () => HTMLElement) {
+    const view = new CompositeComponentViewBuilder(createItemElement).build({
+        id: TextComponentView.label(),
+        value: new TextComponentView()
+    });
+    view.setID(GeneratedID.next("listItem"))
+    return view;
+}
+
+function createCompositeItemComponent(itemVM: TestItemComponentViewModel, itemView: ReturnType<typeof createCompositeItemView>) {
+    return new CompositeComponentBuilder(itemVM)
+        .view(itemView)
+        .factory({
+            id: (vm, v) => new TextComponent(vm, v),
+            value: (vm, v) => new TextComponent(vm, v)
+        })
+        .build()
 }

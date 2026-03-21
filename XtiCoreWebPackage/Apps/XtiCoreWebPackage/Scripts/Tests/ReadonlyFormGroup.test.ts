@@ -22,7 +22,7 @@ describe("Readonly Form Group", () => {
 });
 
 function createReadonlyFormGroup(formGroupViewModel = new ReadonlyFormGroupViewModel()) {
-    const formGroupView = ReadonlyFormGroupView.create();
+    const formGroupView = new ReadonlyFormGroupView();
     formGroupView.setID(formGroupElementID);
     const component = new ReadonlyFormGroup(formGroupViewModel, formGroupView);
     return {

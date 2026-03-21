@@ -1,5 +1,4 @@
-import { Component, ComponentChangeHandler } from "./Component";
-import { IComponentFactory } from "./ComponentFactory";
+import { Component, ComponentChangeHandler, IComponentFactory } from "./Component";
 import { ComponentView } from "./ComponentView";
 import { ComponentViewModel, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
 import { IStyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
@@ -14,8 +13,6 @@ export interface ISynchedTitleViewModel {
     get isTitleSynchedWithText(): boolean;
     set isTitleSynchedWithText(title: boolean);
 }
-
-export type BaseTextComponentView = ComponentView & ITextView & ITitleView;
 
 export function TitleViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T) {
     return class extends Base implements ITitleViewModel {
@@ -53,7 +50,7 @@ export class TextComponentViewModel extends SynchedTitleViewModelMixin(TextViewM
 export function TitleViewMixin<T extends Constructor<IStyleableComponentView>>(Base: T) {
     return class extends Base implements ITitleView {
         setTitle(title: string) {
-            this.setAttributes({ "title": title });
+            return this.setAttributes({ "title": title });
         }
     };
 }
@@ -85,7 +82,7 @@ export interface ITextView {
     setText(text: string): void;
 }
 
-export class TextComponentView extends TextViewMixin(TitleViewMixin(StyleableComponentViewMixin(ComponentView))) {
+export class TextComponentView extends TextViewMixin(TitleViewMixin(StyleableComponentViewMixin(ComponentView))) implements ITextComponentView {
     static block() {
         return new TextComponentView("div");
     }
@@ -102,13 +99,14 @@ export class TextComponentView extends TextViewMixin(TitleViewMixin(StyleableCom
         return new TextComponentView(`h${size}`);
     }
 
+    readonly text = this;
 }
 
 export class TextChangeHandler extends ComponentChangeHandler<ComponentViewModel & ITextViewModel, BaseTextComponentView> {
     handleChanges(changes: ObservableChanges<ComponentViewModel & ITextViewModel>) {
         if (changes.text) {
             const text = changes.text.value;
-            this.updateView(v => v.setText(text));
+            this.updateView(v => v.text.setText(text));
         }
     }
 }
@@ -122,7 +120,7 @@ export class TitleChangeHandler extends ComponentChangeHandler<ComponentViewMode
     }
 }
 
-export class SynchedTitleChangeHandler extends ComponentChangeHandler<BaseTextComponentViewModel, ComponentView & ITextView & ITitleView> {
+export class SynchedTitleChangeHandler extends ComponentChangeHandler<BaseTextComponentViewModel, BaseTextComponentView> {
 
     handleChanges(changes: ObservableChanges<BaseTextComponentViewModel>) {
         if (changes.text || changes.isTitleSynchedWithText) {
@@ -172,6 +170,12 @@ export function SynchedTitleComponentMixin<T extends Constructor<Component>>(Bas
     };
 }
 
+export interface ITextComponentView {
+    readonly text: ComponentView & ITextView;
+}
+
+export type BaseTextComponentView = ComponentView & ITitleView & ITextComponentView;
+
 export class TextComponent extends SynchedTitleComponentMixin(TextComponentMixin(TitleComponentMixin(Component))) {
     constructor(viewModel: BaseTextComponentViewModel, view: BaseTextComponentView) {
         super(
@@ -181,11 +185,5 @@ export class TextComponent extends SynchedTitleComponentMixin(TextComponentMixin
             new TextChangeHandler(viewModel, view),
             new SynchedTitleChangeHandler(viewModel, view)
         );
-    }
-}
-
-export class TextComponentFactory implements IComponentFactory {
-    create(viewModel: BaseTextComponentViewModel, view: BaseTextComponentView) {
-        return new TextComponent(viewModel, view);
     }
 }

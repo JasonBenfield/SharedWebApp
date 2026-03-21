@@ -3,10 +3,9 @@ import { ComponentView } from "./ComponentView";
 import { ComponentViewModel, ObservableChanges } from "./ComponentViewModel";
 import { CustomEventRegistrations, EventManager } from "./EventManager";
 import { StyleableComponentViewMixin } from "./StyleableComponentView";
-import { ITextView, TextChangeHandler, TextComponentView, TextViewModelMixin, TitleChangeHandler, TitleViewMixin, TitleViewModelMixin } from "./TextComponent";
-import { ITitleView } from "./Types";
+import { BaseTextComponentView, ITextComponentView, TextChangeHandler, TextComponentView, TextViewModelMixin, TitleChangeHandler, TitleViewMixin, TitleViewModelMixin } from "./TextComponent";
 
-export type BaseCommandView = ComponentView & ICommandView & ITextView & ITitleView;
+export type BaseCommandView = BaseTextComponentView & ICommandView;
 
 export class CommandChangeHandler extends ComponentChangeHandler<CommandViewModel, ComponentView & ICommandView> {
     handleChanges(changes: ObservableChanges<CommandViewModel>): void {
@@ -24,7 +23,7 @@ export class CommandChangeHandler extends ComponentChangeHandler<CommandViewMode
     }
 }
 
-type CommandAction = () => Promise<any>;
+type CommandAction = (() => Promise<any>) | (() => void);
 
 export interface ICommandOptions {
     viewModel: CommandViewModel,
@@ -34,7 +33,7 @@ export interface ICommandOptions {
 
 export class CommandOptionsBuilder {
     private readonly views: BaseCommandView[] = [];
-    private action: () => Promise<any> = async () => { };
+    private action: CommandAction = async () => { };
 
     constructor(private readonly viewModel: CommandViewModel) {
     }
@@ -49,7 +48,7 @@ export class CommandOptionsBuilder {
         return this;
     }
 
-    setAction(action: () => Promise<any>) {
+    setAction(action: CommandAction) {
         this.action = action;
         return this;
     }
@@ -131,7 +130,7 @@ export interface ICommandView {
     clearStyleAsInProgress(): void;
 }
 
-export class ButtonCommandView extends TitleViewMixin(StyleableComponentViewMixin(ComponentView)) implements ICommandView, ITextView {
+export class ButtonCommandView extends TitleViewMixin(StyleableComponentViewMixin(ComponentView)) implements ICommandView, ITextComponentView {
     private readonly _eventManager = new EventManager<CommandEventLayout>({
         clicked: null
     });

@@ -1,47 +1,87 @@
+import { CssClassManager, ICssClass } from "../CssClass";
+import { ICssStyle } from "../CssStyle";
 import { ComponentView } from "./ComponentView";
 import { Constructor, IHtmlAttributes } from "./Types";
 
 export function StyleableComponentViewMixin<T extends Constructor<ComponentView>>(Base: T) {
     return class extends Base implements IStyleableComponentView {
-        private readonly _attributes: { [name: string]: string } = {};
+        private readonly attributes: { [name: string]: string } = {};
+        private readonly styles: { [name: string]: string } = {};
+        private readonly cssClass = new CssClassManager();
 
         protected addToDom(index: number) {
             super.addToDom(index);
             const element = this.element;
             if (element) {
-                for (const key in this._attributes) {
-                    const value = this._attributes[key];
+                for (const key in this.attributes) {
+                    const value = this.attributes[key];
                     if (value !== undefined && value !== null) {
-                        element.setAttribute(key, this._attributes[key]);
+                        element.setAttribute(key, this.attributes[key]);
                     }
                 }
             }
         }
 
+        setCss(cssBuilder: ICssClass) {
+            this.cssClass.setCssClass(cssBuilder);
+            const css = this.cssClass.value;
+            this.setAttribute("class", css ? css : null);
+            return this;
+        }
+
+        clearStyle() {
+            const keys = Object.keys(this.styles);
+            for (const key of keys) {
+                delete this.styles[key];
+            }
+            this.setAttribute("style", null);
+            return this;
+        }
+
+        setStyle(style: ICssStyle) {
+            const updatedStyles = style.toStyle();
+            for (const name in updatedStyles) {
+                const value = updatedStyles[name];
+                if (value) {
+                    Reflect.set(this.styles, name, value);
+                }
+                else {
+                    delete this.styles[name];
+                }
+            }
+            const styles: string[] = [];
+            for (const name in this.styles) {
+                const value = this.styles[name];
+                styles.push(`${name}: ${value};`);
+            }
+            this.setAttribute("style", styles.length > 0 ? styles.join(" ") : null);
+            return this;
+        }
+
         setID(id: string) {
-            this.setAttribute("id", id);
+            return this.setAttribute("id", id);
         }
 
         setName(name: string) {
-            this.setAttribute("name", name);
+            return this.setAttribute("name", name);
         }
 
         setTitle(title: string) {
-            this.setAttribute("title", title);
+            return this.setAttribute("title", title);
         }
 
         protected setAttribute(name: string, value: string | null) {
-            this.setAttributes({ [name]: value });
+            return this.setAttributes({ [name]: value });
         }
 
         setAttributes(updatedAttributes: IHtmlAttributes & { [name: string]: string | null }) {
             for (const name in updatedAttributes) {
                 const value = updatedAttributes[name];
                 if (value === undefined || value === null) {
-                    delete this._attributes[name];
+                    delete this.attributes[name];
                 }
                 else {
-                    Reflect.set(this._attributes, name, value);
+                    Reflect.set(this.attributes, name, value);
                 }
             }
             const element = this.element;
@@ -56,16 +96,23 @@ export function StyleableComponentViewMixin<T extends Constructor<ComponentView>
                     }
                 }
             }
+            return this;
         }
     };
 }
 
 export interface IStyleableComponentView {
-    setID(id: string): void;
+    setCss(cssBuilder: ICssClass): this;
 
-    setName(name: string): void;
+    clearStyle(): this;
 
-    setTitle(title: string): void;
+    setStyle(style: ICssStyle): this;
 
-    setAttributes(updatedAttributes: IHtmlAttributes & { [name: string]: string | null }): void;
+    setID(id: string): this;
+
+    setName(name: string): this;
+
+    setTitle(title: string): this;
+
+    setAttributes(updatedAttributes: IHtmlAttributes & { [name: string]: string | null }): this;
 }

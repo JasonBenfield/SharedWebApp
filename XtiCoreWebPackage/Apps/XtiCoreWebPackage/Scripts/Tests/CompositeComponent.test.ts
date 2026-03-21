@@ -1,9 +1,10 @@
 
 import { afterEach, describe, expect, test } from "@jest/globals";
 import { DelayedAction } from "../Lib/DelayedAction";
+import { Component } from "../Lib/MVVM/Component";
 import { ComponentView } from "../Lib/MVVM/ComponentView";
 import { ComponentViewModel } from "../Lib/MVVM/ComponentViewModel";
-import { CompositeComponent, CompositeComponentView, CompositeComponentViewModel } from "../Lib/MVVM/CompositeComponent";
+import { CompositeComponentBuilder, CompositeComponentViewBuilder, CompositeComponentViewModel } from "../Lib/MVVM/CompositeComponent";
 import { TestHost } from "./TestHost";
 
 function createDiv(id: string) {
@@ -77,23 +78,35 @@ describe("Container Component", () => {
 });
 
 function createComponent(options: { isVisible: boolean } = { isVisible: true }) {
-    const viewModel = CompositeComponentViewModel.create({
-        level1_1: CompositeComponentViewModel.create({
+    const viewModel = new CompositeComponentViewModel({
+        level1_1: new CompositeComponentViewModel({
             level2_1: new ComponentViewModel(),
             level2_2: new ComponentViewModel()
-        }),
+        }).asLayout(),
         level1_2: new ComponentViewModel()
+    }).asLayout();
+    const view = CompositeComponentViewBuilder.block().build({
+        level1_1: CompositeComponentViewBuilder.block().build({
+            level2_1: new ComponentView(() => createDiv(level2_1ElementID)),
+            level2_2: new ComponentView(() => createDiv(level2_2ElementID))
+        }),
+        level1_2: new ComponentView(() => createDiv(level1_2ElementID))
     });
-    const view = new CompositeComponentView(() => createDiv(containerElementID))
-        .compose({
-            level1_1: new CompositeComponentView(() => createDiv(level1_1ElementID))
-                .compose({
-                    level2_1: new ComponentView(() => createDiv(level2_1ElementID)),
-                    level2_2: new ComponentView(() => createDiv(level2_2ElementID))
-                }),
-            level1_2: new ComponentView(() => createDiv(level1_2ElementID))
-        });
-    const component = CompositeComponent.createComposite(viewModel, view);
+    view.setID(containerElementID);
+    view.level1_1.setID(level1_1ElementID);
+    const component = new CompositeComponentBuilder(viewModel)
+        .view(view)
+        .factory({
+            level1_1: (vm, v) => new CompositeComponentBuilder(vm)
+                .view(v)
+                .factory({
+                    level2_1: (vm, v) => new Component(vm, v),
+                    level2_2: (vm, v) => new Component(vm, v)
+                })
+                .build(),
+            level1_2: (vm, v) => new Component(vm, v)
+        })
+        .build();
     if (options.isVisible) {
         component.show();
     }

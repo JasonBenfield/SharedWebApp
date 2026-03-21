@@ -1,15 +1,17 @@
-import { ComponentView } from "./ComponentView";
+import { ComponentView, IComponentViewLayout } from "./ComponentView";
 import { StyleableComponentViewMixin } from "./StyleableComponentView";
 import { Constructor } from "./Types";
 
 export interface IContainerComponentView {
-    addChildView<T extends ComponentView>(view: T): void;
+    addLayout<T extends IComponentViewLayout>(layout: T): T;
+    addChildView<T extends ComponentView>(view: T): T;
     removeAllChildViews(): void;
     removeChildView(view: ComponentView): void;
 }
 
 export function ContainerComponentViewMixin<T extends Constructor<ComponentView>>(Base: T) {
     return class extends Base implements IContainerComponentView {
+        declare public addLayout: <T extends IComponentViewLayout>(layout: T) => this & T;
         declare public addChildView: <T extends ComponentView>(view: T) => T;
         declare public removeAllChildViews: () => void;
         declare public removeChildView: (view: ComponentView) => void;

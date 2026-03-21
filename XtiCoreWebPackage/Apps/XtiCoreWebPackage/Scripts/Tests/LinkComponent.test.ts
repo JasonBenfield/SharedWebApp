@@ -36,7 +36,7 @@ describe("Link Component", () => {
 });
 
 function createLinkComponent(linkViewModel = new LinkComponentViewModel()) {
-    const linkView = new LinkComponentView().compose({
+    const linkView = LinkComponentView.create({
         text: TextComponentView.block()
     });
     linkView.setID(linkElementID);

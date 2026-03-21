@@ -1,4 +1,3 @@
-import { ConsoleLogger } from "../ConsoleLogger";
 
 type IHtmlEventListener = (el: HTMLElement, evt: Event) => void;
 
@@ -6,23 +5,11 @@ interface IHtmlEventListeners {
     [name: string]: IHtmlEventListener;
 }
 
+export interface IComponentViewLayout {
+    [name: string]: ComponentView;
+}
+
 export class ComponentView {
-    static block() {
-        return new ComponentView("div");
-    }
-
-    static span() {
-        return new ComponentView("span");
-    }
-
-    static label() {
-        return new ComponentView("label");
-    }
-
-    static heading(size: 1 | 2 | 3 | 4 | 5 | 6) {
-        return new ComponentView(`h${size}`);
-    }
-
     private readonly createElement: () => HTMLElement;
     private _element: HTMLElement | null = null;
     private readonly _htmlEventListeners: IHtmlEventListeners = {};
@@ -84,6 +71,14 @@ export class ComponentView {
     hide() {
         this._removeElement();
         this._isVisible = false;
+    }
+
+    protected addLayout<T extends IComponentViewLayout>(layout: T) {
+        for (const key in layout) {
+            const view = layout[key];
+            this.addChildView(view);
+        }
+        return layout;
     }
 
     protected addChildView<T extends ComponentView>(view: T) {

@@ -5,8 +5,6 @@ import { TransformedInputBuilder, TransformedInputComponent, TransformedInputCom
 import { TestHost } from "./TestHost";
 import { ConsoleLogger } from "../Lib/ConsoleLogger";
 
-const inputElementID = "inputEl";
-
 afterEach(() => {
     TestHost.value.reset();
 });
@@ -17,7 +15,7 @@ describe("Transformed Input Component", () => {
             new TransformedInputComponentViewModel(1234)
         );
         TestHost.value.show(view, component);
-        const inputEl = getInputElement();
+        const inputEl = getInputElement(component.id);
         expect(inputEl?.value).toBe("1,234");
     });
     test("sets value from text value", async () => {
@@ -37,7 +35,7 @@ describe("Transformed Input Component", () => {
         view.simulateFocusEvent();
         view.simulateInputEvent("2345");
         TestHost.value.immediateHandleChanges();
-        const inputEl = getInputElement();
+        const inputEl = getInputElement(component.id);
         expect(inputEl?.value).toBe("2345");
     });
     test("should set text value when not changed from UI and input has focus", async () => {
@@ -48,7 +46,7 @@ describe("Transformed Input Component", () => {
         view.simulateFocusEvent();
         component.value = 2345;
         TestHost.value.immediateHandleChanges();
-        const inputEl = getInputElement();
+        const inputEl = getInputElement(component.id);
         expect(inputEl?.value).toBe("2,345");
     });
     test("should set text value when changed from UI and input has lost focus", async () => {
@@ -61,7 +59,7 @@ describe("Transformed Input Component", () => {
         TestHost.value.immediateHandleChanges();
         view.simulateBlurEvent();
         TestHost.value.immediateHandleChanges();
-        const inputEl = getInputElement();
+        const inputEl = getInputElement(component.id);
         expect(inputEl?.value).toBe("2,345");
     });
     test("should set text value when changed from UI and input does not have focus", async () => {
@@ -71,14 +69,33 @@ describe("Transformed Input Component", () => {
         TestHost.value.show(view, component);
         view.simulateInputEvent("2345");
         TestHost.value.immediateHandleChanges();
-        const inputEl = getInputElement();
+        const inputEl = getInputElement(component.id);
         expect(inputEl?.value).toBe("2,345");
+    });
+    test("sets id and name", async () => {
+        const { view, component } = createInputComponent(
+            new TransformedInputComponentViewModel(1234)
+        );
+        TestHost.value.show(view, component);
+        const element = getInputElement(component.id);
+        expect(element?.id).not.toBe("");
+        expect(element?.name).not.toBe("");
+    });
+    test("sets focus and blurs", async () => {
+        const { view, component } = createInputComponent(
+            new TransformedInputComponentViewModel(1234)
+        );
+        component.setFocus();
+        TestHost.value.show(view, component);
+        expect(document.activeElement).toBe(getInputElement(component.id));
+        component.blur();
+        TestHost.value.immediateHandleChanges();
+        expect(document.activeElement).not.toBe(getInputElement(component.id));
     });
 });
 
 function createInputComponent(viewModel = new TransformedInputComponentViewModel(0)) {
     const view = new InputComponentView();
-    view.setID(inputElementID);
     const component = new TransformedInputComponent(
         viewModel,
         view,
@@ -91,6 +108,6 @@ function createInputComponent(viewModel = new TransformedInputComponentViewModel
     };
 }
 
-function getInputElement() {
-    return document.getElementById(inputElementID) as HTMLInputElement;
+function getInputElement(id: string) {
+    return document.getElementById(id) as HTMLInputElement;
 }

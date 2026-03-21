@@ -1,9 +1,8 @@
 import { Component, ComponentChangeHandler } from "./Component";
-import { IComponentFactory } from "./ComponentFactory";
-import { ComponentView } from "./ComponentView";
+import { ComponentView, IComponentViewLayout } from "./ComponentView";
 import { ComponentViewModel, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
-import { CompositeComponentViewMixin } from "./CompositeComponent";
-import { IStyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
+import { CompositeComponentView } from "./CompositeComponent";
+import { IStyleableComponentView } from "./StyleableComponentView";
 import { TitleChangeHandler, TitleComponentMixin, TitleViewModelMixin } from "./TextComponent";
 import { Constructor, ITitleView, ITitleViewModel } from "./Types";
 
@@ -46,7 +45,7 @@ export interface ILinkView {
     setTarget(target: string | null): void;
 }
 
-export function LinkViewMixin<T extends Constructor<IStyleableComponentView>>(Base: T) {
+export function LinkViewMixin<T extends Constructor<ComponentView & IStyleableComponentView>>(Base: T) {
     return class extends Base implements ILinkView {
         setHref(href: string) {
             this.setAttributes({ "href": href });
@@ -60,9 +59,16 @@ export function LinkViewMixin<T extends Constructor<IStyleableComponentView>>(Ba
 
 export type BaseLinkComponentView = ComponentView & ITitleView & ILinkView;
 
-export class LinkComponentView extends CompositeComponentViewMixin(LinkViewMixin(StyleableComponentViewMixin(ComponentView))) {
-    constructor() {
-        super("a");
+export class LinkComponentView<
+    TLayout extends IComponentViewLayout,
+    TPublicLayout extends IComponentViewLayout
+    > extends LinkViewMixin(CompositeComponentView)<TLayout, TPublicLayout> {
+    static create<TLayout extends IComponentViewLayout>(layout: TLayout) {
+        return new LinkComponentView(layout, l => Object.assign({}, l)).asLayout();
+    }
+
+    constructor(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        super("a", layout, toPublicLayout);
     }
 }
 
@@ -111,11 +117,5 @@ export class LinkComponent extends LinkComponentMixin(TitleComponentMixin(Compon
             new TitleChangeHandler(viewModel, view),
             new LinkComponentChangeHandler(viewModel, view)
         );
-    }
-}
-
-export class LinkComponentFactory implements IComponentFactory {
-    create(viewModel: BaseLinkComponentViewModel, view: BaseLinkComponentView) {
-        return new LinkComponent(viewModel, view);
     }
 }

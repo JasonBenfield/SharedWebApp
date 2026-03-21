@@ -3,7 +3,11 @@ export class GeneratedID {
     private static id = 1;
 
     static next(prefix: string = "") {
-        const id = `${prefix || "component"}${GeneratedID.id}`;
+        if (!prefix) {
+            prefix = "component";
+        }
+        const idText = GeneratedID.id.toString().padStart(7, "0");
+        const id = `${prefix}${idText}`;
         GeneratedID.id++;
         return id;
     }

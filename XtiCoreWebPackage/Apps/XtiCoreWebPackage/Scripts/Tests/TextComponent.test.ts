@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test } from "@jest/globals";
 import { ComponentView } from "../Lib/MVVM/ComponentView";
 import { StyleableComponentViewMixin } from "../Lib/MVVM/StyleableComponentView";
-import { TextComponent, TextComponentViewModel, TextViewMixin, TitleViewMixin } from "../Lib/MVVM/TextComponent";
+import { TextComponent, TextComponentView, TextComponentViewModel, TextViewMixin, TitleViewMixin } from "../Lib/MVVM/TextComponent";
 import { TestHost } from "./TestHost";
 
 const textElementID = "textEl";
@@ -35,7 +35,7 @@ describe("Text Component", () => {
 });
 
 function createTextComponent(textViewModel = new TextComponentViewModel()) {
-    const textView = new ComponentFromMixin("div");
+    const textView = new TextComponentView();
     textView.setID(textElementID);
     const component = new TextComponent(textViewModel, textView);
     return {

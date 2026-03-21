@@ -23,8 +23,14 @@
 
 	<ItemGroup>
 	  <TypeScriptCompile Remove="Scripts\Internal\MVVM\MainPage.ts" />
+	  <TypeScriptCompile Remove="Scripts\Lib\AlignCss.ts" />
+	  <TypeScriptCompile Remove="Scripts\Lib\ColumnCss.ts" />
+	  <TypeScriptCompile Remove="Scripts\Lib\ContextualClass.ts" />
+	  <TypeScriptCompile Remove="Scripts\Lib\CssClass.ts" />
+	  <TypeScriptCompile Remove="Scripts\Lib\CssLengthUnit.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\DebouncedAction.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\DelayedAction.ts" />
+	  <TypeScriptCompile Remove="Scripts\Lib\MarginCss.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\Component.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\ComponentView.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\ComponentViewModel.ts" />
@@ -39,6 +45,8 @@
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\TextComponent.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\TextLinkComponent.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\Types.ts" />
+	  <TypeScriptCompile Remove="Scripts\Lib\PaddingCss.ts" />
+	  <TypeScriptCompile Remove="Scripts\Lib\TextCss.ts" />
 	  <TypeScriptCompile Remove="Scripts\Tests\DebouncedAction.test.ts" />
 	  <TypeScriptCompile Remove="Scripts\Tests\DelayedAction.test.ts" />
 	</ItemGroup>

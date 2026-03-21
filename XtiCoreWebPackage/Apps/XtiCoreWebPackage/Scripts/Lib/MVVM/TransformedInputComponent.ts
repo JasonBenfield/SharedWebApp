@@ -1,11 +1,11 @@
-import { ConsoleLogger } from "../ConsoleLogger";
 import { FormattedNumber } from "../FormattedNumber";
 import { Component, ComponentChangeHandler } from "./Component";
-import { ChangedProperty, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
+import { ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
 import { areValuesEqual, IEquatable } from "./Equatable";
 import { EventManager } from "./EventManager";
-import { FocusableComponentMixin, HasFocusProperty } from "./FocusableComponent";
-import { InputComponentChangeHandler, InputComponentView, InputComponentViewModel, InputTextValue } from "./InputComponent";
+import { FocusableComponentChangeHandler, FocusableComponentMixin, HasFocusProperty } from "./FocusableComponent";
+import { InputComponentView, InputComponentViewModel, InputTextValue } from "./InputComponent";
+import { UniqueComponentChangeHandler, UniqueComponentMixin } from "./UniqueComponent";
 
 export class TransformedInputValue<TValue> implements IEquatable {
     constructor(readonly value: TValue, readonly isFromUI = false) {
@@ -75,13 +75,19 @@ export class TransformedNumberInput implements ITransformedInput<number> {
     }
 
     fromView(textValue: string) {
-        let value = Number.parseFloat(textValue.replace(/[A-Z,|$]+/ig, ""));
-        if (Number.isNaN(value)) {
-            value = this._valueWhenNaN;
+        let value: number;
+        if (textValue === this._textValueWhenZero) {
+            value = 0;
         }
-        else if (this._numberOfDecimals > -1) {
-            const powerOfTen = Math.pow(10, this._numberOfDecimals);
-            value = Math.round((value + Number.EPSILON) * powerOfTen) / powerOfTen;
+        else {
+            value = Number.parseFloat(textValue.replace(/[A-Z,|$]+/ig, ""));
+            if (Number.isNaN(value)) {
+                value = this._valueWhenNaN;
+            }
+            else if (this._numberOfDecimals > -1) {
+                const powerOfTen = Math.pow(10, this._numberOfDecimals);
+                value = Math.round((value + Number.EPSILON) * powerOfTen) / powerOfTen;
+            }
         }
         return value;
     }
@@ -120,7 +126,7 @@ export class TransformedInputComponentChangeHandler<TValue> extends ComponentCha
         super(viewModel, view);
     }
 
-    handleChanges(changes: ObservableChanges<TransformedInputComponentViewModel<TValue>> & { value: ChangedProperty }) {
+    handleChanges(changes: ObservableChanges<TransformedInputComponentViewModel<TValue>>) {
         if (changes.transformedValue) {
             const transformedValue: TransformedInputValue<TValue> = changes.transformedValue.value;
             const textValue = this.transformedInput.toView(transformedValue.value);
@@ -141,7 +147,7 @@ export class TransformedInputComponentChangeHandler<TValue> extends ComponentCha
         }
         if (changes.hasFocus) {
             const hasFocus: HasFocusProperty = changes.hasFocus.value;
-            if (!hasFocus.value && this.viewModel.textValue.isFromUI) {
+            if (!hasFocus.value) {
                 const value = this.transformedInput.fromView(this.viewModel.textValue.value);
                 const textValue = this.transformedInput.toView(value);
                 this.viewModel.textValue = new InputTextValue(textValue);
@@ -158,7 +164,7 @@ type TransformedInputComponentEventLayout<TValue> = {
     valueChanged: TValue
 };
 
-export class TransformedInputComponent<TValue> extends FocusableComponentMixin(Component) {
+export class TransformedInputComponent<TValue> extends UniqueComponentMixin(FocusableComponentMixin(Component)) {
     private readonly eventManager = new EventManager<TransformedInputComponentEventLayout<TValue>>({
         valueChanged: null
     });
@@ -172,6 +178,8 @@ export class TransformedInputComponent<TValue> extends FocusableComponentMixin(C
         super(
             viewModel,
             view,
+            new UniqueComponentChangeHandler(viewModel, view),
+            new FocusableComponentChangeHandler(viewModel, view),
             new TransformedInputComponentChangeHandler(viewModel, view, transformedInput)
         );
         view.when.textValueInput.then(this.onTextValueChangedFromUI.bind(this));

@@ -1,15 +1,24 @@
-﻿import { ComponentViewModel } from "../../Lib/MVVM/ComponentViewModel";
-import { CompositeComponent, CompositeComponentView } from "../../Lib/MVVM/CompositeComponent";
-import { ContainerComponent } from "../../Lib/MVVM/ContainerComponent";
-import { IViewModelUpdater, ListComponent, ListComponentOptionsBuilder, ListComponentView, ListComponentViewModel, ListItemFactory, TextViewModelUpdater } from "../../Lib/MVVM/ListComponent";
-import { ReadonlyFormGroup, ReadonlyFormGroupView, ReadonlyFormGroupViewModel } from "../../Lib/MVVM/ReadonlyFormGroup";
-import { TextComponent, TextComponentView, TextComponentViewModel } from "../../Lib/MVVM/TextComponent";
-import { AppHost } from "../AppHost";
+﻿import { BackgroundCss } from "../../Lib/Bootstrap/BackgroundCss";
+import { ContainerCss } from "../../Lib/Bootstrap/ContainerCss";
+import { ContextualClass } from "../../Lib/Bootstrap/ContextualClass";
+import { DisplayCss } from "../../Lib/Bootstrap/DisplayCss";
+import { FlexCss } from "../../Lib/Bootstrap/FlexCss";
+import { HeightCss } from "../../Lib/Bootstrap/HeightCss";
+import { OverflowCss } from "../../Lib/Bootstrap/OverflowCss";
+import { PaddingCss } from "../../Lib/Bootstrap/PaddingCss";
+import { FormattedNumber } from "../../Lib/FormattedNumber";
 import { ButtonCommandView, Command, CommandOptionsBuilder, CommandViewModel } from "../../Lib/MVVM/Command";
 import { ComponentView } from "../../Lib/MVVM/ComponentView";
+import { ComponentViewModel } from "../../Lib/MVVM/ComponentViewModel";
+import { CompositeComponentBuilder, CompositeComponentView, CompositeComponentViewBuilder } from "../../Lib/MVVM/CompositeComponent";
+import { ContainerComponent } from "../../Lib/MVVM/ContainerComponent";
 import { InputComponentView } from "../../Lib/MVVM/InputComponent";
-import { TransformedInputBuilder, TransformedInputComponent, TransformedInputComponentViewModel, TransformedNumberInput } from "../../Lib/MVVM/TransformedInputComponent";
-import { FormattedNumber } from "../../Lib/FormattedNumber";
+import { IViewModelUpdater, ListComponent, ListComponentOptionsBuilder, ListComponentView, ListComponentViewModel, ListItemFactory, TextViewModelUpdater } from "../../Lib/MVVM/ListComponent";
+import { ReadonlyFormGroup, ReadonlyFormGroupView, ReadonlyFormGroupViewModel } from "../../Lib/MVVM/ReadonlyFormGroup";
+import { StyleableComponentViewMixin } from "../../Lib/MVVM/StyleableComponentView";
+import { TextComponent, TextComponentView, TextComponentViewModel } from "../../Lib/MVVM/TextComponent";
+import { TransformedInputComponent, TransformedInputComponentViewModel, TransformedNumberInput } from "../../Lib/MVVM/TransformedInputComponent";
+import { AppHost } from "../AppHost";
 
 class MainPage {
 
@@ -58,13 +67,18 @@ class MainPage {
                         .withComponent((itemVM, itemView) => new TextComponent(itemVM, itemView))
                 )
                 .withItemFactory(() => new ListItemFactory(() => new TestItemComponentViewModel())
-                    .withView((createItemElement) => new CompositeComponentView(createItemElement).compose({
+                    .withView((createItemElement) => new CompositeComponentViewBuilder(createItemElement).build({
                         id: TextComponentView.label(),
                         value: new TextComponentView()
-                    })
-                    )
+                    }).asLayout())
                     .withComponent((itemVM, itemView) => {
-                        return CompositeComponent.createComposite(itemVM, itemView);
+                        return new CompositeComponentBuilder(itemVM)
+                            .view(itemView)
+                            .factory({
+                                id: (vm, view) => new TextComponent(vm, view),
+                                value: (vm, view) => new TextComponent(vm, view)
+                            })
+                            .build();
                     })
                 )
                 .build(new TestItemViewModelUpdater())
@@ -75,7 +89,7 @@ class MainPage {
         const command = new Command(
             new CommandOptionsBuilder(pageViewModel.button)
                 .addView(pageView.buttons.button)
-                .setAction(async () => {
+                .setAction(() => {
                     alert("Testing");
                 })
                 .build()
@@ -109,17 +123,53 @@ class MainPage {
     }
 }
 
-class MainPageView extends ComponentView {
-    readonly formGroup = this.addChildView(ReadonlyFormGroupView.create());
-    readonly textList = this.addChildView(ListComponentView.unorderedList());
-    readonly compositeList = this.addChildView(ListComponentView.unorderedList());
-    readonly buttons = this.addChildView(
-        new CompositeComponentView().compose({
-            button: new ButtonCommandView()
+class MainPageView extends StyleableComponentViewMixin(ComponentView) {
+    constructor() {
+        super();
+        this.setCss(DisplayCss.flex());
+        this.setCss(new FlexCss().column());
+        this.setCss(HeightCss.fill());
+        this.addLayout(this.layout);
+        this.layout.content.setCss(new FlexCss().grow(1));
+        this.layout.content.setCss(OverflowCss.auto());
+        this.layout.content.container.setCss(new ContainerCss());
+        this.layout.toolbar.setCss(BackgroundCss.gradient(ContextualClass.secondary).subtle());
+        this.layout.toolbar.container.setCss(new ContainerCss());
+        this.layout.toolbar.container.setCss(PaddingCss.xs(3));
+        this.layout.toolbar.container.text.setText("Toolbar");
+    }
+
+    private readonly layout = {
+        content: CompositeComponentView.block({
+            container: CompositeComponentView.block({
+                formGroup: new ReadonlyFormGroupView(),
+                textList: ListComponentView.unorderedList(),
+                compositeList: ListComponentView.unorderedList(),
+                buttons: CompositeComponentView.block({
+                    button: new ButtonCommandView()
+                }),
+                input: new InputComponentView(),
+                inputResult: new TextComponentView()
+            })
+        }),
+        toolbar: CompositeComponentView.block({
+            container: CompositeComponentView.block({
+                text: new TextComponentView()
+            })
         })
-    );
-    readonly input = this.addChildView(new InputComponentView());
-    readonly inputResult = this.addChildView(new TextComponentView());
+    };
+
+    get formGroup() { return this.layout.content.container.formGroup; }
+
+    get textList() { return this.layout.content.container.textList; }
+
+    get compositeList() { return this.layout.content.container.compositeList; }
+
+    get buttons() { return this.layout.content.container.buttons; }
+
+    get input() { return this.layout.content.container.input; }
+
+    get inputResult() { return this.layout.content.container.inputResult; }
 }
 
 class TestItem {

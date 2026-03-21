@@ -1,11 +1,10 @@
 import { Component } from "./Component";
-import { IComponentFactory } from "./ComponentFactory";
 import { ComponentView } from "./ComponentView";
 import { ComponentViewModel, ComponentViewModelInitializer } from "./ComponentViewModel";
 import { ILinkView, ILinkViewModel, LinkComponentChangeHandler, LinkComponentMixin, LinkViewMixin, LinkViewModelMixin } from "./LinkComponent";
 import { StyleableComponentViewMixin } from "./StyleableComponentView";
-import { BaseTextComponentViewModel, ITextView, ITextViewModel, SynchedTitleChangeHandler, SynchedTitleComponentMixin, SynchedTitleViewModelMixin, TextChangeHandler, TextComponentMixin, TextViewMixin, TextViewModelMixin, TitleChangeHandler, TitleComponentMixin, TitleViewModelMixin } from "./TextComponent";
-import { ITitleView, ITitleViewModel } from "./Types";
+import { BaseTextComponentView, BaseTextComponentViewModel, ITextComponentView, ITextViewModel, SynchedTitleChangeHandler, SynchedTitleComponentMixin, SynchedTitleViewModelMixin, TextChangeHandler, TextComponentMixin, TextViewMixin, TextViewModelMixin, TitleChangeHandler, TitleComponentMixin, TitleViewModelMixin } from "./TextComponent";
+import { ITitleViewModel } from "./Types";
 
 export type ITextLinkComponentViewModel = ComponentViewModel & ITextViewModel & ITitleViewModel & ILinkViewModel;
 
@@ -15,14 +14,16 @@ export class TextLinkComponentViewModel extends SynchedTitleViewModelMixin(TextV
     }
 }
 
-export type BaseTextLinkComponentView = ComponentView & ITitleView & ILinkView & ITextView;
+export type BaseTextLinkComponentView = BaseTextComponentView & ILinkView;
 
 export type BaseTextLinkComponentViewModel = BaseTextComponentViewModel & ILinkViewModel;
 
-export class TextLinkComponentView extends TextViewMixin(LinkViewMixin(StyleableComponentViewMixin(ComponentView))) implements BaseTextLinkComponentView {
+export class TextLinkComponentView extends TextViewMixin(LinkViewMixin(StyleableComponentViewMixin(ComponentView))) implements ITextComponentView {
     constructor() {
         super("a");
     }
+
+    readonly text = this;
 }
 
 export class TextLinkComponent extends SynchedTitleComponentMixin(TextComponentMixin(LinkComponentMixin(TitleComponentMixin(Component)))) {
@@ -35,11 +36,5 @@ export class TextLinkComponent extends SynchedTitleComponentMixin(TextComponentM
             new SynchedTitleChangeHandler(viewModel, view),
             new LinkComponentChangeHandler(viewModel, view)
         );
-    }
-}
-
-export class TextLinkComponentFactory implements IComponentFactory {
-    create(viewModel: BaseTextLinkComponentViewModel, view: BaseTextLinkComponentView) {
-        return new TextLinkComponent(viewModel, view);
     }
 }
