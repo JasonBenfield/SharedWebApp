@@ -1,4 +1,3 @@
-import { ConsoleLogger } from "../ConsoleLogger";
 import { areValuesEqual } from "./Equatable";
 import { EventManager } from "./EventManager";
 import { ObservableArray } from "./ObservableArray";
@@ -76,7 +75,7 @@ export class ComponentViewModel {
     }
 }
 
-type excludedViewModelProperties =
+export type ExcludedViewModelProperties =
     "changes" |
     "manager" |
     "when" |
@@ -87,7 +86,7 @@ type excludedViewModelProperties =
 
 export type ComponentViewModelDataKeys<T> = {
     [K in keyof T]:
-    K extends excludedViewModelProperties ? never :
+    K extends ExcludedViewModelProperties ? never :
     T[K] extends ComponentViewModel ? never :
     T[K] extends ObservableArray<any> ? never :
     K;

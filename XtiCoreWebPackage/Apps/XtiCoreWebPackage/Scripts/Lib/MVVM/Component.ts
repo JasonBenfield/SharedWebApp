@@ -117,6 +117,19 @@ export class Component {
         this.viewModel.isVisible = false;
     }
 
+    protected addLayout<TLayout extends {
+        [K in ComponentViewModelProperties<typeof this.viewModel>]: (vm: ComponentViewModel, view: ComponentView) => Component
+    }>(layout: TLayout) {
+        for (const key in layout) {
+            const childComponent = Reflect.get(layout, key);
+            if (childComponent instanceof Component) {
+                this.addComponent(childComponent);
+                Reflect.set(this, key, childComponent);
+            }
+        }
+        return layout;
+    }
+
     protected addComponent<TComponent extends Component>(c: TComponent) {
         if (Object.is(this, c)) {
             throw new Error("cannot add component to itself");
@@ -193,5 +206,60 @@ export class Component {
         for (const view of views) {
             view.dispose();
         }
+    }
+}
+
+export type ComponentViewModelProperties<TViewModel> = {
+    [K in keyof TViewModel]: TViewModel[K] extends ComponentViewModel ? K : never;
+}[keyof TViewModel];
+
+export type ComponentViewModelLayout<T> = {
+    [Key in ComponentViewModelProperties<T>]: T[Key];
+}
+export class ComponentLayoutBuilder<
+    TViewModelLayout extends ComponentViewModelLayout<TViewModelLayout>,
+    TView extends ComponentView
+> {
+    constructor(
+        private readonly viewModel: ComponentViewModel & TViewModelLayout,
+        private readonly view: TView
+    ) {
+    }
+
+    viewLayout<TViewPublicLayout extends {
+        [K in ComponentViewModelProperties<TViewModelLayout>]: ComponentView
+    }>(toViewLayout: (view: TView) => TViewPublicLayout) {
+        return new ComponentLayoutBuilderWithViewLayout(this.viewModel, toViewLayout(this.view));
+    }
+}
+
+class ComponentLayoutBuilderWithViewLayout<
+    TViewModelLayout extends ComponentViewModelLayout<TViewModelLayout>,
+    TViewPublicLayout extends {
+        [K in ComponentViewModelProperties<TViewModelLayout>]: ComponentView
+    }
+> {
+    constructor(
+        private readonly viewModel: ComponentViewModel & TViewModelLayout,
+        private readonly viewLayout: TViewPublicLayout
+    ) {
+
+    }
+
+    build<TFactory extends {
+        [K in ComponentViewModelProperties<TViewModelLayout>]: (vm: TViewModelLayout[K], view: TViewPublicLayout[K]) => Component
+    }>(factory: TFactory) {
+        const layout = {};
+        for (const key in this.viewModel) {
+            const childVM: any = Reflect.get(this.viewModel, key);
+            if (childVM instanceof ComponentViewModel) {
+                const childView = Reflect.get(this.viewLayout, key);
+                const createComponent = Reflect.get(factory, key);
+                if (childView && createComponent) {
+                    Reflect.set(layout, key, createComponent(childVM as any, childView));
+                }
+            }
+        }
+        return layout as { [K in keyof TFactory]: ReturnType<TFactory[K]> };
     }
 }

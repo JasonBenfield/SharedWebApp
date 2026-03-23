@@ -1,4 +1,4 @@
-import { Component } from "./Component";
+import { Component, ComponentLayoutBuilder } from "./Component";
 import { ComponentView } from "./ComponentView";
 import { ComponentViewModel } from "./ComponentViewModel";
 import { CompositeComponentViewBuilder, CompositeComponentViewModelLayout } from "./CompositeComponent";
@@ -43,14 +43,8 @@ export interface IReadonlyFormGroupViewModel {
 }
 
 export class ReadonlyFormGroupViewModel extends ComponentViewModel implements IReadonlyFormGroupViewModel {
-    readonly caption: TextComponentViewModel;
-    readonly value: TextComponentViewModel;
-
-    constructor() {
-        super();
-        this.caption = new TextComponentViewModel();
-        this.value = new TextComponentViewModel();
-    }
+    readonly caption = new TextComponentViewModel();
+    readonly value = new TextComponentViewModel();
 }
 
 export class ReadonlyFormGroup extends Component {
@@ -60,8 +54,16 @@ export class ReadonlyFormGroup extends Component {
 
     constructor(viewModel: ComponentViewModel & IReadonlyFormGroupViewModel, view: BaseReadonlyFormGroupView) {
         super(viewModel, view);
-        this.caption = new TextComponent(viewModel.caption, view.caption);
-        this.value = new TextComponent(viewModel.value, view.value);
+        const layout = this.addLayout(
+            new ComponentLayoutBuilder(viewModel, view)
+                .viewLayout(v => v)
+                .build({
+                    caption: (vm, v) => new TextComponent(vm, v),
+                    value: (vm, v) => new TextComponent(vm, v)
+                })
+        );
+        this.caption = layout.caption;
+        this.value = layout.value;
     }
 
     readonly caption: TextComponent;

@@ -99,8 +99,11 @@ export class GridCssStyle implements ICssStyle {
     }
 }
 
-export class GridView extends StyleableComponentViewMixin(ComponentView) {
-    constructor() {
-        super("div");
-    }
+export function GridViewMixin<T extends Constructor<ComponentView & IStyleableComponentView>>(Base: T) {
+    return class extends Base {
+        constructor(...args: any[]) {
+            super(...args);
+            this.setCss(DisplayCss.grid());)
+        }
+    };
 }

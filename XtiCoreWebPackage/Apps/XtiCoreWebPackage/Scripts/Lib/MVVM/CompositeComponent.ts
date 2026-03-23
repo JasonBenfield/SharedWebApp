@@ -1,10 +1,12 @@
 import { Component } from "./Component";
 import { ComponentView, IComponentViewLayout } from "./ComponentView";
-import { ComponentViewModel } from "./ComponentViewModel";
+import { ComponentViewModel, ExcludedViewModelProperties } from "./ComponentViewModel";
 import { StyleableComponentViewMixin } from "./StyleableComponentView";
 
 export type CompositeComponentViewModelProperties<TViewModel> = {
-    [K in keyof TViewModel]: TViewModel[K] extends ComponentViewModel ? K : never;
+    [K in keyof TViewModel]: TViewModel[K] extends ExcludedViewModelProperties ? never :
+    TViewModel[K] extends "asLayout" ? never :
+    TViewModel[K] extends ComponentViewModel ? K : never;
 }[keyof TViewModel];
 
 export type CompositeComponentViewModelLayout<T> = {
@@ -12,6 +14,10 @@ export type CompositeComponentViewModelLayout<T> = {
 }
 
 export class CompositeComponentViewModel<T extends CompositeComponentViewModelLayout<T>> extends ComponentViewModel {
+    static create<T extends CompositeComponentViewModelLayout<T>>(layout: T) {
+        return new CompositeComponentViewModel(layout).asLayout();
+    }
+
     constructor(layout: T) {
         super();
         const vm: any = this;
@@ -33,24 +39,6 @@ export type CompositeComponentLayoutProperties<T> = {
 
 export type CompositeComponentLayout<T> = {
     [Key in CompositeComponentLayoutProperties<T>]: T[Key];
-}
-
-class CompositeComponent<
-    TViewModelLayout extends CompositeComponentViewModelLayout<TViewModelLayout>,
-    TViewLayout extends IComponentViewLayout,
-    TViewPublicLayout extends IComponentViewLayout,
-    TComponentLayout extends CompositeComponentLayout<TComponentLayout>
-> extends Component {
-    constructor(viewModel: ComponentViewModel & TViewModelLayout, view: CompositeComponentView<TViewLayout, TViewPublicLayout>, layout: TComponentLayout) {
-        super(viewModel, view);
-        for (const key in layout) {
-            const childComponent = Reflect.get(layout, key);
-            this.addComponent(childComponent);
-            Reflect.set(this, key, childComponent);
-        }
-    }
-
-    asLayout() { return this as this & TComponentLayout; }
 }
 
 export class CompositeComponentViewBuilder {
@@ -81,7 +69,7 @@ export class CompositeComponentViewBuilder {
 
     build<TLayout extends IComponentViewLayout>(layout: TLayout) {
         return new CompositeComponentViewWithPublicLayoutBuilder(this.tagNameOrCreateElement, layout)
-            .build(l => Object.assign({}, l));
+            .build(l => l);
     }
 }
 
@@ -145,27 +133,22 @@ export class CompositeComponentView<TLayout extends IComponentViewLayout, TPubli
     }
 }
 
-export type CompositeComponentViewLayoutProperties<TView> = {
-    [Key in (keyof TView)]: TView[Key] extends ComponentView ? Key : never;
-}[keyof TView];
-
 export class CompositeComponentBuilder<TViewModelLayout extends CompositeComponentViewModelLayout<TViewModelLayout>> {
     constructor(private readonly viewModel: ComponentViewModel & TViewModelLayout) {
     }
 
-    view<
-        TViewLayout extends IComponentViewLayout,
-        TViewPublicLayout extends {
-            [K in CompositeComponentViewModelProperties<TViewModelLayout>]: ComponentView
-        }
-    >(view: CompositeComponentView<TViewLayout, TViewPublicLayout>) {
+    view<TViewPublicLayout extends {
+        [K in CompositeComponentViewModelProperties<TViewModelLayout>]: ComponentView
+    }>(view: CompositeComponentView<any, TViewPublicLayout>) {
         return new CompositeComponentBuilderWithView(this.viewModel, view);
     }
 }
 
 class CompositeComponentBuilderWithView<
     TViewModelLayout extends CompositeComponentViewModelLayout<TViewModelLayout>,
-    TViewLayout extends IComponentViewLayout,
+    TViewLayout extends {
+        [K in keyof TViewLayout]: ComponentView
+    },
     TViewPublicLayout extends {
         [K in CompositeComponentViewModelProperties<TViewModelLayout>]: ComponentView
     }
@@ -180,13 +163,15 @@ class CompositeComponentBuilderWithView<
     factory<TFactory extends {
         [K in CompositeComponentViewModelProperties<TViewModelLayout>]: (vm: TViewModelLayout[K], view: TViewPublicLayout[K]) => Component
     }>(factory: TFactory) {
-        return new CompositeComponentBuilderWithComponentFactory(this.viewModel, this.view, factory);
+        return new CompositeComponentBuilderWithComponentFactory<TViewModelLayout, TViewLayout, TViewPublicLayout, TFactory>(this.viewModel, this.view, factory);
     }
 }
 
 class CompositeComponentBuilderWithComponentFactory<
     TViewModelLayout extends CompositeComponentViewModelLayout<TViewModelLayout>,
-    TViewLayout extends IComponentViewLayout,
+    TViewLayout extends {
+        [K in keyof TViewLayout]: ComponentView
+    },
     TViewPublicLayout extends {
         [K in CompositeComponentViewModelProperties<TViewModelLayout>]: ComponentView
     }, TFactory extends {
@@ -202,10 +187,14 @@ class CompositeComponentBuilderWithComponentFactory<
     build() {
         const layout = {};
         for (const key in this.viewModel) {
-            const childVM = Reflect.get(this.viewModel, key);
-            const childView = Reflect.get(this.view.publicLayout, key);
-            const createComponent = Reflect.get(this.compositeFactory, key);
-            Reflect.set(layout, key, createComponent(childVM, childView));
+            const childVM: any = Reflect.get(this.viewModel, key);
+            if (childVM instanceof ComponentViewModel) {
+                const childView = Reflect.get(this.view.publicLayout, key);
+                const createComponent = Reflect.get(this.compositeFactory, key);
+                if (childView && createComponent) {
+                    Reflect.set(layout, key, createComponent(childVM as any, childView));
+                }
+            }
         }
         return new CompositeComponent(
             this.viewModel,
@@ -213,4 +202,22 @@ class CompositeComponentBuilderWithComponentFactory<
             layout as { [K in keyof TFactory]: ReturnType<TFactory[K]> }
         ).asLayout();
     }
+}
+
+class CompositeComponent<
+    TViewModelLayout extends CompositeComponentViewModelLayout<TViewModelLayout>,
+    TViewLayout extends IComponentViewLayout,
+    TViewPublicLayout extends IComponentViewLayout,
+    TComponentLayout extends CompositeComponentLayout<TComponentLayout>
+> extends Component {
+    constructor(viewModel: ComponentViewModel & TViewModelLayout, view: CompositeComponentView<TViewLayout, TViewPublicLayout>, layout: TComponentLayout) {
+        super(viewModel, view);
+        for (const key in layout) {
+            const childComponent = Reflect.get(layout, key);
+            this.addComponent(childComponent);
+            Reflect.set(this, key, childComponent);
+        }
+    }
+
+    asLayout() { return this as this & TComponentLayout; }
 }
