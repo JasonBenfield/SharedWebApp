@@ -15,6 +15,22 @@ export class PositionCss extends CssClass {
         return new PositionCss("sticky");
     }
 
+    static stickyAtBotoom() {
+        return new PositionCss("sticky").bottom(0);
+    }
+
+    static stickyAtTop() {
+        return new PositionCss("sticky").top(0);
+    }
+
+    static stickyAtStart() {
+        return new PositionCss("sticky").start(0);
+    }
+
+    static stickyAtEnd() {
+        return new PositionCss("sticky").end(0);
+    }
+
     static relative() {
         return new PositionCss("relative");
     }

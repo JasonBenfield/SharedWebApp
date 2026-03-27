@@ -9,16 +9,18 @@ import { PaddingCss } from "../../Lib/Bootstrap/PaddingCss";
 import { FormattedNumber } from "../../Lib/FormattedNumber";
 import { ButtonCommandView, Command, CommandOptionsBuilder, CommandViewModel } from "../../Lib/MVVM/Command";
 import { ComponentView } from "../../Lib/MVVM/ComponentView";
+import { GridCellView, GridRowView, GridView } from "../../Lib/MVVM/GridView";
 import { ComponentViewModel } from "../../Lib/MVVM/ComponentViewModel";
-import { CompositeComponentBuilder, CompositeComponentView, CompositeComponentViewBuilder } from "../../Lib/MVVM/CompositeComponent";
+import { CompositeComponentBuilder, CompositeComponentView } from "../../Lib/MVVM/CompositeComponent";
 import { ContainerComponent } from "../../Lib/MVVM/ContainerComponent";
 import { InputComponentView } from "../../Lib/MVVM/InputComponent";
 import { IViewModelUpdater, ListComponent, ListComponentOptionsBuilder, ListComponentView, ListComponentViewModel, ListItemFactory, TextViewModelUpdater } from "../../Lib/MVVM/ListComponent";
-import { ReadonlyFormGroup, ReadonlyFormGroupView, ReadonlyFormGroupViewModel } from "../../Lib/MVVM/ReadonlyFormGroup";
+import { FormGroupText, FormGroupView, FormGroupViewModel } from "../../Lib/MVVM/FormGroup";
 import { StyleableComponentViewMixin } from "../../Lib/MVVM/StyleableComponentView";
 import { TextComponent, TextComponentView, TextComponentViewModel } from "../../Lib/MVVM/TextComponent";
 import { TransformedInputComponent, TransformedInputComponentViewModel, TransformedNumberInput } from "../../Lib/MVVM/TransformedInputComponent";
 import { AppHost } from "../AppHost";
+import { CssLengthUnit } from "../../Lib/CssLengthUnit";
 
 class MainPage {
 
@@ -26,7 +28,7 @@ class MainPage {
         const pageView = new MainPageView();
         const pageViewModel = new MainPageViewModel();
 
-        const formGroup = new ReadonlyFormGroup(pageViewModel.formGroup, pageView.formGroup);
+        const formGroup = new FormGroupText(pageViewModel.formGroup, pageView.formGroup);
         formGroup.setCaption("Caption 1");
         formGroup.setValue("Value 1");
         const textListComponent = new ListComponent(
@@ -67,10 +69,15 @@ class MainPage {
                         .withComponent((itemVM, itemView) => new TextComponent(itemVM, itemView))
                 )
                 .withItemFactory(() => new ListItemFactory(() => new TestItemComponentViewModel())
-                    .withView((createItemElement) => new CompositeComponentViewBuilder(createItemElement).build({
-                        id: TextComponentView.label(),
-                        value: new TextComponentView()
-                    }).asLayout())
+                    .withView(
+                        (createItemElement) => CompositeComponentView.fromElement(
+                            createItemElement,
+                            {
+                                id: new TextComponentView(),
+                                value: new TextComponentView()
+                            }
+                        )
+                    )
                     .withComponent((itemVM, itemView) => {
                         return new CompositeComponentBuilder(itemVM)
                             .view(itemView)
@@ -130,6 +137,15 @@ class MainPageView extends StyleableComponentViewMixin(ComponentView) {
         this.setCss(new FlexCss().column());
         this.setCss(HeightCss.fill());
         this.addLayout(this.layout);
+        const grid = this.layout.content.container.grid;
+        grid.setTemplateColumns(
+            CssLengthUnit.auto(),
+            CssLengthUnit.flex(1),
+            CssLengthUnit.auto()
+        )
+        grid.row1.cell1.text.setText("Cell 1");
+        grid.row1.cell2.text.setText("Cell 2");
+        grid.row1.cell3.text.setText("Cell 3");
         this.layout.content.setCss(new FlexCss().grow(1));
         this.layout.content.setCss(OverflowCss.auto());
         this.layout.content.container.setCss(new ContainerCss());
@@ -142,7 +158,20 @@ class MainPageView extends StyleableComponentViewMixin(ComponentView) {
     private readonly layout = {
         content: CompositeComponentView.block({
             container: CompositeComponentView.block({
-                formGroup: new ReadonlyFormGroupView(),
+                grid: GridView.block({
+                    row1: GridRowView.block({
+                        cell1: GridCellView.block({
+                            text: new TextComponentView()
+                        }),
+                        cell2: GridCellView.block({
+                            text: new TextComponentView()
+                        }),
+                        cell3: GridCellView.block({
+                            text: new TextComponentView()
+                        })
+                    })
+                }),
+                formGroup: new FormGroupView(),
                 textList: ListComponentView.unorderedList(),
                 compositeList: ListComponentView.unorderedList(),
                 buttons: CompositeComponentView.block({
@@ -200,7 +229,7 @@ class TestItemViewModelUpdater implements IViewModelUpdater<TestItem, TestItemCo
 }
 
 class MainPageViewModel {
-    readonly formGroup = new ReadonlyFormGroupViewModel();
+    readonly formGroup = new FormGroupViewModel();
     readonly textList = new ListComponentViewModel<TextComponentViewModel>();
     readonly compositeList = new ListComponentViewModel<TestItemComponentViewModel>();
     readonly button = new CommandViewModel();

@@ -4,7 +4,7 @@ import { DelayedAction } from "../Lib/DelayedAction";
 import { Component } from "../Lib/MVVM/Component";
 import { ComponentView } from "../Lib/MVVM/ComponentView";
 import { ComponentViewModel } from "../Lib/MVVM/ComponentViewModel";
-import { CompositeComponentBuilder, CompositeComponentViewBuilder, CompositeComponentViewModel } from "../Lib/MVVM/CompositeComponent";
+import { CompositeComponentBuilder, CompositeComponentView, CompositeComponentViewModel } from "../Lib/MVVM/CompositeComponent";
 import { TestHost } from "./TestHost";
 
 function createDiv(id: string) {
@@ -85,8 +85,8 @@ function createComponent(options: { isVisible: boolean } = { isVisible: true }) 
         }).asLayout(),
         level1_2: new ComponentViewModel()
     }).asLayout();
-    const view = CompositeComponentViewBuilder.block().build({
-        level1_1: CompositeComponentViewBuilder.block().build({
+    const view = CompositeComponentView.block({
+        level1_1: CompositeComponentView.block({
             level2_1: new ComponentView(() => createDiv(level2_1ElementID)),
             level2_2: new ComponentView(() => createDiv(level2_2ElementID))
         }),

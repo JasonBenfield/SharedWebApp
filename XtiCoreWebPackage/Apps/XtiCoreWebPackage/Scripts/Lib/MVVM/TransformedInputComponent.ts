@@ -165,10 +165,10 @@ type TransformedInputComponentEventLayout<TValue> = {
 };
 
 export class TransformedInputComponent<TValue> extends UniqueComponentMixin(FocusableComponentMixin(Component)) {
-    private readonly eventManager = new EventManager<TransformedInputComponentEventLayout<TValue>>({
+    private readonly events = this.eventManager.addEvents<TransformedInputComponentEventLayout<TValue>>({
         valueChanged: null
     });
-    readonly when = this.eventManager.when;
+    readonly when = this.events.when;
 
     constructor(
         protected readonly viewModel: TransformedInputComponentViewModel<TValue>,
@@ -206,7 +206,7 @@ export class TransformedInputComponent<TValue> extends UniqueComponentMixin(Focu
         super.handleChanges(changes);
         if (changes.transformedValue) {
             const value: TransformedInputValue<TValue> = changes.transformedValue.value;
-            this.eventManager?.events.valueChanged.invoke(value.value);
+            this.events?.events.valueChanged.invoke(value.value);
         }
     }
 
@@ -218,8 +218,4 @@ export class TransformedInputComponent<TValue> extends UniqueComponentMixin(Focu
     get placeholder() { return this.viewModel.placeholder; }
     set placeholder(placeholder: string) { this.viewModel.placeholder = placeholder; }
 
-    dispose() {
-        this.eventManager.dispose();
-        super.dispose();
-    }
 }

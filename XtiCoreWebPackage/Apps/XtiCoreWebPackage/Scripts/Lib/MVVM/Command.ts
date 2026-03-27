@@ -3,7 +3,7 @@ import { ComponentView } from "./ComponentView";
 import { ComponentViewModel, ObservableChanges } from "./ComponentViewModel";
 import { CustomEventRegistrations, EventManager } from "./EventManager";
 import { StyleableComponentViewMixin } from "./StyleableComponentView";
-import { BaseTextComponentView, ITextComponentView, TextChangeHandler, TextComponentView, TextViewModelMixin, TitleChangeHandler, TitleViewMixin, TitleViewModelMixin } from "./TextComponent";
+import { BaseTextComponentView,  ITextView,  TextChangeHandler, TextComponentView, TextViewModelMixin, TitleChangeHandler, TitleViewMixin, TitleViewModelMixin } from "./TextComponent";
 
 export type BaseCommandView = BaseTextComponentView & ICommandView;
 
@@ -130,8 +130,8 @@ export interface ICommandView {
     clearStyleAsInProgress(): void;
 }
 
-export class ButtonCommandView extends TitleViewMixin(StyleableComponentViewMixin(ComponentView)) implements ICommandView, ITextComponentView {
-    private readonly _eventManager = new EventManager<CommandEventLayout>({
+export class ButtonCommandView extends TitleViewMixin(StyleableComponentViewMixin(ComponentView)) implements ICommandView, ITextView {
+    private readonly events = this.eventManager.addEvents<CommandEventLayout>({
         clicked: null
     });
     private hasRegisteredEvents = false;
@@ -180,7 +180,7 @@ export class ButtonCommandView extends TitleViewMixin(StyleableComponentViewMixi
             );
             this.hasRegisteredEvents = true;
         }
-        return this._eventManager.when;
+        return this.events.when;
     }
 
     simulateClick() {
@@ -199,6 +199,6 @@ export class ButtonCommandView extends TitleViewMixin(StyleableComponentViewMixi
     }
 
     private handleClickEvent(evt: PointerEvent) {
-        this._eventManager.events.clicked.invoke(evt);
+        this.events.events.clicked.invoke(evt);
     }
 }

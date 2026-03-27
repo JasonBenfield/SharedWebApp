@@ -33,75 +33,7 @@ export class CompositeComponentViewModel<T extends CompositeComponentViewModelLa
     asLayout() { return this as this & T; }
 }
 
-export type CompositeComponentLayoutProperties<T> = {
-    [Key in keyof T]: T[Key] extends ComponentView ? Key : never;
-}[keyof T];
-
-export type CompositeComponentLayout<T> = {
-    [Key in CompositeComponentLayoutProperties<T>]: T[Key];
-}
-
-export class CompositeComponentViewBuilder {
-    static block() {
-        return new CompositeComponentViewBuilder("div");
-    }
-
-    static span() {
-        return new CompositeComponentViewBuilder("span");
-    }
-
-    static heading(size: 1 | 2 | 3 | 4 | 5 | 6) {
-        return new CompositeComponentViewBuilder(`h${size}`);
-    }
-
-    constructor();
-    constructor(createElement: () => HTMLElement);
-    constructor(tagName: string);
-    constructor(tagNameOrCreateElement?: string | (() => HTMLElement)) {
-        this.tagNameOrCreateElement = tagNameOrCreateElement || "div";
-    }
-
-    private readonly tagNameOrCreateElement: string | (() => HTMLElement);
-
-    layout<TLayout extends IComponentViewLayout>(layout: TLayout) {
-        return new CompositeComponentViewWithPublicLayoutBuilder(this.tagNameOrCreateElement, layout);
-    }
-
-    build<TLayout extends IComponentViewLayout>(layout: TLayout) {
-        return new CompositeComponentViewWithPublicLayoutBuilder(this.tagNameOrCreateElement, layout)
-            .build(l => l);
-    }
-}
-
-class CompositeComponentViewWithPublicLayoutBuilder<TLayout extends IComponentViewLayout> {
-    constructor(
-        private readonly tagNameOrCreateElement: string | (() => HTMLElement),
-        private readonly layout: TLayout
-    ) {
-    }
-
-    build<TPublicLayout extends IComponentViewLayout>(toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new CompositeComponentView(
-            this.tagNameOrCreateElement,
-            this.layout,
-            toPublicLayout
-        ).asLayout();
-    }
-}
-
-export class CompositeComponentView<TLayout extends IComponentViewLayout, TPublicLayout extends IComponentViewLayout> extends StyleableComponentViewMixin(ComponentView) {
-    static block<TLayout extends IComponentViewLayout>(layout: TLayout) {
-        return new CompositeComponentViewBuilder("div").build(layout);
-    }
-
-    static span<TLayout extends IComponentViewLayout>(layout: TLayout) {
-        return new CompositeComponentViewBuilder("span").build(layout);
-    }
-
-    static heading<TLayout extends IComponentViewLayout>(size: 1 | 2 | 3 | 4 | 5 | 6, layout: TLayout) {
-        return new CompositeComponentViewBuilder(`h${size}`).build(layout);
-    }
-
+export class BaseCompositeComponentView<TLayout extends IComponentViewLayout, TPublicLayout extends ComponentView | IComponentViewLayout> extends StyleableComponentViewMixin(ComponentView) {
     constructor(
         tagNameOrCreateElement: string | (() => HTMLElement),
         layout: TLayout,
@@ -130,6 +62,32 @@ export class CompositeComponentView<TLayout extends IComponentViewLayout, TPubli
 
     asLayout() {
         return this as this & TLayout;
+    }
+}
+
+export class CompositeComponentView<TLayout extends IComponentViewLayout, TPublicLayout extends ComponentView | IComponentViewLayout> extends BaseCompositeComponentView<TLayout, TPublicLayout> {
+    static fromElement<TLayout extends IComponentViewLayout>(createElement: () => HTMLElement, layout: TLayout) {
+        return new CompositeComponentView(
+            createElement, layout, l => l
+        ).asLayout();
+    }
+
+    static block<TLayout extends IComponentViewLayout>(layout: TLayout) {
+        return new CompositeComponentView(
+            "div", layout, l => l
+        ).asLayout();
+    }
+
+    static span<TLayout extends IComponentViewLayout>(layout: TLayout) {
+        return new CompositeComponentView(
+            "span", layout, l => l
+        ).asLayout();
+    }
+
+    static heading<TLayout extends IComponentViewLayout>(size: 1 | 2 | 3 | 4 | 5 | 6, layout: TLayout) {
+        return new CompositeComponentView(
+            `h${size}`, layout, l => l
+        ).asLayout();
     }
 }
 
@@ -202,6 +160,14 @@ class CompositeComponentBuilderWithComponentFactory<
             layout as { [K in keyof TFactory]: ReturnType<TFactory[K]> }
         ).asLayout();
     }
+}
+
+type CompositeComponentLayoutProperties<T> = {
+    [Key in keyof T]: T[Key] extends ComponentView ? Key : never;
+}[keyof T];
+
+type CompositeComponentLayout<T> = {
+    [Key in CompositeComponentLayoutProperties<T>]: T[Key];
 }
 
 class CompositeComponent<

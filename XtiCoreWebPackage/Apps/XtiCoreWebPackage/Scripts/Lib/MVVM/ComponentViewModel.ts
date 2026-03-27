@@ -1,5 +1,5 @@
 import { areValuesEqual } from "./Equatable";
-import { EventManager } from "./EventManager";
+import { EventManager, EventTemplate } from "./EventManager";
 import { ObservableArray } from "./ObservableArray";
 
 type EventLayout = {
@@ -9,11 +9,11 @@ type EventLayout = {
 export type ComponentViewModelInitializer<TViewModel extends ComponentViewModel> = Partial<ComponentViewModelData<TViewModel>>;
 
 export class ComponentViewModel {
-
-    private readonly _eventManager = new EventManager<EventLayout>({
+    private readonly eventManager = new EventManager();
+    private readonly events = this.eventManager.addEvents<EventLayout>({
         propertyChanged: null
     });
-    readonly when = this._eventManager.when;
+    readonly when = this.events.when;
 
     private readonly _changes: ObservableChanges<typeof this> = {};
 
@@ -33,7 +33,7 @@ export class ComponentViewModel {
                         );
                         const changes = this._changes as any;
                         changes[property] = change;
-                        this._eventManager.events.propertyChanged?.invoke({
+                        this.events.events.propertyChanged?.invoke({
                             viewModel: this,
                             changedProperty: change
                         });
@@ -57,8 +57,8 @@ export class ComponentViewModel {
 
     set isVisible(isVisible: boolean) { this._isVisible = isVisible; }
 
-    notify<TOtherEvents>(otherEventManager: EventManager<TOtherEvents>) {
-        this._eventManager.notify(otherEventManager);
+    notify<TOtherEvents>(otherEventManager: EventManager, template: EventTemplate<TOtherEvents>) {
+        this.eventManager.notify(otherEventManager, template);
     }
 
     dispose() {
@@ -71,7 +71,7 @@ export class ComponentViewModel {
                 propertyValue.dispose();
             }
         }
-        this._eventManager.dispose();
+        this.eventManager.dispose();
     }
 }
 

@@ -49,7 +49,7 @@ type InputViewEventLayout = {
 }
 
 export class InputComponentView extends FocusableViewMixin(StyleableComponentViewMixin(ComponentView)) {
-    private readonly _eventManager = new EventManager<InputViewEventLayout>({
+    private readonly events = this.eventManager.addEvents<InputViewEventLayout>({
         textValueInput: null,
         focused: null,
         blurred: null
@@ -111,19 +111,19 @@ export class InputComponentView extends FocusableViewMixin(StyleableComponentVie
             );
             this.hasRegisteredEvents = true;
         }
-        return this._eventManager.when;
+        return this.events.when;
     }
 
     private handleInputEvent(evt: InputEvent) {
-        this._eventManager.events.textValueInput.invoke(evt);
+        this.events.events.textValueInput.invoke(evt);
     }
 
     private handleFocusEvent(evt: FocusEvent) {
-        this._eventManager.events.focused.invoke(evt);
+        this.events.events.focused.invoke(evt);
     }
 
     private handleBlurEvent(evt: FocusEvent) {
-        this._eventManager.events.blurred.invoke(evt);
+        this.events.events.blurred.invoke(evt);
     }
 
     simulateInputEvent(textValue: string) {
@@ -190,10 +190,10 @@ type InputComponentEventLayout = {
 };
 
 export class InputComponent extends UniqueComponentMixin(FocusableComponentMixin(Component)) {
-    private readonly eventManager = new EventManager<InputComponentEventLayout>({
+    private readonly events = this.eventManager.addEvents<InputComponentEventLayout>({
         textValueChanged: null
     });
-    readonly when = this.eventManager.when;
+    readonly when = this.events.when;
 
     constructor(
         protected readonly viewModel: InputComponentViewModel,
@@ -215,7 +215,7 @@ export class InputComponent extends UniqueComponentMixin(FocusableComponentMixin
         super.handleChanges(changes);
         if (changes.textValue) {
             const textValue: InputTextValue = changes.textValue.value;
-            this.eventManager?.events.textValueChanged.invoke(textValue.value);
+            this.events?.events.textValueChanged.invoke(textValue.value);
         }
     }
 

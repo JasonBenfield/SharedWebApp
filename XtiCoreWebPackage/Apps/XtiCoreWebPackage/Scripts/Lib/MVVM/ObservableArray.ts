@@ -13,13 +13,14 @@ type ItemEventLayout = {
 }
 
 export class ObservableArray<TViewModel extends ComponentViewModel> {
-    private readonly _eventManager = new EventManager<EventLayout<TViewModel>>({
+    private readonly eventManager = new EventManager();
+    private readonly events = this.eventManager.addEvents<EventLayout<TViewModel>>({
         arrayChanged: null,
         arrayItemChanged: null
     });
-    readonly when = this._eventManager.when;
+    readonly when = this.events.when;
 
-    private readonly _itemEventManager = new EventManager<ItemEventLayout>({
+    private readonly itemEvents = this.eventManager.addEvents<ItemEventLayout>({
         propertyChanged: null
     });
 
@@ -27,7 +28,7 @@ export class ObservableArray<TViewModel extends ComponentViewModel> {
     private readonly _changedItemProperties: ChangedProperty[] = [];
 
     constructor() {
-        this._itemEventManager.when.propertyChanged.then(this.handlePropertyChanged.bind(this));
+        this.itemEvents.when.propertyChanged.then(this.handlePropertyChanged.bind(this));
     }
 
     private handlePropertyChanged(event: CustomEvent<UpdatedViewModel>) {
@@ -53,7 +54,7 @@ export class ObservableArray<TViewModel extends ComponentViewModel> {
                 }
                 Reflect.set(itemChange.changes, changedItemProperty.propertyName, changedItemProperty);
             }
-            this._eventManager.events.arrayItemChanged?.invoke(itemChanges);
+            this.events.events.arrayItemChanged?.invoke(itemChanges);
         }
     }
 
@@ -66,7 +67,7 @@ export class ObservableArray<TViewModel extends ComponentViewModel> {
         this._values.push(...values);
         const changes: ChangedObservableArray<TViewModel>[] = [];
         for (const value of values) {
-            value.notify(this._itemEventManager);
+            value.notify(this.eventManager, this.itemEvents.template);
             changes.push(
                 new ChangedObservableArray(
                     this,
@@ -78,7 +79,7 @@ export class ObservableArray<TViewModel extends ComponentViewModel> {
             );
             i++;
         }
-        this._eventManager.events.arrayChanged.invoke(changes);
+        this.events.events.arrayChanged.invoke(changes);
     }
 
     splice(startIndex: number, deleteCount: number, ...addedValues: TViewModel[]) {
@@ -99,7 +100,7 @@ export class ObservableArray<TViewModel extends ComponentViewModel> {
         }
         i = startIndex;
         for (const addedValue of addedValues) {
-            addedValue.notify(this._itemEventManager);
+            addedValue.notify(this.eventManager, this.itemEvents.template);
             changes.push(
                 new ChangedObservableArray(
                     this,
@@ -111,7 +112,7 @@ export class ObservableArray<TViewModel extends ComponentViewModel> {
             );
             i++;
         }
-        this._eventManager.events.arrayChanged.invoke(changes);
+        this.events.events.arrayChanged.invoke(changes);
     }
 
     replaceWith(...updatedValues: TViewModel[]) {
@@ -133,7 +134,7 @@ export class ObservableArray<TViewModel extends ComponentViewModel> {
                     );
                 }
                 else {
-                    updatedValue.notify(this._itemEventManager);
+                    updatedValue.notify(this.eventManager, this.itemEvents.template);
                     changes.push(
                         new ChangedObservableArray(
                             this,
@@ -162,7 +163,7 @@ export class ObservableArray<TViewModel extends ComponentViewModel> {
             }
         }
         this._values.splice(0, this._values.length, ...updatedValues);
-        this._eventManager.events.arrayChanged.invoke(changes);
+        this.events.events.arrayChanged.invoke(changes);
     }
 
     immediateHandleChanges() {
@@ -172,8 +173,7 @@ export class ObservableArray<TViewModel extends ComponentViewModel> {
     dispose() {
         this.debouncedHandlePropertyChanged.cancel();
         this.handleStoredChanges();
-        this._itemEventManager.dispose();
-        this._eventManager.dispose();
+        this.eventManager.dispose();
         const values = this._values.splice(0, this._values.length);
         for (const value of values) {
             value.dispose();

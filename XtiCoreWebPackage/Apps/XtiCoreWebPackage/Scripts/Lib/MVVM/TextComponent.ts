@@ -1,6 +1,7 @@
-import { Component, ComponentChangeHandler, IComponentFactory } from "./Component";
-import { ComponentView } from "./ComponentView";
+import { Component, ComponentChangeHandler } from "./Component";
+import { ComponentView, IComponentViewLayout } from "./ComponentView";
 import { ComponentViewModel, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
+import { BaseCompositeComponentView, CompositeComponentView } from "./CompositeComponent";
 import { IStyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
 import { Constructor, ITitleView, ITitleViewModel } from "./Types";
 
@@ -82,7 +83,7 @@ export interface ITextView {
     setText(text: string): void;
 }
 
-export class TextComponentView extends TextViewMixin(TitleViewMixin(StyleableComponentViewMixin(ComponentView))) implements ITextComponentView {
+export class TextComponentView extends TextViewMixin(TitleViewMixin(StyleableComponentViewMixin(ComponentView))) {
     static block() {
         return new TextComponentView("div");
     }
@@ -91,22 +92,23 @@ export class TextComponentView extends TextViewMixin(TitleViewMixin(StyleableCom
         return new TextComponentView("span");
     }
 
-    static label() {
-        return new TextComponentView("label");
-    }
-
     static heading(size: 1 | 2 | 3 | 4 | 5 | 6) {
         return new TextComponentView(`h${size}`);
     }
+}
 
-    readonly text = this;
+export class CompositeTextComponentView<TLayout extends IComponentViewLayout> extends TitleViewMixin(BaseCompositeComponentView)<TLayout, BaseTextComponentView> implements ITextView {
+
+    setText(text: string) {
+        this.publicLayout.setText(text);
+    }
 }
 
 export class TextChangeHandler extends ComponentChangeHandler<ComponentViewModel & ITextViewModel, BaseTextComponentView> {
     handleChanges(changes: ObservableChanges<ComponentViewModel & ITextViewModel>) {
         if (changes.text) {
             const text = changes.text.value;
-            this.updateView(v => v.text.setText(text));
+            this.updateView(v => v.setText(text));
         }
     }
 }
@@ -170,11 +172,7 @@ export function SynchedTitleComponentMixin<T extends Constructor<Component>>(Bas
     };
 }
 
-export interface ITextComponentView {
-    readonly text: ComponentView & ITextView;
-}
-
-export type BaseTextComponentView = ComponentView & ITitleView & ITextComponentView;
+export type BaseTextComponentView = ComponentView & ITitleView & ITextView;
 
 export class TextComponent extends SynchedTitleComponentMixin(TextComponentMixin(TitleComponentMixin(Component))) {
     constructor(viewModel: BaseTextComponentViewModel, view: BaseTextComponentView) {

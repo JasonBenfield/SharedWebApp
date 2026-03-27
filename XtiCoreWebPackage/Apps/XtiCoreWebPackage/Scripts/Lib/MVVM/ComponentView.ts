@@ -1,3 +1,4 @@
+import { EventManager } from "./EventManager";
 
 type IHtmlEventListener = (el: HTMLElement, evt: Event) => void;
 
@@ -10,6 +11,7 @@ export interface IComponentViewLayout {
 }
 
 export class ComponentView {
+    protected readonly eventManager = new EventManager();
     private readonly createElement: () => HTMLElement;
     private _element: HTMLElement | null = null;
     private readonly _htmlEventListeners: IHtmlEventListeners = {};
@@ -72,6 +74,8 @@ export class ComponentView {
         this._removeElement();
         this._isVisible = false;
     }
+
+    protected getChildViews() { return Array.from(this.childViews); }
 
     protected addLayout<T extends IComponentViewLayout>(layout: T) {
         for (const key in layout) {
@@ -232,6 +236,7 @@ export class ComponentView {
         }
         this._isVisible = false;
         this._parentView = null;
+        this.eventManager.dispose();
     }
 
     private _removeElement() {

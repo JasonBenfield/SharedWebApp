@@ -1,11 +1,8 @@
 import { DebouncedAction } from "../DebouncedAction";
 import { ComponentView } from "./ComponentView";
 import { ChangedProperty, ComponentViewModel, ObservableChanges, UpdatedViewModel } from "./ComponentViewModel";
+import { EventManager } from "./EventManager";
 import { MvvmOptions } from "./MvvmOptions";
-
-export interface IComponentFactory<TComponent extends Component> {
-    create(): TComponent;
-}
 
 export abstract class ComponentChangeHandler<TViewModel extends ComponentViewModel, TView extends ComponentView> {
     private readonly views: TView[];
@@ -48,6 +45,7 @@ export class ComponentVisibilityChangeHandler extends ComponentChangeHandler<Com
 }
 
 export class Component {
+    protected readonly eventManager = new EventManager();
     private readonly changes: ObservableChanges<ComponentViewModel> & { [name: string]: ChangedProperty; } = {};
     private readonly changeHandlers: ComponentChangeHandler<ComponentViewModel, ComponentView>[] = [];
     private readonly childComponents: Component[] = [];
@@ -119,15 +117,14 @@ export class Component {
 
     protected addLayout<TLayout extends {
         [K in ComponentViewModelProperties<typeof this.viewModel>]: (vm: ComponentViewModel, view: ComponentView) => Component
-    }>(layout: TLayout) {
-        for (const key in layout) {
-            const childComponent = Reflect.get(layout, key);
+    }>(componentLayout: TLayout) {
+        for (const key in componentLayout) {
+            const childComponent = Reflect.get(componentLayout, key);
             if (childComponent instanceof Component) {
                 this.addComponent(childComponent);
-                Reflect.set(this, key, childComponent);
             }
         }
-        return layout;
+        return componentLayout;
     }
 
     protected addComponent<TComponent extends Component>(c: TComponent) {
@@ -206,14 +203,15 @@ export class Component {
         for (const view of views) {
             view.dispose();
         }
+        this.eventManager.dispose();
     }
 }
 
-export type ComponentViewModelProperties<TViewModel> = {
+type ComponentViewModelProperties<TViewModel> = {
     [K in keyof TViewModel]: TViewModel[K] extends ComponentViewModel ? K : never;
 }[keyof TViewModel];
 
-export type ComponentViewModelLayout<T> = {
+type ComponentViewModelLayout<T> = {
     [Key in ComponentViewModelProperties<T>]: T[Key];
 }
 export class ComponentLayoutBuilder<

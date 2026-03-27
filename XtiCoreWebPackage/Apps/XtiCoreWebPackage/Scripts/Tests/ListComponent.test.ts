@@ -3,7 +3,7 @@ import { afterEach, describe, expect, test } from "@jest/globals";
 import { ConsoleLogger } from "../Lib/ConsoleLogger";
 import { GeneratedID } from "../Lib/GeneratedID";
 import { ComponentViewModel } from "../Lib/MVVM/ComponentViewModel";
-import { CompositeComponentBuilder, CompositeComponentViewBuilder } from "../Lib/MVVM/CompositeComponent";
+import { CompositeComponentBuilder, CompositeComponentView } from "../Lib/MVVM/CompositeComponent";
 import { IViewModelUpdater, ListComponent, ListComponentOptionsBuilder, ListComponentView, ListComponentViewModel, ListItemFactory, TextViewModelUpdater } from "../Lib/MVVM/ListComponent";
 import { TextComponent, TextComponentView, TextComponentViewModel } from "../Lib/MVVM/TextComponent";
 import { TestHost } from "./TestHost";
@@ -184,7 +184,7 @@ function getListElement() {
 function getListItemValueElement(index: number) {
     const listItems = getListItems();
     const listItem = listItems && listItems[index];
-    return listItem ? listItem.querySelector("div") : null;
+    return listItem ? listItem.querySelectorAll("div")[1] : null;
 }
 
 function createListWithTextItems() {
@@ -347,11 +347,14 @@ function createListWithHeaderAndFooter() {
 }
 
 function createCompositeItemView(createItemElement: () => HTMLElement) {
-    const view = new CompositeComponentViewBuilder(createItemElement).build({
-        id: TextComponentView.label(),
+    const view = CompositeComponentView.fromElement(createItemElement, {
+        id: new TextComponentView(),
         value: new TextComponentView()
     });
-    view.setID(GeneratedID.next("listItem"))
+    const itemID = GeneratedID.next("listItem");
+    view.setID(itemID);
+    view.id.setID(`${itemID}_id`);
+    view.value.setID(`${itemID}_value`);
     return view;
 }
 

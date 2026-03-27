@@ -37,10 +37,11 @@
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\ContainerComponent.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\ContainerComponentView.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\FormattedNumber.ts" />
+	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\FormGroup.ts" />
+	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\LabelComponent.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\LinkComponent.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\MvvmHost.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\ObservableArray.ts" />
-	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\ReadonlyFormGroup.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\StyleableComponentView.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\TextComponent.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\TextLinkComponent.ts" />

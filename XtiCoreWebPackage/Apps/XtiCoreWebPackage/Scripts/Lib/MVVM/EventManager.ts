@@ -10,7 +10,7 @@ export type CustomEventRegistrations<TEvents> = {
     [K in keyof TEvents]: CustomEventRegistration<TEvents[K]>;
 }
 
-type EventTemplate<TEvents> = {
+export type EventTemplate<TEvents> = {
     [K in keyof TEvents]: TEvents[K] | null;
 }
 
@@ -35,28 +35,63 @@ export class CustomUIEvent extends CustomEvent<UIEvent> {
     }
 }
 
-export class EventManager<TEvents> {
-    private readonly _target: EventTarget;
-    readonly events: CustomEventTargets<TEvents> = {} as CustomEventTargets<TEvents>;
-    readonly when: CustomEventRegistrations<TEvents> = {} as CustomEventRegistrations<TEvents>;
+interface IEvents {
+    [name: string]: CustomEventTarget<any>;
+}
 
-    constructor(template: EventTemplate<TEvents>) {
+interface IWhen {
+    [name: string]: CustomEventRegistration<any>;
+}
+
+class EventManagerEvents<TEvents> {
+    constructor(
+        readonly manager: EventManager,
+        readonly template: EventTemplate<TEvents>,
+        readonly events: CustomEventTargets<TEvents>,
+        readonly when: CustomEventRegistrations<TEvents>
+    ) {
+    }
+}
+
+export class EventManager {
+    private readonly _target: EventTarget;
+    private readonly events: IEvents = {};
+    private readonly when: IWhen = {};
+
+    constructor() {
         this._target = new EventTarget();
-        for (const key in template) {
-            const event = new CustomEventTarget<any>(key, this._target);
-            Reflect.set(this.events, key, event);
-            Reflect.set(this.when, key, new CustomEventRegistration(event));
-        }
     }
 
-    notify<TOtherEvents>(otherEventManger: EventManager<TOtherEvents>) {
+    addEvents<TEvents>(template: EventTemplate<TEvents>) {
+        for (const key in template) {
+            const event = new CustomEventTarget<any>(key, this._target);
+            if (!this.events[key]) {
+                this.events[key] = event;
+            }
+            if (!this.when[key]) {
+                this.when[key] = new CustomEventRegistration(event);
+            }
+        }
+        return new EventManagerEvents(
+            this,
+            template,
+            this.events as CustomEventTargets<TEvents>,
+            this.when as CustomEventRegistrations<TEvents>
+        );
+    }
+
+    notify<TOtherEvents>(otherEventManger: EventManager, template: EventTemplate<TOtherEvents>) {
         if (Object.is(this, otherEventManger)) {
             throw new Error("Event Manager cannot notify itself");
         }
-        const events = this.events as any;
-        const eventKeys = Object.keys(this.events);
-        for (const key of eventKeys) {
-            events[key].addEventTarget(otherEventManger._target);
+        if (template instanceof EventManagerEvents) {
+            template = template.template;
+        }
+        for (const key in template) {
+            if (!this.events[key]) {
+                throw new Error(`Event '${key}' not found.`);
+            }
+            this.events[key].addEventTarget(otherEventManger._target);
         }
     }
 
