@@ -1,3 +1,4 @@
+import { ConsoleLogger } from "../ConsoleLogger";
 import { DebouncedAction } from "../DebouncedAction";
 import { ComponentView } from "./ComponentView";
 import { ChangedProperty, ComponentViewModel, ObservableChanges, UpdatedViewModel } from "./ComponentViewModel";
@@ -46,7 +47,7 @@ export class ComponentVisibilityChangeHandler extends ComponentChangeHandler<Com
 
 export class Component {
     protected readonly eventManager = new EventManager();
-    private readonly changes: ObservableChanges<ComponentViewModel> & { [name: string]: ChangedProperty; } = {};
+    private readonly changes: ObservableChanges<ComponentViewModel> = {};
     private readonly changeHandlers: ComponentChangeHandler<ComponentViewModel, ComponentView>[] = [];
     private readonly childComponents: Component[] = [];
     private readonly views: ComponentView[];
@@ -71,8 +72,8 @@ export class Component {
         this.handleChanges(viewModel.changes);
     }
 
-    private onViewModelChanged(event: CustomEvent<UpdatedViewModel>) {
-        this.changes[event.detail.changedProperty.propertyName] = event.detail.changedProperty;
+    private onViewModelChanged(event: CustomEvent<UpdatedViewModel<typeof this.viewModel>>) {
+        Reflect.set(this.changes, event.detail.changedProperty.propertyName, event.detail.changedProperty);
         this.debouncedOnViewModelChanged.execute();
     }
 
@@ -83,13 +84,14 @@ export class Component {
 
     private handleStoredChanges() {
         const storedChanges = Object.assign({}, this.changes);
+        const changes: any = this.changes;
         for (const key in this.changes) {
-            delete this.changes[key];
+            delete changes[key];
         }
         this.handleChanges(storedChanges);
     }
 
-    protected handleChanges(changes: ObservableChanges<ComponentViewModel>) {
+    protected handleChanges(changes: ObservableChanges<typeof this.viewModel>) {
         for (const handler of this.changeHandlers) {
             handler.handleChanges(changes);
         }

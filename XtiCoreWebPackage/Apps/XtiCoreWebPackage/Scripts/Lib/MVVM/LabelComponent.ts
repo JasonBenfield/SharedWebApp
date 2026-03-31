@@ -5,112 +5,110 @@ import { CompositeComponentView } from "./CompositeComponent";
 import { IStyleableComponentView } from "./StyleableComponentView";
 import { TitleChangeHandler, TitleComponentMixin, TitleViewModelMixin } from "./TextComponent";
 import { Constructor, ITitleView, ITitleViewModel } from "./Types";
+import { BaseUniqueComponent } from "./UniqueComponent";
 
 export interface ILabelViewModel {
     get forID(): string;
     set forID(forID: string);
 }
 
-export type BaseLinkComponentViewModel = ComponentViewModel & ILinkViewModel & ITitleViewModel;
+export type BaseLabelComponentViewModel = ComponentViewModel & ILabelViewModel & ITitleViewModel;
 
-export function LinkViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T) {
-    return class extends Base implements ILinkViewModel {
-        private _href = "";
-        get href() { return this._href; }
-        set href(href: string) { this._href = href; }
-
-        private _target: LinkTargetType = "";
-        get target() { return this._target; }
-        set target(target: LinkTargetType) { this._target = target; }
+export function LabelViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T) {
+    return class extends Base implements ILabelViewModel {
+        private _forID = "";
+        get forID() { return this._forID; }
+        set forID(forID: string) { this._forID = forID; }
     };
 }
 
-export class LinkComponentViewModel extends LinkViewModelMixin(TitleViewModelMixin(ComponentViewModel)) {
-    constructor(initializer: ComponentViewModelInitializer<LinkComponentViewModel> = {}) {
+export class LabelComponentViewModel extends LabelViewModelMixin(TitleViewModelMixin(ComponentViewModel)) {
+    constructor(initializer: ComponentViewModelInitializer<LabelComponentViewModel> = {}) {
         super(initializer);
     }
-
-    createComponent(view: BaseLinkComponentView) {
-        return new LinkComponent(this, view);
-    }
 }
 
-export interface ILinkView {
-    setHref(href: string): void;
-    setTarget(target: string | null): void;
+export interface ILabelView {
+    setFor(forID: string): void;
 }
 
-export function LinkViewMixin<T extends Constructor<ComponentView & IStyleableComponentView>>(Base: T) {
-    return class extends Base implements ILinkView {
-        setHref(href: string) {
-            this.setAttributes({ "href": href });
-        }
-
-        setTarget(target: string) {
-            this.setAttributes({ "target": target === "" ? null : target });
+export function LabelViewMixin<T extends Constructor<ComponentView & IStyleableComponentView>>(Base: T) {
+    return class extends Base implements ILabelView {
+        setFor(forID: string) {
+            this.setAttributes({ "for": forID });
         }
     };
 }
 
-export type BaseLinkComponentView = ComponentView & ITitleView & ILinkView;
+export type BaseLabelComponentView = ComponentView & ITitleView & ILabelView;
 
-export class LinkComponentView<
+export class LabelComponentView<
     TLayout extends IComponentViewLayout,
     TPublicLayout extends IComponentViewLayout
-    > extends LinkViewMixin(CompositeComponentView)<TLayout, TPublicLayout> {
+> extends LabelViewMixin(CompositeComponentView)<TLayout, TPublicLayout> {
     static create<TLayout extends IComponentViewLayout>(layout: TLayout) {
-        return new LinkComponentView(layout, l => Object.assign({}, l)).asLayout();
+        return new LabelComponentView(layout, l => l).asLayout();
     }
 
     constructor(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        super("a", layout, toPublicLayout);
+        super("label", layout, toPublicLayout);
     }
 }
 
-export class LinkComponentChangeHandler extends ComponentChangeHandler<ComponentViewModel & BaseLinkComponentViewModel, ComponentView & ILinkView> {
+export class LabelComponentChangeHandler extends ComponentChangeHandler<ComponentViewModel & BaseLabelComponentViewModel, ComponentView & ILabelView> {
 
-    handleChanges(changes: ObservableChanges<ComponentViewModel & BaseLinkComponentViewModel>) {
-        if (changes.href) {
-            const href = changes.href.value;
-            this.updateView(v => v.setHref(href));
-        }
-        if (changes.target) {
-            const target = changes.target.value;
-            this.updateView(v => v.setTarget(target));
+    handleChanges(changes: ObservableChanges<ComponentViewModel & BaseLabelComponentViewModel>) {
+        if (changes.forID) {
+            const forID: string = changes.forID.value;
+            this.updateView(v => v.setFor(forID));
         }
     }
 
 }
 
-export function LinkComponentMixin<T extends Constructor<Component>>(Base: T) {
+export function LabelComponentMixin<T extends Constructor<Component>>(Base: T) {
     return class extends Base {
-        declare protected readonly viewModel: BaseLinkComponentViewModel;
+        declare protected readonly viewModel: BaseLabelComponentViewModel;
 
-        get href() { return this.viewModel.href; }
+        private _forComponent: BaseUniqueComponent | null = null;
 
-        set href(href: string) {
-            this.viewModel.href = href;
+        forComponent(forComponent: BaseUniqueComponent | null) {
+            const existingForComponent = this._forComponent;
+            if (existingForComponent) {
+                existingForComponent.uniqueWhen.idChanged.unregister(this.onForIDChanged.bind(this));
+            }
+            this._forComponent = forComponent;
+            this.viewModel.forID = forComponent?.id || "";
+            if (forComponent) {
+                forComponent.uniqueWhen.idChanged.then(this.onForIDChanged.bind(this));
+            }
         }
 
-        get isTargetBlank() { return this.viewModel.target === "_blank"; }
-
-        setTargetToBlank() {
-            this.viewModel.target = "_blank";
+        private onForIDChanged(evt: CustomEventInit<string>) {
+            const forID = evt.detail;
+            if (forID) {
+                this.viewModel.forID = forID;
+            }
         }
 
-        setTargetToDefault() {
-            this.viewModel.target = "";
+        dispose() {
+            const existingForComponent = this._forComponent;
+            if (existingForComponent) {
+                existingForComponent.uniqueWhen.idChanged.unregister(this.onForIDChanged.bind(this));
+            }
+            this._forComponent = null;
+            super.dispose();
         }
     };
 }
 
-export class LinkComponent extends LinkComponentMixin(TitleComponentMixin(Component)) {
-    constructor(viewModel: BaseLinkComponentViewModel, view: BaseLinkComponentView) {
+export class LabelComponent extends LabelComponentMixin(TitleComponentMixin(Component)) {
+    constructor(viewModel: BaseLabelComponentViewModel, view: BaseLabelComponentView) {
         super(
             viewModel,
             view,
             new TitleChangeHandler(viewModel, view),
-            new LinkComponentChangeHandler(viewModel, view)
+            new LabelComponentChangeHandler(viewModel, view)
         );
     }
 }

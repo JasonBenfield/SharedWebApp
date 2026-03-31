@@ -31,7 +31,6 @@ describe("Link Component", () => {
         expect(element?.href).toBe("https://example.com/2");
         expect(element?.title).toBe("Updated Title");
         expect(element?.target).toBe("_blank");
-        component.dispose();
     });
 });
 

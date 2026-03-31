@@ -8,8 +8,8 @@ type EventLayout<TViewModel extends ComponentViewModel> = {
     arrayItemChanged: ChangedObservableArrayItem<TViewModel>[];
 }
 
-type ItemEventLayout = {
-    propertyChanged: UpdatedViewModel;
+type ItemEventLayout<TViewModel> = {
+    propertyChanged: UpdatedViewModel<TViewModel>;
 }
 
 export class ObservableArray<TViewModel extends ComponentViewModel> {
@@ -20,18 +20,18 @@ export class ObservableArray<TViewModel extends ComponentViewModel> {
     });
     readonly when = this.events.when;
 
-    private readonly itemEvents = this.eventManager.addEvents<ItemEventLayout>({
+    private readonly itemEvents = this.eventManager.addEvents<ItemEventLayout<TViewModel>>({
         propertyChanged: null
     });
 
     private readonly _values: TViewModel[] = [];
-    private readonly _changedItemProperties: ChangedProperty[] = [];
+    private readonly _changedItemProperties: ChangedProperty<any>[] = [];
 
     constructor() {
         this.itemEvents.when.propertyChanged.then(this.handlePropertyChanged.bind(this));
     }
 
-    private handlePropertyChanged(event: CustomEvent<UpdatedViewModel>) {
+    private handlePropertyChanged(event: CustomEvent<UpdatedViewModel<TViewModel>>) {
         this._changedItemProperties.push(event.detail.changedProperty);
         this.debouncedHandlePropertyChanged.execute();
     }

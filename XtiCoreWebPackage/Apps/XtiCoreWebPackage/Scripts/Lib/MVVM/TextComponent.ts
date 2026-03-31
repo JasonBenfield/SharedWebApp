@@ -3,7 +3,7 @@ import { ComponentView, IComponentViewLayout } from "./ComponentView";
 import { ComponentViewModel, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
 import { BaseCompositeComponentView, CompositeComponentView } from "./CompositeComponent";
 import { IStyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
-import { Constructor, ITitleView, ITitleViewModel } from "./Types";
+import { Constructor, ITitleView, ITitleViewModel, IValueComponent } from "./Types";
 
 export interface ITextViewModel {
     get text(): string;
@@ -97,7 +97,31 @@ export class TextComponentView extends TextViewMixin(TitleViewMixin(StyleableCom
     }
 }
 
-export class CompositeTextComponentView<TLayout extends IComponentViewLayout> extends TitleViewMixin(BaseCompositeComponentView)<TLayout, BaseTextComponentView> implements ITextView {
+export class TextCompositeComponentView<TLayout extends IComponentViewLayout> extends TitleViewMixin(BaseCompositeComponentView)<TLayout, BaseTextComponentView> implements ITextView {
+
+    static fromElement<TLayout extends IComponentViewLayout>(createElement: () => HTMLElement, layout: TLayout, toPublicLayout: (l: TLayout) => BaseTextComponentView) {
+        return new TextCompositeComponentView(
+            createElement, layout, toPublicLayout
+        ).asLayout();
+    }
+
+    static block<TLayout extends IComponentViewLayout>(layout: TLayout, toPublicLayout: (l: TLayout) => BaseTextComponentView) {
+        return new TextCompositeComponentView(
+            "div", layout, toPublicLayout
+        ).asLayout();
+    }
+
+    static span<TLayout extends IComponentViewLayout>(layout: TLayout, toPublicLayout: (l: TLayout) => BaseTextComponentView) {
+        return new TextCompositeComponentView(
+            "span", layout, toPublicLayout
+        ).asLayout();
+    }
+
+    static heading<TLayout extends IComponentViewLayout>(size: 1 | 2 | 3 | 4 | 5 | 6, layout: TLayout, toPublicLayout: (l: TLayout) => BaseTextComponentView) {
+        return new TextCompositeComponentView(
+            `h${size}`, layout, toPublicLayout
+        ).asLayout();
+    }
 
     setText(text: string) {
         this.publicLayout.setText(text);
@@ -147,13 +171,21 @@ export function TitleComponentMixin<T extends Constructor<Component>>(Base: T) {
 }
 
 export function TextComponentMixin<T extends Constructor<Component>>(Base: T) {
-    return class extends Base {
+    return class extends Base implements IValueComponent<string> {
         declare protected readonly viewModel: ComponentViewModel & ITextViewModel;
 
         get text() { return this.viewModel.text; }
 
         set text(text: string) {
             this.viewModel.text = text;
+        }
+
+        getValue() {
+            return this.text;
+        }
+
+        setValue(value: string) {
+            this.text = value;
         }
     };
 }
@@ -184,4 +216,5 @@ export class TextComponent extends SynchedTitleComponentMixin(TextComponentMixin
             new SynchedTitleChangeHandler(viewModel, view)
         );
     }
+
 }

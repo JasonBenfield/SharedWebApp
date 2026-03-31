@@ -1,16 +1,17 @@
+import { ConsoleLogger } from "../ConsoleLogger";
 import { areValuesEqual } from "./Equatable";
 import { EventManager, EventTemplate } from "./EventManager";
 import { ObservableArray } from "./ObservableArray";
 
-type EventLayout = {
-    propertyChanged: UpdatedViewModel;
+type EventLayout<TViewModel> = {
+    propertyChanged: UpdatedViewModel<TViewModel>;
 }
 
 export type ComponentViewModelInitializer<TViewModel extends ComponentViewModel> = Partial<ComponentViewModelData<TViewModel>>;
 
 export class ComponentViewModel {
     private readonly eventManager = new EventManager();
-    private readonly events = this.eventManager.addEvents<EventLayout>({
+    private readonly events = this.eventManager.addEvents<EventLayout<ComponentViewModel>>({
         propertyChanged: null
     });
     readonly when = this.events.when;
@@ -24,6 +25,7 @@ export class ComponentViewModel {
                 set: (target: any, property: string, value) => {
                     const originalValue = Reflect.get(target, property);
                     Reflect.set(target, property, value);
+                    ConsoleLogger.value.log(`changing '${originalValue}' to '${value}'`);
                     if (!areValuesEqual(originalValue, value)) {
                         const change = new ChangedProperty(
                             target,
@@ -31,8 +33,9 @@ export class ComponentViewModel {
                             originalValue,
                             value
                         );
-                        const changes = this._changes as any;
+                        const changes: any = this._changes;
                         changes[property] = change;
+                        ConsoleLogger.value.log(`propertyChanged.invoke: '${originalValue}' to '${value}'`);
                         this.events.events.propertyChanged?.invoke({
                             viewModel: this,
                             changedProperty: change
@@ -95,20 +98,20 @@ export type ComponentViewModelDataKeys<T> = {
 export type ComponentViewModelData<T extends ComponentViewModel> = Pick<T, ComponentViewModelDataKeys<T>>;
 
 export type ObservableChanges<T> = {
-    [Key in ComponentViewModelDataKeys<T>]?: ChangedProperty;
+    [Key in ComponentViewModelDataKeys<T>]?: ChangedProperty<T[Key]>;
 }
 
-export interface UpdatedViewModel {
-    viewModel: ComponentViewModel;
-    changedProperty: ChangedProperty;
+export interface UpdatedViewModel<TViewModel> {
+    viewModel: TViewModel;
+    changedProperty: ChangedProperty<TViewModel[keyof TViewModel]>;
 }
 
-export class ChangedProperty {
+export class ChangedProperty<TValue> {
     constructor(
         readonly target: any,
         readonly propertyName: string,
-        readonly originalValue: any,
-        readonly value: any
+        readonly originalValue: TValue,
+        readonly value: TValue
     ) {
     }
 }

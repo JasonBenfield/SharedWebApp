@@ -58,6 +58,11 @@ describe("Input Component", () => {
         const element = getInputElement(component.id);
         expect(element?.id).not.toBe("");
         expect(element?.name).not.toBe("");
+        component.id = "changedID";
+        component.name = "changedName";
+        TestHost.value.immediateHandleChanges();
+        expect(element.id).toBe("changedID");
+        expect(element.name).toBe("changedName");
     });
     test("sets focus and blurs", async () => {
         const { view, component } = createInputComponent(

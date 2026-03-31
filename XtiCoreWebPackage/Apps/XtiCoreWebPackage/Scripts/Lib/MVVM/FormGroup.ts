@@ -1,9 +1,11 @@
 import { Component } from "./Component";
-import { ComponentView } from "./ComponentView";
+import { ComponentView, IComponentViewLayout } from "./ComponentView";
 import { ComponentViewModel } from "./ComponentViewModel";
 import { CompositeComponentView } from "./CompositeComponent";
+import { InputComponent, InputComponentView, InputComponentViewModel } from "./InputComponent";
 import { StyleableComponentViewMixin } from "./StyleableComponentView";
-import { BaseTextComponentView, BaseTextComponentViewModel, TextComponent, TextComponentView, TextComponentViewModel } from "./TextComponent";
+import { BaseTextComponentView, BaseTextComponentViewModel, TextComponent, TextComponentView, TextComponentViewModel, TextCompositeComponentView } from "./TextComponent";
+import { IValueComponent } from "./Types";
 
 export interface IFormGroupView<TValueView extends ComponentView> {
     readonly caption: BaseTextComponentView;
@@ -63,7 +65,8 @@ export class FormGroupViewModel<TValueVM extends ComponentViewModel> extends Com
 export class FormGroup<
     TValueVM extends ComponentViewModel,
     TValueView extends ComponentView,
-    TValueComponent extends Component
+    TValue,
+    TValueComponent extends Component & IValueComponent<TValue>
 > extends Component {
     constructor(
         viewModel: ComponentViewModel & IFormGroupViewModel<TValueVM>,
@@ -77,10 +80,52 @@ export class FormGroup<
 
     readonly caption: TextComponent;
     readonly value: TValueComponent;
+
+    setCaption(caption: string) {
+        this.caption.text = caption;
+    }
+
+    getValue() {
+        return this.value.getValue();
+    }
+
+    setValue(value: TValue) {
+        this.value.setValue(value);
+    }
 }
 
-export class FormGroupText extends FormGroup<BaseTextComponentViewModel, BaseTextComponentView, TextComponent> {
+export class FormGroupTextViewModel extends FormGroupViewModel<TextComponentViewModel> {
+    constructor() {
+        super(new TextComponentViewModel());
+    }
+}
+
+export class FormGroupTextView extends FormGroupView<TextComponentView> {
+    constructor() {
+        super(new TextComponentView());
+    }
+}
+
+export class FormGroupText extends FormGroup<BaseTextComponentViewModel, BaseTextComponentView, string, TextComponent> {
     constructor(viewModel: ComponentViewModel & IFormGroupViewModel<BaseTextComponentViewModel>, view: BaseFormGroupView<BaseTextComponentView>) {
         super(viewModel, view, (vm, v) => new TextComponent(vm, v));
+    }
+}
+
+export class FormGroupInputViewModel extends FormGroupViewModel<InputComponentViewModel> {
+    constructor() {
+        super(new InputComponentViewModel());
+    }
+}
+
+export class FormGroupInputView extends FormGroupView<InputComponentView> {
+    constructor() {
+        super(new InputComponentView());
+    }
+}
+
+export class FormGroupInput extends FormGroup<InputComponentViewModel, InputComponentView, string, InputComponent> {
+    constructor(viewModel: ComponentViewModel & IFormGroupViewModel<InputComponentViewModel>, view: FormGroupView<InputComponentView>) {
+        super(viewModel, view, (vm, v) => new InputComponent(vm, v));
     }
 }

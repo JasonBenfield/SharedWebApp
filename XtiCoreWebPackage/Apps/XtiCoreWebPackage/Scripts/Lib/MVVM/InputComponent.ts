@@ -5,6 +5,7 @@ import { IEquatable } from "./Equatable";
 import { EventManager } from "./EventManager";
 import { FocusableComponentChangeHandler, FocusableComponentMixin, FocusableViewMixin, FocusableViewModelMixin, HasFocusProperty } from "./FocusableComponent";
 import { StyleableComponentViewMixin } from "./StyleableComponentView";
+import { IValueComponent } from "./Types";
 import { UniqueComponentChangeHandler, UniqueComponentMixin, UniqueViewModelMixin } from "./UniqueComponent";
 
 export class InputTextValue implements IEquatable {
@@ -189,7 +190,7 @@ type InputComponentEventLayout = {
     textValueChanged: string
 };
 
-export class InputComponent extends UniqueComponentMixin(FocusableComponentMixin(Component)) {
+export class InputComponent extends UniqueComponentMixin(FocusableComponentMixin(Component)) implements IValueComponent<string> {
     private readonly events = this.eventManager.addEvents<InputComponentEventLayout>({
         textValueChanged: null
     });
@@ -239,6 +240,14 @@ export class InputComponent extends UniqueComponentMixin(FocusableComponentMixin
 
     get placeholder() { return this.viewModel.placeholder; }
     set placeholder(placeholder: string) { this.viewModel.placeholder = placeholder; }
+
+    getValue() {
+        return this.textValue;
+    }
+
+    setValue(value: string) {
+        this.textValue = value;
+    }
 
     dispose() {
         this.eventManager.dispose();

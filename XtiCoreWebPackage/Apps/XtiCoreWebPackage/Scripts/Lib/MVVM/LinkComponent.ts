@@ -34,10 +34,6 @@ export class LinkComponentViewModel extends LinkViewModelMixin(TitleViewModelMix
     constructor(initializer: ComponentViewModelInitializer<LinkComponentViewModel> = {}) {
         super(initializer);
     }
-
-    createComponent(view: BaseLinkComponentView) {
-        return new LinkComponent(this, view);
-    }
 }
 
 export interface ILinkView {
