@@ -1,9 +1,9 @@
 import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentView, IComponentViewLayout } from "./ComponentView";
 import { ComponentViewModel, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
-import { BaseCompositeComponentView, CompositeComponentView } from "./CompositeComponent";
+import { BaseCompositeComponentView } from "./CompositeComponent";
 import { IStyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
-import { Constructor, ITitleView, ITitleViewModel, IValueComponent } from "./Types";
+import { Constructor, ITitleView, ITitleViewModel } from "./Types";
 
 export interface ITextViewModel {
     get text(): string;
@@ -95,31 +95,42 @@ export class TextComponentView extends TextViewMixin(TitleViewMixin(StyleableCom
     static heading(size: 1 | 2 | 3 | 4 | 5 | 6) {
         return new TextComponentView(`h${size}`);
     }
+
+    static listItem() {
+        return new TextComponentView("li");
+    }
+
 }
 
 export class TextCompositeComponentView<TLayout extends IComponentViewLayout> extends TitleViewMixin(BaseCompositeComponentView)<TLayout, BaseTextComponentView> implements ITextView {
 
-    static fromElement<TLayout extends IComponentViewLayout>(createElement: () => HTMLElement, layout: TLayout, toPublicLayout: (l: TLayout) => BaseTextComponentView) {
+    static fromElement<TLayout extends IComponentViewLayout, TPublicLayout extends BaseTextComponentView>(createElement: () => HTMLElement, layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
         return new TextCompositeComponentView(
             createElement, layout, toPublicLayout
         ).asLayout();
     }
 
-    static block<TLayout extends IComponentViewLayout>(layout: TLayout, toPublicLayout: (l: TLayout) => BaseTextComponentView) {
+    static block<TLayout extends IComponentViewLayout, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
         return new TextCompositeComponentView(
             "div", layout, toPublicLayout
         ).asLayout();
     }
 
-    static span<TLayout extends IComponentViewLayout>(layout: TLayout, toPublicLayout: (l: TLayout) => BaseTextComponentView) {
+    static span<TLayout extends IComponentViewLayout, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
         return new TextCompositeComponentView(
             "span", layout, toPublicLayout
         ).asLayout();
     }
 
-    static heading<TLayout extends IComponentViewLayout>(size: 1 | 2 | 3 | 4 | 5 | 6, layout: TLayout, toPublicLayout: (l: TLayout) => BaseTextComponentView) {
+    static heading<TLayout extends IComponentViewLayout, TPublicLayout extends BaseTextComponentView>(size: 1 | 2 | 3 | 4 | 5 | 6, layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
         return new TextCompositeComponentView(
             `h${size}`, layout, toPublicLayout
+        ).asLayout();
+    }
+
+    static listItem<TLayout extends IComponentViewLayout, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        return new TextCompositeComponentView(
+            "li", layout, toPublicLayout
         ).asLayout();
     }
 
@@ -171,21 +182,13 @@ export function TitleComponentMixin<T extends Constructor<Component>>(Base: T) {
 }
 
 export function TextComponentMixin<T extends Constructor<Component>>(Base: T) {
-    return class extends Base implements IValueComponent<string> {
+    return class extends Base {
         declare protected readonly viewModel: ComponentViewModel & ITextViewModel;
 
         get text() { return this.viewModel.text; }
 
         set text(text: string) {
             this.viewModel.text = text;
-        }
-
-        getValue() {
-            return this.text;
-        }
-
-        setValue(value: string) {
-            this.text = value;
         }
     };
 }

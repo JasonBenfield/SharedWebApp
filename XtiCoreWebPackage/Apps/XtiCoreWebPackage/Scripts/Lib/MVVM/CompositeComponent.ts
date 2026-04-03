@@ -89,6 +89,13 @@ export class CompositeComponentView<TLayout extends IComponentViewLayout, TPubli
             `h${size}`, layout, l => l
         ).asLayout();
     }
+
+    static listItem<TLayout extends IComponentViewLayout>(layout: TLayout) {
+        return new CompositeComponentView(
+            "li", layout, l => l
+        ).asLayout();
+    }
+
 }
 
 export class CompositeComponentBuilder<TViewModelLayout extends CompositeComponentViewModelLayout<TViewModelLayout>> {

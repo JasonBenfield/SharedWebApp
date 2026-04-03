@@ -1,11 +1,11 @@
 import { Component } from "./Component";
-import { ComponentView, IComponentViewLayout } from "./ComponentView";
+import { ComponentView } from "./ComponentView";
 import { ComponentViewModel } from "./ComponentViewModel";
 import { CompositeComponentView } from "./CompositeComponent";
 import { InputComponent, InputComponentView, InputComponentViewModel } from "./InputComponent";
 import { StyleableComponentViewMixin } from "./StyleableComponentView";
-import { BaseTextComponentView, BaseTextComponentViewModel, TextComponent, TextComponentView, TextComponentViewModel, TextCompositeComponentView } from "./TextComponent";
-import { IValueComponent } from "./Types";
+import { BaseTextComponentView, BaseTextComponentViewModel, TextComponent, TextComponentView, TextComponentViewModel } from "./TextComponent";
+import { ITransformedInput, TransformedInputComponent, TransformedInputComponentViewModel } from "./TransformedInputComponent";
 
 export interface IFormGroupView<TValueView extends ComponentView> {
     readonly caption: BaseTextComponentView;
@@ -65,8 +65,7 @@ export class FormGroupViewModel<TValueVM extends ComponentViewModel> extends Com
 export class FormGroup<
     TValueVM extends ComponentViewModel,
     TValueView extends ComponentView,
-    TValue,
-    TValueComponent extends Component & IValueComponent<TValue>
+    TValueComponent extends Component
 > extends Component {
     constructor(
         viewModel: ComponentViewModel & IFormGroupViewModel<TValueVM>,
@@ -85,13 +84,6 @@ export class FormGroup<
         this.caption.text = caption;
     }
 
-    getValue() {
-        return this.value.getValue();
-    }
-
-    setValue(value: TValue) {
-        this.value.setValue(value);
-    }
 }
 
 export class FormGroupTextViewModel extends FormGroupViewModel<TextComponentViewModel> {
@@ -106,9 +98,17 @@ export class FormGroupTextView extends FormGroupView<TextComponentView> {
     }
 }
 
-export class FormGroupText extends FormGroup<BaseTextComponentViewModel, BaseTextComponentView, string, TextComponent> {
+export class FormGroupText extends FormGroup<BaseTextComponentViewModel, BaseTextComponentView, TextComponent> {
     constructor(viewModel: ComponentViewModel & IFormGroupViewModel<BaseTextComponentViewModel>, view: BaseFormGroupView<BaseTextComponentView>) {
         super(viewModel, view, (vm, v) => new TextComponent(vm, v));
+    }
+
+    getValue() {
+        return this.value.text;
+    }
+
+    setValue(value: string) {
+        this.value.text = value;
     }
 }
 
@@ -124,8 +124,36 @@ export class FormGroupInputView extends FormGroupView<InputComponentView> {
     }
 }
 
-export class FormGroupInput extends FormGroup<InputComponentViewModel, InputComponentView, string, InputComponent> {
+export class FormGroupInput extends FormGroup<InputComponentViewModel, InputComponentView, InputComponent> {
     constructor(viewModel: ComponentViewModel & IFormGroupViewModel<InputComponentViewModel>, view: FormGroupView<InputComponentView>) {
         super(viewModel, view, (vm, v) => new InputComponent(vm, v));
+    }
+
+    getValue() {
+        return this.value.textValue;
+    }
+
+    setValue(value: string) {
+        this.value.textValue = value;
+    }
+}
+
+export class FormGroupTransformedInputViewModel<TValue> extends FormGroupViewModel<TransformedInputComponentViewModel<TValue>> {
+    constructor(initialValue: TValue) {
+        super(new TransformedInputComponentViewModel(initialValue));
+    }
+}
+
+export class FormGroupTransformedInput<TValue> extends FormGroup<TransformedInputComponentViewModel<TValue>, InputComponentView, TransformedInputComponent<TValue>> {
+    constructor(viewModel: ComponentViewModel & IFormGroupViewModel<TransformedInputComponentViewModel<TValue>>, view: FormGroupView<InputComponentView>, transformedInput: ITransformedInput<TValue>) {
+        super(viewModel, view, (vm, v) => new TransformedInputComponent(vm, v, transformedInput));
+    }
+
+    getValue() {
+        return this.value.value;
+    }
+
+    setValue(value: TValue) {
+        this.value.value = value;
     }
 }

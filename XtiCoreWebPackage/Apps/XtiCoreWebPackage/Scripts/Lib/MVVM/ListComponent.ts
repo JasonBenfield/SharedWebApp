@@ -26,7 +26,6 @@ export interface IViewModelUpdater<TSource, TItemViewModel> {
 }
 
 export interface IListView {
-    createItemElement(): HTMLElement;
     addItem(item: ComponentView): void;
     insertItem(item: ComponentView, index: number): void;
     removeItem(item: ComponentView): void;
@@ -34,11 +33,6 @@ export interface IListView {
 
 export function ListViewMixin<T extends Constructor<ComponentView>>(Base: T) {
     return class extends Base implements IListView {
-        protected itemTagName: string = "";
-
-        createItemElement() {
-            return document.createElement(this.itemTagName);
-        }
 
         addItem(view: ComponentView) {
             this.addChildView(view);
@@ -56,16 +50,11 @@ export function ListViewMixin<T extends Constructor<ComponentView>>(Base: T) {
 
 export class ListComponentView extends ListViewMixin(StyleableComponentViewMixin(ComponentView)) {
     static unorderedList() {
-        return new ListComponentView("ul", "li");
+        return new ListComponentView("ul");
     }
 
-    static create(itemTagName: "div" | "a") {
-        return new ListComponentView("div", itemTagName);
-    }
-
-    constructor(listTagName: string, itemTagName: string) {
-        super(listTagName);
-        this.itemTagName = itemTagName;
+    static block() {
+        return new ListComponentView("div");
     }
 
 }
@@ -95,7 +84,7 @@ export interface IListComponentOptions<TSource, THeaderComponent extends Compone
 
 function createDefaultListItemFactory() {
     return new ListItemFactory(() => new ComponentViewModel())
-        .withView((createItemElement) => new ComponentView(createItemElement))
+        .withView(() => new ComponentView())
         .withComponent((itemVM, itemView) => new Component(itemVM, itemView))
         .build()
 }
@@ -223,7 +212,7 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
         this.isFooterVisibilityAutomated = options.isFooterVisibilityAutomated;
         const headerFactory = options.headerFactory;
         const headerViewModel = headerFactory.createItemViewModel();
-        const headerView = headerFactory.createItemView(view.createItemElement.bind(view), headerViewModel);
+        const headerView = headerFactory.createItemView(headerViewModel);
         view.addItem(headerView);
         this.header = this.addComponent(headerFactory.createItemComponent(headerViewModel, headerView));
         if (this.isHeaderVisibilityAutomated && viewModel.items.length > 0) {
@@ -239,7 +228,7 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
         }
         const footerFactory = options.footerFactory;
         const footerViewModel = footerFactory.createItemViewModel();
-        const footerView = footerFactory.createItemView(view.createItemElement.bind(view), footerViewModel);
+        const footerView = footerFactory.createItemView(footerViewModel);
         view.addItem(footerView);
         this.footer = this.addComponent(footerFactory.createItemComponent(footerViewModel, footerView));
         if (this.isFooterVisibilityAutomated && viewModel.items.length > 0) {
@@ -312,7 +301,7 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
     }
 
     private insertItemComponent(itemVM: ComponentViewModel, index: number) {
-        const itemView = this.itemFactory.createItemView(this.view.createItemElement.bind(this.view), itemVM);
+        const itemView = this.itemFactory.createItemView(itemVM);
         const itemComponent = this.itemFactory.createItemComponent(itemVM, itemView);
         this._itemComponents.set(itemVM, itemComponent);
         this.insertComponent(itemComponent, index);
@@ -427,7 +416,7 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
 
 export interface IListItemFactory<TComponent extends Component> {
     createItemViewModel(): ComponentViewModel;
-    createItemView(createItemElement: () => HTMLElement, viewModel: ComponentViewModel): ComponentView;
+    createItemView(viewModel: ComponentViewModel): ComponentView;
     createItemComponent(viewModel: ComponentViewModel, view: ComponentView): TComponent;
 }
 
@@ -435,7 +424,7 @@ export class ListItemFactory<TItemViewModel extends ComponentViewModel> {
     constructor(private readonly createItemViewModel: () => TItemViewModel) {
     }
 
-    withView<TItemView extends ComponentView>(createItemView: (createItemElement: () => HTMLElement, viewModel: TItemViewModel) => TItemView) {
+    withView<TItemView extends ComponentView>(createItemView: (viewModel: TItemViewModel) => TItemView) {
         return new ListItemFactoryForView<TItemViewModel, TItemView>(this.createItemViewModel, createItemView);
     }
 }
@@ -443,7 +432,7 @@ export class ListItemFactory<TItemViewModel extends ComponentViewModel> {
 export class ListItemFactoryForView<TItemViewModel extends ComponentViewModel, TItemView extends ComponentView> {
     constructor(
         private readonly createItemViewModel: () => TItemViewModel,
-        private readonly createItemView: (createItemElement: () => HTMLElement, viewModel: TItemViewModel) => TItemView
+        private readonly createItemView: (viewModel: TItemViewModel) => TItemView
     ) {
     }
 
@@ -459,7 +448,7 @@ export class ListItemFactoryForView<TItemViewModel extends ComponentViewModel, T
 export class ListItemFactoryForComponent<TItemViewModel extends ComponentViewModel, TItemView extends ComponentView, TItemComponent extends Component> {
     constructor(
         private readonly createItemViewModel: () => TItemViewModel,
-        private readonly createItemView: (createItemElement: () => HTMLElement, viewModel: TItemViewModel) => TItemView,
+        private readonly createItemView: (viewModel: TItemViewModel) => TItemView,
         private readonly createItemComponent: (viewModel: TItemViewModel, view: TItemView) => TItemComponent
     ) {
     }

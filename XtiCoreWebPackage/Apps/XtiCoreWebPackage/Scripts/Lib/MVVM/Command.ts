@@ -83,6 +83,8 @@ export class Command extends Component {
         }
     }
 
+    declare addView: <TView extends BaseCommandView>(view: TView) => TView;
+
     private onClick() {
         this.execute();
     }

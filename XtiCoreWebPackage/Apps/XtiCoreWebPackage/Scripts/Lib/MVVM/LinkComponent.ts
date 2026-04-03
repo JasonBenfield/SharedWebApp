@@ -1,7 +1,7 @@
 import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentView, IComponentViewLayout } from "./ComponentView";
 import { ComponentViewModel, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
-import { CompositeComponentView } from "./CompositeComponent";
+import { BaseCompositeComponentView, CompositeComponentView } from "./CompositeComponent";
 import { IStyleableComponentView } from "./StyleableComponentView";
 import { TitleChangeHandler, TitleComponentMixin, TitleViewModelMixin } from "./TextComponent";
 import { Constructor, ITitleView, ITitleViewModel } from "./Types";
@@ -58,9 +58,13 @@ export type BaseLinkComponentView = ComponentView & ITitleView & ILinkView;
 export class LinkComponentView<
     TLayout extends IComponentViewLayout,
     TPublicLayout extends IComponentViewLayout
-    > extends LinkViewMixin(CompositeComponentView)<TLayout, TPublicLayout> {
+> extends LinkViewMixin(BaseCompositeComponentView)<TLayout, TPublicLayout> {
     static create<TLayout extends IComponentViewLayout>(layout: TLayout) {
-        return new LinkComponentView(layout, l => Object.assign({}, l)).asLayout();
+        return LinkComponentView.createWithPublicLayout(layout, l => Object.assign({}, l));
+    }
+
+    static createWithPublicLayout<TLayout extends IComponentViewLayout, TPublicLayout extends IComponentViewLayout>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        return new LinkComponentView(layout, toPublicLayout).asLayout();
     }
 
     constructor(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {

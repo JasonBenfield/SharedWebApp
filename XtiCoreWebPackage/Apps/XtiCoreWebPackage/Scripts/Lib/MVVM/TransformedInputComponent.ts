@@ -4,7 +4,6 @@ import { ComponentViewModelInitializer, ObservableChanges } from "./ComponentVie
 import { areValuesEqual, IEquatable } from "./Equatable";
 import { FocusableComponentChangeHandler, FocusableComponentMixin, HasFocusProperty } from "./FocusableComponent";
 import { InputComponentView, InputComponentViewModel, InputTextValue } from "./InputComponent";
-import { IValueComponent } from "./Types";
 import { UniqueComponentChangeHandler, UniqueComponentMixin } from "./UniqueComponent";
 
 export class TransformedInputValue<TValue> implements IEquatable {
@@ -163,7 +162,7 @@ type TransformedInputComponentEventLayout<TValue> = {
     valueChanged: TValue
 };
 
-export class TransformedInputComponent<TValue> extends UniqueComponentMixin(FocusableComponentMixin(Component)) implements IValueComponent<TValue> {
+export class TransformedInputComponent<TValue> extends UniqueComponentMixin(FocusableComponentMixin(Component)) {
     private readonly events = this.eventManager.addEvents<TransformedInputComponentEventLayout<TValue>>({
         valueChanged: null
     });
@@ -217,13 +216,5 @@ export class TransformedInputComponent<TValue> extends UniqueComponentMixin(Focu
 
     get placeholder() { return this.viewModel.placeholder; }
     set placeholder(placeholder: string) { this.viewModel.placeholder = placeholder; }
-
-    getValue() {
-        return this.value;
-    }
-
-    setValue(value: TValue) {
-        this.value = value;
-    }
 
 }

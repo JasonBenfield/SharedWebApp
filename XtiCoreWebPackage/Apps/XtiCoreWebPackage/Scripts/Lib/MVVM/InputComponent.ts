@@ -2,10 +2,8 @@ import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentView } from "./ComponentView";
 import { ComponentViewModel, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
 import { IEquatable } from "./Equatable";
-import { EventManager } from "./EventManager";
 import { FocusableComponentChangeHandler, FocusableComponentMixin, FocusableViewMixin, FocusableViewModelMixin, HasFocusProperty } from "./FocusableComponent";
 import { StyleableComponentViewMixin } from "./StyleableComponentView";
-import { IValueComponent } from "./Types";
 import { UniqueComponentChangeHandler, UniqueComponentMixin, UniqueViewModelMixin } from "./UniqueComponent";
 
 export class InputTextValue implements IEquatable {
@@ -41,6 +39,14 @@ export class InputComponentViewModel extends UniqueViewModelMixin(FocusableViewM
     private _placeholder = "";
     get placeholder() { return this._placeholder; }
     set placeholder(placeholder: string) { this._placeholder = placeholder; }
+
+    private _isRequired = false;
+    get isRequired() { return this._isRequired; }
+    set isRequired(isRequired: boolean) { this._isRequired = isRequired; }
+
+    private _maxLength = 0;
+    get maxLength() { return this._maxLength; }
+    set maxLength(maxLength: number) { this._maxLength = maxLength; }
 }
 
 type InputViewEventLayout = {
@@ -95,6 +101,14 @@ export class InputComponentView extends FocusableViewMixin(StyleableComponentVie
     setPlaceholder(placeholder: string) {
         this.setAttribute("placeholder", placeholder);
     }
+
+    setMaxLength(maxLength: number) {
+        this.setAttribute("maxlength", maxLength.toString());
+    }
+
+    required() { this.setAttribute("required", ""); }
+
+    notRequired() { this.setAttribute("required", null); }
 
     get when() {
         if (!this.hasRegisteredEvents) {
@@ -174,14 +188,29 @@ export class InputComponentChangeHandler extends ComponentChangeHandler<InputCom
 
     handleChanges(changes: ObservableChanges<InputComponentViewModel>) {
         if (changes.textValue) {
-            const textValue: InputTextValue = changes.textValue.value;
+            const textValue = changes.textValue.value;
             if (!textValue.isFromUI) {
                 this.updateView(v => v.setTextValue(textValue.value));
             }
         }
         if (changes.placeholder) {
-            const placeholder: string = changes.placeholder.value;
+            const placeholder = changes.placeholder.value;
             this.updateView(v => v.setPlaceholder(placeholder));
+        }
+        if (changes.isRequired) {
+            const isRequired = changes.isRequired.value;
+            this.updateView(v => {
+                if (isRequired) {
+                    v.required();
+                }
+                else {
+                    v.notRequired();
+                }
+            });
+        }
+        if (changes.maxLength) {
+            const maxLength = changes.maxLength.value;
+            this.updateView(v => v.setMaxLength(maxLength));
         }
     }
 }
@@ -190,7 +219,7 @@ type InputComponentEventLayout = {
     textValueChanged: string
 };
 
-export class InputComponent extends UniqueComponentMixin(FocusableComponentMixin(Component)) implements IValueComponent<string> {
+export class InputComponent extends UniqueComponentMixin(FocusableComponentMixin(Component)) {
     private readonly events = this.eventManager.addEvents<InputComponentEventLayout>({
         textValueChanged: null
     });
@@ -241,13 +270,12 @@ export class InputComponent extends UniqueComponentMixin(FocusableComponentMixin
     get placeholder() { return this.viewModel.placeholder; }
     set placeholder(placeholder: string) { this.viewModel.placeholder = placeholder; }
 
-    getValue() {
-        return this.textValue;
-    }
+    get maxLength() { return this.viewModel.maxLength; }
+    set maxLength(maxLength: number) { this.viewModel.maxLength = maxLength; }
 
-    setValue(value: string) {
-        this.textValue = value;
-    }
+    required() { this.viewModel.isRequired = true; }
+
+    notRequired() { this.viewModel.isRequired = false; }
 
     dispose() {
         this.eventManager.dispose();

@@ -1,9 +1,10 @@
 ﻿import { CssClass } from "../CssClass";
+import { Breakpoints } from "./Breakpoints";
 
 type ColumnCssSize = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | "auto" | "fill";
 
-export class ColumnCssForBreakpoint {
-    constructor(private readonly breakpoint: string, private readonly size: ColumnCssSize) {
+class ColumnCssForBreakpoint {
+    constructor(private readonly breakpoint: Breakpoints, private readonly size: ColumnCssSize) {
     }
 
     cssClassName() {
@@ -66,54 +67,43 @@ export class ColumnCss extends CssClass {
     } = {};
 
     xs(columnSize: ColumnCssSize = "fill") {
-        this.breakpoints.xs = new ColumnCssForBreakpoint("xs", columnSize);
-        return this;
+        return this.setBreakpoint("xs", columnSize);
     }
 
     sm(columnSize: ColumnCssSize = "fill") {
-        this.breakpoints.sm = new ColumnCssForBreakpoint("sm", columnSize);
-        return this;
+        return this.setBreakpoint("sm", columnSize);
     }
 
     md(columnSize: ColumnCssSize = "fill") {
-        this.breakpoints.md = new ColumnCssForBreakpoint("md", columnSize);
-        return this;
+        return this.setBreakpoint("md", columnSize);
     }
 
     lg(columnSize: ColumnCssSize = "fill") {
-        this.breakpoints.lg = new ColumnCssForBreakpoint("lg", columnSize);
-        return this;
+        return this.setBreakpoint("lg", columnSize);
     }
 
     xl(columnSize: ColumnCssSize = "fill") {
-        this.breakpoints.xl = new ColumnCssForBreakpoint("xl", columnSize);
-        return this;
+        return this.setBreakpoint("xl", columnSize);
     }
 
     xxl(columnSize: ColumnCssSize = "fill") {
-        this.breakpoints.xxl = new ColumnCssForBreakpoint("xxl", columnSize);
+        return this.setBreakpoint("xxl", columnSize);
+    }
+
+    private setBreakpoint(breakpoint: Breakpoints, columnSize: ColumnCssSize) {
+        const columnBreakpoint = new ColumnCssForBreakpoint(breakpoint, columnSize);
+        Reflect.set(this.breakpoints, breakpoint, columnBreakpoint);
         return this;
+
     }
 
     protected buildCss() {
         const classNames: string[] = [];
-        if (this.breakpoints.xs) {
-            classNames.push(this.breakpoints.xs.cssClassName());
-        }
-        if (this.breakpoints.sm) {
-            classNames.push(this.breakpoints.sm.cssClassName());
-        }
-        if (this.breakpoints.md) {
-            classNames.push(this.breakpoints.md.cssClassName());
-        }
-        if (this.breakpoints.lg) {
-            classNames.push(this.breakpoints.lg.cssClassName());
-        }
-        if (this.breakpoints.xl) {
-            classNames.push(this.breakpoints.xl.cssClassName());
-        }
-        if (this.breakpoints.xxl) {
-            classNames.push(this.breakpoints.xxl.cssClassName());
+        for (const key in this.breakpoints) {
+            const breakpoint: ColumnCssForBreakpoint = Reflect.get(this.breakpoints, key);
+            if (breakpoint) {
+                classNames.push(breakpoint.cssClassName());
+            }
         }
         return classNames.join(" ");
     }

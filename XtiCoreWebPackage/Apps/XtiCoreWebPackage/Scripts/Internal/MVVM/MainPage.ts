@@ -36,18 +36,18 @@ class MainPage {
                     new ListComponentOptionsBuilder(vm, v)
                         .withHeaderFactory(
                             () => new ListItemFactory(() => new TextComponentViewModel())
-                                .withView((createItemElement) => new TextComponentView(createItemElement))
+                                .withView(() => TextComponentView.listItem())
                                 .withComponent((itemVM, itemView) => new TextComponent(itemVM, itemView))
                         )
                         .withFooterFactory(
                             () => new ListItemFactory(() => new TextComponentViewModel())
-                                .withView((createItemElement) => new TextComponentView(createItemElement))
+                                .withView(() => TextComponentView.listItem())
                                 .withComponent((itemVM, itemView) => new TextComponent(itemVM, itemView))
                         )
                         .withItemFactory(() => {
                             return new ListItemFactory(() => new TextComponentViewModel())
-                                .withView((createItemElement) => {
-                                    const itemView = new TextComponentView(createItemElement);
+                                .withView(() => {
+                                    const itemView = TextComponentView.listItem();
                                     return itemView;
                                 })
                                 .withComponent((itemVM, itemView) => new TextComponent(itemVM, itemView));
@@ -144,11 +144,11 @@ class MainPageView {
         grid.row1.cell3.text.setText("Cell 3");
         layout.content.setCss(new FlexCss().grow(1));
         layout.content.setCss(OverflowCss.auto());
-        layout.content.container.setCss(new ContainerCss());
+        layout.content.container.setCss(ContainerCss.xs());
         layout.content.container.link.text.setCss(MarginCss.end(1));
         layout.content.container.link.otherText.setText("Other Text");
         layout.toolbar.setCss(BackgroundCss.gradient(ContextualClass.secondary).subtle());
-        layout.toolbar.container.setCss(new ContainerCss());
+        layout.toolbar.container.setCss(ContainerCss.xs());
         layout.toolbar.container.setCss(PaddingCss.xs(3));
         layout.toolbar.container.text.setText("Toolbar");
     }

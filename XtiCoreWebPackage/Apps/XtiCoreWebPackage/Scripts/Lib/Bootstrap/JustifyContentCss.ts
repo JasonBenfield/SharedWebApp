@@ -18,6 +18,10 @@ export class JustifyContentCss extends CssClass {
         return new JustifyContentCss("center");
     }
 
+    static between() {
+        return new JustifyContentCss("between");
+    }
+
     private readonly justify: {
         xs?: ContentJustifications;
         sm?: ContentJustifications;

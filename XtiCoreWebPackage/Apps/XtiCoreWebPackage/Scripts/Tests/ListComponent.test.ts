@@ -195,7 +195,7 @@ function createListWithTextItems() {
         new ListComponentOptionsBuilder(viewModel, view)
             .withItemFactory(
                 () => new ListItemFactory(() => new TextComponentViewModel())
-                    .withView((createItemElement) => new TextComponentView(createItemElement))
+                    .withView(() => TextComponentView.listItem())
                     .withComponent((itemVM, itemView) => new TextComponent(itemVM, itemView))
             )
             .build(new TextViewModelUpdater())
@@ -261,8 +261,8 @@ function createListWithHeader() {
         new ListComponentOptionsBuilder(viewModel, view)
             .withHeaderFactory(
                 () => new ListItemFactory(() => new TextComponentViewModel())
-                    .withView((createItemElement) => {
-                        const itemView = new TextComponentView(createItemElement);
+                    .withView(() => {
+                        const itemView = TextComponentView.listItem();
                         itemView.setID(headerID);
                         return itemView;
                     })
@@ -289,8 +289,8 @@ function createListWithFooter() {
         new ListComponentOptionsBuilder(viewModel, view)
             .withFooterFactory(
                 () => new ListItemFactory(() => new TextComponentViewModel())
-                    .withView((createItemElement) => {
-                        const itemView = new TextComponentView(createItemElement);
+                    .withView(() => {
+                        const itemView = TextComponentView.listItem();
                         itemView.setID(footerID);
                         return itemView;
                     })
@@ -317,8 +317,8 @@ function createListWithHeaderAndFooter() {
         new ListComponentOptionsBuilder(viewModel, view)
             .withHeaderFactory(
                 () => new ListItemFactory(() => new TextComponentViewModel())
-                    .withView((createItemElement) => {
-                        const itemView = new TextComponentView(createItemElement);
+                    .withView(() => {
+                        const itemView = TextComponentView.listItem();
                         itemView.setID(headerID);
                         return itemView;
                     })
@@ -326,8 +326,8 @@ function createListWithHeaderAndFooter() {
             )
             .withFooterFactory(
                 () => new ListItemFactory(() => new TextComponentViewModel())
-                    .withView((createItemElement) => {
-                        const itemView = new TextComponentView(createItemElement);
+                    .withView(() => {
+                        const itemView = TextComponentView.listItem();
                         itemView.setID(footerID);
                         return itemView;
                     })
@@ -346,8 +346,8 @@ function createListWithHeaderAndFooter() {
     };
 }
 
-function createCompositeItemView(createItemElement: () => HTMLElement) {
-    const view = CompositeComponentView.fromElement(createItemElement, {
+function createCompositeItemView() {
+    const view = CompositeComponentView.block({
         id: new TextComponentView(),
         value: new TextComponentView()
     });

@@ -4,7 +4,7 @@ import { CssClass } from "../CssClass";
 import { CssLengthUnit } from "../CssLengthUnit";
 import { ICssStyle, ICssStyles } from "../CssStyle";
 import { ComponentView, IComponentViewLayout } from "./ComponentView";
-import { BaseCompositeComponentView, CompositeComponentView } from "./CompositeComponent";
+import { BaseCompositeComponentView } from "./CompositeComponent";
 import { IStyleableComponentView } from "./StyleableComponentView";
 import { Constructor } from "./Types";
 
@@ -108,11 +108,40 @@ export interface IGridViewLayout {
     [name: string]: BaseGridRowView;
 }
 
+class GridCss extends CssClass {
+    private _type = "";
+
+    bordered() {
+        this._type = "grid-bordered";
+        return this;
+    }
+
+    borderless() {
+        this._type = "grid-bordered";
+        return this;
+    }
+
+    layout() {
+        this._type = "grid-layout";
+        return this;
+    }
+
+    protected buildCss() {
+        const classNames: string[] = [];
+        classNames.push("grid");
+        if (!this._type) {
+            classNames.push(this._type);
+        }
+        return classNames.join(" ");
+    }
+}
+
 export function GridViewMixin<T extends Constructor<ComponentView & IStyleableComponentView>>(Base: T) {
     return class extends Base {
         constructor(...args: any[]) {
             super(...args);
             this.setCss(DisplayCss.grid());
+            this.setCss(this.gridCss);
         }
 
         private readonly _gridStyle = new GridCssStyle();
@@ -125,21 +154,54 @@ export function GridViewMixin<T extends Constructor<ComponentView & IStyleableCo
             return this.setGridStyle(s => s.setTemplateRows(...rows));
         }
 
-        setGridStyle(configure: (style: GridCssStyle) => void) {
+        setColumnGap(length: CssLengthUnit) {
+            return this.setGridStyle(s => s.setColumnGap(length));
+        }
+
+        setRowGap(length: CssLengthUnit) {
+            return this.setGridStyle(s => s.setRowGap(length));
+        }
+
+        setAutoColumns(columns: GridTemplateCss) {
+            return this.setGridStyle(s => s.setAutoColumns(columns));
+        }
+
+        setAutoRows(rows: GridTemplateCss) {
+            return this.setGridStyle(s => s.setAutoRows(rows));
+        }
+
+        private setGridStyle(configure: (style: GridCssStyle) => void) {
             configure(this._gridStyle);
             this.setStyle(this._gridStyle);
             return this;
         }
 
-        addRowLayout<T extends IGridViewLayout>(layout: T) {
+        private readonly gridCss = new GridCss();
+
+        styleAsBordered() {
+            this.gridCss.bordered();
+            return this.setCss(this.gridCss);
+        }
+
+        styleAsBorderless() {
+            this.gridCss.borderless();
+            return this.setCss(this.gridCss);
+        }
+
+        styleAsLayout() {
+            this.gridCss.layout();
+            return this.setCss(this.gridCss);
+        }
+
+        protected addRowLayout<T extends IGridViewLayout>(layout: T) {
             return this.addLayout(layout);
         }
 
-        addRow<T extends BaseGridRowView>(row: T) {
+        protected addRow<T extends BaseGridRowView>(row: T) {
             return this.addChildView<T>(row);
         }
 
-        addRows<T extends BaseGridRowView>(...rows: T[]) {
+        protected addRows<T extends BaseGridRowView>(...rows: T[]) {
             for (const row of rows) {
                 this.addChildView(row);
             }
@@ -156,7 +218,7 @@ class GridRowCss extends CssClass {
         return this;
     }
 
-    buildCss() {
+    protected buildCss() {
         const classNames: string[] = [];
         classNames.push("grid-row");
         if (!this._context.equals(ContextualClass.default)) {
@@ -166,7 +228,7 @@ class GridRowCss extends CssClass {
     }
 }
 
-type BaseGridRowView = ComponentView & IGridRowView;
+export type BaseGridRowView = ComponentView & IGridRowView;
 
 export interface IGridRowView {
     calculateTotalWidth(): number;
@@ -199,7 +261,11 @@ export function GridRowViewMixin<T extends Constructor<ComponentView & IStyleabl
         }
 
         setContext(context: ContextualClass) {
-            this.gridRowCss.context(context);
+            return this.setGridRowCss(css => css.context(context));
+        }
+
+        protected setGridRowCss(configure: (css: GridRowCss) => void) {
+            configure(this.gridRowCss);
             this.setCss(this.gridRowCss);
             return this;
         }
@@ -224,7 +290,7 @@ export function GridRowViewMixin<T extends Constructor<ComponentView & IStyleabl
 }
 
 class GridCellCss extends CssClass {
-    buildCss() {
+    protected buildCss() {
         return "grid-cell";
     }
 }
@@ -297,6 +363,12 @@ export class GridView<TLayout extends IGridViewLayout, TPublicLayout extends Com
             "div", layout, l => l
         ).asLayout();
     }
+
+    declare addRowLayout: <T extends IGridViewLayout>(layout: T) => T;
+
+    declare addRow: <T extends BaseGridRowView>(row: T) => T;
+
+    declare addRows: <T extends BaseGridRowView>(...rows: T[]) => T[];
 }
 
 export class GridRowView<TLayout extends IGridRowViewLayout, TPublicLayout extends ComponentView | IComponentViewLayout> extends GridRowViewMixin(BaseCompositeComponentView)<TLayout, TPublicLayout> {
@@ -305,11 +377,16 @@ export class GridRowView<TLayout extends IGridRowViewLayout, TPublicLayout exten
             "div", layout, l => l
         ).asLayout();
     }
+    static listItem<TLayout extends IGridRowViewLayout>(layout: TLayout) {
+        return new GridRowView(
+            "li", layout, l => l
+        ).asLayout();
+    }
 }
 
-export class LinkGridRowView<TLayout extends IGridRowViewLayout, TPublicLayout extends ComponentView | IComponentViewLayout> extends GridRowViewMixin(BaseCompositeComponentView)<TLayout, TPublicLayout> {
+export class GridRowLinkView<TLayout extends IGridRowViewLayout, TPublicLayout extends ComponentView | IComponentViewLayout> extends GridRowViewMixin(BaseCompositeComponentView)<TLayout, TPublicLayout> {
     static create<TLayout extends IGridRowViewLayout>(layout: TLayout) {
-        return new LinkGridRowView(
+        return new GridRowLinkView(
             layout, l => l
         ).asLayout();
     }

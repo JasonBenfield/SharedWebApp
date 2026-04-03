@@ -105,6 +105,11 @@ export class Component {
         return this.viewModel === otherViewModel;
     }
 
+    protected addView(view: ComponentView) {
+        this.views.push(view);
+        return view;
+    }
+
     hasView(otherView: ComponentView) {
         return Boolean(this.views.find(v => v === otherView));
     }
