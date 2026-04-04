@@ -35,7 +35,6 @@
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\ComponentView.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\ComponentViewModel.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\ContainerComponent.ts" />
-	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\ContainerComponentView.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\FormattedNumber.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\FormGroup.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\LabelComponent.ts" />

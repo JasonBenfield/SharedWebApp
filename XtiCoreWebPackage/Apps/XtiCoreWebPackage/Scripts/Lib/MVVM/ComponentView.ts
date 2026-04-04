@@ -6,8 +6,8 @@ interface IHtmlEventListeners {
     [name: string]: IHtmlEventListener;
 }
 
-export interface IComponentViewLayout {
-    [name: string]: ComponentView;
+export type ComponentViewLayout<T> = {
+    [K in keyof T]: ComponentView;
 }
 
 export class ComponentView {
@@ -77,7 +77,7 @@ export class ComponentView {
 
     protected getChildViews() { return Array.from(this.childViews); }
 
-    protected addLayout<T extends IComponentViewLayout>(layout: T) {
+    protected addLayout<T extends ComponentViewLayout<T>>(layout: T) {
         for (const key in layout) {
             const view = layout[key];
             this.addChildView(view);

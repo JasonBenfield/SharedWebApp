@@ -1,7 +1,7 @@
 import { DelayedAction } from "../DelayedAction";
 import { Component } from "./Component";
 import { ComponentView } from "./ComponentView";
-import { ContainerComponentView } from "./ContainerComponentView";
+import { ContainerComponentView } from "./ContainerComponent";
 import { MvvmOptions } from "./MvvmOptions";
 
 class RootView extends ContainerComponentView {

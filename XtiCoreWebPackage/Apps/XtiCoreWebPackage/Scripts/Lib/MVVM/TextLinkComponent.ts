@@ -1,7 +1,7 @@
 import { Component } from "./Component";
-import { ComponentView, IComponentViewLayout } from "./ComponentView";
+import { ComponentView, ComponentViewLayout } from "./ComponentView";
 import { ComponentViewModel, ComponentViewModelInitializer } from "./ComponentViewModel";
-import { CompositeComponentView } from "./CompositeComponent";
+import { BaseCompositeComponentView, CompositeComponentView } from "./CompositeComponent";
 import { ILinkView, ILinkViewModel, LinkComponentChangeHandler, LinkComponentMixin, LinkViewMixin, LinkViewModelMixin } from "./LinkComponent";
 import { StyleableComponentViewMixin } from "./StyleableComponentView";
 import { BaseTextComponentView, BaseTextComponentViewModel, ITextView, ITextViewModel, SynchedTitleChangeHandler, SynchedTitleComponentMixin, SynchedTitleViewModelMixin, TextChangeHandler, TextComponentMixin, TextViewMixin, TextViewModelMixin, TitleChangeHandler, TitleComponentMixin, TitleViewModelMixin } from "./TextComponent";
@@ -19,16 +19,49 @@ export type BaseTextLinkComponentView = BaseTextComponentView & ILinkView;
 
 export type BaseTextLinkComponentViewModel = BaseTextComponentViewModel & ILinkViewModel;
 
-export class TextLinkCompositeComponentView<
-    TLayout extends IComponentViewLayout,
-    TPublicLayout extends BaseTextComponentView
-> extends LinkViewMixin(CompositeComponentView)<TLayout, TPublicLayout> implements ILinkView {
-    static create<TLayout extends IComponentViewLayout, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new TextLinkCompositeComponentView(layout, toPublicLayout).asLayout();
+export class LinkWithTextComponentView<
+    TLayout extends ComponentViewLayout<TLayout>
+> extends LinkViewMixin(CompositeComponentView)<TLayout, BaseTextComponentView> implements ILinkView {
+
+    static create<TLayout extends ComponentViewLayout<TLayout>>(layout: TLayout, toPublicLayout: (l: TLayout) => BaseTextComponentView) {
+        return new LinkWithTextComponentView(layout, toPublicLayout).asLayout();
     }
 
-    constructor(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+    constructor(layout: TLayout, toPublicLayout: (l: TLayout) => BaseTextComponentView) {
         super("a", layout, toPublicLayout);
+    }
+
+    declare asLayout: () => TextLinkCompositeComponentView<TLayout> & TLayout;
+
+    setText(text: string) {
+        this.publicLayout.setText(text);
+    }
+}
+
+export class TextLinkCompositeComponentView<
+    TLayout extends ComponentViewLayout<TLayout>
+    > extends BaseCompositeComponentView<TLayout, BaseTextLinkComponentView> implements ITextView, ILinkView {
+
+    static block<TLayout extends ComponentViewLayout<TLayout>>(layout: TLayout, toPublicLayout: (l: TLayout) => BaseTextLinkComponentView) {
+        return new TextLinkCompositeComponentView("div", layout, toPublicLayout).asLayout();
+    }
+
+    static span<TLayout extends ComponentViewLayout<TLayout>>(layout: TLayout, toPublicLayout: (l: TLayout) => BaseTextLinkComponentView) {
+        return new TextLinkCompositeComponentView("span", layout, toPublicLayout).asLayout();
+    }
+
+    static listItem<TLayout extends ComponentViewLayout<TLayout>>(layout: TLayout, toPublicLayout: (l: TLayout) => BaseTextLinkComponentView) {
+        return new TextLinkCompositeComponentView("li", layout, toPublicLayout).asLayout();
+    }
+
+    declare asLayout: () => TextLinkCompositeComponentView<TLayout> & TLayout;
+
+    setHref(href: string) {
+        this.publicLayout.setHref(href);
+    }
+
+    setTarget(target: string) {
+        this.publicLayout.setTarget(target);
     }
 
     setText(text: string) {

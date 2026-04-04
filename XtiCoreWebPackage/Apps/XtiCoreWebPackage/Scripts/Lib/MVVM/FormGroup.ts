@@ -1,54 +1,76 @@
+import { FormControlCss, FormLabelCss } from "../Bootstrap/FormGroupCss";
+import { CssClass } from "../CssClass";
+import { CssLengthUnit } from "../CssLengthUnit";
 import { Component } from "./Component";
-import { ComponentView } from "./ComponentView";
+import { ComponentView, ComponentViewLayout } from "./ComponentView";
 import { ComponentViewModel } from "./ComponentViewModel";
-import { CompositeComponentView } from "./CompositeComponent";
-import { InputComponent, InputComponentView, InputComponentViewModel } from "./InputComponent";
-import { StyleableComponentViewMixin } from "./StyleableComponentView";
-import { BaseTextComponentView, BaseTextComponentViewModel, TextComponent, TextComponentView, TextComponentViewModel } from "./TextComponent";
+import { BaseCompositeComponentView, ICompositeComponentView } from "./CompositeComponent";
+import { GridCellView, GridRowViewMixin, GridViewMixin } from "./GridView";
+import { BaseInputComponentView, InputComponent, InputComponentView, InputComponentViewModel } from "./InputComponent";
+import { BaseLinkComponentView, BaseLinkComponentViewModel, LinkComponent, LinkComponentView, LinkComponentViewModel } from "./LinkComponent";
+import { BaseTextComponentView, BaseTextComponentViewModel, TextComponent, TextComponentView, TextComponentViewModel, TextCompositeComponentView } from "./TextComponent";
+import { BaseTextLabelComponentView, BaseTextLabelComponentViewModel, TextLabelComponent, TextLabelComponentView, TextLabelComponentViewModel } from "./TextLabelComponent";
+import { BaseTextLinkComponentView, BaseTextLinkComponentViewModel, TextLinkComponent, TextLinkComponentView, TextLinkComponentViewModel, TextLinkCompositeComponentView } from "./TextLinkComponent";
 import { ITransformedInput, TransformedInputComponent, TransformedInputComponentViewModel } from "./TransformedInputComponent";
+import { BaseUniqueComponent } from "./UniqueComponent";
 
-export interface IFormGroupView<TValueView extends ComponentView> {
-    readonly caption: BaseTextComponentView;
+interface IFormGroupViewLayout<TValueView extends ComponentView> {
+    captionCell: ComponentView & {
+        caption: BaseTextLabelComponentView
+    },
+    valueCell: ComponentView & {
+        value: TValueView
+    }
+};
+
+export interface IFormGroupViewPublicLayout<TValueView extends ComponentView> {
+    readonly caption: BaseTextLabelComponentView;
     readonly value: TValueView;
 }
 
-export type BaseFormGroupView<TValueView extends ComponentView> = ComponentView & IFormGroupView<TValueView>;
+export type BaseFormGroupView<TValueView extends ComponentView> = ComponentView & { publicLayout: IFormGroupViewPublicLayout<TValueView> };
 
-export class FormGroupView<TValueView extends ComponentView> extends StyleableComponentViewMixin(ComponentView) implements IFormGroupView<TValueView> {
+class FormGroupCss extends CssClass {
+    protected buildCss() {
+        return "form-group";
+    }
+}
+
+class FormGroupCaptionCellCss extends CssClass {
+    protected buildCss() {
+        return "form-group-caption-cell";
+    }
+}
+
+export class FormGroupView<TValueView extends ComponentView> extends GridRowViewMixin(BaseCompositeComponentView)<IFormGroupViewLayout<TValueView>, IFormGroupViewPublicLayout<TValueView>> implements ICompositeComponentView<IFormGroupViewLayout<TValueView>, IFormGroupViewPublicLayout<TValueView>> {
+
     constructor(valueView: TValueView) {
-        super("div");
-        this.layout = {
-            captionContainer: CompositeComponentView.block({
-                caption: new TextComponentView()
+        const layout = {
+            captionCell: GridCellView.block({
+                caption: new TextLabelComponentView()
             }),
-            valueContainer: CompositeComponentView.block({
+            valueCell: GridCellView.block({
                 value: valueView
             })
         };
-        this.addLayout(this.layout);
+        super(
+            "div",
+            layout,
+            l => {
+                return {
+                    caption: l.captionCell.caption,
+                    value: l.valueCell.value
+                };
+            }
+        );
+        this.setCss(new FormGroupCss());
+        layout.captionCell.setCss(new FormGroupCaptionCellCss());
+        this.publicLayout.caption.setCss(new FormLabelCss());
     }
-
-    private readonly layout: {
-        captionContainer: ComponentView & {
-            caption: TextComponentView
-        },
-        valueContainer: ComponentView & {
-            value: TValueView
-        }
-    };
-
-    get captionContainer() { return this.layout.captionContainer; }
-
-    get caption() { return this.layout.captionContainer.caption; }
-
-    get valueContainer() { return this.layout.valueContainer; }
-
-    get value() { return this.layout.valueContainer.value; }
-
 }
 
 export interface IFormGroupViewModel<TValue extends ComponentViewModel> {
-    caption: TextComponentViewModel,
+    caption: BaseTextLabelComponentViewModel,
     value: TValue
 }
 
@@ -58,7 +80,7 @@ export class FormGroupViewModel<TValueVM extends ComponentViewModel> extends Com
         this.value = value;
     }
 
-    readonly caption = new TextComponentViewModel();
+    readonly caption = new TextLabelComponentViewModel();
     readonly value: TValueVM;
 }
 
@@ -73,11 +95,15 @@ export class FormGroup<
         createValueComponent: (vm: TValueVM, v: TValueView) => TValueComponent
     ) {
         super(viewModel, view);
-        this.caption = new TextComponent(viewModel.caption, view.caption);
-        this.value = createValueComponent(viewModel.value, view.value);
+        this.caption = new TextLabelComponent(viewModel.caption, view.publicLayout.caption);
+        this.value = createValueComponent(viewModel.value, view.publicLayout.value);
+        const value: any = this.value;
+        if (value.id && typeof value.id === "string") {
+            this.caption.forComponent(value);
+        }
     }
 
-    readonly caption: TextComponent;
+    readonly caption: TextLabelComponent;
     readonly value: TValueComponent;
 
     setCaption(caption: string) {
@@ -95,6 +121,14 @@ export class FormGroupTextViewModel extends FormGroupViewModel<TextComponentView
 export class FormGroupTextView extends FormGroupView<TextComponentView> {
     constructor() {
         super(new TextComponentView());
+        this.publicLayout.value.setCss(FormControlCss.text());
+    }
+}
+
+export class FormGroupTextCompositeView<TLayout extends ComponentViewLayout<TLayout>> extends FormGroupView<TextCompositeComponentView<TLayout>> {
+    constructor(layout: TLayout, toPublicLayout: (l: TLayout) => BaseTextComponentView) {
+        super(TextCompositeComponentView.block(layout, toPublicLayout));
+        this.publicLayout.value.setCss(FormControlCss.text());
     }
 }
 
@@ -112,6 +146,63 @@ export class FormGroupText extends FormGroup<BaseTextComponentViewModel, BaseTex
     }
 }
 
+export class FormGroupLinkViewModel extends FormGroupViewModel<LinkComponentViewModel> {
+    constructor() {
+        super(new LinkComponentViewModel());
+    }
+}
+
+export class FormGroupLinkView<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends ComponentViewLayout<TPublicLayout>> extends FormGroupView<LinkComponentView<TLayout, TPublicLayout>> {
+    constructor(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        super(new LinkComponentView(layout, toPublicLayout));
+        this.publicLayout.value.setCss(FormControlCss.link());
+    }
+}
+
+export class FormGroupLink extends FormGroup<BaseLinkComponentViewModel, BaseLinkComponentView, LinkComponent> {
+    constructor(protected readonly viewModel: ComponentViewModel & IFormGroupViewModel<BaseLinkComponentViewModel>, view: BaseFormGroupView<BaseLinkComponentView>) {
+        super(viewModel, view, (vm, v) => new LinkComponent(vm, v));
+    }
+
+    getHref() { return this.viewModel.value.href; }
+
+    setHref(href: string) { this.viewModel.value.href = href; }
+}
+
+export class FormGroupTextLinkViewModel extends FormGroupViewModel<TextLinkComponentViewModel> {
+    constructor() {
+        super(new TextLinkComponentViewModel());
+    }
+}
+
+export class FormGroupTextLinkView extends FormGroupView<TextLinkComponentView> {
+    constructor() {
+        super(new TextLinkComponentView());
+        this.publicLayout.value.setCss(FormControlCss.link());
+    }
+}
+
+export class FormGroupTextLinkCompositeView<TLayout extends ComponentViewLayout<TLayout>> extends FormGroupView<TextLinkCompositeComponentView<TLayout>> {
+    constructor(layout: TLayout, toPublicLayout: (l: TLayout) => BaseTextComponentView) {
+        super(TextLinkCompositeComponentView.create(layout, toPublicLayout));
+        this.publicLayout.value.setCss(FormControlCss.link());
+    }
+}
+
+export class FormGroupTextLink extends FormGroup<BaseTextLinkComponentViewModel, BaseTextLinkComponentView, TextLinkComponent> {
+    constructor(protected readonly viewModel: ComponentViewModel & IFormGroupViewModel<BaseTextLinkComponentViewModel>, view: BaseFormGroupView<BaseTextLinkComponentView>) {
+        super(viewModel, view, (vm, v) => new TextLinkComponent(vm, v));
+    }
+
+    getHref() { return this.viewModel.value.href; }
+
+    setHref(href: string) { this.viewModel.value.href = href; }
+
+    getText() { return this.viewModel.value.text; }
+
+    setText(text: string) { this.viewModel.value.text = text; }
+}
+
 export class FormGroupInputViewModel extends FormGroupViewModel<InputComponentViewModel> {
     constructor() {
         super(new InputComponentViewModel());
@@ -121,11 +212,20 @@ export class FormGroupInputViewModel extends FormGroupViewModel<InputComponentVi
 export class FormGroupInputView extends FormGroupView<InputComponentView> {
     constructor() {
         super(new InputComponentView());
+        this.publicLayout.value.setCss(this.formControlCss);
+    }
+
+    private readonly formControlCss = new FormControlCss();
+
+    setFormControlCss(configure: (css: FormControlCss) => void) {
+        configure(this.formControlCss);
+        this.publicLayout.value.setCss(this.formControlCss);
+        return this;
     }
 }
 
-export class FormGroupInput extends FormGroup<InputComponentViewModel, InputComponentView, InputComponent> {
-    constructor(viewModel: ComponentViewModel & IFormGroupViewModel<InputComponentViewModel>, view: FormGroupView<InputComponentView>) {
+export class FormGroupInput extends FormGroup<InputComponentViewModel, BaseInputComponentView, InputComponent> {
+    constructor(viewModel: ComponentViewModel & IFormGroupViewModel<InputComponentViewModel>, view: BaseFormGroupView<BaseInputComponentView>) {
         super(viewModel, view, (vm, v) => new InputComponent(vm, v));
     }
 
@@ -136,6 +236,10 @@ export class FormGroupInput extends FormGroup<InputComponentViewModel, InputComp
     setValue(value: string) {
         this.value.textValue = value;
     }
+
+    setFocus() {
+        this.value.setFocus();
+    }
 }
 
 export class FormGroupTransformedInputViewModel<TValue> extends FormGroupViewModel<TransformedInputComponentViewModel<TValue>> {
@@ -144,8 +248,8 @@ export class FormGroupTransformedInputViewModel<TValue> extends FormGroupViewMod
     }
 }
 
-export class FormGroupTransformedInput<TValue> extends FormGroup<TransformedInputComponentViewModel<TValue>, InputComponentView, TransformedInputComponent<TValue>> {
-    constructor(viewModel: ComponentViewModel & IFormGroupViewModel<TransformedInputComponentViewModel<TValue>>, view: FormGroupView<InputComponentView>, transformedInput: ITransformedInput<TValue>) {
+export class FormGroupTransformedInput<TValue> extends FormGroup<TransformedInputComponentViewModel<TValue>, BaseInputComponentView, TransformedInputComponent<TValue>> {
+    constructor(viewModel: ComponentViewModel & IFormGroupViewModel<TransformedInputComponentViewModel<TValue>>, view: BaseFormGroupView<BaseInputComponentView>, transformedInput: ITransformedInput<TValue>) {
         super(viewModel, view, (vm, v) => new TransformedInputComponent(vm, v, transformedInput));
     }
 
@@ -155,5 +259,39 @@ export class FormGroupTransformedInput<TValue> extends FormGroup<TransformedInpu
 
     setValue(value: TValue) {
         this.value.value = value;
+    }
+
+    setFocus() {
+        this.value.setFocus();
+    }
+}
+
+export type FormGroupContainerViewLayout<T> = {
+    [K in keyof T]: BaseFormGroupView<ComponentView>;
+}
+
+class FormGroupContainerCss extends CssClass {
+    protected buildCss() {
+        return "form-group-grid";
+    }
+}
+
+export class FormGroupContainerView<TLayout extends FormGroupContainerViewLayout<TLayout>> extends GridViewMixin(BaseCompositeComponentView)<TLayout, TLayout> {
+    static create<TLayout extends FormGroupContainerViewLayout<TLayout>>(layout: TLayout) {
+        return new FormGroupContainerView(layout).asLayout();
+    }
+
+    constructor(layout: TLayout) {
+        super("div", layout, l => l);
+        this.styleAsLayout();
+        this.setCss(new FormGroupContainerCss());
+        this.setTemplateColumns(
+            CssLengthUnit.auto(),
+            CssLengthUnit.flex(1)
+        );
+    }
+
+    addFormGroup<T extends BaseFormGroupView<ComponentView>>(formGroup: T) {
+        return this.addChildView(formGroup);
     }
 }

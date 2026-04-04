@@ -1,5 +1,5 @@
 import { Component, ComponentChangeHandler } from "./Component";
-import { ComponentView, IComponentViewLayout } from "./ComponentView";
+import { ComponentView, ComponentViewLayout } from "./ComponentView";
 import { ComponentViewModel, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
 import { CompositeComponentView } from "./CompositeComponent";
 import { IStyleableComponentView } from "./StyleableComponentView";
@@ -43,11 +43,15 @@ export function LabelViewMixin<T extends Constructor<ComponentView & IStyleableC
 export type BaseLabelComponentView = ComponentView & ITitleView & ILabelView;
 
 export class LabelComponentView<
-    TLayout extends IComponentViewLayout,
-    TPublicLayout extends IComponentViewLayout
+    TLayout extends ComponentViewLayout<TLayout>,
+    TPublicLayout extends ComponentViewLayout<TPublicLayout>
 > extends LabelViewMixin(CompositeComponentView)<TLayout, TPublicLayout> {
-    static create<TLayout extends IComponentViewLayout>(layout: TLayout) {
-        return new LabelComponentView(layout, l => l).asLayout();
+    static create<TLayout extends ComponentViewLayout<TLayout>>(layout: TLayout) {
+        return LabelComponentView.createWithPublicLayout(layout, l => l);
+    }
+
+    static createWithPublicLayout<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends ComponentViewLayout<TPublicLayout>>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        return new LabelComponentView(layout, toPublicLayout).asLayout();
     }
 
     constructor(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {

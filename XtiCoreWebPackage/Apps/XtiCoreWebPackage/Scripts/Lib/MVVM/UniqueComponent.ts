@@ -1,4 +1,3 @@
-import { ConsoleLogger } from "../ConsoleLogger";
 import { GeneratedID } from "../GeneratedID";
 import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentView } from "./ComponentView";

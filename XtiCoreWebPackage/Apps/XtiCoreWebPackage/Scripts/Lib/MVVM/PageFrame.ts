@@ -17,16 +17,16 @@ import { TextCss } from "../Bootstrap/TextCss";
 import "../Styles/default.scss";
 import { ComponentView } from "./ComponentView";
 import { CompositeComponentView } from "./CompositeComponent";
-import { ContainerComponentView } from "./ContainerComponentView";
 import { StyleableComponentViewMixin } from "./StyleableComponentView";
 import { TextComponentView } from "./TextComponent";
+import { ContainerComponentView } from "./ContainerComponent";
 
 export class PageFrameBannerView extends StyleableComponentViewMixin(ComponentView) {
     constructor() {
         super();
         this.addLayout(this.layout);
         this.setCss(BackgroundCss.gradient(ContextualClass.primary));
-        this.layout.container.setCss(new ContainerCss());
+        this.layout.container.setCss(ContainerCss.xs());
         this.layout.container.setCss(DisplayCss.flex());
         this.layout.container.setCss(new FlexCss().row());
         this.appTitle.setText("App Title");

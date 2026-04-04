@@ -2,9 +2,10 @@ import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentView } from "./ComponentView";
 import { ComponentViewModel, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
 import { IEquatable } from "./Equatable";
-import { FocusableComponentChangeHandler, FocusableComponentMixin, FocusableViewMixin, FocusableViewModelMixin, HasFocusProperty } from "./FocusableComponent";
+import { CustomEventRegistrations } from "./EventManager";
+import { FocusableComponentChangeHandler, FocusableComponentMixin, FocusableViewMixin, FocusableViewModelMixin, HasFocusProperty, IFocusableView } from "./FocusableComponent";
 import { StyleableComponentViewMixin } from "./StyleableComponentView";
-import { UniqueComponentChangeHandler, UniqueComponentMixin, UniqueViewModelMixin } from "./UniqueComponent";
+import { IUniqueView, UniqueComponentChangeHandler, UniqueComponentMixin, UniqueViewModelMixin } from "./UniqueComponent";
 
 export class InputTextValue implements IEquatable {
     constructor(readonly value: string, readonly isFromUI = false) {
@@ -55,7 +56,19 @@ type InputViewEventLayout = {
     blurred: FocusEvent;
 }
 
-export class InputComponentView extends FocusableViewMixin(StyleableComponentViewMixin(ComponentView)) {
+export interface IInputView {
+    readonly when: CustomEventRegistrations<InputViewEventLayout>;
+    getTextValue(): string;
+    setTextValue(textValue: string): void;
+    setPlaceholder(placeholder: string): this;
+    setMaxLength(maxLength: number): this;
+    required(): this;
+    notRequired(): this;
+}
+
+export type BaseInputComponentView = ComponentView & IFocusableView & IUniqueView & IInputView;
+
+export class InputComponentView extends FocusableViewMixin(StyleableComponentViewMixin(ComponentView)) implements IInputView {
     private readonly events = this.eventManager.addEvents<InputViewEventLayout>({
         textValueInput: null,
         focused: null,
@@ -99,16 +112,16 @@ export class InputComponentView extends FocusableViewMixin(StyleableComponentVie
     }
 
     setPlaceholder(placeholder: string) {
-        this.setAttribute("placeholder", placeholder);
+        return this.setAttribute("placeholder", placeholder);
     }
 
     setMaxLength(maxLength: number) {
-        this.setAttribute("maxlength", maxLength.toString());
+        return this.setAttribute("maxlength", maxLength.toString());
     }
 
-    required() { this.setAttribute("required", ""); }
+    required() { return this.setAttribute("required", ""); }
 
-    notRequired() { this.setAttribute("required", null); }
+    notRequired() { return this.setAttribute("required", null); }
 
     get when() {
         if (!this.hasRegisteredEvents) {
@@ -181,8 +194,8 @@ export class InputComponentView extends FocusableViewMixin(StyleableComponentVie
     }
 }
 
-export class InputComponentChangeHandler extends ComponentChangeHandler<InputComponentViewModel, InputComponentView> {
-    constructor(viewModel: InputComponentViewModel, view: InputComponentView) {
+export class InputComponentChangeHandler extends ComponentChangeHandler<InputComponentViewModel, BaseInputComponentView> {
+    constructor(viewModel: InputComponentViewModel, view: BaseInputComponentView) {
         super(viewModel, view);
     }
 
@@ -227,7 +240,7 @@ export class InputComponent extends UniqueComponentMixin(FocusableComponentMixin
 
     constructor(
         protected readonly viewModel: InputComponentViewModel,
-        protected readonly view: InputComponentView
+        protected readonly view: BaseInputComponentView
     ) {
         super(
             viewModel,

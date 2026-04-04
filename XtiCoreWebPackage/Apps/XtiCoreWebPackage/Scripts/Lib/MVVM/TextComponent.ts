@@ -1,5 +1,5 @@
 import { Component, ComponentChangeHandler } from "./Component";
-import { ComponentView, IComponentViewLayout } from "./ComponentView";
+import { ComponentView, ComponentViewLayout } from "./ComponentView";
 import { ComponentViewModel, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
 import { BaseCompositeComponentView } from "./CompositeComponent";
 import { IStyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
@@ -88,8 +88,56 @@ export class TextComponentView extends TextViewMixin(TitleViewMixin(StyleableCom
         return new TextComponentView("div");
     }
 
+    static paragraph() {
+        return new TextComponentView("p");
+    }
+
     static span() {
         return new TextComponentView("span");
+    }
+
+    static strong() {
+        return new TextComponentView("strong");
+    }
+
+    static small() {
+        return new TextComponentView("small");
+    }
+
+    static emphasis() {
+        return new TextComponentView("em");
+    }
+
+    static preformat() {
+        return new TextComponentView("pre");
+    }
+
+    static deleted() {
+        return new TextComponentView("del");
+    }
+
+    static inserted() {
+        return new TextComponentView("ins");
+    }
+
+    static strikethrough() {
+        return new TextComponentView("s");
+    }
+
+    static superscript() {
+        return new TextComponentView("sup");
+    }
+
+    static subscript() {
+        return new TextComponentView("sub");
+    }
+
+    static inlineQuote() {
+        return new TextComponentView("q");
+    }
+
+    static blockQuote() {
+        return new TextComponentView("blockquote");
     }
 
     static heading(size: 1 | 2 | 3 | 4 | 5 | 6) {
@@ -102,37 +150,74 @@ export class TextComponentView extends TextViewMixin(TitleViewMixin(StyleableCom
 
 }
 
-export class TextCompositeComponentView<TLayout extends IComponentViewLayout> extends TitleViewMixin(BaseCompositeComponentView)<TLayout, BaseTextComponentView> implements ITextView {
-
-    static fromElement<TLayout extends IComponentViewLayout, TPublicLayout extends BaseTextComponentView>(createElement: () => HTMLElement, layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new TextCompositeComponentView(
-            createElement, layout, toPublicLayout
-        ).asLayout();
-    }
-
-    static block<TLayout extends IComponentViewLayout, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+export class TextCompositeComponentView<TLayout extends ComponentViewLayout<TLayout>> extends TitleViewMixin(BaseCompositeComponentView)<TLayout, BaseTextComponentView> implements ITextView {
+    static block<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
         return new TextCompositeComponentView(
             "div", layout, toPublicLayout
         ).asLayout();
     }
 
-    static span<TLayout extends IComponentViewLayout, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+    static paragraph<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        return new TextCompositeComponentView(
+            "p", layout, toPublicLayout
+        ).asLayout();
+    }
+
+    static span<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
         return new TextCompositeComponentView(
             "span", layout, toPublicLayout
         ).asLayout();
     }
 
-    static heading<TLayout extends IComponentViewLayout, TPublicLayout extends BaseTextComponentView>(size: 1 | 2 | 3 | 4 | 5 | 6, layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+    static small<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        return new TextCompositeComponentView(
+            "sm", layout, toPublicLayout
+        ).asLayout();
+    }
+
+    static emphasis<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        return new TextCompositeComponentView(
+            "em", layout, toPublicLayout
+        ).asLayout();
+    }
+
+    static preformat<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        return new TextCompositeComponentView(
+            "pre", layout, toPublicLayout
+        ).asLayout();
+    }
+
+    static strikethrough<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        return new TextCompositeComponentView(
+            "s", layout, toPublicLayout
+        ).asLayout();
+    }
+
+    static inlineQuote<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        return new TextCompositeComponentView(
+            "q", layout, toPublicLayout
+        ).asLayout();
+    }
+
+    static blockQuote<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        return new TextCompositeComponentView(
+            "blockquote", layout, toPublicLayout
+        ).asLayout();
+    }
+
+    static heading<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(size: 1 | 2 | 3 | 4 | 5 | 6, layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
         return new TextCompositeComponentView(
             `h${size}`, layout, toPublicLayout
         ).asLayout();
     }
 
-    static listItem<TLayout extends IComponentViewLayout, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+    static listItem<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
         return new TextCompositeComponentView(
             "li", layout, toPublicLayout
         ).asLayout();
     }
+
+    declare asLayout: () => TextCompositeComponentView<TLayout> & TLayout;
 
     setText(text: string) {
         this.publicLayout.setText(text);

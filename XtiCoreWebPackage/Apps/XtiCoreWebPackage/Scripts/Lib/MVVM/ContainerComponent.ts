@@ -1,5 +1,5 @@
 import { Component, ComponentChangeHandler } from "./Component";
-import { ComponentView, IComponentViewLayout } from "./ComponentView";
+import { ComponentView, ComponentViewLayout } from "./ComponentView";
 import { ComponentViewModel } from "./ComponentViewModel";
 import { StyleableComponentViewMixin } from "./StyleableComponentView";
 import { Constructor } from "./Types";
@@ -19,7 +19,7 @@ export class ContainerComponent extends Component {
 }
 
 export interface IContainerComponentView {
-    addLayout<T extends IComponentViewLayout>(layout: T): T;
+    addLayout<TLayout extends ComponentViewLayout<TLayout>>(layout: TLayout): TLayout;
     addChildView<T extends ComponentView>(view: T): T;
     removeAllChildViews(): void;
     removeChildView(view: ComponentView): void;
@@ -27,7 +27,7 @@ export interface IContainerComponentView {
 
 export function ContainerComponentViewMixin<T extends Constructor<ComponentView>>(Base: T) {
     return class extends Base implements IContainerComponentView {
-        declare public addLayout: <T extends IComponentViewLayout>(layout: T) => this & T;
+        declare public addLayout: <TLayout extends ComponentViewLayout<TLayout>>(layout: TLayout) => this & TLayout;
         declare public addChildView: <T extends ComponentView>(view: T) => T;
         declare public removeAllChildViews: () => void;
         declare public removeChildView: (view: ComponentView) => void;

@@ -1,5 +1,5 @@
 import { Component, ComponentChangeHandler } from "./Component";
-import { ComponentView, IComponentViewLayout } from "./ComponentView";
+import { ComponentView, ComponentViewLayout } from "./ComponentView";
 import { ComponentViewModel, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
 import { BaseCompositeComponentView, CompositeComponentView } from "./CompositeComponent";
 import { IStyleableComponentView } from "./StyleableComponentView";
@@ -38,7 +38,7 @@ export class LinkComponentViewModel extends LinkViewModelMixin(TitleViewModelMix
 
 export interface ILinkView {
     setHref(href: string): void;
-    setTarget(target: string | null): void;
+    setTarget(target: string): void;
 }
 
 export function LinkViewMixin<T extends Constructor<ComponentView & IStyleableComponentView>>(Base: T) {
@@ -56,14 +56,14 @@ export function LinkViewMixin<T extends Constructor<ComponentView & IStyleableCo
 export type BaseLinkComponentView = ComponentView & ITitleView & ILinkView;
 
 export class LinkComponentView<
-    TLayout extends IComponentViewLayout,
-    TPublicLayout extends IComponentViewLayout
+    TLayout extends ComponentViewLayout<TLayout>,
+    TPublicLayout extends ComponentViewLayout<TPublicLayout>
 > extends LinkViewMixin(BaseCompositeComponentView)<TLayout, TPublicLayout> {
-    static create<TLayout extends IComponentViewLayout>(layout: TLayout) {
+    static create<TLayout extends ComponentViewLayout<TLayout>>(layout: TLayout) {
         return LinkComponentView.createWithPublicLayout(layout, l => Object.assign({}, l));
     }
 
-    static createWithPublicLayout<TLayout extends IComponentViewLayout, TPublicLayout extends IComponentViewLayout>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+    static createWithPublicLayout<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends ComponentViewLayout<TPublicLayout>>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
         return new LinkComponentView(layout, toPublicLayout).asLayout();
     }
 

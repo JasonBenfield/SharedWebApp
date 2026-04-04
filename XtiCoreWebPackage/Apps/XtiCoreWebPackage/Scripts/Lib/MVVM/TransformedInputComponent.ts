@@ -3,7 +3,7 @@ import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
 import { areValuesEqual, IEquatable } from "./Equatable";
 import { FocusableComponentChangeHandler, FocusableComponentMixin, HasFocusProperty } from "./FocusableComponent";
-import { InputComponentView, InputComponentViewModel, InputTextValue } from "./InputComponent";
+import { BaseInputComponentView, InputComponentViewModel, InputTextValue } from "./InputComponent";
 import { UniqueComponentChangeHandler, UniqueComponentMixin } from "./UniqueComponent";
 
 export class TransformedInputValue<TValue> implements IEquatable {
@@ -116,10 +116,10 @@ export class TransformedNumberInput implements ITransformedInput<number> {
     }
 }
 
-export class TransformedInputComponentChangeHandler<TValue> extends ComponentChangeHandler<TransformedInputComponentViewModel<TValue>, InputComponentView> {
+export class TransformedInputComponentChangeHandler<TValue> extends ComponentChangeHandler<TransformedInputComponentViewModel<TValue>, BaseInputComponentView> {
     constructor(
         viewModel: TransformedInputComponentViewModel<TValue>,
-        view: InputComponentView,
+        view: BaseInputComponentView,
         private readonly transformedInput: ITransformedInput<TValue>
     ) {
         super(viewModel, view);
@@ -170,7 +170,7 @@ export class TransformedInputComponent<TValue> extends UniqueComponentMixin(Focu
 
     constructor(
         protected readonly viewModel: TransformedInputComponentViewModel<TValue>,
-        protected readonly view: InputComponentView,
+        protected readonly view: BaseInputComponentView,
         protected readonly transformedInput: ITransformedInput<TValue>
     ) {
         super(
@@ -188,7 +188,6 @@ export class TransformedInputComponent<TValue> extends UniqueComponentMixin(Focu
     private onTextValueChangedFromUI() {
         const textValue = this.view.getTextValue();
         if (this.view.elementExists) {
-            console.log(`onTextValueChangedFromUI: ${textValue}`);
             this.viewModel.textValue = new InputTextValue(textValue, true);
         }
     }

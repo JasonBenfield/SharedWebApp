@@ -1,10 +1,10 @@
 import { ContextualClass } from "../Bootstrap/ContextualClass";
 import { ListGroupCss, ListGroupItemCss } from "../Bootstrap/ListGroupCss";
-import { ComponentView, IComponentViewLayout } from "./ComponentView";
-import { BaseCompositeComponentView, CompositeComponentView } from "./CompositeComponent";
-import { BaseGridRowView, GridRowViewMixin, GridViewMixin, IGridRowViewLayout } from "./GridView";
+import { ComponentView, ComponentViewLayout } from "./ComponentView";
+import { BaseCompositeComponentView } from "./CompositeComponent";
+import { BaseGridRowView, GridRowViewLayout, GridRowViewMixin, GridViewMixin } from "./GridView";
 import { LinkViewMixin } from "./LinkComponent";
-import { IListView, ListViewMixin } from "./ListComponent";
+import { ListViewMixin } from "./ListComponent";
 import { IStyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
 import { BaseTextComponentView, TextViewMixin, TitleViewMixin } from "./TextComponent";
 import { Constructor } from "./Types";
@@ -39,8 +39,16 @@ export class ListGroupView extends ListGroupViewMixin(ListViewMixin(StyleableCom
     }
 }
 
+export interface IListGroupItemView {
+    styleAsActiveSelection(): this;
+    styleAsNotActiveSelection(): this;
+    styleAsAction(): this;
+    styleAsNotAnAction(): this;
+    setContext(context: ContextualClass): this;
+}
+
 export function ListGroupItemViewMixin<T extends Constructor<ComponentView & IStyleableComponentView>>(Base: T) {
-    return class extends Base {
+    return class extends Base implements IListGroupItemView {
         constructor(...args: any[]) {
             super(...args);
             this.setCss(this.listGroupItemCss);
@@ -97,12 +105,12 @@ export class GridListGroupView extends GridViewMixin(ListGroupViewMixin(ListView
     declare removeItem: (view: BaseGridRowView) => void;
 }
 
-export class ListGroupItemView<TLayout extends IComponentViewLayout, TPublicLayout extends IComponentViewLayout> extends ListGroupItemViewMixin(BaseCompositeComponentView)<TLayout, TPublicLayout> {
-    static listItem<TLayout extends IComponentViewLayout>(layout: TLayout) {
+export class ListGroupItemView<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends ComponentViewLayout<TPublicLayout>> extends ListGroupItemViewMixin(BaseCompositeComponentView)<TLayout, TPublicLayout> {
+    static listItem<TLayout extends ComponentViewLayout<TLayout>>(layout: TLayout) {
         return new ListGroupItemView("li", layout, l => Object.assign({}, l)).asLayout();
     }
 
-    static block<TLayout extends IComponentViewLayout>(layout: TLayout) {
+    static block<TLayout extends ComponentViewLayout<TLayout>>(layout: TLayout) {
         return new ListGroupItemView("div", layout, l => Object.assign({}, l)).asLayout();
     }
 
@@ -111,8 +119,8 @@ export class ListGroupItemView<TLayout extends IComponentViewLayout, TPublicLayo
     }
 }
 
-export class LinkListGroupItemView<TLayout extends IComponentViewLayout, TPublicLayout extends IComponentViewLayout> extends ListGroupItemViewMixin(LinkViewMixin(BaseCompositeComponentView)) {
-    static create<TLayout extends IComponentViewLayout>(layout: TLayout) {
+export class LinkListGroupItemView<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends ComponentViewLayout<TPublicLayout>> extends ListGroupItemViewMixin(LinkViewMixin(BaseCompositeComponentView)) {
+    static create<TLayout extends ComponentViewLayout<TLayout>>(layout: TLayout) {
         return new LinkListGroupItemView(layout, l => Object.assign({}, l)).asLayout();
     }
 
@@ -121,12 +129,12 @@ export class LinkListGroupItemView<TLayout extends IComponentViewLayout, TPublic
     }
 }
 
-export class TextCompositeListGroupItemView<TLayout extends IComponentViewLayout, TPublicLayout extends BaseTextComponentView> extends ListGroupItemViewMixin(TextViewMixin(TitleViewMixin(BaseCompositeComponentView))) {
-    static listItem<TLayout extends IComponentViewLayout, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+export class TextCompositeListGroupItemView<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView> extends ListGroupItemViewMixin(TextViewMixin(TitleViewMixin(BaseCompositeComponentView))) {
+    static listItem<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
         return new TextCompositeListGroupItemView("li", layout, toPublicLayout).asLayout();
     }
 
-    static block<TLayout extends IComponentViewLayout, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+    static block<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
         return new TextCompositeListGroupItemView("div", layout, toPublicLayout).asLayout();
     }
 
@@ -138,6 +146,10 @@ export class TextCompositeListGroupItemView<TLayout extends IComponentViewLayout
 export class TextListGroupItemView extends ListGroupItemViewMixin(TitleViewMixin(TextViewMixin(StyleableComponentViewMixin(ComponentView)))) {
     static block() {
         return new TextListGroupItemView("div");
+    }
+
+    static listItem() {
+        return new TextListGroupItemView("li");
     }
 }
 
@@ -151,20 +163,20 @@ export class TextLinkListGroupItemView extends ListGroupItemViewMixin(LinkViewMi
     }
 }
 
-export class GridListGroupItemView<TLayout extends IGridRowViewLayout, TPublicLayout extends ComponentView | IComponentViewLayout> extends GridRowViewMixin(ListGroupItemViewMixin(StyleableComponentViewMixin(BaseCompositeComponentView))) {
-    static listItem<TLayout extends IGridRowViewLayout>(layout: TLayout) {
+export class GridListGroupItemView<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends ComponentView | ComponentViewLayout<TPublicLayout>> extends GridRowViewMixin(ListGroupItemViewMixin(StyleableComponentViewMixin(BaseCompositeComponentView))) {
+    static listItem<TLayout extends GridRowViewLayout<TLayout>>(layout: TLayout) {
         return GridListGroupItemView.listItemWithPublicLayout(layout, l => l);
     }
 
-    static listItemWithPublicLayout<TLayout extends IGridRowViewLayout, TPublicLayout extends ComponentView | IComponentViewLayout>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+    static listItemWithPublicLayout<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends ComponentView | ComponentViewLayout<TPublicLayout>>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
         return new GridListGroupItemView("li", layout, toPublicLayout).asLayout();
     }
 
-    static block<TLayout extends IGridRowViewLayout>(layout: TLayout) {
+    static block<TLayout extends GridRowViewLayout<TLayout>>(layout: TLayout) {
         return GridListGroupItemView.blockWithPublicLayout(layout, l => l);
     }
 
-    static blockWithPublicLayout<TLayout extends IGridRowViewLayout, TPublicLayout extends ComponentView | IComponentViewLayout>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+    static blockWithPublicLayout<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends ComponentView | ComponentViewLayout<TPublicLayout>>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
         return new GridListGroupItemView("div", layout, toPublicLayout).asLayout();
     }
 
@@ -175,12 +187,12 @@ export class GridListGroupItemView<TLayout extends IGridRowViewLayout, TPublicLa
     }
 }
 
-export class GridLinkListGroupItemView<TLayout extends IGridRowViewLayout, TPublicLayout extends ComponentView | IComponentViewLayout> extends LinkViewMixin(GridRowViewMixin(ListGroupItemViewMixin(BaseCompositeComponentView))) {
-    static create<TLayout extends IGridRowViewLayout>(layout: TLayout) {
+export class GridLinkListGroupItemView<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends ComponentView | ComponentViewLayout<TPublicLayout>> extends LinkViewMixin(GridRowViewMixin(ListGroupItemViewMixin(BaseCompositeComponentView))) {
+    static create<TLayout extends GridRowViewLayout<TLayout>>(layout: TLayout) {
         return GridLinkListGroupItemView.createWithPublicLayout(layout, l => l);
     }
 
-    static createWithPublicLayout<TLayout extends IGridRowViewLayout, TPublicLayout extends ComponentView | IComponentViewLayout>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+    static createWithPublicLayout<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends ComponentView | ComponentViewLayout<TPublicLayout>>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
         return new GridLinkListGroupItemView(layout, toPublicLayout).asLayout();
     }
 
