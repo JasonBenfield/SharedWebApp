@@ -42,6 +42,7 @@
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\MvvmHost.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\ObservableArray.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\StyleableComponentView.ts" />
+	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\TextButtonComponent.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\TextComponent.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\TextLabelComponent.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\TextLinkComponent.ts" />

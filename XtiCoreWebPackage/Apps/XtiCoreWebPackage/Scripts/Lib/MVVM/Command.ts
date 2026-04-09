@@ -1,11 +1,62 @@
+import { ButtonViewMixin } from "./ButtonComponent";
 import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentView } from "./ComponentView";
 import { ComponentViewModel, ObservableChanges } from "./ComponentViewModel";
 import { CustomEventRegistrations, EventManager } from "./EventManager";
 import { StyleableComponentViewMixin } from "./StyleableComponentView";
-import { BaseTextComponentView,  ITextView,  TextChangeHandler, TextComponentView, TextViewModelMixin, TitleChangeHandler, TitleViewMixin, TitleViewModelMixin } from "./TextComponent";
+import { BaseTextComponentView, ITextView, TextChangeHandler, TextComponentView, TextViewModelMixin, TitleChangeHandler, TitleViewMixin, TitleViewModelMixin } from "./TextComponent";
+
+export class CommandViewModel extends TextViewModelMixin(TitleViewModelMixin(ComponentViewModel)) {
+    private _isEnabled = true;
+    get isEnabled() { return this._isEnabled; }
+    set isEnabled(isEnabled: boolean) { this._isEnabled = isEnabled; }
+
+    private _isInProgress = false;
+    get isInProgress() { return this._isInProgress; }
+    set isInProgress(isInProgress: boolean) { this._isInProgress = isInProgress; }
+}
+
+export interface ICommandView {
+    readonly when: CustomEventRegistrations<CommandEventLayout>;
+    enable(): void;
+    disable(): void;
+    styleAsInProgress(): void;
+    clearStyleAsInProgress(): void;
+}
 
 export type BaseCommandView = BaseTextComponentView & ICommandView;
+
+type CommandEventLayout = {
+    clicked: PointerEvent;
+}
+
+export class ButtonCommandView extends TitleViewMixin(ButtonViewMixin(StyleableComponentViewMixin(ComponentView))) implements ICommandView, ITextView {
+    constructor() {
+        super("button");
+        this.text = this.addChildView(new TextComponentView());
+    }
+
+    readonly text: TextComponentView;
+
+    setText(text: string) {
+        this.text.setText(text);
+    }
+
+    simulateClick() {
+        const element = this.element as HTMLButtonElement;
+        if (element && !element.disabled) {
+            element.click();
+        }
+    }
+
+    styleAsInProgress() {
+
+    }
+
+    clearStyleAsInProgress() {
+
+    }
+}
 
 export class CommandChangeHandler extends ComponentChangeHandler<CommandViewModel, ComponentView & ICommandView> {
     handleChanges(changes: ObservableChanges<CommandViewModel>): void {
@@ -97,6 +148,16 @@ export class Command extends Component {
         this.viewModel.title = title;
     }
 
+    get isEnabled() { return this.viewModel.isEnabled; }
+
+    enable() {
+        this.viewModel.isEnabled = true;
+    }
+
+    disable() {
+        this.viewModel.isEnabled = false;
+    }
+
     async execute() {
         if (!this.viewModel.isInProgress) {
             this.viewModel.isInProgress = true;
@@ -107,100 +168,5 @@ export class Command extends Component {
                 this.viewModel.isInProgress = false;
             }
         }
-    }
-}
-
-export class CommandViewModel extends TextViewModelMixin(TitleViewModelMixin(ComponentViewModel)) {
-    private _isEnabled = true;
-    get isEnabled() { return this._isEnabled; }
-    set isEnabled(isEnabled: boolean) { this._isEnabled = isEnabled; }
-
-    private _isInProgress = false;
-    get isInProgress() { return this._isInProgress; }
-    set isInProgress(isInProgress: boolean) { this._isInProgress = isInProgress; }
-}
-
-type CommandEventLayout = {
-    clicked: PointerEvent;
-}
-
-export interface ICommandView {
-    readonly when: CustomEventRegistrations<CommandEventLayout>;
-    enable(): void;
-    disable(): void;
-    styleAsInProgress(): void;
-    clearStyleAsInProgress(): void;
-}
-
-export class ButtonCommandView extends TitleViewMixin(StyleableComponentViewMixin(ComponentView)) implements ICommandView, ITextView {
-    private readonly events = this.eventManager.addEvents<CommandEventLayout>({
-        clicked: null
-    });
-    private hasRegisteredEvents = false;
-    private isEnabled = true;
-
-    constructor() {
-        super("button");
-        this.text = this.addChildView(new TextComponentView());
-    }
-
-    readonly text: TextComponentView;
-
-    protected addToDom(index: number) {
-        super.addToDom(index);
-        const element = this.element as HTMLButtonElement;
-        if (element && !this.isEnabled) {
-            element.disabled = true;
-        }
-    }
-
-    setText(text: string) {
-        this.text.setText(text);
-    }
-
-    enable() {
-        this.isEnabled = true;
-        const element = this.element as HTMLButtonElement;
-        if (element) {
-            element.disabled = false;
-        }
-    }
-
-    disable() {
-        this.isEnabled = false;
-        const element = this.element as HTMLButtonElement;
-        if (element) {
-            element.disabled = true;
-        }
-    }
-
-    get when() {
-        if (!this.hasRegisteredEvents) {
-            this.setEventListener(
-                "click",
-                this.handleClickEvent.bind(this) as any
-            );
-            this.hasRegisteredEvents = true;
-        }
-        return this.events.when;
-    }
-
-    simulateClick() {
-        const element = this.element as HTMLButtonElement;
-        if (element && !element.disabled) {
-            element.click();
-        }
-    }
-
-    styleAsInProgress() {
-
-    }
-
-    clearStyleAsInProgress() {
-
-    }
-
-    private handleClickEvent(evt: PointerEvent) {
-        this.events.events.clicked.invoke(evt);
     }
 }

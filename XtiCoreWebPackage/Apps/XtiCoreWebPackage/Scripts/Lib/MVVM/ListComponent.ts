@@ -2,6 +2,7 @@ import { DebouncedAction } from "../DebouncedAction";
 import { Component } from "./Component";
 import { ComponentView } from "./ComponentView";
 import { ComponentViewModel } from "./ComponentViewModel";
+import { CustomEventRegistrations } from "./EventManager";
 import { MvvmOptions } from "./MvvmOptions";
 import { ChangedObservableArray, ChangedObservableArrayItem, ObservableArray } from "./ObservableArray";
 import { StyleableComponentViewMixin } from "./StyleableComponentView";
@@ -25,7 +26,12 @@ export interface IViewModelUpdater<TSource, TItemViewModel> {
     updateFrom(source: TSource, viewModel: TItemViewModel): void;
 }
 
+type ListViewEventLayout = {
+    clicked: PointerEvent;
+}
+
 export interface IListView {
+    readonly whenList: CustomEventRegistrations<ListViewEventLayout>;
     addItem(item: ComponentView): void;
     insertItem(item: ComponentView, index: number): void;
     removeItem(item: ComponentView): void;
@@ -33,6 +39,28 @@ export interface IListView {
 
 export function ListViewMixin<T extends Constructor<ComponentView>>(Base: T) {
     return class extends Base implements IListView {
+
+        private readonly listEvents = this.eventManager.addEvents<ListViewEventLayout>({
+            clicked: null
+        });
+        get whenList() {
+            if (!this.hasRegisteredListEvents) {
+                this.setEventListener(
+                    "click",
+                    this.handleClickEvent.bind(this) as any
+                );
+                this.hasRegisteredListEvents = true;
+            }
+            return this.listEvents.when;
+        }
+
+        private hasRegisteredListEvents = false;
+
+        private handleClickEvent(evt: PointerEvent) {
+            this.listEvents.events.clicked.invoke(evt);
+        }
+
+        getItems() { return this.getChildViews(); }
 
         addItem(view: ComponentView) {
             this.addChildView(view);
@@ -187,6 +215,15 @@ export class ListComponentOptionsBuilderFromItemFactory<TItemViewModel extends C
     }
 }
 
+export class ListComponentItemClickedEventArgs<TItemComponent extends Component> {
+    constructor(readonly listItem: TItemComponent, readonly source: Component) {
+    }
+}
+
+type ListComponentEventLayout<TItemComponent extends Component> = {
+    itemClicked: ListComponentItemClickedEventArgs<TItemComponent>;
+}
+
 export class ListComponent<TSource, THeaderComponent extends Component, TItemComponent extends Component, TFooterComponent extends Component> extends Component {
     declare protected readonly viewModel: BaseListComponentViewModel<ComponentViewModel>;
     protected readonly view: BaseListView;
@@ -194,6 +231,22 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
     private readonly itemUpdater: IViewModelUpdater<TSource, ComponentViewModel>;
     private readonly _itemChanges: ChangedObservableArray<ComponentViewModel>[] = [];
     private readonly _itemComponents: Map<ComponentViewModel, TItemComponent> = new Map();
+    private readonly events = this.eventManager.addEvents<ListComponentEventLayout<TItemComponent>>({
+        itemClicked: null
+    });
+    get when() {
+        if (!this.hasRegisteredListEvents) {
+            this.view.whenList.clicked.then(this.onListClicked.bind(this));
+            this.hasRegisteredListEvents = true;
+        }
+        return this.events.when;
+    }
+
+    private onListClicked(evt: CustomEventInit<PointerEvent>) {
+        
+    }
+
+    private hasRegisteredListEvents = false;
 
     readonly header: THeaderComponent;
     private isHeaderVisibilityAutomated: boolean;

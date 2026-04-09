@@ -3,7 +3,7 @@ import { ComponentView, ComponentViewLayout } from "./ComponentView";
 import { ComponentViewModel, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
 import { BaseCompositeComponentView } from "./CompositeComponent";
 import { IStyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
-import { Constructor, ITitleView, ITitleViewModel } from "./Types";
+import { Constructor, HeadingSize, ITitleView, ITitleViewModel } from "./Types";
 
 export interface ITextViewModel {
     get text(): string;
@@ -140,7 +140,7 @@ export class TextComponentView extends TextViewMixin(TitleViewMixin(StyleableCom
         return new TextComponentView("blockquote");
     }
 
-    static heading(size: 1 | 2 | 3 | 4 | 5 | 6) {
+    static heading(size: HeadingSize) {
         return new TextComponentView(`h${size}`);
     }
 
@@ -205,7 +205,7 @@ export class TextCompositeComponentView<TLayout extends ComponentViewLayout<TLay
         ).asLayout();
     }
 
-    static heading<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(size: 1 | 2 | 3 | 4 | 5 | 6, layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+    static heading<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(size: HeadingSize, layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
         return new TextCompositeComponentView(
             `h${size}`, layout, toPublicLayout
         ).asLayout();

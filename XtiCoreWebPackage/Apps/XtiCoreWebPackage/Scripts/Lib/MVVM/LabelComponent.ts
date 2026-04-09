@@ -1,7 +1,7 @@
 import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentView, ComponentViewLayout } from "./ComponentView";
 import { ComponentViewModel, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
-import { CompositeComponentView } from "./CompositeComponent";
+import { BaseCompositeComponentView, CompositeComponentView } from "./CompositeComponent";
 import { IStyleableComponentView } from "./StyleableComponentView";
 import { TitleChangeHandler, TitleComponentMixin, TitleViewModelMixin } from "./TextComponent";
 import { Constructor, ITitleView, ITitleViewModel } from "./Types";
@@ -45,7 +45,7 @@ export type BaseLabelComponentView = ComponentView & ITitleView & ILabelView;
 export class LabelComponentView<
     TLayout extends ComponentViewLayout<TLayout>,
     TPublicLayout extends ComponentViewLayout<TPublicLayout>
-> extends LabelViewMixin(CompositeComponentView)<TLayout, TPublicLayout> {
+> extends LabelViewMixin(BaseCompositeComponentView)<TLayout, TPublicLayout> {
     static create<TLayout extends ComponentViewLayout<TLayout>>(layout: TLayout) {
         return LabelComponentView.createWithPublicLayout(layout, l => l);
     }
@@ -57,6 +57,8 @@ export class LabelComponentView<
     constructor(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
         super("label", layout, toPublicLayout);
     }
+
+    declare asLayout: () => LabelComponentView<TLayout, TPublicLayout> & TLayout;
 }
 
 export class LabelComponentChangeHandler extends ComponentChangeHandler<ComponentViewModel & BaseLabelComponentViewModel, ComponentView & ILabelView> {
@@ -79,12 +81,12 @@ export function LabelComponentMixin<T extends Constructor<Component>>(Base: T) {
         forComponent(forComponent: BaseUniqueComponent | null) {
             const existingForComponent = this._forComponent;
             if (existingForComponent) {
-                existingForComponent.uniqueWhen.idChanged.unregister(this.onForIDChanged.bind(this));
+                existingForComponent.whenUnique.idChanged.unregister(this.onForIDChanged.bind(this));
             }
             this._forComponent = forComponent;
             this.viewModel.forID = forComponent?.id || "";
             if (forComponent) {
-                forComponent.uniqueWhen.idChanged.then(this.onForIDChanged.bind(this));
+                forComponent.whenUnique.idChanged.then(this.onForIDChanged.bind(this));
             }
         }
 
@@ -98,7 +100,7 @@ export function LabelComponentMixin<T extends Constructor<Component>>(Base: T) {
         dispose() {
             const existingForComponent = this._forComponent;
             if (existingForComponent) {
-                existingForComponent.uniqueWhen.idChanged.unregister(this.onForIDChanged.bind(this));
+                existingForComponent.whenUnique.idChanged.unregister(this.onForIDChanged.bind(this));
             }
             this._forComponent = null;
             super.dispose();

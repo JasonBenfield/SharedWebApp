@@ -1,7 +1,6 @@
-import { ConsoleLogger } from "../ConsoleLogger";
 import { DebouncedAction } from "../DebouncedAction";
 import { ComponentView } from "./ComponentView";
-import { ChangedProperty, ComponentViewModel, ObservableChanges, UpdatedViewModel } from "./ComponentViewModel";
+import { ComponentViewModel, ObservableChanges, UpdatedViewModel } from "./ComponentViewModel";
 import { EventManager } from "./EventManager";
 import { MvvmOptions } from "./MvvmOptions";
 

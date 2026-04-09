@@ -1,7 +1,7 @@
 import { Component } from "./Component";
 import { ComponentView, ComponentViewLayout } from "./ComponentView";
 import { ComponentViewModel, ComponentViewModelInitializer } from "./ComponentViewModel";
-import { BaseCompositeComponentView, CompositeComponentView } from "./CompositeComponent";
+import { BaseCompositeComponentView } from "./CompositeComponent";
 import { ILinkView, ILinkViewModel, LinkComponentChangeHandler, LinkComponentMixin, LinkViewMixin, LinkViewModelMixin } from "./LinkComponent";
 import { StyleableComponentViewMixin } from "./StyleableComponentView";
 import { BaseTextComponentView, BaseTextComponentViewModel, ITextView, ITextViewModel, SynchedTitleChangeHandler, SynchedTitleComponentMixin, SynchedTitleViewModelMixin, TextChangeHandler, TextComponentMixin, TextViewMixin, TextViewModelMixin, TitleChangeHandler, TitleComponentMixin, TitleViewModelMixin } from "./TextComponent";
@@ -21,7 +21,7 @@ export type BaseTextLinkComponentViewModel = BaseTextComponentViewModel & ILinkV
 
 export class LinkWithTextComponentView<
     TLayout extends ComponentViewLayout<TLayout>
-> extends LinkViewMixin(CompositeComponentView)<TLayout, BaseTextComponentView> implements ILinkView {
+> extends LinkViewMixin(BaseCompositeComponentView)<TLayout, BaseTextComponentView> {
 
     static create<TLayout extends ComponentViewLayout<TLayout>>(layout: TLayout, toPublicLayout: (l: TLayout) => BaseTextComponentView) {
         return new LinkWithTextComponentView(layout, toPublicLayout).asLayout();

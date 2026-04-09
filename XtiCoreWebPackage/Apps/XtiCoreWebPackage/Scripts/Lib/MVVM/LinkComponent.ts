@@ -1,7 +1,7 @@
 import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentView, ComponentViewLayout } from "./ComponentView";
 import { ComponentViewModel, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
-import { BaseCompositeComponentView, CompositeComponentView } from "./CompositeComponent";
+import { BaseCompositeComponentView } from "./CompositeComponent";
 import { IStyleableComponentView } from "./StyleableComponentView";
 import { TitleChangeHandler, TitleComponentMixin, TitleViewModelMixin } from "./TextComponent";
 import { Constructor, ITitleView, ITitleViewModel } from "./Types";
@@ -70,6 +70,8 @@ export class LinkComponentView<
     constructor(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
         super("a", layout, toPublicLayout);
     }
+
+    declare asLayout: () => LinkComponentView<TLayout, TPublicLayout> & TLayout;
 }
 
 export class LinkComponentChangeHandler extends ComponentChangeHandler<ComponentViewModel & BaseLinkComponentViewModel, ComponentView & ILinkView> {

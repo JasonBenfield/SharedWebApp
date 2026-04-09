@@ -29,7 +29,7 @@ export interface IUniqueView {
 }
 
 export interface IUniqueComponent {
-    readonly uniqueWhen: CustomEventRegistrations<UniqueComponentEventLayout>;
+    readonly whenUnique: CustomEventRegistrations<UniqueComponentEventLayout>;
     get id(): string;
     set id(id: string);
     get name(): string;
@@ -47,7 +47,7 @@ export function UniqueComponentMixin<T extends Constructor<Component>>(Base: T) 
         private readonly uniqueEvents = this.eventManager.addEvents<UniqueComponentEventLayout>({
             idChanged: null
         });
-        readonly uniqueWhen = this.uniqueEvents.when;
+        readonly whenUnique = this.uniqueEvents.when;
 
         constructor(...args: any[]) {
             super(...args);

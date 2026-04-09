@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test } from "@jest/globals";
 import { DelayedAction } from "../Lib/DelayedAction";
 import { ButtonCommandView, Command, CommandOptionsBuilder, CommandViewModel } from "../Lib/MVVM/Command";
-import { ContainerComponentView } from "../Lib/MVVM/ContainerComponentView";
+import { ContainerComponentView } from "../Lib/MVVM/ContainerComponent";
 import { TestHost } from "./TestHost";
 
 const button1ElementID = "button1El";

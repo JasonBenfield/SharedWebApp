@@ -54,6 +54,11 @@ export class TextCss extends CssClass {
         return this;
     }
 
+    semibold() {
+        this.fontWeight = "fw-semibold";
+        return this;
+    }
+
     bolder() {
         this.fontWeight = "fw-bolder";
         return this;
@@ -87,6 +92,11 @@ export class TextCss extends CssClass {
 
     italicize() {
         this.style = "fst-italic";
+        return this;
+    }
+
+    normalStyle() {
+        this.style = "fst-normal";
         return this;
     }
 
@@ -131,6 +141,13 @@ export class TextCss extends CssClass {
         this._textSelection = "user-select-none";
     }
 
+    private _lineHeight = "";
+
+    lineHeight(lineHeight: "1" | "sm" | "base" | "lg") {
+        this._lineHeight = lineHeight;
+        return this;
+    }
+
     protected buildCss() {
         const classNames: string[] = [];
         if (this._color) {
@@ -170,6 +187,9 @@ export class TextCss extends CssClass {
         }
         if (this._textSelection) {
             classNames.push(this._textSelection);
+        }
+        if (this._lineHeight) {
+            classNames.push(`lh-${this._lineHeight}`);
         }
         return classNames.join(" ");
     }

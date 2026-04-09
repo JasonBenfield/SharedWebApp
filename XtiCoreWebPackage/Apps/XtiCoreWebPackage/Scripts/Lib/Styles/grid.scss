@@ -118,15 +118,15 @@
             border-radius: 0;
         }
 
-        & > .grid-cell:first-child {
-            padding-left: $list-group-item-padding-x;
-            border-left: $list-group-border-width solid var(--#{$prefix}list-group-border-color);
-        }
+            & > .grid-cell:first-child {
+                padding-left: $list-group-item-padding-x;
+                border-left: $list-group-border-width solid var(--#{$prefix}list-group-border-color);
+            }
 
-        & > .grid-cell:last-child {
-            padding-right: $list-group-item-padding-x;
-            border-right: $list-group-border-width solid var(--#{$prefix}list-group-border-color);
-        }
+            & > .grid-cell:last-child {
+                padding-right: $list-group-item-padding-x;
+                border-right: $list-group-border-width solid var(--#{$prefix}list-group-border-color);
+            }
 
         &:first-child {
             & > .grid-cell:first-child {
@@ -155,20 +155,46 @@
             background-color: $list-group-disabled-bg;
         }
         // Include both here for `<a>`s and `<button>`s
-        &.active {
+        &.grid-row.active {
             z-index: 2; // Place active items above their siblings for proper border styling
             color: $list-group-active-color;
             background-color: $list-group-active-bg;
             border-color: $list-group-active-border-color;
         }
+    }
 
-        & + & {
+    > .grid-row.list-group-item-action {
+        width: 100%;
+        color: var(--bs-list-group-action-color);
+        text-align: inherit;
+    }
+
+        > .grid-row.list-group-item-action:not(.active):hover, .list-group-item-action:not(.active):focus {
+            z-index: 1;
+            color: var(--bs-list-group-action-hover-color);
+            text-decoration: none;
+            background-color: var(--bs-list-group-action-hover-bg);
+        }
+
+        > .grid-row.list-group-item-action:not(.active):active {
+            color: var(--bs-list-group-action-active-color);
+            background-color: var(--bs-list-group-action-active-bg);
+        }
+
+    > .list-group-item.grid-row + .list-group-item.grid-row {
+        border-top-width: 0;
+
+        > .grid-cell {
             border-top-width: 0;
+        }
+    }
 
-            &.active {
-                margin-top: -$list-group-border-width;
-                border-top-width: $list-group-border-width;
-            }
+    > .list-group-item.grid-row.active + .list-group-item.grid-row.active {
+        margin-top: -$list-group-border-width;
+        border-top-width: $list-group-border-width;
+
+        > .grid-cell {
+            border-top-width: $list-group-border-width;
         }
     }
 }
@@ -187,29 +213,29 @@
     }
 }
 
-.list-group.grid.list-group-flush:not(:first-child) {
-    @include border-radius(0);
+    .list-group.grid.list-group-flush:not(:first-child) {
+        @include border-radius(0);
 
-    > .list-group-item:first-child > .grid-cell:first-child {
-        border-top-left-radius: 0;
+        > .list-group-item:first-child > .grid-cell:first-child {
+            border-top-left-radius: 0;
+        }
+
+        > .list-group-item:first-child > .grid-cell:last-child {
+            border-top-right-radius: 0;
+        }
     }
 
-    > .list-group-item:first-child > .grid-cell:last-child {
-        border-top-right-radius: 0;
-    }
-}
+    .list-group.grid.list-group-flush:not(:last-child) {
+        @include border-radius(0);
 
-.list-group.grid.list-group-flush:not(:last-child) {
-    @include border-radius(0);
+        > .list-group-item:last-child > .grid-cell:first-child {
+            border-bottom-left-radius: 0;
+        }
 
-    > .list-group-item:last-child > .grid-cell:first-child {
-        border-bottom-left-radius: 0;
+        > .list-group-item:last-child > .grid-cell:last-child {
+            border-bottom-right-radius: 0;
+        }
     }
-
-    > .list-group-item:last-child > .grid-cell:last-child {
-        border-bottom-right-radius: 0;
-    }
-}
 
 @each $state, $value in $theme-colors {
 

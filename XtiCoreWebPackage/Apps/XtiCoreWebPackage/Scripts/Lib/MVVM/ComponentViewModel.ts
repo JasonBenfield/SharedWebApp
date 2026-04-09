@@ -25,7 +25,6 @@ export class ComponentViewModel {
                 set: (target: any, property: string, value) => {
                     const originalValue = Reflect.get(target, property);
                     Reflect.set(target, property, value);
-                    ConsoleLogger.value.log(`changing '${originalValue}' to '${value}'`);
                     if (!areValuesEqual(originalValue, value)) {
                         const change = new ChangedProperty(
                             target,
@@ -35,7 +34,6 @@ export class ComponentViewModel {
                         );
                         const changes: any = this._changes;
                         changes[property] = change;
-                        ConsoleLogger.value.log(`propertyChanged.invoke: '${originalValue}' to '${value}'`);
                         this.events.events.propertyChanged?.invoke({
                             viewModel: this,
                             changedProperty: change

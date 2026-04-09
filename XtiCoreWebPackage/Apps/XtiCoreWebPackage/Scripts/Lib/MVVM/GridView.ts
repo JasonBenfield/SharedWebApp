@@ -6,10 +6,10 @@ import { ICssStyle, ICssStyles } from "../CssStyle";
 import { ComponentView, ComponentViewLayout } from "./ComponentView";
 import { BaseCompositeComponentView } from "./CompositeComponent";
 import { ILinkView, LinkViewMixin } from "./LinkComponent";
-import { IStyleableComponentView } from "./StyleableComponentView";
-import { BaseTextComponentView, ITextView } from "./TextComponent";
+import { IStyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
+import { BaseTextComponentView, ITextView, TextViewMixin, TitleViewMixin } from "./TextComponent";
 import { BaseTextLinkComponentView } from "./TextLinkComponent";
-import { Constructor } from "./Types";
+import { Constructor, HeadingSize } from "./Types";
 
 export type GridTemplateCss = CssLengthUnit | GridTemplateMinMax | GridTemplateRepeat | GridTemplateFitContent;
 
@@ -364,9 +364,7 @@ export function GridCellViewMixin<T extends Constructor<ComponentView & IStyleab
 
 export class GridView<TLayout extends GridViewLayout<TLayout>, TPublicLayout extends ComponentView | ComponentViewLayout<TPublicLayout>> extends GridViewMixin(BaseCompositeComponentView)<TLayout, TPublicLayout> {
     static block<TLayout extends GridViewLayout<TLayout>>(layout: TLayout) {
-        return new GridView(
-            "div", layout, l => l
-        ).asLayout();
+        return new GridView("div", layout, l => l).asLayout();
     }
 
     declare asLayout: () => GridView<TLayout, TPublicLayout> & TLayout;
@@ -380,30 +378,24 @@ export class GridView<TLayout extends GridViewLayout<TLayout>, TPublicLayout ext
 
 export class GridRowView<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends ComponentView | ComponentViewLayout<TPublicLayout>> extends GridRowViewMixin(BaseCompositeComponentView)<TLayout, TPublicLayout> {
     static block<TLayout extends GridRowViewLayout<TLayout>>(layout: TLayout) {
-        return new GridRowView(
-            "div", layout, l => l
-        ).asLayout();
+        return new GridRowView("div", layout, l => l).asLayout();
     }
     static listItem<TLayout extends GridRowViewLayout<TLayout>>(layout: TLayout) {
-        return new GridRowView(
-            "li", layout, l => l
-        ).asLayout();
+        return new GridRowView("li", layout, l => l).asLayout();
     }
 
     declare asLayout: () => GridRowView<TLayout, TPublicLayout> & TLayout;
 }
 
-export class GridRowTextView<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView> extends GridRowViewMixin(BaseCompositeComponentView)<TLayout, TPublicLayout> implements ITextView {
+export class GridRowTextCompositeView<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView> extends GridRowViewMixin(BaseCompositeComponentView)<TLayout, TPublicLayout> implements ITextView {
     static block<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new GridRowTextView(
-            "div", layout, toPublicLayout
-        ).asLayout();
+        return new GridRowTextCompositeView("div", layout, toPublicLayout).asLayout();
     }
     static listItem<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new GridRowTextView("li", layout, toPublicLayout).asLayout();
+        return new GridRowTextCompositeView("li", layout, toPublicLayout).asLayout();
     }
 
-    declare asLayout: () => GridRowTextView<TLayout, TPublicLayout> & TLayout;
+    declare asLayout: () => GridRowTextCompositeView<TLayout, TPublicLayout> & TLayout;
 
     setText(text: string) {
         this.publicLayout.setText(text);
@@ -412,14 +404,10 @@ export class GridRowTextView<TLayout extends GridRowViewLayout<TLayout>, TPublic
 
 export class GridRowTextLinkView<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextLinkComponentView> extends GridRowViewMixin(BaseCompositeComponentView)<TLayout, TPublicLayout> implements ITextView, ILinkView {
     static block<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextLinkComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new GridRowTextLinkView(
-            "div", layout, toPublicLayout
-        ).asLayout();
+        return new GridRowTextLinkView("div", layout, toPublicLayout).asLayout();
     }
     static listItem<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextLinkComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new GridRowTextLinkView(
-            "li", layout, toPublicLayout
-        ).asLayout();
+        return new GridRowTextLinkView("li", layout, toPublicLayout).asLayout();
     }
 
     declare asLayout: () => GridRowTextLinkView<TLayout, TPublicLayout> & TLayout;
@@ -442,9 +430,7 @@ export class BaseGridRowViewMixin<TLayout extends GridRowViewLayout<TLayout>, TP
 
 export class GridRowLinkView<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends ComponentView | ComponentViewLayout<TPublicLayout>> extends LinkViewMixin(BaseGridRowViewMixin)<TLayout, TPublicLayout> {
     static create<TLayout extends GridRowViewLayout<TLayout>>(layout: TLayout) {
-        return new GridRowLinkView(
-            layout, l => l
-        ).asLayout();
+        return new GridRowLinkView(layout, l => l).asLayout();
     }
 
     constructor(
@@ -479,34 +465,62 @@ export class GridRowLinkWithTextView<TLayout extends GridRowViewLayout<TLayout>,
 
 export class GridCellView<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends ComponentView | ComponentViewLayout<TPublicLayout>> extends GridCellViewMixin(BaseCompositeComponentView)<TLayout, TPublicLayout> {
     static block<TLayout extends ComponentViewLayout<TLayout>>(layout: TLayout) {
-        return new GridCellView(
-            "div", layout, l => l
-        ).asLayout();
+        return new GridCellView("div", layout, l => l).asLayout();
     }
 
     declare asLayout: () => GridCellView<TLayout, TPublicLayout> & TLayout;
 }
 
-export class GridCellTextView<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView> extends GridCellViewMixin(BaseCompositeComponentView)<TLayout, TPublicLayout> implements ITextView {
+export class GridCellTextCompositeView<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView> extends GridCellViewMixin(BaseCompositeComponentView)<TLayout, TPublicLayout> implements ITextView {
     static block<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new GridCellTextView(
-            "div", layout, toPublicLayout
-        ).asLayout();
+        return new GridCellTextCompositeView("div", layout, toPublicLayout).asLayout();
     }
 
-    declare asLayout: () => GridCellTextView<TLayout, TPublicLayout> & TLayout;
+    declare asLayout: () => GridCellTextCompositeView<TLayout, TPublicLayout> & TLayout;
 
     setText(text: string) {
         this.publicLayout.setText(text);
     }
 }
 
-export class GridCellTextLinkView<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextLinkComponentView> extends GridCellViewMixin(BaseCompositeComponentView)<TLayout, TPublicLayout> implements ITextView, ILinkView {
-    static block<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextLinkComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new GridCellTextLinkView("div", layout, toPublicLayout).asLayout();
+export class GridCellTextView extends GridCellViewMixin(TitleViewMixin(TextViewMixin(StyleableComponentViewMixin(ComponentView)))) {
+    static block() {
+        return new GridCellTextView("div");
     }
 
-    declare asLayout: () => GridCellTextLinkView<TLayout, TPublicLayout> & TLayout;
+    static span() {
+        return new GridCellTextView("span");
+    }
+
+    static strong() {
+        return new GridCellTextView("strong");
+    }
+
+    static small() {
+        return new GridCellTextView("small");
+    }
+
+    static heading(size: HeadingSize) {
+        return new GridCellTextView(`h${size}`);
+    }
+}
+
+export class GridCellTextLinkView extends GridCellViewMixin(LinkViewMixin(TitleViewMixin(TextViewMixin(StyleableComponentViewMixin(ComponentView))))) {
+    static create() {
+        return new GridCellTextLinkView();
+    }
+
+    constructor() {
+        super("a");
+    }
+}
+
+export class GridCellTextLinkCompositeView<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextLinkComponentView> extends GridCellViewMixin(BaseCompositeComponentView)<TLayout, TPublicLayout> implements ITextView, ILinkView {
+    static block<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextLinkComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        return new GridCellTextLinkCompositeView("div", layout, toPublicLayout).asLayout();
+    }
+
+    declare asLayout: () => GridCellTextLinkCompositeView<TLayout, TPublicLayout> & TLayout;
 
     setHref(href: string) {
         this.publicLayout.setHref(href);
@@ -515,6 +529,25 @@ export class GridCellTextLinkView<TLayout extends ComponentViewLayout<TLayout>, 
     setTarget(target: string) {
         this.publicLayout.setTarget(target);
     }
+
+    setText(text: string) {
+        this.publicLayout.setText(text);
+    }
+}
+
+export class BaseGridCellViewMixin<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends ComponentView | ComponentViewLayout<TPublicLayout>> extends GridCellViewMixin(BaseCompositeComponentView)<TLayout, TPublicLayout> {
+}
+
+export class GridCellLinkWithTextView<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView> extends LinkViewMixin(BaseGridCellViewMixin)<TLayout, TPublicLayout> implements ITextView {
+    static create<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        return new GridCellLinkWithTextView(layout, toPublicLayout).asLayout();
+    }
+
+    constructor(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        super("a", layout, toPublicLayout)
+    }
+
+    declare asLayout: () => GridCellLinkWithTextView<TLayout, TPublicLayout> & TLayout;
 
     setText(text: string) {
         this.publicLayout.setText(text);

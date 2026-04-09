@@ -54,17 +54,23 @@ class EventManagerEvents<TEvents> {
 }
 
 export class EventManager {
-    private readonly _target: EventTarget;
+    private _target: EventTarget | null = null;
+
+    private get target() {
+        let target = this._target;
+        if (!target) {
+            target = new EventTarget();
+            this._target = target;
+        }
+        return target;
+    }
+
     private readonly events: IEvents = {};
     private readonly when: IWhen = {};
 
-    constructor() {
-        this._target = new EventTarget();
-    }
-
     addEvents<TEvents>(template: EventTemplate<TEvents>) {
         for (const key in template) {
-            const event = new CustomEventTarget<any>(key, this._target);
+            const event = new CustomEventTarget<any>(key, this.target);
             if (!this.events[key]) {
                 this.events[key] = event;
             }
@@ -91,7 +97,7 @@ export class EventManager {
             if (!this.events[key]) {
                 throw new Error(`Event '${key}' not found.`);
             }
-            this.events[key].addEventTarget(otherEventManger._target);
+            this.events[key].addEventTarget(otherEventManger.target);
         }
     }
 

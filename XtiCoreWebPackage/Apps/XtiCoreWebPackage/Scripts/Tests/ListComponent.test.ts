@@ -5,8 +5,10 @@ import { GeneratedID } from "../Lib/GeneratedID";
 import { ComponentViewModel } from "../Lib/MVVM/ComponentViewModel";
 import { CompositeComponentBuilder, CompositeComponentView } from "../Lib/MVVM/CompositeComponent";
 import { IViewModelUpdater, ListComponent, ListComponentOptionsBuilder, ListComponentView, ListComponentViewModel, ListItemFactory, TextViewModelUpdater } from "../Lib/MVVM/ListComponent";
+import { TextButtonComponent, TextButtonComponentView, TextButtonComponentViewModel } from "../Lib/MVVM/TextButtonComponent";
 import { TextComponent, TextComponentView, TextComponentViewModel } from "../Lib/MVVM/TextComponent";
 import { TestHost } from "./TestHost";
+import { DelayedAction } from "../Lib/DelayedAction";
 
 const elementID = "listEl";
 const headerID = "headerEl";
@@ -165,6 +167,27 @@ describe("List Component", () => {
         expect(document.getElementById(headerID)).toBeNull();
         expect(document.getElementById(footerID)).toBeNull();
     });
+    test("should handle click", async () => {
+        const { view, component } = createListWithHeaderAndFooter();
+        component.header.text = "Header";
+        component.setItems(new TestItem(1, "Test 1"), new TestItem(2, "Test 2"), new TestItem(3, "Test 3"));
+        component.footer.text = "Footer";
+        type TestListItemComponent = ReturnType<typeof createCompositeItemComponent>;
+        let clickedListItem: TestListItemComponent | null = null;
+        let clickedButton: TextButtonComponent | null = null;
+        component.when.itemClicked.then((evt) => {
+            clickedListItem = evt.detail.listItem;
+            clickedButton = evt.detail.source as TextButtonComponent;
+        });
+        TestHost.value.show(view, component);
+        const listItemViews = view.getItems();
+        const itemView2 = listItemViews[2] as ReturnType<typeof createCompositeItemView>;
+        itemView2.button.simulateClick();
+        await DelayedAction.delay(10);
+        const expectedListItem = component.getItems()[1];
+        expect(clickedListItem).toBe(expectedListItem);
+        expect(clickedButton).toBe(expectedListItem.button);
+    });
 });
 
 function getListItemElement(index: number) {
@@ -219,6 +242,7 @@ class TestItemComponentViewModel extends ComponentViewModel {
 
     readonly id = new TextComponentViewModel();
     readonly value = new TextComponentViewModel();
+    readonly button = new TextButtonComponentViewModel();
 }
 
 class TestItemViewModelUpdater implements IViewModelUpdater<TestItem, TestItemComponentViewModel> {
@@ -347,9 +371,10 @@ function createListWithHeaderAndFooter() {
 }
 
 function createCompositeItemView() {
-    const view = CompositeComponentView.block({
+    const view = CompositeComponentView.listItem({
         id: new TextComponentView(),
-        value: new TextComponentView()
+        value: new TextComponentView(),
+        button: new TextButtonComponentView()
     });
     const itemID = GeneratedID.next("listItem");
     view.setID(itemID);
@@ -363,7 +388,8 @@ function createCompositeItemComponent(itemVM: TestItemComponentViewModel, itemVi
         .view(itemView)
         .factory({
             id: (vm, v) => new TextComponent(vm, v),
-            value: (vm, v) => new TextComponent(vm, v)
+            value: (vm, v) => new TextComponent(vm, v),
+            button: (vm, v) => new TextButtonComponent(vm, v)
         })
         .build()
 }

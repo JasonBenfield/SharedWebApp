@@ -17,20 +17,25 @@ export class FormControlCss extends CssClass {
 
     static control() { return new FormControlCss(); }
 
-    static makeLarge() { return new FormControlCss().makeLarge(); }
+    static large() { return new FormControlCss().large(); }
 
-    static makeSmall() { return new FormControlCss().makeSmall(); }
+    static small() { return new FormControlCss().small(); }
 
     private type = "";
     private size = "";
 
-    makeLarge() {
+    large() {
         this.size = "lg";
         return this;
     }
 
-    makeSmall() {
+    small() {
         this.size = "sm";
+        return this;
+    }
+
+    normalSize() {
+        this.size = "";
         return this;
     }
 

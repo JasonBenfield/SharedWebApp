@@ -13,14 +13,14 @@ import { ButtonCommandView, Command, CommandOptionsBuilder, CommandViewModel } f
 import { ComponentViewModel } from "../../Lib/MVVM/ComponentViewModel";
 import { CompositeComponentBuilder, CompositeComponentView } from "../../Lib/MVVM/CompositeComponent";
 import { FormGroupContainerView, FormGroupText, FormGroupTextView, FormGroupViewModel } from "../../Lib/MVVM/FormGroup";
-import { GridCellTextView, GridCellView, GridRowTextView, GridRowView, GridView } from "../../Lib/MVVM/GridView";
+import { GridCellTextView, GridCellView, GridRowView, GridSpan, GridView } from "../../Lib/MVVM/GridView";
 import { InputComponentView } from "../../Lib/MVVM/InputComponent";
-import { IViewModelUpdater, ListComponent, ListComponentOptionsBuilder, ListComponentView, ListComponentViewModel, ListItemFactory, TextViewModelUpdater } from "../../Lib/MVVM/ListComponent";
+import { IViewModelUpdater, ListComponent, ListComponentOptionsBuilder, ListComponentViewModel, ListItemFactory, TextViewModelUpdater } from "../../Lib/MVVM/ListComponent";
+import { GridListGroupItemView, GridListGroupView, GridTextListGroupItemView, ListGroupView, TextListGroupItemView } from "../../Lib/MVVM/ListGroup";
 import { TextComponent, TextComponentView, TextComponentViewModel } from "../../Lib/MVVM/TextComponent";
-import { TextLinkComponent, TextLinkComponentViewModel, TextLinkCompositeComponentView } from "../../Lib/MVVM/TextLinkComponent";
+import { LinkWithTextComponentView, TextLinkComponent, TextLinkComponentViewModel } from "../../Lib/MVVM/TextLinkComponent";
 import { TransformedInputComponent, TransformedInputComponentViewModel, TransformedNumberInput } from "../../Lib/MVVM/TransformedInputComponent";
 import { AppHost } from "../AppHost";
-import { GridListGroupView, ListGroupView, TextListGroupItemView } from "../../Lib/MVVM/ListGroup";
 
 class MainPage {
 
@@ -60,23 +60,36 @@ class MainPage {
                         .withHeaderFactory(
                             () => new ListItemFactory(() => new TextComponentViewModel())
                                 .withView(() => {
-                                    return GridRowTextView.listItem({
-                                        textCell: GridCellTextView.block()
-                                    },
-                                        l => l.textCell)
+                                    const headerView = GridTextListGroupItemView.listItem(
+                                        {
+                                            textCell: GridCellTextView.block()
+                                        },
+                                        l => l.textCell
+                                    );
+                                    headerView.textCell.setGridColumn(new GridSpan(2));
+                                    return headerView;
                                 })
                                 .withComponent((itemVM, itemView) => new TextComponent(itemVM, itemView))
                         )
                         .withFooterFactory(
                             () => new ListItemFactory(() => new TextComponentViewModel())
-                                .withView(() => TextComponentView.listItem())
+                                .withView(() => {
+                                    const footerView = GridTextListGroupItemView.listItem(
+                                        {
+                                            textCell: GridCellTextView.block()
+                                        },
+                                        l => l.textCell
+                                    );
+                                    footerView.textCell.setGridColumn(new GridSpan(2));
+                                    return footerView;
+                                })
                                 .withComponent((itemVM, itemView) => new TextComponent(itemVM, itemView))
                         )
                         .withItemFactory(() => new ListItemFactory(() => new TestItemComponentViewModel())
                             .withView(
-                                () => CompositeComponentView.block({
-                                    id: new TextComponentView(),
-                                    value: new TextComponentView()
+                                () => GridListGroupItemView.block({
+                                    id: GridCellTextView.block(),
+                                    value: GridCellTextView.block()
                                 })
                             )
                             .withComponent((itemVM, itemView) => {
@@ -149,8 +162,11 @@ class MainPageView {
         layout.content.setCss(new FlexCss().grow(1));
         layout.content.setCss(OverflowCss.auto());
         layout.content.container.setCss(ContainerCss.xs());
-        layout.content.container.link.text.setCss(MarginCss.end(1));
-        layout.content.container.link.otherText.setText("Other Text");
+        this.view.publicLayout.link.text.setCss(MarginCss.end(1));
+        this.view.publicLayout.link.otherText.setText("Other Text");
+        this.view.publicLayout.textList.setCss(MarginCss.bottom(3));
+        this.view.publicLayout.compositeList.setTemplateColumns(CssLengthUnit.auto(), CssLengthUnit.flex(1));
+        this.view.publicLayout.compositeList.setCss(MarginCss.bottom(3));
         layout.toolbar.setCss(BackgroundCss.gradient(ContextualClass.secondary).subtle());
         layout.toolbar.container.setCss(ContainerCss.xs());
         layout.toolbar.container.setCss(PaddingCss.xs(3));
@@ -176,7 +192,7 @@ class MainPageView {
                 formGroups: FormGroupContainerView.create({
                     formGroup: new FormGroupTextView()
                 }),
-                link: TextLinkCompositeComponentView.create({
+                link: LinkWithTextComponentView.create({
                     text: TextComponentView.span(),
                     otherText: TextComponentView.span()
                 }, l => l.text),

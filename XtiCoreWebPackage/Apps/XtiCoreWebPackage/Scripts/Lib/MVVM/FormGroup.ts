@@ -10,9 +10,8 @@ import { BaseInputComponentView, InputComponent, InputComponentView, InputCompon
 import { BaseLinkComponentView, BaseLinkComponentViewModel, LinkComponent, LinkComponentView, LinkComponentViewModel } from "./LinkComponent";
 import { BaseTextComponentView, BaseTextComponentViewModel, TextComponent, TextComponentView, TextComponentViewModel, TextCompositeComponentView } from "./TextComponent";
 import { BaseTextLabelComponentView, BaseTextLabelComponentViewModel, TextLabelComponent, TextLabelComponentView, TextLabelComponentViewModel } from "./TextLabelComponent";
-import { BaseTextLinkComponentView, BaseTextLinkComponentViewModel, TextLinkComponent, TextLinkComponentView, TextLinkComponentViewModel, TextLinkCompositeComponentView } from "./TextLinkComponent";
+import { BaseTextLinkComponentView, BaseTextLinkComponentViewModel, LinkWithTextComponentView, TextLinkComponent, TextLinkComponentView, TextLinkComponentViewModel, TextLinkCompositeComponentView } from "./TextLinkComponent";
 import { ITransformedInput, TransformedInputComponent, TransformedInputComponentViewModel } from "./TransformedInputComponent";
-import { BaseUniqueComponent } from "./UniqueComponent";
 
 interface IFormGroupViewLayout<TValueView extends ComponentView> {
     captionCell: ComponentView & {
@@ -128,8 +127,10 @@ export class FormGroupTextView extends FormGroupView<TextComponentView> {
 export class FormGroupTextCompositeView<TLayout extends ComponentViewLayout<TLayout>> extends FormGroupView<TextCompositeComponentView<TLayout>> {
     constructor(layout: TLayout, toPublicLayout: (l: TLayout) => BaseTextComponentView) {
         super(TextCompositeComponentView.block(layout, toPublicLayout));
-        this.publicLayout.value.setCss(FormControlCss.text());
+        this.publicLayout.value.setCss(this.formControlCss);
     }
+
+    private readonly formControlCss = FormControlCss.text();
 }
 
 export class FormGroupText extends FormGroup<BaseTextComponentViewModel, BaseTextComponentView, TextComponent> {
@@ -182,9 +183,16 @@ export class FormGroupTextLinkView extends FormGroupView<TextLinkComponentView> 
     }
 }
 
-export class FormGroupTextLinkCompositeView<TLayout extends ComponentViewLayout<TLayout>> extends FormGroupView<TextLinkCompositeComponentView<TLayout>> {
-    constructor(layout: TLayout, toPublicLayout: (l: TLayout) => BaseTextComponentView) {
-        super(TextLinkCompositeComponentView.create(layout, toPublicLayout));
+export class FormGroupTextLinkCompositeView<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextLinkComponentView> extends FormGroupView<TextLinkCompositeComponentView<TLayout>> {
+    constructor(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        super(TextLinkCompositeComponentView.block(layout, toPublicLayout));
+        this.publicLayout.value.setCss(FormControlCss.link());
+    }
+}
+
+export class FormGroupLinkWithTextView<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView> extends FormGroupView<TextLinkCompositeComponentView<TLayout>> {
+    constructor(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        super(LinkWithTextComponentView.create(layout, toPublicLayout));
         this.publicLayout.value.setCss(FormControlCss.link());
     }
 }

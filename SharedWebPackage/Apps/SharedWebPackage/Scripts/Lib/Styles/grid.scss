@@ -119,15 +119,15 @@
             border-radius: 0;
         }
 
-        & > .grid-cell:first-child {
-            padding-left: $list-group-item-padding-x;
-            border-left: $list-group-border-width solid var(--#{$prefix}list-group-border-color);
-        }
+            & > .grid-cell:first-child {
+                padding-left: $list-group-item-padding-x;
+                border-left: $list-group-border-width solid var(--#{$prefix}list-group-border-color);
+            }
 
-        & > .grid-cell:last-child {
-            padding-right: $list-group-item-padding-x;
-            border-right: $list-group-border-width solid var(--#{$prefix}list-group-border-color);
-        }
+            & > .grid-cell:last-child {
+                padding-right: $list-group-item-padding-x;
+                border-right: $list-group-border-width solid var(--#{$prefix}list-group-border-color);
+            }
 
         &:first-child {
             & > .grid-cell:first-child {
@@ -165,6 +165,10 @@
 
         & + & {
             border-top-width: 0;
+
+            & > .grid-cell {
+                border-top-width: 0;
+            }
 
             &.active {
                 margin-top: -$list-group-border-width;
