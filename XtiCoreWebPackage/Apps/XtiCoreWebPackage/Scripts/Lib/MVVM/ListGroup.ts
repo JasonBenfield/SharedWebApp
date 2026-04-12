@@ -1,16 +1,21 @@
 import { ContextualClass } from "../Bootstrap/ContextualClass";
 import { ListGroupCss, ListGroupItemCss } from "../Bootstrap/ListGroupCss";
+import { ButtonViewMixin } from "./ButtonComponent";
 import { ComponentView, ComponentViewLayout } from "./ComponentView";
 import { BaseCompositeComponentView } from "./CompositeComponent";
-import { BaseGridRowView, GridRowLinkView, GridRowLinkWithTextView, GridRowTextCompositeView, GridRowView, GridRowViewLayout, GridRowViewMixin, GridViewMixin } from "./GridView";
-import { LinkViewMixin } from "./LinkComponent";
+import { BaseGridRowView, GridRowLinkView, GridRowLinkContainerOfTextView, GridRowContainerOfTextView, GridRowView, GridRowViewLayout, GridRowViewMixin, GridViewMixin, GridCellContainerOfTextLinkView, GridRowContainerOfTextLinkView, GridRowButtonView, GridRowButtonContainerOfTextView, GridRowLabelView, GridRowLabelContainerOfTextView, GridRowContainerOfTextLabelView, GridRowContainerOfTextButtonView } from "./GridView";
+import { LabelViewMixin } from "./LabelComponent";
+import { ILinkView, LinkViewMixin } from "./LinkComponent";
 import { ListViewMixin } from "./ListComponent";
-import { IStyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
-import { BaseTextComponentView, TextViewMixin, TitleViewMixin } from "./TextComponent";
-import { Constructor } from "./Types";
+import { StyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
+import { BaseTextButtonComponentView } from "./TextButtonComponent";
+import { BaseTextComponentView, ITextView, TextViewMixin, TitleViewMixin } from "./TextComponent";
+import { BaseTextLabelComponentView } from "./TextLabelComponent";
+import { BaseTextLinkComponentView } from "./TextLinkComponent";
+import { Constructor, ITitleView } from "./Types";
 
 
-export function ListGroupViewMixin<T extends Constructor<ComponentView & IStyleableComponentView>>(Base: T) {
+export function ListGroupViewMixin<T extends Constructor<StyleableComponentView>>(Base: T) {
     return class extends Base {
         private readonly listGroupCss = new ListGroupCss();
         constructor(...args: any[]) {
@@ -25,7 +30,7 @@ export function ListGroupViewMixin<T extends Constructor<ComponentView & IStylea
     }
 }
 
-export class ListGroupView extends ListGroupViewMixin(ListViewMixin(StyleableComponentViewMixin(ComponentView))) {
+export class ListGroupView extends ListGroupViewMixin(ListViewMixin(StyleableComponentView)) {
     static unorderedList() {
         return new ListGroupView("ul");
     }
@@ -47,7 +52,7 @@ export interface IListGroupItemView {
     setContext(context: ContextualClass): this;
 }
 
-export function ListGroupItemViewMixin<T extends Constructor<ComponentView & IStyleableComponentView>>(Base: T) {
+export function ListGroupItemViewMixin<T extends Constructor<StyleableComponentView>>(Base: T) {
     return class extends Base implements IListGroupItemView {
         constructor(...args: any[]) {
             super(...args);
@@ -96,7 +101,7 @@ export class GridListGroupView extends GridViewMixin(ListGroupViewMixin(ListView
     constructor(listTagName = "div") {
         super(listTagName);
     }
-    
+
 
     declare addItem: (view: BaseGridRowView) => void;
 
@@ -133,20 +138,20 @@ export class LinkListGroupItemView<TLayout extends ComponentViewLayout<TLayout>,
     declare asLayout: () => LinkListGroupItemView<TLayout, TPublicLayout> & TLayout;
 }
 
-export class TextCompositeListGroupItemView<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView> extends ListGroupItemViewMixin(TextViewMixin(TitleViewMixin(BaseCompositeComponentView))) {
+export class ListGroupItemContainerOfTextView<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView> extends ListGroupItemViewMixin(TextViewMixin(TitleViewMixin(BaseCompositeComponentView))) {
     static listItem<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new TextCompositeListGroupItemView("li", layout, toPublicLayout).asLayout();
+        return new ListGroupItemContainerOfTextView("li", layout, toPublicLayout).asLayout();
     }
 
     static block<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new TextCompositeListGroupItemView("div", layout, toPublicLayout).asLayout();
+        return new ListGroupItemContainerOfTextView("div", layout, toPublicLayout).asLayout();
     }
 
     constructor(tagName: string, layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
         super(tagName, layout, toPublicLayout);
     }
 
-    declare asLayout: () => TextCompositeListGroupItemView<TLayout, TPublicLayout> & TLayout;
+    declare asLayout: () => ListGroupItemContainerOfTextView<TLayout, TPublicLayout> & TLayout;
 }
 
 export class TextListGroupItemView extends ListGroupItemViewMixin(TitleViewMixin(TextViewMixin(StyleableComponentViewMixin(ComponentView)))) {
@@ -159,13 +164,33 @@ export class TextListGroupItemView extends ListGroupItemViewMixin(TitleViewMixin
     }
 }
 
-export class TextLinkListGroupItemView extends ListGroupItemViewMixin(LinkViewMixin(TitleViewMixin(TextViewMixin(StyleableComponentViewMixin(ComponentView))))) {
+export class ListGroupItemTextLinkView extends ListGroupItemViewMixin(LinkViewMixin(TitleViewMixin(TextViewMixin(StyleableComponentViewMixin(ComponentView))))) {
     static create() {
-        return new TextListGroupItemView();
+        return new ListGroupItemTextLinkView();
     }
 
     constructor() {
         super("a");
+    }
+}
+
+export class ListGroupItemTextButtonView extends ListGroupItemViewMixin(ButtonViewMixin(TitleViewMixin(TextViewMixin(StyleableComponentViewMixin(ComponentView))))) {
+    static create() {
+        return new ListGroupItemTextButtonView();
+    }
+
+    constructor() {
+        super("button");
+    }
+}
+
+export class ListGroupItemTextLabelView extends ListGroupItemViewMixin(LabelViewMixin(TitleViewMixin(TextViewMixin(StyleableComponentViewMixin(ComponentView))))) {
+    static create() {
+        return new ListGroupItemTextLabelView();
+    }
+
+    constructor() {
+        super("label");
     }
 }
 
@@ -187,107 +212,150 @@ export class GridListGroupItemView<TLayout extends GridRowViewLayout<TLayout>, T
     }
 
     declare asLayout: () => GridListGroupItemView<TLayout, TPublicLayout> & TLayout;
-
-    setContext(context: ContextualClass) {
-        this.setListGroupItemCss(css => css.context(context));
-        this.setGridRowCss(css => css.context(context));
-        return this;
-    }
 }
 
-export class GridTextListGroupItemView<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView> extends ListGroupItemViewMixin(GridRowTextCompositeView)<TLayout, TPublicLayout> {
+export class GridListGroupItemContainerOfTextView<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView> extends ListGroupItemViewMixin(GridRowContainerOfTextView)<TLayout, TPublicLayout> {
     static block<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new GridTextListGroupItemView("div", layout, toPublicLayout).asLayout();
+        return new GridListGroupItemContainerOfTextView("div", layout, toPublicLayout).asLayout();
     }
     static listItem<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new GridTextListGroupItemView("li", layout, toPublicLayout).asLayout();
+        return new GridListGroupItemContainerOfTextView("li", layout, toPublicLayout).asLayout();
     }
 
-    declare asLayout: () => GridTextListGroupItemView<TLayout, TPublicLayout> & TLayout;
-
-    setContext(context: ContextualClass) {
-        this.setListGroupItemCss(css => css.context(context));
-        this.setGridRowCss(css => css.context(context));
-        return this;
-    }
+    declare asLayout: () => GridListGroupItemContainerOfTextView<TLayout, TPublicLayout> & TLayout;
 }
 
-export class GridLinkListGroupItemView<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends ComponentView | ComponentViewLayout<TPublicLayout>> extends ListGroupItemViewMixin(GridRowLinkView)<TLayout, TPublicLayout> {
+export class GridListGroupItemContainerOfTextLinkView<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextLinkComponentView>
+    extends ListGroupItemViewMixin(GridRowContainerOfTextLinkView)<TLayout, TPublicLayout>  {
+
+    static block<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextLinkComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        return new GridListGroupItemContainerOfTextLinkView("div", layout, toPublicLayout).asLayout();
+    }
+    static listItem<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextLinkComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        return new GridListGroupItemContainerOfTextLinkView("li", layout, toPublicLayout).asLayout();
+    }
+
+    declare asLayout: () => GridListGroupItemContainerOfTextLinkView<TLayout, TPublicLayout> & TLayout;
+}
+
+export class GridListGroupItemContainerOfTextLabelView<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextLabelComponentView>
+    extends ListGroupItemViewMixin(GridRowContainerOfTextLabelView)<TLayout, TPublicLayout> {
+
+    static block<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextLabelComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        return new GridListGroupItemContainerOfTextLabelView("div", layout, toPublicLayout).asLayout();
+    }
+    static listItem<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextLabelComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        return new GridListGroupItemContainerOfTextLabelView("li", layout, toPublicLayout).asLayout();
+    }
+
+    declare asLayout: () => GridListGroupItemContainerOfTextLabelView<TLayout, TPublicLayout> & TLayout;
+}
+
+export class GridListGroupItemContainerOfTextButtonView<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextButtonComponentView>
+    extends ListGroupItemViewMixin(GridRowContainerOfTextButtonView)<TLayout, TPublicLayout> {
+
+    static block<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextButtonComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        return new GridListGroupItemContainerOfTextButtonView("div", layout, toPublicLayout).asLayout();
+    }
+    static listItem<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextButtonComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        return new GridListGroupItemContainerOfTextButtonView("li", layout, toPublicLayout).asLayout();
+    }
+
+    declare asLayout: () => GridListGroupItemContainerOfTextButtonView<TLayout, TPublicLayout> & TLayout;
+}
+
+export class GridListGroupItemLinkView<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends ComponentView | ComponentViewLayout<TPublicLayout>>
+    extends ListGroupItemViewMixin(GridRowLinkView)<TLayout, TPublicLayout> {
+
     static create<TLayout extends GridRowViewLayout<TLayout>>(layout: TLayout) {
-        return GridLinkListGroupItemView.createWithPublicLayout(layout, l => l);
+        return GridListGroupItemLinkView.createWithPublicLayout(layout, l => l);
     }
 
     static createWithPublicLayout<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends ComponentView | ComponentViewLayout<TPublicLayout>>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new GridLinkListGroupItemView(layout, toPublicLayout).asLayout();
+        return new GridListGroupItemLinkView(layout, toPublicLayout).asLayout();
     }
 
     constructor(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
         super(layout, toPublicLayout);
     }
 
-    declare asLayout: () => GridLinkListGroupItemView<TLayout, TPublicLayout> & TLayout;
-
-    setContext(context: ContextualClass) {
-        this.setListGroupItemCss(css => css.context(context));
-        this.setGridRowCss(css => css.context(context));
-        return this;
-    }
+    declare asLayout: () => GridListGroupItemLinkView<TLayout, TPublicLayout> & TLayout;
 }
 
-export class GridButtonListGroupItemView<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends ComponentView | ComponentViewLayout<TPublicLayout>> extends ListGroupItemViewMixin(GridRowView)<TLayout, TPublicLayout> {
+export class GridListGroupItemLabelView<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends ComponentView | ComponentViewLayout<TPublicLayout>>
+    extends ListGroupItemViewMixin(GridRowLabelView)<TLayout, TPublicLayout> {
+
     static create<TLayout extends GridRowViewLayout<TLayout>>(layout: TLayout) {
-        return GridButtonListGroupItemView.createWithPublicLayout(layout, l => l);
+        return GridListGroupItemLabelView.createWithPublicLayout(layout, l => l);
     }
 
     static createWithPublicLayout<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends ComponentView | ComponentViewLayout<TPublicLayout>>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new GridButtonListGroupItemView(layout, toPublicLayout).asLayout();
-    }
-
-    constructor(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        super("button", layout, toPublicLayout);
-    }
-
-    declare asLayout: () => GridButtonListGroupItemView<TLayout, TPublicLayout> & TLayout;
-
-    setContext(context: ContextualClass) {
-        this.setListGroupItemCss(css => css.context(context));
-        this.setGridRowCss(css => css.context(context));
-        return this;
-    }
-}
-
-export class GridButtonWithTextListGroupItemView<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView> extends ListGroupItemViewMixin(GridRowTextCompositeView)<TLayout, TPublicLayout> {
-    static create<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new GridButtonWithTextListGroupItemView(layout, toPublicLayout).asLayout();
-    }
-
-    constructor(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        super("button", layout, toPublicLayout);
-    }
-
-    declare asLayout: () => GridButtonWithTextListGroupItemView<TLayout, TPublicLayout> & TLayout;
-
-    setContext(context: ContextualClass) {
-        this.setListGroupItemCss(css => css.context(context));
-        this.setGridRowCss(css => css.context(context));
-        return this;
-    }
-}
-
-export class GridLinkWithTextListGroupItemView<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView> extends ListGroupItemViewMixin(GridRowLinkWithTextView)<TLayout, TPublicLayout> {
-    static create<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new GridLinkWithTextListGroupItemView(layout, toPublicLayout).asLayout();
+        return new GridListGroupItemLabelView(layout, toPublicLayout).asLayout();
     }
 
     constructor(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
         super(layout, toPublicLayout);
     }
 
-    declare asLayout: () => GridLinkWithTextListGroupItemView<TLayout, TPublicLayout> & TLayout;
+    declare asLayout: () => GridListGroupItemLabelView<TLayout, TPublicLayout> & TLayout;
+}
 
-    setContext(context: ContextualClass) {
-        this.setListGroupItemCss(css => css.context(context));
-        this.setGridRowCss(css => css.context(context));
-        return this;
+export class GridListGroupItemButtonView<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends ComponentView | ComponentViewLayout<TPublicLayout>>
+    extends ListGroupItemViewMixin(GridRowButtonView)<TLayout, TPublicLayout> {
+
+    static create<TLayout extends GridRowViewLayout<TLayout>>(layout: TLayout) {
+        return GridListGroupItemButtonView.createWithPublicLayout(layout, l => l);
     }
+
+    static createWithPublicLayout<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends ComponentView | ComponentViewLayout<TPublicLayout>>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        return new GridListGroupItemButtonView(layout, toPublicLayout).asLayout();
+    }
+
+    constructor(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        super(layout, toPublicLayout);
+    }
+
+    declare asLayout: () => GridListGroupItemButtonView<TLayout, TPublicLayout> & TLayout;
+}
+
+export class GridListGroupItemButtonContainerOfTextView<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>
+    extends ListGroupItemViewMixin(GridRowButtonContainerOfTextView)<TLayout, TPublicLayout> {
+
+    static create<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        return new GridListGroupItemButtonContainerOfTextView(layout, toPublicLayout).asLayout();
+    }
+
+    constructor(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        super(layout, toPublicLayout);
+    }
+
+    declare asLayout: () => GridListGroupItemButtonContainerOfTextView<TLayout, TPublicLayout> & TLayout;
+}
+
+export class GridListGroupItemLinkContainerOfTextView<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>
+    extends ListGroupItemViewMixin(GridRowLinkContainerOfTextView)<TLayout, TPublicLayout> {
+
+    static create<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        return new GridListGroupItemLinkContainerOfTextView(layout, toPublicLayout).asLayout();
+    }
+
+    constructor(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        super(layout, toPublicLayout);
+    }
+
+    declare asLayout: () => GridListGroupItemLinkContainerOfTextView<TLayout, TPublicLayout> & TLayout;
+}
+
+export class GridListGroupItemLabelContainerOfTextView<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>
+    extends ListGroupItemViewMixin(GridRowLabelContainerOfTextView)<TLayout, TPublicLayout> {
+
+    static create<TLayout extends GridRowViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        return new GridListGroupItemLabelContainerOfTextView(layout, toPublicLayout).asLayout();
+    }
+
+    constructor(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+        super(layout, toPublicLayout);
+    }
+
+    declare asLayout: () => GridListGroupItemLabelContainerOfTextView<TLayout, TPublicLayout> & TLayout;
 }

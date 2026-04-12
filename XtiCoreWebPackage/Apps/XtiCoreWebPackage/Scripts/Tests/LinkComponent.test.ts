@@ -12,13 +12,12 @@ afterEach(() => {
 
 describe("Link Component", () => {
     test("sets element attributes when view model changes", async () => {
-        const { view, component } = createLinkComponent(
-            new LinkComponentViewModel({
-                href: "https://example.com/1",
-                title: "Initial Title",
-                target: ""
-            })
+        const { view, viewModel, component } = createLinkComponent(
+            new LinkComponentViewModel()
         );
+        viewModel.href = "https://example.com/1";
+        viewModel.title = "Initial Title";
+        viewModel.target = "";
         TestHost.value.show(view, component);
         const element = document.getElementById(linkElementID) as HTMLAnchorElement;
         expect(element?.tagName).toBe("A");

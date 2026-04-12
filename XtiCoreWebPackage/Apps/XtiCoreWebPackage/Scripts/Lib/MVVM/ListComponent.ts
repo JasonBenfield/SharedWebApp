@@ -215,45 +215,28 @@ export class ListComponentOptionsBuilderFromItemFactory<TItemViewModel extends C
     }
 }
 
-export class ListComponentItemClickedEventArgs<TItemComponent extends Component> {
-    constructor(readonly listItem: TItemComponent, readonly source: Component) {
+export class ListComponentHeaderClickedEventArgs<THeaderComponent extends Component> {
+    constructor(readonly header: THeaderComponent, readonly source: Component) {
     }
 }
 
-type ListComponentEventLayout<TItemComponent extends Component> = {
+export class ListComponentItemClickedEventArgs<TItemComponent extends Component> {
+    constructor(readonly item: TItemComponent, readonly source: Component) {
+    }
+}
+
+export class ListComponentFooterClickedEventArgs<TFooterComponent extends Component> {
+    constructor(readonly footer: TFooterComponent, readonly source: Component) {
+    }
+}
+
+type ListComponentEventLayout<THeaderComponent extends Component, TItemComponent extends Component, TFooterComponent extends Component> = {
+    headerClicked: ListComponentHeaderClickedEventArgs<THeaderComponent>;
     itemClicked: ListComponentItemClickedEventArgs<TItemComponent>;
+    footerClicked: ListComponentFooterClickedEventArgs<TFooterComponent>;
 }
 
 export class ListComponent<TSource, THeaderComponent extends Component, TItemComponent extends Component, TFooterComponent extends Component> extends Component {
-    declare protected readonly viewModel: BaseListComponentViewModel<ComponentViewModel>;
-    protected readonly view: BaseListView;
-    private readonly itemFactory: IListItemFactory<TItemComponent>;
-    private readonly itemUpdater: IViewModelUpdater<TSource, ComponentViewModel>;
-    private readonly _itemChanges: ChangedObservableArray<ComponentViewModel>[] = [];
-    private readonly _itemComponents: Map<ComponentViewModel, TItemComponent> = new Map();
-    private readonly events = this.eventManager.addEvents<ListComponentEventLayout<TItemComponent>>({
-        itemClicked: null
-    });
-    get when() {
-        if (!this.hasRegisteredListEvents) {
-            this.view.whenList.clicked.then(this.onListClicked.bind(this));
-            this.hasRegisteredListEvents = true;
-        }
-        return this.events.when;
-    }
-
-    private onListClicked(evt: CustomEventInit<PointerEvent>) {
-        
-    }
-
-    private hasRegisteredListEvents = false;
-
-    readonly header: THeaderComponent;
-    private isHeaderVisibilityAutomated: boolean;
-    readonly footer: TFooterComponent;
-    private isFooterVisibilityAutomated: boolean;
-    private hasRegisteredItemPropertyChanged = false;
-
     constructor(options: IListComponentOptions<TSource, THeaderComponent, TItemComponent, TFooterComponent>) {
         const viewModel = options.viewModel;
         const view = options.view;
@@ -294,6 +277,53 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
         this.registerArrayItemChanged();
     }
 
+    declare protected readonly viewModel: BaseListComponentViewModel<ComponentViewModel>;
+    protected readonly view: BaseListView;
+    private readonly itemFactory: IListItemFactory<TItemComponent>;
+    private readonly itemUpdater: IViewModelUpdater<TSource, ComponentViewModel>;
+    private readonly _itemChanges: ChangedObservableArray<ComponentViewModel>[] = [];
+    private readonly _itemComponents: Map<ComponentViewModel, TItemComponent> = new Map();
+    private readonly registeredEvents = this.eventManager.addEvents<ListComponentEventLayout<THeaderComponent, TItemComponent, TFooterComponent>>({
+        headerClicked: null,
+        itemClicked: null,
+        footerClicked: null
+    });
+    get when() {
+        if (!this.hasRegisteredListEvents) {
+            this.view.whenList.clicked.then(this.onListClicked.bind(this));
+            this.hasRegisteredListEvents = true;
+        }
+        return this.registeredEvents.when;
+    }
+
+    private hasRegisteredListEvents = false;
+    readonly header: THeaderComponent;
+    private isHeaderVisibilityAutomated: boolean;
+    readonly footer: TFooterComponent;
+    private isFooterVisibilityAutomated: boolean;
+    private hasRegisteredItemPropertyChanged = false;
+
+    private onListClicked(evt: CustomEventInit<PointerEvent>) {
+        const otherEl = evt.detail?.target;
+        if (otherEl && otherEl instanceof HTMLElement) {
+            for (const childComponent of this.getChildComponents()) {
+                if (childComponent.containsElement(otherEl)) {
+                    const item = childComponent as TItemComponent;
+                    const source = childComponent.findComponentFromElement(otherEl) || item;
+                    if (childComponent === this.header) {
+                        this.registeredEvents.events.headerClicked.invoke(new ListComponentHeaderClickedEventArgs(this.header, source));
+                    }
+                    else if (childComponent === this.footer) {
+                        this.registeredEvents.events.footerClicked.invoke(new ListComponentFooterClickedEventArgs(this.footer, source));
+                    }
+                    else {
+                        this.registeredEvents.events.itemClicked.invoke(new ListComponentItemClickedEventArgs(item, source));
+                    }
+                }
+            }
+        }
+    }
+
     private registerArrayItemChanged() {
         if (!this.hasRegisteredItemPropertyChanged && (this.isHeaderVisibilityAutomated || this.isFooterVisibilityAutomated)) {
             this.viewModel.items.when.arrayItemChanged.then(this.handleArrayItemChanged.bind(this));
@@ -322,7 +352,7 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
         const itemComponents = this._itemComponents;
         for (const change of changes) {
             const index = change.index + 1;
-            if (change.action === "add" || change.action === "insert") {
+            if (change.action === "insert") {
                 this.insertItemComponent(change.item, index);
             }
             else if (change.action === "move") {
@@ -374,6 +404,16 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
         return this.getChildComponents().filter(c => c !== this.header && c !== this.footer) as TItemComponent[];
     }
 
+    insertItem(index: number, sourceItem: TSource) {
+        this.insertItems(index, sourceItem);
+    }
+
+    insertItems(index: number, ...sourceItems: TSource[]) {
+        const itemViewModels = sourceItems.map(item => this.createItemViewModel(item));
+        this.viewModel.items.splice(index, 0, ...itemViewModels);
+        this.updateHeaderAndFooterVisibility();
+    }
+
     addItem(sourceItem: TSource) {
         this.addItems(sourceItem);
     }
@@ -395,10 +435,12 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
             const itemViewModels: ComponentViewModel[] = [];
             for (const sourceItem of sourceItems) {
                 let itemViewModel = originalItemViewModels.find(vm => this.itemUpdater.isMatch(sourceItem, vm));
-                if (!itemViewModel) {
+                if (itemViewModel) {
+                    this.itemUpdater.updateFrom(sourceItem, itemViewModel);
+                }
+                else {
                     itemViewModel = this.createItemViewModel(sourceItem);
                 }
-                this.itemUpdater.updateFrom(sourceItem, itemViewModel);
                 itemViewModels.push(itemViewModel);
             }
             this.viewModel.items.replaceWith(...itemViewModels);
@@ -415,11 +457,13 @@ export class ListComponent<TSource, THeaderComponent extends Component, TItemCom
         itemViewModels.push(...originalItemViewModels);
         for (const sourceItem of sourceItems) {
             let itemViewModel = originalItemViewModels.find(vm => this.itemUpdater.isMatch(sourceItem, vm));
-            if (!itemViewModel) {
+            if (itemViewModel) {
+                this.itemUpdater.updateFrom(sourceItem, itemViewModel);
+            }
+            else {
                 itemViewModel = this.createItemViewModel(sourceItem);
                 itemViewModels.push(itemViewModel);
             }
-            this.itemUpdater.updateFrom(sourceItem, itemViewModel);
         }
         this.viewModel.items.replaceWith(...itemViewModels);
         this.updateHeaderAndFooterVisibility();

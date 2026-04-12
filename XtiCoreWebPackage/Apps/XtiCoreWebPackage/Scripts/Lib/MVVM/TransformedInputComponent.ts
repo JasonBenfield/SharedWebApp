@@ -1,6 +1,6 @@
 import { FormattedNumber } from "../FormattedNumber";
 import { Component, ComponentChangeHandler } from "./Component";
-import { ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
+import { ObservableChanges } from "./ComponentViewModel";
 import { areValuesEqual, IEquatable } from "./Equatable";
 import { FocusableComponentChangeHandler, FocusableComponentMixin, HasFocusProperty } from "./FocusableComponent";
 import { BaseInputComponentView, InputComponentViewModel, InputTextValue } from "./InputComponent";
@@ -28,10 +28,9 @@ export class TransformedInputValue<TValue> implements IEquatable {
 
 export class TransformedInputComponentViewModel<TValue> extends InputComponentViewModel {
     constructor(
-        initialValue: TValue,
-        initializer: Omit<ComponentViewModelInitializer<TransformedInputComponentViewModel<TValue>>, "value"> = {}
+        initialValue: TValue
     ) {
-        super("", initializer);
+        super("");
         this.transformedValue = new TransformedInputValue(initialValue);
     }
 

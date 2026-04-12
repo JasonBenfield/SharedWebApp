@@ -1,16 +1,13 @@
 import { ButtonComponentChangeHandler, ButtonComponentMixin, ButtonComponentViewModelMixin, ButtonViewMixin, IButtonComponentViewModel, IButtonView } from "./ButtonComponent";
 import { Component } from "./Component";
 import { ComponentView, ComponentViewLayout } from "./ComponentView";
-import { ComponentViewModel, ComponentViewModelInitializer } from "./ComponentViewModel";
+import { ComponentViewModel } from "./ComponentViewModel";
 import { BaseCompositeComponentView } from "./CompositeComponent";
 import { IStyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
 import { BaseTextComponentView, ISynchedTitleViewModel, ITextView, ITextViewModel, SynchedTitleChangeHandler, SynchedTitleComponentMixin, SynchedTitleViewModelMixin, TextChangeHandler, TextComponentMixin, TextViewMixin, TextViewModelMixin, TitleChangeHandler, TitleComponentMixin, TitleViewModelMixin } from "./TextComponent";
 import { ITitleView, ITitleViewModel } from "./Types";
 
 export class TextButtonComponentViewModel extends SynchedTitleViewModelMixin(TextViewModelMixin(ButtonComponentViewModelMixin(TitleViewModelMixin(ComponentViewModel)))) {
-    constructor(initializer: ComponentViewModelInitializer<TextButtonComponentViewModel> = {}) {
-        super(initializer);
-    }
 }
 
 export type BaseTextButtonComponentViewModel = ComponentViewModel & IButtonComponentViewModel & ITitleViewModel & ITextViewModel & ISynchedTitleViewModel;

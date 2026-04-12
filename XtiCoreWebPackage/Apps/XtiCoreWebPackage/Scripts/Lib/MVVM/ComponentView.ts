@@ -41,6 +41,20 @@ export class ComponentView {
 
     get isVisible() { return this._isVisible; }
 
+    elementEquals(otherEl: HTMLElement) { return this.element === otherEl; }
+
+    containsElement(otherEl: HTMLElement) {
+        let result: boolean;
+        const element = this.element;
+        if (element) {
+            result = element === otherEl || element.contains(otherEl);
+        }
+        else {
+            result = false;
+        }
+        return result;
+    }
+
     protected setEventListener<K extends keyof HTMLElementEventMap>(eventType: K, listener: (ev: HTMLElementEventMap[K]) => void) {
         const element = this._element;
         const listeners: any = this._htmlEventListeners;

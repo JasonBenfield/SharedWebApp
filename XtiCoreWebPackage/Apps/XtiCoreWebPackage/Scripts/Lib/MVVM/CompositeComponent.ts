@@ -193,7 +193,7 @@ type CompositeComponentLayoutProperties<T> = {
     [Key in keyof T]: T[Key] extends ComponentView ? Key : never;
 }[keyof T];
 
-type CompositeComponentLayout<T> = {
+export type CompositeComponentLayout<T> = {
     [Key in CompositeComponentLayoutProperties<T>]: T[Key];
 }
 

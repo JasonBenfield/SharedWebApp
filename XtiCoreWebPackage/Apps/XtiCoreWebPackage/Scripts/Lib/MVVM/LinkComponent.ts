@@ -1,8 +1,8 @@
 import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentView, ComponentViewLayout } from "./ComponentView";
-import { ComponentViewModel, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
+import { ComponentViewModel, ObservableChanges } from "./ComponentViewModel";
 import { BaseCompositeComponentView } from "./CompositeComponent";
-import { IStyleableComponentView } from "./StyleableComponentView";
+import { StyleableComponentView } from "./StyleableComponentView";
 import { TitleChangeHandler, TitleComponentMixin, TitleViewModelMixin } from "./TextComponent";
 import { Constructor, ITitleView, ITitleViewModel } from "./Types";
 
@@ -31,9 +31,6 @@ export function LinkViewModelMixin<T extends Constructor<ComponentViewModel>>(Ba
 }
 
 export class LinkComponentViewModel extends LinkViewModelMixin(TitleViewModelMixin(ComponentViewModel)) {
-    constructor(initializer: ComponentViewModelInitializer<LinkComponentViewModel> = {}) {
-        super(initializer);
-    }
 }
 
 export interface ILinkView {
@@ -41,7 +38,7 @@ export interface ILinkView {
     setTarget(target: string): void;
 }
 
-export function LinkViewMixin<T extends Constructor<ComponentView & IStyleableComponentView>>(Base: T) {
+export function LinkViewMixin<T extends Constructor<StyleableComponentView>>(Base: T) {
     return class extends Base implements ILinkView {
         setHref(href: string) {
             this.setAttributes({ "href": href });

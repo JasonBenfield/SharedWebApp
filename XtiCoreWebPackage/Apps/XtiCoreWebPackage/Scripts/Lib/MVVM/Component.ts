@@ -121,16 +121,45 @@ export class Component {
         this.viewModel.isVisible = false;
     }
 
-    protected addLayout<TLayout extends {
-        [K in ComponentViewModelProperties<typeof this.viewModel>]: (vm: ComponentViewModel, view: ComponentView) => Component
-    }>(componentLayout: TLayout) {
-        for (const key in componentLayout) {
-            const childComponent = Reflect.get(componentLayout, key);
-            if (childComponent instanceof Component) {
-                this.addComponent(childComponent);
-            }
+    containsElement(otherEl: HTMLElement) {
+        let result = false;
+        let i = 0;
+        while (!result && i < this.views.length) {
+            const view = this.views[i];
+            result = view.elementEquals(otherEl) || view.containsElement(otherEl);
+            i++;
         }
-        return componentLayout;
+        return result;
+    }
+
+    findComponentFromElement(otherEl: HTMLElement): Component | null {
+        let foundComponent: Component | null = null;
+        let i = 0;
+        while (!foundComponent && i < this.views.length) {
+            const view = this.views[i];
+            if (view.elementEquals(otherEl)) {
+                foundComponent = this;
+            }
+            else if (view.containsElement(otherEl)) {
+                foundComponent = this.findChildComponentFromElement(otherEl);
+                if (!foundComponent) {
+                    foundComponent = this;
+                }
+            }
+            i++;
+        }
+        return foundComponent;
+    }
+
+    private findChildComponentFromElement(otherEl: HTMLElement): Component | null {
+        let foundComponent: Component | null = null;
+        let i = 0;
+        while (!foundComponent && i < this.childComponents.length) {
+            const childComponent = this.childComponents[i];
+            foundComponent = childComponent.findComponentFromElement(otherEl);
+            i++;
+        }
+        return foundComponent;
     }
 
     protected addComponent<TComponent extends Component>(c: TComponent) {
@@ -210,60 +239,5 @@ export class Component {
             view.dispose();
         }
         this.eventManager.dispose();
-    }
-}
-
-type ComponentViewModelProperties<TViewModel> = {
-    [K in keyof TViewModel]: TViewModel[K] extends ComponentViewModel ? K : never;
-}[keyof TViewModel];
-
-type ComponentViewModelLayout<T> = {
-    [Key in ComponentViewModelProperties<T>]: T[Key];
-}
-export class ComponentLayoutBuilder<
-    TViewModelLayout extends ComponentViewModelLayout<TViewModelLayout>,
-    TView extends ComponentView
-> {
-    constructor(
-        private readonly viewModel: ComponentViewModel & TViewModelLayout,
-        private readonly view: TView
-    ) {
-    }
-
-    viewLayout<TViewPublicLayout extends {
-        [K in ComponentViewModelProperties<TViewModelLayout>]: ComponentView
-    }>(toViewLayout: (view: TView) => TViewPublicLayout) {
-        return new ComponentLayoutBuilderWithViewLayout(this.viewModel, toViewLayout(this.view));
-    }
-}
-
-class ComponentLayoutBuilderWithViewLayout<
-    TViewModelLayout extends ComponentViewModelLayout<TViewModelLayout>,
-    TViewPublicLayout extends {
-        [K in ComponentViewModelProperties<TViewModelLayout>]: ComponentView
-    }
-> {
-    constructor(
-        private readonly viewModel: ComponentViewModel & TViewModelLayout,
-        private readonly viewLayout: TViewPublicLayout
-    ) {
-
-    }
-
-    build<TFactory extends {
-        [K in ComponentViewModelProperties<TViewModelLayout>]: (vm: TViewModelLayout[K], view: TViewPublicLayout[K]) => Component
-    }>(factory: TFactory) {
-        const layout = {};
-        for (const key in this.viewModel) {
-            const childVM: any = Reflect.get(this.viewModel, key);
-            if (childVM instanceof ComponentViewModel) {
-                const childView = Reflect.get(this.viewLayout, key);
-                const createComponent = Reflect.get(factory, key);
-                if (childView && createComponent) {
-                    Reflect.set(layout, key, createComponent(childVM as any, childView));
-                }
-            }
-        }
-        return layout as { [K in keyof TFactory]: ReturnType<TFactory[K]> };
     }
 }

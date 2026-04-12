@@ -71,7 +71,7 @@ export class ObservableArray<TViewModel extends ComponentViewModel> {
             changes.push(
                 new ChangedObservableArray(
                     this,
-                    "add",
+                    "insert",
                     i,
                     value,
                     -1
@@ -104,7 +104,7 @@ export class ObservableArray<TViewModel extends ComponentViewModel> {
             changes.push(
                 new ChangedObservableArray(
                     this,
-                    "add",
+                    "insert",
                     i,
                     addedValue,
                     -1
@@ -184,7 +184,7 @@ export class ObservableArray<TViewModel extends ComponentViewModel> {
 export class ChangedObservableArray<TViewModel extends ComponentViewModel> {
     constructor(
         readonly target: any,
-        readonly action: "add" | "insert" | "remove" | "move",
+        readonly action: "insert" | "remove" | "move",
         readonly index: number,
         readonly item: TViewModel,
         readonly originalIndex: number

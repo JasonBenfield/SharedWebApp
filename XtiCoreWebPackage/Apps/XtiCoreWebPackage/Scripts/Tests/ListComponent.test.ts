@@ -6,7 +6,7 @@ import { ComponentViewModel } from "../Lib/MVVM/ComponentViewModel";
 import { CompositeComponentBuilder, CompositeComponentView } from "../Lib/MVVM/CompositeComponent";
 import { IViewModelUpdater, ListComponent, ListComponentOptionsBuilder, ListComponentView, ListComponentViewModel, ListItemFactory, TextViewModelUpdater } from "../Lib/MVVM/ListComponent";
 import { TextButtonComponent, TextButtonComponentView, TextButtonComponentViewModel } from "../Lib/MVVM/TextButtonComponent";
-import { TextComponent, TextComponentView, TextComponentViewModel } from "../Lib/MVVM/TextComponent";
+import { TextComponent, TextComponentView, TextComponentViewModel, ContainerOfTextView } from "../Lib/MVVM/TextComponent";
 import { TestHost } from "./TestHost";
 import { DelayedAction } from "../Lib/DelayedAction";
 
@@ -133,18 +133,18 @@ describe("List Component", () => {
         TestHost.value.immediateHandleChanges();
         expect(getListItems().length).toBe(5);
         expect(getListItemElement(0)?.id).toBe(headerID);
-        expect(getListItemElement(0)?.innerText).toBe("Header");
+        expect(getListItemElement(0)?.querySelector("div")?.innerText).toBe("Header");
         expect(getListItemElement(4)?.id).toBe(footerID);
-        expect(getListItemElement(4)?.innerText).toBe("Footer");
+        expect(getListItemElement(4)?.querySelector("div")?.innerText).toBe("Footer");
         component.setItems(new TestItem(4, "Test 4"), new TestItem(1, "Test 1"), new TestItem(2, "Test 3"), new TestItem(3, "Test 3"));
         component.header.text = "Changed Header";
         component.footer.text = "Changed Footer";
         TestHost.value.immediateHandleChanges();
         expect(getListItems().length).toBe(6);
         expect(getListItemElement(0)?.id).toBe(headerID);
-        expect(getListItemElement(0)?.innerText).toBe("Changed Header");
+        expect(getListItemElement(0)?.querySelector("div")?.innerText).toBe("Changed Header");
         expect(getListItemElement(5)?.id).toBe(footerID);
-        expect(getListItemElement(5)?.innerText).toBe("Changed Footer");
+        expect(getListItemElement(5)?.querySelector("div")?.innerText).toBe("Changed Footer");
         component.removeAllItems();
         TestHost.value.immediateHandleChanges();
         expect(getListItems().length).toBe(0);
@@ -167,7 +167,7 @@ describe("List Component", () => {
         expect(document.getElementById(headerID)).toBeNull();
         expect(document.getElementById(footerID)).toBeNull();
     });
-    test("should handle click", async () => {
+    test("should notify when item clicked", async () => {
         const { view, component } = createListWithHeaderAndFooter();
         component.header.text = "Header";
         component.setItems(new TestItem(1, "Test 1"), new TestItem(2, "Test 2"), new TestItem(3, "Test 3"));
@@ -176,7 +176,7 @@ describe("List Component", () => {
         let clickedListItem: TestListItemComponent | null = null;
         let clickedButton: TextButtonComponent | null = null;
         component.when.itemClicked.then((evt) => {
-            clickedListItem = evt.detail.listItem;
+            clickedListItem = evt.detail.item;
             clickedButton = evt.detail.source as TextButtonComponent;
         });
         TestHost.value.show(view, component);
@@ -187,6 +187,38 @@ describe("List Component", () => {
         const expectedListItem = component.getItems()[1];
         expect(clickedListItem).toBe(expectedListItem);
         expect(clickedButton).toBe(expectedListItem.button);
+    });
+    test("should notify when header clicked", async () => {
+        const { view, component } = createListWithHeaderAndFooter();
+        component.header.text = "Header";
+        component.setItems(new TestItem(1, "Test 1"), new TestItem(2, "Test 2"), new TestItem(3, "Test 3"));
+        component.footer.text = "Footer";
+        let clickedHeader: TextComponent | null = null;
+        component.when.headerClicked.then((evt) => {
+            clickedHeader = evt.detail.header;
+        });
+        TestHost.value.show(view, component);
+        const listItemViews = view.getItems();
+        const headerView = listItemViews[0] as ReturnType<typeof createCompositeHeaderView>;
+        headerView.button.simulateClick();
+        await DelayedAction.delay(10);
+        expect(clickedHeader).toBe(component.header);
+    });
+    test("should notify when footer clicked", async () => {
+        const { view, component } = createListWithHeaderAndFooter();
+        component.header.text = "Header";
+        component.setItems(new TestItem(1, "Test 1"), new TestItem(2, "Test 2"), new TestItem(3, "Test 3"));
+        component.footer.text = "Footer";
+        let clickedFooter: TextComponent | null = null;
+        component.when.footerClicked.then((evt) => {
+            clickedFooter = evt.detail.footer;
+        });
+        TestHost.value.show(view, component);
+        const listItemViews = view.getItems();
+        const footerView = listItemViews[listItemViews.length - 1] as ReturnType<typeof createCompositeFooterView>;
+        footerView.button.simulateClick();
+        await DelayedAction.delay(10);
+        expect(clickedFooter).toBe(component.footer);
     });
 });
 
@@ -341,20 +373,12 @@ function createListWithHeaderAndFooter() {
         new ListComponentOptionsBuilder(viewModel, view)
             .withHeaderFactory(
                 () => new ListItemFactory(() => new TextComponentViewModel())
-                    .withView(() => {
-                        const itemView = TextComponentView.listItem();
-                        itemView.setID(headerID);
-                        return itemView;
-                    })
+                    .withView(() => createCompositeHeaderView())
                     .withComponent((itemVM, itemView) => new TextComponent(itemVM, itemView))
             )
             .withFooterFactory(
                 () => new ListItemFactory(() => new TextComponentViewModel())
-                    .withView(() => {
-                        const itemView = TextComponentView.listItem();
-                        itemView.setID(footerID);
-                        return itemView;
-                    })
+                    .withView(() => createCompositeFooterView())
                     .withComponent((itemVM, itemView) => new TextComponent(itemVM, itemView))
             )
             .withItemFactory(() => new ListItemFactory(() => new TestItemComponentViewModel())
@@ -368,6 +392,24 @@ function createListWithHeaderAndFooter() {
         view: view,
         component: component
     };
+}
+
+function createCompositeHeaderView() {
+    const itemView = ContainerOfTextView.listItem({
+        text: new TextComponentView(),
+        button: new TextButtonComponentView()
+    }, l => l.text);
+    itemView.setID(headerID);
+    return itemView;
+}
+
+function createCompositeFooterView() {
+    const itemView = ContainerOfTextView.listItem({
+        text: new TextComponentView(),
+        button: new TextButtonComponentView()
+    }, l => l.text);
+    itemView.setID(footerID);
+    return itemView;
 }
 
 function createCompositeItemView() {

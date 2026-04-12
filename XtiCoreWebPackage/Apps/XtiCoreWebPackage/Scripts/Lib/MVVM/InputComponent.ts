@@ -1,11 +1,11 @@
 import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentView } from "./ComponentView";
-import { ComponentViewModel, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
+import { ComponentViewModel,  ObservableChanges } from "./ComponentViewModel";
 import { IEquatable } from "./Equatable";
 import { CustomEventRegistrations } from "./EventManager";
 import { FocusableComponentChangeHandler, FocusableComponentMixin, FocusableViewMixin, FocusableViewModelMixin, HasFocusProperty, IFocusableView } from "./FocusableComponent";
 import { StyleableComponentViewMixin } from "./StyleableComponentView";
-import { IUniqueView, UniqueComponentChangeHandler, UniqueComponentMixin, UniqueViewModelMixin } from "./UniqueComponent";
+import { IUniqueView, UniqueComponentChangeHandler, UniqueComponentMixin, UniqueViewMixin, UniqueViewModelMixin } from "./UniqueComponent";
 
 export class InputTextValue implements IEquatable {
     constructor(readonly value: string, readonly isFromUI = false) {
@@ -28,8 +28,8 @@ export class InputTextValue implements IEquatable {
 }
 
 export class InputComponentViewModel extends UniqueViewModelMixin(FocusableViewModelMixin(ComponentViewModel)) {
-    constructor(initialTextValue: string = "", initializer: Omit<ComponentViewModelInitializer<InputComponentViewModel>, "textValue"> = {}) {
-        super(initializer);
+    constructor(initialTextValue: string = "") {
+        super();
         this.textValue = new InputTextValue(initialTextValue);
     }
 
@@ -68,7 +68,7 @@ export interface IInputView {
 
 export type BaseInputComponentView = ComponentView & IFocusableView & IUniqueView & IInputView;
 
-export class InputComponentView extends FocusableViewMixin(StyleableComponentViewMixin(ComponentView)) implements IInputView {
+export class InputComponentView extends FocusableViewMixin(UniqueViewMixin(StyleableComponentViewMixin(ComponentView))) implements IInputView {
     private readonly events = this.eventManager.addEvents<InputViewEventLayout>({
         textValueInput: null,
         focused: null,

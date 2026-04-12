@@ -1,8 +1,8 @@
 import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentView, ComponentViewLayout } from "./ComponentView";
-import { ComponentViewModel, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
+import { ComponentViewModel, ObservableChanges } from "./ComponentViewModel";
 import { BaseCompositeComponentView } from "./CompositeComponent";
-import { IStyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
+import { StyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
 import { Constructor, HeadingSize, ITitleView, ITitleViewModel } from "./Types";
 
 export interface ITextViewModel {
@@ -43,12 +43,9 @@ export function SynchedTitleViewModelMixin<T extends Constructor<ComponentViewMo
 export type BaseTextComponentViewModel = ComponentViewModel & ITextViewModel & ITitleViewModel & ISynchedTitleViewModel;
 
 export class TextComponentViewModel extends SynchedTitleViewModelMixin(TextViewModelMixin(TitleViewModelMixin(ComponentViewModel))) {
-    constructor(initializer: ComponentViewModelInitializer<TextComponentViewModel> = {}) {
-        super(initializer);
-    }
 }
 
-export function TitleViewMixin<T extends Constructor<IStyleableComponentView>>(Base: T) {
+export function TitleViewMixin<T extends Constructor<StyleableComponentView>>(Base: T) {
     return class extends Base implements ITitleView {
         setTitle(title: string) {
             return this.setAttributes({ "title": title });
@@ -150,81 +147,81 @@ export class TextComponentView extends TextViewMixin(TitleViewMixin(StyleableCom
 
 }
 
-export class TextCompositeComponentView<TLayout extends ComponentViewLayout<TLayout>> extends TitleViewMixin(BaseCompositeComponentView)<TLayout, BaseTextComponentView> implements ITextView {
+export class ContainerOfTextView<TLayout extends ComponentViewLayout<TLayout>> extends TitleViewMixin(BaseCompositeComponentView)<TLayout, BaseTextComponentView> implements ITextView {
     static block<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new TextCompositeComponentView(
+        return new ContainerOfTextView(
             "div", layout, toPublicLayout
         ).asLayout();
     }
 
     static paragraph<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new TextCompositeComponentView(
+        return new ContainerOfTextView(
             "p", layout, toPublicLayout
         ).asLayout();
     }
 
     static span<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new TextCompositeComponentView(
+        return new ContainerOfTextView(
             "span", layout, toPublicLayout
         ).asLayout();
     }
 
     static small<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new TextCompositeComponentView(
+        return new ContainerOfTextView(
             "sm", layout, toPublicLayout
         ).asLayout();
     }
 
     static emphasis<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new TextCompositeComponentView(
+        return new ContainerOfTextView(
             "em", layout, toPublicLayout
         ).asLayout();
     }
 
     static preformat<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new TextCompositeComponentView(
+        return new ContainerOfTextView(
             "pre", layout, toPublicLayout
         ).asLayout();
     }
 
     static strikethrough<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new TextCompositeComponentView(
+        return new ContainerOfTextView(
             "s", layout, toPublicLayout
         ).asLayout();
     }
 
     static inlineQuote<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new TextCompositeComponentView(
+        return new ContainerOfTextView(
             "q", layout, toPublicLayout
         ).asLayout();
     }
 
     static blockQuote<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new TextCompositeComponentView(
+        return new ContainerOfTextView(
             "blockquote", layout, toPublicLayout
         ).asLayout();
     }
 
     static heading<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(size: HeadingSize, layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new TextCompositeComponentView(
+        return new ContainerOfTextView(
             `h${size}`, layout, toPublicLayout
         ).asLayout();
     }
 
     static listItem<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new TextCompositeComponentView(
+        return new ContainerOfTextView(
             "li", layout, toPublicLayout
         ).asLayout();
     }
 
-    declare asLayout: () => TextCompositeComponentView<TLayout> & TLayout;
+    declare asLayout: () => ContainerOfTextView<TLayout> & TLayout;
 
     setText(text: string) {
         this.publicLayout.setText(text);
     }
 }
 
-export class TextChangeHandler extends ComponentChangeHandler<ComponentViewModel & ITextViewModel, BaseTextComponentView> {
+export class TextChangeHandler extends ComponentChangeHandler<ComponentViewModel & ITextViewModel, ComponentView & ITextView> {
     handleChanges(changes: ObservableChanges<ComponentViewModel & ITextViewModel>) {
         if (changes.text) {
             const text = changes.text.value;

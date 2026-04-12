@@ -5,7 +5,13 @@ export interface IEquatable {
 
 export function areValuesEqual(originalValue: any, value: any): boolean {
     let result: boolean;
-    if (originalValue === value) {
+    if (
+        ((originalValue === null) !== (value === null)) ||
+        ((originalValue === undefined) !== (value !== undefined))
+    ) {
+        result = false;
+    }
+    else if (originalValue === value) {
         result = true;
     }
     else if (isEquatable(originalValue)) {

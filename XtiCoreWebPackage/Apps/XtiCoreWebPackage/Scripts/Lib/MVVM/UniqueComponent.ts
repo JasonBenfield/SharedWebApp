@@ -3,6 +3,7 @@ import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentView } from "./ComponentView";
 import { ComponentViewModel, ObservableChanges } from "./ComponentViewModel";
 import { CustomEventRegistrations } from "./EventManager";
+import { StyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
 import { Constructor } from "./Types";
 
 export interface IUniqueViewModel {
@@ -24,10 +25,18 @@ export function UniqueViewModelMixin<T extends Constructor<ComponentViewModel>>(
 }
 
 export interface IUniqueView {
-    setID(id: string): void;
-    setName(name: string): void;
+    setID(id: string): this;
+    setName(name: string): this;
 }
 
+export function UniqueViewMixin<T extends Constructor<StyleableComponentView>>(Base: T) {
+    return class extends Base implements IUniqueView {
+        setName(name: string) {
+            return this.setAttribute("name", name);
+        }
+
+    };
+}
 export interface IUniqueComponent {
     readonly whenUnique: CustomEventRegistrations<UniqueComponentEventLayout>;
     get id(): string;

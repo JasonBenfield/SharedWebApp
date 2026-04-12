@@ -1,9 +1,8 @@
 
 import { afterEach, describe, expect, test } from "@jest/globals";
 import { InputComponentView } from "../Lib/MVVM/InputComponent";
-import { TransformedInputBuilder, TransformedInputComponent, TransformedInputComponentViewModel, TransformedNumberInput } from "../Lib/MVVM/TransformedInputComponent";
+import { TransformedInputComponent, TransformedInputComponentViewModel, TransformedNumberInput } from "../Lib/MVVM/TransformedInputComponent";
 import { TestHost } from "./TestHost";
-import { ConsoleLogger } from "../Lib/ConsoleLogger";
 
 afterEach(() => {
     TestHost.value.reset();

@@ -1,8 +1,7 @@
 import { Component, ComponentChangeHandler } from "./Component";
-import { ComponentView, ComponentViewLayout } from "./ComponentView";
-import { ComponentViewModel, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
-import { BaseCompositeComponentView, CompositeComponentView } from "./CompositeComponent";
-import { IStyleableComponentView } from "./StyleableComponentView";
+import { ComponentView } from "./ComponentView";
+import { ComponentViewModel, ObservableChanges } from "./ComponentViewModel";
+import { StyleableComponentView } from "./StyleableComponentView";
 import { TitleChangeHandler, TitleComponentMixin, TitleViewModelMixin } from "./TextComponent";
 import { Constructor, ITitleView, ITitleViewModel } from "./Types";
 import { BaseUniqueComponent } from "./UniqueComponent";
@@ -23,16 +22,13 @@ export function LabelViewModelMixin<T extends Constructor<ComponentViewModel>>(B
 }
 
 export class LabelComponentViewModel extends LabelViewModelMixin(TitleViewModelMixin(ComponentViewModel)) {
-    constructor(initializer: ComponentViewModelInitializer<LabelComponentViewModel> = {}) {
-        super(initializer);
-    }
 }
 
 export interface ILabelView {
     setFor(forID: string): void;
 }
 
-export function LabelViewMixin<T extends Constructor<ComponentView & IStyleableComponentView>>(Base: T) {
+export function LabelViewMixin<T extends Constructor<StyleableComponentView>>(Base: T) {
     return class extends Base implements ILabelView {
         setFor(forID: string) {
             this.setAttributes({ "for": forID });
@@ -41,25 +37,6 @@ export function LabelViewMixin<T extends Constructor<ComponentView & IStyleableC
 }
 
 export type BaseLabelComponentView = ComponentView & ITitleView & ILabelView;
-
-export class LabelComponentView<
-    TLayout extends ComponentViewLayout<TLayout>,
-    TPublicLayout extends ComponentViewLayout<TPublicLayout>
-> extends LabelViewMixin(BaseCompositeComponentView)<TLayout, TPublicLayout> {
-    static create<TLayout extends ComponentViewLayout<TLayout>>(layout: TLayout) {
-        return LabelComponentView.createWithPublicLayout(layout, l => l);
-    }
-
-    static createWithPublicLayout<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends ComponentViewLayout<TPublicLayout>>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new LabelComponentView(layout, toPublicLayout).asLayout();
-    }
-
-    constructor(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        super("label", layout, toPublicLayout);
-    }
-
-    declare asLayout: () => LabelComponentView<TLayout, TPublicLayout> & TLayout;
-}
 
 export class LabelComponentChangeHandler extends ComponentChangeHandler<ComponentViewModel & BaseLabelComponentViewModel, ComponentView & ILabelView> {
 

@@ -7,8 +7,6 @@ type EventLayout<TViewModel> = {
     propertyChanged: UpdatedViewModel<TViewModel>;
 }
 
-export type ComponentViewModelInitializer<TViewModel extends ComponentViewModel> = Partial<ComponentViewModelData<TViewModel>>;
-
 export class ComponentViewModel {
     private readonly eventManager = new EventManager();
     private readonly events = this.eventManager.addEvents<EventLayout<ComponentViewModel>>({
@@ -18,7 +16,7 @@ export class ComponentViewModel {
 
     private readonly _changes: ObservableChanges<typeof this> = {};
 
-    constructor(initializer: ComponentViewModelInitializer<ComponentViewModel> = {}) {
+    constructor() {
         const proxy = new Proxy(
             this,
             {
@@ -43,10 +41,6 @@ export class ComponentViewModel {
                 },
             }
         );
-        for (const key in initializer) {
-            const initialValue = Reflect.get(initializer, key);
-            Reflect.set(proxy, key, initialValue);
-        }
         return proxy;
     }
 

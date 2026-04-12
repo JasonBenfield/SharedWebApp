@@ -11,14 +11,13 @@ afterEach(() => {
 
 describe("Text Link Component", () => {
     test("sets element attributes when view model changes", async () => {
-        const { view, component } = createLinkComponent(
-            new TextLinkComponentViewModel({
-                text: "Initial Text",
-                href: "https://example.com/1",
-                title: "Initial Title",
-                target: ""
-            })
+        const { view, viewModel, component } = createLinkComponent(
+            new TextLinkComponentViewModel()
         );
+        viewModel.text = "Initial Text";
+        viewModel.href = "https://example.com/1";
+        viewModel.title = "Initial Title";
+        viewModel.target = "";
         TestHost.value.show(view, component);
         const element = document.getElementById(linkElementID) as HTMLAnchorElement;
         expect(element?.tagName).toBe("A");

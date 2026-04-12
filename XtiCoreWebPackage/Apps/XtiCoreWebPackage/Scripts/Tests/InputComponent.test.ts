@@ -26,12 +26,10 @@ describe("Input Component", () => {
         expect(element?.value).toBe("Changed Value");
     });
     test("sets placeholder", async () => {
-        const { view, component } = createInputComponent(
-            new InputComponentViewModel(
-                "Initial Value", {
-                placeholder: "Initial Placeholder"
-            })
+        const { view, viewModel, component } = createInputComponent(
+            new InputComponentViewModel("Initial Value")
         );
+        viewModel.placeholder = "Initial Placeholder";
         component.id = inputElementID;
         TestHost.value.show(view, component);
         const element = getInputElement(inputElementID);

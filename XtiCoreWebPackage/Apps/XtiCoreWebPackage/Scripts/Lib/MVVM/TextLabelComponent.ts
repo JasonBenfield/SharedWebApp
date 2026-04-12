@@ -1,54 +1,55 @@
 import { Component } from "./Component";
 import { ComponentView, ComponentViewLayout } from "./ComponentView";
-import { ComponentViewModel, ComponentViewModelInitializer } from "./ComponentViewModel";
+import { ComponentViewModel } from "./ComponentViewModel";
 import { BaseCompositeComponentView } from "./CompositeComponent";
 import { ILabelView, ILabelViewModel, LabelComponentChangeHandler, LabelComponentMixin, LabelViewMixin, LabelViewModelMixin } from "./LabelComponent";
-import { IStyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
-import { BaseTextComponentView, ISynchedTitleViewModel, ITextView, ITextViewModel, SynchedTitleChangeHandler, SynchedTitleComponentMixin, SynchedTitleViewModelMixin, TextChangeHandler, TextComponentMixin, TextViewMixin, TextViewModelMixin, TitleChangeHandler, TitleComponentMixin, TitleViewModelMixin } from "./TextComponent";
+import { StyleableComponentViewMixin } from "./StyleableComponentView";
+import { BaseTextComponentView, ISynchedTitleViewModel, ITextView, ITextViewModel, SynchedTitleChangeHandler, SynchedTitleComponentMixin, SynchedTitleViewModelMixin, TextChangeHandler, TextComponentMixin, TextViewMixin, TextViewModelMixin, TitleChangeHandler, TitleComponentMixin, TitleViewMixin, TitleViewModelMixin } from "./TextComponent";
 import { ITitleView, ITitleViewModel } from "./Types";
 
 export class TextLabelComponentViewModel extends SynchedTitleViewModelMixin(TextViewModelMixin(LabelViewModelMixin(TitleViewModelMixin(ComponentViewModel)))) {
-    constructor(initializer: ComponentViewModelInitializer<TextLabelComponentViewModel> = {}) {
-        super(initializer);
-    }
 }
 
 export type BaseTextLabelComponentViewModel = ComponentViewModel & ILabelViewModel & ITitleViewModel & ITextViewModel & ISynchedTitleViewModel;
 
-export type BaseTextLabelComponentView = ComponentView & IStyleableComponentView & ITitleView & ILabelView & ITextView;
+export type BaseTextLabelComponentView = ComponentView & ITitleView & ILabelView & ITextView;
 
-export class LabelWithTextComponentView<
-    TLayout extends ComponentViewLayout<TLayout>,
-    TPublicLayout extends BaseTextComponentView
-> extends LabelViewMixin(BaseCompositeComponentView)<TLayout, TPublicLayout> implements ITextView {
+class BaseTitleCompositeComponentView<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends ComponentView | ComponentViewLayout<TPublicLayout>>
+    extends TitleViewMixin(BaseCompositeComponentView)<TLayout, TPublicLayout> {
+}
+
+export class LabelContainerOfTextView<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>
+    extends LabelViewMixin(BaseTitleCompositeComponentView)<TLayout, TPublicLayout>
+    implements ILabelView, ITitleView, ITextView {
+
     static create<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new LabelWithTextComponentView(layout, toPublicLayout).asLayout();
+        return new LabelContainerOfTextView(layout, toPublicLayout).asLayout();
     }
 
     constructor(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
         super("label", layout, toPublicLayout);
     }
 
-    declare asLayout: () => LabelWithTextComponentView<TLayout, TPublicLayout> & TLayout;
+    declare asLayout: () => LabelContainerOfTextView<TLayout, TPublicLayout> & TLayout;
 
     setText(text: string) {
         this.publicLayout.setText(text);
     }
 }
 
-export class TextLabelCompositeComponentView<
-    TLayout extends ComponentViewLayout<TLayout>,
-    TPublicLayout extends BaseTextLabelComponentView
-> extends BaseCompositeComponentView<TLayout, TPublicLayout> implements ILabelView, ITextView {
+export class ContainerOfTextLabelView<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextLabelComponentView>
+    extends BaseTitleCompositeComponentView<TLayout, TPublicLayout>
+    implements ILabelView, ITitleView, ITextView {
+
     static block<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends BaseTextLabelComponentView>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new TextLabelCompositeComponentView("div", layout, toPublicLayout).asLayout();
+        return new ContainerOfTextLabelView("div", layout, toPublicLayout).asLayout();
     }
 
     constructor(tagName: string, layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
         super(tagName, layout, toPublicLayout);
     }
 
-    declare asLayout: () => TextLabelCompositeComponentView<TLayout, TPublicLayout> & TLayout;
+    declare asLayout: () => ContainerOfTextLabelView<TLayout, TPublicLayout> & TLayout;
 
     setFor(forID: string) {
         this.publicLayout.setFor(forID);
@@ -59,7 +60,10 @@ export class TextLabelCompositeComponentView<
     }
 }
 
-export class TextLabelComponentView extends TextViewMixin(LabelViewMixin(StyleableComponentViewMixin(ComponentView))) {
+export class TextLabelComponentView
+    extends TitleViewMixin(TextViewMixin(LabelViewMixin(StyleableComponentViewMixin(ComponentView))))
+    implements ITitleView, ITextView, ILabelView {
+
     constructor() {
         super("label");
     }

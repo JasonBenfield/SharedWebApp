@@ -62,19 +62,11 @@ export function StyleableComponentViewMixin<T extends Constructor<ComponentView>
             return this.setAttribute("id", id);
         }
 
-        setName(name: string) {
-            return this.setAttribute("name", name);
-        }
-
-        setTitle(title: string) {
-            return this.setAttribute("title", title);
-        }
-
         protected setAttribute(name: string, value: string | null) {
             return this.setAttributes({ [name]: value });
         }
 
-        setAttributes(updatedAttributes: IHtmlAttributes & { [name: string]: string | null }) {
+        protected setAttributes(updatedAttributes: IHtmlAttributes & { [name: string]: string | null }) {
             for (const name in updatedAttributes) {
                 const value = updatedAttributes[name];
                 if (value === undefined || value === null) {
@@ -103,16 +95,9 @@ export function StyleableComponentViewMixin<T extends Constructor<ComponentView>
 
 export interface IStyleableComponentView {
     setCss(cssBuilder: ICssClass): this;
-
     clearStyle(): this;
-
     setStyle(style: ICssStyle): this;
+}
 
-    setID(id: string): this;
-
-    setName(name: string): this;
-
-    setTitle(title: string): this;
-
-    setAttributes(updatedAttributes: IHtmlAttributes & { [name: string]: string | null }): this;
+export class StyleableComponentView extends StyleableComponentViewMixin(ComponentView) {
 }

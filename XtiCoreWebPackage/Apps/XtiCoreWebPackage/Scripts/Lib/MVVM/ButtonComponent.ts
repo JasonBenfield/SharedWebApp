@@ -2,10 +2,10 @@ import { ButtonCss } from "../Bootstrap/ButtonCss";
 import { ContextualClass } from "../Bootstrap/ContextualClass";
 import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentView, ComponentViewLayout } from "./ComponentView";
-import { ComponentViewModel, ComponentViewModelInitializer, ObservableChanges } from "./ComponentViewModel";
+import { ComponentViewModel, ObservableChanges } from "./ComponentViewModel";
 import { BaseCompositeComponentView } from "./CompositeComponent";
 import { CustomEventRegistrations } from "./EventManager";
-import { IStyleableComponentView } from "./StyleableComponentView";
+import { StyleableComponentView } from "./StyleableComponentView";
 import { TitleViewModelMixin } from "./TextComponent";
 import { Constructor } from "./Types";
 
@@ -25,9 +25,6 @@ export function ButtonComponentViewModelMixin<T extends Constructor<ComponentVie
 }
 
 export class ButtonComponentViewModel extends ButtonComponentViewModelMixin(TitleViewModelMixin(ComponentViewModel)) {
-    constructor(initializer: ComponentViewModelInitializer<ButtonComponentViewModel> = {}) {
-        super(initializer);
-    }
 }
 
 export type ButtonViewEventLayout = {
@@ -42,7 +39,7 @@ export interface IButtonView {
 
 export type BaseButtonComponentView = ComponentView & IButtonView;
 
-export function ButtonViewMixin<T extends Constructor<ComponentView & IStyleableComponentView>>(Base: T) {
+export function ButtonViewMixin<T extends Constructor<StyleableComponentView>>(Base: T) {
     return class extends Base {
         constructor(...args: any[]) {
             super(...args);
@@ -83,12 +80,22 @@ export function ButtonViewMixin<T extends Constructor<ComponentView & IStyleable
             return this.setButtonCss(css => css.context(context));
         }
 
-        styleAsOutline() {
-            return this.setButtonCss(css => css.outline());
+        styleAsOutline(context?: ContextualClass) {
+            return this.setButtonCss(css => {
+                css.outline();
+                if (context) {
+                    css.context(context);
+                }
+            });
         }
 
-        styleAsSolid() {
-            return this.setButtonCss(css => css.solid());
+        styleAsSolid(context?: ContextualClass) {
+            return this.setButtonCss(css => {
+                css.solid();
+                if (context) {
+                    css.context(context);
+                }
+            });
         }
 
         makeLarge() {
@@ -105,7 +112,7 @@ export function ButtonViewMixin<T extends Constructor<ComponentView & IStyleable
 
         protected setButtonCss(configure: (css: ButtonCss) => void) {
             configure(this.buttonCss);
-            return this;
+            return this.setCss(this.buttonCss);
 
         }
 
