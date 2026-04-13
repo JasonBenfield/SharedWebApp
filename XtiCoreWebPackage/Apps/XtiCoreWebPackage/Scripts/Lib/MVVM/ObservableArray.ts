@@ -62,6 +62,10 @@ export class ObservableArray<TViewModel extends ComponentViewModel> {
 
     getValues() { return Array.from(this._values); }
 
+    findIndex(predicate: (value: TViewModel, index: number) => boolean) {
+        return this._values.findIndex(predicate);
+    }
+
     push(...values: TViewModel[]) {
         let i = this._values.length;
         this._values.push(...values);

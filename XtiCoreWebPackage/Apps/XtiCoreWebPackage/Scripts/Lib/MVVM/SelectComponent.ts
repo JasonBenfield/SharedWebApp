@@ -1,3 +1,4 @@
+import { ConsoleLogger } from "../ConsoleLogger";
 import { DebouncedAction } from "../DebouncedAction";
 import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentView } from "./ComponentView";
@@ -67,7 +68,7 @@ export class SelectComponentViewModel<TValue> extends ComponentViewModel impleme
 }
 
 type SelectViewEventLayout = {
-    changed: PointerEvent;
+    changed: Event;
 }
 
 export interface ISelectView {
@@ -109,7 +110,7 @@ export function SelectViewMixin<T extends Constructor<ComponentView>>(Base: T) {
 
         private hasRegisteredSelectEvents = false;
 
-        private handleChangeEvent(evt: PointerEvent) {
+        private handleChangeEvent(evt: Event) {
             this.selectEvents.events.changed.invoke(evt);
         }
 
@@ -148,14 +149,16 @@ export function SelectViewMixin<T extends Constructor<ComponentView>>(Base: T) {
             if (element) {
                 const index = element.selectedIndex;
                 if (index > -1) {
-                    const selectedOption = element.options[index];
+                    const optionElement = element.options[index];
                     selectedIndex = this.getItems().findIndex(
-                        item => item.elementEquals(selectedOption)
+                        item => item.elementEquals(optionElement)
                     );
-
+                }
+                else {
+                    selectedIndex = -1;
                 }
             }
-            return this._selectedIndex;
+            return selectedIndex;
         }
 
         setSelectedIndex(selectedIndex: number) {
@@ -196,7 +199,7 @@ export class SelectComponentView extends SelectViewMixin(StyleableComponentViewM
         const element = this.element as HTMLSelectElement;
         if (element && !element.disabled) {
             element.selectedIndex = selectedIndex;
-            element.dispatchEvent(new Event("change", { bubbles: true }));
+            element.dispatchEvent(new Event("change", { bubbles: true, cancelable: true }));
         }
     }
 
@@ -239,37 +242,47 @@ export class SelectComponent<TValue> extends Component {
             i++;
         }
         viewModel.items.when.arrayChanged.then(this.handleItemsChanged.bind(this));
+        this.view.whenSelect.changed.then(this.onValueChangedFromUI.bind(this));
     }
 
     private readonly registeredEvents = this.eventManager.addEvents<SelectComponentEventLayout<TValue>>({
         valueChanged: null
     });
-    get when() {
-        if (!this.hasRegisteredSelectEvents) {
-            this.view.whenSelect.changed.then(this.onValueChangedFromUI.bind(this));
-            this.hasRegisteredSelectEvents = true;
-        }
-        return this.registeredEvents.when;
-    }
+    readonly when = this.registeredEvents.when;
     private readonly _itemChanges: ChangedObservableArray<BaseOptionComponentViewModel<TValue>>[] = [];
     private readonly _itemComponents: Map<BaseOptionComponentViewModel<TValue>, OptionComponent<TValue>> = new Map();
     private readonly isMatch: (value1: TValue, value2: TValue) => boolean;
     private readonly formatValue: (value: TValue) => string | null;
     private readonly formatText: (value: TValue) => string;
-    private hasRegisteredSelectEvents = false;
+
+    get value() { return this.viewModel.value; }
+    set value(value: TValue | null) {
+        this.viewModel.preferredValue = value;
+        let selectedIndex = -1;
+        if (value) {
+            selectedIndex = this.viewModel.items.findIndex(item => this.isMatch(item.value, value!));
+        }
+        if (selectedIndex < 0) {
+            value = null;
+        }
+        this.viewModel.selectedIndex = new SelectedIndexValue(selectedIndex, false);
+        this.viewModel.value = value;
+    }
 
     private onValueChangedFromUI() {
-        let value: TValue | null = null;
         const selectedIndex = this.view.getSelectedIndex();
-        if (selectedIndex > -1) {
-            const item = this.getItems()[selectedIndex];
-            if (item) {
-                value = item.value;
+        if (this.view.elementExists) {
+            let value: TValue | null = null;
+            if (selectedIndex > -1) {
+                const item = this.getItems()[selectedIndex];
+                if (item) {
+                    value = item.value;
+                }
             }
+            this.viewModel.selectedIndex = new SelectedIndexValue(selectedIndex, true);
+            this.viewModel.value = value;
+            this.viewModel.preferredValue = value;
         }
-        this.viewModel.selectedIndex = new SelectedIndexValue(selectedIndex, true);
-        this.viewModel.value = value;
-        this.viewModel.preferredValue = value;
     }
 
     private handleItemsChanged(evt: CustomEvent<ChangedObservableArray<BaseOptionComponentViewModel<TValue>>[]>) {
@@ -286,18 +299,18 @@ export class SelectComponent<TValue> extends Component {
         const changes = this._itemChanges.splice(0, this._itemChanges.length);
         const itemComponents = this._itemComponents;
         for (const change of changes) {
-            const index = change.index + 1;
             if (change.action === "insert") {
-                this.insertItemComponent(change.item, index);
+                this.insertItemComponent(change.item, change.index);
             }
             else if (change.action === "move") {
                 const itemComponent = itemComponents.get(change.item);
-                itemComponent?.moveTo(index);
+                itemComponent?.moveTo(change.index);
             }
             else if (change.action === "remove") {
                 this.removeItemComponent(change.item);
             }
         }
+        this.selectPreferredValue();
     }
 
     private insertItemComponent(itemVM: BaseOptionComponentViewModel<TValue>, index: number) {
@@ -321,20 +334,6 @@ export class SelectComponent<TValue> extends Component {
         return this.getChildComponents() as OptionComponent<TValue>[];
     }
 
-    get value() { return this.viewModel.value; }
-    set value(value: TValue | null) {
-        this.viewModel.preferredValue = value;
-        let selectedIndex = -1;
-        if (value) {
-            selectedIndex = this.getItems().findIndex(item => this.isMatch(item.value, value!));
-        }
-        if (selectedIndex < 0) {
-            value = null;
-        }
-        this.viewModel.selectedIndex = new SelectedIndexValue(selectedIndex, false);
-        this.viewModel.value = value;
-    }
-
     addItem(sourceItem: TValue) {
         this.addItems(sourceItem);
     }
@@ -342,7 +341,6 @@ export class SelectComponent<TValue> extends Component {
     addItems(...sourceItems: TValue[]) {
         const itemViewModels = sourceItems.map(item => this.createItemViewModel(item));
         this.viewModel.items.push(...itemViewModels);
-        this.itemsChanged();
     }
 
     insertItem(index: number, sourceItem: TValue) {
@@ -352,12 +350,10 @@ export class SelectComponent<TValue> extends Component {
     insertItems(index: number, ...sourceItems: TValue[]) {
         const itemViewModels = sourceItems.map(item => this.createItemViewModel(item));
         this.viewModel.items.splice(index, 0, ...itemViewModels);
-        this.itemsChanged();
     }
 
     removeAllItems() {
         this.viewModel.items.splice(0, this.viewModel.items.length);
-        this.itemsChanged();
     }
 
     setItems(...sourceItems: TValue[]) {
@@ -381,7 +377,6 @@ export class SelectComponent<TValue> extends Component {
         else {
             this.viewModel.items.splice(0, this.viewModel.items.length);
         }
-        this.itemsChanged();
     }
 
     addOrUpdateItems(...sourceItems: TValue[]) {
@@ -401,11 +396,12 @@ export class SelectComponent<TValue> extends Component {
             }
         }
         this.viewModel.items.replaceWith(...itemViewModels);
-        this.itemsChanged();
     }
 
     private createItemViewModel(sourceItem: TValue) {
-        return this.viewModel.createItem(sourceItem);
+        const itemViewModel = this.viewModel.createItem(sourceItem);
+        this.updateItemViewModel(itemViewModel, sourceItem);
+        return itemViewModel;
     }
 
     private updateItemViewModel(itemViewModel: BaseOptionComponentViewModel<TValue>, sourceItem: TValue) {
@@ -413,7 +409,7 @@ export class SelectComponent<TValue> extends Component {
         itemViewModel.text = this.formatText(sourceItem);
     }
 
-    private itemsChanged() {
+    private selectPreferredValue() {
         let value = this.viewModel.preferredValue;
         const selectedIndex = value ?
             this.getItems().findIndex(item => this.isMatch(item.value, value!)) :

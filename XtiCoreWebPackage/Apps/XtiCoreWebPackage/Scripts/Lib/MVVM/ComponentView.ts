@@ -122,10 +122,10 @@ export class ComponentView {
     }
 
     protected removeAllChildViews() {
-        for (const view of this.childViews) {
+        const childViews = this.childViews.splice(0, this.childViews.length);
+        for (const view of childViews) {
             view.dispose();
         }
-        this.childViews.splice(0, this.childViews.length);
     }
 
     protected removeChildView(view: ComponentView) {
@@ -190,15 +190,16 @@ export class ComponentView {
         const parentView = this._parentView;
         const parentElement = parentView?._element;
         if (parentView && parentElement) {
-            const views = parentView.childViews;
+            const siblingViews = parentView.childViews;
             for (let i = 0; i < index; i++) {
-                if (!views[i].isVisible) {
+                const siblingView = siblingViews[i];
+                if (siblingView && !siblingView.isVisible) {
                     elementIndex--;
                 }
             }
             if (elementIndex > -1) {
                 const childElement = parentElement.children[elementIndex];
-                if (childElement instanceof HTMLElement) {
+                if (childElement && childElement instanceof HTMLElement) {
                     refElement = childElement;
                 }
             }

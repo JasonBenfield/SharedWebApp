@@ -52,25 +52,6 @@ export function LinkViewMixin<T extends Constructor<StyleableComponentView>>(Bas
 
 export type BaseLinkComponentView = ComponentView & ITitleView & ILinkView;
 
-export class LinkComponentView<
-    TLayout extends ComponentViewLayout<TLayout>,
-    TPublicLayout extends ComponentViewLayout<TPublicLayout>
-> extends LinkViewMixin(BaseCompositeComponentView)<TLayout, TPublicLayout> {
-    static create<TLayout extends ComponentViewLayout<TLayout>>(layout: TLayout) {
-        return LinkComponentView.createWithPublicLayout(layout, l => Object.assign({}, l));
-    }
-
-    static createWithPublicLayout<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends ComponentViewLayout<TPublicLayout>>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new LinkComponentView(layout, toPublicLayout).asLayout();
-    }
-
-    constructor(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        super("a", layout, toPublicLayout);
-    }
-
-    declare asLayout: () => LinkComponentView<TLayout, TPublicLayout> & TLayout;
-}
-
 export class LinkComponentChangeHandler extends ComponentChangeHandler<ComponentViewModel & BaseLinkComponentViewModel, ComponentView & ILinkView> {
 
     handleChanges(changes: ObservableChanges<ComponentViewModel & BaseLinkComponentViewModel>) {

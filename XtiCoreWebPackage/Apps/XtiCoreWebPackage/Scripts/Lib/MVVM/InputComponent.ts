@@ -1,6 +1,6 @@
 import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentView } from "./ComponentView";
-import { ComponentViewModel,  ObservableChanges } from "./ComponentViewModel";
+import { ComponentViewModel, ObservableChanges } from "./ComponentViewModel";
 import { IEquatable } from "./Equatable";
 import { CustomEventRegistrations } from "./EventManager";
 import { FocusableComponentChangeHandler, FocusableComponentMixin, FocusableViewMixin, FocusableViewModelMixin, HasFocusProperty, IFocusableView } from "./FocusableComponent";
@@ -69,19 +69,34 @@ export interface IInputView {
 export type BaseInputComponentView = ComponentView & IFocusableView & IUniqueView & IInputView;
 
 export class InputComponentView extends FocusableViewMixin(UniqueViewMixin(StyleableComponentViewMixin(ComponentView))) implements IInputView {
+
+    constructor() {
+        super("input");
+        this.setType("text");
+        this.setEventListener(
+            "input",
+            this.handleInputEvent.bind(this) as any
+        );
+        this.setEventListener(
+            "focus",
+            this.handleFocusEvent.bind(this) as any
+        );
+        this.setEventListener(
+            "blur",
+            this.handleBlurEvent.bind(this) as any
+        );
+    }
+
     private readonly events = this.eventManager.addEvents<InputViewEventLayout>({
         textValueInput: null,
         focused: null,
         blurred: null
     });
-    private hasRegisteredEvents = false;
-
-    constructor() {
-        super("input");
-        this.setType("text");
-    }
+    readonly when = this.events.when;
 
     private get inputElement() { return this.element as HTMLInputElement | null; }
+
+    private textValue = "";
 
     setType(type: string) {
         this.setAttribute("type", type);
@@ -96,8 +111,6 @@ export class InputComponentView extends FocusableViewMixin(UniqueViewMixin(Style
         super.addToDom(index);
         this.setInputValue();
     }
-
-    private textValue = "";
 
     setTextValue(textValue: string) {
         this.textValue = textValue;
@@ -122,25 +135,6 @@ export class InputComponentView extends FocusableViewMixin(UniqueViewMixin(Style
     required() { return this.setAttribute("required", ""); }
 
     notRequired() { return this.setAttribute("required", null); }
-
-    get when() {
-        if (!this.hasRegisteredEvents) {
-            this.setEventListener(
-                "input",
-                this.handleInputEvent.bind(this) as any
-            );
-            this.setEventListener(
-                "focus",
-                this.handleFocusEvent.bind(this) as any
-            );
-            this.setEventListener(
-                "blur",
-                this.handleBlurEvent.bind(this) as any
-            );
-            this.hasRegisteredEvents = true;
-        }
-        return this.events.when;
-    }
 
     private handleInputEvent(evt: InputEvent) {
         this.events.events.textValueInput.invoke(evt);

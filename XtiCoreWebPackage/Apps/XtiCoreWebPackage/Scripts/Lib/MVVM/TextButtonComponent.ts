@@ -4,7 +4,7 @@ import { ComponentView, ComponentViewLayout } from "./ComponentView";
 import { ComponentViewModel } from "./ComponentViewModel";
 import { BaseCompositeComponentView } from "./CompositeComponent";
 import { IStyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
-import { BaseTextComponentView, ISynchedTitleViewModel, ITextView, ITextViewModel, SynchedTitleChangeHandler, SynchedTitleComponentMixin, SynchedTitleViewModelMixin, TextChangeHandler, TextComponentMixin, TextViewMixin, TextViewModelMixin, TitleChangeHandler, TitleComponentMixin, TitleViewModelMixin } from "./TextComponent";
+import { BaseTextComponentView, ISynchedTitleViewModel, ITextView, ITextViewModel, SynchedTitleChangeHandler, SynchedTitleComponentMixin, SynchedTitleViewModelMixin, TextChangeHandler, TextComponentMixin, TextViewMixin, TextViewModelMixin, TitleChangeHandler, TitleComponentMixin, TitleViewMixin, TitleViewModelMixin } from "./TextComponent";
 import { ITitleView, ITitleViewModel } from "./Types";
 
 export class TextButtonComponentViewModel extends SynchedTitleViewModelMixin(TextViewModelMixin(ButtonComponentViewModelMixin(TitleViewModelMixin(ComponentViewModel)))) {
@@ -58,7 +58,8 @@ export class TextButtonCompositeComponentView<
     }
 }
 
-export class TextButtonComponentView extends TextViewMixin(ButtonViewMixin(StyleableComponentViewMixin(ComponentView))) {
+export class TextButtonComponentView extends TitleViewMixin(TextViewMixin(ButtonViewMixin(StyleableComponentViewMixin(ComponentView))))
+    implements ITitleView, ITextView, IButtonView {
     constructor() {
         super("button");
     }

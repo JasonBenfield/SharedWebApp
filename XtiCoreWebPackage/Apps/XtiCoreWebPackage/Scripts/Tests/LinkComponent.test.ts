@@ -1,6 +1,7 @@
 
 import { afterEach, describe, expect, test } from "@jest/globals";
-import { LinkComponent, LinkComponentView, LinkComponentViewModel } from "../Lib/MVVM/LinkComponent";
+import { LinkComponent, LinkComponentViewModel } from "../Lib/MVVM/LinkComponent";
+import { LinkCompositeComponentView } from "../Lib/MVVM/LinkCompositeComponent";
 import { TextComponentView } from "../Lib/MVVM/TextComponent";
 import { TestHost } from "./TestHost";
 
@@ -34,7 +35,7 @@ describe("Link Component", () => {
 });
 
 function createLinkComponent(linkViewModel = new LinkComponentViewModel()) {
-    const linkView = LinkComponentView.create({
+    const linkView = LinkCompositeComponentView.create({
         text: TextComponentView.block()
     });
     linkView.setID(linkElementID);

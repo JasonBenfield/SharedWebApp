@@ -1,11 +1,12 @@
 
 import { afterEach, describe, expect, test } from "@jest/globals";
+import { ConsoleLogger } from "../Lib/ConsoleLogger";
+import { DelayedAction } from "../Lib/DelayedAction";
 import { InputComponent, InputComponentView, InputComponentViewModel } from "../Lib/MVVM/InputComponent";
-import { LabelComponent, LabelComponentView, LabelComponentViewModel } from "../Lib/MVVM/LabelComponent";
+import { LabelComponent, LabelComponentViewModel } from "../Lib/MVVM/LabelComponent";
+import { LabelCompositeComponentView } from "../Lib/MVVM/LabelCompositeComponent";
 import { TextComponentView } from "../Lib/MVVM/TextComponent";
 import { TestHost } from "./TestHost";
-import { DelayedAction } from "../Lib/DelayedAction";
-import { ConsoleLogger } from "../Lib/ConsoleLogger";
 
 const elementID = "labelEl";
 
@@ -36,7 +37,7 @@ describe("Label Component", () => {
 
 function createLabelComponent() {
     const labelViewModel = new LabelComponentViewModel();
-    const labelView = LabelComponentView.create({
+    const labelView = LabelCompositeComponentView.create({
         text: TextComponentView.block()
     });
     labelView.setID(elementID);

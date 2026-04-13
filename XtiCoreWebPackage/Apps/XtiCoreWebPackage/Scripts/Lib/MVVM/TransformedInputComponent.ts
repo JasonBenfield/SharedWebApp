@@ -162,10 +162,6 @@ type TransformedInputComponentEventLayout<TValue> = {
 };
 
 export class TransformedInputComponent<TValue> extends UniqueComponentMixin(FocusableComponentMixin(Component)) {
-    private readonly events = this.eventManager.addEvents<TransformedInputComponentEventLayout<TValue>>({
-        valueChanged: null
-    });
-    readonly when = this.events.when;
 
     constructor(
         protected readonly viewModel: TransformedInputComponentViewModel<TValue>,
@@ -183,6 +179,11 @@ export class TransformedInputComponent<TValue> extends UniqueComponentMixin(Focu
         view.when.focused.then(this.onFocusFromUI.bind(this));
         view.when.blurred.then(this.onBlurFromUI.bind(this));
     }
+
+    private readonly events = this.eventManager.addEvents<TransformedInputComponentEventLayout<TValue>>({
+        valueChanged: null
+    });
+    readonly when = this.events.when;
 
     private onTextValueChangedFromUI() {
         const textValue = this.view.getTextValue();
