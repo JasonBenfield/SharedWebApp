@@ -1,8 +1,9 @@
 
 import { afterEach, describe, expect, test } from "@jest/globals";
-import { FormGroupText, FormGroupView, FormGroupViewModel } from "../Lib/MVVM/FormGroup";
-import { TestHost } from "./TestHost";
+import { FormGroupView, FormGroupViewModel } from "../Lib/MVVM/FormGroup";
+import { FormGroupText } from "../Lib/MVVM/FormGroupText";
 import { TextComponentView, TextComponentViewModel } from "../Lib/MVVM/TextComponent";
+import { TestHost } from "./TestHost";
 
 const formGroupElementID = "formGroupEl";
 
@@ -15,7 +16,7 @@ describe("Readonly Form Group", () => {
         const { view, viewModel, component } = createReadonlyFormGroup();
         TestHost.value.show(view, component);
         component.caption.text = "Caption 1";
-        component.value.text ="Value 1";
+        component.value.text = "Value 1";
         expect(viewModel.caption.text).toEqual("Caption 1");
         expect(viewModel.value.text).toEqual("Value 1");
         component.dispose();

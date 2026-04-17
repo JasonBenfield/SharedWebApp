@@ -81,7 +81,7 @@ describe("Select Component", () => {
             new TestItem(2)
         ];
         component.addItems(...items);
-        component.value = items[0];
+        component.setValue(items[0]);
         TestHost.value.show(view, component);
         component.removeAllItems();
         component.immediateHandleChanges();
@@ -95,11 +95,11 @@ describe("Select Component", () => {
         const { view, component } = createSelectComponent();
         const items = [new TestItem(1), new TestItem(2)];
         component.addItems(...items);
-        component.value = items[1];
+        component.setValue(items[1]);
         TestHost.value.show(view, component);
         const element = document.getElementById(elementID) as HTMLSelectElement;
         expect(element?.selectedIndex).toBe(1);
-        component.value = items[0];
+        component.setValue(items[0]);
         component.immediateHandleChanges();
         expect(element?.selectedIndex).toBe(0);
     });
@@ -107,7 +107,7 @@ describe("Select Component", () => {
     test("selects value set before items are added", async () => {
         const { view, component } = createSelectComponent();
         const items = [new TestItem(1), new TestItem(2)];
-        component.value = items[1];
+        component.setValue(items[1]);
         component.addItems(...items);
         TestHost.value.show(view, component);
         const element = document.getElementById(elementID) as HTMLSelectElement;
@@ -118,7 +118,7 @@ describe("Select Component", () => {
         const { view, component } = createSelectComponent();
         const items = [new TestItem(1), new TestItem(2)];
         component.addItems(...items);
-        component.value = items[1];
+        component.setValue(items[1]);
         TestHost.value.show(view, component);
         component.setItems(new TestItem(1), new TestItem(3));
         component.immediateHandleChanges();
@@ -130,9 +130,9 @@ describe("Select Component", () => {
         const { view, component } = createSelectComponent();
         const items = [new TestItem(1), new TestItem(2)];
         component.addItems(...items);
-        component.value = items[1];
+        component.setValue(items[1]);
         TestHost.value.show(view, component);
-        component.value = null;
+        component.setValue(null);
         component.immediateHandleChanges();
         const element = document.getElementById(elementID) as HTMLSelectElement;
         expect(element?.selectedIndex).toBe(-1);
@@ -142,7 +142,7 @@ describe("Select Component", () => {
         const { view, component } = createSelectComponent();
         const items = [new TestItem(1), new TestItem(2)];
         component.addItems(...items);
-        component.value = items[1];
+        component.setValue(items[1]);
         TestHost.value.show(view, component);
         view.simulateChange(0);
         component.immediateHandleChanges();
@@ -152,16 +152,17 @@ describe("Select Component", () => {
 });
 
 function createSelectComponent() {
-    const viewModel = new SelectComponentViewModel<TestItem>();
+    const viewModel = new SelectComponentViewModel<TestItem | null>();
     const view = new SelectComponentView();
     view.setID(elementID);
-    const component = new SelectComponent<TestItem>(
+    const component = new SelectComponent<TestItem | null>(
         viewModel,
         view,
+        null,
         {
-            isMatch: (item1, item2) => item1.id === item2.id,
-            formatValue: (val) => val.id.toString(),
-            formatText: (val) => val.toString()
+            isMatch: (item1, item2) => item1?.id === item2?.id,
+            formatValue: (val) => val?.id.toString() || null,
+            formatText: (val) => val?.toString() || ""
         }
     );
     return {

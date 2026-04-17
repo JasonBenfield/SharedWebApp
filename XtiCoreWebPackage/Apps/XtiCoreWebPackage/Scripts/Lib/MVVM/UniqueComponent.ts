@@ -3,7 +3,7 @@ import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentView } from "./ComponentView";
 import { ComponentViewModel, ObservableChanges } from "./ComponentViewModel";
 import { CustomEventRegistrations } from "./EventManager";
-import { StyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
+import { StyleableComponentView } from "./StyleableComponentView";
 import { Constructor } from "./Types";
 
 export interface IUniqueViewModel {

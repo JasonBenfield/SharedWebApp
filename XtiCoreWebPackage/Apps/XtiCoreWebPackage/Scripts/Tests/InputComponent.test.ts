@@ -13,9 +13,8 @@ afterEach(() => {
 
 describe("Input Component", () => {
     test("sets text value", async () => {
-        const { view, component } = createInputComponent(
-            new InputComponentViewModel("Initial Value")
-        );
+        const { view, component } = createInputComponent();
+        component.textValue = "Initial Value";
         component.id = inputElementID;
         TestHost.value.show(view, component);
         const element = getInputElement(inputElementID);
@@ -26,10 +25,8 @@ describe("Input Component", () => {
         expect(element?.value).toBe("Changed Value");
     });
     test("sets placeholder", async () => {
-        const { view, viewModel, component } = createInputComponent(
-            new InputComponentViewModel("Initial Value")
-        );
-        viewModel.placeholder = "Initial Placeholder";
+        const { view, component } = createInputComponent();
+        component.placeholder = "Initial Placeholder";
         component.id = inputElementID;
         TestHost.value.show(view, component);
         const element = getInputElement(inputElementID);
@@ -40,18 +37,15 @@ describe("Input Component", () => {
         expect(element?.placeholder).toBe("Changed Placeholder");
     });
     test("updates view model from input", async () => {
-        const { view, component } = createInputComponent(
-            new InputComponentViewModel("Initial Value")
-        );
+        const { view, component } = createInputComponent();
+        component.textValue = "Initial Value";
         TestHost.value.show(view, component);
         view.simulateInputEvent("Changed Value");
         TestHost.value.immediateHandleChanges();
         expect(component.textValue).toBe("Changed Value");
     });
     test("sets id and name", async () => {
-        const { view, component } = createInputComponent(
-            new InputComponentViewModel("Initial Value")
-        );
+        const { view, component } = createInputComponent();
         TestHost.value.show(view, component);
         const element = getInputElement(component.id);
         expect(element?.id).not.toBe("");
@@ -63,9 +57,7 @@ describe("Input Component", () => {
         expect(element.name).toBe("changedName");
     });
     test("sets focus and blurs", async () => {
-        const { view, component } = createInputComponent(
-            new InputComponentViewModel("Initial Value")
-        );
+        const { view, component } = createInputComponent();
         component.setFocus();
         TestHost.value.show(view, component);
         expect(document.activeElement).toBe(getInputElement(component.id));

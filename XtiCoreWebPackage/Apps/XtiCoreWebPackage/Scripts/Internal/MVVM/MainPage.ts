@@ -13,7 +13,8 @@ import { FormattedNumber } from "../../Lib/FormattedNumber";
 import { ButtonCommandView, Command, CommandOptionsBuilder, CommandViewModel } from "../../Lib/MVVM/Command";
 import { ComponentViewModel } from "../../Lib/MVVM/ComponentViewModel";
 import { CompositeComponentBuilder, CompositeComponentView } from "../../Lib/MVVM/CompositeComponent";
-import { FormGroupContainerView, FormGroupInputView, FormGroupText, FormGroupTextView, FormGroupTextViewModel, FormGroupTransformedInput, FormGroupTransformedInputViewModel } from "../../Lib/MVVM/FormGroup";
+import { IEquatable } from "../../Lib/MVVM/Equatable";
+import { FormGroupContainerView, FormGroupInputView, FormGroupSelect, FormGroupSelectView, FormGroupSelectViewModel, FormGroupText, FormGroupTextView, FormGroupTextViewModel, FormGroupTransformedInput, FormGroupTransformedInputViewModel } from "../../Lib/MVVM/FormGroup";
 import { GridCellTextView, GridCellView, GridRowView, GridSpan, GridView } from "../../Lib/MVVM/GridView";
 import { IViewModelUpdater, ListComponent, ListComponentOptionsBuilder, ListComponentViewModel, ListItemFactory, TextViewModelUpdater } from "../../Lib/MVVM/ListComponent";
 import { GridListGroupItemView, GridListGroupView, GridListGroupItemContainerOfTextView, ListGroupView, TextListGroupItemView } from "../../Lib/MVVM/ListGroup";
@@ -26,6 +27,8 @@ class MainPageViewModel extends ComponentViewModel {
     readonly textFormGroup = new FormGroupTextViewModel();
     readonly inputFormGroup = new FormGroupTransformedInputViewModel(0);
     readonly inputResultFormGroup = new FormGroupTextViewModel();
+    readonly selectFormGroup = new FormGroupSelectViewModel<TestItem>();
+    readonly selectResultFormGroup = new FormGroupTextViewModel();
     readonly link = new TextLinkComponentViewModel();
     readonly textList = new ListComponentViewModel<TextComponentViewModel>();
     readonly compositeList = new ListComponentViewModel<TestItemComponentViewModel>();
@@ -84,7 +87,9 @@ class MainPageView {
                 formGroups: FormGroupContainerView.create({
                     textFormGroup: new FormGroupTextView(),
                     inputFormGroup: new FormGroupInputView(),
-                    inputResultFormGroup: new FormGroupTextView()
+                    inputResultFormGroup: new FormGroupTextView(),
+                    selectFormGroup: new FormGroupSelectView(),
+                    selectResultFormGroup: new FormGroupTextView()
                 }),
                 link: LinkContainerOfTextView.create({
                     text: TextComponentView.span(),
@@ -108,6 +113,8 @@ class MainPageView {
             textFormGroup: l.content.container.formGroups.textFormGroup,
             inputFormGroup: l.content.container.formGroups.inputFormGroup,
             inputResultFormGroup: l.content.container.formGroups.inputResultFormGroup,
+            selectFormGroup: l.content.container.formGroups.selectFormGroup,
+            selectResultFormGroup: l.content.container.formGroups.selectResultFormGroup,
             link: l.content.container.link,
             textList: l.content.container.textList,
             compositeList: l.content.container.compositeList,
@@ -123,6 +130,12 @@ class MainPage {
         const pageViewModel = new MainPageViewModel();
         const pageView = new MainPageView();
 
+        const selectItems = [
+            new TestItem(0, "Select..."),
+            new TestItem(1, "Option 1"),
+            new TestItem(1, "Option 2"),
+            new TestItem(1, "Option 3")
+        ];
         const component = new CompositeComponentBuilder(pageViewModel)
             .view(pageView.view)
             .factory({
@@ -135,6 +148,16 @@ class MainPage {
                         .setFormatString(FormattedNumber.currencyFormatString)
                 ),
                 inputResultFormGroup: (vm, v) => new FormGroupText(vm, v),
+                selectFormGroup: (vm, v) => new FormGroupSelect<TestItem>(
+                    vm,
+                    v,
+                    selectItems[0],
+                    {
+                        formatValue: (v) => v.id.toString(),
+                        formatText: (v) => v.toString()
+                    }
+                ),
+                selectResultFormGroup: (vm, v) => new FormGroupText(vm, v),
                 link: (vm, v) => new TextLinkComponent(vm, v),
                 textList: (vm, v) => createTextListComponent(vm, v),
                 compositeList: (vm, v) => createCompositeListComponent(vm, v),
@@ -152,6 +175,15 @@ class MainPage {
         component.textFormGroup.setValue("Value 1");
         component.inputFormGroup.setCaption("Input");
         component.inputResultFormGroup.setCaption("Input Result");
+        component.inputFormGroup.when.valueChanged.then(evt => {
+            component.inputResultFormGroup.setValue(evt.detail.toLocaleString());
+        });
+        component.selectFormGroup.setCaption("Select");
+        component.selectFormGroup.addItems(...selectItems);
+        component.selectResultFormGroup.setCaption("Select Result");
+        component.selectFormGroup.when.valueChanged.then(evt => {
+            component.selectResultFormGroup.setValue(evt.detail.toString());
+        });
         component.link.href = "https://example.com";
         component.link.text = "Example";
         component.textList.header.text = "Text List Header";
@@ -191,9 +223,6 @@ class MainPage {
             alert(`${text} clicked!`);
         });
         component.button.setText("Test Button");
-        component.inputFormGroup.when.valueChanged.then(evt => {
-            component.inputResultFormGroup.setValue(evt.detail.toLocaleString());
-        });
         AppHost.value.show(
             pageView.view,
             component
@@ -201,9 +230,19 @@ class MainPage {
     }
 }
 
-class TestItem {
+class TestItem implements IEquatable {
     constructor(readonly id: number, readonly value: string) {
     }
+
+    equals(other: any) {
+        let result = false;
+        if (other && other instanceof TestItem) {
+            result = other.id == this.id;
+        }
+        return result;
+    }
+
+    toString() { return this.value; }
 }
 
 class TestItemComponentViewModel extends ComponentViewModel {

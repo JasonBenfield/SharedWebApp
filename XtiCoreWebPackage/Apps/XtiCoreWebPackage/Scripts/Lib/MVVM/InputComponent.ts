@@ -3,9 +3,10 @@ import { ComponentView } from "./ComponentView";
 import { ComponentViewModel, ObservableChanges } from "./ComponentViewModel";
 import { IEquatable } from "./Equatable";
 import { CustomEventRegistrations } from "./EventManager";
-import { FocusableComponentChangeHandler, FocusableComponentMixin, FocusableViewMixin, FocusableViewModelMixin, HasFocusProperty, IFocusableView } from "./FocusableComponent";
-import { StyleableComponentViewMixin } from "./StyleableComponentView";
-import { IUniqueView, UniqueComponentChangeHandler, UniqueComponentMixin, UniqueViewMixin, UniqueViewModelMixin } from "./UniqueComponent";
+import { FocusableComponentChangeHandler, FocusableComponentMixin, FocusableViewMixin, FocusableViewModelMixin, HasFocusProperty, IFocusableView, IFocusableViewModel } from "./FocusableComponent";
+import { StyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
+import { Constructor } from "./Types";
+import { IUniqueView, IUniqueViewModel, UniqueComponentChangeHandler, UniqueComponentMixin, UniqueViewMixin, UniqueViewModelMixin } from "./UniqueComponent";
 
 export class InputTextValue implements IEquatable {
     constructor(readonly value: string, readonly isFromUI = false) {
@@ -27,28 +28,71 @@ export class InputTextValue implements IEquatable {
     }
 }
 
-export class InputComponentViewModel extends UniqueViewModelMixin(FocusableViewModelMixin(ComponentViewModel)) {
-    constructor(initialTextValue: string = "") {
-        super();
-        this.textValue = new InputTextValue(initialTextValue);
-    }
+export interface ITextInputViewModel {
+    get textValue(): InputTextValue;
+    set textValue(textValue: InputTextValue);
 
-    private _textValue = new InputTextValue("");
-    get textValue() { return this._textValue; }
-    set textValue(textValue: InputTextValue) { this._textValue = textValue; }
+    get placeholder(): string;
+    set placeholder(placeholder: string);
 
-    private _placeholder = "";
-    get placeholder() { return this._placeholder; }
-    set placeholder(placeholder: string) { this._placeholder = placeholder; }
+    get maxLength(): number;
+    set maxLength(maxLength: number);
 
-    private _isRequired = false;
-    get isRequired() { return this._isRequired; }
-    set isRequired(isRequired: boolean) { this._isRequired = isRequired; }
+    get isRequired(): boolean;
+    set isRequired(isRequired: boolean);
 
-    private _maxLength = 0;
-    get maxLength() { return this._maxLength; }
-    set maxLength(maxLength: number) { this._maxLength = maxLength; }
+    get isDisabled(): boolean;
+    set isDisabled(isDisabled: boolean);
+
+    get isReadOnly(): boolean;
+    set isReadOnly(isReadOnly: boolean);
 }
+
+export function TextInputViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T) {
+    return class extends Base implements ITextInputViewModel {
+        private _textValue = new InputTextValue("");
+        get textValue() { return this._textValue; }
+        set textValue(textValue: InputTextValue) { this._textValue = textValue; }
+
+        private _isRequired = false;
+        get isRequired() { return this._isRequired; }
+        set isRequired(isRequired: boolean) { this._isRequired = isRequired; }
+
+        private _maxLength = 0;
+        get maxLength() { return this._maxLength; }
+        set maxLength(maxLength: number) { this._maxLength = maxLength; }
+
+        private _isDisabled = false;
+        get isDisabled() { return this._isDisabled; }
+        set isDisabled(isDisabled: boolean) { this._isDisabled = isDisabled; }
+
+        private _isReadOnly = false;
+        get isReadOnly() { return this._isReadOnly; }
+        set isReadOnly(isReadOnly: boolean) { this._isReadOnly = isReadOnly; }
+
+        private _placeholder = "";
+        get placeholder() { return this._placeholder; }
+        set placeholder(placeholder: string) { this._placeholder = placeholder; }
+    };
+}
+
+export interface IInputComponentViewModel {
+    get inputType(): string;
+    set inputType(inputType: string);
+}
+
+export class InputComponentViewModel
+    extends TextInputViewModelMixin(UniqueViewModelMixin(FocusableViewModelMixin(ComponentViewModel)))
+    implements ITextInputViewModel, IInputComponentViewModel {
+
+    private _inputType = "";
+    get inputType() { return this._inputType; }
+    set inputType(inputType: string) { this._inputType = inputType; }
+}
+
+export type BaseTextInputComponentViewModel = ComponentViewModel & ITextInputViewModel;
+
+export type BaseInputComponentViewModel = ComponentViewModel & ITextInputViewModel & IInputComponentViewModel & IUniqueViewModel & IFocusableViewModel;
 
 type InputViewEventLayout = {
     textValueInput: InputEvent;
@@ -56,19 +100,80 @@ type InputViewEventLayout = {
     blurred: FocusEvent;
 }
 
-export interface IInputView {
-    readonly when: CustomEventRegistrations<InputViewEventLayout>;
+export interface ITextInputView {
     getTextValue(): string;
     setTextValue(textValue: string): void;
     setPlaceholder(placeholder: string): this;
     setMaxLength(maxLength: number): this;
     required(): this;
     notRequired(): this;
+    enable(): void;
+    disable(): void;
+    makeReadOnly(): void;
+    makeEditable(): void;
 }
 
-export type BaseInputComponentView = ComponentView & IFocusableView & IUniqueView & IInputView;
+export interface IInputView {
+    readonly when: CustomEventRegistrations<InputViewEventLayout>;
+    setType(type: string): void;
+}
 
-export class InputComponentView extends FocusableViewMixin(UniqueViewMixin(StyleableComponentViewMixin(ComponentView))) implements IInputView {
+export type BaseTextInputComponentView = ComponentView & IFocusableView & IUniqueView & ITextInputView;
+
+export type BaseInputComponentView = ComponentView & IFocusableView & IUniqueView & ITextInputView & IInputView;
+
+export function TextInputComponentViewMixin<T extends Constructor<StyleableComponentView>>(Base: T) {
+    return class extends Base implements ITextInputView {
+        private textValue = "";
+        private get textInputElement() { return this.element as HTMLInputElement | HTMLTextAreaElement | null; }
+
+        getTextValue() {
+            const element = this.textInputElement;
+            return element ? element.value : "";
+        }
+
+        protected addToDom(index: number) {
+            super.addToDom(index);
+            this.setInputValue();
+        }
+
+        setTextValue(textValue: string) {
+            this.textValue = textValue;
+            this.setInputValue();
+        }
+
+        private setInputValue() {
+            const element = this.textInputElement;
+            if (element) {
+                element.value = this.textValue;
+            }
+        }
+
+        setPlaceholder(placeholder: string) {
+            return this.setAttribute("placeholder", placeholder);
+        }
+
+        setMaxLength(maxLength: number) {
+            return this.setAttribute("maxlength", maxLength.toString());
+        }
+
+        required() { return this.setAttribute("required", ""); }
+
+        notRequired() { return this.removeAttribute("required"); }
+
+        enable() { return this.removeAttribute("disabled"); }
+
+        disable() { return this.setAttribute("disabled", ""); }
+
+        makeReadOnly() { return this.setAttribute("readOnly", ""); }
+
+        makeEditable() { return this.removeAttribute("readOnly"); }
+    };
+}
+
+export class InputComponentView
+    extends TextInputComponentViewMixin(FocusableViewMixin(UniqueViewMixin(StyleableComponentViewMixin(ComponentView))))
+    implements ITextInputView, IInputView {
 
     constructor() {
         super("input");
@@ -96,45 +201,9 @@ export class InputComponentView extends FocusableViewMixin(UniqueViewMixin(Style
 
     private get inputElement() { return this.element as HTMLInputElement | null; }
 
-    private textValue = "";
-
     setType(type: string) {
         this.setAttribute("type", type);
     }
-
-    getTextValue() {
-        const element = this.inputElement;
-        return element ? element.value : "";
-    }
-
-    protected addToDom(index: number) {
-        super.addToDom(index);
-        this.setInputValue();
-    }
-
-    setTextValue(textValue: string) {
-        this.textValue = textValue;
-        this.setInputValue();
-    }
-
-    private setInputValue() {
-        const element = this.inputElement;
-        if (element) {
-            element.value = this.textValue;
-        }
-    }
-
-    setPlaceholder(placeholder: string) {
-        return this.setAttribute("placeholder", placeholder);
-    }
-
-    setMaxLength(maxLength: number) {
-        return this.setAttribute("maxlength", maxLength.toString());
-    }
-
-    required() { return this.setAttribute("required", ""); }
-
-    notRequired() { return this.setAttribute("required", null); }
 
     private handleInputEvent(evt: InputEvent) {
         this.events.events.textValueInput.invoke(evt);
@@ -188,18 +257,27 @@ export class InputComponentView extends FocusableViewMixin(UniqueViewMixin(Style
     }
 }
 
-export class InputComponentChangeHandler extends ComponentChangeHandler<InputComponentViewModel, BaseInputComponentView> {
-    constructor(viewModel: InputComponentViewModel, view: BaseInputComponentView) {
+export class TextInputValueChangeHandler extends ComponentChangeHandler<BaseTextInputComponentViewModel, BaseTextInputComponentView> {
+    constructor(viewModel: BaseTextInputComponentViewModel, view: BaseTextInputComponentView) {
         super(viewModel, view);
     }
 
-    handleChanges(changes: ObservableChanges<InputComponentViewModel>) {
+    handleChanges(changes: ObservableChanges<BaseTextInputComponentViewModel>) {
         if (changes.textValue) {
             const textValue = changes.textValue.value;
             if (!textValue.isFromUI) {
                 this.updateView(v => v.setTextValue(textValue.value));
             }
         }
+    }
+}
+
+export class TextInputComponentChangeHandler extends ComponentChangeHandler<BaseTextInputComponentViewModel, BaseTextInputComponentView> {
+    constructor(viewModel: BaseTextInputComponentViewModel, view: BaseTextInputComponentView) {
+        super(viewModel, view);
+    }
+
+    handleChanges(changes: ObservableChanges<BaseTextInputComponentViewModel>) {
         if (changes.placeholder) {
             const placeholder = changes.placeholder.value;
             this.updateView(v => v.setPlaceholder(placeholder));
@@ -222,18 +300,73 @@ export class InputComponentChangeHandler extends ComponentChangeHandler<InputCom
     }
 }
 
+export class InputComponentChangeHandler extends ComponentChangeHandler<BaseInputComponentViewModel, BaseInputComponentView> {
+    constructor(viewModel: BaseInputComponentViewModel, view: BaseInputComponentView) {
+        super(viewModel, view);
+    }
+
+    handleChanges(changes: ObservableChanges<BaseInputComponentViewModel>) {
+        if (changes.inputType) {
+            const inputType = changes.inputType.value;
+            this.updateView(v => v.setType(inputType));
+        }
+    }
+}
+
 type InputComponentEventLayout = {
     textValueChanged: string
 };
 
-export class InputComponent extends UniqueComponentMixin(FocusableComponentMixin(Component)) {
+export function TextInputValueComponentMixin<T extends Constructor<Component>>(Base: T) {
+    return class extends Base {
+        declare protected readonly viewModel: BaseTextInputComponentViewModel;
+
+        get textValue() { return this.viewModel.textValue.value; }
+        set textValue(textValue: string) { this.viewModel.textValue = new InputTextValue(textValue, false); }
+    }
+}
+
+export function TextInputComponentMixin<T extends Constructor<Component>>(Base: T) {
+    return class extends Base {
+        declare protected readonly viewModel: BaseTextInputComponentViewModel;
+
+        get placeholder() { return this.viewModel.placeholder; }
+        set placeholder(placeholder: string) { this.viewModel.placeholder = placeholder; }
+
+        get maxLength() { return this.viewModel.maxLength; }
+        set maxLength(maxLength: number) { this.viewModel.maxLength = maxLength; }
+
+        required() { this.viewModel.isRequired = true; }
+
+        notRequired() { this.viewModel.isRequired = false; }
+
+    }
+}
+
+export function InputComponentMixin<T extends Constructor<Component>>(Base: T) {
+    return class extends Base {
+        declare protected readonly viewModel: BaseInputComponentViewModel;
+
+        hideInput() {
+            this.viewModel.inputType = "hidden";
+        }
+
+        obscureInput() {
+            this.viewModel.inputType = "password";
+        }
+    }
+}
+
+export class InputComponent
+    extends InputComponentMixin(TextInputValueComponentMixin(TextInputComponentMixin(UniqueComponentMixin(FocusableComponentMixin(Component))))) {
+
     private readonly events = this.eventManager.addEvents<InputComponentEventLayout>({
         textValueChanged: null
     });
     readonly when = this.events.when;
 
     constructor(
-        protected readonly viewModel: InputComponentViewModel,
+        protected readonly viewModel: BaseInputComponentViewModel,
         protected readonly view: BaseInputComponentView
     ) {
         super(
@@ -241,14 +374,17 @@ export class InputComponent extends UniqueComponentMixin(FocusableComponentMixin
             view,
             new UniqueComponentChangeHandler(viewModel, view),
             new FocusableComponentChangeHandler(viewModel, view),
+            new TextInputValueChangeHandler(viewModel, view),
+            new TextInputComponentChangeHandler(viewModel, view),
             new InputComponentChangeHandler(viewModel, view)
         );
+        viewModel.inputType = "text";
         view.when.textValueInput.then(this.onTextValueChangedFromUI.bind(this));
         view.when.focused.then(this.onFocusFromUI.bind(this));
         view.when.blurred.then(this.onBlurFromUI.bind(this));
     }
 
-    protected handleChanges(changes: ObservableChanges<InputComponentViewModel>) {
+    protected handleChanges(changes: ObservableChanges<BaseInputComponentViewModel>) {
         super.handleChanges(changes);
         if (changes.textValue) {
             const textValue: InputTextValue = changes.textValue.value;
@@ -269,23 +405,5 @@ export class InputComponent extends UniqueComponentMixin(FocusableComponentMixin
 
     private onBlurFromUI() {
         this.viewModel.hasFocus = new HasFocusProperty(false, true);
-    }
-
-    get textValue() { return this.viewModel.textValue.value; }
-    set textValue(textValue: string) { this.viewModel.textValue = new InputTextValue(textValue, false); }
-
-    get placeholder() { return this.viewModel.placeholder; }
-    set placeholder(placeholder: string) { this.viewModel.placeholder = placeholder; }
-
-    get maxLength() { return this.viewModel.maxLength; }
-    set maxLength(maxLength: number) { this.viewModel.maxLength = maxLength; }
-
-    required() { this.viewModel.isRequired = true; }
-
-    notRequired() { this.viewModel.isRequired = false; }
-
-    dispose() {
-        this.eventManager.dispose();
-        super.dispose();
     }
 }

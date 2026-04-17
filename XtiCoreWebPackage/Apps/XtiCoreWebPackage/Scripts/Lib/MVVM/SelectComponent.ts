@@ -2,7 +2,7 @@ import { ConsoleLogger } from "../ConsoleLogger";
 import { DebouncedAction } from "../DebouncedAction";
 import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentView } from "./ComponentView";
-import { ComponentViewModel, ObservableChanges } from "./ComponentViewModel";
+import { ChangedProperty, ComponentViewModel, ObservableChanges } from "./ComponentViewModel";
 import { areValuesEqual, IEquatable } from "./Equatable";
 import { CustomEventRegistrations } from "./EventManager";
 import { MvvmOptions } from "./MvvmOptions";
@@ -230,9 +230,14 @@ export class SelectComponent<TValue> extends Component {
     constructor(
         protected readonly viewModel: BaseSelectComponentViewModel<TValue>,
         protected readonly view: BaseSelectComponentView,
+        private readonly valueWhenNull: TValue,
         itemUpdater?: IOptionComponentUpdater<TValue>
     ) {
         super(viewModel, view, new SelectComponentChangeHandler(viewModel, view));
+        if (viewModel.value === null) {
+            viewModel.value = valueWhenNull;
+            viewModel.preferredValue = valueWhenNull;
+        }
         this.isMatch = itemUpdater?.isMatch || areValuesEqual;
         this.formatValue = itemUpdater?.formatValue || (() => null);
         this.formatText = itemUpdater?.formatText || ((v) => `${v}`);
@@ -255,15 +260,19 @@ export class SelectComponent<TValue> extends Component {
     private readonly formatValue: (value: TValue) => string | null;
     private readonly formatText: (value: TValue) => string;
 
-    get value() { return this.viewModel.value; }
-    set value(value: TValue | null) {
+    get value() {
+        const value = this.viewModel.value;
+        return value === null ? this.valueWhenNull : value;
+    }
+
+    setValue(value: TValue) {
         this.viewModel.preferredValue = value;
         let selectedIndex = -1;
         if (value) {
             selectedIndex = this.viewModel.items.findIndex(item => this.isMatch(item.value, value!));
         }
         if (selectedIndex < 0) {
-            value = null;
+            value = this.valueWhenNull;
         }
         this.viewModel.selectedIndex = new SelectedIndexValue(selectedIndex, false);
         this.viewModel.value = value;
@@ -272,7 +281,7 @@ export class SelectComponent<TValue> extends Component {
     private onValueChangedFromUI() {
         const selectedIndex = this.view.getSelectedIndex();
         if (this.view.elementExists) {
-            let value: TValue | null = null;
+            let value: TValue = this.valueWhenNull;
             if (selectedIndex > -1) {
                 const item = this.getItems()[selectedIndex];
                 if (item) {
@@ -311,6 +320,14 @@ export class SelectComponent<TValue> extends Component {
             }
         }
         this.selectPreferredValue();
+    }
+
+    protected handleChanges(changes: ObservableChanges<BaseSelectComponentViewModel<TValue>>) {
+        super.handleChanges(changes);
+        const value = Reflect.get(changes, "value") as ChangedProperty<TValue> | undefined;
+        if (value) {
+            this.registeredEvents.events.valueChanged.invoke(value.value);
+        }
     }
 
     private insertItemComponent(itemVM: BaseOptionComponentViewModel<TValue>, index: number) {
@@ -415,7 +432,7 @@ export class SelectComponent<TValue> extends Component {
             this.getItems().findIndex(item => this.isMatch(item.value, value!)) :
             -1;
         if (selectedIndex < 0) {
-            value = null;
+            value = this.valueWhenNull;
         }
         this.viewModel.selectedIndex = new SelectedIndexValue(selectedIndex, false);
         this.viewModel.value = value;

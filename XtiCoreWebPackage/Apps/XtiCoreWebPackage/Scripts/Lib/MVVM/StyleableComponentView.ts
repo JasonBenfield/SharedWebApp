@@ -25,7 +25,12 @@ export function StyleableComponentViewMixin<T extends Constructor<ComponentView>
         setCss(cssBuilder: ICssClass) {
             this.cssClass.setCssClass(cssBuilder);
             const css = this.cssClass.value;
-            this.setAttribute("class", css ? css : null);
+            if (css) {
+                this.setAttribute("class", css);
+            }
+            else {
+                this.removeAttribute("class");
+            }
             return this;
         }
 
@@ -34,7 +39,7 @@ export function StyleableComponentViewMixin<T extends Constructor<ComponentView>
             for (const key of keys) {
                 delete this.styles[key];
             }
-            this.setAttribute("style", null);
+            this.removeAttribute("style");
             return this;
         }
 
@@ -54,7 +59,12 @@ export function StyleableComponentViewMixin<T extends Constructor<ComponentView>
                 const value = this.styles[name];
                 styles.push(`${name}: ${value};`);
             }
-            this.setAttribute("style", styles.length > 0 ? styles.join(" ") : null);
+            if (styles.length > 0) {
+                this.setAttribute("style", styles.join(" "));
+            }
+            else {
+                this.removeAttribute("style");
+            }
             return this;
         }
 
@@ -62,8 +72,12 @@ export function StyleableComponentViewMixin<T extends Constructor<ComponentView>
             return this.setAttribute("id", id);
         }
 
-        protected setAttribute(name: string, value: string | null) {
+        protected setAttribute(name: string, value: string) {
             return this.setAttributes({ [name]: value });
+        }
+
+        protected removeAttribute(name: string) {
+            return this.setAttributes({ [name]: null });
         }
 
         protected setAttributes(updatedAttributes: IHtmlAttributes & { [name: string]: string | null }) {

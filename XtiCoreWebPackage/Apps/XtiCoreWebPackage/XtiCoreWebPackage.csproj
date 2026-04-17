@@ -28,9 +28,14 @@
 	  <TypeScriptCompile Remove="Scripts\Lib\ContextualClass.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\CssClass.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\CssLengthUnit.ts" />
+	  <TypeScriptCompile Remove="Scripts\Lib\DateOnly.ts" />
+	  <TypeScriptCompile Remove="Scripts\Lib\DateTimeFormatOptions.ts" />
+	  <TypeScriptCompile Remove="Scripts\Lib\DateTimeOffset.ts" />
+	  <TypeScriptCompile Remove="Scripts\Lib\DayOfWeek.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\DebouncedAction.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\DelayedAction.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MarginCss.ts" />
+	  <TypeScriptCompile Remove="Scripts\Lib\Month.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\Component.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\ComponentView.ts" />
 	  <TypeScriptCompile Remove="Scripts\Lib\MVVM\ComponentViewModel.ts" />
@@ -51,5 +56,20 @@
 	  <TypeScriptCompile Remove="Scripts\Lib\TextCss.ts" />
 	  <TypeScriptCompile Remove="Scripts\Tests\DebouncedAction.test.ts" />
 	  <TypeScriptCompile Remove="Scripts\Tests\DelayedAction.test.ts" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <TypeScriptCompile Update="Scripts\Lib\TimeOnly.ts">
+	    <SubType>Code</SubType>
+	  </TypeScriptCompile>
+	  <TypeScriptCompile Update="Scripts\Tests\DateOnly.test.ts">
+	    <SubType>Code</SubType>
+	  </TypeScriptCompile>
+	  <TypeScriptCompile Update="Scripts\Tests\DateTimeOffset.test.ts">
+	    <SubType>Code</SubType>
+	  </TypeScriptCompile>
+	  <TypeScriptCompile Update="Scripts\Tests\TimeOnly.test.ts">
+	    <SubType>Code</SubType>
+	  </TypeScriptCompile>
 	</ItemGroup>
 </Project>

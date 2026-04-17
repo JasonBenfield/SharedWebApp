@@ -1,7 +1,6 @@
 import { Component, ComponentChangeHandler } from "./Component";
-import { ComponentView, ComponentViewLayout } from "./ComponentView";
+import { ComponentView } from "./ComponentView";
 import { ComponentViewModel, ObservableChanges } from "./ComponentViewModel";
-import { BaseCompositeComponentView } from "./CompositeComponent";
 import { StyleableComponentView } from "./StyleableComponentView";
 import { TitleChangeHandler, TitleComponentMixin, TitleViewModelMixin } from "./TextComponent";
 import { Constructor, ITitleView, ITitleViewModel } from "./Types";

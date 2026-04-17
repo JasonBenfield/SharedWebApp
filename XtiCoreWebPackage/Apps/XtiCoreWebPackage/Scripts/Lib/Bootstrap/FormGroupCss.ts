@@ -5,13 +5,19 @@ export class FormControlCss extends CssClass {
 
     static text() {
         const css = new FormControlCss();
-        css.type = "text";
+        css.type = "form-control-plaintext";
         return css;
     }
 
     static link() {
         const css = new FormControlCss();
-        css.type = "link";
+        css.type = "form-control-link";
+        return css;
+    }
+
+    static select() {
+        const css = new FormControlCss();
+        css.type = "form-select";
         return css;
     }
 
@@ -21,7 +27,7 @@ export class FormControlCss extends CssClass {
 
     static small() { return new FormControlCss().small(); }
 
-    private type = "";
+    private type = "form-control";
     private size = "";
 
     large() {
@@ -40,14 +46,14 @@ export class FormControlCss extends CssClass {
     }
 
     protected buildCss() {
-        let css: string;
+        const cssNames: string[] = [];
         if (this.type) {
-            css = `form-control-${this.type}`;
+            cssNames.push(this.type);
         }
-        else {
-            css = this.size ? `form-control-${this.size}` : "form-control";
+        if (this.size) {
+            cssNames.push(`form-control-${this.size}`);
         }
-        return css;
+        return cssNames.join(" ");
     }
 }
 

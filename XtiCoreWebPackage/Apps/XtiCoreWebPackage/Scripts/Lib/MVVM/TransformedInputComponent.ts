@@ -1,9 +1,10 @@
 import { FormattedNumber } from "../FormattedNumber";
+import { CommandViewModel } from "./Command";
 import { Component, ComponentChangeHandler } from "./Component";
-import { ObservableChanges } from "./ComponentViewModel";
+import { ChangedProperty, ComponentViewModel, ObservableChanges } from "./ComponentViewModel";
 import { areValuesEqual, IEquatable } from "./Equatable";
-import { FocusableComponentChangeHandler, FocusableComponentMixin, HasFocusProperty } from "./FocusableComponent";
-import { BaseInputComponentView, InputComponentViewModel, InputTextValue } from "./InputComponent";
+import { FocusableComponentChangeHandler, FocusableComponentMixin, HasFocusProperty, IFocusableViewModel } from "./FocusableComponent";
+import { BaseInputComponentView, BaseInputComponentViewModel, IInputComponentViewModel, InputComponentChangeHandler, InputComponentMixin, InputComponentViewModel, InputTextValue, ITextInputViewModel, TextInputComponentChangeHandler, TextInputComponentMixin } from "./InputComponent";
 import { UniqueComponentChangeHandler, UniqueComponentMixin } from "./UniqueComponent";
 
 export class TransformedInputValue<TValue> implements IEquatable {
@@ -25,6 +26,13 @@ export class TransformedInputValue<TValue> implements IEquatable {
         return `value: '${this.value}', isFromUI: ${this.isFromUI}`;
     }
 }
+
+export interface ITransformedInputComponentViewModel<TValue> {
+    get transformedValue(): TransformedInputValue<TValue>;
+    set transformedValue(value: TransformedInputValue<TValue>);
+}
+
+export type BaseTransformedInputComponentViewModel<TValue> = BaseInputComponentViewModel & ITransformedInputComponentViewModel<TValue>;
 
 export class TransformedInputComponentViewModel<TValue> extends InputComponentViewModel {
     constructor(
@@ -115,16 +123,16 @@ export class TransformedNumberInput implements ITransformedInput<number> {
     }
 }
 
-export class TransformedInputComponentChangeHandler<TValue> extends ComponentChangeHandler<TransformedInputComponentViewModel<TValue>, BaseInputComponentView> {
+export class TransformedInputValueChangeHandler<TValue> extends ComponentChangeHandler<BaseTransformedInputComponentViewModel<TValue>, BaseInputComponentView> {
     constructor(
-        viewModel: TransformedInputComponentViewModel<TValue>,
+        viewModel: BaseTransformedInputComponentViewModel<TValue>,
         view: BaseInputComponentView,
         private readonly transformedInput: ITransformedInput<TValue>
     ) {
         super(viewModel, view);
     }
 
-    handleChanges(changes: ObservableChanges<TransformedInputComponentViewModel<TValue>>) {
+    handleChanges(changes: ObservableChanges<BaseTransformedInputComponentViewModel<TValue>>) {
         if (changes.textValue) {
             const textValue = changes.textValue.value;
             if (textValue.isFromUI) {
@@ -135,8 +143,9 @@ export class TransformedInputComponentChangeHandler<TValue> extends ComponentCha
                 this.updateView(v => v.setTextValue(textValue.value));
             }
         }
-        if (changes.transformedValue) {
-            const transformedValue = changes.transformedValue.value;
+        const changedTransformedValue = (<any>changes).transformedValue as ChangedProperty<TransformedInputValue<TValue>>;
+        if (changedTransformedValue) {
+            const transformedValue = changedTransformedValue.value;
             if (!transformedValue.isFromUI || !this.viewModel.hasFocus.value) {
                 const textValue = this.transformedInput.toView(transformedValue.value);
                 this.viewModel.textValue = new InputTextValue(textValue, false);
@@ -150,10 +159,6 @@ export class TransformedInputComponentChangeHandler<TValue> extends ComponentCha
                 this.viewModel.textValue = new InputTextValue(textValue);
             }
         }
-        if (changes.placeholder) {
-            const placeholder: string = changes.placeholder.value;
-            this.updateView(v => v.setPlaceholder(placeholder));
-        }
     }
 }
 
@@ -161,10 +166,10 @@ type TransformedInputComponentEventLayout<TValue> = {
     valueChanged: TValue
 };
 
-export class TransformedInputComponent<TValue> extends UniqueComponentMixin(FocusableComponentMixin(Component)) {
+export class TransformedInputComponent<TValue> extends InputComponentMixin(TextInputComponentMixin(UniqueComponentMixin(FocusableComponentMixin(Component)))) {
 
     constructor(
-        protected readonly viewModel: TransformedInputComponentViewModel<TValue>,
+        protected readonly viewModel: BaseTransformedInputComponentViewModel<TValue>,
         protected readonly view: BaseInputComponentView,
         protected readonly transformedInput: ITransformedInput<TValue>
     ) {
@@ -173,7 +178,9 @@ export class TransformedInputComponent<TValue> extends UniqueComponentMixin(Focu
             view,
             new UniqueComponentChangeHandler(viewModel, view),
             new FocusableComponentChangeHandler(viewModel, view),
-            new TransformedInputComponentChangeHandler(viewModel, view, transformedInput)
+            new TransformedInputValueChangeHandler(viewModel, view, transformedInput),
+            new TextInputComponentChangeHandler(viewModel, view),
+            new InputComponentChangeHandler(viewModel, view)
         );
         view.when.textValueInput.then(this.onTextValueChangedFromUI.bind(this));
         view.when.focused.then(this.onFocusFromUI.bind(this));
@@ -200,7 +207,7 @@ export class TransformedInputComponent<TValue> extends UniqueComponentMixin(Focu
         this.viewModel.hasFocus = new HasFocusProperty(false, true);
     }
 
-    protected handleChanges(changes: ObservableChanges<TransformedInputComponentViewModel<TValue>>) {
+    protected handleChanges(changes: ObservableChanges<BaseTransformedInputComponentViewModel<TValue>>) {
         super.handleChanges(changes);
         if (changes.transformedValue) {
             const value = changes.transformedValue.value;
@@ -212,8 +219,5 @@ export class TransformedInputComponent<TValue> extends UniqueComponentMixin(Focu
     set value(value: TValue) {
         this.viewModel.transformedValue = new TransformedInputValue(value, false);
     }
-
-    get placeholder() { return this.viewModel.placeholder; }
-    set placeholder(placeholder: string) { this.viewModel.placeholder = placeholder; }
 
 }

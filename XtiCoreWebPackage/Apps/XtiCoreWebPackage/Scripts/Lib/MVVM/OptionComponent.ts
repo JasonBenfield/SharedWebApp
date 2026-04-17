@@ -33,7 +33,8 @@ export class OptionComponentViewModel<TValue> extends ComponentViewModel impleme
 }
 
 export interface IOptionComponentView {
-    setValue(value: string | null): void;
+    setValue(value: string): void;
+    clearValue(): void;
     setText(text: string): void;
 }
 
@@ -47,8 +48,12 @@ export class OptionComponentView
         super("option");
     }
 
-    setValue(value: string | null) {
+    setValue(value: string) {
         this.setAttribute("value", value);
+    }
+
+    clearValue() {
+        this.removeAttribute("value");
     }
 }
 
@@ -60,7 +65,14 @@ export class OptionComponentChangeHandler<TValue> extends ComponentChangeHandler
     handleChanges(changes: ObservableChanges<BaseOptionComponentViewModel<TValue>>) {
         if (changes.formattedValue) {
             const formattedValue = changes.formattedValue.value;
-            this.updateView(v => v.setValue(formattedValue));
+            this.updateView(v => {
+                if (formattedValue === null) {
+                    v.clearValue();
+                }
+                else {
+                    v.setValue(formattedValue);
+                }
+            });
         }
     }
 }
