@@ -6,6 +6,7 @@ import { ICssStyle, ICssStyles } from "../CssStyle";
 import { ButtonViewMixin, IButtonView } from "./ButtonComponent";
 import { ComponentView, ComponentViewLayout } from "./ComponentView";
 import { BaseCompositeComponentView } from "./CompositeComponent";
+import { IContainerComponentView } from "./ContainerComponent";
 import { ILabelView, LabelViewMixin } from "./LabelComponent";
 import { ILinkView, LinkViewMixin } from "./LinkComponent";
 import { StyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
@@ -283,11 +284,11 @@ export function GridRowViewMixin<T extends Constructor<StyleableComponentView>>(
             return this.addLayout(layout);
         }
 
-        addCell<T extends BaseGridRowView>(cell: T) {
+        addCell<T extends BaseGridCellView>(cell: T) {
             return this.addChildView<T>(cell);
         }
 
-        addCells<T extends BaseGridRowView>(...cells: T[]) {
+        addCells<T extends BaseGridCellView>(...cells: T[]) {
             for (const cell of cells) {
                 this.addChildView(cell);
             }
@@ -611,7 +612,9 @@ export class GridRowButtonContainerOfTextView<TLayout extends GridRowViewLayout<
     }
 }
 
-export class GridCellView<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends ComponentView | ComponentViewLayout<TPublicLayout>> extends GridCellViewMixin(BaseCompositeComponentView)<TLayout, TPublicLayout> {
+export class GridCellView<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends ComponentView | ComponentViewLayout<TPublicLayout>>
+    extends GridCellViewMixin(BaseCompositeComponentView)<TLayout, TPublicLayout> {
+
     static block<TLayout extends ComponentViewLayout<TLayout>>(layout: TLayout) {
         return GridCellView.blockWithPublicLayout(layout, l => l);
     }
@@ -644,15 +647,47 @@ export class GridCellView<TLayout extends ComponentViewLayout<TLayout>, TPublicL
         return new GridCellView("pre", layout, toPublicLayout).asLayout();
     }
 
-    static heading<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends ComponentViewLayout<TPublicLayout>>(size: 1 | 2 | 3 | 4 | 5 | 6, layout: TLayout) {
+    static heading<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends ComponentViewLayout<TPublicLayout>>(size: HeadingSize, layout: TLayout) {
         return GridCellView.headingWithPublicLayout(size, layout, l => l);
     }
 
-    static headingWithPublicLayout<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends ComponentViewLayout<TPublicLayout>>(size: 1 | 2 | 3 | 4 | 5 | 6, layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
+    static headingWithPublicLayout<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends ComponentViewLayout<TPublicLayout>>(size: HeadingSize, layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
         return new GridCellView(`h${size}`, layout, toPublicLayout);
     }
 
     declare asLayout: () => GridCellView<TLayout, TPublicLayout> & TLayout;
+}
+
+export class GridCellContainerView
+    extends GridCellViewMixin(StyleableComponentView)
+    implements IContainerComponentView {
+
+    static block() {
+        return new GridCellContainerView("div");
+    }
+
+    static span() {
+        return new GridCellContainerView("span");
+    }
+
+    static paragraph() {
+        return new GridCellContainerView("p");
+    }
+
+    static preformat() {
+        return new GridCellContainerView("pre");
+    }
+
+    static heading(size: HeadingSize) {
+        return new GridCellContainerView(`h${size}`);
+    }
+
+    declare public addLayout: <TLayout extends ComponentViewLayout<TLayout>>(layout: TLayout) => this & TLayout;
+    declare public addChildView: <T extends ComponentView>(view: T) => T;
+    declare public insertChildView: <T extends ComponentView>(view: T, index: number) => T;
+    declare public removeAllChildViews: () => void;
+    declare public removeChildView: (view: ComponentView) => void;
+
 }
 
 class BaseGridCellCompositeView<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends ComponentView | ComponentViewLayout<TPublicLayout>> extends GridCellViewMixin(BaseCompositeComponentView)<TLayout, TPublicLayout> {

@@ -1,4 +1,6 @@
-﻿export class ContextualClass {
+﻿import { IEquatable } from "../MVVM/Equatable";
+
+export class ContextualClass implements IEquatable {
     public static readonly default = new ContextualClass("default");
     public static readonly success = new ContextualClass("success");
     public static readonly info = new ContextualClass("info");
@@ -23,7 +25,7 @@
     get isDark() { return this.equals(ContextualClass.dark); }
 
     append(prefix: string) {
-        let dash = prefix.lastIndexOf("-") === prefix.length - 1 ? "" : "-";
+        const dash = prefix.lastIndexOf("-") === prefix.length - 1 ? "" : "-";
         return `${prefix}${dash}${this.value}`;
     }
 

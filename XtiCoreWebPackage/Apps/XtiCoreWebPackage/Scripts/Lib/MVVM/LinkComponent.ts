@@ -2,7 +2,7 @@ import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentView } from "./ComponentView";
 import { ComponentViewModel, ObservableChanges } from "./ComponentViewModel";
 import { StyleableComponentView } from "./StyleableComponentView";
-import { TitleChangeHandler, TitleComponentMixin, TitleViewModelMixin } from "./TextComponent";
+import { ITitleComponent, TitleChangeHandler, TitleComponentMixin, TitleViewModelMixin } from "./TextComponent";
 import { Constructor, ITitleView, ITitleViewModel } from "./Types";
 
 export type LinkTargetType = "" | "_blank";
@@ -66,8 +66,18 @@ export class LinkComponentChangeHandler extends ComponentChangeHandler<Component
 
 }
 
+export interface ILinkComponent {
+    get href(): string;
+    set href(href: string);
+
+    get isTargetBlank(): boolean;
+
+    setTargetToBlank(): void;
+    setTargetToDefault(): void;
+}
+
 export function LinkComponentMixin<T extends Constructor<Component>>(Base: T) {
-    return class extends Base {
+    return class extends Base implements ILinkComponent {
         declare protected readonly viewModel: BaseLinkComponentViewModel;
 
         get href() { return this.viewModel.href; }
@@ -88,7 +98,10 @@ export function LinkComponentMixin<T extends Constructor<Component>>(Base: T) {
     };
 }
 
-export class LinkComponent extends LinkComponentMixin(TitleComponentMixin(Component)) {
+export class LinkComponent
+    extends LinkComponentMixin(TitleComponentMixin(Component))
+    implements ILinkComponent, ITitleComponent {
+
     constructor(viewModel: BaseLinkComponentViewModel, view: BaseLinkComponentView) {
         super(
             viewModel,

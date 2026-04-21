@@ -1,15 +1,15 @@
 
 import { afterEach, describe, expect, test } from "@jest/globals";
 import { InputComponentView } from "../Lib/MVVM/InputComponent";
-import { TransformedInputComponent, TransformedInputComponentViewModel } from "../Lib/MVVM/TransformedInputComponent";
+import { NumericTextInputComponent, NumericTextInputComponentViewModel } from "../Lib/MVVM/NumericTextInputComponent";
+import { TransformedInputComponentViewModel } from "../Lib/MVVM/TransformedInputComponent";
 import { TestHost } from "./TestHost";
-import { TransformedNumberInput } from "../Lib/MVVM/NumericTextInputComponent";
 
 afterEach(() => {
     TestHost.value.reset();
 });
 
-describe("Transformed Input Component", () => {
+describe("Numeric Text Input Component", () => {
     test("sets text value from value", async () => {
         const { view, component } = createInputComponent(
             new TransformedInputComponentViewModel(1234)
@@ -94,12 +94,11 @@ describe("Transformed Input Component", () => {
     });
 });
 
-function createInputComponent(viewModel = new TransformedInputComponentViewModel(0)) {
+function createInputComponent(viewModel = new NumericTextInputComponentViewModel()) {
     const view = new InputComponentView();
-    const component = new TransformedInputComponent(
+    const component = new NumericTextInputComponent(
         viewModel,
-        view,
-        new TransformedNumberInput()
+        view
     );
     return {
         viewModel: viewModel,

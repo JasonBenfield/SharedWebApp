@@ -1,4 +1,4 @@
-import { Component } from "./Component";
+import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentView } from "./ComponentView";
 import { ComponentViewModel, ObservableChanges } from "./ComponentViewModel";
 import { CustomEventRegistrations } from "./EventManager";
@@ -8,7 +8,11 @@ import { StyleableComponentViewMixin } from "./StyleableComponentView";
 import { IUniqueView, IUniqueViewModel, UniqueComponentChangeHandler, UniqueComponentMixin, UniqueViewMixin, UniqueViewModelMixin } from "./UniqueComponent";
 
 export interface ITextAreaViewModel {
+    get numberOfColumns(): number;
+    set numberOfColumns(numberOfColumns: number);
 
+    get numberOfRows(): number;
+    set numberOfRows(numberOfRows: number);
 }
 
 export type BaseTextAreaComponentViewModel = ComponentViewModel & IUniqueViewModel & IFocusableViewModel & ITextInputViewModel & ITextAreaViewModel;
@@ -16,10 +20,21 @@ export type BaseTextAreaComponentViewModel = ComponentViewModel & IUniqueViewMod
 export class TextAreaComponentViewModel
     extends TextInputViewModelMixin(UniqueViewModelMixin(FocusableViewModelMixin(ComponentViewModel)))
     implements ITextInputViewModel, ITextAreaViewModel {
+
+    private _numberOfColumns = 0;
+    get numberOfColumns() { return this._numberOfColumns; }
+    set numberOfColumns(numberOfColumns: number) { this._numberOfColumns = numberOfColumns; }
+
+    private _numberOfRows = 0;
+    get numberOfRows() { return this._numberOfRows; }
+    set numberOfRows(numberOfRows: number) { this._numberOfRows = numberOfRows; }
 }
 
 export interface ITextAreaView {
     readonly when: CustomEventRegistrations<TextAreaViewEventLayout>;
+
+    setNumberOfColumns(numberOfColumns: number): void;
+    setNumberOfRows(numberOfRows: number): void;
 }
 
 export type BaseTextAreaComponentView = ComponentView & IFocusableView & IUniqueView & ITextInputView & ITextAreaView;
@@ -109,11 +124,34 @@ export class TextAreaComponentView
             );
         }
     }
+
+    setNumberOfColumns(numberOfColumns: number) {
+        this.setAttributes({ "cols": numberOfColumns ? numberOfColumns.toString() : null });
+    }
+
+    setNumberOfRows(numberOfRows: number) {
+        this.setAttributes({ "rows": numberOfRows ? numberOfRows.toString() : null });
+    }
 }
 
 type TextAreaComponentEventLayout = {
     textValueChanged: string
 };
+
+export class TextAreaChangeHandler extends ComponentChangeHandler<BaseTextAreaComponentViewModel, BaseTextAreaComponentView> {
+
+    handleChanges(changes: ObservableChanges<BaseTextAreaComponentViewModel>) {
+        if (changes.numberOfColumns) {
+            const numberOfColumns = changes.numberOfColumns.value;
+            this.updateView(v => v.setNumberOfColumns(numberOfColumns));
+        }
+        if (changes.numberOfRows) {
+            const numberOfRows = changes.numberOfRows.value;
+            this.updateView(v => v.setNumberOfRows(numberOfRows));
+        }
+    }
+
+}
 
 export class TextAreaComponent
     extends TextInputValueComponentMixin(TextInputComponentMixin(UniqueComponentMixin(FocusableComponentMixin(Component)))) {
@@ -133,7 +171,8 @@ export class TextAreaComponent
             new UniqueComponentChangeHandler(viewModel, view),
             new FocusableComponentChangeHandler(viewModel, view),
             new TextInputValueChangeHandler(viewModel, view),
-            new TextInputComponentChangeHandler(viewModel, view)
+            new TextInputComponentChangeHandler(viewModel, view),
+            new TextAreaChangeHandler(viewModel, view)
         );
         view.when.textValueInput.then(this.onTextValueChangedFromUI.bind(this));
         view.when.focused.then(this.onFocusFromUI.bind(this));
@@ -162,4 +201,10 @@ export class TextAreaComponent
     private onBlurFromUI() {
         this.viewModel.hasFocus = new HasFocusProperty(false, true);
     }
+
+    get numberOfColumns() { return this.viewModel.numberOfColumns; }
+    set numberOfColumns(numberOfColumns: number) { this.viewModel.numberOfColumns = numberOfColumns; }
+
+    get numberOfRows() { return this.viewModel.numberOfRows; }
+    set numberOfRows(numberOfRows: number) { this.viewModel.numberOfRows = numberOfRows; }
 }

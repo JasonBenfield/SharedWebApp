@@ -111,6 +111,7 @@ export interface IStyleableComponentView {
     setCss(cssBuilder: ICssClass): this;
     clearStyle(): this;
     setStyle(style: ICssStyle): this;
+    setID(id: string): this;
 }
 
 export class StyleableComponentView extends StyleableComponentViewMixin(ComponentView) {

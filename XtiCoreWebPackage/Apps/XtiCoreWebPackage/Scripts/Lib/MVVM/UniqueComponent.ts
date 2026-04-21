@@ -1,3 +1,4 @@
+import { ConsoleLogger } from "../ConsoleLogger";
 import { GeneratedID } from "../GeneratedID";
 import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentView } from "./ComponentView";
@@ -53,17 +54,17 @@ export interface UniqueComponentEventLayout {
 
 export function UniqueComponentMixin<T extends Constructor<Component>>(Base: T) {
     return class extends Base implements IUniqueComponent {
-        private readonly uniqueEvents = this.eventManager.addEvents<UniqueComponentEventLayout>({
-            idChanged: null
-        });
-        readonly whenUnique = this.uniqueEvents.when;
-
         constructor(...args: any[]) {
             super(...args);
             const nextID = GeneratedID.next(`${this.constructor.name}_`);
             this.id = nextID;
             this.name = nextID;
         }
+
+        private readonly uniqueEvents = this.eventManager.addEvents<UniqueComponentEventLayout>({
+            idChanged: null
+        });
+        readonly whenUnique = this.uniqueEvents.when;
 
         declare protected readonly viewModel: ComponentViewModel & IUniqueViewModel;
 

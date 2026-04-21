@@ -73,3 +73,9 @@ export class ButtonCss extends CssClass {
         return classNames.join(" ");
     }
 }
+
+export class CloseButtonCss extends CssClass {
+    static remove() { return new CloseButtonCss().remove(); }
+
+    protected buildCss() { return "btn-close"; }
+}

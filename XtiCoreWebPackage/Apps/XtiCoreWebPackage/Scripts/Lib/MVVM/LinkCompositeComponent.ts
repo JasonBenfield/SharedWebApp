@@ -1,9 +1,9 @@
 import { Component } from "./Component";
 import { ComponentView, ComponentViewLayout } from "./ComponentView";
 import { ComponentViewModel } from "./ComponentViewModel";
-import { BaseCompositeComponentView, CompositeComponentLayout, CompositeComponentView, CompositeComponentViewModelLayout, CompositeComponentViewModelProperties } from "./CompositeComponent";
-import { ILinkView, ILinkViewModel, LinkComponentChangeHandler, LinkViewMixin, LinkViewModelMixin } from "./LinkComponent";
-import { TitleChangeHandler, TitleViewMixin, TitleViewModelMixin } from "./TextComponent";
+import { BaseCompositeComponentView, CompositeComponentLayout, CompositeComponentView, CompositeComponentViewModelLayout, CompositeComponentViewModelProperties, IPublicLayoutView } from "./CompositeComponent";
+import { ILinkComponent, ILinkView, ILinkViewModel, LinkComponentChangeHandler, LinkComponentMixin, LinkViewMixin, LinkViewModelMixin } from "./LinkComponent";
+import { ITitleComponent, TitleChangeHandler, TitleComponentMixin, TitleViewMixin, TitleViewModelMixin } from "./TextComponent";
 import { ITitleView, ITitleViewModel } from "./Types";
 
 export class LinkCompositeComponentViewModel<TLayout extends CompositeComponentViewModelLayout<TLayout>>
@@ -22,7 +22,6 @@ export class LinkCompositeComponentViewModel<TLayout extends CompositeComponentV
                 vm[key] = childVM;
             }
         }
-        return (<any>this) as (LinkCompositeComponentViewModel<TLayout> & TLayout);
     }
 
     asLayout() { return this as this & TLayout; }
@@ -124,11 +123,16 @@ class LinkCompositeComponentBuilderWithComponentFactory<
 
 class LinkCompositeComponent<
     TViewModelLayout extends CompositeComponentViewModelLayout<TViewModelLayout>,
-    TViewLayout extends ComponentViewLayout<TViewLayout>,
     TViewPublicLayout extends ComponentViewLayout<TViewPublicLayout>,
     TComponentLayout extends CompositeComponentLayout<TComponentLayout>
-> extends Component {
-    constructor(viewModel: ComponentViewModel & TViewModelLayout & ILinkViewModel & ITitleViewModel, view: CompositeComponentView<TViewLayout, TViewPublicLayout> & ILinkView & ITitleView, layout: TComponentLayout) {
+    > extends LinkComponentMixin(TitleComponentMixin(Component))
+    implements ILinkComponent, ITitleComponent {
+
+    constructor(
+        viewModel: ComponentViewModel & TViewModelLayout & ILinkViewModel & ITitleViewModel,
+        view: ComponentView & IPublicLayoutView<TViewPublicLayout> & ILinkView & ITitleView,
+        layout: TComponentLayout
+    ) {
         super(
             viewModel,
             view,
@@ -142,5 +146,5 @@ class LinkCompositeComponent<
         }
     }
 
-    asLayout() { return this as this & TComponentLayout; }
+    asLayout() { return this as any as Component & TComponentLayout & ILinkComponent & ITitleComponent; }
 }

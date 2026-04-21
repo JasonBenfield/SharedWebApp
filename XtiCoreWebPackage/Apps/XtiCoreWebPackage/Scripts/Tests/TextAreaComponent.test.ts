@@ -1,24 +1,24 @@
 
 import { afterEach, describe, expect, test } from "@jest/globals";
-import { InputComponent, InputComponentView, InputComponentViewModel } from "../Lib/MVVM/InputComponent";
-import { TestHost } from "./TestHost";
 import { ConsoleLogger } from "../Lib/ConsoleLogger";
+import { TextAreaComponent, TextAreaComponentView, TextAreaComponentViewModel } from "../Lib/MVVM/TextAreaComponent";
+import { TestHost } from "./TestHost";
 
-const inputElementID = "inputEl";
+const elementID = "textAreaEl";
 
 afterEach(() => {
     TestHost.value.reset();
     ConsoleLogger.value.disable();
 });
 
-describe("Input Component", () => {
+describe("Text Area Component", () => {
     test("sets text value", async () => {
         const { view, component } = createInputComponent();
         component.textValue = "Initial Value";
-        component.id = inputElementID;
+        component.id = elementID;
         TestHost.value.show(view, component);
-        const element = getInputElement(inputElementID);
-        expect(element?.tagName).toBe("INPUT");
+        const element = getTextAreaElement(elementID);
+        expect(element?.tagName).toBe("TEXTAREA");
         expect(element?.value).toBe("Initial Value");
         component.textValue = "Changed Value";
         TestHost.value.immediateHandleChanges();
@@ -27,9 +27,9 @@ describe("Input Component", () => {
     test("sets placeholder", async () => {
         const { view, component } = createInputComponent();
         component.placeholder = "Initial Placeholder";
-        component.id = inputElementID;
+        component.id = elementID;
         TestHost.value.show(view, component);
-        const element = getInputElement(inputElementID);
+        const element = getTextAreaElement(elementID);
         expect(element?.placeholder).toBe("Initial Placeholder");
         component.placeholder = "Changed Placeholder";
         TestHost.value.immediateHandleChanges();
@@ -46,7 +46,7 @@ describe("Input Component", () => {
     test("sets id and name", async () => {
         const { view, component } = createInputComponent();
         TestHost.value.show(view, component);
-        const element = getInputElement(component.id);
+        const element = getTextAreaElement(component.id);
         expect(element?.id || "").not.toBe("");
         expect(element?.name || "").not.toBe("");
         component.id = "changedID";
@@ -59,16 +59,30 @@ describe("Input Component", () => {
         const { view, component } = createInputComponent();
         component.setFocus();
         TestHost.value.show(view, component);
-        expect(document.activeElement).toBe(getInputElement(component.id));
+        expect(document.activeElement).toBe(getTextAreaElement(component.id));
         component.blur();
         TestHost.value.immediateHandleChanges();
-        expect(document.activeElement).not.toBe(getInputElement(component.id));
+        expect(document.activeElement).not.toBe(getTextAreaElement(component.id));
+    });
+    test("sets number of columns", async () => {
+        const { view, component } = createInputComponent();
+        component.numberOfColumns = 80;
+        TestHost.value.show(view, component);
+        const element = getTextAreaElement(component.id);
+        expect(element?.cols).toBe(80);
+    });
+    test("sets number of rows", async () => {
+        const { view, component } = createInputComponent();
+        component.numberOfRows = 3;
+        TestHost.value.show(view, component);
+        const element = getTextAreaElement(component.id);
+        expect(element?.rows).toBe(3);
     });
 });
 
-function createInputComponent(viewModel = new InputComponentViewModel()) {
-    const view = new InputComponentView();
-    const component = new InputComponent(viewModel, view);
+function createInputComponent(viewModel = new TextAreaComponentViewModel()) {
+    const view = new TextAreaComponentView();
+    const component = new TextAreaComponent(viewModel, view);
     return {
         viewModel: viewModel,
         view: view,
@@ -76,6 +90,6 @@ function createInputComponent(viewModel = new InputComponentViewModel()) {
     };
 }
 
-function getInputElement(id: string) {
-    return document.getElementById(id) as HTMLInputElement;
+function getTextAreaElement(id: string) {
+    return document.getElementById(id) as HTMLTextAreaElement;
 }

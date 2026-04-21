@@ -1,9 +1,9 @@
 import { Component } from "./Component";
 import { ComponentView, ComponentViewLayout } from "./ComponentView";
 import { ComponentViewModel } from "./ComponentViewModel";
-import { BaseCompositeComponentView, CompositeComponentLayout, CompositeComponentView, CompositeComponentViewModelLayout, CompositeComponentViewModelProperties } from "./CompositeComponent";
-import { ILabelView, ILabelViewModel, LabelComponentChangeHandler, LabelViewMixin, LabelViewModelMixin } from "./LabelComponent";
-import { TitleChangeHandler, TitleViewMixin, TitleViewModelMixin } from "./TextComponent";
+import { BaseCompositeComponentView, CompositeComponentLayout, CompositeComponentView, CompositeComponentViewModelLayout, CompositeComponentViewModelProperties, IPublicLayoutView } from "./CompositeComponent";
+import { ILabelComponent, ILabelView, ILabelViewModel, LabelComponentChangeHandler, LabelComponentMixin, LabelViewMixin, LabelViewModelMixin } from "./LabelComponent";
+import { ITitleComponent, TitleChangeHandler, TitleComponentMixin, TitleViewMixin, TitleViewModelMixin } from "./TextComponent";
 import { ITitleView, ITitleViewModel } from "./Types";
 
 export class LabelCompositeComponentViewModel<TLayout extends CompositeComponentViewModelLayout<TLayout>> extends TitleViewModelMixin(LabelViewModelMixin(ComponentViewModel)) {
@@ -125,11 +125,17 @@ class LabelCompositeComponentBuilderWithComponentFactory<
 
 class LabelCompositeComponent<
     TViewModelLayout extends CompositeComponentViewModelLayout<TViewModelLayout>,
-    TViewLayout extends ComponentViewLayout<TViewLayout>,
     TViewPublicLayout extends ComponentViewLayout<TViewPublicLayout>,
     TComponentLayout extends CompositeComponentLayout<TComponentLayout>
-> extends Component {
-    constructor(viewModel: ComponentViewModel & TViewModelLayout & ILabelViewModel & ITitleViewModel, view: CompositeComponentView<TViewLayout, TViewPublicLayout> & ILabelView & ITitleView, layout: TComponentLayout) {
+>
+    extends LabelComponentMixin(TitleComponentMixin(Component))
+    implements ILabelComponent, ITitleComponent {
+
+    constructor(
+        viewModel: ComponentViewModel & TViewModelLayout & ILabelViewModel & ITitleViewModel,
+        view: ComponentView & IPublicLayoutView<TViewPublicLayout> & ILabelView & ITitleView,
+        layout: TComponentLayout
+    ) {
         super(
             viewModel,
             view,
@@ -143,5 +149,5 @@ class LabelCompositeComponent<
         }
     }
 
-    asLayout() { return this as this & TComponentLayout; }
+    asLayout() { return this as any as Component & TComponentLayout & ILabelComponent & ITitleComponent; }
 }

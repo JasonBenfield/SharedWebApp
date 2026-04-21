@@ -1,3 +1,4 @@
+import { ConsoleLogger } from "../ConsoleLogger";
 import { DebouncedAction } from "../DebouncedAction";
 import { ComponentView } from "./ComponentView";
 import { ComponentViewModel, ObservableChanges, UpdatedViewModel } from "./ComponentViewModel";
@@ -44,6 +45,10 @@ export class ComponentVisibilityChangeHandler extends ComponentChangeHandler<Com
     }
 }
 
+export type ComponentLayout<T> = {
+    [K in keyof T]: Component;
+}
+
 export class Component {
     protected readonly eventManager = new EventManager();
     private readonly changes: ObservableChanges<ComponentViewModel> = {};
@@ -83,9 +88,8 @@ export class Component {
 
     private handleStoredChanges() {
         const storedChanges = Object.assign({}, this.changes);
-        const changes: any = this.changes;
         for (const key in this.changes) {
-            delete changes[key];
+            Reflect.deleteProperty(this.changes, key);
         }
         this.handleChanges(storedChanges);
     }
@@ -160,6 +164,14 @@ export class Component {
             i++;
         }
         return foundComponent;
+    }
+
+    protected addLayout<TLayout extends ComponentLayout<TLayout>>(layout: TLayout) {
+        for (const key in layout) {
+            const component = layout[key];
+            this.addComponent(component);
+        }
+        return layout;
     }
 
     protected addComponent<TComponent extends Component>(c: TComponent) {

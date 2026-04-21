@@ -2,7 +2,7 @@ import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentView } from "./ComponentView";
 import { ComponentViewModel, ObservableChanges } from "./ComponentViewModel";
 import { StyleableComponentView } from "./StyleableComponentView";
-import { TitleChangeHandler, TitleComponentMixin, TitleViewModelMixin } from "./TextComponent";
+import { ITitleComponent, TitleChangeHandler, TitleComponentMixin, TitleViewModelMixin } from "./TextComponent";
 import { Constructor, ITitleView, ITitleViewModel } from "./Types";
 import { BaseUniqueComponent } from "./UniqueComponent";
 
@@ -46,11 +46,14 @@ export class LabelComponentChangeHandler extends ComponentChangeHandler<Componen
             this.updateView(v => v.setFor(forID));
         }
     }
+}
 
+export interface ILabelComponent {
+    forComponent(forComponent: BaseUniqueComponent | null): void;
 }
 
 export function LabelComponentMixin<T extends Constructor<Component>>(Base: T) {
-    return class extends Base {
+    return class extends Base implements ILabelComponent {
         declare protected readonly viewModel: BaseLabelComponentViewModel;
 
         private _forComponent: BaseUniqueComponent | null = null;
@@ -85,7 +88,10 @@ export function LabelComponentMixin<T extends Constructor<Component>>(Base: T) {
     };
 }
 
-export class LabelComponent extends LabelComponentMixin(TitleComponentMixin(Component)) {
+export class LabelComponent
+    extends LabelComponentMixin(TitleComponentMixin(Component))
+    implements ILabelComponent, ITitleComponent {
+
     constructor(viewModel: BaseLabelComponentViewModel, view: BaseLabelComponentView) {
         super(
             viewModel,

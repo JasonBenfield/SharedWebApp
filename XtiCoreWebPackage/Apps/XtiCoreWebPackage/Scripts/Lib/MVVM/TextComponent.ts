@@ -251,8 +251,13 @@ export class SynchedTitleChangeHandler extends ComponentChangeHandler<BaseTextCo
     }
 }
 
+export interface ITitleComponent {
+    get title(): string;
+    set title(title: string);
+}
+
 export function TitleComponentMixin<T extends Constructor<Component>>(Base: T) {
-    return class extends Base {
+    return class extends Base implements ITitleComponent {
         declare protected readonly viewModel: ComponentViewModel & ITitleViewModel;
 
         get title() { return this.viewModel.title; }

@@ -1,6 +1,7 @@
 import { Component, ComponentChangeHandler } from "./Component";
-import { ComponentView } from "./ComponentView";
+import { ComponentView, ComponentViewLayout } from "./ComponentView";
 import { ComponentViewModel, ObservableChanges } from "./ComponentViewModel";
+import { BaseCompositeComponentView } from "./CompositeComponent";
 import { IEquatable } from "./Equatable";
 import { CustomEventRegistrations } from "./EventManager";
 import { FocusableComponentChangeHandler, FocusableComponentMixin, FocusableViewMixin, FocusableViewModelMixin, HasFocusProperty, IFocusableView, IFocusableViewModel } from "./FocusableComponent";
@@ -92,7 +93,7 @@ export class InputComponentViewModel
 
 export type BaseTextInputComponentViewModel = ComponentViewModel & ITextInputViewModel;
 
-export type BaseInputComponentViewModel = ComponentViewModel & ITextInputViewModel & IInputComponentViewModel & IUniqueViewModel & IFocusableViewModel;
+export type BaseInputComponentViewModel = BaseTextInputComponentViewModel & IInputComponentViewModel & IUniqueViewModel & IFocusableViewModel;
 
 type InputViewEventLayout = {
     textValueInput: InputEvent;
@@ -103,10 +104,10 @@ type InputViewEventLayout = {
 export interface ITextInputView {
     getTextValue(): string;
     setTextValue(textValue: string): void;
-    setPlaceholder(placeholder: string): this;
-    setMaxLength(maxLength: number): this;
-    required(): this;
-    notRequired(): this;
+    setPlaceholder(placeholder: string): void;
+    setMaxLength(maxLength: number): void;
+    required(): void;
+    notRequired(): void;
     enable(): void;
     disable(): void;
     makeReadOnly(): void;
@@ -255,6 +256,49 @@ export class InputComponentView
             );
         }
     }
+}
+
+export class ContainerOfInputView<
+    TLayout extends ComponentViewLayout<TLayout>
+> extends BaseCompositeComponentView<TLayout, BaseInputComponentView> implements ITextInputView, IInputView {
+
+    static block<TLayout extends ComponentViewLayout<TLayout>>(layout: TLayout, toPublicLayout: (l: TLayout) => BaseInputComponentView) {
+        return new ContainerOfInputView("div", layout, toPublicLayout).asLayout();
+    }
+
+    static span<TLayout extends ComponentViewLayout<TLayout>>(layout: TLayout, toPublicLayout: (l: TLayout) => BaseInputComponentView) {
+        return new ContainerOfInputView("span", layout, toPublicLayout).asLayout();
+    }
+
+    static listItem<TLayout extends ComponentViewLayout<TLayout>>(layout: TLayout, toPublicLayout: (l: TLayout) => BaseInputComponentView) {
+        return new ContainerOfInputView("li", layout, toPublicLayout).asLayout();
+    }
+
+    readonly when = this.publicLayout.when;
+
+    declare asLayout: () => ContainerOfInputView<TLayout> & TLayout;
+
+    getTextValue() { return this.publicLayout.getTextValue(); }
+
+    setTextValue(textValue: string) { this.publicLayout.setTextValue(textValue); }
+
+    setPlaceholder(placeholder: string) { this.publicLayout.setPlaceholder(placeholder); }
+
+    setMaxLength(maxLength: number) { this.publicLayout.setMaxLength(maxLength); }
+
+    required() { this.publicLayout.required(); }
+
+    notRequired() { this.publicLayout.notRequired(); }
+
+    enable() { this.publicLayout.enable(); }
+
+    disable() { this.publicLayout.disable(); }
+
+    makeReadOnly() { this.publicLayout.makeReadOnly(); }
+
+    makeEditable() { this.publicLayout.makeEditable(); }
+
+    setType(type: string) { this.publicLayout.setType(type); }
 }
 
 export class TextInputValueChangeHandler extends ComponentChangeHandler<BaseTextInputComponentViewModel, BaseTextInputComponentView> {

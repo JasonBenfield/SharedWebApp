@@ -21,6 +21,7 @@ export class ContainerComponent extends Component {
 export interface IContainerComponentView {
     addLayout<TLayout extends ComponentViewLayout<TLayout>>(layout: TLayout): TLayout;
     addChildView<T extends ComponentView>(view: T): T;
+    insertChildView<T extends ComponentView>(view: T, index: number): T;
     removeAllChildViews(): void;
     removeChildView(view: ComponentView): void;
 }
@@ -29,6 +30,7 @@ export function ContainerComponentViewMixin<T extends Constructor<ComponentView>
     return class extends Base implements IContainerComponentView {
         declare public addLayout: <TLayout extends ComponentViewLayout<TLayout>>(layout: TLayout) => this & TLayout;
         declare public addChildView: <T extends ComponentView>(view: T) => T;
+        declare public insertChildView: <T extends ComponentView>(view: T, index: number) => T;
         declare public removeAllChildViews: () => void;
         declare public removeChildView: (view: ComponentView) => void;
     };

@@ -11,15 +11,6 @@ export type ComponentViewLayout<T> = {
 }
 
 export class ComponentView {
-    protected readonly eventManager = new EventManager();
-    private readonly createElement: () => HTMLElement;
-    private _element: HTMLElement | null = null;
-    private readonly _htmlEventListeners: IHtmlEventListeners = {};
-    private _parentView: ComponentView | null = null;
-    private readonly childViews: ComponentView[] = [];
-    private _isVisible = true;
-    protected isParentRequired = true;
-
     constructor();
     constructor(tagName: string);
     constructor(createElement: () => HTMLElement);
@@ -34,6 +25,15 @@ export class ComponentView {
             this.createElement = tagNameOrCreateElement;
         }
     }
+
+    protected readonly eventManager = new EventManager();
+    private readonly createElement: () => HTMLElement;
+    private readonly _htmlEventListeners: IHtmlEventListeners = {};
+    private readonly childViews: ComponentView[] = [];
+    protected isParentRequired = true;
+    private _element: HTMLElement | null = null;
+    private _parentView: ComponentView | null = null;
+    private _isVisible = true;
 
     protected get element() { return this._element; }
 
@@ -267,5 +267,11 @@ export class ComponentView {
             }
         }
         this._element = null;
+    }
+}
+
+export class HorizontalRuleView extends ComponentView {
+    constructor() {
+        super("hr");
     }
 }

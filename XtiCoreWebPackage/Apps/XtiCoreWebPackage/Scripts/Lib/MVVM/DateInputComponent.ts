@@ -4,6 +4,9 @@ import { BaseInputComponentView } from "./InputComponent";
 import { ITransformedInput, TransformedInputComponent, TransformedInputComponentViewModel } from "./TransformedInputComponent";
 
 export class DateInputComponentViewModel extends TransformedInputComponentViewModel<DateOnly> {
+    constructor(initialValue = DateOnly.max()) {
+        super(initialValue);
+    }
 }
 
 class TransformedDateInput implements ITransformedInput<DateOnly> {
@@ -22,7 +25,7 @@ class TransformedDateInput implements ITransformedInput<DateOnly> {
     }
 
     toView(value: DateOnly) {
-        return value ? value.toISOString() : "";
+        return value && !value.isMaxYear ? value.toISOString() : "";
     }
 
 }

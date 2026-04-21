@@ -14,6 +14,7 @@ afterEach(() => {
 describe("Select Component", () => {
     test("adds items", async () => {
         const { view, component } = createSelectComponent();
+        component.id = elementID;
         component.addItems(
             new TestItem(1),
             new TestItem(2)
@@ -28,6 +29,7 @@ describe("Select Component", () => {
 
     test("inserts items", async () => {
         const { view, component } = createSelectComponent();
+        component.id = elementID;
         component.addItems(
             new TestItem(1),
             new TestItem(2)
@@ -44,6 +46,7 @@ describe("Select Component", () => {
 
     test("sets items", async () => {
         const { view, component } = createSelectComponent();
+        component.id = elementID;
         component.addItems(
             new TestItem(1),
             new TestItem(2)
@@ -60,6 +63,7 @@ describe("Select Component", () => {
 
     test("adds or updates items", async () => {
         const { view, component } = createSelectComponent();
+        component.id = elementID;
         component.addItems(
             new TestItem(1),
             new TestItem(2)
@@ -76,6 +80,7 @@ describe("Select Component", () => {
 
     test("removes all items", async () => {
         const { view, component } = createSelectComponent();
+        component.id = elementID;
         const items = [
             new TestItem(1),
             new TestItem(2)
@@ -93,6 +98,7 @@ describe("Select Component", () => {
 
     test("selects value", async () => {
         const { view, component } = createSelectComponent();
+        component.id = elementID;
         const items = [new TestItem(1), new TestItem(2)];
         component.addItems(...items);
         component.setValue(items[1]);
@@ -106,6 +112,7 @@ describe("Select Component", () => {
 
     test("selects value set before items are added", async () => {
         const { view, component } = createSelectComponent();
+        component.id = elementID;
         const items = [new TestItem(1), new TestItem(2)];
         component.setValue(items[1]);
         component.addItems(...items);
@@ -116,6 +123,7 @@ describe("Select Component", () => {
 
     test("clears selected value if value not found", async () => {
         const { view, component } = createSelectComponent();
+        component.id = elementID;
         const items = [new TestItem(1), new TestItem(2)];
         component.addItems(...items);
         component.setValue(items[1]);
@@ -128,6 +136,7 @@ describe("Select Component", () => {
 
     test("clears selected value", async () => {
         const { view, component } = createSelectComponent();
+        component.id = elementID;
         const items = [new TestItem(1), new TestItem(2)];
         component.addItems(...items);
         component.setValue(items[1]);
@@ -140,6 +149,7 @@ describe("Select Component", () => {
 
     test("selects value from UI", async () => {
         const { view, component } = createSelectComponent();
+        component.id = elementID;
         const items = [new TestItem(1), new TestItem(2)];
         component.addItems(...items);
         component.setValue(items[1]);
@@ -149,6 +159,18 @@ describe("Select Component", () => {
         expect(component.value).toBe(items[0]);
     });
 
+    test("sets id and name", async () => {
+        const { view, component } = createSelectComponent();
+        TestHost.value.show(view, component);
+        const element = document.getElementById(component.id) as HTMLSelectElement;
+        expect(element?.id || "").not.toBe("");
+        expect(element?.name || "").not.toBe("");
+        component.id = "changedID";
+        component.name = "changedName";
+        TestHost.value.immediateHandleChanges();
+        expect(element.id).toBe("changedID");
+        expect(element.name).toBe("changedName");
+    });
 });
 
 function createSelectComponent() {

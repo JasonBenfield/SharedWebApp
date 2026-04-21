@@ -1,7 +1,7 @@
 import { Component } from "./Component";
 import { ComponentView, ComponentViewLayout } from "./ComponentView";
 import { ComponentViewModel, ExcludedViewModelProperties } from "./ComponentViewModel";
-import { StyleableComponentViewMixin } from "./StyleableComponentView";
+import { IStyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
 
 export type CompositeComponentViewModelProperties<TViewModel> = {
     [K in keyof TViewModel]: TViewModel[K] extends ExcludedViewModelProperties ? never :
@@ -33,12 +33,14 @@ export class CompositeComponentViewModel<T extends CompositeComponentViewModelLa
     asLayout() { return this as this & T; }
 }
 
-export interface ICompositeComponentView<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends ComponentView | ComponentViewLayout<TPublicLayout>> {
-    asLayout(): ComponentView & ICompositeComponentView<TLayout, TPublicLayout> & TLayout;
+export interface IPublicLayoutView<TPublicLayout extends ComponentView | ComponentViewLayout<TPublicLayout>> {
     readonly publicLayout: TPublicLayout;
 }
 
-export class BaseCompositeComponentView<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends ComponentView | ComponentViewLayout<TPublicLayout>> extends StyleableComponentViewMixin(ComponentView) implements ICompositeComponentView<TLayout, TPublicLayout> {
+export class BaseCompositeComponentView<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends ComponentView | ComponentViewLayout<TPublicLayout>>
+    extends StyleableComponentViewMixin(ComponentView)
+    implements IPublicLayoutView<TPublicLayout> {
+
     constructor(
         tagNameOrCreateElement: string | (() => HTMLElement),
         layout: TLayout,
@@ -66,8 +68,7 @@ export class BaseCompositeComponentView<TLayout extends ComponentViewLayout<TLay
     get publicLayout() { return this._publicLayout; }
 
     asLayout() {
-        const asLayout: any = this;
-        return asLayout as BaseCompositeComponentView<TLayout, TPublicLayout> & TLayout;
+        return this as any as ComponentView & IStyleableComponentView & IPublicLayoutView<TPublicLayout> & TLayout;
     }
 }
 
@@ -124,7 +125,7 @@ export class CompositeComponentBuilder<TViewModelLayout extends CompositeCompone
 
     view<TViewPublicLayout extends {
         [K in CompositeComponentViewModelProperties<TViewModelLayout>]: ComponentView
-    }>(view: CompositeComponentView<any, TViewPublicLayout>) {
+    }>(view: ComponentView & IStyleableComponentView & IPublicLayoutView<TViewPublicLayout>) {
         return new CompositeComponentBuilderWithView(this.viewModel, view);
     }
 }
@@ -140,7 +141,7 @@ class CompositeComponentBuilderWithView<
 > {
     constructor(
         private readonly viewModel: ComponentViewModel & TViewModelLayout,
-        private readonly view: CompositeComponentView<TViewLayout, TViewPublicLayout>
+        private readonly view: ComponentView & IStyleableComponentView & IPublicLayoutView<TViewPublicLayout>
     ) {
 
     }
@@ -164,7 +165,7 @@ class CompositeComponentBuilderWithComponentFactory<
     }> {
     constructor(
         private readonly viewModel: ComponentViewModel & TViewModelLayout,
-        private readonly view: CompositeComponentView<TViewLayout, TViewPublicLayout>,
+        private readonly view: ComponentView & IStyleableComponentView & IPublicLayoutView<TViewPublicLayout>,
         private readonly compositeFactory: TFactory
     ) {
     }
@@ -199,11 +200,10 @@ export type CompositeComponentLayout<T> = {
 
 class CompositeComponent<
     TViewModelLayout extends CompositeComponentViewModelLayout<TViewModelLayout>,
-    TViewLayout extends ComponentViewLayout<TViewLayout>,
     TViewPublicLayout extends ComponentViewLayout<TViewPublicLayout>,
     TComponentLayout extends CompositeComponentLayout<TComponentLayout>
-> extends Component {
-    constructor(viewModel: ComponentViewModel & TViewModelLayout, view: CompositeComponentView<TViewLayout, TViewPublicLayout>, layout: TComponentLayout) {
+    > extends Component {
+    constructor(viewModel: ComponentViewModel & TViewModelLayout, view: ComponentView & IPublicLayoutView<TViewPublicLayout>, layout: TComponentLayout) {
         super(viewModel, view);
         for (const key in layout) {
             const childComponent = Reflect.get(layout, key);
@@ -212,5 +212,7 @@ class CompositeComponent<
         }
     }
 
-    asLayout() { return this as this & TComponentLayout; }
+    asLayout() {
+        return this as any as Component & TComponentLayout;
+    }
 }

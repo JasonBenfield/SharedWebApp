@@ -10,6 +10,7 @@ import { ChangedObservableArray, ObservableArray } from "./ObservableArray";
 import { BaseOptionComponentView, BaseOptionComponentViewModel, IOptionComponentUpdater, OptionComponent, OptionComponentView, OptionComponentViewModel } from "./OptionComponent";
 import { StyleableComponentViewMixin } from "./StyleableComponentView";
 import { Constructor } from "./Types";
+import { IUniqueView, IUniqueViewModel, UniqueComponentChangeHandler, UniqueComponentMixin, UniqueViewMixin, UniqueViewModelMixin } from "./UniqueComponent";
 
 export class SelectedIndexValue implements IEquatable {
     constructor(readonly value: number, readonly isFromUI = false) {
@@ -46,9 +47,11 @@ export interface ISelectViewModel<TValue> {
     set preferredValue(value: TValue | null);
 }
 
-export type BaseSelectComponentViewModel<TValue> = ComponentViewModel & ISelectViewModel<TValue>;
+export type BaseSelectComponentViewModel<TValue> = ComponentViewModel & ISelectViewModel<TValue> & IUniqueViewModel;
 
-export class SelectComponentViewModel<TValue> extends ComponentViewModel implements ISelectViewModel<TValue> {
+export class SelectComponentViewModel<TValue>
+    extends UniqueViewModelMixin(ComponentViewModel)
+    implements IUniqueViewModel, ISelectViewModel<TValue> {
 
     readonly items = new ObservableArray<BaseOptionComponentViewModel<TValue>>();
 
@@ -190,7 +193,10 @@ export function SelectViewMixin<T extends Constructor<ComponentView>>(Base: T) {
     };
 }
 
-export class SelectComponentView extends SelectViewMixin(StyleableComponentViewMixin(ComponentView)) {
+export class SelectComponentView
+    extends SelectViewMixin(UniqueViewMixin(StyleableComponentViewMixin(ComponentView)))
+    implements ISelectView, IUniqueView {
+
     constructor() {
         super("select");
     }
@@ -205,7 +211,7 @@ export class SelectComponentView extends SelectViewMixin(StyleableComponentViewM
 
 }
 
-export type BaseSelectComponentView = ComponentView & ISelectView;
+export type BaseSelectComponentView = ComponentView & ISelectView & IUniqueView;
 
 type SelectComponentEventLayout<TValue> = {
     valueChanged: TValue;
@@ -226,14 +232,20 @@ export class SelectComponentChangeHandler<TValue> extends ComponentChangeHandler
     }
 }
 
-export class SelectComponent<TValue> extends Component {
+export class SelectComponent<TValue> extends UniqueComponentMixin(Component) {
+
     constructor(
         protected readonly viewModel: BaseSelectComponentViewModel<TValue>,
         protected readonly view: BaseSelectComponentView,
         private readonly valueWhenNull: TValue,
         itemUpdater?: IOptionComponentUpdater<TValue>
     ) {
-        super(viewModel, view, new SelectComponentChangeHandler(viewModel, view));
+        super(
+            viewModel,
+            view,
+            new UniqueComponentChangeHandler(viewModel, view),
+            new SelectComponentChangeHandler(viewModel, view)
+        );
         if (viewModel.value === null) {
             viewModel.value = valueWhenNull;
             viewModel.preferredValue = valueWhenNull;
@@ -281,7 +293,7 @@ export class SelectComponent<TValue> extends Component {
     private onValueChangedFromUI() {
         const selectedIndex = this.view.getSelectedIndex();
         if (this.view.elementExists) {
-            let value: TValue = this.valueWhenNull;
+            let value = this.valueWhenNull;
             if (selectedIndex > -1) {
                 const item = this.getItems()[selectedIndex];
                 if (item) {

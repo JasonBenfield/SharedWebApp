@@ -4,26 +4,17 @@ import { CssLengthUnit } from "../CssLengthUnit";
 import { Component } from "./Component";
 import { ComponentView } from "./ComponentView";
 import { ComponentViewModel } from "./ComponentViewModel";
-import { BaseCompositeComponentView, ICompositeComponentView } from "./CompositeComponent";
-import { GridCellView, GridRowViewMixin, GridViewMixin } from "./GridView";
-import { IStyleableComponentView } from "./StyleableComponentView";
+import { BaseCompositeComponentView, IPublicLayoutView } from "./CompositeComponent";
+import { GridCellContainerView, GridRowViewMixin, GridViewMixin } from "./GridView";
+import { IStyleableComponentView, StyleableComponentView } from "./StyleableComponentView";
 import { BaseTextLabelComponentView, BaseTextLabelComponentViewModel, TextLabelComponent, TextLabelComponentView, TextLabelComponentViewModel } from "./TextLabelComponent";
-
-interface IFormGroupViewLayout<TValueView extends ComponentView> {
-    captionCell: ComponentView & {
-        caption: BaseTextLabelComponentView & IStyleableComponentView
-    },
-    valueCell: ComponentView & {
-        value: TValueView
-    }
-};
 
 export interface IFormGroupViewPublicLayout<TValueView extends ComponentView> {
     readonly caption: BaseTextLabelComponentView & IStyleableComponentView;
     readonly value: TValueView;
 }
 
-export type BaseFormGroupView<TValueView extends ComponentView> = ComponentView & { publicLayout: IFormGroupViewPublicLayout<TValueView> };
+export type BaseFormGroupView<TValueView extends ComponentView> = ComponentView & IPublicLayoutView<IFormGroupViewPublicLayout<TValueView>>;
 
 class FormGroupCss extends CssClass {
     protected buildCss() {
@@ -37,31 +28,33 @@ class FormGroupCaptionCellCss extends CssClass {
     }
 }
 
-export class FormGroupView<TValueView extends ComponentView> extends GridRowViewMixin(BaseCompositeComponentView)<IFormGroupViewLayout<TValueView>, IFormGroupViewPublicLayout<TValueView>> implements ICompositeComponentView<IFormGroupViewLayout<TValueView>, IFormGroupViewPublicLayout<TValueView>> {
+export class FormGroupView<TValueView extends ComponentView>
+    extends GridRowViewMixin(StyleableComponentView)
+    implements IPublicLayoutView<IFormGroupViewPublicLayout<TValueView>> {
 
     constructor(valueView: TValueView) {
-        const layout = {
-            captionCell: GridCellView.block({
-                caption: new TextLabelComponentView()
-            }),
-            valueCell: GridCellView.block({
-                value: valueView
-            })
-        };
-        super(
-            "div",
-            layout,
-            l => {
-                return {
-                    caption: l.captionCell.caption,
-                    value: l.valueCell.value
-                };
-            }
-        );
+        super();
         this.setCss(new FormGroupCss());
-        layout.captionCell.setCss(new FormGroupCaptionCellCss());
+        this.addLayout(this.layout);
+        this.layout.valueCell.addChildView(valueView);
+        this.layout.captionCell.setCss(new FormGroupCaptionCellCss());
+        const captionView = this.layout.captionCell.addChildView(new TextLabelComponentView());
+        this.publicLayout = {
+            caption: captionView,
+            value: valueView
+        }
         this.publicLayout.caption.setCss(new FormLabelCss());
     }
+
+    private readonly layout = {
+        captionCell: GridCellContainerView.block(),
+        valueCell: GridCellContainerView.block()
+    };
+
+    readonly captionCell = this.layout.captionCell;
+    readonly valueCell = this.layout.valueCell;
+
+    readonly publicLayout: IFormGroupViewPublicLayout<TValueView>;
 }
 
 export interface IFormGroupViewModel<TValue extends ComponentViewModel> {
@@ -85,13 +78,17 @@ export class FormGroup<
     TValueComponent extends Component
 > extends Component {
     constructor(
-        viewModel: ComponentViewModel & IFormGroupViewModel<TValueVM>,
+        protected readonly viewModel: ComponentViewModel & IFormGroupViewModel<TValueVM>,
         view: BaseFormGroupView<TValueView>,
         createValueComponent: (vm: TValueVM, v: TValueView) => TValueComponent
     ) {
         super(viewModel, view);
-        this.caption = new TextLabelComponent(viewModel.caption, view.publicLayout.caption);
-        this.value = createValueComponent(viewModel.value, view.publicLayout.value);
+        const layout = this.addLayout({
+            caption: new TextLabelComponent(viewModel.caption, view.publicLayout.caption),
+            value: createValueComponent(viewModel.value, view.publicLayout.value)
+        });
+        this.caption = layout.caption;
+        this.value = layout.value;
         const value: any = this.value;
         if (value.id && typeof value.id === "string") {
             this.caption.forComponent(value);
@@ -101,10 +98,11 @@ export class FormGroup<
     readonly caption: TextLabelComponent;
     readonly value: TValueComponent;
 
+    getCaption() { return this.caption.text; }
+
     setCaption(caption: string) {
         this.caption.text = caption;
     }
-
 }
 
 export type FormGroupContainerViewLayout<T> = {
@@ -131,6 +129,8 @@ export class FormGroupContainerView<TLayout extends FormGroupContainerViewLayout
             CssLengthUnit.flex(1)
         );
     }
+
+    declare asLayout: () => FormGroupContainerView<TLayout> & TLayout;
 
     addFormGroup<T extends BaseFormGroupView<ComponentView>>(formGroup: T) {
         return this.addChildView(formGroup);

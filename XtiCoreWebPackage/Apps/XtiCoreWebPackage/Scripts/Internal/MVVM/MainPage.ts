@@ -4,93 +4,108 @@ import { ContainerCss } from "../../Lib/Bootstrap/ContainerCss";
 import { ContextualClass } from "../../Lib/Bootstrap/ContextualClass";
 import { DisplayCss } from "../../Lib/Bootstrap/DisplayCss";
 import { FlexCss } from "../../Lib/Bootstrap/FlexCss";
+import { FormControlCss } from "../../Lib/Bootstrap/FormGroupCss";
 import { HeightCss } from "../../Lib/Bootstrap/HeightCss";
 import { MarginCss } from "../../Lib/Bootstrap/MarginCss";
 import { OverflowCss } from "../../Lib/Bootstrap/OverflowCss";
 import { PaddingCss } from "../../Lib/Bootstrap/PaddingCss";
 import { CssLengthUnit } from "../../Lib/CssLengthUnit";
-import { FormattedNumber } from "../../Lib/FormattedNumber";
 import { ButtonCommandView, Command, CommandOptionsBuilder, CommandViewModel } from "../../Lib/MVVM/Command";
 import { ComponentViewModel } from "../../Lib/MVVM/ComponentViewModel";
 import { CompositeComponentBuilder, CompositeComponentView } from "../../Lib/MVVM/CompositeComponent";
 import { IEquatable } from "../../Lib/MVVM/Equatable";
-import { FormGroupContainerView, FormGroupInputView, FormGroupSelect, FormGroupSelectView, FormGroupSelectViewModel, FormGroupText, FormGroupTextView, FormGroupTextViewModel, FormGroupTransformedInput, FormGroupTransformedInputViewModel } from "../../Lib/MVVM/FormGroup";
-import { GridCellTextView, GridCellView, GridRowView, GridSpan, GridView } from "../../Lib/MVVM/GridView";
+import { FormGroupContainerView } from "../../Lib/MVVM/FormGroup";
+import { FormGroupDateInput, FormGroupDateInputViewModel, FormGroupInputView, FormGroupNumericTextInput, FormGroupNumericTextInputViewModel } from "../../Lib/MVVM/FormGroupInput";
+import { FormGroupSelect, FormGroupSelectView, FormGroupSelectViewModel } from "../../Lib/MVVM/FormGroupSelect";
+import { FormGroupText, FormGroupTextView, FormGroupTextViewModel } from "../../Lib/MVVM/FormGroupText";
+import { FormGroupTextArea, FormGroupTextAreaView, FormGroupTextAreaViewModel } from "../../Lib/MVVM/FormGroupTextArea";
+import { GridCellContainerView, GridCellTextView, GridSpan } from "../../Lib/MVVM/GridView";
 import { IViewModelUpdater, ListComponent, ListComponentOptionsBuilder, ListComponentViewModel, ListItemFactory, TextViewModelUpdater } from "../../Lib/MVVM/ListComponent";
-import { GridListGroupItemView, GridListGroupView, GridListGroupItemContainerOfTextView, ListGroupView, TextListGroupItemView } from "../../Lib/MVVM/ListGroup";
+import { GridListGroupItemContainerOfTextView, GridListGroupItemView, GridListGroupView, ListGroupView, TextListGroupItemView } from "../../Lib/MVVM/ListGroup";
+import { StyleableComponentView } from "../../Lib/MVVM/StyleableComponentView";
 import { TextComponent, TextComponentView, TextComponentViewModel } from "../../Lib/MVVM/TextComponent";
 import { LinkContainerOfTextView, TextLinkComponent, TextLinkComponentViewModel } from "../../Lib/MVVM/TextLinkComponent";
-import { TransformedNumberInput } from "../../Lib/MVVM/TransformedInputComponent";
 import { AppHost } from "../AppHost";
 
 class MainPageViewModel extends ComponentViewModel {
     readonly textFormGroup = new FormGroupTextViewModel();
-    readonly inputFormGroup = new FormGroupTransformedInputViewModel(0);
-    readonly inputResultFormGroup = new FormGroupTextViewModel();
+    readonly inputFormGroup = new FormGroupNumericTextInputViewModel();
+    readonly inputResult = new TextComponentViewModel();
     readonly selectFormGroup = new FormGroupSelectViewModel<TestItem>();
-    readonly selectResultFormGroup = new FormGroupTextViewModel();
+    readonly selectResult = new TextComponentViewModel();
+    readonly dateInputFormGroup = new FormGroupDateInputViewModel();
+    readonly dateResult = new TextComponentViewModel();
+    readonly textAreaFormGroup = new FormGroupTextAreaViewModel();
+    readonly textAreaResult = new TextComponentViewModel();
     readonly link = new TextLinkComponentViewModel();
     readonly textList = new ListComponentViewModel<TextComponentViewModel>();
     readonly compositeList = new ListComponentViewModel<TestItemComponentViewModel>();
     readonly button = new CommandViewModel();
 }
 
-class MainPageView {
+class MainPageView extends StyleableComponentView {
     constructor() {
-        this.view.setCss(DisplayCss.flex());
-        this.view.setCss(new FlexCss().column());
-        this.view.setCss(HeightCss.fill());
-        const grid = this.view.content.container.grid;
-        grid.styleAsLayout();
-        grid.setTemplateColumns(
+        super();
+        this.setCss(DisplayCss.flex());
+        this.setCss(new FlexCss().column());
+        this.setCss(HeightCss.fill());
+        this.addLayout(this.layout);
+        this.layout.content.setCss(new FlexCss().grow(1));
+        this.layout.content.setCss(OverflowCss.auto());
+        this.layout.content.container.setCss(ContainerCss.xs());
+        this.layout.content.setCss(PaddingCss.bottom(3));
+
+        this.formGroups.setTemplateColumns(
             CssLengthUnit.auto(),
             CssLengthUnit.flex(1),
             CssLengthUnit.auto()
-        )
-        grid.row1.cell1.text.setText("Cell 1");
-        grid.row1.cell2.text.setText("Cell 2");
-        grid.row1.cell3.text.setText("Cell 3");
-        this.view.content.setCss(new FlexCss().grow(1));
-        this.view.content.setCss(OverflowCss.auto());
-        this.view.content.container.setCss(ContainerCss.xs());
-        this.view.content.setCss(PaddingCss.bottom(3));
+        );
+        this.formGroups.text.valueCell.setGridColumn(new GridSpan(2));
+        for (const key in this.formGroupResults) {
+            const textView: TextComponentView = Reflect.get(this.formGroupResults, key);
+            textView.setCss(FormControlCss.text());
+        }
 
-        this.view.publicLayout.link.text.setCss(MarginCss.end(1));
-        this.view.publicLayout.link.otherText.setText("Other Text");
-        this.view.publicLayout.textList.setCss(MarginCss.bottom(3));
-        this.view.publicLayout.compositeList.setTemplateColumns(CssLengthUnit.auto(), CssLengthUnit.flex(1));
-        this.view.publicLayout.compositeList.setCss(MarginCss.bottom(3));
-        this.view.publicLayout.button.styleAsOutline(ContextualClass.primary);
+        this.publicLayout.link.text.setCss(MarginCss.end(1));
+        this.publicLayout.link.otherText.setText("Other Text");
+        this.publicLayout.textList.setCss(MarginCss.bottom(3));
+        this.publicLayout.compositeList.setTemplateColumns(CssLengthUnit.auto(), CssLengthUnit.flex(1));
+        this.publicLayout.compositeList.setCss(MarginCss.bottom(3));
+        this.publicLayout.button.styleAsOutline(ContextualClass.primary);
 
-        this.view.toolbar.setCss(BackgroundCss.gradient(ContextualClass.secondary).subtle());
-        this.view.toolbar.container.setCss(ContainerCss.xs());
-        this.view.toolbar.container.setCss(PaddingCss.xs(3));
-        this.view.toolbar.container.text.setText("Toolbar");
+        this.layout.toolbar.setCss(BackgroundCss.gradient(ContextualClass.secondary).subtle());
+        this.layout.toolbar.container.setCss(ContainerCss.xs());
+        this.layout.toolbar.container.setCss(PaddingCss.xs(3));
+        this.layout.toolbar.container.text.setText("Toolbar");
     }
 
-    readonly view = CompositeComponentView.blockWithPublicLayout({
+    private readonly formGroups = FormGroupContainerView.create({
+        text: new FormGroupTextView(),
+        input: new FormGroupInputView(),
+        select: new FormGroupSelectView(),
+        date: new FormGroupInputView(),
+        textArea: new FormGroupTextAreaView()
+    });
+
+    private readonly formGroupResults = {
+        input: this.formGroups.input
+            .addCell(GridCellContainerView.block())
+            .addChildView(TextComponentView.block()),
+        select: this.formGroups.select
+            .addCell(GridCellContainerView.block())
+            .addChildView(TextComponentView.block()),
+        date: this.formGroups.date
+            .addCell(GridCellContainerView.block())
+            .addChildView(TextComponentView.block()),
+        textArea: this.formGroups.textArea
+            .addCell(GridCellContainerView.block())
+            .addChildView(TextComponentView.block())
+    };
+
+    private readonly layout = {
         content: CompositeComponentView.block({
             container: CompositeComponentView.block({
-                grid: GridView.block({
-                    row1: GridRowView.block({
-                        cell1: GridCellView.block({
-                            text: new TextComponentView()
-                        }),
-                        cell2: GridCellView.block({
-                            text: new TextComponentView()
-                        }),
-                        cell3: GridCellView.block({
-                            text: new TextComponentView()
-                        })
-                    })
-                }),
-                formGroups: FormGroupContainerView.create({
-                    textFormGroup: new FormGroupTextView(),
-                    inputFormGroup: new FormGroupInputView(),
-                    inputResultFormGroup: new FormGroupTextView(),
-                    selectFormGroup: new FormGroupSelectView(),
-                    selectResultFormGroup: new FormGroupTextView()
-                }),
+                formGroups: this.formGroups,
                 link: LinkContainerOfTextView.create({
                     text: TextComponentView.span(),
                     otherText: TextComponentView.span()
@@ -108,20 +123,23 @@ class MainPageView {
                 text: new TextComponentView()
             })
         })
-    }, l => {
-        return {
-            textFormGroup: l.content.container.formGroups.textFormGroup,
-            inputFormGroup: l.content.container.formGroups.inputFormGroup,
-            inputResultFormGroup: l.content.container.formGroups.inputResultFormGroup,
-            selectFormGroup: l.content.container.formGroups.selectFormGroup,
-            selectResultFormGroup: l.content.container.formGroups.selectResultFormGroup,
-            link: l.content.container.link,
-            textList: l.content.container.textList,
-            compositeList: l.content.container.compositeList,
-            button: l.content.container.buttons.button,
-            inputResult: l.content.container.inputResult
-        };
-    });
+    };
+
+    readonly publicLayout = {
+        textFormGroup: this.formGroups.text,
+        inputFormGroup: this.formGroups.input,
+        inputResult: this.formGroupResults.input,
+        selectFormGroup: this.formGroups.select,
+        selectResult: this.formGroupResults.select,
+        dateInputFormGroup: this.formGroups.date,
+        dateResult: this.formGroupResults.date,
+        textAreaFormGroup: this.formGroups.textArea,
+        textAreaResult: this.formGroupResults.textArea,
+        link: this.layout.content.container.link,
+        textList: this.layout.content.container.textList,
+        compositeList: this.layout.content.container.compositeList,
+        button: this.layout.content.container.buttons.button
+    };
 }
 
 class MainPage {
@@ -137,17 +155,11 @@ class MainPage {
             new TestItem(1, "Option 3")
         ];
         const component = new CompositeComponentBuilder(pageViewModel)
-            .view(pageView.view)
+            .view(pageView)
             .factory({
                 textFormGroup: (vm, v) => new FormGroupText(vm, v),
-                inputFormGroup: (vm, v) => new FormGroupTransformedInput(
-                    vm,
-                    v,
-                    new TransformedNumberInput()
-                        .setNumberOfDecimals(2)
-                        .setFormatString(FormattedNumber.currencyFormatString)
-                ),
-                inputResultFormGroup: (vm, v) => new FormGroupText(vm, v),
+                inputFormGroup: (vm, v) => new FormGroupNumericTextInput(vm, v),
+                inputResult: (vm, v) => new TextComponent(vm, v),
                 selectFormGroup: (vm, v) => new FormGroupSelect<TestItem>(
                     vm,
                     v,
@@ -157,7 +169,11 @@ class MainPage {
                         formatText: (v) => v.toString()
                     }
                 ),
-                selectResultFormGroup: (vm, v) => new FormGroupText(vm, v),
+                selectResult: (vm, v) => new TextComponent(vm, v),
+                dateInputFormGroup: (vm, v) => new FormGroupDateInput(vm, v,),
+                dateResult: (vm, v) => new TextComponent(vm, v),
+                textAreaFormGroup: (vm, v) => new FormGroupTextArea(vm, v),
+                textAreaResult: (vm, v) => new TextComponent(vm, v),
                 link: (vm, v) => new TextLinkComponent(vm, v),
                 textList: (vm, v) => createTextListComponent(vm, v),
                 compositeList: (vm, v) => createCompositeListComponent(vm, v),
@@ -174,15 +190,22 @@ class MainPage {
         component.textFormGroup.setCaption("Caption 1");
         component.textFormGroup.setValue("Value 1");
         component.inputFormGroup.setCaption("Input");
-        component.inputResultFormGroup.setCaption("Input Result");
         component.inputFormGroup.when.valueChanged.then(evt => {
-            component.inputResultFormGroup.setValue(evt.detail.toLocaleString());
+            component.inputResult.text = evt.detail.toLocaleString();
         });
         component.selectFormGroup.setCaption("Select");
         component.selectFormGroup.addItems(...selectItems);
-        component.selectResultFormGroup.setCaption("Select Result");
         component.selectFormGroup.when.valueChanged.then(evt => {
-            component.selectResultFormGroup.setValue(evt.detail.toString());
+            component.selectResult.text = evt.detail.toString();
+        });
+        component.dateInputFormGroup.setCaption("Date");
+        component.dateInputFormGroup.when.valueChanged.then(evt => {
+            component.dateResult.text = evt.detail.format();
+        });
+        component.textAreaFormGroup.setNumberOfRows(3);
+        component.textAreaFormGroup.setCaption("Text Area");
+        component.textAreaFormGroup.when.textValueChanged.then(evt => {
+            component.textAreaResult.text = evt.detail;
         });
         component.link.href = "https://example.com";
         component.link.text = "Example";
@@ -224,7 +247,7 @@ class MainPage {
         });
         component.button.setText("Test Button");
         AppHost.value.show(
-            pageView.view,
+            pageView,
             component
         );
     }

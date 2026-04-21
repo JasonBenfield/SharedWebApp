@@ -8,14 +8,6 @@ type EventLayout<TViewModel> = {
 }
 
 export class ComponentViewModel {
-    private readonly eventManager = new EventManager();
-    private readonly events = this.eventManager.addEvents<EventLayout<ComponentViewModel>>({
-        propertyChanged: null
-    });
-    readonly when = this.events.when;
-
-    private readonly _changes: ObservableChanges<typeof this> = {};
-
     constructor() {
         const proxy = new Proxy(
             this,
@@ -43,6 +35,14 @@ export class ComponentViewModel {
         );
         return proxy;
     }
+
+    private readonly eventManager = new EventManager();
+    private readonly events = this.eventManager.addEvents<EventLayout<ComponentViewModel>>({
+        propertyChanged: null
+    });
+    readonly when = this.events.when;
+
+    private readonly _changes: ObservableChanges<typeof this> = {};
 
     get changes() { return this._changes; }
 
