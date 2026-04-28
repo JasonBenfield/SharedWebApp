@@ -2,8 +2,8 @@
 
 export class RootView extends BasicContainerView {
     private static defaultElement() {
-        const root = document.body.appendChild(document.createElement('div'));
-        root.style.display = 'contents';
+        const root = document.body.appendChild(document.createElement("div"));
+        root.style.display = "contents";
         return root;
     }
 

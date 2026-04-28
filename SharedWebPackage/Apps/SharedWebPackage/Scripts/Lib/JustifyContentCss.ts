@@ -2,15 +2,15 @@
 
 export class JustifyContentCss implements ICssBuilder {
     static start() {
-        return new JustifyContentCss('start');
+        return new JustifyContentCss("start");
     }
 
     static end() {
-        return new JustifyContentCss('end');
+        return new JustifyContentCss("end");
     }
 
     static center() {
-        return new JustifyContentCss('center');
+        return new JustifyContentCss("center");
     }
 
     private readonly justify: {
@@ -58,21 +58,21 @@ export class JustifyContentCss implements ICssBuilder {
 
     cssClass() {
         let cssClass = new CssClass();
-        cssClass.addName(this.cssClassName('xs'));
-        cssClass.addName(this.cssClassName('sm'));
-        cssClass.addName(this.cssClassName('md'));
-        cssClass.addName(this.cssClassName('lg'));
-        cssClass.addName(this.cssClassName('xl'));
-        cssClass.addName(this.cssClassName('xxl'));
+        cssClass.addName(this.cssClassName("xs"));
+        cssClass.addName(this.cssClassName("sm"));
+        cssClass.addName(this.cssClassName("md"));
+        cssClass.addName(this.cssClassName("lg"));
+        cssClass.addName(this.cssClassName("xl"));
+        cssClass.addName(this.cssClassName("xxl"));
         return cssClass;
     }
 
     private cssClassName(breakpoint: LayoutBreakpoint) {
         let value = this.justify[breakpoint];
         if (value) {
-            let breakpointPart = breakpoint === 'xs' ? '' : `-${breakpoint}`;
+            let breakpointPart = breakpoint === "xs" ? "" : `-${breakpoint}`;
             return `flex${breakpointPart}-${value}`;
         }
-        return '';
+        return "";
     }
 }

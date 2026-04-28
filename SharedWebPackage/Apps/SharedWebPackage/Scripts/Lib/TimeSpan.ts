@@ -10,21 +10,21 @@ export class TimeSpan implements IFormattable {
         if (TimeSpan.regex1.test(text)) {
             const match = TimeSpan.regex1.exec(text);
             return new TimeSpan(
-                Number(match.groups.days || '0'),
-                Number(match.groups.hours || '0'),
-                Number(match.groups.minutes || '0'),
-                Number(match.groups.seconds || '0'),
-                Number(match.groups.ticks || '0')
+                Number(match?.groups?.days || '0'),
+                Number(match?.groups?.hours || '0'),
+                Number(match?.groups?.minutes || '0'),
+                Number(match?.groups?.seconds || '0'),
+                Number(match?.groups?.ticks || '0')
             );
         }
         else if (TimeSpan.regex2.test(text)) {
             const match = TimeSpan.regex2.exec(text);
             return new TimeSpan(
-                Number(match.groups.days || '0'),
-                Number(match.groups.hours || '0'),
-                Number(match.groups.minutes || '0'),
-                Number(match.groups.seconds || '0'),
-                Number(match.groups.ticks || '0')
+                Number(match?.groups?.days || '0'),
+                Number(match?.groups?.hours || '0'),
+                Number(match?.groups?.minutes || '0'),
+                Number(match?.groups?.seconds || '0'),
+                Number(match?.groups?.ticks || '0')
             );
         }
         return null;
@@ -93,7 +93,7 @@ export class TimeSpan implements IFormattable {
             this.days += Math.floor(this.hours / 24.0);
             this.hours = this.hours % 24.0;
         }
-        this.milliseconds = Math.floor(ticks / 10000);
+        this.milliseconds = Math.floor(this.ticks / 10000);
         this.totalTicks = this.days * 864000000000 +
             this.hours * 36000000000 +
             this.minutes * 600000000 +

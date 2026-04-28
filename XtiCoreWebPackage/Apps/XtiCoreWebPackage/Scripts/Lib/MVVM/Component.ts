@@ -1,7 +1,7 @@
-import { ConsoleLogger } from "../ConsoleLogger";
 import { DebouncedAction } from "../DebouncedAction";
 import { ComponentView } from "./ComponentView";
 import { ComponentViewModel, ObservableChanges, UpdatedViewModel } from "./ComponentViewModel";
+import { CurrentScrollIntoView } from "./CurrentScrollIntoView";
 import { EventManager } from "./EventManager";
 import { MvvmOptions } from "./MvvmOptions";
 
@@ -26,6 +26,13 @@ export abstract class ComponentChangeHandler<TViewModel extends ComponentViewMod
             action(view);
         }
     }
+
+    protected updateFirstView(action: (v: TView) => void) {
+        const view = this.views[0];
+        if (view) {
+            action(view);
+        }
+    }
 }
 
 export class ComponentVisibilityChangeHandler extends ComponentChangeHandler<ComponentViewModel, ComponentView> {
@@ -41,6 +48,24 @@ export class ComponentVisibilityChangeHandler extends ComponentChangeHandler<Com
                     v.hide();
                 }
             });
+        }
+    }
+}
+
+export class ComponentScrollIntoViewChangeHandler extends ComponentChangeHandler<ComponentViewModel, ComponentView> {
+
+    handleChanges(changes: ObservableChanges<ComponentViewModel>) {
+        if (changes.isScrolledIntoView) {
+            const isScrolledIntoView = changes.isScrolledIntoView.value;
+            this.updateFirstView(v => {
+                if (isScrolledIntoView) {
+                    v.scrollIntoView();
+                }
+                else {
+                    v.cancelScrollIntoView();
+                }
+            });
+            CurrentScrollIntoView.value.setCurrent(this.viewModel);
         }
     }
 }
@@ -69,7 +94,10 @@ export class Component {
         else {
             this.views = [viewOrViews];
         }
-        this.changeHandlers.push(new ComponentVisibilityChangeHandler(viewModel, this.views));
+        this.changeHandlers.push(
+            new ComponentVisibilityChangeHandler(viewModel, this.views),
+            new ComponentScrollIntoViewChangeHandler(viewModel, this.views)
+        );
         for (const changeHandler of changeHandlers) {
             this.changeHandlers.push(changeHandler);
         }
@@ -123,6 +151,10 @@ export class Component {
 
     hide() {
         this.viewModel.isVisible = false;
+    }
+
+    scrollIntoView() {
+        this.viewModel.isScrolledIntoView = true;
     }
 
     containsElement(otherEl: HTMLElement) {

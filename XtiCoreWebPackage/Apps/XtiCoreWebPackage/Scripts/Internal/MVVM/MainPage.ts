@@ -26,6 +26,8 @@ import { StyleableComponentView } from "../../Lib/MVVM/StyleableComponentView";
 import { TextComponent, TextComponentView, TextComponentViewModel } from "../../Lib/MVVM/TextComponent";
 import { LinkContainerOfTextView, TextLinkComponent, TextLinkComponentViewModel } from "../../Lib/MVVM/TextLinkComponent";
 import { AppHost } from "../AppHost";
+import { MessageAlertComponent, MessageAlertComponentView, MessageAlertComponentViewModel } from "../../Lib/MVVM/MessageAlertComponent";
+import { DelayedAction } from "../../Lib/DelayedAction";
 
 class MainPageViewModel extends ComponentViewModel {
     readonly textFormGroup = new FormGroupTextViewModel();
@@ -41,6 +43,7 @@ class MainPageViewModel extends ComponentViewModel {
     readonly textList = new ListComponentViewModel<TextComponentViewModel>();
     readonly compositeList = new ListComponentViewModel<TestItemComponentViewModel>();
     readonly button = new CommandViewModel();
+    readonly alert = new MessageAlertComponentViewModel();
 }
 
 class MainPageView extends StyleableComponentView {
@@ -72,6 +75,7 @@ class MainPageView extends StyleableComponentView {
         this.publicLayout.compositeList.setTemplateColumns(CssLengthUnit.auto(), CssLengthUnit.flex(1));
         this.publicLayout.compositeList.setCss(MarginCss.bottom(3));
         this.publicLayout.button.styleAsOutline(ContextualClass.primary);
+        this.publicLayout.button.setCss(MarginCss.bottom(3));
 
         this.layout.toolbar.setCss(BackgroundCss.gradient(ContextualClass.secondary).subtle());
         this.layout.toolbar.container.setCss(ContainerCss.xs());
@@ -115,7 +119,7 @@ class MainPageView extends StyleableComponentView {
                 buttons: CompositeComponentView.block({
                     button: new ButtonCommandView()
                 }),
-                inputResult: new TextComponentView()
+                alert: new MessageAlertComponentView()
             })
         }),
         toolbar: CompositeComponentView.block({
@@ -138,7 +142,8 @@ class MainPageView extends StyleableComponentView {
         link: this.layout.content.container.link,
         textList: this.layout.content.container.textList,
         compositeList: this.layout.content.container.compositeList,
-        button: this.layout.content.container.buttons.button
+        button: this.layout.content.container.buttons.button,
+        alert: this.layout.content.container.alert
     };
 }
 
@@ -184,7 +189,8 @@ class MainPage {
                             alert("Testing");
                         })
                         .build()
-                )
+                ),
+                alert: (vm, v) => new MessageAlertComponent(vm, v)
             })
             .build();
         component.textFormGroup.setCaption("Caption 1");
@@ -215,7 +221,7 @@ class MainPage {
         component.compositeList.header.text = "Composite List Header";
         component.compositeList.setItems(new TestItem(1, "Test 1"), new TestItem(2, "Test 2"), new TestItem(3, "Test 3"), new TestItem(4, "Test 4"));
         component.compositeList.footer.text = "Composite List Footer";
-        component.compositeList.when.headerClicked.then(evt => {
+        component.compositeList.when.headerClicked.then(async (evt) => {
             let text: string;
             if (evt.detail.source instanceof TextComponent) {
                 text = evt.detail.source.text;
@@ -223,7 +229,10 @@ class MainPage {
             else {
                 text = "Header";
             }
-            alert(`${text} clicked!`);
+            component.alert.infoAction(
+                "Loading...",
+                () => DelayedAction.delay(3000)
+            );
         });
         component.compositeList.when.itemClicked.then(evt => {
             let text: string;

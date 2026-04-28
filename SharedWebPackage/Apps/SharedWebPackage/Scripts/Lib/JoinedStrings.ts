@@ -3,7 +3,7 @@ export class JoinedStrings {
     private readonly format: (any) => string;
 
     private static defaultFormat(value: string) {
-        return value ? value.toString() : '';
+        return value ? value.toString() : "";
     }
 
     constructor(
@@ -14,9 +14,9 @@ export class JoinedStrings {
     }
 
     value() {
-        let result = '';
+        let result = "";
         for (const value of this.arr) {
-            if (result !== '') {
+            if (result !== "") {
                 result += this.separator;
             }
             result += this.format(value);

@@ -63,7 +63,7 @@ export class TextCss implements ICssBuilder {
         return this;
     }
 
-    private size: string;
+    private size: string | null = null;
 
     fontSize(size: 1 | 2 | 3 | 4 | 5) {
         this.size = size ? `fs-${size}` : null;

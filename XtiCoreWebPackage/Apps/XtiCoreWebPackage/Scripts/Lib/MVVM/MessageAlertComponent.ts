@@ -1,10 +1,11 @@
 import { AlertHeadingCss } from "../Bootstrap/AlertCss";
 import { ContextualClass } from "../Bootstrap/ContextualClass";
-import { AlertComponentMixin, AlertViewMixin, AlertViewModelMixin, IAlertComponent, IAlertView, IAlertViewModel } from "./AlertComponent";
+import { AlertComponentChangeHandler, AlertComponentMixin, AlertViewMixin, AlertViewModelMixin, IAlertComponent, IAlertView, IAlertViewModel } from "./AlertComponent";
 import { Component } from "./Component";
 import { ComponentView, ComponentViewLayout } from "./ComponentView";
 import { ComponentViewModel } from "./ComponentViewModel";
 import { BaseCompositeComponentView } from "./CompositeComponent";
+import { CurrentScrollIntoView } from "./CurrentScrollIntoView";
 import { StyleableComponentView } from "./StyleableComponentView";
 import { BaseTextComponentView, TextComponent, TextComponentView, TextComponentViewModel } from "./TextComponent";
 
@@ -79,7 +80,7 @@ export class MessageAlertComponent
     extends AlertComponentMixin(Component)
     implements IAlertComponent {
     constructor(protected readonly viewModel: MessageAlertComponentViewModel, view: BaseMessageAlertComponentView) {
-        super(viewModel, view);
+        super(viewModel, view, new AlertComponentChangeHandler(viewModel, view));
         const layout = this.addLayout({
             heading: new TextComponent(viewModel.heading, view.heading),
             message: new TextComponent(viewModel.message, view.message)
@@ -91,6 +92,7 @@ export class MessageAlertComponent
 
     private readonly heading: TextComponent;
     private readonly message: TextComponent;
+    private isAutoScrollEnabled = false;
 
     primary(message: string, heading?: string) {
         this.setContext(ContextualClass.primary, message, heading);
@@ -161,11 +163,23 @@ export class MessageAlertComponent
         this.updateVisibility();
     }
 
+    enableAutoScrollIntoView() {
+        this.isAutoScrollEnabled = true;
+    }
+
+    disableAutoScrollIntoView() {
+        this.isAutoScrollEnabled = false;
+    }
+
     private updateVisibility() {
         if (this.message.text || this.heading.text) {
             this.show();
+            if (this.isAutoScrollEnabled) {
+                this.scrollIntoView();
+            }
         }
         else {
+            this.viewModel.isScrolledIntoView = false;
             this.hide();
         }
     }

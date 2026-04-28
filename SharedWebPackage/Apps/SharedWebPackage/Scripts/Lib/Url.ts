@@ -10,13 +10,13 @@ export class Url {
 
     constructor(baseUrl: string) {
         this.url = baseUrl;
-        const hashIndex = this.url.indexOf('#');
-        this._hash = new UrlHash(hashIndex > -1 ? this.url.substring(hashIndex + 1) : '');
+        const hashIndex = this.url.indexOf("#");
+        this._hash = new UrlHash(hashIndex > -1 ? this.url.substring(hashIndex + 1) : "");
         if (hashIndex > -1) {
             this.url = this.url.substring(0, hashIndex);
         }
-        const queryIndex = this.url.indexOf('?');
-        this._query = new UrlQuery(queryIndex > -1 ? this.url.substring(queryIndex + 1) : '');
+        const queryIndex = this.url.indexOf("?");
+        this._query = new UrlQuery(queryIndex > -1 ? this.url.substring(queryIndex + 1) : "");
         if (queryIndex > -1) {
             this.url = this.url.substring(0, queryIndex);
         }

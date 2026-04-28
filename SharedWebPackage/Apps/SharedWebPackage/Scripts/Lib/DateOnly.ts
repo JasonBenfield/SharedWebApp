@@ -12,14 +12,14 @@ export class DateOnly implements IFormattable {
     }
 
     static parse(text: string) {
-        let result: DateOnly;
+        let result: DateOnly | null;
         if (text) {
             if (DateOnly.dateOnlyRegex.test(text)) {
                 const match = DateOnly.dateOnlyRegex.exec(text);
                 result = new DateOnly(
-                    Number(match.groups.Year || '0'),
-                    Month.fromValue(Number(match.groups.Month || '0')),
-                    Number(match.groups.Date || '0')
+                    Number(match?.groups?.Year || "0"),
+                    Month.fromValue(Number(match?.groups?.Month || "0")),
+                    Number(match?.groups?.Date || "0")
                 );
             }
             else {
@@ -128,8 +128,8 @@ export class DateOnly implements IFormattable {
     }
     
     toISOString() {
-        const monthText = this._month.value.toString().padStart(2, '0');
-        const dateText = this._date.toString().padStart(2, '0');
+        const monthText = this._month.value.toString().padStart(2, "0");
+        const dateText = this._date.toString().padStart(2, "0");
         return `${this._year}-${monthText}-${dateText}`;
     }
 

@@ -22,8 +22,8 @@ export class BasicListGroupView<TItemView extends BasicListGroupItemView> extend
     }
 
     private onMouseDown(el: HTMLElement, evt: JQuery.Event) {
-        this.mouseDownPosition.x = evt.clientX;
-        this.mouseDownPosition.y = evt.clientY;
+        this.mouseDownPosition.x = evt.clientX || 0;
+        this.mouseDownPosition.y = evt.clientY || 0;
     }
 
     handleClick(action: (element: HTMLElement, evt: JQuery.Event) => void) {

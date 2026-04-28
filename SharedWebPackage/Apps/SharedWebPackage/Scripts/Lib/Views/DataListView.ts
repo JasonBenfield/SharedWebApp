@@ -12,6 +12,9 @@ export class DataListView extends BasicComponentView {
 
     addOptions(howMany?: number) {
         const options: DataListOptionView[] = [];
+        if (!howMany) {
+            howMany = 0;
+        }
         for (let i = 0; i < howMany; i++) {
             const option = this.addView(DataListOptionView);
             options.push(option);

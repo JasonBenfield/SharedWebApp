@@ -8,7 +8,7 @@ import { TimeSpan } from "./TimeSpan";
 export class UrlHash {
     constructor(hash: string | NamedValue[]) {
         if (hash) {
-            if (typeof hash === 'string') {
+            if (typeof hash === "string") {
                 this.pushHashValues(hash);
             }
             else {
@@ -18,11 +18,11 @@ export class UrlHash {
     }
 
     private pushHashValues(query: string) {
-        const parts = query.split('&');
+        const parts = query.split("&");
         for (const part of parts) {
-            const nameValue = part.split('=');
+            const nameValue = part.split("=");
             const name = nameValue[0];
-            let value = '';
+            let value = "";
             if (nameValue[1]) {
                 value = nameValue[1];
             }
@@ -47,31 +47,31 @@ export class UrlHash {
         if (text) {
             text = text.toLowerCase();
         }
-        return text === 'true' || text === 'yes' || text === 'y' || text === '1';
+        return text === "true" || text === "yes" || text === "y" || text === "1";
     }
 
     getDateTimeValue(name: string) {
         const text = this.getValue(name);
-        return DateTimeOffset.canParse(text) ? DateTimeOffset.parse(text) : null;
+        return text && DateTimeOffset.canParse(text) ? DateTimeOffset.parse(text) : null;
     }
 
     getDateValue(name: string) {
         const text = this.getValue(name);
-        return DateOnly.canParse(text) ? DateOnly.parse(text) : null;
+        return text && DateOnly.canParse(text) ? DateOnly.parse(text) : null;
     }
 
     getTimeValue(name: string) {
         const text = this.getValue(name);
-        return TimeOnly.canParse(text) ? TimeOnly.parse(text) : null;
+        return text && TimeOnly.canParse(text) ? TimeOnly.parse(text) : null;
     }
 
     getTimeSpanValue(name: string) {
         const text = this.getValue(name);
-        return TimeSpan.canParse(text) ? TimeSpan.parse(text) : null;
+        return text && TimeSpan.canParse(text) ? TimeSpan.parse(text) : null;
     }
 
     getValue(name: string) {
-        let hashValue = this.hashValues.find(qv => qv.name === name);
+        const hashValue = this.hashValues.find(qv => qv.name === name);
         return hashValue ? hashValue.value : null;
     }
 
@@ -86,9 +86,9 @@ export class UrlHash {
     }
 
     toString() {
-        let str = '';
+        let str = "";
         if (this.hashValues.length > 0) {
-            str = new JoinedStrings('&', this.hashValues).value();
+            str = new JoinedStrings("&", this.hashValues).value();
         }
         return str;
     }

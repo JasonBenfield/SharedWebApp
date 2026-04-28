@@ -11,7 +11,7 @@ export class ColumnView extends BlockView {
     }
 
     setColumnCss(columnCss: ColumnCss) {
-        this.setCss('columns', columnCss);
+        this.setCss("columns", columnCss);
     }
 }
 
@@ -21,7 +21,7 @@ export class LabelColumnView extends LabelView {
     }
 
     setColumnCss(columnCss: ColumnCss) {
-        this.setCss('columns', columnCss);
+        this.setCss("columns", columnCss);
     }
 }
 
@@ -31,6 +31,6 @@ export class TextColumnView extends TextBlockView {
     }
 
     setColumnCss(columnCss: ColumnCss) {
-        this.setCss('columns', columnCss);
+        this.setCss("columns", columnCss);
     }
 }

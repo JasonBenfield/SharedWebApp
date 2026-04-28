@@ -15,16 +15,15 @@ export class LinkCompositeComponentViewModel<TLayout extends CompositeComponentV
 
     constructor(layout: TLayout) {
         super();
-        const vm: any = this;
         for (const key in layout) {
-            const childVM: any = layout[key];
+            const childVM: any = Reflect.get(layout, key);
             if (childVM && childVM instanceof ComponentViewModel) {
-                vm[key] = childVM;
+                Reflect.set(this, key, childVM);
             }
         }
     }
 
-    asLayout() { return this as this & TLayout; }
+    asLayout() { return this as any as LinkCompositeComponentViewModel<TLayout> & TLayout; }
 }
 
 class BaseLinkCompositeComponentView<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends ComponentViewLayout<TPublicLayout>>

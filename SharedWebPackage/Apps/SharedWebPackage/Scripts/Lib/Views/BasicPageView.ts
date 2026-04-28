@@ -10,7 +10,7 @@ import { ContextualClass } from "../ContextualClass";
 import { CssLengthUnit } from "../CssLengthUnit";
 import { PaddingCss } from "../PaddingCss";
 import { Position, PositionUnit } from "../Position";
-import '../Styles/default.scss';
+import "../Styles/default.scss";
 import { TextCss } from "../TextCss";
 import { BasicComponentView } from "./BasicComponentView";
 import { BlockView } from "./BlockView";
@@ -40,7 +40,7 @@ export class BasicPageView {
         const rootView = new RootView();
         const grid = rootView.addView(GridView);
         grid.styleAsLayout();
-        grid.addCssName('h-100');
+        grid.addCssName("h-100");
         grid.setTemplateRows(CssLengthUnit.auto(), CssLengthUnit.flex(1));
         this.topBanner = grid.addCell(GridCellView)
             .configure(b => {
@@ -63,31 +63,31 @@ export class BasicPageView {
         );
         this.environmentBox.setPadding(PaddingCss.xs(1));
         this.environmentBox.setBackgroundContext(ContextualClass.light);
-        this.environmentBox.addCssName('bg-opacity-25');
+        this.environmentBox.addCssName("bg-opacity-25");
         this.environmentName = this.environmentBox.addView(TextBlockView)
             .configure(tb => {
                 tb.setTextCss(new TextCss().context(ContextualClass.warning).bold());
             });
-        this.topBanner.addCssName('container');
+        this.topBanner.addCssName("container");
         const row = this.topBanner.addView(RowView);
         const col1 = row.addColumn();
-        col1.setColumnCss(ColumnCss.xs('auto'));
+        col1.setColumnCss(ColumnCss.xs("auto"));
         this.appTitle = col1.addView(TextHeading1View);
         const col2 = row.addColumn();
         col2.setTextCss(new TextCss().truncate());
-        col2.addCssFrom(new AlignCss().self(a => a.xs('center')));
+        col2.addCssFrom(new AlignCss().self(a => a.xs("center")));
         this.pageTitle = col2.addView(TextBlockView);
         const col3 = row.addColumn();
-        col3.setColumnCss(ColumnCss.xs('auto'));
-        col3.addCssFrom(new AlignCss().self(a => a.xs('center')));
+        col3.setColumnCss(ColumnCss.xs("auto"));
+        col3.addCssFrom(new AlignCss().self(a => a.xs("center")));
 
         this.userDropdown = col3.addView(DropdownComponentView);
         this.userDropdown.button.useOutlineStyle(ContextualClass.light);
         this.userDropdown.button.addView(FaIconView)
-            .configure(i => i.solidStyle('user'));
+            .configure(i => i.solidStyle("user"));
         this.userMenu = this.userDropdown.menuContainer.addView(UserMenuView);
         const relFill = grid.addCell();
-        relFill.addCssName('position-relative');
+        relFill.addCssName("position-relative");
         this.content = relFill.addView(BlockView);
         this.content.positionAbsoluteFill();
         this.modalError = this.addView(ModalErrorView);

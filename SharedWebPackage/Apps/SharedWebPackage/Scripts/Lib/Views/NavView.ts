@@ -13,20 +13,20 @@ export class NavView extends BasicContainerView implements IMenuView {
     private _configListItem: (listItem: BasicComponentView) => void = () => { };
 
     constructor(container: BasicComponentView) {
-        super(container, 'nav');
-        this.addCssName('nav');
+        super(container, "nav");
+        this.addCssName("nav");
     }
 
     pills() {
-        this.addCssName('nav-pills');
+        this.addCssName("nav-pills");
     }
 
     justified() {
-        this.addCssName('nav-justified');
+        this.addCssName("nav-justified");
     }
 
     setFlexCss(flexCss: FlexCss) {
-        this.setCss('flex', flexCss && flexCss.cssClass().toString());
+        this.setCss("flex", flexCss);
     }
 
     configListItem(configListItem: (listItem: BasicComponentView) => void) {
@@ -38,27 +38,27 @@ export class NavView extends BasicContainerView implements IMenuView {
 
     addMenuItem() {
         const menuItem = this.addLinkCommand();
-        menuItem.addCssName('menu-item');
+        menuItem.addCssName("menu-item");
         return menuItem;
     }
 
     addButton() {
         const button = this.addView(ButtonView);
-        button.addCssName('nav-link');
+        button.addCssName("nav-link");
         this._configListItem(button);
         return button;
     }
 
     addTextButton() {
         const textButton = this.addView(TextButtonView);
-        textButton.addCssName('nav-link');
+        textButton.addCssName("nav-link");
         this._configListItem(textButton);
         return textButton;
     }
 
     addButtonCommand() {
         const buttonCommand = this.addView(ButtonCommandView);
-        buttonCommand.addCssName('nav-link');
+        buttonCommand.addCssName("nav-link");
         this._configListItem(buttonCommand);
         return buttonCommand;
     }
@@ -89,7 +89,7 @@ export class NavView extends BasicContainerView implements IMenuView {
         const links: TView[] = [];
         for (let i = 0; i < howMany; i++) {
             const link = this.addView(ctor);
-            link.addCssName('nav-link');
+            link.addCssName("nav-link");
             this._configListItem(link);
             links.push(link);
         }

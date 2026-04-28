@@ -6,7 +6,7 @@ export class SelectView extends BasicComponentView {
     protected readonly selectElement: HTMLSelectElement;
 
     constructor(container: BasicComponentView) {
-        super(container, 'select');
+        super(container, "select");
         this.selectElement = this.elementView.element as HTMLSelectElement;
     }
 
@@ -21,7 +21,7 @@ export class SelectView extends BasicComponentView {
     }
 
     styleAsFormControl() {
-        this.addCssName('form-select');
+        this.addCssName("form-select");
     }
 
     options() { return this.getViews() as SelectOptionView[]; }
@@ -46,20 +46,23 @@ export class SelectView extends BasicComponentView {
 
     addOptions(howMany?: number) {
         const options: SelectOptionView[] = [];
+        if (!howMany) {
+            howMany = 0;
+        }
         for (let i = 0; i < howMany; i++) {
             const option = this.addView(SelectOptionView);
             options.push(option);
         }
         return options;
     }
-    
-    onChange() { return this.on('change'); }
+
+    onChange() { return this.on("change"); }
 }
 
 export class SelectOptionView extends BasicTextComponentView {
 
     constructor(container: BasicComponentView) {
-        super(container, 'option');
+        super(container, "option");
     }
 
     protected setAttr: (config: (attr: IOptionAttributes) => void) => void;

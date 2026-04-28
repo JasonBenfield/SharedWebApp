@@ -10,6 +10,9 @@ import { TitleViewModelMixin } from "./TextComponent";
 import { Constructor } from "./Types";
 
 export interface IButtonComponentViewModel {
+    get actionName(): string;
+    set actionName(actionName: string);
+
     get isEnabled(): boolean;
     set isEnabled(isEnabled: boolean);
 }
@@ -18,6 +21,10 @@ export type BaseButtonComponentViewModel = ComponentViewModel & IButtonComponent
 
 export function ButtonComponentViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T) {
     return class extends Base implements IButtonComponentViewModel {
+        private _actionName = "";
+        get actionName() { return this._actionName; }
+        set actionName(actionName: string) { this._actionName = actionName; }
+
         private _isEnabled = true;
         get isEnabled() { return this._isEnabled; }
         set isEnabled(isEnabled: boolean) { this._isEnabled = isEnabled; }
@@ -64,6 +71,11 @@ export function ButtonViewMixin<T extends Constructor<StyleableComponentView>>(B
             }
             return this.buttonEvents.when;
         }
+
+        declare protected readonly viewModel: BaseButtonComponentViewModel;
+
+        get actionName() { return this.viewModel.actionName; }
+        set actionName(actionName: string) { this.viewModel.actionName = actionName; }
 
         private handleClickEvent(evt: PointerEvent) {
             this.buttonEvents.events.clicked.invoke(evt);

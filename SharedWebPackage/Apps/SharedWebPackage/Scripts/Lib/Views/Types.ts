@@ -14,10 +14,10 @@ export interface IHtmlAttributes {
     id?: string;
     name?: string;
     title?: string;
-    'class'?: string;
+    'class'?: string | null;
     role?: string;
     draggable?: string;
-    opacity?: string;
+    opacity?: string | null;
 }
 
 export interface ICitableAttributes extends IHtmlAttributes {
@@ -43,7 +43,7 @@ export interface IButtonAttributes extends IHtmlAttributes {
 }
 
 export interface IFormAttributes extends IHtmlAttributes {
-    autocomplete?: string;
+    autocomplete?: string | null;
     action?: string;
     method?: string;
     target?: string;
@@ -53,7 +53,7 @@ export interface ITextAreaAttributes extends IHtmlAttributes {
     rows?: string;
     cols?: string;
     maxlength?: string;
-    autocomplete?: string;
+    autocomplete?: string | null;
     disabled?: boolean;
     readonly?: boolean;
     placeholder?: string;
@@ -65,7 +65,7 @@ export interface IInputAttributes extends IHtmlAttributes {
     inputmode?: string;
     pattern?: string;
     maxlength?: string;
-    autocomplete?: string;
+    autocomplete?: string | null;
     disabled?: boolean;
     readonly?: boolean;
     placeholder?: string;

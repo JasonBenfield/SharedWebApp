@@ -2,12 +2,12 @@
 export class DateTimeFormatOptions {
     private readonly options: Intl.DateTimeFormatOptions;
     private _isTimeIncludedWhenMidnight = false;
-    private _fractionalSecondDigits: 1 | 2 | 3 = undefined;
+    private _fractionalSecondDigits: 1 | 2 | 3 | undefined = undefined;
 
     constructor(options?: Intl.DateTimeFormatOptions) {
         this.options = {
-            month: 'numeric', day: 'numeric', year: '2-digit',
-            hour: 'numeric', minute: '2-digit'
+            month: "numeric", day: "numeric", year: "2-digit",
+            hour: "numeric", minute: "2-digit"
         };
         if (options) {
             for (const key in options) {
@@ -27,55 +27,55 @@ export class DateTimeFormatOptions {
     }
 
     useLongNameOfWeekday() {
-        this.options.weekday = 'long';
+        this.options.weekday = "long";
         return this;
     }
 
     useShortNameOfWeekday() {
-        this.options.weekday = 'short';
+        this.options.weekday = "short";
         return this;
     }
 
     useNarrowNameOfWeekday() {
-        this.options.weekday = 'narrow';
+        this.options.weekday = "narrow";
         return this;
     }
 
     useLongDayPeriod() {
         this.options.hour12 = true;
-        this.options.dayPeriod = 'long';
+        this.options.dayPeriod = "long";
         return this;
     }
 
     useShortDayPeriod() {
         this.options.hour12 = true;
-        this.options.dayPeriod = 'short';
+        this.options.dayPeriod = "short";
         return this;
     }
 
     useNarrowDayPeriod() {
         this.options.hour12 = true;
-        this.options.dayPeriod = 'narrow';
+        this.options.dayPeriod = "narrow";
         return this;
     }
 
     useShortNameOfMonth() {
-        this.options.month = 'short';
+        this.options.month = "short";
         return this;
     }
 
     useLongNameOfMonth() {
-        this.options.month = 'long';
+        this.options.month = "long";
         return this;
     }
 
     useNarrowNameOfMonth() {
-        this.options.month = 'narrow';
+        this.options.month = "narrow";
         return this;
     }
 
     useFullYear() {
-        this.options.year = 'numeric';
+        this.options.year = "numeric";
         return this;
     }
 
@@ -85,12 +85,12 @@ export class DateTimeFormatOptions {
     }
     
     useNumericSeconds() {
-        this.options.second = 'numeric';
+        this.options.second = "numeric";
         return this;
     }
 
     use2DigitSeconds() {
-        this.options.second = '2-digit';
+        this.options.second = "2-digit";
         return this;
     }
 
@@ -100,42 +100,42 @@ export class DateTimeFormatOptions {
     }
 
     useFullDateStyle() {
-        this.options.dateStyle = 'full';
+        this.options.dateStyle = "full";
         return this;
     }
 
     useLongDateStyle() {
-        this.options.dateStyle = 'long';
+        this.options.dateStyle = "long";
         return this;
     }
 
     useMediumDateStyle() {
-        this.options.dateStyle = 'medium';
+        this.options.dateStyle = "medium";
         return this;
     }
 
     useShortDateStyle() {
-        this.options.dateStyle = 'short';
+        this.options.dateStyle = "short";
         return this;
     }
 
     useFullTimeStyle() {
-        this.options.timeStyle = 'full';
+        this.options.timeStyle = "full";
         return this;
     }
 
     useLongTimeStyle() {
-        this.options.timeStyle = 'long';
+        this.options.timeStyle = "long";
         return this;
     }
 
     useMediumTimeStyle() {
-        this.options.timeStyle = 'medium';
+        this.options.timeStyle = "medium";
         return this;
     }
 
     useShortTimeStyle() {
-        this.options.timeStyle = 'short';
+        this.options.timeStyle = "short";
         return this;
     }
 

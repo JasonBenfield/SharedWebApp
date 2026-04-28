@@ -1,4 +1,3 @@
-import { ConsoleLogger } from "../ConsoleLogger";
 import { areValuesEqual } from "./Equatable";
 import { EventManager, EventTemplate } from "./EventManager";
 import { ObservableArray } from "./ObservableArray";
@@ -47,10 +46,12 @@ export class ComponentViewModel {
     get changes() { return this._changes; }
 
     private _isVisible = true;
-
     get isVisible() { return this._isVisible; }
-
     set isVisible(isVisible: boolean) { this._isVisible = isVisible; }
+
+    private _isScrolledIntoView = false;
+    get isScrolledIntoView() { return this._isScrolledIntoView; }
+    set isScrolledIntoView(isScrolledIntoView: boolean) { this._isScrolledIntoView = isScrolledIntoView; }
 
     notify<TOtherEvents>(otherEventManager: EventManager, template: EventTemplate<TOtherEvents>) {
         this.eventManager.notify(otherEventManager, template);

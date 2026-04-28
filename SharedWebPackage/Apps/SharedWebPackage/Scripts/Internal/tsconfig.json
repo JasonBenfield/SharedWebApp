@@ -5,6 +5,7 @@
     "emitDecoratorMetadata": true,
     "lib": [ "ES2020", "dom" ],
     "module": "commonjs",
+    "strictNullChecks": true,
     "noImplicitAny": false,
     "noEmitOnError": true,
     "removeComments": false,

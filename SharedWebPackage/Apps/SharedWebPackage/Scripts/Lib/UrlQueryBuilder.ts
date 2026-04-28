@@ -1,16 +1,16 @@
-﻿import * as _ from 'lodash';
-import { DateOnly } from './DateOnly';
-import { DateTimeOffset } from './DateTimeOffset';
+﻿import * as _ from "lodash";
+import { DateOnly } from "./DateOnly";
+import { DateTimeOffset } from "./DateTimeOffset";
 import { NamedValue } from "./NamedValue";
-import { TimeOnly } from './TimeOnly';
-import { TimeSpan } from './TimeSpan';
+import { TimeOnly } from "./TimeOnly";
+import { TimeSpan } from "./TimeSpan";
 import { UrlQuery } from "./UrlQuery";
 
 export class UrlQueryBuilder {
     private _query: UrlQuery;
 
     constructor(query: string | UrlQuery) {
-        if (typeof query === 'string') {
+        if (typeof query === "string") {
             this._query = new UrlQuery(query);
         }
         else {
@@ -34,27 +34,27 @@ export class UrlQueryBuilder {
         if (text) {
             text = text.toLowerCase();
         }
-        return text === 'true' || text === 'yes' || text === 'y' || text === '1';
+        return text === "true" || text === "yes" || text === "y" || text === "1";
     }
 
     getDateTimeValue(name: string) {
         const text = this.getValue(name);
-        return DateTimeOffset.canParse(text) ? DateTimeOffset.parse(text) : null;
+        return text && DateTimeOffset.canParse(text) ? DateTimeOffset.parse(text) : null;
     }
 
     getDateValue(name: string) {
         const text = this.getValue(name);
-        return DateOnly.canParse(text) ? DateOnly.parse(text) : null;
+        return text && DateOnly.canParse(text) ? DateOnly.parse(text) : null;
     }
 
     getTimeValue(name: string) {
         const text = this.getValue(name);
-        return TimeOnly.canParse(text) ? TimeOnly.parse(text) : null;
+        return text && TimeOnly.canParse(text) ? TimeOnly.parse(text) : null;
     }
 
     getTimeSpanValue(name: string) {
         const text = this.getValue(name);
-        return TimeSpan.canParse(text) ? TimeSpan.parse(text) : null;
+        return text && TimeSpan.canParse(text) ? TimeSpan.parse(text) : null;
     }
 
     getValue(name: string) {
@@ -62,7 +62,7 @@ export class UrlQueryBuilder {
     }
 
     clear() {
-        this._query = new UrlQuery('');
+        this._query = new UrlQuery("");
         return this;
     }
 
@@ -109,10 +109,10 @@ export class UrlQueryBuilder {
             if (value instanceof Date || value instanceof DateOnly || value instanceof DateTimeOffset || value instanceof TimeOnly || value instanceof TimeSpan) {
                 queryValues.push(new NamedValue(name, value.toISOString()));
             }
-            else if (typeof value === 'string') {
+            else if (typeof value === "string") {
                 queryValues.push(new NamedValue(name, value));
             }
-            else if (typeof value === 'number') {
+            else if (typeof value === "number") {
                 queryValues.push(new NamedValue(name, value.toString()));
             }
             else if (_.isArray(value)) {
@@ -129,7 +129,7 @@ export class UrlQueryBuilder {
     }
 
     addQueryFromObject(obj: any) {
-        return this._addQueryFromObject(obj, '');
+        return this._addQueryFromObject(obj, "");
     }
 
     private _addQueryFromObject(obj: any, prefix: string) {

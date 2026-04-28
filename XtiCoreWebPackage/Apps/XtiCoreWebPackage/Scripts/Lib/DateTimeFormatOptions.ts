@@ -2,7 +2,7 @@
 export class DateTimeFormatOptions {
     private readonly options: Intl.DateTimeFormatOptions;
     private _isTimeIncludedWhenMidnight = false;
-    private _fractionalSecondDigits: 1 | 2 | 3 = undefined;
+    private _fractionalSecondDigits: 1 | 2 | 3 | undefined = undefined;
 
     constructor(options?: Intl.DateTimeFormatOptions) {
         this.options = {
@@ -11,16 +11,16 @@ export class DateTimeFormatOptions {
         };
         if (options) {
             for (const key in options) {
-                const prop = options[key];
+                const prop = Reflect.get(options, key);
                 if (prop !== undefined) {
-                    this.options[key] = prop;
+                    Reflect.set(this.options, key, prop);
                 }
             }
         }
     }
 
     get isTimeIncludedWhenMidnight() { return this._isTimeIncludedWhenMidnight; }
-    
+
     includeTimeWhenMidnight() {
         this._isTimeIncludedWhenMidnight = true;
         return this;
@@ -83,7 +83,7 @@ export class DateTimeFormatOptions {
         this.options.hour12 = true;
         return this;
     }
-    
+
     useNumericSeconds() {
         this.options.second = 'numeric';
         return this;

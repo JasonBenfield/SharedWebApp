@@ -5,12 +5,12 @@ export class TextAreaView extends BasicComponentView {
     protected readonly textAreaElement: HTMLTextAreaElement;
 
     constructor(container: BasicComponentView) {
-        super(container, 'textarea');
+        super(container, "textarea");
         this.textAreaElement = this.elementView.element as HTMLTextAreaElement;
     }
 
     styleAsFormControl() {
-        this.addCssName('form-control');
+        this.addCssName("form-control");
     }
 
     protected setAttr: (config: (attr: ITextAreaAttributes) => void) => void;
@@ -33,11 +33,11 @@ export class TextAreaView extends BasicComponentView {
 
     clearAutocomplete() { this.setAutocomplete(null); }
 
-    setAutocompleteOff() { this.setAutocomplete('off'); }
+    setAutocompleteOff() { this.setAutocomplete("off"); }
 
-    setAutocompleteNewPassword() { this.setAutocomplete('new-password'); }
+    setAutocompleteNewPassword() { this.setAutocomplete("new-password"); }
 
-    private setAutocomplete(autocomplete: string) {
+    private setAutocomplete(autocomplete: string | null) {
         this.setAttr(attr => attr.autocomplete = autocomplete);
     }
 
@@ -71,9 +71,9 @@ export class TextAreaView extends BasicComponentView {
 
     blur() { this.textAreaElement.blur(); }
 
-    onFocus() { return this.on('focus'); }
+    onFocus() { return this.on("focus"); }
 
-    onBlur() { return this.on('blur'); }
+    onBlur() { return this.on("blur"); }
 
-    onInput() { return this.on('input change'); }
+    onInput() { return this.on("input change"); }
 }

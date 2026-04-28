@@ -307,9 +307,9 @@ export class DateTimeOffset implements IFormattable {
 
     equals(other: DateTimeOffset | DateOnly | Date | null) {
         if (other) {
-            let otherDate: Date;
+            let otherDate: Date | undefined;
             if (other instanceof DateOnly) {
-                otherDate = DateTimeOffset.fromDateOnly(other).refDate;
+                otherDate = DateTimeOffset.fromDateOnly(other)?.refDate ;
             }
             else if (other instanceof DateTimeOffset) {
                 otherDate = other.refDate;
@@ -317,7 +317,7 @@ export class DateTimeOffset implements IFormattable {
             else {
                 otherDate = other;
             }
-            return this.refDate.getTime() === otherDate.getTime();
+            return this.refDate.getTime() === otherDate?.getTime();
         }
         return false;
     }
@@ -340,9 +340,9 @@ export class DateTimeOffset implements IFormattable {
 
     compareTo(other: DateTimeOffset | DateOnly | Date | null) {
         if (other) {
-            let otherDate: Date;
+            let otherDate: Date | undefined;
             if (other instanceof DateOnly) {
-                otherDate = DateTimeOffset.fromDateOnly(other).refDate;
+                otherDate = DateTimeOffset.fromDateOnly(other)?.refDate;
             }
             else if (other instanceof DateTimeOffset) {
                 otherDate = other.refDate;
@@ -350,13 +350,15 @@ export class DateTimeOffset implements IFormattable {
             else {
                 otherDate = other;
             }
-            if (this.refDate < otherDate) {
-                return -1;
+            if (otherDate) {
+                if (this.refDate < otherDate) {
+                    return -1;
+                }
+                if (this.refDate > otherDate) {
+                    return 1;
+                }
+                return 0;
             }
-            if (this.refDate > otherDate) {
-                return 1;
-            }
-            return 0;
         }
         return -1;
     }

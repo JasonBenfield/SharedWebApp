@@ -7,36 +7,36 @@ interface ISerializableRelativeYearOffset {
     readonly type: string;
     readonly value: {
         readonly yearOffset: number;
-        readonly month: number | 'reference-date';
+        readonly month: number | "reference-date";
         readonly dayOfMonth: ISerializableDayOfMonth;
     }
 }
 
 function formatOrdinalDay(day: number) {
-    let suffix = 'th';
+    let suffix = "th";
     if (day === 1 || day === 21) {
-        suffix = 'st';
+        suffix = "st";
     }
     else if (day === 2 || day === 22) {
-        suffix = 'nd';
+        suffix = "nd";
     }
     else if (day === 3 || day === 23) {
-        suffix = 'rd';
+        suffix = "rd";
     }
     return `${day}${suffix}`;
 }
 
-export type MonthOfYear = Month | 'reference-date';
+export type MonthOfYear = Month | "reference-date";
 
 export class RelativeYearOffset {
     static deserialize(serialized: ISerializableRelativeYearOffset) {
         return new RelativeYearOffset(
             serialized.value.yearOffset,
-            serialized.value.month === 'reference-date' ? serialized.value.month : Month.fromIndex(serialized.value.month),
+            serialized.value.month === "reference-date" ? serialized.value.month : Month.fromIndex(serialized.value.month),
             DayOfMonth.deserialize(serialized.value.dayOfMonth)
         );
     }
-    
+
     readonly dayOfMonth: DayOfMonth;
 
     constructor(
@@ -54,16 +54,16 @@ export class RelativeYearOffset {
 
     format() {
         const yearOffset = Math.abs(this.yearOffset);
-        let type = this.yearOffset < 0 ? ' ago' : ' later';
+        let type = this.yearOffset < 0 ? " ago" : " later";
         if (yearOffset === 0) {
-            type = '';
+            type = "";
         }
-        const yearOffsetText = yearOffset > 0 ? yearOffset.toString() : 'same';
-        const pluralized = yearOffset > 1 ? 's' : '';
+        const yearOffsetText = yearOffset > 0 ? yearOffset.toString() : "same";
+        const pluralized = yearOffset > 1 ? "s" : "";
         const month = this.month instanceof Month ?
             this.month.formatLongName() :
-            'reference month';
-        const dayOfMonth = typeof this.dayOfMonth.value === 'number'
+            "reference month";
+        const dayOfMonth = typeof this.dayOfMonth.value === "number"
             ? `on the ${formatOrdinalDay(this.dayOfMonth.value)}`
             : this.dayOfMonth.format().toLowerCase();
         return `${yearOffsetText} year${pluralized}${type} in ${month} ${dayOfMonth}`;
@@ -121,13 +121,13 @@ export class RelativeMonthOffset {
 
     format() {
         const monthOffset = Math.abs(this.monthOffset);
-        const monthOffsetText = monthOffset > 0 ? monthOffset.toString() : 'same';
-        let type = this.monthOffset < 0 ? ' ago' : ' later';
+        const monthOffsetText = monthOffset > 0 ? monthOffset.toString() : "same";
+        let type = this.monthOffset < 0 ? " ago" : " later";
         if (monthOffset === 0) {
-            type = '';
+            type = "";
         }
-        const pluralized = monthOffset > 1 ? 's' : '';
-        const dayOfMonth = typeof this.dayOfMonth.value === 'number'
+        const pluralized = monthOffset > 1 ? "s" : "";
+        const dayOfMonth = typeof this.dayOfMonth.value === "number"
             ? `on the ${formatOrdinalDay(this.dayOfMonth.value)}`
             : this.dayOfMonth.format().toLowerCase();
         return `${monthOffsetText} month${pluralized}${type} ${dayOfMonth}`;
@@ -155,7 +155,7 @@ export class RelativeMonthOffset {
     }
 }
 
-type DayOfMonthValue = number | 'month-end' | 'reference-day';
+type DayOfMonthValue = number | "month-end" | "reference-day";
 
 interface ISerializableDayOfMonth {
     readonly type: string;
@@ -166,27 +166,25 @@ export class DaysOfMonth {
     private readonly daysOfMonth: DayOfMonth[] = [];
 
     constructor() {
-        this.daysOfMonth.push(new DayOfMonth('reference-day'));
+        this.daysOfMonth.push(new DayOfMonth("reference-day"));
         for (let day = 1; day <= 30; day++) {
             this.daysOfMonth.push(new DayOfMonth(day));
         }
-        this.daysOfMonth.push(new DayOfMonth('month-end'));
+        this.daysOfMonth.push(new DayOfMonth("month-end"));
     }
 
     get values() { return this.daysOfMonth; }
 
     value(dayOfMonth: DayOfMonth) {
         let result: DayOfMonth;
-        if (dayOfMonth) {
-            if (dayOfMonth.isReferenceDay) {
-                result = this.daysOfMonth[0];
-            }
-            else if (dayOfMonth.isMonthEnd) {
-                result = this.daysOfMonth[31];
-            }
-            else {
-                result = this.daysOfMonth[dayOfMonth.value];
-            }
+        if (dayOfMonth.isReferenceDay) {
+            result = this.daysOfMonth[0];
+        }
+        else if (dayOfMonth.isMonthEnd) {
+            result = this.daysOfMonth[31];
+        }
+        else {
+            result = this.daysOfMonth[dayOfMonth.value];
         }
         return result;
     }
@@ -200,17 +198,17 @@ export class DayOfMonth {
     constructor(readonly value: DayOfMonthValue) {
     }
 
-    get isMonthEnd() { return this.value === 'month-end'; }
+    get isMonthEnd() { return this.value === "month-end"; }
 
-    get isReferenceDay() { return this.value === 'reference-day'; }
+    get isReferenceDay() { return this.value === "reference-day"; }
 
     format() {
         let formatted: string;
-        if (this.value === 'month-end') {
-            formatted = 'End of Month';
+        if (this.value === "month-end") {
+            formatted = "End of Month";
         }
-        else if (this.value === 'reference-day') {
-            formatted = 'Reference Day';
+        else if (this.value === "reference-day") {
+            formatted = "Reference Day";
         }
         else {
             formatted = this.value.toString();
@@ -220,10 +218,10 @@ export class DayOfMonth {
 
     toDate(startOfMonth: DateOnly, referenceDay: number) {
         let dayOfMonth: number;
-        if (this.value === 'month-end') {
+        if (this.value === "month-end") {
             dayOfMonth = 31;
         }
-        else if (this.value === 'reference-day') {
+        else if (this.value === "reference-day") {
             dayOfMonth = referenceDay;
         }
         else {
@@ -263,12 +261,12 @@ export class RelativeDayOffset {
 
     format() {
         const dayOffset = Math.abs(this.dayOffset);
-        let type = this.dayOffset < 0 ? ' ago' : ' later';
+        let type = this.dayOffset < 0 ? " ago" : " later";
         if (dayOffset === 0) {
-            type = '';
+            type = "";
         }
-        const dayOffsetText = dayOffset > 0 ? dayOffset.toString() : 'same';
-        const pluralized = dayOffset > 1 ? 's' : '';
+        const dayOffsetText = dayOffset > 0 ? dayOffset.toString() : "same";
+        const pluralized = dayOffset > 1 ? "s" : "";
         return `${dayOffsetText} day${pluralized}${type}`;
     }
 
@@ -322,8 +320,8 @@ export class RelativeDateRange {
     }
 
     constructor(
-        readonly relativeStart: RelativeOffset,
-        readonly relativeEnd: RelativeOffset,
+        readonly relativeStart: RelativeOffset | null,
+        readonly relativeEnd: RelativeOffset | null,
         readonly isEndRelativeToStart: boolean = true
     ) {
     }
@@ -338,7 +336,7 @@ export class RelativeDateRange {
         if (this.relativeEnd) {
             return `On or before ${this.relativeEnd.format()}`;
         }
-        return '';
+        return "";
     }
 
     toDateRange(referenceDate: DateOnly = DateOnly.today()) {

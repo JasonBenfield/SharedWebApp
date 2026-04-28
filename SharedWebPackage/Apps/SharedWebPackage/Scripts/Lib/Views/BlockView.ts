@@ -8,19 +8,19 @@ import { ViewConstructor } from "./Types";
 
 export class BlockView extends BasicContainerView {
     constructor(container: BasicComponentView) {
-        super(container, 'div');
+        super(container, "div");
     }
 
     height100() {
-        this.addCssName('h-100');
+        this.addCssName("h-100");
     }
 
     setFlexCss(flexCss: FlexCss) {
-        this.setCss('flex', flexCss);
+        this.setCss("flex", flexCss);
     }
 
     setBorderCss(borderCss: BorderCss) {
-        this.setCss('border', borderCss);
+        this.setCss("border", borderCss);
     }
 
     positionAbsoluteFill() {
@@ -28,7 +28,7 @@ export class BlockView extends BasicContainerView {
     }
 
     scrollable() {
-        this.addCssName('overflow-auto');
+        this.addCssName("overflow-auto");
     }
 
     setRole(role: string) {
@@ -56,7 +56,7 @@ export class BlockView extends BasicContainerView {
     }
 
     styleAsFormControl() {
-        this.addCssName('form-control-text');
+        this.addCssName("form-control-text");
     }
 
     scrollIntoView(arg?: boolean | ScrollIntoViewOptions) {

@@ -2,21 +2,21 @@
 import { ISerializableValueRangeBound, ValueRangeBound } from "./ValueRangeBound";
 
 export interface ISerializableDateRange {
-    readonly start: ISerializableValueRangeBound<DateOnly>;
-    readonly end: ISerializableValueRangeBound<DateOnly>;
+    readonly start: ISerializableValueRangeBound<DateOnly> | null;
+    readonly end: ISerializableValueRangeBound<DateOnly> | null;
 }
 
 export class DateRange implements IFormattable {
     static deserialize(serialized: ISerializableDateRange) {
         return serialized
             ? new DateRange(
-                ValueRangeBound.deserialize<DateOnly>(serialized.start),
-                ValueRangeBound.deserialize<DateOnly>(serialized.end)
+                serialized.start ? ValueRangeBound.deserialize<DateOnly>(serialized.start) : null,
+                serialized.end ? ValueRangeBound.deserialize<DateOnly>(serialized.end) : null
             )
             : null;
     }
 
-    constructor(readonly start: ValueRangeBound<DateOnly>, readonly end: ValueRangeBound<DateOnly>) {
+    constructor(readonly start: ValueRangeBound<DateOnly> | null, readonly end: ValueRangeBound<DateOnly> | null) {
         if (start && !start.value) {
             this.start = null;
         }
@@ -34,13 +34,13 @@ export class DateRange implements IFormattable {
     }
 
     format() {
-        let str = '';
+        let str = "";
         let adjustedStartDate = this.start ? this.start.value : null;
-        if (adjustedStartDate && !this.start.isIncluded) {
+        if (adjustedStartDate && !this.start?.isIncluded) {
             adjustedStartDate = adjustedStartDate.addDays(-1);
         }
         let adjustedEndDate = this.end ? this.end.value : null;
-        if (adjustedEndDate && !this.end.isIncluded) {
+        if (adjustedEndDate && !this.end?.isIncluded) {
             adjustedEndDate = adjustedEndDate.addDays(1);
         }
         if (adjustedStartDate && adjustedEndDate && adjustedStartDate.equals(adjustedEndDate)) {
@@ -51,24 +51,24 @@ export class DateRange implements IFormattable {
             if (this.start && this.start.value) {
                 let prefix: string;
                 if (this.start.isIncluded) {
-                    prefix = 'On or After';
+                    prefix = "On or After";
                 }
                 else {
-                    prefix = 'After';
+                    prefix = "After";
                 }
                 const startDateText = this.start.value.format();
                 str += `${prefix} ${startDateText}`;
             }
             if (this.end && this.end.value) {
                 if (str) {
-                    str += ' to ';
+                    str += " to ";
                 }
                 let prefix: string;
                 if (this.end.isIncluded) {
-                    prefix = 'On or Before';
+                    prefix = "On or Before";
                 }
                 else {
-                    prefix = 'Before';
+                    prefix = "Before";
                 }
                 const endDateText = this.end.value.format();
                 str += `${prefix} ${endDateText}`;

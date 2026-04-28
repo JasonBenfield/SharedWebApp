@@ -96,7 +96,7 @@ export class PaddingCss implements ICssBuilder {
         return typeof data === 'number' || data === 'auto';
     }
 
-    private getCss(breakpoint: string, direction: string, amount: PaddingAmount) {
+    private getCss(breakpoint: string, direction: string, amount?: PaddingAmount) {
         let css: string;
         if (amount === undefined || amount == null) {
             css = '';

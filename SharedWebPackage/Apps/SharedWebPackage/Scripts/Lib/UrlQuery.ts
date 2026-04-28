@@ -8,7 +8,7 @@ import { DateTimeOffset } from "./DateTimeOffset";
 export class UrlQuery {
     constructor(query: string | NamedValue[]) {
         if (query) {
-            if (typeof query === 'string') {
+            if (typeof query === "string") {
                 this.pushQueryValues(query);
             }
             else {
@@ -34,27 +34,27 @@ export class UrlQuery {
         if (text) {
             text = text.toLowerCase();
         }
-        return text === 'true' || text === 'yes' || text === 'y' || text === '1';
+        return text === "true" || text === "yes" || text === "y" || text === "1";
     }
 
     getDateTimeValue(name: string) {
         const text = this.getValue(name);
-        return DateTimeOffset.canParse(text) ? DateTimeOffset.parse(text) : null;
+        return text && DateTimeOffset.canParse(text) ? DateTimeOffset.parse(text) : null;
     }
 
     getDateValue(name: string) {
         const text = this.getValue(name);
-        return DateOnly.canParse(text) ? DateOnly.parse(text) : null;
+        return text && DateOnly.canParse(text) ? DateOnly.parse(text) : null;
     }
 
     getTimeValue(name: string) {
         const text = this.getValue(name);
-        return TimeOnly.canParse(text) ? TimeOnly.parse(text) : null;
+        return text && TimeOnly.canParse(text) ? TimeOnly.parse(text) : null;
     }
 
     getTimeSpanValue(name: string) {
         const text = this.getValue(name);
-        return TimeSpan.canParse(text) ? TimeSpan.parse(text) : null;
+        return text && TimeSpan.canParse(text) ? TimeSpan.parse(text) : null;
     }
 
     getValue(name: string) {
@@ -63,11 +63,11 @@ export class UrlQuery {
     }
 
     private pushQueryValues(query: string) {
-        const parts = query.split('&');
+        const parts = query.split("&");
         for(const part of parts) {
-            const nameValue = part.split('=');
+            const nameValue = part.split("=");
             const name = nameValue[0];
-            let value = '';
+            let value = "";
             if (nameValue[1]) {
                 value = nameValue[1];
             }
@@ -81,9 +81,9 @@ export class UrlQuery {
     }
 
     toString() {
-        let str = '';
+        let str = "";
         if (this.queryValues.length > 0) {
-            str = new JoinedStrings('&', this.queryValues).value();
+            str = new JoinedStrings("&", this.queryValues).value();
         }
         return str;
     }

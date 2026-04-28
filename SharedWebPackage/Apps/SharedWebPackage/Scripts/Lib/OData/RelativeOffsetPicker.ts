@@ -233,7 +233,7 @@ export class RelativeOffsetPicker extends BasicComponent {
     }
 
     getValue() {
-        let relativeOffset: RelativeOffset;
+        let relativeOffset: RelativeOffset | null;
         const unitSelection = this.offsetUnitSelect.getValue();
         if (unitSelection === UnitSelection.NotSet) {
             relativeOffset = null;

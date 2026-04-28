@@ -6,7 +6,7 @@ import { PaddingCss } from "../PaddingCss";
 import { Position } from "../Position";
 import { TextCss } from "../TextCss";
 import { HtmlElementView } from "./HtmlElementView";
-import { IHtmlAttributes, IHtmlElementView, IHtmlStyle, ViewConstructor } from './Types';
+import { IHtmlAttributes, IHtmlElementView, IHtmlStyle, ViewConstructor } from "./Types";
 import { ViewEventBuilder } from "./ViewEventBuilder";
 
 interface ICssBuilders {
@@ -22,8 +22,8 @@ export class BasicComponentView {
     private isVisible = true;
     protected readonly elementView: HtmlElementView;
 
-    constructor(private readonly container: BasicComponentView, createElement: IHtmlElementView) {
-        if (typeof createElement === 'string') {
+    constructor(private readonly container: BasicComponentView | null, createElement: IHtmlElementView) {
+        if (typeof createElement === "string") {
             this.elementView = HtmlElementView.fromTag(createElement);
         }
         else if (createElement instanceof HTMLElement) {
@@ -45,7 +45,7 @@ export class BasicComponentView {
     hasElement(element: HTMLElement) {
         return this.elementView.hasElement(element);
     }
-    
+
     protected setAttr(config: (attr: IHtmlAttributes) => void) {
         config(this.attr);
         const attr = Object.create(this.attr);
@@ -57,11 +57,11 @@ export class BasicComponentView {
 
     protected setStyle(config: (style: IHtmlStyle) => void) {
         config(this.style);
-        let style = this.style;
+        let style: IHtmlStyle | null = this.style;
         if (Object.keys(this.style).length === 0) {
             style = null;
         }
-        this.elementView.setAttribute({ style: style }, 'style');
+        this.elementView.setAttribute({ style: style }, "style");
     }
 
     configure(action: (c: this) => void) {
@@ -116,35 +116,35 @@ export class BasicComponentView {
     }
 
     setBackgroundContext(contextClass: ContextualClass) {
-        this.setCss('bg-context', contextClass.append('bg'));
+        this.setCss("bg-context", contextClass.append("bg"));
     }
 
     setTextCss(textCss: TextCss) {
-        this.setCss('text', textCss);
+        this.setCss("text", textCss);
     }
 
     setMargin(margin: MarginCss) {
-        this.setCss('margin', margin);
+        this.setCss("margin", margin);
     }
 
     setPadding(padding: PaddingCss) {
-        this.setCss('padding', padding);
+        this.setCss("padding", padding);
     }
 
     positionAbsolute(position?: Position) {
-        this.setPosition('absolute', position || new Position());
+        this.setPosition("absolute", position || new Position());
     }
 
     positionRelative(position?: Position) {
-        this.setPosition('relative', position || new Position());
+        this.setPosition("relative", position || new Position());
     }
 
     positionFixed(position?: Position) {
-        this.setPosition('fixed', position || new Position());
+        this.setPosition("fixed", position || new Position());
     }
 
     positionSticky(position?: Position) {
-        this.setPosition('sticky', position || new Position());
+        this.setPosition("sticky", position || new Position());
     }
 
     private setPosition(value: string, position: Position) {
@@ -164,18 +164,18 @@ export class BasicComponentView {
     protected setCss(name: string, value: ICssBuilder | string) {
         const previousValue = this.buildCss(this.css[name]);
         const updatedValued = this.buildCss(value);
-        this.replaceCssName(previousValue, updatedValued);
+        this.replaceCssName(previousValue || "", updatedValued || "");
         this.css[name] = value;
     }
 
     private buildCss(value: ICssBuilder | string) {
         if (value) {
-            if (typeof value === 'string') {
+            if (typeof value === "string") {
                 return value;
             }
             return value.cssClass().toString();
         }
-        return '';
+        return "";
     }
 
     addCssFrom(css: CssClass | ICssBuilder) {

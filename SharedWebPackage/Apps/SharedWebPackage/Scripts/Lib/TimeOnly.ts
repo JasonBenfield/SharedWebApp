@@ -12,10 +12,10 @@ export class TimeOnly implements IFormattable {
         if (TimeOnly.regex1.test(text)) {
             const match = TimeOnly.regex1.exec(text);
             return new TimeOnly(
-                Number(match.groups.hours || '0'),
-                Number(match.groups.minutes || '0'),
-                Number(match.groups.seconds || '0'),
-                Number(match.groups.ticks || '0')
+                Number(match?.groups?.hours || "0"),
+                Number(match?.groups?.minutes || "0"),
+                Number(match?.groups?.seconds || "0"),
+                Number(match?.groups?.ticks || "0")
             );
         }
         return null;
@@ -45,7 +45,7 @@ export class TimeOnly implements IFormattable {
             milliseconds = 0;
         }
         if (milliseconds > 999) {
-            milliseconds = Math.floor(Number(milliseconds.toString().padEnd(7, '0')) / 10000.0);
+            milliseconds = Math.floor(Number(milliseconds.toString().padEnd(7, "0")) / 10000.0);
         }
         const refDate = new Date(
             date.getFullYear(),
@@ -148,11 +148,11 @@ export class TimeOnly implements IFormattable {
     }
 
     toISOString() {
-        const hoursText = this.hours.toString().padStart(2, '0');
-        const minutesText = this.minutes.toString().padStart(2, '0');
-        const secondsText = this.seconds.toString().padStart(2, '0');
-        const millisecondsText = this.milliseconds.toString().padStart(3, '0');
-        const ticksText = ''.padStart(4, '0');
+        const hoursText = this.hours.toString().padStart(2, "0");
+        const minutesText = this.minutes.toString().padStart(2, "0");
+        const secondsText = this.seconds.toString().padStart(2, "0");
+        const millisecondsText = this.milliseconds.toString().padStart(3, "0");
+        const ticksText = "".padStart(4, "0");
         return `${hoursText}:${minutesText}:${secondsText}.${millisecondsText}${ticksText}`;
     }
 

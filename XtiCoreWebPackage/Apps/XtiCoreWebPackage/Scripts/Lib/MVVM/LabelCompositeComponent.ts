@@ -13,17 +13,15 @@ export class LabelCompositeComponentViewModel<TLayout extends CompositeComponent
 
     constructor(layout: TLayout) {
         super();
-        const vm: any = this;
         for (const key in layout) {
-            const childVM: any = layout[key];
+            const childVM: any = Reflect.get(layout, key);
             if (childVM && childVM instanceof ComponentViewModel) {
-                vm[key] = childVM;
+                Reflect.set(this, key, childVM);
             }
         }
-        return (<any>this) as (LabelCompositeComponentViewModel<TLayout> & TLayout);
     }
 
-    asLayout() { return this as this & TLayout; }
+    asLayout() { return this as any as LabelCompositeComponentViewModel<TLayout> & TLayout; }
 }
 
 class BaseLabelCompositeComponentView<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends ComponentViewLayout<TPublicLayout>>

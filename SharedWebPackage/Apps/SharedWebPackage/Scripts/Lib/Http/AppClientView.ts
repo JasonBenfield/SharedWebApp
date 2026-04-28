@@ -5,10 +5,7 @@ import { WebPage } from "./WebPage";
 export class AppClientView<TArgs> {
     private resourceUrl: AppResourceUrl;
 
-    constructor(
-        resourceUrl: AppResourceUrl,
-        actionName: string
-    ) {
+    constructor(resourceUrl: AppResourceUrl, actionName: string) {
         this.resourceUrl = resourceUrl.withAction(actionName);
     }
 
@@ -18,11 +15,11 @@ export class AppClientView<TArgs> {
         this.resourceUrl = this.resourceUrl.withModifier(modifier);
     }
 
-    getUrl(data: TArgs) {
-        return this.getModifierUrl(null, data);
+    getUrl(data: TArgs | null) {
+        return this.getModifierUrl("", data);
     }
 
-    getModifierUrl(modifier: string, data: TArgs) {
+    getModifierUrl(modifier: string, data: TArgs | null) {
         let model: any;
         const obj: any = data;
         if (obj === undefined || obj === null) {
@@ -34,19 +31,21 @@ export class AppClientView<TArgs> {
         else {
             model = data;
         }
-        const resourceUrl = modifier === undefined || modifier === null
-            ? this.resourceUrl.withCurrentVersion()
-            : this.resourceUrl.withCurrentVersion().withModifier(modifier);
+        const resourceUrl = modifier ?
+            this.resourceUrl.withCurrentVersion().withModifier(modifier) :
+            this.resourceUrl.withCurrentVersion();
         const urlBuilder = new UrlBuilder(resourceUrl.url.value());
-        urlBuilder.addQueryFromObject(model);
+        if (model) {
+            urlBuilder.addQueryFromObject(model);
+        }
         return urlBuilder;
     }
 
-    getVersionedUrl(data: TArgs) {
-        return this.getVersionedModifierUrl(null, data);
+    getVersionedUrl(data: TArgs | null) {
+        return this.getVersionedModifierUrl("", data);
     }
 
-    getVersionedModifierUrl(modifier: string, data: TArgs) {
+    getVersionedModifierUrl(modifier: string, data: TArgs | null) {
         let model: any;
         if (data === undefined || data === null) {
             model = data;
@@ -57,26 +56,28 @@ export class AppClientView<TArgs> {
         else {
             model = data;
         }
-        const resourceUrl = modifier === undefined || modifier === null
-            ? this.resourceUrl
-            : this.resourceUrl.withModifier(modifier);
+        const resourceUrl = modifier ?
+            this.resourceUrl.withModifier(modifier) :
+            this.resourceUrl;
         const urlBuilder = new UrlBuilder(resourceUrl.url.value());
-        urlBuilder.addQueryFromObject(model);
+        if (model) {
+            urlBuilder.addQueryFromObject(model);
+        }
         return urlBuilder;
     }
 
-    open(data: TArgs, modifier?: string) {
+    open(data: TArgs | null, modifier?: string) {
         const webPage = this.createWebPage(data, modifier);
         webPage.open();
     }
 
-    openWindow(data: TArgs, modifier?: string) {
+    openWindow(data: TArgs | null, modifier?: string) {
         const webPage = this.createWebPage(data, modifier);
         webPage.openWindow();
     }
 
-    private createWebPage(data: TArgs, modifier?: string) {
-        const urlBuilder = this.getModifierUrl(modifier, data);
+    private createWebPage(data: TArgs | null, modifier?: string) {
+        const urlBuilder = this.getModifierUrl(modifier || "", data);
         return new WebPage(urlBuilder);
     }
 }

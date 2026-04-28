@@ -1,6 +1,6 @@
 ﻿import { CssClass } from "./CssClass";
 
-export type MarginAmount = 0 | 1 | 2 | 3 | 4 | 5 | 'auto';
+export type MarginAmount = 0 | 1 | 2 | 3 | 4 | 5 | "auto";
 
 export interface MarginAmounts {
     bottom?: MarginAmount;
@@ -49,67 +49,67 @@ export class MarginCss implements ICssBuilder {
     private readonly css = new CssClass;
 
     xs(amounts: MarginAmounts | MarginAmount) {
-        this.addCssForBreakpoint('xs', amounts);
+        this.addCssForBreakpoint("xs", amounts);
         return this;
     }
 
     sm(amounts: MarginAmounts | MarginAmount) {
-        this.addCssForBreakpoint('sm', amounts);
+        this.addCssForBreakpoint("sm", amounts);
         return this;
     }
 
     md(amounts: MarginAmounts | MarginAmount) {
-        this.addCssForBreakpoint('md', amounts);
+        this.addCssForBreakpoint("md", amounts);
         return this;
     }
 
     lg(amounts: MarginAmounts | MarginAmount) {
-        this.addCssForBreakpoint('lg', amounts);
+        this.addCssForBreakpoint("lg", amounts);
         return this;
     }
 
     xl(amounts: MarginAmounts | MarginAmount) {
-        this.addCssForBreakpoint('xl', amounts);
+        this.addCssForBreakpoint("xl", amounts);
         return this;
     }
 
     xxl(amounts: MarginAmounts | MarginAmount) {
-        this.addCssForBreakpoint('xxl', amounts);
+        this.addCssForBreakpoint("xxl", amounts);
         return this;
     }
 
     private addCssForBreakpoint(breakpoint: string, amounts: MarginAmounts | MarginAmount) {
         if (amounts !== null && amounts !== undefined) {
             if (this.isMarginAmount(amounts)) {
-                this.css.addName(this.getCss(breakpoint, '', amounts));
+                this.css.addName(this.getCss(breakpoint, "", amounts));
             }
             else {
-                this.css.addName(this.getCss(breakpoint, 'b', amounts.bottom));
-                this.css.addName(this.getCss(breakpoint, 't', amounts.top));
-                this.css.addName(this.getCss(breakpoint, 's', amounts.start));
-                this.css.addName(this.getCss(breakpoint, 'e', amounts.end));
+                this.css.addName(this.getCss(breakpoint, "b", amounts.bottom));
+                this.css.addName(this.getCss(breakpoint, "t", amounts.top));
+                this.css.addName(this.getCss(breakpoint, "s", amounts.start));
+                this.css.addName(this.getCss(breakpoint, "e", amounts.end));
             }
         }
     }
 
     private isMarginAmount(data: any): data is MarginAmount {
-        return typeof data === 'number' || data === 'auto';
+        return typeof data === "number" || data === "auto";
     }
 
-    private getCss(breakpoint: string, direction: string, amount: MarginAmount) {
+    private getCss(breakpoint: string, direction: string, amount?: MarginAmount) {
         let css: string;
         if (amount === undefined) {
-            css = '';
+            css = "";
         }
         else {
-            css = 'm';
+            css = "m";
             if (direction) {
                 css += direction;
             }
             if (amount === null || amount === undefined) {
                 amount = 0;
             }
-            if (breakpoint && breakpoint !== 'xs') {
+            if (breakpoint && breakpoint !== "xs") {
                 css += `-${breakpoint}`;
             }
             css += `-${amount}`;

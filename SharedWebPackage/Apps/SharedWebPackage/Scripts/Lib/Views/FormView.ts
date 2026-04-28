@@ -7,9 +7,9 @@ import { IFormAttributes, TargetValue, ViewConstructor } from "./Types";
 export class FormView extends BasicContainerView {
 
     constructor(container: BasicComponentView) {
-        super(container, 'form');
+        super(container, "form");
         this.setAction("#");
-        this.setMethod('POST');
+        this.setMethod("POST");
     }
 
     configureFormGroupContainers(configure: (fgc: FormGroupContainerView) => void) {
@@ -24,20 +24,20 @@ export class FormView extends BasicContainerView {
         if (!ctor) {
             ctor = FormGroupContainerView as any;
         }
-        return this.addView(ctor);
+        return this.addView(ctor!);
     }
 
-    onSubmit() { return this.on('submit'); }
+    onSubmit() { return this.on("submit"); }
 
     protected setAttr: (config: (attr: IFormAttributes) => void) => void;
 
     clearAutocomplete() { this.setAutocomplete(null); }
 
-    setAutocompleteOff() { this.setAutocomplete('off'); }
+    setAutocompleteOff() { this.setAutocomplete("off"); }
 
-    setAutocompleteNewPassword() { this.setAutocomplete('new-password'); }
+    setAutocompleteNewPassword() { this.setAutocomplete("new-password"); }
 
-    private setAutocomplete(autocomplete: string) {
+    private setAutocomplete(autocomplete: string | null) {
         this.setAttr(attr => attr.autocomplete = autocomplete);
     }
 
@@ -62,11 +62,11 @@ export class FormView extends BasicContainerView {
     }
 
     styleAsValidated() {
-        this.addCssName('was-validated');
+        this.addCssName("was-validated");
     }
 
     styleAsNotValidated() {
-        this.removeCssName('was-validated');
+        this.removeCssName("was-validated");
     }
 
     scrollIntoView(arg?: boolean | ScrollIntoViewOptions) {

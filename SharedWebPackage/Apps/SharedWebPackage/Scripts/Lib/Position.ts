@@ -1,19 +1,19 @@
 ﻿
 export class PositionUnit {
-    static em(size: number) { return new PositionUnit(size, 'em'); }
+    static em(size: number) { return new PositionUnit(size, "em"); }
 
-    static rem(size: number) { return new PositionUnit(size, 'rem'); }
+    static rem(size: number) { return new PositionUnit(size, "rem"); }
 
-    static px(size: number) { return new PositionUnit(size, 'px'); }
+    static px(size: number) { return new PositionUnit(size, "px"); }
 
-    static percentage(size: number) { return new PositionUnit(size, '%'); }
+    static percentage(size: number) { return new PositionUnit(size, "%"); }
 
-    static zero() { return new PositionUnit(0, ''); }
+    static zero() { return new PositionUnit(0, ""); }
 
     private readonly css: string;
 
     protected constructor(readonly size: number, readonly unit: string) {
-        this.css = size ? `${size}${unit}` : '0';
+        this.css = size ? `${size}${unit}` : "0";
     }
 
     value() { return this.css; }

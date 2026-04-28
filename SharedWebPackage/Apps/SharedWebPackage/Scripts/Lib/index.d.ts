@@ -21,7 +21,7 @@ interface IFormattable {
 }
 
 interface ICssClass {
-    toString(): string;
+    toString(): string | null;
 }
 
 interface ICssBuilder {

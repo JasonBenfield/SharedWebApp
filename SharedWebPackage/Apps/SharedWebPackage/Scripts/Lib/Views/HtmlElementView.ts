@@ -1,5 +1,5 @@
-﻿import * as $ from 'jquery';
-import { DelayedAction } from '../DelayedAction';
+﻿import * as $ from "jquery";
+import { DelayedAction } from "../DelayedAction";
 
 interface IElementEvent {
     evtName: string;
@@ -14,8 +14,8 @@ export class HtmlElementView {
     }
 
     static root() {
-        const root = document.body.appendChild(document.createElement('div'));
-        root.style.display = 'contents';
+        const root = document.body.appendChild(document.createElement("div"));
+        root.style.display = "contents";
         return HtmlElementView.fromElement(root);
     }
 
@@ -33,11 +33,11 @@ export class HtmlElementView {
     get offsetWidth() { return this.element.offsetWidth; }
 
     getViewID() {
-        return this.element.id || '';
+        return this.element.id || "";
     }
 
     getViewName() {
-        return this.element.attributes['name'] || '';
+        return this.element.attributes["name"] || "";
     }
 
     setAttributes(attributes: any) {
@@ -46,9 +46,11 @@ export class HtmlElementView {
         }
         for (let i = 0; i < this.element.attributes.length; i++) {
             const attribute = this.element.attributes.item(i);
-            const value = attributes[attribute.name];
-            if (value === null || value === undefined || value === false) {
-                this.element.removeAttribute(attribute.name);
+            if (attribute) {
+                const value = attributes[attribute.name];
+                if (value === null || value === undefined || value === false) {
+                    this.element.removeAttribute(attribute.name);
+                }
             }
         }
         for (const key in attributes) {
@@ -59,7 +61,7 @@ export class HtmlElementView {
     setAttribute(attributes: any, name: string) {
         const value = attributes[name];
         if (value === true) {
-            this.element.setAttribute(name, '');
+            this.element.setAttribute(name, "");
         }
         else if (value === null || value === undefined || value === false) {
             this.element.removeAttribute(name);
@@ -71,21 +73,21 @@ export class HtmlElementView {
     }
 
     private formatValue(value: any) {
-        if (typeof value === 'boolean') {
-            return '';
+        if (typeof value === "boolean") {
+            return "";
         }
-        if (typeof value === 'string') {
+        if (typeof value === "string") {
             return value;
         }
-        if (typeof value === 'number') {
+        if (typeof value === "number") {
             return value.toString();
         }
-        let objStr = '';
+        let objStr = "";
         for (const key in value) {
             const childValue = value[key];
             if (childValue) {
                 if (objStr) {
-                    objStr += '; ';
+                    objStr += "; ";
                 }
                 const formatted = this.formatValue(childValue);
                 objStr += `${key}: ${formatted}`;
@@ -111,7 +113,7 @@ export class HtmlElementView {
     }
 
     getTitle() {
-        return this.element.attributes['title'] as string || '';
+        return this.element.attributes["title"] as string || "";
     }
 
     getText() {

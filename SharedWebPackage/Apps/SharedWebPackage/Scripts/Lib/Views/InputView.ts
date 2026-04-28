@@ -8,9 +8,9 @@ export class InputView extends BasicComponentView {
     protected readonly inputElement: HTMLInputElement;
 
     constructor(container: BasicComponentView) {
-        super(container, 'input');
+        super(container, "input");
         this.inputElement = this.elementView.element as HTMLInputElement;
-        this.setType('text');
+        this.setType("text");
     }
 
     protected setAttr: (config: (attr: IInputAttributes) => void) => void;
@@ -24,7 +24,7 @@ export class InputView extends BasicComponentView {
     }
 
     styleAsFormControl() {
-        this.addCssName('form-control');
+        this.addCssName("form-control");
     }
 
     enable() { this.setAttr(a => a.disabled = false); }
@@ -39,13 +39,13 @@ export class InputView extends BasicComponentView {
 
     clearAutocomplete() { this.setAutocomplete(null); }
 
-    setAutocompleteOff() { this.setAutocomplete('off'); }
+    setAutocompleteOff() { this.setAutocomplete("off"); }
 
-    setAutocompleteNewPassword() { this.setAutocomplete('new-password'); }
+    setAutocompleteNewPassword() { this.setAutocomplete("new-password"); }
 
     setList(list: string) { this.setAttr(a => a.list = list); }
 
-    private setAutocomplete(autocomplete: string) {
+    private setAutocomplete(autocomplete: string | null) {
         this.setAttr(attr => attr.autocomplete = autocomplete);
     }
 
@@ -61,19 +61,24 @@ export class InputView extends BasicComponentView {
 
     getFiles() {
         const files: File[] = [];
-        for (let i = 0; i < this.inputElement.files.length; i++) {
-            files.push(this.inputElement.files.item(i));
+        if (this.inputElement.files) {
+            for (let i = 0; i < this.inputElement.files.length; i++) {
+                const file = this.inputElement.files.item(i);
+                if (file) {
+                    files.push(file);
+                }
+            }
         }
         return files;
     }
 
     setBorder(border: ContextualClass) {
         const borderCss = this.getBorderCss(border);
-        this.setCss('border', borderCss);
+        this.setCss("border", borderCss);
     }
 
     private getBorderCss(border: ContextualClass) {
-        return border === ContextualClass.default ? '' : border.append('border');
+        return border === ContextualClass.default ? "" : border.append("border");
     }
 
     setMaxLength(maxLength: number) {
@@ -88,11 +93,11 @@ export class InputView extends BasicComponentView {
         this.setAttr(attr => attr.placeholder = placeholder);
     }
 
-    setType(type: 'text' | 'hidden' | 'password' | 'date' | 'number' | 'time' | 'file' | 'email' | 'month' | 'url') {
+    setType(type: "text" | "hidden" | "password" | "date" | "number" | "time" | "file" | "email" | "month" | "url") {
         this.setAttr(attr => attr.type = type);
     }
 
-    setInputMode(inputmode: 'text' | 'decimal' | 'numeric' | 'tel' | 'search' | 'email' | 'url') {
+    setInputMode(inputmode: "text" | "decimal" | "numeric" | "tel" | "search" | "email" | "url") {
         this.setAttr(attr => attr.inputmode = inputmode);
     }
 
@@ -108,11 +113,11 @@ export class InputView extends BasicComponentView {
 
     blur() { this.inputElement.blur(); }
 
-    onFocus() { return this.on('focus'); }
+    onFocus() { return this.on("focus"); }
 
-    onBlur() { return this.on('blur'); }
+    onBlur() { return this.on("blur"); }
 
-    onInput() { return this.on('input change'); }
+    onInput() { return this.on("input change"); }
 
     addDataListView() {
         return InputView.getDataListContainer().addView(DataListView);
@@ -122,10 +127,10 @@ export class InputView extends BasicComponentView {
 
     static getDataListContainer() {
         if (!InputView.dataListContainer) {
-            let dataListContainerEl = document.getElementById('dataListContainer');
+            let dataListContainerEl = document.getElementById("dataListContainer");
             if (!dataListContainerEl) {
-                dataListContainerEl = document.body.appendChild(document.createElement('div'));
-                dataListContainerEl.id = 'dataListContainer';
+                dataListContainerEl = document.body.appendChild(document.createElement("div"));
+                dataListContainerEl.id = "dataListContainer";
             }
             InputView.dataListContainer = new BasicContainerView(null, dataListContainerEl);
         }

@@ -18,10 +18,15 @@ export class CssClass implements ICssClass {
     addFrom(cssClass: CssClass | ICssBuilder) {
         if (cssClass) {
             if (cssClass instanceof CssClass) {
-                this.addName(cssClass.value);
+                if (cssClass.value) {
+                    this.addName(cssClass.value);
+                }
             }
             else {
-                this.addName(cssClass.cssClass().toString());
+                const className = cssClass.cssClass()?.toString();
+                if (className) {
+                    this.addName(className);
+                }
             }
         }
         return this;

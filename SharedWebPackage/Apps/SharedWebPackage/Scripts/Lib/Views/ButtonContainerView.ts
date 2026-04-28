@@ -17,7 +17,7 @@ export class ButtonContainerView extends BlockView {
         if (!viewCtor) {
             viewCtor = ButtonCommandView as any;
         }
-        const button = this.addView(viewCtor);
+        const button = this.addView(viewCtor!);
         button.icon.makeFixedWidth();
         button.setTextCss(new TextCss().start());
         button.useOutlineStyle(ContextualClass.primary);
@@ -28,7 +28,7 @@ export class ButtonContainerView extends BlockView {
         if (!viewCtor) {
             viewCtor = LinkCommandView as any;
         }
-        const button = this.addView(viewCtor);
+        const button = this.addView(viewCtor!);
         button.icon.makeFixedWidth();
         button.setTextCss(new TextCss().start());
         button.useOutlineStyle(ContextualClass.primary);

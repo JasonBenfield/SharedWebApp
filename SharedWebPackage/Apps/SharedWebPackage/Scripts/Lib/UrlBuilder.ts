@@ -25,13 +25,13 @@ export class UrlBuilder {
         else {
             url = baseUrl;
         }
-        const hashIndex = url.indexOf('#');
-        this._hash = new UrlHashBuilder(hashIndex > -1 ? url.substring(hashIndex + 1) : '');
+        const hashIndex = url.indexOf("#");
+        this._hash = new UrlHashBuilder(hashIndex > -1 ? url.substring(hashIndex + 1) : "");
         if (hashIndex > -1) {
             url = url.substring(0, hashIndex);
         }
-        const queryIndex = url.indexOf('?');
-        this._query = new UrlQueryBuilder(queryIndex > -1 ? url.substring(queryIndex + 1) : '');
+        const queryIndex = url.indexOf("?");
+        this._query = new UrlQueryBuilder(queryIndex > -1 ? url.substring(queryIndex + 1) : "");
         if (queryIndex > -1) {
             url = url.substring(0, queryIndex);
         }
@@ -42,30 +42,30 @@ export class UrlBuilder {
 
     addPart(part: string) {
         if (part) {
-            const hashIndex = part.indexOf('#');
+            const hashIndex = part.indexOf("#");
             if (hashIndex > -1) {
                 let hashValue = part.substring(hashIndex + 1);
                 this.addHashString(hashValue);
                 part = part.substring(0, hashIndex);
             }
-            const queryIndex = part.indexOf('?');
+            const queryIndex = part.indexOf("?");
             if (queryIndex > -1) {
                 const query = part.substring(queryIndex + 1);
                 this.addQueryString(query);
                 part = part.substring(0, queryIndex);
             }
             let baseUrl = this._url.withoutQueryAndHash();
-            if (baseUrl.substring(baseUrl.length - 1) === '/') {
+            if (baseUrl.substring(baseUrl.length - 1) === "/") {
                 baseUrl = baseUrl.substring(0, baseUrl.length - 1);
             }
             const parts = [baseUrl];
-            const fragments = part.split('/');
+            const fragments = part.split("/");
             for (const fragment of fragments) {
                 if (fragment) {
                     parts.push(fragment);
                 }
             }
-            this._url = new Url(new JoinedStrings('/', parts).value());
+            this._url = new Url(new JoinedStrings("/", parts).value());
         }
         return this;
     }

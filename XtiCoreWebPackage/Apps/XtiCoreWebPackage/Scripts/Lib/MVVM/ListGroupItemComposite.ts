@@ -1,14 +1,14 @@
-import { AlertComponentChangeHandler, AlertComponentMixin, AlertViewMixin, AlertViewModelMixin, IAlertComponent, IAlertView, IAlertViewModel } from "./AlertComponent";
 import { Component } from "./Component";
 import { ComponentView, ComponentViewLayout } from "./ComponentView";
 import { ComponentViewModel } from "./ComponentViewModel";
-import { BaseCompositeComponentView, CompositeComponentLayout, CompositeComponentView, CompositeComponentViewModelLayout, CompositeComponentViewModelProperties, IPublicLayoutView } from "./CompositeComponent";
+import { CompositeComponentLayout, CompositeComponentView, CompositeComponentViewModelLayout, CompositeComponentViewModelProperties, IPublicLayoutView } from "./CompositeComponent";
+import { IListGroupItem, IListGroupItemView, IListGroupItemViewModel, ListGroupItemChangeHandler, ListGroupItemMixin, ListGroupItemViewModelMixin } from "./ListGroup";
 
-export class AlertCompositeComponentViewModel<TLayout extends CompositeComponentViewModelLayout<TLayout>>
-    extends AlertViewModelMixin(ComponentViewModel) {
+export class ListGroupItemCompositeViewModel<TLayout extends CompositeComponentViewModelLayout<TLayout>>
+    extends ListGroupItemViewModelMixin(ComponentViewModel) {
 
     static create<T extends CompositeComponentViewModelLayout<T>>(layout: T) {
-        return new AlertCompositeComponentViewModel(layout).asLayout();
+        return new ListGroupItemCompositeViewModel(layout).asLayout();
     }
 
     constructor(layout: TLayout) {
@@ -21,36 +21,21 @@ export class AlertCompositeComponentViewModel<TLayout extends CompositeComponent
         }
     }
 
-    asLayout() { return this as any as AlertCompositeComponentViewModel<TLayout> & TLayout; }
+    asLayout() { return this as any as ListGroupItemCompositeViewModel<TLayout> & TLayout; }
 }
 
-export class AlertCompositeComponentView<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends ComponentViewLayout<TPublicLayout>>
-    extends AlertViewMixin(BaseCompositeComponentView)<TLayout, TPublicLayout>
-    implements IAlertView {
-
-    static block<TLayout extends ComponentViewLayout<TLayout>>(layout: TLayout) {
-        return AlertCompositeComponentView.blockeWithPublicLayout(layout, l => l);
-    }
-
-    static blockeWithPublicLayout<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends ComponentViewLayout<TPublicLayout>>(layout: TLayout, toPublicLayout: (l: TLayout) => TPublicLayout) {
-        return new AlertCompositeComponentView("div", layout, toPublicLayout).asLayout();
-    }
-
-    declare asLayout: () => AlertCompositeComponentView<TLayout, TPublicLayout> & TLayout;
-}
-
-export class AlertCompositeComponentBuilder<TViewModelLayout extends CompositeComponentViewModelLayout<TViewModelLayout>> {
-    constructor(private readonly viewModel: ComponentViewModel & TViewModelLayout & IAlertViewModel) {
+export class ListGroupItemCompositeBuilder<TViewModelLayout extends CompositeComponentViewModelLayout<TViewModelLayout>> {
+    constructor(private readonly viewModel: ComponentViewModel & TViewModelLayout & IListGroupItemViewModel) {
     }
 
     view<TViewPublicLayout extends {
         [K in CompositeComponentViewModelProperties<TViewModelLayout>]: ComponentView
-    }>(view: CompositeComponentView<any, TViewPublicLayout> & IAlertView) {
-        return new AlertCompositeComponentBuilderWithView(this.viewModel, view);
+    }>(view: CompositeComponentView<any, TViewPublicLayout> & IListGroupItemView) {
+        return new ListGroupItemCompositeBuilderWithView(this.viewModel, view);
     }
 }
 
-class AlertCompositeComponentBuilderWithView<
+class ListGroupItemCompositeBuilderWithView<
     TViewModelLayout extends CompositeComponentViewModelLayout<TViewModelLayout>,
     TViewLayout extends {
         [K in keyof TViewLayout]: ComponentView
@@ -60,19 +45,19 @@ class AlertCompositeComponentBuilderWithView<
     }
 > {
     constructor(
-        private readonly viewModel: ComponentViewModel & TViewModelLayout & IAlertViewModel,
-        private readonly view: CompositeComponentView<TViewLayout, TViewPublicLayout> & IAlertView
+        private readonly viewModel: ComponentViewModel & TViewModelLayout & IListGroupItemViewModel,
+        private readonly view: CompositeComponentView<TViewLayout, TViewPublicLayout> & IListGroupItemView
     ) {
     }
 
     factory<TFactory extends {
         [K in CompositeComponentViewModelProperties<TViewModelLayout>]: (vm: TViewModelLayout[K], view: TViewPublicLayout[K]) => Component
     }>(factory: TFactory) {
-        return new AlertCompositeComponentBuilderWithComponentFactory<TViewModelLayout, TViewLayout, TViewPublicLayout, TFactory>(this.viewModel, this.view, factory);
+        return new ListGroupItemCompositeBuilderWithComponentFactory<TViewModelLayout, TViewLayout, TViewPublicLayout, TFactory>(this.viewModel, this.view, factory);
     }
 }
 
-class AlertCompositeComponentBuilderWithComponentFactory<
+class ListGroupItemCompositeBuilderWithComponentFactory<
     TViewModelLayout extends CompositeComponentViewModelLayout<TViewModelLayout>,
     TViewLayout extends {
         [K in keyof TViewLayout]: ComponentView
@@ -83,8 +68,8 @@ class AlertCompositeComponentBuilderWithComponentFactory<
         [K in CompositeComponentViewModelProperties<TViewModelLayout>]: (vm: TViewModelLayout[K], view: TViewPublicLayout[K]) => Component
     }> {
     constructor(
-        private readonly viewModel: ComponentViewModel & TViewModelLayout & IAlertViewModel,
-        private readonly view: CompositeComponentView<TViewLayout, TViewPublicLayout> & IAlertView,
+        private readonly viewModel: ComponentViewModel & TViewModelLayout & IListGroupItemViewModel,
+        private readonly view: CompositeComponentView<TViewLayout, TViewPublicLayout> & IListGroupItemView,
         private readonly compositeFactory: TFactory
     ) {
     }
@@ -101,7 +86,7 @@ class AlertCompositeComponentBuilderWithComponentFactory<
                 }
             }
         }
-        return new AlertCompositeComponent(
+        return new ListGroupItemComposite(
             this.viewModel,
             this.view,
             layout as { [K in keyof TFactory]: ReturnType<TFactory[K]> }
@@ -109,21 +94,21 @@ class AlertCompositeComponentBuilderWithComponentFactory<
     }
 }
 
-class AlertCompositeComponent<
+class ListGroupItemComposite<
     TViewModelLayout extends CompositeComponentViewModelLayout<TViewModelLayout>,
     TViewPublicLayout extends ComponentViewLayout<TViewPublicLayout>,
     TComponentLayout extends CompositeComponentLayout<TComponentLayout>
-> extends AlertComponentMixin(Component) {
+> extends ListGroupItemMixin(Component) {
 
     constructor(
-        viewModel: ComponentViewModel & TViewModelLayout & IAlertViewModel,
-        view: ComponentView & IPublicLayoutView<TViewPublicLayout> & IAlertView,
+        viewModel: ComponentViewModel & TViewModelLayout & IListGroupItemViewModel,
+        view: ComponentView & IPublicLayoutView<TViewPublicLayout> & IListGroupItemView,
         layout: TComponentLayout
     ) {
         super(
             viewModel,
             view,
-            new AlertComponentChangeHandler(viewModel, view)
+            new ListGroupItemChangeHandler(viewModel, view)
         );
         for (const key in layout) {
             const childComponent = Reflect.get(layout, key);
@@ -132,5 +117,5 @@ class AlertCompositeComponent<
         }
     }
 
-    asLayout() { return this as any as Component & TComponentLayout & IAlertComponent; }
+    asLayout() { return this as any as Component & TComponentLayout & IListGroupItem; }
 }

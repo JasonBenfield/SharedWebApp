@@ -5,6 +5,7 @@
     "module": "CommonJS",
     "noImplicitAny": false,
     "noEmitOnError": true,
+    "strictNullChecks": true,
     "removeComments": false,
     "sourceMap": true,
     "target": "es2022",

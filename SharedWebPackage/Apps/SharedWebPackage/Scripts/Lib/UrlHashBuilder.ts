@@ -1,16 +1,16 @@
-﻿import { NamedValue } from "./NamedValue";
-import * as _ from 'lodash';
-import { UrlHash } from "./UrlHash";
+﻿import * as _ from "lodash";
 import { DateOnly } from "./DateOnly";
+import { DateTimeOffset } from "./DateTimeOffset";
+import { NamedValue } from "./NamedValue";
 import { TimeOnly } from "./TimeOnly";
 import { TimeSpan } from "./TimeSpan";
-import { DateTimeOffset } from "./DateTimeOffset";
+import { UrlHash } from "./UrlHash";
 
 export class UrlHashBuilder {
     private _hash: UrlHash;
 
     constructor(hash: string | UrlHash) {
-        if (typeof hash === 'string') {
+        if (typeof hash === "string") {
             this._hash = new UrlHash(hash);
         }
         else {
@@ -34,27 +34,27 @@ export class UrlHashBuilder {
         if (text) {
             text = text.toLowerCase();
         }
-        return text === 'true' || text === 'yes' || text === 'y' || text === '1';
+        return text === "true" || text === "yes" || text === "y" || text === "1";
     }
 
     getDateTimeValue(name: string) {
         const text = this.getValue(name);
-        return DateTimeOffset.canParse(text) ? DateTimeOffset.parse(text) : null;
+        return text && DateTimeOffset.canParse(text) ? DateTimeOffset.parse(text) : null;
     }
 
     getDateValue(name: string) {
         const text = this.getValue(name);
-        return DateOnly.canParse(text) ? DateOnly.parse(text) : null;
+        return text && DateOnly.canParse(text) ? DateOnly.parse(text) : null;
     }
 
     getTimeValue(name: string) {
         const text = this.getValue(name);
-        return TimeOnly.canParse(text) ? TimeOnly.parse(text) : null;
+        return text && TimeOnly.canParse(text) ? TimeOnly.parse(text) : null;
     }
 
     getTimeSpanValue(name: string) {
         const text = this.getValue(name);
-        return TimeSpan.canParse(text) ? TimeSpan.parse(text) : null;
+        return text && TimeSpan.canParse(text) ? TimeSpan.parse(text) : null;
     }
 
     getValue(name: string) {
@@ -62,7 +62,7 @@ export class UrlHashBuilder {
     }
 
     clear() {
-        this._hash = new UrlHash('');
+        this._hash = new UrlHash("");
         return this;
     }
 
@@ -107,27 +107,25 @@ export class UrlHashBuilder {
         let hashValues = this._hash.getValues();
         if (name) {
             if (value instanceof Date || value instanceof DateOnly || value instanceof DateTimeOffset || value instanceof TimeOnly || value instanceof TimeSpan) {
-                let queryValue = value === undefined || value === null
-                    ? null
-                    : value.toISOString();
-                hashValues.push(new NamedValue(name, queryValue));
-            }
-            else if (typeof value === 'string') {
-                let queryValue: string;
-                if (value !== undefined && value !== null) {
-                    queryValue = value;
+                const queryValue = value === undefined || value === null ? null : value.toISOString();
+                if (queryValue !== null) {
+                    hashValues.push(new NamedValue(name, queryValue));
                 }
-                hashValues.push(new NamedValue(name, queryValue));
             }
-            else if (typeof value === 'number') {
-                let queryValue: string;
-                if (value !== undefined && value !== null) {
-                    queryValue = value.toString();
+            else if (typeof value === "string") {
+                const queryValue = value === undefined || value === null ? null : value;
+                if (queryValue !== null) {
+                    hashValues.push(new NamedValue(name, queryValue));
                 }
-                hashValues.push(new NamedValue(name, queryValue));
+            }
+            else if (typeof value === "number") {
+                const queryValue = value === undefined || value === null ? null : value.toString();
+                if (queryValue !== null) {
+                    hashValues.push(new NamedValue(name, queryValue));
+                }
             }
             else if (_.isArray(value)) {
-                for(const arrValue of value) {
+                for (const arrValue of value) {
                     this.addQuery(name, arrValue);
                 }
             }
@@ -140,7 +138,7 @@ export class UrlHashBuilder {
     }
 
     addQueryFromObject(obj: any) {
-        return this._addQueryFromObject(obj, '');
+        return this._addQueryFromObject(obj, "");
     }
 
     private _addQueryFromObject(obj: any, prefix: string) {

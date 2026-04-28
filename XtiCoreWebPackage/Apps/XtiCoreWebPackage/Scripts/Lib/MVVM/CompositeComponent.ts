@@ -20,14 +20,12 @@ export class CompositeComponentViewModel<T extends CompositeComponentViewModelLa
 
     constructor(layout: T) {
         super();
-        const vm: any = this;
         for (const key in layout) {
-            const childVM: any = layout[key];
+            const childVM: any = Reflect.get(layout, key);
             if (childVM && childVM instanceof ComponentViewModel) {
-                vm[key] = childVM;
+                Reflect.set(this, key, childVM);
             }
         }
-        return (<any>this) as (CompositeComponentViewModel<T> & T);
     }
 
     asLayout() { return this as this & T; }

@@ -140,7 +140,7 @@ export class GridView extends BasicComponentView {
         if (!ctor) {
             ctor = GridRowView as any;
         }
-        const rows = this.addViews(howManyRows, ctor) as TRowView[];
+        const rows = this.addViews(howManyRows, ctor!) as TRowView[];
         this.rows.push(...rows);
         return rows;
     }
@@ -271,11 +271,11 @@ export class GridCellView extends BasicContainerView {
     }
 
     setGridColumn(start: number | GridSpan, end?: number | GridSpan) {
-        this.setStyle(style => style["grid-column"] = this.rangeValue(start, end));
+        this.setStyle(style => style["grid-column"] = this.rangeValue(start, end || 0));
     }
 
     setGridRow(start: number | GridSpan, end?: number | GridSpan) {
-        this.setStyle(style => style["grid-row"] = this.rangeValue(start, end));
+        this.setStyle(style => style["grid-row"] = this.rangeValue(start, end || 0));
     }
 
     private rangeValue(start: number | GridSpan, end: number | GridSpan) {

@@ -2,12 +2,12 @@
 import { IContainerView, IHtmlElementView, ViewConstructor } from "./Types";
 
 export class BasicContainerView extends BasicComponentView implements IContainerView {
-    constructor(container: BasicComponentView, createElementView: IHtmlElementView) {
+    constructor(container: BasicComponentView | null, createElementView: IHtmlElementView) {
         super(container, createElementView);
     }
 
     makeDraggable() {
-        this.setAttr(attr => attr.draggable = 'true');
+        this.setAttr(attr => attr.draggable = "true");
     }
 
     getViews: () => BasicComponentView[];

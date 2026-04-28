@@ -181,6 +181,28 @@ export class ComponentView {
                     childIndex++;
                 }
             }
+            this.scrollIntoViewIfRequired();
+        }
+    }
+
+    private isScrolledIntoView = false;
+
+    cancelScrollIntoView() {
+        this.isScrolledIntoView = false;
+    }
+
+    scrollIntoView() {
+        this.isScrolledIntoView = true;
+        this.scrollIntoViewIfRequired();
+    }
+
+    private scrollIntoViewIfRequired() {
+        if (this.isScrolledIntoView) {
+            const element = this.element;
+            if (element) {
+                element.scrollIntoView();
+                this.isScrolledIntoView = false;
+            }
         }
     }
 

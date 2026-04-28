@@ -18,7 +18,7 @@ export class BaseFormView extends FormView {
     }
 
     handleSubmit(action: (el: HTMLElement, evt: JQuery.Event) => void) {
-        this.on('submit')
+        this.on("submit")
             .execute(async (el, evt) => {
                 evt.preventDefault();
                 if (document.activeElement instanceof HTMLElement) {
@@ -32,7 +32,7 @@ export class BaseFormView extends FormView {
 
     addHiddenInput() {
         const inputView = this.addView(InputView);
-        inputView.setType('hidden');
+        inputView.setType("hidden");
         return inputView;
     }
 
