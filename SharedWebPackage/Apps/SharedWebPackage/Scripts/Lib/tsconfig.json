@@ -3,6 +3,7 @@
   "compilerOptions": {
     "lib": [ "ES2024", "dom" ],
     "module": "CommonJS",
+    "esModuleInterop": true,
     "noImplicitAny": false,
     "noEmitOnError": true,
     "strictNullChecks": true,

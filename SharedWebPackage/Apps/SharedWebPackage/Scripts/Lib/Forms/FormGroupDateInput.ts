@@ -5,7 +5,7 @@ import { EventBuilders } from "../Events";
 import { FormGroupInputGroupView, FormGroupInputView } from "../Views/FormGroup";
 import { FormGroup } from "./FormGroup";
 
-type Events = { valueChanged: DateOnly };
+type Events = { valueChanged: DateOnly | null };
 
 export class FormGroupDateInput extends FormGroup {
     private readonly dateInputControl: DateInputControl;
@@ -21,14 +21,14 @@ export class FormGroupDateInput extends FormGroup {
         this.valueTextComponent = this.addComponent(new TextComponent(view.valueTextView));
     }
     
-    makeReadOnly(format: (date: DateOnly) => string = FormGroupDateInput.defaultReadOnlyFormat) {
+    makeReadOnly(format: (date: DateOnly | null) => string = FormGroupDateInput.defaultReadOnlyFormat) {
         const value = this.dateInputControl.getValue();
         this.dateInputControl.hide();
         this.valueTextComponent.show();
         this.valueTextComponent.setText(format(value));
     }
 
-    private static readonly defaultReadOnlyFormat = (value: DateOnly) => value ? value.toLocaleString() : '';
+    private static readonly defaultReadOnlyFormat = (value: DateOnly | null) => value?.toLocaleString() || "";
 
     makeEditable() {
         this.dateInputControl.show();

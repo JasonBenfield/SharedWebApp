@@ -9,7 +9,7 @@ export class TextToTimeSpanViewValue extends TypedFieldViewValue<string, TimeSpa
         this.format = TextToTimeSpanViewValue.defaultFormat;
     }
 
-    static defaultFormat(value: TimeSpan) { return value ? value.toISOString() : ''; }
+    static defaultFormat(value: TimeSpan) { return value ? value.toISOString() : ""; }
 
     protected _fromView(value: string) {
         if (value && TimeSpan.canParse(value)) {

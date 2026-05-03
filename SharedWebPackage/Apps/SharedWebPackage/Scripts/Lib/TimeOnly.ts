@@ -194,32 +194,26 @@ export class TimeOnly implements IFormattable {
             else if (this.hours < other.hours) {
                 result = -1;
             }
-            else if (this.hours === other.hours) {
-                if (this.minutes > other.minutes) {
-                    result = 1;
-                }
-                else if (this.minutes < other.minutes) {
-                    result = -1;
-                }
-                else if (this.minutes === other.minutes) {
-                    if (this.seconds > other.seconds) {
-                        result = 1;
-                    }
-                    else if (this.seconds < other.seconds) {
-                        result = -1;
-                    }
-                    else if (this.seconds === other.seconds) {
-                        if (this.milliseconds > other.milliseconds) {
-                            result = 1;
-                        }
-                        else if (this.milliseconds < other.milliseconds) {
-                            result = -1;
-                        }
-                        else {
-                            result = 0;
-                        }
-                    }
-                }
+            else if (this.minutes > other.minutes) {
+                result = 1;
+            }
+            else if (this.minutes < other.minutes) {
+                result = -1;
+            }
+            else if (this.seconds > other.seconds) {
+                result = 1;
+            }
+            else if (this.seconds < other.seconds) {
+                result = -1;
+            }
+            else if (this.milliseconds > other.milliseconds) {
+                result = 1;
+            }
+            else if (this.milliseconds < other.milliseconds) {
+                result = -1;
+            }
+            else {
+                result = 0;
             }
         }
         else {

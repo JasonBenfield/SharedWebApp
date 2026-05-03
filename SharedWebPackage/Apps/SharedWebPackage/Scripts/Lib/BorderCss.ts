@@ -2,17 +2,17 @@
 import { CssClass } from "./CssClass";
 
 export class BorderCss {
-    private _all: BorderPartCss;
-    private _top: BorderPartCss;
-    private _end: BorderPartCss;
-    private _bottom: BorderPartCss;
-    private _start: BorderPartCss;
-    private _rounded: string;
-    private _roundedSize: number;
+    private _all?: BorderPartCss;
+    private _top?: BorderPartCss;
+    private _end?: BorderPartCss;
+    private _bottom?: BorderPartCss;
+    private _start?: BorderPartCss;
+    private _rounded?: string;
+    private _roundedSize?: number;
 
     all(configure: (part: BorderPartCss) => void) {
         if (!this._all) {
-            this._all = new BorderPartCss('');
+            this._all = new BorderPartCss("");
         }
         configure(this._all);
         return this;
@@ -20,7 +20,7 @@ export class BorderCss {
 
     top(configure: (part: BorderPartCss) => void) {
         if (!this._top) {
-            this._top = new BorderPartCss('top');
+            this._top = new BorderPartCss("top");
         }
         configure(this._top);
         return this;
@@ -28,7 +28,7 @@ export class BorderCss {
 
     end(configure: (part: BorderPartCss) => void) {
         if (!this._end) {
-            this._end = new BorderPartCss('end');
+            this._end = new BorderPartCss("end");
         }
         configure(this._end);
         return this;
@@ -36,7 +36,7 @@ export class BorderCss {
 
     bottom(configure: (part: BorderPartCss) => void) {
         if (!this._bottom) {
-            this._bottom = new BorderPartCss('bottom');
+            this._bottom = new BorderPartCss("bottom");
         }
         configure(this._bottom);
         return this;
@@ -44,44 +44,44 @@ export class BorderCss {
 
     start(configure: (part: BorderPartCss) => void) {
         if (!this._start) {
-            this._start = new BorderPartCss('start');
+            this._start = new BorderPartCss("start");
         }
         configure(this._start);
         return this;
     }
 
     rounded() {
-        this._rounded = 'rounded';
+        this._rounded = "rounded";
         return this;
     }
 
     roundedTop() {
-        this._rounded = 'rounded-top';
+        this._rounded = "rounded-top";
         return this;
     }
 
     roundedEnd() {
-        this._rounded = 'rounded-end';
+        this._rounded = "rounded-end";
         return this;
     }
 
     roundedBottom() {
-        this._rounded = 'rounded-bottom';
+        this._rounded = "rounded-bottom";
         return this;
     }
 
     roundedStart() {
-        this._rounded = 'rounded-start';
+        this._rounded = "rounded-start";
         return this;
     }
 
     roundedCircle() {
-        this._rounded = 'rounded-circle';
+        this._rounded = "rounded-circle";
         return this;
     }
 
     roundedPill() {
-        this._rounded = 'rounded-pill';
+        this._rounded = "rounded-pill";
         return this;
     }
 
@@ -97,12 +97,24 @@ export class BorderCss {
 
     cssClass() {
         const cssClass = new CssClass();
-        cssClass.addFrom(this._all);
-        cssClass.addFrom(this._top);
-        cssClass.addFrom(this._end);
-        cssClass.addFrom(this._bottom);
-        cssClass.addFrom(this._start);
-        cssClass.addName(this._rounded);
+        if (this._all) {
+            cssClass.addFrom(this._all);
+        }
+        if (this._top) {
+            cssClass.addFrom(this._top);
+        }
+        if (this._end) {
+            cssClass.addFrom(this._end);
+        }
+        if (this._bottom) {
+            cssClass.addFrom(this._bottom);
+        }
+        if (this._start) {
+            cssClass.addFrom(this._start);
+        }
+        if (this._rounded) {
+            cssClass.addName(this._rounded);
+        }
         if (this._roundedSize !== undefined) {
             cssClass.addName(`rounded-${this._roundedSize}`);
         }
@@ -116,12 +128,12 @@ export class BorderCss {
 
 export class BorderPartCss {
     private readonly part: string;
-    private _context: ContextualClass;
-    private _width: number;
-    private _opacity: number;
+    private _context?: ContextualClass;
+    private _width?: number;
+    private _opacity?: number;
 
     constructor(part: string) {
-        this.part = part ? `border-${part}` : 'border';
+        this.part = part ? `border-${part}` : "border";
     }
 
     context(context: ContextualClass) {

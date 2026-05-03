@@ -7,7 +7,7 @@ import { InputControl } from "./InputControl";
 import { TextComponent } from "./TextComponent";
 import { EventSource } from "../Events";
 
-type Events = { valueChanged: TimeSpan };
+type Events = { valueChanged: TimeSpan | null };
 
 export class TimeSpanInputControl extends BasicComponent {
     private readonly dayInputControl: InputControl<number>;
@@ -26,37 +26,37 @@ export class TimeSpanInputControl extends BasicComponent {
     private isSecondIncluded = true;
     private isMillisecondIncluded = true;
 
-    private readonly eventSource = new EventSource<Events>(this, { valueChanged: null as TimeSpan });
+    private readonly eventSource = new EventSource<Events>(this, { valueChanged: new TimeSpan(0, 0) });
     readonly when = this.eventSource.when;
 
     constructor(protected readonly view: TimeSpanInputView) {
         super(view);
         this.dayInputControl = this.addComponent(new InputControl(view.dayInputView, new TextToNumberViewValue()));
         this.dayCaptionTextComponent = this.addComponent(new TextComponent(view.dayCaptionTextView));
-        this.dayCaptionTextComponent.setText('days');
-        this.dayCaptionTextComponent.setTitle('days');
+        this.dayCaptionTextComponent.setText("days");
+        this.dayCaptionTextComponent.setTitle("days");
         this.hourInputControl = this.addComponent(new InputControl(view.hourInputView, new TextToNumberViewValue()));
         const hours = new EnumerableRange(0, 24).value();
         this.hourInputControl.addDataList(...hours);
         this.hourCaptionTextComponent = this.addComponent(new TextComponent(view.hourCaptionTextView));
-        this.hourCaptionTextComponent.setText('hours');
-        this.hourCaptionTextComponent.setTitle('hours');
+        this.hourCaptionTextComponent.setText("hours");
+        this.hourCaptionTextComponent.setTitle("hours");
         this.minuteInputControl = this.addComponent(new InputControl(view.minuteInputView, new TextToNumberViewValue()));
         const minutes = new EnumerableRange(0, 60).value();
         this.minuteInputControl.addDataList(...minutes);
         this.minuteCaptionTextComponent = this.addComponent(new TextComponent(view.minuteCaptionTextView));
-        this.minuteCaptionTextComponent.setText('mins');
-        this.minuteCaptionTextComponent.setTitle('minutes');
+        this.minuteCaptionTextComponent.setText("mins");
+        this.minuteCaptionTextComponent.setTitle("minutes");
         this.secondInputControl = this.addComponent(new InputControl(view.secondInputView, new TextToNumberViewValue()));
         const seconds = new EnumerableRange(0, 60).value();
         this.secondInputControl.addDataList(...seconds);
         this.secondCaptionTextComponent = this.addComponent(new TextComponent(view.secondCaptionTextView));
-        this.secondCaptionTextComponent.setText('s');
-        this.secondCaptionTextComponent.setTitle('seconds');
+        this.secondCaptionTextComponent.setText("s");
+        this.secondCaptionTextComponent.setTitle("seconds");
         this.millisecondInputControl = this.addComponent(new InputControl(view.millisecondInputView, new TextToNumberViewValue()));
         this.millisecondCaptionTextComponent = this.addComponent(new TextComponent(view.millisecondCaptionTextView));
-        this.millisecondCaptionTextComponent.setText('ms');
-        this.millisecondCaptionTextComponent.setText('milliseconds');
+        this.millisecondCaptionTextComponent.setText("ms");
+        this.millisecondCaptionTextComponent.setText("milliseconds");
         this.dayInputControl.when.valueChanged.then(this.onValueChanged.bind(this));
         this.hourInputControl.when.valueChanged.then(this.onValueChanged.bind(this));
         this.minuteInputControl.when.valueChanged.then(this.onValueChanged.bind(this));

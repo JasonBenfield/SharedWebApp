@@ -6,7 +6,7 @@ export class DataListOptionView extends BasicComponentView {
         super(container, 'option');
     }
 
-    protected setAttr: (config: (attr: IOptionAttributes) => void) => void;
+    declare protected setAttr: (config: (attr: IOptionAttributes) => void) => void;
 
     setValue(value: string) {
         this.setAttr(a => a.value = value);

@@ -52,7 +52,7 @@ export class ButtonGroupView extends BasicComponentView {
         this.clickConfig(this.on('click').execute(action)).subscribe();
     }
 
-    disposeAllViews: () => void;
+    declare disposeAllViews: () => void;
 
     addButton(styleName = 'default') {
         const button = this.addView(ButtonView);

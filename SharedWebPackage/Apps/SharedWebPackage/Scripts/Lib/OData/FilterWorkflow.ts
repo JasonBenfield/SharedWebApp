@@ -35,7 +35,7 @@ export class FilterWorkflow implements IPanel {
     private readonly relativeDateRangePanel: RelativeDateRangePanel;
     private readonly absoluteDateRangePanel: AbsoluteDateRangePanel;
     private readonly absoluteNumberRangePanel: AbsoluteNumberRangePanel;
-    private options: FilterColumnOptionsBuilder;
+    private options: FilterColumnOptionsBuilder | null = null;
 
     constructor(
         private readonly filter: ODataQueryFilterBuilder,
@@ -79,7 +79,7 @@ export class FilterWorkflow implements IPanel {
         this.panels.activate(this.selectFilterConditionPanel);
         const result = await this.selectFilterConditionPanel.start();
         if (result.next) {
-            const selection = this.options.getSelection();
+            const selection = this.options?.getSelection();
             if (selection instanceof FilterSelectionRelativeDateRange) {
                 this.activateRelativeDateRangePanel();
             }

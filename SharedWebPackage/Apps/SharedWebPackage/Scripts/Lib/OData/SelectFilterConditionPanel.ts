@@ -28,7 +28,7 @@ class Result {
 export class SelectFilterConditionPanel extends BasicComponent implements IPanel {
     private readonly panelView: SelectFilterConditionPanelView;
     private readonly awaitable = new Awaitable<Result>();
-    private options: FilterColumnOptionsBuilder;
+    private options: FilterColumnOptionsBuilder | null = null;
     private readonly conditionListGroup: ListGroup<TextComponent, TextButtonListGroupItemView>;
 
     constructor(view: SelectFilterConditionPanelView) {
@@ -57,13 +57,15 @@ export class SelectFilterConditionPanel extends BasicComponent implements IPanel
     }
 
     private onItemClick(item: TextComponent) {
-        const condition = item.data as FilterSelection;
-        this.options.setFilterSelection(condition);
-        if (this.options.hasAppliedToQuery) {
-            this.awaitable.resolve(Result.done());
-        }
-        else {
-            this.awaitable.resolve(Result.next());
+        if (this.options) {
+            const condition = item.data as FilterSelection;
+            this.options.setFilterSelection(condition);
+            if (this.options.hasAppliedToQuery) {
+                this.awaitable.resolve(Result.done());
+            }
+            else {
+                this.awaitable.resolve(Result.next());
+            }
         }
     }
 

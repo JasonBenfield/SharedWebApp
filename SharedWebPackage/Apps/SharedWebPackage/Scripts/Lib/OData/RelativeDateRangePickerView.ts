@@ -55,7 +55,7 @@ export class RelativeDateRangePickerView extends BasicComponentView {
         this.toOffsetPicker.setViewID(`${id}_toOffsetPicker`);
     }
 
-    protected setStyle: (config: (style: IGridStyle) => void) => void;
+    declare protected setStyle: (config: (style: IGridStyle) => void) => void;
 
     private setTemplateColumns(...columns: GridTemplateCss[]) {
         const value = new GridTemplateCssValue(...columns).value();

@@ -22,7 +22,7 @@ class Result {
 export class AbsoluteNumberRangePanel extends BasicComponent implements IPanel {
     private readonly panelView: ValueRangePanelView;
     private readonly awaitable = new Awaitable<Result>();
-    private options: FilterColumnOptionsBuilder;
+    private options: FilterColumnOptionsBuilder | null = null;
     private readonly columnName: TextComponent;
     private readonly numberRangePicker: NumberRangePicker;
     private readonly preview: TextComponent;
@@ -46,7 +46,7 @@ export class AbsoluteNumberRangePanel extends BasicComponent implements IPanel {
 
     private save() {
         const numberRange = this.numberRangePicker.getValue();
-        this.options.setAbsoluteNumberRangeValue(numberRange);
+        this.options?.setAbsoluteNumberRangeValue(numberRange);
         this.awaitable.resolve(Result.done());
     }
 

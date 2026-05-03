@@ -83,7 +83,7 @@ export class FaIconView extends IconView {
         this.setCss("icon-pulled", pulled);
     }
 
-    startAnimation(animation: FaIconAnimation) {
+    startAnimation(animation: FaIconAnimation | null) {
         let css = animation ? `fa-${animation}` : animation;
         this.setCss("icon-animation", css);
     }

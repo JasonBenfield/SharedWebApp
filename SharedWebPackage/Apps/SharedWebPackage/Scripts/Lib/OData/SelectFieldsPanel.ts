@@ -30,6 +30,7 @@ export class SelectFieldsPanel extends BasicComponent implements IPanel {
     private readonly availableAlert: MessageAlert;
     private readonly selectedFields: ListGroup<SelectedFieldListItem, SelectedFieldListItemView>;
     private readonly selectedAlert: MessageAlert;
+    private selectedFieldDragStart: SelectedFieldListItem | null = null;
 
     constructor(
         private readonly select: ODataQuerySelectBuilder,
@@ -53,26 +54,30 @@ export class SelectFieldsPanel extends BasicComponent implements IPanel {
         new Command(this.save.bind(this)).add(view.saveButton);
     }
 
-    private selectedFieldDragStart: SelectedFieldListItem;
-
-    private onSelectFieldDragStart(el: HTMLElement, evt: JQuery.DragStartEvent) {
+    private onSelectFieldDragStart(el: HTMLElement, evt: JQuery.Event) {
         this.selectedFieldDragStart = this.selectedFields.getItemByElement(el) as SelectedFieldListItem;
         this.selectedFieldDragStart.styleAsDragStart();
-        const dragEvent = evt.originalEvent as DragEvent;
-        dragEvent.dataTransfer.effectAllowed = 'move';
+        const dragStartEvent = evt as JQuery.DragStartEvent;
+        const dragEvent = dragStartEvent.originalEvent as DragEvent;
+        if (dragEvent.dataTransfer) {
+            dragEvent.dataTransfer.effectAllowed = "move";
+        }
     }
 
     private onSelectFieldDragEnter(el: HTMLElement, evt: JQuery.Event) {
         evt.preventDefault();
     }
 
-    private onSelectFieldOver(el: HTMLElement, evt: JQuery.DragOverEvent) {
+    private onSelectFieldOver(el: HTMLElement, evt: JQuery.Event) {
         evt.preventDefault();
-        const dragEvent = evt.originalEvent as DragEvent;
-        dragEvent.dataTransfer.dropEffect = 'move';
+        const dragOverEvent = evt as JQuery.DragOverEvent;
+        const dragEvent = dragOverEvent.originalEvent as DragEvent;
+        if (dragEvent.dataTransfer) {
+            dragEvent.dataTransfer.dropEffect = "move";
+        }
     }
 
-    private onSelectFieldDragEnd(el: HTMLElement, evt: JQuery.Event) {
+    private onSelectFieldDragEnd() {
         if (this.selectedFieldDragStart) {
             this.selectedFieldDragStart.styleAsDragEnd();
             this.selectedFieldDragStart = null;
@@ -102,7 +107,7 @@ export class SelectFieldsPanel extends BasicComponent implements IPanel {
         }
     }
 
-    private onAvailableFieldClicked(availableField: SelectedFieldListItem) {
+    private onAvailableFieldClicked(availableField: AvailableFieldListItem) {
         this.selectedFields.addItem(
             availableField.column,
             (c, itemView) => new SelectedFieldListItem(c, itemView)
@@ -150,13 +155,13 @@ export class SelectFieldsPanel extends BasicComponent implements IPanel {
 
     private updateAlerts() {
         if (this.selectedFields.getItems().length === 0) {
-            this.selectedAlert.warning('No fields have been selected.');
+            this.selectedAlert.warning("No fields have been selected.");
         }
         else {
             this.selectedAlert.clear();
         }
         if (this.availableFields.getItems().length === 0) {
-            this.availableAlert.warning('No fields are available.');
+            this.availableAlert.warning("No fields are available.");
         }
         else {
             this.availableAlert.clear();

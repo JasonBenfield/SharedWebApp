@@ -1,14 +1,18 @@
-﻿import { TypedFieldViewValue } from "./TypedFieldViewValue";
+﻿import { DateOnly } from "../Common";
+import { TextToDateOnlyViewValue } from "./TextToDateOnlyViewValue";
+import { TextToNumberViewValue } from "./TextToNumberViewValue";
+import { TextToTextViewValue } from "./TextToTextViewValue";
+import { TypedFieldViewValue } from "./TypedFieldViewValue";
 
-export class MultiViewValue<TView, TActual> extends TypedFieldViewValue<TView, TActual>{
-    private viewValue: TypedFieldViewValue<TView, TActual>;
+export class MultiViewValue extends TypedFieldViewValue<string, string | DateOnly | number> {
+    private viewValue: TextToTextViewValue | TextToDateOnlyViewValue | TextToNumberViewValue;
 
-    constructor(viewValue: TypedFieldViewValue<TView, TActual>) {
+    constructor(viewValue: TextToTextViewValue | TextToDateOnlyViewValue | TextToNumberViewValue) {
         super();
         this.viewValue = viewValue;
     }
 
-    setViewValue(viewValue: TypedFieldViewValue<TView, TActual>) {
+    setViewValue(viewValue: TextToTextViewValue | TextToDateOnlyViewValue | TextToNumberViewValue) {
         this.viewValue = viewValue;
     }
 
@@ -16,11 +20,19 @@ export class MultiViewValue<TView, TActual> extends TypedFieldViewValue<TView, T
         return this.viewValue.getValue();
     }
 
-    setValue = (value: any) => {
-        this.viewValue.setValue(value);
+    setValue = (value: string | DateOnly | number | null) => {
+        if (this.viewValue instanceof TextToTextViewValue) {
+            this.viewValue.setValue(value as string | null);
+        }
+        else if (this.viewValue instanceof TextToDateOnlyViewValue) {
+            this.viewValue.setValue(value as DateOnly | null);
+        }
+        else if (this.viewValue instanceof TextToNumberViewValue) {
+            this.viewValue.setValue(value as number | null);
+        }
     }
 
-    setValueFromView = (viewValue: TView) => {
+    setValueFromView = (viewValue: string) => {
         return this.viewValue.setValueFromView(viewValue);
     }
 

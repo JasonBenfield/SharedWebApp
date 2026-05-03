@@ -2,7 +2,7 @@ import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentView, ComponentViewLayout } from "./ComponentView";
 import { ComponentViewModel, ObservableChanges } from "./ComponentViewModel";
 import { BaseCompositeComponentView } from "./CompositeComponent";
-import { StyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
+import { StyleableComponentView } from "./StyleableComponentView";
 import { Constructor, HeadingSize, ITitleView, ITitleViewModel } from "./Types";
 
 export interface ITextViewModel {
@@ -15,24 +15,24 @@ export interface ISynchedTitleViewModel {
     set isTitleSynchedWithText(title: boolean);
 }
 
-export function TitleViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T) {
-    return class extends Base implements ITitleViewModel {
+export function TitleViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T): T & Constructor<ITitleViewModel> {
+    return class extends Base {
         private _title = "";
         get title() { return this._title; }
         set title(title: string) { this._title = title; }
     };
 }
 
-export function TextViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T) {
-    return class extends Base implements ITextViewModel {
+export function TextViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T): T & Constructor<ITextViewModel> {
+    return class extends Base {
         private _text = "";
         get text() { return this._text; }
         set text(text: string) { this._text = text; }
     };
 }
 
-export function SynchedTitleViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T) {
-    return class extends Base implements ISynchedTitleViewModel {
+export function SynchedTitleViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T): T & Constructor<ISynchedTitleViewModel> {
+    return class extends Base {
         private _isTitleSynchedWithText = false;
         get isTitleSynchedWithText() { return this._isTitleSynchedWithText; }
         set isTitleSynchedWithText(title: boolean) { this._isTitleSynchedWithText = title; }
@@ -45,16 +45,16 @@ export type BaseTextComponentViewModel = ComponentViewModel & ITextViewModel & I
 export class TextComponentViewModel extends SynchedTitleViewModelMixin(TextViewModelMixin(TitleViewModelMixin(ComponentViewModel))) {
 }
 
-export function TitleViewMixin<T extends Constructor<StyleableComponentView>>(Base: T) {
-    return class extends Base implements ITitleView {
+export function TitleViewMixin<T extends Constructor<StyleableComponentView>>(Base: T): T & Constructor<ITitleView> {
+    return class extends Base {
         setTitle(title: string) {
             return this.setAttributes({ "title": title });
         }
     };
 }
 
-export function TextViewMixin<T extends Constructor<ComponentView>>(Base: T) {
-    return class extends Base implements ITextView {
+export function TextViewMixin<T extends Constructor<ComponentView>>(Base: T): T & Constructor<ITextView> {
+    return class extends Base {
         private _text = "";
 
         setText(text: string) {
@@ -80,7 +80,7 @@ export interface ITextView {
     setText(text: string): void;
 }
 
-export class TextComponentView extends TextViewMixin(TitleViewMixin(StyleableComponentViewMixin(ComponentView))) {
+export class TextComponentView extends TextViewMixin(TitleViewMixin(StyleableComponentView)) {
     static block() {
         return new TextComponentView("div");
     }
@@ -256,8 +256,8 @@ export interface ITitleComponent {
     set title(title: string);
 }
 
-export function TitleComponentMixin<T extends Constructor<Component>>(Base: T) {
-    return class extends Base implements ITitleComponent {
+export function TitleComponentMixin<T extends Constructor<Component>>(Base: T): T & Constructor<ITitleComponent> {
+    return class extends Base {
         declare protected readonly viewModel: ComponentViewModel & ITitleViewModel;
 
         get title() { return this.viewModel.title; }
@@ -268,7 +268,12 @@ export function TitleComponentMixin<T extends Constructor<Component>>(Base: T) {
     };
 }
 
-export function TextComponentMixin<T extends Constructor<Component>>(Base: T) {
+export interface ITextComponent {
+    get text(): string;
+    set text(text: string);
+}
+
+export function TextComponentMixin<T extends Constructor<Component>>(Base: T): T & Constructor<ITextComponent> {
     return class extends Base {
         declare protected readonly viewModel: ComponentViewModel & ITextViewModel;
 
@@ -280,7 +285,12 @@ export function TextComponentMixin<T extends Constructor<Component>>(Base: T) {
     };
 }
 
-export function SynchedTitleComponentMixin<T extends Constructor<Component>>(Base: T) {
+export interface ISynchedTitleComponent {
+    synchTitleWithText(): void;
+    stopSynchTitleWithText(): void;
+}
+
+export function SynchedTitleComponentMixin<T extends Constructor<Component>>(Base: T): T & Constructor<ISynchedTitleComponent> {
     return class extends Base {
         declare protected readonly viewModel: ComponentViewModel & ITextViewModel & ITitleViewModel & ISynchedTitleViewModel;
 
@@ -296,7 +306,9 @@ export function SynchedTitleComponentMixin<T extends Constructor<Component>>(Bas
 
 export type BaseTextComponentView = ComponentView & ITitleView & ITextView;
 
-export class TextComponent extends SynchedTitleComponentMixin(TextComponentMixin(TitleComponentMixin(Component))) {
+export class TextComponent
+    extends SynchedTitleComponentMixin(TextComponentMixin(TitleComponentMixin(Component)))
+    implements ITitleComponent, ITextComponent, ISynchedTitleComponent {
     constructor(viewModel: BaseTextComponentViewModel, view: BaseTextComponentView) {
         super(
             viewModel,

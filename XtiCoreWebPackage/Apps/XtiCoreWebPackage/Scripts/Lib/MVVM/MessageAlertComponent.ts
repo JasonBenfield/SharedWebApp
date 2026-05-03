@@ -5,7 +5,6 @@ import { Component } from "./Component";
 import { ComponentView, ComponentViewLayout } from "./ComponentView";
 import { ComponentViewModel } from "./ComponentViewModel";
 import { BaseCompositeComponentView } from "./CompositeComponent";
-import { CurrentScrollIntoView } from "./CurrentScrollIntoView";
 import { StyleableComponentView } from "./StyleableComponentView";
 import { BaseTextComponentView, TextComponent, TextComponentView, TextComponentViewModel } from "./TextComponent";
 

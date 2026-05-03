@@ -5,9 +5,9 @@ import { EventSource } from "../Events";
 import { ComponentID } from "./ComponentID";
 
 export class FileType {
-    static readonly anyImage = new FileType('image/*');
-    static readonly anyVideo = new FileType('video/*');
-    static readonly anyAudio = new FileType('audio/*');
+    static readonly anyImage = new FileType("image/*");
+    static readonly anyVideo = new FileType("video/*");
+    static readonly anyAudio = new FileType("audio/*");
 
     static extension(ext: string) { return new FileType(`.${ext}`); }
 
@@ -26,8 +26,8 @@ export class FileInputControl extends BasicComponent {
     constructor(protected readonly view: InputView) {
         super(view);
         view.setViewID(ComponentID.nextID());
-        view.setType('file');
-        view.on('change')
+        view.setType("file");
+        view.on("change")
             .execute(this.onInputValueChanged.bind(this))
             .subscribe();
     }
@@ -56,10 +56,10 @@ export class FileInputControl extends BasicComponent {
     acceptFileTypes(...fileTypes: (string | FileType)[]) {
         let accept: string;
         if (fileTypes && fileTypes.length > 0) {
-            accept = new JoinedStrings(',', fileTypes).value();
+            accept = new JoinedStrings(",", fileTypes).value();
         }
         else {
-            accept = '';
+            accept = "";
         }
         this.view.setAccept(accept);
     }
@@ -69,7 +69,7 @@ export class FileInputControl extends BasicComponent {
     }
 
     clear() {
-        this.view.setValue('');
+        this.view.setValue("");
     }
 
     protected onDispose() {

@@ -1,20 +1,30 @@
-﻿declare module '*.scss' {
+﻿declare module "*.scss" {
     const content: { [className: string]: string };
     export default content;
 }
 
-declare module '*.html' {
+declare module "*.html" {
     const content: string;
     export default content;
 }
 
-declare type LayoutBreakpoint = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+declare module "*.woff2" {
+    const content: string;
+    export default content;
+}
 
-declare type FlexDirections = 'row' | 'column';
+declare module "*.css" {
+    const content: string;
+    export default content;
+}
 
-declare type FlexWraps = 'wrap' | 'nowrap' | 'wrap-reverse';
+declare type LayoutBreakpoint = "xs" | "sm" | "md" | "lg" | "xl" | "xxl";
 
-declare type ContentJustifications = 'start' | 'end' | 'center' | 'between' | 'around' | 'evenly';
+declare type FlexDirections = "row" | "column";
+
+declare type FlexWraps = "wrap" | "nowrap" | "wrap-reverse";
+
+declare type ContentJustifications = "start" | "end" | "center" | "between" | "around" | "evenly";
 
 interface IFormattable {
     format(): string;
@@ -137,7 +147,7 @@ interface IField {
     getName(): string;
     getCaption(): string;
     getValue(): any;
-    getField(name: string): IField;
+    getField(name: string): IField | null;
     clearErrors();
     validate(errors: IErrorList);
     import(values: Record<string, any>);
@@ -153,7 +163,7 @@ interface IConstraint {
     test(value: any): IConstraintResult;
 }
 
-type ColumnCssSize = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 'auto' | 'fill';
+type ColumnCssSize = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | "auto" | "fill";
 
 interface IColumnCss {
     xs(columnSize: ColumnCssSize);

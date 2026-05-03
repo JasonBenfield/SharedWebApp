@@ -16,8 +16,6 @@ export class TestClickableListHeaderView extends ListGroupItemView {
 }
 
 export class TestClickableListFooterView extends ListGroupItemView {
-    readonly text: TextBlockView;
-
     constructor(container: BasicComponentView) {
         super(container);
         this.addView(TextBlockView).setText("List Footer");

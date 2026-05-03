@@ -28,7 +28,7 @@ export class FormGroup extends BasicComponent {
         this.captionText.setText(caption);
     }
 
-    getValue() { return null; }
+    getValue(): any { return null; }
 
     show() { this.view.show(); }
 

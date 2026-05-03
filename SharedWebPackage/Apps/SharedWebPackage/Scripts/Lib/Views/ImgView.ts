@@ -6,7 +6,7 @@ export class ImgView extends BasicComponentView {
         super(container, 'img');
     }
 
-    protected setAttr: (config: (attr: IImgAttributes) => void) => void;
+    declare protected setAttr: (config: (attr: IImgAttributes) => void) => void;
 
     setSrc(src: string) {
         this.setAttr(attr => attr.src = src);

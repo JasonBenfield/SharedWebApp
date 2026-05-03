@@ -5,7 +5,7 @@ import { TimeOnly } from "../TimeOnly";
 import { FormGroupInputView } from "../Views/FormGroup";
 import { FormGroup } from "./FormGroup";
 
-type Events = { valueChanged: TimeOnly };
+type Events = { valueChanged: TimeOnly | null };
 
 export class FormGroupTimeInput extends FormGroup {
     private readonly inputControl: TimeInputControl;
@@ -21,14 +21,14 @@ export class FormGroupTimeInput extends FormGroup {
         this.valueTextComponent = this.addComponent(new TextComponent(view.valueTextView));
     }
 
-    makeReadOnly(format: (time: TimeOnly) => string = FormGroupTimeInput.defaultReadOnlyFormat) {
+    makeReadOnly(format: (time: TimeOnly | null) => string = FormGroupTimeInput.defaultReadOnlyFormat) {
         const value = this.inputControl.getValue();
         this.inputControl.hide();
         this.valueTextComponent.show();
         this.valueTextComponent.setText(format(value));
     }
 
-    private static readonly defaultReadOnlyFormat = (value: TimeOnly) => value ? value.toLocaleString() : '';
+    private static readonly defaultReadOnlyFormat = (value: TimeOnly | null) => value ? value.toLocaleString() : "";
 
     makeEditable() {
         this.inputControl.show();

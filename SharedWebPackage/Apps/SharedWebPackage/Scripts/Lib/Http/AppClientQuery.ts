@@ -69,21 +69,17 @@ export class AppClientQuery<TModel, TEntity> {
         }
         else if (typeof postResult.result === "string") {
             apiError = new ErrorFromHttpResult(postResult, "Get", errorOptions).value;
-            if (apiError) {
-                if (!errorOptions.preventDefault) {
-                    this.events.handleError(apiError);
-                }
-                throw apiError;
+            if (!errorOptions.preventDefault) {
+                this.events.handleError(apiError);
             }
+            throw apiError;
         }
         else if (postResult.result && postResult.result.Data) {
             apiError = new ErrorFromHttpResult(postResult, "Get", errorOptions).value;
-            if (apiError) {
-                if (!errorOptions.preventDefault) {
-                    this.events.handleError(apiError);
-                }
-                throw apiError;
+            if (!errorOptions.preventDefault) {
+                this.events.handleError(apiError);
             }
+            throw apiError;
         }
         else {
             const odataError = postResult.result && postResult.result.error;
@@ -119,13 +115,11 @@ export class AppClientQuery<TModel, TEntity> {
             }
             else {
                 apiError = new ErrorFromHttpResult(postResult, "Get", errorOptions).value;
-                if (apiError) {
-                    if (!errorOptions.preventDefault) {
-                        this.events.handleError(apiError);
-                    }
-                    throw apiError;
+                if (!errorOptions.preventDefault) {
+                    this.events.handleError(apiError);
                 }
             }
+            throw apiError;
         }
         return result;
     }

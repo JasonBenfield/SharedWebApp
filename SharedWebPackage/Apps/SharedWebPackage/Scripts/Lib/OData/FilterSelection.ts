@@ -11,7 +11,7 @@ export interface FilterSelection {
 }
 
 export class FilterSelectionEqual implements FilterSelection {
-    readonly displayText = 'Equal To'
+    readonly displayText = "Equal To"
 
     canSelect(sourceType: SourceType) {
         return sourceType.isNumber() || sourceType.isDate();
@@ -27,7 +27,7 @@ export class FilterSelectionEqual implements FilterSelection {
 }
 
 export class FilterSelectionNotEqual implements FilterSelection {
-    readonly displayText = 'Not Equal To';
+    readonly displayText = "Not Equal To";
 
     canSelect(sourceType: SourceType) {
         return sourceType.isNumber() || sourceType.isDate();
@@ -43,7 +43,7 @@ export class FilterSelectionNotEqual implements FilterSelection {
 }
 
 export class FilterSelectionGreaterThan implements FilterSelection {
-    readonly displayText = 'Greater Than';
+    readonly displayText = "Greater Than";
 
     canSelect(sourceType: SourceType) {
         return false;
@@ -59,7 +59,7 @@ export class FilterSelectionGreaterThan implements FilterSelection {
 }
 
 export class FilterSelectionLessThan implements FilterSelection {
-    readonly displayText = 'Less Than';
+    readonly displayText = "Less Than";
 
     canSelect(sourceType: SourceType) {
         return false;
@@ -75,7 +75,7 @@ export class FilterSelectionLessThan implements FilterSelection {
 }
 
 export class FilterSelectionGreaterThanOrEqual implements FilterSelection {
-    readonly displayText = 'Greater Than or Equal To';
+    readonly displayText = "Greater Than or Equal To";
 
     canSelect(sourceType: SourceType) {
         return false;
@@ -91,7 +91,7 @@ export class FilterSelectionGreaterThanOrEqual implements FilterSelection {
 }
 
 export class FilterSelectionLessThanOrEqual implements FilterSelection {
-    readonly displayText = 'Less Than or Equal To';
+    readonly displayText = "Less Than or Equal To";
 
     canSelect(sourceType: SourceType) {
         return false;
@@ -107,7 +107,7 @@ export class FilterSelectionLessThanOrEqual implements FilterSelection {
 }
 
 export class FilterSelectionIsTrue implements FilterSelection {
-    readonly displayText = 'Is True';
+    readonly displayText = "Is True";
 
     canSelect(sourceType: SourceType) {
         return sourceType.isBoolean();
@@ -122,7 +122,7 @@ export class FilterSelectionIsTrue implements FilterSelection {
 }
 
 export class FilterSelectionIsFalse implements FilterSelection {
-    readonly displayText = 'Is False';
+    readonly displayText = "Is False";
 
     canSelect(sourceType: SourceType) {
         return sourceType.isBoolean();
@@ -137,7 +137,7 @@ export class FilterSelectionIsFalse implements FilterSelection {
 }
 
 export class FilterSelectionStringEqual implements FilterSelection {
-    readonly displayText = 'Equal To';
+    readonly displayText = "Equal To";
 
     canSelect(sourceType: SourceType) {
         return sourceType.isString();
@@ -159,7 +159,7 @@ export class FilterSelectionStringEqual implements FilterSelection {
 }
 
 export class FilterSelectionStringNotEqual implements FilterSelection {
-    readonly displayText = 'Not Equal To';
+    readonly displayText = "Not Equal To";
 
     canSelect(sourceType: SourceType) {
         return sourceType.isString();
@@ -181,7 +181,7 @@ export class FilterSelectionStringNotEqual implements FilterSelection {
 }
 
 export class FilterSelectionStartsWith implements FilterSelection {
-    readonly displayText = 'Starts With';
+    readonly displayText = "Starts With";
 
     canSelect(sourceType: SourceType) {
         return sourceType.isString();
@@ -203,7 +203,7 @@ export class FilterSelectionStartsWith implements FilterSelection {
 }
 
 export class FilterSelectionEndsWith implements FilterSelection {
-    readonly displayText = 'Ends With';
+    readonly displayText = "Ends With";
 
     canSelect(sourceType: SourceType) {
         return sourceType.isString();
@@ -225,7 +225,7 @@ export class FilterSelectionEndsWith implements FilterSelection {
 }
 
 export class FilterSelectionContains implements FilterSelection {
-    readonly displayText = 'Contains';
+    readonly displayText = "Contains";
 
     canSelect(sourceType: SourceType) {
         return sourceType.isString();
@@ -247,31 +247,31 @@ export class FilterSelectionContains implements FilterSelection {
 }
 
 export class FilterSelectionIsBlank implements FilterSelection {
-    readonly displayText = 'Is Blank';
+    readonly displayText = "Is Blank";
 
     canSelect(sourceType: SourceType) {
         return sourceType.isString();
     }
 
     applyToQuery(filter: ODataQueryFilterBuilder, field: FilterField) {
-        filter.add(FilterConditionOperation.equal(field, new FilterStringValue(false, '')));
+        filter.add(FilterConditionOperation.equal(field, new FilterStringValue(false, "")));
     }
 }
 
 export class FilterSelectionIsNotBlank implements FilterSelection {
-    readonly displayText = 'Is Not Blank';
+    readonly displayText = "Is Not Blank";
 
     canSelect(sourceType: SourceType) {
         return sourceType.isString();
     }
 
     applyToQuery(filter: ODataQueryFilterBuilder, field: FilterField) {
-        filter.add(FilterConditionOperation.notEqual(field, new FilterStringValue(false, '')));
+        filter.add(FilterConditionOperation.notEqual(field, new FilterStringValue(false, "")));
     }
 }
 
 export class FilterSelectionRelativeDateRange implements FilterSelection {
-    readonly displayText = 'Relative Date Range';
+    readonly displayText = "Relative Date Range";
 
     canSelect(sourceType: SourceType) {
         return sourceType.isDate();
@@ -283,7 +283,7 @@ export class FilterSelectionRelativeDateRange implements FilterSelection {
 }
 
 export class FilterSelectionAbsoluteDateRange implements FilterSelection {
-    readonly displayText = 'Absolute Date Range';
+    readonly displayText = "Absolute Date Range";
 
     canSelect(sourceType: SourceType) {
         return sourceType.isDate();
@@ -295,7 +295,7 @@ export class FilterSelectionAbsoluteDateRange implements FilterSelection {
 }
 
 export class FilterSelectionAbsoluteNumberRange implements FilterSelection {
-    readonly displayText = 'Number Range';
+    readonly displayText = "Number Range";
 
     canSelect(sourceType: SourceType) {
         return sourceType.isNumber();

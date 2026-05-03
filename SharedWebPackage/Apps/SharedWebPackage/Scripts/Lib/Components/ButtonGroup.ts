@@ -6,12 +6,12 @@ import { BasicComponent } from "./BasicComponent";
 import { TextButtonComponent } from "./TextButtonComponent";
 import { TextComponent } from "./TextComponent";
 
-type Events = { buttonClicked: BasicComponent };
+type Events = { buttonClicked: TextButtonComponent };
 
 export class ButtonGroup extends BasicComponent {
     declare protected readonly view: ButtonGroupView;
 
-    private readonly eventSource = new EventSource<Events>(this, { buttonClicked: null });
+    private readonly eventSource = new EventSource<Events>(this, { buttonClicked: {} as TextButtonComponent });
     readonly when = this.eventSource.when;
 
     constructor(view: ButtonGroupView) {
@@ -21,7 +21,7 @@ export class ButtonGroup extends BasicComponent {
 
     private handleClick(el: HTMLElement) {
         const item = this.getComponentByElement(el);
-        if (item) {
+        if (item && item instanceof TextButtonComponent) {
             this.eventSource.events.buttonClicked.invoke(item);
         }
     }
@@ -32,7 +32,7 @@ export class ButtonGroup extends BasicComponent {
         this.clearComponents();
     }
 
-    addTextButton(createButton?: (buttonView: TextButtonView) => TextButtonComponent, styleName: string = 'default') {
+    addTextButton(createButton?: (buttonView: TextButtonView) => TextButtonComponent, styleName: string = "default") {
         const buttonView = this.view.addTextButton(styleName);
         const button = createButton ? createButton(buttonView) : new TextButtonComponent(buttonView);
         this.addComponent(button);

@@ -7,7 +7,7 @@ import { ErrorList } from "./ErrorList";
 
 export abstract class SimpleFieldFormGroup<TValue> extends BasicComponent implements IField {
     private readonly name: string;
-    private caption: string;
+    private caption = "";
     private readonly captionBlock: TextComponent;
     protected readonly valueTextComponent: TextComponent;
     protected hasValidated = false;
@@ -23,9 +23,9 @@ export abstract class SimpleFieldFormGroup<TValue> extends BasicComponent implem
         return this.name;
     }
 
-    abstract getValue(): TValue;
+    abstract getValue(): TValue | null;
 
-    abstract setValue(value: TValue);
+    abstract setValue(value: TValue | null);
 
     getCaption() {
         return this.caption;

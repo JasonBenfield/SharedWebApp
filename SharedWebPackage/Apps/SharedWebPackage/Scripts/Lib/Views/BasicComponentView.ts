@@ -10,7 +10,7 @@ import { IHtmlAttributes, IHtmlElementView, IHtmlStyle, ViewConstructor } from "
 import { ViewEventBuilder } from "./ViewEventBuilder";
 
 interface ICssBuilders {
-    [name: string]: ICssBuilder | string;
+    [name: string]: ICssBuilder | string | null;
 }
 
 export class BasicComponentView {
@@ -161,14 +161,14 @@ export class BasicComponentView {
         this.setAttr(attr => attr.title = title);
     }
 
-    protected setCss(name: string, value: ICssBuilder | string) {
+    protected setCss(name: string, value: ICssBuilder | string | null) {
         const previousValue = this.buildCss(this.css[name]);
         const updatedValued = this.buildCss(value);
         this.replaceCssName(previousValue || "", updatedValued || "");
         this.css[name] = value;
     }
 
-    private buildCss(value: ICssBuilder | string) {
+    private buildCss(value: ICssBuilder | string | null) {
         if (value) {
             if (typeof value === "string") {
                 return value;

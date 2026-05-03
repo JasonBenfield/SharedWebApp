@@ -14,8 +14,8 @@ export interface IAlertViewModel {
 
 export type BaseAlertComponentViewModel = ComponentViewModel & IAlertViewModel;
 
-export function AlertViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T) {
-    return class extends Base implements IAlertViewModel {
+export function AlertViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T): T & Constructor<IAlertViewModel> {
+    return class extends Base {
         private _context = ContextualClass.default;
         get context() { return this._context; }
         set context(context: ContextualClass) { this._context = context; }
@@ -33,8 +33,8 @@ export interface IAlertView {
 
 export type BaseAlertComponentView = ComponentView & IAlertView;
 
-export function AlertViewMixin<T extends Constructor<ComponentView & IStyleableComponentView>>(Base: T) {
-    return class extends Base implements IAlertView {
+export function AlertViewMixin<T extends Constructor<ComponentView & IStyleableComponentView>>(Base: T): T & Constructor<IAlertView> {
+    return class extends Base {
         private readonly alertCss = new AlertCss();
 
         setContext(context: ContextualClass) {
@@ -86,8 +86,8 @@ export interface IAlertComponent {
     setContextToLight(): void;
 }
 
-export function AlertComponentMixin<T extends Constructor<Component>>(Base: T) {
-    return class extends Base implements IAlertComponent {
+export function AlertComponentMixin<T extends Constructor<Component>>(Base: T): T & Constructor<IAlertComponent> {
+    return class extends Base {
         declare protected readonly viewModel: BaseAlertComponentViewModel;
 
         get context() { return this.viewModel.context; }

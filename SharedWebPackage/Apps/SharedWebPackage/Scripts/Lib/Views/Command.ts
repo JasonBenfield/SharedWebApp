@@ -10,8 +10,8 @@ import { ICommandView } from "./Types";
 export class ButtonCommandView extends ButtonView implements ICommandView {
     readonly icon: FaIconView;
     private readonly textSpan: TextSpanView;
-    private isIconRight: boolean;
-    private text: string;
+    private isIconRight = false;
+    private text = "";
 
     constructor(container: BasicComponentView) {
         super(container);
@@ -57,14 +57,14 @@ export class ButtonCommandView extends ButtonView implements ICommandView {
 export class LinkCommandView extends LinkView implements ICommandView {
     readonly icon: FaIconView;
     private readonly textSpan: TextSpanView;
-    private isIconRight: boolean;
-    private text: string;
+    private isIconRight = false;
+    private text = "";
 
     constructor(container: BasicComponentView) {
         super(container);
         this.icon = this.addIcon();
         this.textSpan = this.addView(TextSpanView);
-        this.addCssName('btn');
+        this.addCssName("btn");
         this.setContext(ContextualClass.default);
     }
 
@@ -104,38 +104,38 @@ export class LinkCommandView extends LinkView implements ICommandView {
     }
 
     enable() {
-        this.updateDisabled('');
+        this.updateDisabled("");
     }
 
     disable() {
-        this.updateDisabled('disabled');
+        this.updateDisabled("disabled");
     }
 
     private updateDisabled(disabled: string) {
-        this.setCss('link-disabled', disabled);
+        this.setCss("link-disabled", disabled);
     }
 
     setActive() {
-        this.updateActiveCss('active');
+        this.updateActiveCss("active");
     }
 
     setInactive() {
-        this.updateActiveCss('');
+        this.updateActiveCss("");
     }
 
     private updateActiveCss(active: string) {
-        this.setCss('link-active', active);
+        this.setCss("link-active", active);
     }
 
     setContext(context: ContextualClass) {
-        this.setCss('link-context', this.getContextCss(context, false));
+        this.setCss("link-context", this.getContextCss(context, false));
     }
 
     useOutlineStyle(context: ContextualClass) {
-        this.setCss('link-context', this.getContextCss(context, true));
+        this.setCss("link-context", this.getContextCss(context, true));
     }
 
     private getContextCss(context: ContextualClass, isOutline: boolean) {
-        return context ? context.append(isOutline ? 'btn-outline' : 'btn') : '';
+        return context ? context.append(isOutline ? "btn-outline" : "btn") : "";
     }
 }

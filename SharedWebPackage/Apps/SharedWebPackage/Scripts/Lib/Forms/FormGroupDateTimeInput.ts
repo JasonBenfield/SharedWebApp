@@ -5,7 +5,7 @@ import { EventBuilders } from "../Events";
 import { FormGroupDateTimeInputView } from "../Views/FormGroup";
 import { FormGroup } from "./FormGroup";
 
-type Events = { valueChanged: DateTimeOffset };
+type Events = { valueChanged: DateTimeOffset | null };
 
 export class FormGroupDateTimeInput extends FormGroup {
     private readonly inputControl: DateTimeInputControl;
@@ -21,14 +21,14 @@ export class FormGroupDateTimeInput extends FormGroup {
         this.valueTextComponent = this.addComponent(new TextComponent(view.valueTextView));
     }
     
-    makeReadOnly(format: (date: DateTimeOffset) => string = FormGroupDateTimeInput.defaultReadOnlyFormat) {
+    makeReadOnly(format: (date: DateTimeOffset | null) => string = FormGroupDateTimeInput.defaultReadOnlyFormat) {
         const value = this.inputControl.getValue();
         this.inputControl.hide();
         this.valueTextComponent.show();
         this.valueTextComponent.setText(format(value));
     }
 
-    private static readonly defaultReadOnlyFormat = (value: DateTimeOffset) => value ? value.toLocaleString() : '';
+    private static readonly defaultReadOnlyFormat = (value: DateTimeOffset | null) => value ? value.toLocaleString() : '';
 
     makeEditable() {
         this.inputControl.show();
@@ -37,7 +37,7 @@ export class FormGroupDateTimeInput extends FormGroup {
 
     getValue() { return this.inputControl.getValue(); }
 
-    setValue(value: DateTimeOffset) {
+    setValue(value: DateTimeOffset | null) {
         this.inputControl.setValue(value);
     }
 }

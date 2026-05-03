@@ -346,15 +346,19 @@ export class RelativeDateRange {
         const endReferenceDate = this.isEndRelativeToStart && start ?
             start.value :
             referenceDate;
-        let endDate = this.relativeEnd ?
-            this.relativeEnd.toDate(endReferenceDate) :
-            null;
-        if (endDate) {
-            endDate = endDate.addDays(1);
+        let end: ValueRangeBound<DateOnly> | null;
+        if (endReferenceDate) {
+            let endDate = this.relativeEnd ? this.relativeEnd.toDate(endReferenceDate) : null;
+            if (endDate) {
+                endDate = endDate.addDays(1);
+            }
+            end = endDate ?
+                new ValueRangeBound(endDate, false) :
+                null;
         }
-        const end = endDate ?
-            new ValueRangeBound(endDate, false) :
-            null;
+        else {
+            end = null;
+        }
         return new DateRange(start, end);
     }
 

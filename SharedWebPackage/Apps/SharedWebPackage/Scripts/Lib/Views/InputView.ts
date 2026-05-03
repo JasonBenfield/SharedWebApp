@@ -13,7 +13,7 @@ export class InputView extends BasicComponentView {
         this.setType("text");
     }
 
-    protected setAttr: (config: (attr: IInputAttributes) => void) => void;
+    declare protected setAttr: (config: (attr: IInputAttributes) => void) => void;
 
     required() { this.setAttr(a => a.required = true); }
 

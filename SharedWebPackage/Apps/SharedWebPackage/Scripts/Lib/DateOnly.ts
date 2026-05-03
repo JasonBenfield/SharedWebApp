@@ -68,7 +68,7 @@ export class DateOnly implements IFormattable {
     get month() { return this._month; }
     get date() { return this._date; }
 
-    private _dayOfWeek: DayOfWeek;
+    private _dayOfWeek?: DayOfWeek;
 
     get dayOfWeek() {
         if (!this._dayOfWeek) {

@@ -11,7 +11,7 @@ export class DateInputFormGroup extends SimpleFieldInputFormGroup<DateOnly> {
 
     constructor(prefix: string, name: string, view: SimpleFieldFormGroupInputView) {
         super(prefix, name, view, new TextToDateOnlyViewValue());
-        this.view.inputView.setType('date');
+        this.view.inputView.setType("date");
         this.view.inputView.setMaxWidth(CssLengthUnit.em(10));
     }
 

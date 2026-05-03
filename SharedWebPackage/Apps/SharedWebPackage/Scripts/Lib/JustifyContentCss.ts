@@ -23,7 +23,9 @@ export class JustifyContentCss implements ICssBuilder {
     } = {};
 
     constructor(xs?: ContentJustifications) {
-        this.xs(xs);
+        if (xs) {
+            this.xs(xs);
+        }
     }
 
     xs(value: ContentJustifications) {

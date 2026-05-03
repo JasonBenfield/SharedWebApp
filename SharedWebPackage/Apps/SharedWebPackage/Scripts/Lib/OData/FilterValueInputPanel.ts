@@ -25,9 +25,9 @@ class Result {
 export class FilterValueInputPanel implements IPanel {
     private readonly awaitable = new Awaitable<Result>();
     private readonly title: TextComponent;
-    private options: FilterColumnOptionsBuilder;
+    private options: FilterColumnOptionsBuilder | null = null;
     private readonly input: InputControl<number | string | DateOnly>;
-    private viewValue: MultiViewValue<string, number | string | DateOnly>;
+    private viewValue: MultiViewValue;
     private readonly saveCommand: Command;
 
     constructor(private readonly view: FilterValueInputPanelView) {
@@ -46,12 +46,14 @@ export class FilterValueInputPanel implements IPanel {
     private save() {
         if (!this.input.isBlank()) {
             const value = this.getValue();
-            if (typeof value !== 'number' || !Number.isNaN(value)) {
-                if (typeof value === 'string') {
-                    this.options.setStringValue(value, this.view.ignoreCaseInput.getValue());
-                }
-                else {
-                    this.options.setValue(value);
+            if (value !== null) {
+                if (typeof value !== "number" || !Number.isNaN(value)) {
+                    if (typeof value === "string") {
+                        this.options?.setStringValue(value, this.view.ignoreCaseInput.getValue());
+                    }
+                    else {
+                        this.options?.setValue(value);
+                    }
                 }
                 this.awaitable.resolve(Result.done());
             }
@@ -75,17 +77,17 @@ export class FilterValueInputPanel implements IPanel {
         }
         if (options.column.sourceType.isNumber()) {
             this.viewValue.setViewValue(new TextToNumberViewValue());
-            this.view.valueInput.setType('text');
+            this.view.valueInput.setType("text");
         }
         else if (options.column.sourceType.isDate()) {
             this.viewValue.setViewValue(new TextToDateOnlyViewValue());
-            this.view.valueInput.setType('date');
+            this.view.valueInput.setType("date");
         }
         else {
             this.viewValue.setViewValue(new TextToTextViewValue());
-            this.view.valueInput.setType('text');
+            this.view.valueInput.setType("text");
         }
-        this.setValue('');
+        this.setValue("");
         this.view.ignoreCaseInput.setValue(true);
     }
 

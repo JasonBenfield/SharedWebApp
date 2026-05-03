@@ -10,13 +10,13 @@ export class BasicContainerView extends BasicComponentView implements IContainer
         this.setAttr(attr => attr.draggable = "true");
     }
 
-    getViews: () => BasicComponentView[];
+    declare getViews: () => BasicComponentView[];
 
-    disposeAllViews: () => void;
+    declare disposeAllViews: () => void;
 
-    addView: <T extends BasicComponentView>(ctor: ViewConstructor<T>) => T;
+    declare addView: <T extends BasicComponentView>(ctor: ViewConstructor<T>) => T;
 
-    addViews: <T extends BasicComponentView>(howMany: number, ctor: ViewConstructor<T>) => T[];
+    declare addViews: <T extends BasicComponentView>(howMany: number, ctor: ViewConstructor<T>) => T[];
 
-    insertView: <T extends BasicComponentView>(index: number, ctor: ViewConstructor<T>) => T;
+    declare insertView: <T extends BasicComponentView>(index: number, ctor: ViewConstructor<T>) => T;
 }

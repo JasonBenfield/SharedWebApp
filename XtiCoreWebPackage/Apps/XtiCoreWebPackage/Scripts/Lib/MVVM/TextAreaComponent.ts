@@ -4,7 +4,7 @@ import { ComponentViewModel, ObservableChanges } from "./ComponentViewModel";
 import { CustomEventRegistrations } from "./EventManager";
 import { FocusableComponentChangeHandler, FocusableComponentMixin, FocusableViewMixin, FocusableViewModelMixin, HasFocusProperty, IFocusableView, IFocusableViewModel } from "./FocusableComponent";
 import { InputTextValue, ITextInputView, ITextInputViewModel, TextInputComponentChangeHandler, TextInputComponentMixin, TextInputComponentViewMixin, TextInputValueChangeHandler, TextInputValueComponentMixin, TextInputViewModelMixin } from "./InputComponent";
-import { StyleableComponentViewMixin } from "./StyleableComponentView";
+import { StyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
 import { IUniqueView, IUniqueViewModel, UniqueComponentChangeHandler, UniqueComponentMixin, UniqueViewMixin, UniqueViewModelMixin } from "./UniqueComponent";
 
 export interface ITextAreaViewModel {
@@ -46,7 +46,7 @@ type TextAreaViewEventLayout = {
 }
 
 export class TextAreaComponentView
-    extends TextInputComponentViewMixin(FocusableViewMixin(UniqueViewMixin(StyleableComponentViewMixin(ComponentView))))
+    extends TextInputComponentViewMixin(FocusableViewMixin(UniqueViewMixin(StyleableComponentView)))
     implements ITextInputView, ITextAreaView {
 
     constructor() {

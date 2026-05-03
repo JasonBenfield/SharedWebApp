@@ -11,21 +11,21 @@ export class BasicComponentContainer extends BasicComponent {
         return this.view.getViewID();
     }
 
-    getComponentByElement: (element: HTMLElement) => BasicComponent;
+    declare getComponentByElement: (element: HTMLElement) => BasicComponent;
 
-    anyComponents: () => boolean;
+    declare anyComponents: () => boolean;
 
-    getComponent: (index: number) => BasicComponent;
+    declare getComponent: (index: number) => BasicComponent;
 
-    getComponents: () => BasicComponent[];
+    declare getComponents: () => BasicComponent[];
 
-    clearComponents: () => void;
+    declare clearComponents: () => void;
 
-    addComponent: <T extends BasicComponent | AsyncCommand>(component: T) => T;
+    declare addComponent: <T extends BasicComponent | AsyncCommand>(component: T) => T;
 
-    removeComponent: <T extends BasicComponent | AsyncCommand>(component: T) => T;
+    declare removeComponent: <T extends BasicComponent | AsyncCommand>(component: T) => T;
 
-    moveComponent: <T extends BasicComponent>(component: T, destinationIndex: number) => T;
+    declare moveComponent: <T extends BasicComponent>(component: T, destinationIndex: number) => T;
 
-    insertComponent: <T extends BasicComponent | AsyncCommand>(component: T, destinationIndex: number) => T;
+    declare insertComponent: <T extends BasicComponent | AsyncCommand>(component: T, destinationIndex: number) => T;
 }

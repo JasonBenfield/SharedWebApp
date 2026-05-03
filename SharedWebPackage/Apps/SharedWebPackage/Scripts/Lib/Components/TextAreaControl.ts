@@ -2,7 +2,6 @@
 import { DelayedAction } from "../DelayedAction";
 import { DeviceType } from "../DeviceType";
 import { EventSource } from "../Events";
-import { InputView } from "../Views/InputView";
 import { TextAreaView } from "../Views/TextAreaView";
 import { BasicComponent } from "./BasicComponent";
 import { ComponentID } from "./ComponentID";
@@ -11,9 +10,9 @@ type Events = { valueChanged: string };
 
 export class TextAreaControl extends BasicComponent {
     private readonly debouncedSetFocus: DebouncedAction;
-    private previousValue: string;
+    private previousValue = "";
 
-    private readonly eventSource = new EventSource<Events>(this, { valueChanged: null as string });
+    private readonly eventSource = new EventSource<Events>(this, { valueChanged: "" });
     readonly when = this.eventSource.when;
 
     constructor(protected readonly view: TextAreaView) {

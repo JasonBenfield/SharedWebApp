@@ -9,7 +9,7 @@ export class ErrorFromHttpResult {
         if (result.Data) {
             result = result.Data;
         }
-        if (result && typeof result !== 'string') {
+        if (result && typeof result !== "string") {
             let rawErrors: IErrorModel[];
             if (result.Errors) {
                 rawErrors = result.Errors;
@@ -20,29 +20,29 @@ export class ErrorFromHttpResult {
             errors = rawErrors.map(e => new ErrorModel(e.Message, e.Caption, e.Source));
         }
         else if (postResult.status === 404) {
-            errors = [new ErrorModel('Not Found', '', '', this)];
+            errors = [new ErrorModel("Not Found", "", "", this)];
         }
         else if (postResult.status === 401) {
-            errors = [new ErrorModel('Not Authenticated', '', '', this)];
+            errors = [new ErrorModel("Not Authenticated", "", "", this)];
         }
         else if (postResult.status === 403) {
-            errors = [new ErrorModel('Not Authorized', '', '', this)];
+            errors = [new ErrorModel("Not Authorized", "", "", this)];
         }
         else {
-            let message = 'An error occurred';
+            let message = "An error occurred";
             if (postResult.status !== 500) {
                 message += ` (${postResult.status})`;
             }
-            if (typeof result === 'string') {
+            if (typeof result === "string") {
                 message += `\r\n${result}`;
             }
-            errors = [new ErrorModel(message, '', '', this)];
+            errors = [new ErrorModel(message, "", "", this)];
         }
         this.value = new AppClientError(
             errors,
             postResult.status,
             friendlyName,
-            errorOptions.caption || ''
+            errorOptions.caption || ""
         );
     }
 

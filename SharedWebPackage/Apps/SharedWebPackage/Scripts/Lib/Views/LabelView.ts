@@ -7,7 +7,7 @@ export class LabelView extends BasicContainerView implements ILabelView {
         super(container, 'label');
     }
 
-    protected setAttr: (config: (attr: ILabelAttributes) => void) => void;
+    declare protected setAttr: (config: (attr: ILabelAttributes) => void) => void;
 
     setFor(forTarget: string) {
         this.setAttr(attr => attr.for = forTarget);

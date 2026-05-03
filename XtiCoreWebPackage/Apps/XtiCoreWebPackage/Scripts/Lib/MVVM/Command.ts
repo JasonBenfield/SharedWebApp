@@ -3,7 +3,7 @@ import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentView } from "./ComponentView";
 import { ComponentViewModel, ObservableChanges } from "./ComponentViewModel";
 import { CustomEventRegistrations, EventManager } from "./EventManager";
-import { StyleableComponentViewMixin } from "./StyleableComponentView";
+import { StyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
 import { BaseTextComponentView, ITextView, TextChangeHandler, TextComponentView, TextViewModelMixin, TitleChangeHandler, TitleViewMixin, TitleViewModelMixin } from "./TextComponent";
 
 export class CommandViewModel extends TextViewModelMixin(TitleViewModelMixin(ComponentViewModel)) {
@@ -30,7 +30,10 @@ type CommandEventLayout = {
     clicked: PointerEvent;
 }
 
-export class ButtonCommandView extends TitleViewMixin(ButtonViewMixin(StyleableComponentViewMixin(ComponentView))) implements ICommandView, ITextView {
+export class ButtonCommandView
+    extends TitleViewMixin(ButtonViewMixin(StyleableComponentView))
+    implements ICommandView, ITextView {
+
     constructor() {
         super("button");
         this.text = this.addChildView(new TextComponentView());

@@ -1,7 +1,7 @@
 ﻿export class SingleActivePanel {
     private readonly panels: IPanel[] = [];
-    private _previousActive: IPanel = null;
-    private _currentActive: IPanel = null;
+    private _previousActive: IPanel | null = null;
+    private _currentActive: IPanel | null = null;
 
     add<T extends IPanel>(panel: T) {
         this.panels.push(panel);

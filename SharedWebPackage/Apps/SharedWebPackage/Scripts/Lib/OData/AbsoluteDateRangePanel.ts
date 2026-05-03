@@ -22,7 +22,7 @@ class Result {
 export class AbsoluteDateRangePanel extends BasicComponent implements IPanel {
     private readonly panelView: ValueRangePanelView;
     private readonly awaitable = new Awaitable<Result>();
-    private options: FilterColumnOptionsBuilder;
+    private options: FilterColumnOptionsBuilder | null = null;
     private readonly columnName: TextComponent;
     private readonly dateRangePicker: DateRangePicker;
     private readonly preview: TextComponent;
@@ -46,7 +46,7 @@ export class AbsoluteDateRangePanel extends BasicComponent implements IPanel {
 
     private save() {
         const dateRange = this.dateRangePicker.getValue();
-        this.options.setAbsoluteDateRangeValue(dateRange);
+        this.options?.setAbsoluteDateRangeValue(dateRange);
         this.awaitable.resolve(Result.done());
     }
 

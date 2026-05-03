@@ -29,7 +29,7 @@ export class ConstraintCollection {
             const value = field.getValue();
             if (value === undefined || value === null) {
                 if (!this.isNullAllowed) {
-                    errors.add(new ErrorModel('Must not be null', field.getCaption(), field.getName()));
+                    errors.add(new ErrorModel("Must not be null", field.getCaption(), field.getName()));
                 }
             }
             else {

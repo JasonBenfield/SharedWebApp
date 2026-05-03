@@ -1,9 +1,9 @@
-﻿import * as $ from "jquery";
+﻿import $ from "jquery";
 import { DelayedAction } from "../DelayedAction";
 
 interface IElementEvent {
     evtName: string;
-    selector: string;
+    selector: string | null;
     action: (sourceElement: HTMLElement, evt: JQuery.Event) => void;
 }
 
@@ -132,7 +132,7 @@ export class HtmlElementView {
         new DelayedAction(() => this.element.scrollIntoView(arg), 1).execute();
     }
 
-    on(evtName: string, selector: string, action: (sourceElement: HTMLElement, evt: JQuery.Event) => void) {
+    on(evtName: string, selector: string | null, action: (sourceElement: HTMLElement, evt: JQuery.Event) => void) {
         const handler: IElementEvent = { evtName: evtName, selector: selector, action: action };
         this.handlers.push(handler);
         if (document.contains(this.element)) {
@@ -155,8 +155,9 @@ export class HtmlElementView {
         $(this.element).on(
             handler.evtName,
             handler.selector,
-            function (event: JQuery.Event) {
-                return handler.action(this, event);
+            (event: JQuery.TriggeredEvent) => {
+                const el = event.currentTarget;
+                return handler.action(el, event);
             }
         );
     }

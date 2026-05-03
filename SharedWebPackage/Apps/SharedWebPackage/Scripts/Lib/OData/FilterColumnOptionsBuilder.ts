@@ -15,8 +15,8 @@ enum FilterAppend {
 
 export class FilterColumnOptionsBuilder {
     private appendValue: FilterAppend = FilterAppend.replace;
-    private selection: FilterSelection;
-    private _hasAppliedToQuery: boolean;
+    private selection: FilterSelection | null = null;
+    private _hasAppliedToQuery = false;
 
     constructor(private readonly filter: ODataQueryFilterBuilder, readonly column: ODataColumn) {
     }

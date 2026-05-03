@@ -1,15 +1,14 @@
-﻿import { AppClientAction } from "../Http/AppClientAction";
-import { AppClientError } from "../Http/AppClientError";
+﻿import { ModalError } from "../Components/ModalError";
 import { ConsoleLog } from "../ConsoleLog";
-import { ModalError } from "../Components/ModalError";
 import { ErrorModel } from "../ErrorModel";
+import { AppClientAction } from "../Http/AppClientAction";
+import { AppClientError } from "../Http/AppClientError";
 import { BaseFormView } from "../Views/BaseFormView";
-import { SimpleFieldFormGroupDateTimeInputView, SimpleFieldFormGroupSelectView, SimpleFieldFormGroupTimeSpanInputView } from "../Views/FormGroup";
+import { SimpleFieldFormGroupDateTimeInputView, SimpleFieldFormGroupInputView, SimpleFieldFormGroupSelectView, SimpleFieldFormGroupTimeSpanInputView } from "../Views/FormGroup";
+import { InputView } from "../Views/InputView";
 import { ErrorList } from "./ErrorList";
 import { FormGroupCollection } from "./FormGroupCollection";
 import { FormSaveResult } from "./FormSaveResult";
-import { SimpleFieldFormGroupInputView } from "../Views/FormGroup";
-import { InputView } from "../Views/InputView";
 
 export class BaseForm {
     private readonly formGroups: FormGroupCollection;
@@ -137,28 +136,33 @@ export class BaseForm {
 
     async save<TResult>(action: AppClientAction<any, TResult>) {
         const validationResult = this.validate();
-        this.view.addCssName('was-validated');
+        this.view.addCssName("was-validated");
         if (validationResult.hasErrors()) {
             const errors = validationResult.values();
             this.modalError.show(errors, `Unable to ${action.friendlyName}`);
             return new FormSaveResult<TResult>(null, errors);
         }
-        let result: TResult;
+        let result: TResult | null = null;
         const errors: IErrorModel[] = [];
         try {
             const model = this.export();
             result = await action.execute(model, { preventDefault: true });
         }
         catch (ex) {
-            let caption = '';
+            let caption = "";
             if (ex instanceof AppClientError) {
                 errors.push(...ex.getErrors());
                 caption = ex.getCaption();
             }
-            else {
-                const error = new ErrorModel(ex.message, '', '');
+            else if (ex instanceof Error) {
+                const error = new ErrorModel(ex.message || "", "", "");
                 errors.push(error);
-                new ConsoleLog().error(ex.message);
+                new ConsoleLog().error(ex.message || "");
+            }
+            else {
+                const error = new ErrorModel(`${ex}`, "", "");
+                errors.push(error);
+                new ConsoleLog().error(`${ex}`);
             }
             this.modalError.show(errors, caption);
         }

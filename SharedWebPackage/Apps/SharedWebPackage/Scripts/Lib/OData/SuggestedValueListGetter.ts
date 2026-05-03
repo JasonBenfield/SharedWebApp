@@ -1,7 +1,7 @@
 ﻿import { ISuggestedValueGetter } from "./Types";
 
 export class SuggestedValueListGetter implements ISuggestedValueGetter {
-    private ignoreCase: boolean;
+    private ignoreCase = false;
     private comparer: (inputValue, testValue, ignoreCase) => boolean = () => true;
     private readonly valuesToExclude: any[] = [];
 
@@ -19,13 +19,13 @@ export class SuggestedValueListGetter implements ISuggestedValueGetter {
     async getSuggestedValues(inputValue: any) {
         return new Promise<any[]>(
             (resolve) => {
-                const list = [];
+                const list: any[] = [];
                 for (const item of this.list) {
                     if (this.comparer(inputValue, item, this.ignoreCase) && !this.isExcluded(item)) {
                         list.push(item);
                     }
                 }
-                resolve(this.list);
+                resolve(list);
             }
         );
     }

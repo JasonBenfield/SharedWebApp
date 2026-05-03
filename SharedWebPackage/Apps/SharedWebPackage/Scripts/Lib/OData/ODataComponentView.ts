@@ -4,13 +4,13 @@ import { BasicComponentView } from "../Views/BasicComponentView";
 import { BlockView } from "../Views/BlockView";
 import { BasicGridRowView, GridRowView, GridView } from "../Views/Grid";
 import { MessageAlertView } from "../Views/MessageAlertView";
-import { IconCellView } from './IconCellView';
-import { ModalODataComponentView } from './ModalODataComponentView';
+import { IconCellView } from "./IconCellView";
+import { ModalODataComponentView } from "./ModalODataComponentView";
 import { ODataColumnViewBuilder } from "./ODataColumnViewBuilder";
 import { ODataFooterComponentView } from "./ODataFooterComponentView";
 import { ODataGridView } from "./ODataGridView";
 import { ODataHeaderCellView } from "./ODataHeaderCellView";
-import { ODataTextCellView } from './ODataTextCellView';
+import { ODataTextCellView } from "./ODataTextCellView";
 
 export class ODataComponentView extends GridView {
     readonly grid: ODataGridView;
@@ -63,18 +63,18 @@ export class ODataComponentView extends GridView {
             .headerCell(
                 IconCellView,
                 (cellView) => {
-                    cellView.addCssName('position-sticky-top');
-                    cellView.addCssName('position-sticky-left');
-                    cellView.addCssName('z-5');
-                    cellView.icon.solidStyle('gear');
-                    cellView.addCssName('odata-gear-header');
+                    cellView.addCssName("position-sticky-top");
+                    cellView.addCssName("position-sticky-left");
+                    cellView.addCssName("z-5");
+                    cellView.icon.solidStyle("gear");
+                    cellView.addCssName("odata-gear-header");
                 }
             )
             .dataCell(
                 ODataTextCellView,
                 (cellView) => {
-                    cellView.addCssName('position-sticky-left');
-                    cellView.addCssName('z-3');
+                    cellView.addCssName("position-sticky-left");
+                    cellView.addCssName("z-3");
                 }
             );
     }
@@ -85,7 +85,7 @@ export class ODataComponentView extends GridView {
             .headerCell(
                 ODataHeaderCellView,
                 (cellView) => {
-                    cellView.removeCssName('grid-heading');
+                    cellView.removeCssName("grid-heading");
                     cellView.columnName.hide();
                     cellView.sortButton.hide();
                 }

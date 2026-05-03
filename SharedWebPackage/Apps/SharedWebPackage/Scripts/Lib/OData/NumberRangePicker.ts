@@ -18,9 +18,9 @@ export class NumberRangePicker extends BasicComponent {
     private readonly toCheck: BooleanInputControl;
     private readonly to: InputControl<number>;
     private readonly toInclude: BooleanInputControl;
-    private _numberFormat: string;
+    private _numberFormat?: string;
 
-    private readonly eventSource = new EventSource<Events>(this, { valueChanged: null as NumberRange });
+    private readonly eventSource = new EventSource<Events>(this, { valueChanged: new NumberRange(null, null) });
     readonly when = this.eventSource.when;
 
     constructor(view: ValueRangePickerView) {
@@ -73,7 +73,7 @@ export class NumberRangePicker extends BasicComponent {
                     from++;
                 }
                 const to = this.to.getValue();
-                if (to < from) {
+                if (to !== null && to < from) {
                     this.to.setValue(from);
                 }
             }
@@ -114,7 +114,7 @@ export class NumberRangePicker extends BasicComponent {
                 if (this.toInclude.getValue()) {
                     to--;
                 }
-                if (from > to) {
+                if (from !== null && from > to) {
                     this.from.setValue(to);
                 }
             }
@@ -132,16 +132,12 @@ export class NumberRangePicker extends BasicComponent {
 
     getValue() {
         const includeStart = this.fromInclude.getValue();
-        const start = this.fromCheck.getValue()
-            ? this.from.getValue()
-            : null;
+        const start = this.fromCheck.getValue() ? this.from.getValue() : null;
         const includeEnd = this.toInclude.getValue();
-        const end = this.toCheck.getValue()
-            ? this.to.getValue()
-            : null;
+        const end = this.toCheck.getValue() ? this.to.getValue() : null;
         return new NumberRange(
-            start ? new ValueRangeBound(start, includeStart) : null,
-            end ? new ValueRangeBound(end, includeEnd) : null,
+            start === null ? null : new ValueRangeBound(start, includeStart),
+            end === null ? null : new ValueRangeBound(end, includeEnd),
             this._numberFormat
         );
     }
@@ -149,10 +145,10 @@ export class NumberRangePicker extends BasicComponent {
     setValue(numberRange: NumberRange) {
         this.fromCheck.setValue(Boolean(numberRange.start));
         this.from.setValue(numberRange.start && numberRange.start.value);
-        this.fromInclude.setValue(numberRange.start && numberRange.start.isIncluded);
+        this.fromInclude.setValue(numberRange.start?.isIncluded || false);
         this.toCheck.setValue(Boolean(numberRange.end));
         this.to.setValue(numberRange.end && numberRange.end.value);
-        this.toInclude.setValue(numberRange.end && numberRange.end.isIncluded);
+        this.toInclude.setValue(numberRange.end?.isIncluded || false);
         this.updateFromVisibility();
         this.updateToVisibility();
     }

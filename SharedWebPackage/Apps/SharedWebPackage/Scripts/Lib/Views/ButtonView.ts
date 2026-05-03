@@ -13,7 +13,7 @@ export class ButtonView extends BasicContainerView {
         this.addCssName("btn");
     }
 
-    protected setAttr: (config: (attr: IButtonAttributes) => void) => void;
+    declare protected setAttr: (config: (attr: IButtonAttributes) => void) => void;
 
     handleClick(action: () => void) {
         this.on('click').execute(action).subscribe();

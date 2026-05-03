@@ -15,7 +15,7 @@ export class CssClass implements ICssClass {
         return this;
     }
 
-    addFrom(cssClass: CssClass | ICssBuilder) {
+    addFrom(cssClass: CssClass | ICssBuilder | null) {
         if (cssClass) {
             if (cssClass instanceof CssClass) {
                 if (cssClass.value) {
@@ -32,8 +32,8 @@ export class CssClass implements ICssClass {
         return this;
     }
 
-    addName(name: string) {
-        return this.addNames(name);
+    addName(name: string | null) {
+        return name ? this.addNames(name) : this;
     }
 
     addNames(...names: string[]) {
@@ -115,7 +115,7 @@ export class CssClass implements ICssClass {
     }
 
     private updateValue() {
-        this.value = this.names.length > 0 ? new JoinedStrings(' ', this.names).value() : '';
+        this.value = this.names.length > 0 ? new JoinedStrings(" ", this.names).value() : "";
     }
 
     includes(name: string) { return this.names.includes(name); }

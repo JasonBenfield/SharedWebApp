@@ -44,7 +44,7 @@ export class ODataComponentOptionsBuilder<TEntity> {
     private createDataRow:
         (rowIndex: number, columns: ODataColumn[], record: Queryable<TEntity>, view: BasicGridRowView) => ODataRow =
         this.defaultCreateDataRow;
-    private odataClient: IODataClient<TEntity>;
+    private odataClient: IODataClient<TEntity> | null = null;
     private pageSize: number = 50;
     readonly query = new ODataQueryBuilder();
     private saveChangesOptions: SaveChangesOptions = { select: false, filter: false, orderby: false };
@@ -68,8 +68,8 @@ export class ODataComponentOptionsBuilder<TEntity> {
     }
 
     setCreateLinkRow(configureLinkRow: (rowIndex: number, columns: ODataColumn[], record: Queryable<TEntity>, row: ODataLinkRow) => void) {
-        this.createDataRow = (rowIndex: number, columns: ODataColumn[], record: any, view: LinkGridRowView) => {
-            const row = this.defaultCreateLinkRow(rowIndex, columns, record, view);
+        this.createDataRow = (rowIndex: number, columns: ODataColumn[], record: any, view) => {
+            const row = this.defaultCreateLinkRow(rowIndex, columns, record, view as LinkGridRowView);
             configureLinkRow(rowIndex, columns, record, row);
             return row;
         };
@@ -125,7 +125,7 @@ export class ODataComponentOptionsBuilder<TEntity> {
                 if (!column.hasSuggestedValueGetter()) {
                     if (column.sourceType.isString()) {
                         column.setSuggestedValueGetter(
-                            new SuggestedValueODataGetter(this.odataClient, column.columnName)
+                            new SuggestedValueODataGetter(this.odataClient!, column.columnName)
                         );
                     }
                     else {
@@ -139,7 +139,7 @@ export class ODataComponentOptionsBuilder<TEntity> {
         return new ODataComponentOptions(
             this.id,
             this.createDataRow,
-            this.odataClient,
+            this.odataClient!,
             this.pageSize,
             this.saveChangesOptions,
             startColumns,

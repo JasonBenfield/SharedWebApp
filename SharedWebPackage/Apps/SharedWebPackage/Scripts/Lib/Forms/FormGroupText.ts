@@ -4,7 +4,7 @@ import { FormGroup } from "./FormGroup";
 
 export class FormGroupText extends FormGroup {
     private readonly textValue: TextComponent;
-    private _visibleWhen: (textOrFormattable: string | IFormattable) => boolean;
+    private _visibleWhen?: (textOrFormattable: string | IFormattable) => boolean;
 
     constructor(view: FormGroupTextView) {
         super(view);

@@ -5,7 +5,7 @@ import { FormGroupInputGroupView, FormGroupInputView } from "../Views/FormGroup"
 import { FormGroup } from "./FormGroup";
 import { TypedFieldViewValue } from "./TypedFieldViewValue";
 
-type Events<TValue> = { valueChanged: TValue };
+type Events<TValue> = { valueChanged: TValue | null };
 
 export class FormGroupInput<TValue> extends FormGroup {
     private readonly inputControl: InputControl<TValue>;

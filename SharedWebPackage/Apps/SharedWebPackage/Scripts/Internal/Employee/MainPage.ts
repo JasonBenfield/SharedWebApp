@@ -1,15 +1,15 @@
-﻿import { AsyncCommand } from '../../Lib/Components/Command';
-import { MessageAlert } from '../../Lib/Components/MessageAlert';
-import { TextComponent } from '../../Lib/Components/TextComponent';
-import { ConsoleLog } from '../../Lib/ConsoleLog';
-import { DateOnly } from '../../Lib/DateOnly';
-import { DateTimeOffset } from '../../Lib/DateTimeOffset';
-import { DeviceType } from '../../Lib/DeviceType';
-import { AppVersionDomain } from '../../Lib/Http/AppVersionDomain';
-import { DefaultPageContext } from '../DefaultPageContext';
-import { SharedPage } from '../SharedPage';
-import { AddEmployeeForm } from './AddEmployeeForm';
-import { MainPageView } from './MainPageView';
+﻿import { AsyncCommand } from "../../Lib/Components/Command";
+import { MessageAlert } from "../../Lib/Components/MessageAlert";
+import { TextComponent } from "../../Lib/Components/TextComponent";
+import { ConsoleLog } from "../../Lib/ConsoleLog";
+import { DateOnly } from "../../Lib/DateOnly";
+import { DateTimeOffset } from "../../Lib/DateTimeOffset";
+import { DeviceType } from "../../Lib/DeviceType";
+import { AppVersionDomain } from "../../Lib/Http/AppVersionDomain";
+import { DefaultPageContext } from "../DefaultPageContext";
+import { SharedPage } from "../SharedPage";
+import { AddEmployeeForm } from "./AddEmployeeForm";
+import { MainPageView } from "./MainPageView";
 
 class MainPage extends SharedPage {
     protected readonly view: MainPageView;
@@ -19,7 +19,7 @@ class MainPage extends SharedPage {
 
     constructor() {
         super(new MainPageView());
-        new TextComponent(this.view.heading).setText('Add Employee');
+        new TextComponent(this.view.heading).setText("Add Employee");
         this.alert = new MessageAlert(this.view.alert);
         this.addEmployeeForm = new AddEmployeeForm(this.view.addEmployeeForm);
         this.addEmployeeForm.handleSubmit(this.onFormSubmit.bind(this));
@@ -29,9 +29,9 @@ class MainPage extends SharedPage {
         DeviceType.instance.canFocus = true;
         this.addEmployeeForm.Address.setFocus();
         AppVersionDomain.instance.addDomain({
-            App: 'Shared',
-            Version: 'Current',
-            Domain: 'development.guinevere.com:44303'
+            App: "Shared",
+            Version: "Current",
+            Domain: "development.guinevere.com:44303"
         });
         console.log(`DateOnly.today() < DateOnly.today().addDays(1): ${DateOnly.today() < DateOnly.today().addDays(1)}`);
         console.log(`DateOnly.today() > DateOnly.today().addDays(1): ${DateOnly.today() > DateOnly.today().addDays(1)}`);
@@ -59,7 +59,7 @@ class MainPage extends SharedPage {
 
     private save() {
         return this.alert.infoAction(
-            'Saving...',
+            "Saving...",
             async () => {
                 const result = await this.addEmployeeForm.save(this.sharedClient.Employee.AddEmployeeAction);
                 if (result.succeeded()) {

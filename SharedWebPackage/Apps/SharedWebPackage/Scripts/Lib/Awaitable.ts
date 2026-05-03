@@ -1,6 +1,6 @@
 ﻿
 export class Awaitable<TResult> {
-    private _resolve: (value: TResult) => void = null;
+    private _resolve: ((value: TResult) => void) | null = null;
 
     isInProgress() {
         return this._resolve !== null;
@@ -13,7 +13,7 @@ export class Awaitable<TResult> {
     }
 
     resolve(result: TResult) {
-        let resolve = this._resolve;
+        const resolve = this._resolve;
         this._resolve = null;
         if (resolve) {
             resolve(result);

@@ -7,7 +7,7 @@ import { FormGroupContainer } from "./FormGroupContainer";
 type Events = { submitted: boolean };
 
 export class FormComponent extends BasicComponent {
-    private readonly eventSource = new EventSource<Events>(this, { submitted: null as boolean });
+    private readonly eventSource = new EventSource<Events>(this, { submitted: false });
     readonly when = this.eventSource.when;
 
     constructor(protected readonly view: FormView) {

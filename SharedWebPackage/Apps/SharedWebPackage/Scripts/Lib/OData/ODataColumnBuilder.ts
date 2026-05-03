@@ -1,5 +1,4 @@
-﻿import { GridCellView } from "../Views/Grid";
-import { DefaultValueFormatter } from "./DefaultValueFormatter";
+﻿import { DefaultValueFormatter } from "./DefaultValueFormatter";
 import { ODataCell } from "./ODataCell";
 import { ODataColumn } from "./ODataColumn";
 import { ODataColumnViewBuilder } from "./ODataColumnViewBuilder";
@@ -19,15 +18,15 @@ export class ODataColumnBuilder {
     private canFilter = true;
     private formatter: IValueFormatter = new DefaultValueFormatter();
     private createHeaderCell: ICreateHeaderCell =
-        (column: ODataColumn, view: ODataHeaderCellView) => new ODataHeaderCell(column, view);
+        (column, view) => new ODataHeaderCell(column, view as ODataHeaderCellView);
     private createDataCell: ICreateDataCell =
-        (rowIndex: number, column: ODataColumn, record: any, formatter: IValueFormatter, view: GridCellView) => {
+        (rowIndex, column, record, formatter, view) => {
             if (view instanceof ODataTextCellView) {
                 return new ODataTextCell(rowIndex, column, record, formatter, view);
             }
             return new ODataCell(rowIndex, column, record, view);
         };
-    private suggestedValueGetter: ISuggestedValueGetter;
+    private suggestedValueGetter: ISuggestedValueGetter | null = null;
             
 
     constructor(

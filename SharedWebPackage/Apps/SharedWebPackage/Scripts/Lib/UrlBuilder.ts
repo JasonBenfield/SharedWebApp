@@ -81,26 +81,26 @@ export class UrlBuilder {
     }
 
     replaceQuery(name: string, value: string[]): UrlBuilder;
-    replaceQuery(name: string, value: string): UrlBuilder;
-    replaceQuery(name: string, value: Date): UrlBuilder;
-    replaceQuery(name: string, value: DateOnly): UrlBuilder;
-    replaceQuery(name: string, value: TimeOnly): UrlBuilder;
-    replaceQuery(name: string, value: TimeSpan): UrlBuilder;
-    replaceQuery(name: string, value: DateTimeOffset): UrlBuilder;
-    replaceQuery(name: string, value: number): UrlBuilder;
+    replaceQuery(name: string, value: string | null): UrlBuilder;
+    replaceQuery(name: string, value: Date | null): UrlBuilder;
+    replaceQuery(name: string, value: DateOnly | null): UrlBuilder;
+    replaceQuery(name: string, value: TimeOnly | null): UrlBuilder;
+    replaceQuery(name: string, value: TimeSpan | null): UrlBuilder;
+    replaceQuery(name: string, value: DateTimeOffset | null): UrlBuilder;
+    replaceQuery(name: string, value: number | null): UrlBuilder;
     replaceQuery(name: string, value: any) {
         this._query.replaceQuery(name, value);
         return this;
     }
 
     addQuery(name: string, value: string[]): UrlBuilder;
-    addQuery(name: string, value: string): UrlBuilder;
-    addQuery(name: string, value: Date): UrlBuilder;
-    addQuery(name: string, value: DateOnly): UrlBuilder;
-    addQuery(name: string, value: TimeOnly): UrlBuilder;
-    addQuery(name: string, value: TimeSpan): UrlBuilder;
-    addQuery(name: string, value: DateTimeOffset): UrlBuilder;
-    addQuery(name: string, value: number): UrlBuilder;
+    addQuery(name: string, value: string | null): UrlBuilder;
+    addQuery(name: string, value: Date | null): UrlBuilder;
+    addQuery(name: string, value: DateOnly | null): UrlBuilder;
+    addQuery(name: string, value: TimeOnly | null): UrlBuilder;
+    addQuery(name: string, value: TimeSpan | null): UrlBuilder;
+    addQuery(name: string, value: DateTimeOffset | null): UrlBuilder;
+    addQuery(name: string, value: number | null): UrlBuilder;
     addQuery(name: string, value: any) {
         this._query.addQuery(name, value);
         return this;
@@ -135,26 +135,26 @@ export class UrlBuilder {
     }
 
     replaceHash(name: string, value: string[]): UrlBuilder;
-    replaceHash(name: string, value: string): UrlBuilder;
-    replaceHash(name: string, value: Date): UrlBuilder;
-    replaceHash(name: string, value: DateOnly): UrlBuilder;
-    replaceHash(name: string, value: TimeOnly): UrlBuilder;
-    replaceHash(name: string, value: TimeSpan): UrlBuilder;
-    replaceHash(name: string, value: DateTimeOffset): UrlBuilder;
-    replaceHash(name: string, value: number): UrlBuilder;
+    replaceHash(name: string, value: string | null): UrlBuilder;
+    replaceHash(name: string, value: Date | null): UrlBuilder;
+    replaceHash(name: string, value: DateOnly | null): UrlBuilder;
+    replaceHash(name: string, value: TimeOnly | null): UrlBuilder;
+    replaceHash(name: string, value: TimeSpan | null): UrlBuilder;
+    replaceHash(name: string, value: DateTimeOffset | null): UrlBuilder;
+    replaceHash(name: string, value: number | null): UrlBuilder;
     replaceHash(name: string, value: any) {
         this._hash.replaceQuery(name, value);
         return this;
     }
 
     addHash(name: string, value: string[]): UrlBuilder;
-    addHash(name: string, value: string): UrlBuilder;
-    addHash(name: string, value: Date): UrlBuilder;
-    addHash(name: string, value: DateOnly): UrlBuilder;
-    addHash(name: string, value: TimeOnly): UrlBuilder;
-    addHash(name: string, value: TimeSpan): UrlBuilder;
-    addHash(name: string, value: DateTimeOffset): UrlBuilder;
-    addHash(name: string, value: number): UrlBuilder;
+    addHash(name: string, value: string | null): UrlBuilder;
+    addHash(name: string, value: Date | null): UrlBuilder;
+    addHash(name: string, value: DateOnly | null): UrlBuilder;
+    addHash(name: string, value: TimeOnly | null): UrlBuilder;
+    addHash(name: string, value: TimeSpan | null): UrlBuilder;
+    addHash(name: string, value: DateTimeOffset | null): UrlBuilder;
+    addHash(name: string, value: number | null): UrlBuilder;
     addHash(name: string, value: any) {
         this._hash.addQuery(name, value);
         return this;

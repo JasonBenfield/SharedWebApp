@@ -4,10 +4,10 @@ import { ComponentViewModel, ObservableChanges } from "./ComponentViewModel";
 import { BaseCompositeComponentView } from "./CompositeComponent";
 import { IEquatable } from "./Equatable";
 import { CustomEventRegistrations } from "./EventManager";
-import { FocusableComponentChangeHandler, FocusableComponentMixin, FocusableViewMixin, FocusableViewModelMixin, HasFocusProperty, IFocusableView, IFocusableViewModel } from "./FocusableComponent";
-import { StyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
+import { FocusableComponentChangeHandler, FocusableComponentMixin, FocusableViewMixin, FocusableViewModelMixin, HasFocusProperty, IFocusableComponent, IFocusableView, IFocusableViewModel } from "./FocusableComponent";
+import { StyleableComponentView } from "./StyleableComponentView";
 import { Constructor } from "./Types";
-import { IUniqueView, IUniqueViewModel, UniqueComponentChangeHandler, UniqueComponentMixin, UniqueViewMixin, UniqueViewModelMixin } from "./UniqueComponent";
+import { IUniqueComponent, IUniqueView, IUniqueViewModel, UniqueComponentChangeHandler, UniqueComponentMixin, UniqueViewMixin, UniqueViewModelMixin } from "./UniqueComponent";
 
 export class InputTextValue implements IEquatable {
     constructor(readonly value: string, readonly isFromUI = false) {
@@ -49,8 +49,8 @@ export interface ITextInputViewModel {
     set isReadOnly(isReadOnly: boolean);
 }
 
-export function TextInputViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T) {
-    return class extends Base implements ITextInputViewModel {
+export function TextInputViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T): T & Constructor<ITextInputViewModel> {
+    return class extends Base {
         private _textValue = new InputTextValue("");
         get textValue() { return this._textValue; }
         set textValue(textValue: InputTextValue) { this._textValue = textValue; }
@@ -123,8 +123,8 @@ export type BaseTextInputComponentView = ComponentView & IFocusableView & IUniqu
 
 export type BaseInputComponentView = ComponentView & IFocusableView & IUniqueView & ITextInputView & IInputView;
 
-export function TextInputComponentViewMixin<T extends Constructor<StyleableComponentView>>(Base: T) {
-    return class extends Base implements ITextInputView {
+export function TextInputComponentViewMixin<T extends Constructor<StyleableComponentView>>(Base: T): T & Constructor<ITextInputView> {
+    return class extends Base {
         private textValue = "";
         private get textInputElement() { return this.element as HTMLInputElement | HTMLTextAreaElement | null; }
 
@@ -173,7 +173,7 @@ export function TextInputComponentViewMixin<T extends Constructor<StyleableCompo
 }
 
 export class InputComponentView
-    extends TextInputComponentViewMixin(FocusableViewMixin(UniqueViewMixin(StyleableComponentViewMixin(ComponentView))))
+    extends TextInputComponentViewMixin(FocusableViewMixin(UniqueViewMixin(StyleableComponentView)))
     implements ITextInputView, IInputView {
 
     constructor() {
@@ -361,7 +361,12 @@ type InputComponentEventLayout = {
     textValueChanged: string
 };
 
-export function TextInputValueComponentMixin<T extends Constructor<Component>>(Base: T) {
+export interface ITextInputValueComponent {
+    get textValue(): string;
+    set textValue(textValue: string);
+}
+
+export function TextInputValueComponentMixin<T extends Constructor<Component>>(Base: T): T & Constructor<ITextInputValueComponent> {
     return class extends Base {
         declare protected readonly viewModel: BaseTextInputComponentViewModel;
 
@@ -370,7 +375,18 @@ export function TextInputValueComponentMixin<T extends Constructor<Component>>(B
     }
 }
 
-export function TextInputComponentMixin<T extends Constructor<Component>>(Base: T) {
+export interface ITextInputComponent {
+    get placeholder(): string;
+    set placeholder(placeholder: string);
+
+    get maxLength(): number;
+    set maxLength(maxLength: number);
+
+    required(): void;
+    notRequired(): void;
+}
+
+export function TextInputComponentMixin<T extends Constructor<Component>>(Base: T): T & Constructor<ITextInputComponent> {
     return class extends Base {
         declare protected readonly viewModel: BaseTextInputComponentViewModel;
 
@@ -387,7 +403,12 @@ export function TextInputComponentMixin<T extends Constructor<Component>>(Base: 
     }
 }
 
-export function InputComponentMixin<T extends Constructor<Component>>(Base: T) {
+export interface IInputComponent {
+    hideInput(): void;
+    obscureInput(): void;
+}
+
+export function InputComponentMixin<T extends Constructor<Component>>(Base: T): T & Constructor<IInputComponent> {
     return class extends Base {
         declare protected readonly viewModel: BaseInputComponentViewModel;
 
@@ -402,7 +423,8 @@ export function InputComponentMixin<T extends Constructor<Component>>(Base: T) {
 }
 
 export class InputComponent
-    extends InputComponentMixin(TextInputValueComponentMixin(TextInputComponentMixin(UniqueComponentMixin(FocusableComponentMixin(Component))))) {
+    extends InputComponentMixin(TextInputValueComponentMixin(TextInputComponentMixin(UniqueComponentMixin(FocusableComponentMixin(Component)))))
+    implements IInputComponent, ITextInputValueComponent, ITextInputComponent, IUniqueComponent, IFocusableComponent {
 
     private readonly events = this.eventManager.addEvents<InputComponentEventLayout>({
         textValueChanged: null

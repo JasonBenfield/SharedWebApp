@@ -124,7 +124,7 @@ export class FormGroupCollection {
     }
 
     getField(name: string) {
-        let match: IField = null;
+        let match: IField | null = null;
         for (const formGroup of this.formGroups()) {
             const testField = formGroup.getField(name);
             if (testField) {

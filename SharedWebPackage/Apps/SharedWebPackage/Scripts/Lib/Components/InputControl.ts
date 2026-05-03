@@ -8,14 +8,14 @@ import { BasicComponent } from "./BasicComponent";
 import { ComponentID } from "./ComponentID";
 import { DataListComponent } from "./DataListComponent";
 
-type Events<TValue> = { valueChanged: TValue };
+type Events<TValue> = { valueChanged: TValue | null };
 
 export class InputControl<TValue> extends BasicComponent {
     declare protected readonly view: InputView;
     private readonly debouncedSetFocus: DebouncedAction;
-    private previousValue: TValue;
+    private previousValue: TValue | null;
 
-    private readonly eventSource = new EventSource<Events<TValue>>(this, { valueChanged: null as TValue });
+    private readonly eventSource = new EventSource<Events<TValue>>(this, { valueChanged: null });
     readonly when = this.eventSource.when;
 
     constructor(
@@ -77,11 +77,11 @@ export class InputControl<TValue> extends BasicComponent {
         this.view.setCustomValidity(message);
     }
 
-    setType(type: 'text' | 'hidden' | 'date' | 'number' | 'time' | 'file' | 'email' | 'month' | 'url') {
+    setType(type: "text" | "hidden" | "date" | "number" | "time" | "file" | "email" | "month" | "url") {
         this.view.setType(type);
     }
 
-    setInputMode(inputmode: 'text' | 'decimal' | 'numeric' | 'tel' | 'search' | 'email' | 'url') {
+    setInputMode(inputmode: "text" | "decimal" | "numeric" | "tel" | "search" | "email" | "url") {
         this.view.setInputMode(inputmode);
     }
 
@@ -108,7 +108,7 @@ export class InputControl<TValue> extends BasicComponent {
         return this.viewValue.getValue();
     }
 
-    setValue(value: TValue) {
+    setValue(value: TValue | null) {
         this.viewValue.setValue(value);
         const inputValue = this.viewValue.toView();
         this.view.setValue(inputValue);
@@ -134,7 +134,7 @@ export class InputControl<TValue> extends BasicComponent {
     }
 
     protect() {
-        this.view.setType('password');
+        this.view.setType("password");
     }
 
     setMaxLength(maxLength: number) {

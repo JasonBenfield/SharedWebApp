@@ -19,7 +19,7 @@ export class ODataColumn {
         readonly canFilter: boolean,
         readonly canSort: boolean,
         readonly view: ODataColumnView,
-        readonly suggestedValueGetter: ISuggestedValueGetter
+        readonly suggestedValueGetter: ISuggestedValueGetter | null
     ) {
     }
 
@@ -27,7 +27,7 @@ export class ODataColumn {
         if (this.formatter instanceof NumberValueFormatter) {
             return this.formatter.formatString;
         }
-        return '';
+        return "";
     }
 
     toFilterField() { return new FilterField(this.columnName, this.displayText); }

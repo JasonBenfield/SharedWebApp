@@ -13,7 +13,7 @@ export class TextAreaView extends BasicComponentView {
         this.addCssName("form-control");
     }
 
-    protected setAttr: (config: (attr: ITextAreaAttributes) => void) => void;
+    declare protected setAttr: (config: (attr: ITextAreaAttributes) => void) => void;
 
     required() { this.setAttr(a => a.required = true); }
 

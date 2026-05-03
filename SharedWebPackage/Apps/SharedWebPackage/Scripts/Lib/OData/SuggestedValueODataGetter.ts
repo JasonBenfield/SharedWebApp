@@ -1,10 +1,9 @@
-﻿import { ODataColumn } from "./ODataColumn";
-import { ODataQueryBuilder } from "./ODataQueryBuilder";
+﻿import { ODataQueryBuilder } from "./ODataQueryBuilder";
 import { FilterConditionFunction, FilterConditionOperation, FilterField, FilterStringValue } from "./ODataQueryFilterBuilder";
 import { IODataClient, ISuggestedValueGetter } from "./Types";
 
 export class SuggestedValueODataGetter implements ISuggestedValueGetter {
-    private ignoreCase: boolean;
+    private ignoreCase = false;
     private valuesToExclude: string[] = [];
 
     constructor(
@@ -42,9 +41,9 @@ export class SuggestedValueODataGetter implements ISuggestedValueGetter {
         }
         query.apply.addGroupBy().addField(this.fieldName);
         const odataResult = await this.odataClient.execute(query.build());
-        const records = odataResult.records.length > this.top
-            ? odataResult.records.slice(0, this.top - 1)
-            : odataResult.records;
+        const records = odataResult.records.length > this.top ?
+            odataResult.records.slice(0, this.top - 1) :
+            odataResult.records;
         return records.map(r => r[this.fieldName]);
     }
 }

@@ -37,8 +37,8 @@ export interface IListView {
     removeItem(item: ComponentView): void;
 }
 
-export function ListViewMixin<T extends Constructor<ComponentView>>(Base: T) {
-    return class extends Base implements IListView {
+export function ListViewMixin<T extends Constructor<ComponentView>>(Base: T): T & Constructor<IListView> {
+    return class extends Base {
 
         private readonly listEvents = this.eventManager.addEvents<ListViewEventLayout>({
             clicked: null

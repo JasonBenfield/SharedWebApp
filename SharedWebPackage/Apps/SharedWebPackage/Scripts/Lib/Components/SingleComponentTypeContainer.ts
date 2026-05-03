@@ -15,15 +15,15 @@ export class SingleComponentTypeContainer<TItem extends BasicComponent, TItemVie
         return this.view.getViewID();
     }
 
-    getComponentByElement: (element: HTMLElement) => BasicComponent;
+    declare getComponentByElement: (element: HTMLElement) => BasicComponent;
 
-    anyComponents: () => boolean;
+    declare anyComponents: () => boolean;
 
-    getComponent: (index: number) => TItem;
+    declare getComponent: (index: number) => TItem;
 
-    getComponents: () => TItem[];
+    declare getComponents: () => TItem[];
 
-    clearComponents: () => void;
+    declare clearComponents: () => void;
 
     add() {
         const componentView = this.createComponentView(this.view);

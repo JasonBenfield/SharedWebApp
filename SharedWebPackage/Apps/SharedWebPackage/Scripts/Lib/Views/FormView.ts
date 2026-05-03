@@ -29,7 +29,7 @@ export class FormView extends BasicContainerView {
 
     onSubmit() { return this.on("submit"); }
 
-    protected setAttr: (config: (attr: IFormAttributes) => void) => void;
+    declare protected setAttr: (config: (attr: IFormAttributes) => void) => void;
 
     clearAutocomplete() { this.setAutocomplete(null); }
 

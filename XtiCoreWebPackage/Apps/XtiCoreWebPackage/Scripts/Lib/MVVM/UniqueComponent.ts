@@ -14,8 +14,8 @@ export interface IUniqueViewModel {
     set name(name: string);
 }
 
-export function UniqueViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T) {
-    return class extends Base implements IUniqueViewModel {
+export function UniqueViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T): T & Constructor<IUniqueViewModel> {
+    return class extends Base {
         private _id = "";
         get id() { return this._id; }
         set id(id: string) { this._id = id; }
@@ -30,8 +30,8 @@ export interface IUniqueView {
     setName(name: string): this;
 }
 
-export function UniqueViewMixin<T extends Constructor<StyleableComponentView>>(Base: T) {
-    return class extends Base implements IUniqueView {
+export function UniqueViewMixin<T extends Constructor<StyleableComponentView>>(Base: T): T & Constructor<IUniqueView> {
+    return class extends Base {
         setName(name: string) {
             return this.setAttribute("name", name);
         }
@@ -52,8 +52,8 @@ export interface UniqueComponentEventLayout {
     idChanged: string
 };
 
-export function UniqueComponentMixin<T extends Constructor<Component>>(Base: T) {
-    return class extends Base implements IUniqueComponent {
+export function UniqueComponentMixin<T extends Constructor<Component>>(Base: T): T & Constructor<IUniqueComponent> {
+    return class extends Base {
         constructor(...args: any[]) {
             super(...args);
             const nextID = GeneratedID.next(`${this.constructor.name}_`);

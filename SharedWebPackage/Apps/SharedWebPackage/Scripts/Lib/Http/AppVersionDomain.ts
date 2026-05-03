@@ -1,6 +1,6 @@
 ﻿
 export class AppVersionDomain {
-    private webAppDomains: IAppVersionDomain[];
+    private webAppDomains: IAppVersionDomain[] | null = null;
 
     static readonly instance = new AppVersionDomain();
 

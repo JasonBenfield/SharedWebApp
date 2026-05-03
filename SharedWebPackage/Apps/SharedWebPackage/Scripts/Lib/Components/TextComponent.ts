@@ -4,7 +4,7 @@ import { BasicComponent } from "./BasicComponent";
 export class TextComponent extends BasicComponent {
     declare protected readonly view: TextComponentView;
     private text: string;
-    private formatTitle: (text: string) => string;
+    private formatTitle?: (text: string) => string;
     private _data: any;
 
     constructor(view: TextComponentView) {

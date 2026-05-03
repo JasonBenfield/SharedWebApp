@@ -1,7 +1,7 @@
 import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentView } from "./ComponentView";
 import { ComponentViewModel, ObservableChanges } from "./ComponentViewModel";
-import { StyleableComponentViewMixin } from "./StyleableComponentView";
+import { StyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
 import { TextChangeHandler, TextViewMixin } from "./TextComponent";
 
 export interface IOptionComponentViewModel<TValue> {
@@ -41,7 +41,7 @@ export interface IOptionComponentView {
 export type BaseOptionComponentView = ComponentView & IOptionComponentView;
 
 export class OptionComponentView
-    extends TextViewMixin(StyleableComponentViewMixin(ComponentView))
+    extends TextViewMixin(StyleableComponentView)
     implements IOptionComponentView {
 
     constructor() {

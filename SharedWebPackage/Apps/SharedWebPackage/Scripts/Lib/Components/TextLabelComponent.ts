@@ -3,8 +3,8 @@ import { ILabelView, ITextComponentView } from "../Views/Types";
 import { BasicComponent } from "./BasicComponent";
 
 export class TextLabelComponent extends BasicComponent {
-    private text: string;
-    private formatTitle: (text: string) => string;
+    private text = "";
+    private formatTitle?: (text: string) => string;
     private _data: any;
 
     constructor(protected readonly view: BasicComponentView & ITextComponentView & ILabelView) {

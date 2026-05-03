@@ -1,5 +1,5 @@
 ﻿export interface ISerializableValueRangeBound<T> {
-    readonly value: T;
+    readonly value: T | null;
     readonly isIncluded: boolean;
 }
 
@@ -10,7 +10,7 @@ export class ValueRangeBound<T> {
             : null;
     }
 
-    constructor(readonly value: T, readonly isIncluded: boolean) {
+    constructor(readonly value: T | null, readonly isIncluded: boolean) {
     }
 
     serialize() {

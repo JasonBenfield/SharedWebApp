@@ -6,9 +6,7 @@ import { AddEmployeeFormView } from './AddEmployeeFormView';
 import { AddressInputField } from './AddressInputField';
 
 export class AddEmployeeForm extends BaseForm {
-    protected readonly view: AddEmployeeFormView;
-
-    constructor(view: AddEmployeeFormView) {
+    constructor(protected readonly view: AddEmployeeFormView) {
         super('AddEmployeeForm', view);
         this.EmployeeName.setCaption("Name");
         this.EmployeeName.setValue('Paul Atreides')
@@ -31,11 +29,13 @@ export class AddEmployeeForm extends BaseForm {
         this.Address.setCaption('Address');
     }
 
-    readonly EmployeeName = this.addTextInputFormGroup('EmployeeName', this.view.EmployeeName);
-    readonly BirthDate = this.addDateInputFormGroup('BirthDate', this.view.BirthDate);
-    readonly Salary = this.addNumberInputFormGroup('Salary', this.view.Salary);
-    readonly Department = this.addNumberDropDownFormGroup('Department', this.view.Department);
-    readonly Address = this.addFormGroup(
-        new AddressInputField(this.getName(), 'Address', this.view.Address)
-    );
+    get EmployeeName() { return this.addTextInputFormGroup('EmployeeName', this.view.EmployeeName); }
+    get BirthDate() { return this.addDateInputFormGroup('BirthDate', this.view.BirthDate); }
+    get Salary() { return this.addNumberInputFormGroup('Salary', this.view.Salary); }
+    get Department() { return this.addNumberDropDownFormGroup('Department', this.view.Department); }
+    get Address() {
+        return this.addFormGroup(
+            new AddressInputField(this.getName(), 'Address', this.view.Address)
+        );
+    }
 }

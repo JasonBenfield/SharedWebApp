@@ -19,8 +19,8 @@ export interface IButtonComponentViewModel {
 
 export type BaseButtonComponentViewModel = ComponentViewModel & IButtonComponentViewModel;
 
-export function ButtonComponentViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T) {
-    return class extends Base implements IButtonComponentViewModel {
+export function ButtonComponentViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T): T & Constructor<IButtonComponentViewModel> {
+    return class extends Base {
         private _actionName = "";
         get actionName() { return this._actionName; }
         set actionName(actionName: string) { this._actionName = actionName; }
@@ -44,9 +44,20 @@ export interface IButtonView {
     disable(): void;
 }
 
+export interface IButtonViewMixin {
+    simulateClick(): void;
+    setContext(context: ContextualClass): this;
+    styleAsOutline(context?: ContextualClass): this;
+    styleAsSolid(context?: ContextualClass): this;
+    makeLarge(): this;
+    makeSmall(): this;
+    makeNormalSize(): this;
+    setType(type: "submit" | "button" | "reset"): this;
+}
+
 export type BaseButtonComponentView = ComponentView & IButtonView;
 
-export function ButtonViewMixin<T extends Constructor<StyleableComponentView>>(Base: T) {
+export function ButtonViewMixin<T extends Constructor<StyleableComponentView>>(Base: T): T & Constructor<IButtonView> & Constructor<IButtonViewMixin> {
     return class extends Base {
         constructor(...args: any[]) {
             super(...args);
@@ -71,11 +82,6 @@ export function ButtonViewMixin<T extends Constructor<StyleableComponentView>>(B
             }
             return this.buttonEvents.when;
         }
-
-        declare protected readonly viewModel: BaseButtonComponentViewModel;
-
-        get actionName() { return this.viewModel.actionName; }
-        set actionName(actionName: string) { this.viewModel.actionName = actionName; }
 
         private handleClickEvent(evt: PointerEvent) {
             this.buttonEvents.events.clicked.invoke(evt);
@@ -129,7 +135,7 @@ export function ButtonViewMixin<T extends Constructor<StyleableComponentView>>(B
         }
 
         setType(type: "submit" | "button" | "reset") {
-            this.setAttributes({ "type": type });
+            return this.setAttributes({ "type": type });
         }
 
         protected addToDom(index: number) {
@@ -178,9 +184,21 @@ export class ButtonView<
     declare asLayout: () => ButtonView<TLayout, TPublicLayout> & TLayout;
 }
 
-export function ButtonComponentMixin<T extends Constructor<Component>>(Base: T) {
+export interface IButtonComponent {
+    get actionName(): string;
+    set actionName(actionName: string);
+
+    get isEnabled(): boolean;
+    enable(): void;
+    disable(): void;
+}
+
+export function ButtonComponentMixin<T extends Constructor<Component>>(Base: T): T & Constructor<IButtonComponent> {
     return class extends Base {
         declare protected readonly viewModel: BaseButtonComponentViewModel;
+
+        get actionName() { return this.viewModel.actionName; }
+        set actionName(actionName: string) { this.viewModel.actionName = actionName; }
 
         get isEnabled() { return this.viewModel.isEnabled; }
 

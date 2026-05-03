@@ -1,20 +1,20 @@
-﻿import { Modal } from 'bootstrap';
-import { ColumnCss } from '../ColumnCss';
-import { ContextualClass } from '../ContextualClass';
-import { EventSource } from '../Events';
-import { MarginCss } from '../MarginCss';
-import { TextCss } from '../TextCss';
-import { BasicComponentView } from './BasicComponentView';
-import { BlockView } from './BlockView';
-import { ButtonCommandView } from './Command';
-import { MessageAlertView } from './MessageAlertView';
-import { RowView } from './RowView';
-import { TextBlockView } from './TextBlockView';
-import { TextHeading5View } from './TextHeadings';
+﻿import { Modal } from "bootstrap";
+import { ColumnCss } from "../ColumnCss";
+import { ContextualClass } from "../ContextualClass";
+import { EventSource } from "../Events";
+import { MarginCss } from "../MarginCss";
+import { TextCss } from "../TextCss";
+import { BasicComponentView } from "./BasicComponentView";
+import { BlockView } from "./BlockView";
+import { ButtonCommandView } from "./Command";
+import { MessageAlertView } from "./MessageAlertView";
+import { RowView } from "./RowView";
+import { TextBlockView } from "./TextBlockView";
+import { TextHeading5View } from "./TextHeadings";
 
 export class ModalComponentView extends BasicComponentView {
-    private modal: Modal;
-    private backdrop: boolean | 'static' = 'static';
+    private modal: Modal | null = null;
+    private backdrop: boolean | "static" = "static";
 
     private readonly events = { closed: null };
     private readonly eventSource = new EventSource<typeof this.events>(this, this.events);
@@ -26,30 +26,30 @@ export class ModalComponentView extends BasicComponentView {
     readonly footer: BlockView;
 
     constructor(container: BasicComponentView) {
-        super(container, 'div');
-        this.addCssName('modal');
-        this.addCssName('fade');
-        this.setAttr(a => a.role = 'dialog');
+        super(container, "div");
+        this.addCssName("modal");
+        this.addCssName("fade");
+        this.setAttr(a => a.role = "dialog");
         this.frame = this.addView(BlockView);
-        this.frame.setRole('document');
-        this.frame.addCssName('modal-dialog');
-        this.frame.addCssName('modal-dialog-centered');
+        this.frame.setRole("document");
+        this.frame.addCssName("modal-dialog");
+        this.frame.addCssName("modal-dialog-centered");
         const content = this.frame.addView(BlockView);
-        content.addCssName('modal-content');
+        content.addCssName("modal-content");
         this.header = content.addView(BlockView);
-        this.header.addCssName('modal-header');
+        this.header.addCssName("modal-header");
         this.body = content.addView(BlockView);
-        this.body.addCssName('modal-body');
+        this.body.addCssName("modal-body");
         this.footer = content.addView(BlockView);
-        this.footer.addCssName('modal-footer');
-        this.on('hidden.bs.modal')
+        this.footer.addCssName("modal-footer");
+        this.on("hidden.bs.modal")
             .execute(() => {
                 this.eventSource.events.closed.invoke();
             })
             .subscribe();
     }
 
-    setBackdrop(backdrop: boolean | 'static') {
+    setBackdrop(backdrop: boolean | "static") {
         this.backdrop = backdrop;
     }
 
@@ -88,11 +88,11 @@ export class ModalMessageAlertView extends ModalComponentView {
         let buttonColumn = row.addColumn()
             .configure(c => {
                 c.setTextCss(new TextCss().end());
-                c.setColumnCss(ColumnCss.xs('auto'));
+                c.setColumnCss(ColumnCss.xs("auto"));
             });
         this.okButton = buttonColumn.addView(ButtonCommandView);
-        this.okButton.icon.solidStyle('check');
-        this.okButton.setText('OK');
+        this.okButton.icon.solidStyle("check");
+        this.okButton.setText("OK");
         this.okButton.setContext(ContextualClass.secondary);
         this.okButton.setMargin(MarginCss.end(1));
     }
@@ -115,16 +115,16 @@ export class ModalConfirmView extends ModalComponentView {
         const buttonColumn = row.addColumn()
             .configure(c => {
                 c.setTextCss(new TextCss().end());
-                c.setColumnCss(ColumnCss.xs('auto'));
+                c.setColumnCss(ColumnCss.xs("auto"));
             });
         this.noButton = buttonColumn.addView(ButtonCommandView);
-        this.noButton.icon.solidStyle('times');
-        this.noButton.setText('No');
+        this.noButton.icon.solidStyle("times");
+        this.noButton.setText("No");
         this.noButton.setContext(ContextualClass.secondary);
         this.noButton.setMargin(MarginCss.end(1));
         this.yesButton = buttonColumn.addView(ButtonCommandView);
-        this.yesButton.icon.solidStyle('check');
-        this.yesButton.setText('Yes');
+        this.yesButton.icon.solidStyle("check");
+        this.yesButton.setText("Yes");
         this.yesButton.setContext(ContextualClass.primary);
     }
 

@@ -4,7 +4,7 @@ import { InputControl } from "../Components/InputControl";
 import { DateOnly } from "../DateOnly";
 import { DateRange } from "../DateRange";
 import { DebouncedAction } from "../DebouncedAction";
-import { EventSource } from '../Events';
+import { EventSource } from "../Events";
 import { TextToDateOnlyViewValue } from "../Forms/TextToDateOnlyViewValue";
 import { ValueRangeBound } from "../ValueRangeBound";
 import { ValueRangePickerView } from "./ValueRangePickerView";
@@ -20,18 +20,18 @@ export class DateRangePicker extends BasicComponent {
     private readonly to: InputControl<DateOnly>;
     private readonly toInclude: BooleanInputControl;
 
-    private readonly eventSource = new EventSource<Events>(this, { valueChanged: null as DateRange });
+    private readonly eventSource = new EventSource<Events>(this, { valueChanged: new DateRange(null, null) });
     readonly when = this.eventSource.when;
 
     constructor(view: ValueRangePickerView) {
         super(view);
         this.fromCheck = this.addComponent(new BooleanInputControl(view.fromCheckInput));
         this.from = this.addComponent(new InputControl<DateOnly>(view.fromInput, new TextToDateOnlyViewValue()));
-        view.fromInput.setType('date');
+        view.fromInput.setType("date");
         this.fromInclude = this.addComponent(new BooleanInputControl(view.fromIncludeInput));
         this.toCheck = this.addComponent(new BooleanInputControl(view.toCheckInput));
         this.to = this.addComponent(new InputControl<DateOnly>(view.toInput, new TextToDateOnlyViewValue()));
-        view.toInput.setType('date');
+        view.toInput.setType("date");
         this.toInclude = this.addComponent(new BooleanInputControl(view.toIncludeInput));
         this.fromCheck.when.valueChanged.then(this.onFromCheckChanged.bind(this));
         this.from.when.valueChanged.then(this.onFromChanged.bind(this));
@@ -94,13 +94,9 @@ export class DateRangePicker extends BasicComponent {
 
     getValue() {
         const includeStart = this.fromInclude.getValue();
-        const start = this.fromCheck.getValue()
-            ? this.from.getValue()
-            : null;
+        const start = this.fromCheck.getValue() ? this.from.getValue() : null;
         const includeEnd = this.toInclude.getValue();
-        const end = this.toCheck.getValue()
-            ? this.to.getValue()
-            : null;
+        const end = this.toCheck.getValue() ? this.to.getValue() : null;
         return new DateRange(
             new ValueRangeBound(start, includeStart),
             new ValueRangeBound(end, includeEnd)
@@ -109,11 +105,11 @@ export class DateRangePicker extends BasicComponent {
 
     setValue(dateRange: DateRange) {
         this.fromCheck.setValue(Boolean(dateRange.start));
-        this.from.setValue(dateRange.start && dateRange.start.value);
-        this.fromInclude.setValue(dateRange.start && dateRange.start.isIncluded);
+        this.from.setValue(dateRange.start?.value || null);
+        this.fromInclude.setValue(dateRange.start?.isIncluded || false);
         this.toCheck.setValue(Boolean(dateRange.end));
-        this.to.setValue(dateRange.end && dateRange.end.value);
-        this.toInclude.setValue(dateRange.end && dateRange.end.isIncluded);
+        this.to.setValue(dateRange.end?.value || null);
+        this.toInclude.setValue(dateRange.end?.isIncluded || false);
         this.updateFromVisibility();
         this.updateToVisibility();
     }

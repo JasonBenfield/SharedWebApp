@@ -1,11 +1,9 @@
-import { FormattedNumber } from "../FormattedNumber";
-import { CommandViewModel } from "./Command";
 import { Component, ComponentChangeHandler } from "./Component";
-import { ChangedProperty, ComponentViewModel, ObservableChanges } from "./ComponentViewModel";
+import { ChangedProperty, ObservableChanges } from "./ComponentViewModel";
 import { areValuesEqual, IEquatable } from "./Equatable";
-import { FocusableComponentChangeHandler, FocusableComponentMixin, HasFocusProperty, IFocusableViewModel } from "./FocusableComponent";
-import { BaseInputComponentView, BaseInputComponentViewModel, IInputComponentViewModel, InputComponentChangeHandler, InputComponentMixin, InputComponentViewModel, InputTextValue, ITextInputViewModel, TextInputComponentChangeHandler, TextInputComponentMixin } from "./InputComponent";
-import { UniqueComponentChangeHandler, UniqueComponentMixin } from "./UniqueComponent";
+import { FocusableComponentChangeHandler, FocusableComponentMixin, HasFocusProperty, IFocusableComponent } from "./FocusableComponent";
+import { BaseInputComponentView, BaseInputComponentViewModel, IInputComponent, InputComponentChangeHandler, InputComponentMixin, InputComponentViewModel, InputTextValue, ITextInputComponent, TextInputComponentChangeHandler, TextInputComponentMixin } from "./InputComponent";
+import { IUniqueComponent, UniqueComponentChangeHandler, UniqueComponentMixin } from "./UniqueComponent";
 
 export class TransformedInputValue<TValue> implements IEquatable {
     constructor(readonly value: TValue, readonly isFromUI = false) {
@@ -110,7 +108,9 @@ type TransformedInputComponentEventLayout<TValue> = {
     valueChanged: TValue
 };
 
-export class TransformedInputComponent<TValue> extends InputComponentMixin(TextInputComponentMixin(UniqueComponentMixin(FocusableComponentMixin(Component)))) {
+export class TransformedInputComponent<TValue>
+    extends InputComponentMixin(TextInputComponentMixin(UniqueComponentMixin(FocusableComponentMixin(Component))))
+    implements IInputComponent, ITextInputComponent, IUniqueComponent, IFocusableComponent {
 
     constructor(
         protected readonly viewModel: BaseTransformedInputComponentViewModel<TValue>,

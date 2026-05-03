@@ -4,10 +4,10 @@ import { TextLinkComponentView } from "../Views/Types";
 import { TextComponent } from "./TextComponent";
 
 export class TextLinkComponent extends TextComponent {
-    static readonly doNothing = 'javascript:;';
+    static readonly doNothing = "javascript:;";
 
     declare protected readonly view: TextLinkComponentView;
-    private href: string;
+    private href = "";
 
     constructor(view: TextLinkComponentView) {
         super(view);
@@ -32,7 +32,7 @@ export class TextLinkComponent extends TextComponent {
     }
 
     setTargetToBlank() {
-        this.view.setTarget('_blank');
+        this.view.setTarget("_blank");
     }
 
     setTargetToDefault() {

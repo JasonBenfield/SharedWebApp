@@ -22,7 +22,7 @@ export class TextCss implements ICssBuilder {
         return this;
     }
 
-    private _color: ContextualClass | "text-muted" | "text-reset";
+    private _color: ContextualClass | string = "";
 
     context(context: ContextualClass) {
         this._color = context;
@@ -39,14 +39,14 @@ export class TextCss implements ICssBuilder {
         return this;
     }
 
-    private _truncate: "text-truncate";
+    private _truncate: string = "";
 
     truncate() {
         this._truncate = "text-truncate";
         return this;
     }
 
-    private fontWeight: string;
+    private fontWeight = "";
 
     bold() {
         this.fontWeight = "fw-bold";
@@ -70,7 +70,7 @@ export class TextCss implements ICssBuilder {
         return this;
     }
 
-    private _wrap: string;
+    private _wrap = "";
 
     wrap() {
         this._wrap = "text-wrap";
@@ -82,14 +82,14 @@ export class TextCss implements ICssBuilder {
         return this;
     }
 
-    private style: string;
+    private style = "";
 
     italicize() {
         this.style = "fst-italic";
         return this;
     }
 
-    private textDecoration: string;
+    private textDecoration = "";
 
     underline() {
         this.textDecoration = "text-decoration-underline";
@@ -106,14 +106,14 @@ export class TextCss implements ICssBuilder {
         return this;
     }
 
-    private _textBreak: string;
+    private _textBreak = "";
 
     textBreak() {
         this._textBreak = "text-break";
         return this;
     }
 
-    private _monospace: string;
+    private _monospace = "";
 
     monospace() {
         this._monospace = "font-monospace";

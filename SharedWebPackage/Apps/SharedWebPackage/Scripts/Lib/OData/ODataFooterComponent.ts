@@ -9,7 +9,7 @@ export class ODataFooterComponent extends BasicComponent {
     declare protected readonly view: ODataFooterComponentView;
     private readonly pageButtonGroup: ButtonGroup;
     private readonly countText: TextComponent;
-    private readonly _events = { pageRequested: null as number };
+    private readonly _events = { pageRequested: 0 };
     private readonly eventSource = new EventSource<typeof this._events>(this, this._events);
     readonly when = this.eventSource.when;
 
@@ -38,7 +38,7 @@ export class ODataFooterComponent extends BasicComponent {
                     }
                 }
                 else {
-                    this.pageButtonGroup.addText().setText('...');
+                    this.pageButtonGroup.addText().setText("...");
                 }
             }
         }
@@ -71,7 +71,7 @@ export class ODataFooterComponent extends BasicComponent {
     }
 
     setCount(startRecord: number, recordCount: number, total: number) {
-        let countText = '';
+        let countText = "";
         if (total > 0) {
             if (startRecord === 1 && recordCount === total) {
                 countText = total.toLocaleString();

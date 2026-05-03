@@ -24,7 +24,7 @@ export class FormGroupTextArea extends FormGroup {
         const value = this.textAreaControl.getValue();
         this.textAreaControl.hide();
         this.valueTextComponent.show();
-        this.valueTextComponent.setText(value ? value.toString() : '');
+        this.valueTextComponent.setText(value || "");
     }
 
     makeEditable() {

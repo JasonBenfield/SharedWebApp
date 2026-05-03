@@ -8,7 +8,7 @@ export class AsyncCommand {
     private isMultiExecutionAllowed = false;
     private isEnabled = true;
     private executionCount = 0;
-    private inProgressAnimation: FaIconAnimation = null;
+    private inProgressAnimation: FaIconAnimation | null = null;
 
     constructor(private readonly action: CommandAction) {
     }

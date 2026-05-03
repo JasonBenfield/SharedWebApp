@@ -5,15 +5,15 @@ import { InputView } from "../Views/InputView";
 import { InputControl } from "./InputControl";
 
 export class TimeInputControl extends InputControl<TimeOnly> {
-    private step = '60';
+    private step = "60";
 
     constructor(view: InputView) {
         super(view, new TextToTimeOnlyViewValue());
-        view.setType('time');
+        view.setType("time");
         view.setMaxWidth(CssLengthUnit.em(10));
     }
 
-    setType: (type: 'time') => void;
+    declare setType: (type: "time") => void;
 
     required() {
         this.view.required();
@@ -27,12 +27,12 @@ export class TimeInputControl extends InputControl<TimeOnly> {
         this.view.setCustomValidity(message);
     }
 
-    setValue(value: TimeOnly) {
+    setValue(value: TimeOnly | null) {
         if (value && value.seconds) {
-            this.setTimeStep('1');
+            this.setTimeStep("1");
         }
         else {
-            this.setTimeStep('60');
+            this.setTimeStep("60");
         }
         super.setValue(value);
     }

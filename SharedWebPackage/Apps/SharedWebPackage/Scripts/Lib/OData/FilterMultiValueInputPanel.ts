@@ -33,10 +33,10 @@ class Result {
 export class FilterMultiValueInputPanel implements IPanel {
     private readonly awaitable = new Awaitable<Result>();
     private readonly title: TextComponent;
-    private options: FilterColumnOptionsBuilder;
+    private options: FilterColumnOptionsBuilder | null = null;
     private readonly input: InputControl<number | string | DateOnly>;
     private readonly ignoreCaseInput: BooleanInputControl;
-    private viewValue: MultiViewValue<string, number | string | DateOnly>;
+    private viewValue: MultiViewValue;
     private readonly alert: MessageAlert;
     private readonly suggestedValues: ListGroup<SuggestedValueListItem, SuggestedValueListItemView>;
     private readonly selectedValues: ListGroup<SelectedValueListItem, SelectedValueListItemView>;
@@ -77,10 +77,10 @@ export class FilterMultiValueInputPanel implements IPanel {
     );
 
     private async getSuggestedValues() {
-        if (this.options) {
+        if (this.options && this.options.column.suggestedValueGetter) {
             const suggestedValues = await this.alert.infoAction(
-                'Loading...',
-                () => this.options.column.suggestedValueGetter.getSuggestedValues(this.input.getValue())
+                "Loading...",
+                () => this.options!.column.suggestedValueGetter!.getSuggestedValues(this.input.getValue())
             );
             this.suggestedValues.setItems(
                 suggestedValues as string[],
@@ -96,7 +96,7 @@ export class FilterMultiValueInputPanel implements IPanel {
     private onSelectedValueDeleteClicked(el: HTMLElement) {
         const item = this.selectedValues.getItemByElement(el);
         this.selectedValues.removeItem(item);
-        this.options.column.suggestedValueGetter.exclude(this.getSelectedValues());
+        this.options?.column.suggestedValueGetter?.exclude(this.getSelectedValues());
         this.updateSelectedValueVisibility();
         this.debouncedGetSuggestedValues.execute();
     }
@@ -113,9 +113,9 @@ export class FilterMultiValueInputPanel implements IPanel {
     private add() {
         if (!this.input.isBlank()) {
             const value = this.getInputValue();
-            if (typeof value !== 'number' || !Number.isNaN(value)) {
+            if (typeof value !== "number" || !Number.isNaN(value)) {
                 this.addValue(value);
-                this.setInputValue('');
+                this.setInputValue("");
                 this.input.setFocus();
             }
         }
@@ -128,7 +128,7 @@ export class FilterMultiValueInputPanel implements IPanel {
                 new SelectedValueListItem(v, `${v}`, itemView)
         );
         this.updateSelectedValueVisibility();
-        this.options.column.suggestedValueGetter.exclude(this.getSelectedValues());
+        this.options?.column.suggestedValueGetter?.exclude(this.getSelectedValues());
         this.debouncedGetSuggestedValues.execute();
     }
 
@@ -137,16 +137,18 @@ export class FilterMultiValueInputPanel implements IPanel {
     }
 
     private save() {
-        const values = this.getSelectedValues();
-        if (values.length > 0) {
+        if (this.options) {
             const values = this.getSelectedValues();
-            if (this.options.column.sourceType.isString()) {
-                this.options.setStringValues(values, this.ignoreCaseInput.getValue());
+            if (values.length > 0) {
+                const values = this.getSelectedValues();
+                if (this.options.column.sourceType.isString()) {
+                    this.options.setStringValues(values, this.ignoreCaseInput.getValue());
+                }
+                else {
+                    this.options.setValues(values);
+                }
+                this.awaitable.resolve(Result.done());
             }
-            else {
-                this.options.setValues(values);
-            }
-            this.awaitable.resolve(Result.done());
         }
     }
 
@@ -176,22 +178,22 @@ export class FilterMultiValueInputPanel implements IPanel {
         }
         if (options.column.sourceType.isNumber()) {
             this.viewValue.setViewValue(new TextToNumberViewValue());
-            this.view.valueInput.setType('text');
+            this.view.valueInput.setType("text");
         }
         else if (options.column.sourceType.isDate()) {
             this.viewValue.setViewValue(new TextToDateOnlyViewValue());
-            this.view.valueInput.setType('date');
+            this.view.valueInput.setType("date");
         }
         else {
             this.viewValue.setViewValue(new TextToTextViewValue());
-            this.view.valueInput.setType('text');
+            this.view.valueInput.setType("text");
         }
         this.selectedValues.clearItems();
         this.updateSelectedValueVisibility();
-        this.setInputValue('');
+        this.setInputValue("");
         this.view.ignoreCaseInput.setValue(true);
-        this.options.column.suggestedValueGetter.exclude([]);
-        this.options.column.suggestedValueGetter.setIgnoreCase(this.ignoreCaseInput.getValue());
+        this.options.column.suggestedValueGetter?.exclude([]);
+        this.options.column.suggestedValueGetter?.setIgnoreCase(this.ignoreCaseInput.getValue());
         this.debouncedGetSuggestedValues.execute();
     }
 

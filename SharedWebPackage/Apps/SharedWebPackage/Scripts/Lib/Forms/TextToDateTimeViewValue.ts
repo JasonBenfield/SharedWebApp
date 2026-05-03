@@ -14,11 +14,13 @@ export class TextToDateTimeViewValue extends TypedFieldViewValue<string, DateTim
     protected _fromView(value: string) {
         if (value) {
             const match = /^(?<Year>\d{4})-(?<Month>\d{2})-(?<Day>\d{2})$/.exec(value);
-            return new Date(
-                Number(match.groups.Year),
-                Number(match.groups.Month) - 1,
-                Number(match.groups.Day)
-            );
+            if (match && match.groups) {
+                return new Date(
+                    Number(match.groups.Year),
+                    Number(match.groups.Month) - 1,
+                    Number(match.groups.Day)
+                );
+            }
         }
         return null;
     }

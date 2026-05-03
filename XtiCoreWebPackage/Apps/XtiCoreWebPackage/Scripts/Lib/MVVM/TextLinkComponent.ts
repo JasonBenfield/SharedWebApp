@@ -3,7 +3,7 @@ import { ComponentView, ComponentViewLayout } from "./ComponentView";
 import { ComponentViewModel } from "./ComponentViewModel";
 import { BaseCompositeComponentView } from "./CompositeComponent";
 import { ILinkView, ILinkViewModel, LinkComponentChangeHandler, LinkComponentMixin, LinkViewMixin, LinkViewModelMixin } from "./LinkComponent";
-import { StyleableComponentViewMixin } from "./StyleableComponentView";
+import { StyleableComponentView } from "./StyleableComponentView";
 import { BaseTextComponentView, BaseTextComponentViewModel, ITextView, SynchedTitleChangeHandler, SynchedTitleComponentMixin, SynchedTitleViewModelMixin, TextChangeHandler, TextComponentMixin, TextViewMixin, TextViewModelMixin, TitleChangeHandler, TitleComponentMixin, TitleViewMixin, TitleViewModelMixin } from "./TextComponent";
 
 export class TextLinkComponentViewModel extends SynchedTitleViewModelMixin(TextViewModelMixin(LinkViewModelMixin(TitleViewModelMixin(ComponentViewModel)))) {
@@ -69,7 +69,8 @@ export class ContainerOfTextLinkView<
     }
 }
 
-export class TextLinkComponentView extends TitleViewMixin(TextViewMixin(LinkViewMixin(StyleableComponentViewMixin(ComponentView)))) {
+export class TextLinkComponentView
+    extends TitleViewMixin(TextViewMixin(LinkViewMixin(StyleableComponentView))) {
     constructor() {
         super("a");
     }

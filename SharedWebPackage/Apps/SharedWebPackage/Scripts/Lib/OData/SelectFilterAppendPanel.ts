@@ -28,7 +28,7 @@ class Result {
 export class SelectFilterAppendPanel extends BasicComponent implements IPanel {
     private readonly panelView: SelectFilterAppendPanelView;
     private readonly awaitable = new Awaitable<Result>();
-    private options: FilterColumnOptionsBuilder;
+    private options: FilterColumnOptionsBuilder | null = null;
     private readonly conditionComponents: BasicComponent[] = [];
 
     constructor(view: SelectFilterAppendPanelView) {
@@ -49,40 +49,46 @@ export class SelectFilterAppendPanel extends BasicComponent implements IPanel {
     }
 
     private updateConditions() {
-        for (const component of this.conditionComponents) {
-            this.removeComponent(component);
-        }
-        this.conditionComponents.splice(0, this.conditionComponents.length);
-        const conditionClauses = this.options.getConditionClauses();
-        if (conditionClauses.length > 0) {
-            this.panelView.showConditions();
-        }
-        else {
-            this.panelView.hideConditions();
-        }
-        for (const conditionClause of conditionClauses) {
-            const conditionClauseComponent = this.addComponent(
-                new FilterConditionClauseComponent(this.panelView.addCondition())
-            );
-            conditionClauseComponent.setConditionClause(conditionClause);
-            conditionClauseComponent.when.deleteClicked.then(this.onDeleteClick.bind(this));
-            this.conditionComponents.push(conditionClauseComponent);
+        if (this.options) {
+            for (const component of this.conditionComponents) {
+                this.removeComponent(component);
+            }
+            this.conditionComponents.splice(0, this.conditionComponents.length);
+            const conditionClauses = this.options.getConditionClauses();
+            if (conditionClauses.length > 0) {
+                this.panelView.showConditions();
+            }
+            else {
+                this.panelView.hideConditions();
+            }
+            for (const conditionClause of conditionClauses) {
+                const conditionClauseComponent = this.addComponent(
+                    new FilterConditionClauseComponent(this.panelView.addCondition())
+                );
+                conditionClauseComponent.setConditionClause(conditionClause);
+                conditionClauseComponent.when.deleteClicked.then(this.onDeleteClick.bind(this));
+                this.conditionComponents.push(conditionClauseComponent);
+            }
         }
     }
 
     private onItemClick(sourceElement: HTMLElement) {
-        if (this.panelView.clearItem.hasElement(sourceElement)) {
-            this.options.replace();
+        if (this.options) {
+            if (this.panelView.clearItem.hasElement(sourceElement)) {
+                this.options.replace();
+            }
+            else if (this.panelView.appendItem.hasElement(sourceElement)) {
+                this.options.append();
+            }
+            this.awaitable.resolve(Result.next());
         }
-        else if (this.panelView.appendItem.hasElement(sourceElement)) {
-            this.options.append();
-        }
-        this.awaitable.resolve(Result.next());
     }
 
     private onDeleteClick(conditionClause: FilterConditionClause) {
-        this.options.deleteConditionClause(conditionClause);
-        this.updateConditions();
+        if (this.options) {
+            this.options.deleteConditionClause(conditionClause);
+            this.updateConditions();
+        }
     }
 
     start() {

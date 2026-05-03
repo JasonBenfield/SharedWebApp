@@ -2,6 +2,7 @@
 import { DateRange, ISerializableDateRange } from "../DateRange";
 import { DateTimeOffset } from "../DateTimeOffset";
 import { JoinedStrings } from "../JoinedStrings";
+import { Month } from "../Month";
 import { ISerializableNumberRange, NumberRange } from "../NumberRange";
 import { ISerializableRelativeDateRange, RelativeDateRange } from "../RelativeDateRange";
 import { TimeOnly } from "../TimeOnly";
@@ -107,7 +108,7 @@ export class FilterPartFactory {
                 serializablePart.value as ISerializableFilterConditionClause
             );
         }
-        return part as T;
+        return part! as T;
     }
 }
 
@@ -116,17 +117,17 @@ interface ISerializableFilterConjunction {
 }
 
 export class FilterConjunction {
-    static readonly typeName = 'FilterConjunction';
+    static readonly typeName = "FilterConjunction";
 
     static deserialize(serialized: ISerializableFilterConjunction) {
         return new FilterConjunction(serialized.value);
     }
 
-    static none() { return new FilterConjunction(''); }
+    static none() { return new FilterConjunction(""); }
 
-    static and() { return new FilterConjunction('and'); }
+    static and() { return new FilterConjunction("and"); }
 
-    static or() { return new FilterConjunction('or'); }
+    static or() { return new FilterConjunction("or"); }
 
     private constructor(private readonly value: string) {
     }
@@ -135,7 +136,7 @@ export class FilterConjunction {
         return this.toQuery();
     }
 
-    toQuery() { return this.value ? ` ${this.value} ` : ''; }
+    toQuery() { return this.value ? ` ${this.value} ` : ""; }
 
     serialize() {
         return {
@@ -152,7 +153,7 @@ interface ISerializableFilterConditionOperation {
 }
 
 export class FilterConditionOperation {
-    static readonly typeName = 'FilterConditionOperation';
+    static readonly typeName = "FilterConditionOperation";
 
     static deserialize(serialized: ISerializableFilterConditionOperation) {
         return new FilterConditionOperation(
@@ -163,11 +164,11 @@ export class FilterConditionOperation {
     }
 
     static isIn(left: FilterField | FilterFieldFunction, right: FilterValue | FilterStringValue) {
-        return new FilterConditionOperation(left, 'in', right);
+        return new FilterConditionOperation(left, "in", right);
     }
 
     static isNotIn(left: FilterField | FilterFieldFunction, right: FilterValue | FilterStringValue) {
-        return new FilterConditionOperation(left, 'not in', right);
+        return new FilterConditionOperation(left, "not in", right);
     }
 
     static equal(left: FilterField | FilterFieldFunction, right: FilterValue | FilterStringValue) {
@@ -185,7 +186,7 @@ export class FilterConditionOperation {
         if (right.isArray()) {
             return FilterConditionOperation.isIn(left, right);
         }
-        return new FilterConditionOperation(left, 'eq', right);
+        return new FilterConditionOperation(left, "eq", right);
     }
 
     static notEqual(left: FilterField | FilterFieldFunction, right: FilterValue | FilterStringValue) {
@@ -203,23 +204,23 @@ export class FilterConditionOperation {
         if (right.isArray()) {
             return FilterConditionOperation.isNotIn(left, right);
         }
-        return new FilterConditionOperation(left, 'ne', right);
+        return new FilterConditionOperation(left, "ne", right);
     }
 
     static lessThan(left: FilterField | FilterFieldFunction, right: FilterValue | FilterStringValue) {
-        return new FilterConditionOperation(left, 'lt', right);
+        return new FilterConditionOperation(left, "lt", right);
     }
 
     static lessThanOrEqual(left: FilterField | FilterFieldFunction, right: FilterValue | FilterStringValue) {
-        return new FilterConditionOperation(left, 'le', right);
+        return new FilterConditionOperation(left, "le", right);
     }
 
     static greaterThan(left: FilterField | FilterFieldFunction, right: FilterValue | FilterStringValue) {
-        return new FilterConditionOperation(left, 'gt', right);
+        return new FilterConditionOperation(left, "gt", right);
     }
 
     static greaterThanOrEqual(left: FilterField | FilterFieldFunction, right: FilterValue | FilterStringValue) {
-        return new FilterConditionOperation(left, 'ge', right);
+        return new FilterConditionOperation(left, "ge", right);
     }
 
     private constructor(
@@ -234,36 +235,36 @@ export class FilterConditionOperation {
     }
 
     format() {
-        if (this.operator === 'eq' && this.right.value === '') {
+        if (this.operator === "eq" && this.right.value === "") {
             return `${this.left.format()} is blank`;
         }
-        else if (this.operator === 'ne' && this.right.value === '') {
+        else if (this.operator === "ne" && this.right.value === "") {
             return `${this.left.format()} is not blank`;
         }
         let operator = this.operator;
-        if (operator === 'in') {
-            operator = 'is any of';
+        if (operator === "in") {
+            operator = "is any of";
         }
-        else if (operator === 'not in') {
-            operator = 'is not any of';
+        else if (operator === "not in") {
+            operator = "is not any of";
         }
-        else if (operator === 'eq') {
-            operator = 'is equal to';
+        else if (operator === "eq") {
+            operator = "is equal to";
         }
-        else if (operator === 'ne') {
-            operator = 'is not equal to';
+        else if (operator === "ne") {
+            operator = "is not equal to";
         }
-        if (operator === 'gt') {
-            operator = 'is greater than';
+        if (operator === "gt") {
+            operator = "is greater than";
         }
-        else if (operator === 'lt') {
-            operator = 'is less than';
+        else if (operator === "lt") {
+            operator = "is less than";
         }
-        if (operator === 'ge') {
-            operator = 'is greater than or equal to';
+        if (operator === "ge") {
+            operator = "is greater than or equal to";
         }
-        else if (operator === 'le') {
-            operator = 'is less than or equal to';
+        else if (operator === "le") {
+            operator = "is less than or equal to";
         }
         return `${this.left.format()} ${operator} ${this.right.format()}`;
     }
@@ -273,8 +274,8 @@ export class FilterConditionOperation {
         if (left instanceof FilterField && this.right instanceof FilterStringValue && this.right.ignoreCase) {
             left = FilterFieldFunction.toLower(left);
         }
-        const notOperator = this.operator === 'not in' ? 'not ' : '';
-        const operator = this.operator === 'not in' ? 'in' : this.operator;
+        const notOperator = this.operator === "not in" ? "not " : "";
+        const operator = this.operator === "not in" ? "in" : this.operator;
         return `${notOperator}${left.toQuery()} ${operator} ${this.right.toQuery()}`;
     }
 
@@ -297,7 +298,7 @@ interface ISerializableFilterField {
 }
 
 export class FilterField {
-    static readonly typeName = 'FilterField';
+    static readonly typeName = "FilterField";
 
     static deserialize(serialized: ISerializableFilterField) {
         return new FilterField(serialized.fieldName, serialized.displayText);
@@ -337,7 +338,7 @@ interface ISerializableFilterFieldFunction {
 }
 
 export class FilterFieldFunction {
-    static readonly typeName = 'FilterFieldFunction';
+    static readonly typeName = "FilterFieldFunction";
 
     static deserialize(serialized: ISerializableFilterFieldFunction) {
         const deserializedValues = serialized.values.map(
@@ -351,39 +352,39 @@ export class FilterFieldFunction {
     }
 
     static toLower(field: FilterField | FilterFieldFunction) {
-        return new FilterFieldFunction('tolower', field);
+        return new FilterFieldFunction("tolower", field);
     }
 
     static toUpper(field: FilterField | FilterFieldFunction) {
-        return new FilterFieldFunction('toupper', field);
+        return new FilterFieldFunction("toupper", field);
     }
 
     static trim(field: FilterField | FilterFieldFunction) {
-        return new FilterFieldFunction('trim', field);
+        return new FilterFieldFunction("trim", field);
     }
 
     static substring(field: FilterField | FilterFieldFunction, value: FilterValue) {
-        return new FilterFieldFunction('substring', field, value);
+        return new FilterFieldFunction("substring", field, value);
     }
 
     static indexOf(field: FilterField | FilterFieldFunction, value: FilterValue) {
-        return new FilterFieldFunction('indexof', field, value);
+        return new FilterFieldFunction("indexof", field, value);
     }
 
     static concat(field: FilterField | FilterFieldFunction, value: FilterValue) {
-        return new FilterFieldFunction('concat', field, value);
+        return new FilterFieldFunction("concat", field, value);
     }
 
     static round(field: FilterField | FilterFieldFunction) {
-        return new FilterFieldFunction('round', field);
+        return new FilterFieldFunction("round", field);
     }
 
     static floor(field: FilterField | FilterFieldFunction) {
-        return new FilterFieldFunction('floor', field);
+        return new FilterFieldFunction("floor", field);
     }
 
     static ceiling(field: FilterField | FilterFieldFunction) {
-        return new FilterFieldFunction('ceiling', field);
+        return new FilterFieldFunction("ceiling", field);
     }
 
     private readonly values: FilterValue[] = [];
@@ -409,7 +410,7 @@ export class FilterFieldFunction {
         return this.field.getField();
     }
 
-    isToLower() { return this.functionName === 'tolower'; }
+    isToLower() { return this.functionName === "tolower"; }
 
     format() {
         return this.toQuery();
@@ -419,7 +420,7 @@ export class FilterFieldFunction {
         const args = [this.field.toQuery()];
         const values = this.values.map(v => v.toQuery());
         args.push(...values);
-        const joined = new JoinedStrings(',', args).value();
+        const joined = new JoinedStrings(",", args).value();
         return `${this.functionName}(${joined})`;
     }
 
@@ -444,7 +445,7 @@ interface ISerializableFilterValue {
 }
 
 export class FilterValue {
-    static readonly typeName = 'FilterValue';
+    static readonly typeName = "FilterValue";
 
     static deserialize(serialized: ISerializableFilterValue) {
         return new FilterValue(serialized.value);
@@ -478,12 +479,12 @@ export class FilterValue {
         if (this.isArray()) {
             const arr = this.arrayValue();
             const joined = new JoinedStrings(
-                ',',
+                ",",
                 arr.map(v => new FilterValue(v).toQuery())
             ).value();
             query = `(${joined})`;
         }
-        else if (typeof this.value === 'number' || typeof this.value === 'boolean') {
+        else if (typeof this.value === "number" || typeof this.value === "boolean") {
             query = this.value.toString();
         }
         else if (this.value instanceof Date) {
@@ -499,7 +500,7 @@ export class FilterValue {
             query = `${this.value.toISOString()}`;
         }
         else {
-            query = `'${this.value}'`;
+            query = `"${this.value}"`;
         }
         return query;
     }
@@ -521,7 +522,7 @@ interface ISerializableFilterStringValue {
 }
 
 export class FilterStringValue {
-    static readonly typeName = 'FilterStringValue';
+    static readonly typeName = "FilterStringValue";
 
     static deserialize(serialized: ISerializableFilterStringValue) {
         return new FilterStringValue(serialized.ignoreCase, serialized.value);
@@ -535,17 +536,17 @@ export class FilterStringValue {
     arrayValue() { return this.value as string[]; }
 
     format() {
-        const ignoreCaseText = this.ignoreCase ? ' ( ignore case )' : '';
+        const ignoreCaseText = this.ignoreCase ? " ( ignore case )" : "";
         let formatted: string;
         if (this.isArray()) {
             const arr = this.arrayValue();
             formatted = new JoinedStrings(
-                ', ',
+                ", ",
                 arr
             ).value();
         }
         else {
-            formatted = `'${this.value}'`;
+            formatted = `"${this.value}"`;
         }
         return `${formatted}${ignoreCaseText}`;
     }
@@ -555,7 +556,7 @@ export class FilterStringValue {
         if (this.isArray()) {
             const arr = this.arrayValue();
             const joined = new JoinedStrings(
-                ',',
+                ",",
                 arr.map(v => new FilterStringValue(this.ignoreCase, v).toQuery())
             ).value();
             query = `(${joined})`;
@@ -565,7 +566,7 @@ export class FilterStringValue {
             if (this.ignoreCase) {
                 value = value.toLowerCase();
             }
-            query = `'${value}'`;
+            query = `"${value}"`;
         }
         return query;
     }
@@ -589,7 +590,7 @@ interface ISerializableFilterConditionFunction {
 }
 
 export class FilterConditionFunction {
-    static readonly typeName = 'FilterConditionFunction';
+    static readonly typeName = "FilterConditionFunction";
 
     static deserialize(serialized: ISerializableFilterConditionFunction) {
         const deserializedValues = serialized.values.map(
@@ -603,15 +604,15 @@ export class FilterConditionFunction {
     }
 
     static startsWith(field: FilterField | FilterFieldFunction, value: FilterStringValue) {
-        return new FilterConditionFunction('startswith', field, value);
+        return new FilterConditionFunction("startswith", field, value);
     }
 
     static endsWith(field: FilterField | FilterFieldFunction, value: FilterStringValue) {
-        return new FilterConditionFunction('endswith', field, value);
+        return new FilterConditionFunction("endswith", field, value);
     }
 
     static contains(field: FilterField | FilterFieldFunction, value: FilterStringValue) {
-        return new FilterConditionFunction('contains', field, value);
+        return new FilterConditionFunction("contains", field, value);
     }
 
     private readonly values: FilterStringValue[];
@@ -630,11 +631,11 @@ export class FilterConditionFunction {
 
     format() {
         let functionName = this.functionName;
-        if (this.functionName === 'startswith') {
-            functionName = 'starts with';
+        if (this.functionName === "startswith") {
+            functionName = "starts with";
         }
-        else if (this.functionName === 'endswith') {
-            functionName = 'ends with';
+        else if (this.functionName === "endswith") {
+            functionName = "ends with";
         }
         return `${this.field.format()} ${functionName} ${this.values[0].format()}`;
     }
@@ -647,7 +648,7 @@ export class FilterConditionFunction {
         const args = [left.toQuery()];
         const values = this.values.map(v => v.toQuery());
         args.push(...values);
-        const joined = new JoinedStrings(',', args).value();
+        const joined = new JoinedStrings(",", args).value();
         return `${this.functionName}(${joined})`;
     }
 
@@ -671,12 +672,12 @@ interface ISerializableFilterAbsoluteDateRange {
 }
 
 export class FilterAbsoluteDateRange {
-    static readonly typeName = 'FilterAbsoluteDateRange';
+    static readonly typeName = "FilterAbsoluteDateRange";
 
     static deserialize(serialized: ISerializableFilterAbsoluteDateRange) {
         return new FilterAbsoluteDateRange(
             FilterPartFactory.create(serialized.field),
-            DateRange.deserialize(serialized.range)
+            DateRange.deserialize(serialized.range) || new DateRange(null, null)
         );
     }
 
@@ -698,13 +699,13 @@ export class FilterAbsoluteDateRange {
             if (dateRange.start.isIncluded) {
                 condition = FilterConditionOperation.greaterThanOrEqual(
                     this.field,
-                    new FilterValue(dateRange.start.value)
+                    new FilterValue(dateRange.start.value || new DateOnly(1900, Month.January, 1))
                 );
             }
             else {
                 condition = FilterConditionOperation.greaterThan(
                     this.field,
-                    new FilterValue(dateRange.start.value)
+                    new FilterValue(dateRange.start.value || new DateOnly(1900, Month.January, 1))
                 );
             }
             conditionClauses.push(new FilterConditionClause(condition));
@@ -717,13 +718,13 @@ export class FilterAbsoluteDateRange {
             if (dateRange.end.isIncluded) {
                 condition = FilterConditionOperation.lessThanOrEqual(
                     this.field,
-                    new FilterValue(dateRange.end.value)
+                    new FilterValue(dateRange.end.value || DateOnly.max())
                 );
             }
             else {
                 condition = FilterConditionOperation.lessThan(
                     this.field,
-                    new FilterValue(dateRange.end.value)
+                    new FilterValue(dateRange.end.value || DateOnly.max())
                 );
             }
             conditionClauses.push(new FilterConditionClause(condition));
@@ -738,7 +739,7 @@ export class FilterAbsoluteDateRange {
     toQuery() {
         const clauses = this.getConditionClauses();
         return new JoinedStrings(
-            '',
+            "",
             clauses.map(c => c.toQuery())
         ).value();
     }
@@ -761,7 +762,7 @@ interface ISerializableFilterAbsoluteNumberRange {
 }
 
 export class FilterAbsoluteNumberRange {
-    static readonly typeName = 'FilterAbsoluteNumberRange';
+    static readonly typeName = "FilterAbsoluteNumberRange";
 
     static deserialize(serialized: ISerializableFilterAbsoluteNumberRange) {
         return new FilterAbsoluteNumberRange(
@@ -788,13 +789,13 @@ export class FilterAbsoluteNumberRange {
             if (numberRange.start.isIncluded) {
                 condition = FilterConditionOperation.greaterThanOrEqual(
                     this.field,
-                    new FilterValue(numberRange.start.value)
+                    new FilterValue(numberRange.start.value || Number.MIN_SAFE_INTEGER)
                 );
             }
             else {
                 condition = FilterConditionOperation.greaterThan(
                     this.field,
-                    new FilterValue(numberRange.start.value)
+                    new FilterValue(numberRange.start.value || Number.MIN_SAFE_INTEGER)
                 );
             }
             conditionClauses.push(new FilterConditionClause(condition));
@@ -807,13 +808,13 @@ export class FilterAbsoluteNumberRange {
             if (numberRange.end.isIncluded) {
                 condition = FilterConditionOperation.lessThanOrEqual(
                     this.field,
-                    new FilterValue(numberRange.end.value)
+                    new FilterValue(numberRange.end.value || Number.MAX_SAFE_INTEGER)
                 );
             }
             else {
                 condition = FilterConditionOperation.lessThan(
                     this.field,
-                    new FilterValue(numberRange.end.value)
+                    new FilterValue(numberRange.end.value || Number.MAX_SAFE_INTEGER)
                 );
             }
             conditionClauses.push(new FilterConditionClause(condition));
@@ -828,7 +829,7 @@ export class FilterAbsoluteNumberRange {
     toQuery() {
         const clauses = this.getConditionClauses();
         return new JoinedStrings(
-            '',
+            "",
             clauses.map(c => c.toQuery())
         ).value();
     }
@@ -851,12 +852,12 @@ interface ISerializableFilterRelativeDateRange {
 }
 
 export class FilterRelativeDateRange {
-    static readonly typeName = 'FilterRelativeDateRange';
+    static readonly typeName = "FilterRelativeDateRange";
 
     static deserialize(serialized: ISerializableFilterRelativeDateRange) {
         return new FilterRelativeDateRange(
             FilterPartFactory.create(serialized.field),
-            RelativeDateRange.deserialize(serialized.range)
+            RelativeDateRange.deserialize(serialized.range) || new RelativeDateRange(null, null, true)
         );
     }
 
@@ -882,7 +883,7 @@ export class FilterRelativeDateRange {
     toQuery() {
         const clauses = this.getConditionClauses();
         return new JoinedStrings(
-            '',
+            "",
             clauses.map(c => c.toQuery())
         ).value();
     }
@@ -921,12 +922,12 @@ export interface ISerializableFilterConditionClause {
 }
 
 export class FilterConditionClause {
-    static readonly typeName = 'FilterConditionClause';
+    static readonly typeName = "FilterConditionClause";
 
     static deserialize(serialized: ISerializableFilterConditionClause) {
         return new FilterConditionClause(
             FilterPartFactory.create(serialized.condition),
-            FilterPartFactory.create(serialized.conjunction)
+            FilterPartFactory.create(serialized.conjunction) as FilterConjunction || FilterConjunction.none()
         );
     }
 
@@ -968,7 +969,7 @@ export class FilterConditionClause {
 export class ODataQueryFilterBuilder {
     private readonly conditionClauses: FilterConditionClause[] = [];
 
-    constructor(serialized: ISerializableFilter, private readonly columns: ODataColumn[]) {
+    constructor(serialized: ISerializableFilter | null, private readonly columns: ODataColumn[]) {
         if (serialized) {
             this.fromSerialized(serialized, columns);
         }
@@ -981,7 +982,7 @@ export class ODataQueryFilterBuilder {
     fromSerialized(serialized: ISerializableFilter, columns: ODataColumn[]) {
         for (const part of serialized.conditionClauses) {
             const deserializedCondition = FilterPartFactory.create(part) as FilterConditionClause;
-            const column = this.columns.find(c => deserializedCondition.isField(c.columnName));
+            const column = columns.find(c => deserializedCondition.isField(c.columnName));
             if (column) {
                 this.conditionClauses.push(deserializedCondition);
             }
@@ -1031,7 +1032,7 @@ export class ODataQueryFilterBuilder {
 
     build() {
         return new JoinedStrings(
-            '',
+            "",
             this.conditionClauses.map(c => c.toQuery())
         ).value();
     }

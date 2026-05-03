@@ -7,9 +7,9 @@ import { MenuComponent } from "./MenuComponent";
 import { MenuItemComponent } from "./MenuItemComponent";
 
 export class UserMenuComponent extends MenuComponent {
-    constructor(app: AppClient, private readonly userMenu: UserMenuView) {
+    constructor(app: AppClient | null, private readonly userMenu: UserMenuView) {
         super(app, DefaultMenuDefinitions.instance.User.menuName, userMenu);
-        window.addEventListener('popstate', this.onPopState.bind(this));
+        window.addEventListener("popstate", this.onPopState.bind(this));
     }
 
     private onPopState() {
@@ -33,17 +33,17 @@ export class UserMenuComponent extends MenuComponent {
 
     private updateLogoutUrl(menuItem: MenuItemComponent) {
         let returnUrl = location.href;
-        if (returnUrl.indexOf('#') > -1) {
-            if (returnUrl.indexOf('?') > -1) {
-                returnUrl.replace('#', '&');
+        if (returnUrl.indexOf("#") > -1) {
+            if (returnUrl.indexOf("?") > -1) {
+                returnUrl.replace("#", "&");
             }
             else {
-                returnUrl.replace('#', '?');
+                returnUrl.replace("#", "?");
             }
         }
         menuItem.setHref(
             new UrlBuilder(menuItem.getUrl())
-                .addQuery('ReturnUrl', encodeURIComponent(returnUrl))
+                .addQuery("ReturnUrl", encodeURIComponent(returnUrl))
                 .value()
         );
     }

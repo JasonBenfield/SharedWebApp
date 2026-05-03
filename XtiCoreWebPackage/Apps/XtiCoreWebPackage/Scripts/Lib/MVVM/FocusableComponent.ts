@@ -30,7 +30,7 @@ export class HasFocusProperty implements IEquatable {
     }
 }
 
-export function FocusableViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T) {
+export function FocusableViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T): T & Constructor<IFocusableViewModel> {
     return class extends Base implements IFocusableViewModel {
         private _hasFocus = new HasFocusProperty(false, false);
         get hasFocus() { return this._hasFocus; }
@@ -43,7 +43,7 @@ export interface IFocusableView {
     blur(): void;
 }
 
-export function FocusableViewMixin<T extends Constructor<ComponentView>>(Base: T) {
+export function FocusableViewMixin<T extends Constructor<ComponentView>>(Base: T): T & Constructor<IFocusableView> {
     return class extends Base implements IFocusableView {
         private hasFocus = false;
 
@@ -79,8 +79,8 @@ export interface IFocusableComponent {
     blur(): void;
 }
 
-export function FocusableComponentMixin<T extends Constructor<Component>>(Base: T) {
-    return class extends Base implements IFocusableComponent {
+export function FocusableComponentMixin<T extends Constructor<Component>>(Base: T): T & Constructor<IFocusableComponent> {
+    return class extends Base {
         declare protected readonly viewModel: ComponentViewModel & IFocusableViewModel;
 
         get hasFocus() { return this.viewModel.hasFocus.value; }

@@ -17,7 +17,7 @@ export class GridTemplateCssValue {
 
     value() {
         return new JoinedStrings(
-            ' ',
+            " ",
             this.templates.map(c => c.toString())
         ).value();
     }
@@ -59,7 +59,7 @@ export class GridSpan {
     readonly value: string;
 
     constructor(size?: number) {
-        this.value = size ? `span ${size}` : 'span';
+        this.value = size ? `span ${size}` : "span";
     }
 
     toString() { return this.value; }
@@ -70,17 +70,17 @@ export class GridView extends BasicComponentView {
     private readonly rows: BasicGridRowView[] = [];
 
     constructor(container: BasicComponentView) {
-        super(container, 'div');
-        this.addCssName('grid');
+        super(container, "div");
+        this.addCssName("grid");
     }
 
-    protected setStyle: (config: (style: IGridStyle) => void) => void;
+    declare protected setStyle: (config: (style: IGridStyle) => void) => void;
 
-    borderless() { this.addCssName('grid-borderless'); }
+    borderless() { this.addCssName("grid-borderless"); }
 
-    styleAsLayout() { this.addCssName('grid-layout'); }
+    styleAsLayout() { this.addCssName("grid-layout"); }
 
-    height100() { this.addCssName('h-100'); }
+    height100() { this.addCssName("h-100"); }
 
     clearContents() {
         this.cells.splice(0, this.cells.length);
@@ -89,33 +89,33 @@ export class GridView extends BasicComponentView {
     }
 
     setContext(context: ContextualClass) {
-        this.setCss('grid', context.append('grid'));
+        this.setCss("grid", context.append("grid"));
     }
 
     setColumnGap(length: CssLengthUnit) {
-        this.setStyle(style => style['column-gap'] = length.value());
+        this.setStyle(style => style["column-gap"] = length.value());
     }
 
     setRowGap(length: CssLengthUnit) {
-        this.setStyle(style => style['row-gap'] = length.value());
+        this.setStyle(style => style["row-gap"] = length.value());
     }
 
     setAutoColumns(columns: GridTemplateCss) {
-        this.setStyle(style => style['grid-auto-columns'] = columns.toString());
+        this.setStyle(style => style["grid-auto-columns"] = columns.toString());
     }
 
     setAutoRows(rows: GridTemplateCss) {
-        this.setStyle(style => style['grid-auto-rows'] = rows.toString());
+        this.setStyle(style => style["grid-auto-rows"] = rows.toString());
     }
 
     setTemplateColumns(...columns: GridTemplateCss[]) {
         const value = new GridTemplateCssValue(...columns).value();
-        this.setStyle(style => style['grid-template-columns'] = value);
+        this.setStyle(style => style["grid-template-columns"] = value);
     }
 
     setTemplateRows(...rows: GridTemplateCss[]) {
         const value = new GridTemplateCssValue(...rows).value();
-        this.setStyle(style => style['grid-template-rows'] = value);
+        this.setStyle(style => style["grid-template-rows"] = value);
     }
 
     addCell<TView extends GridCellView>(ctor?: ViewConstructor<TView>) {
@@ -153,8 +153,8 @@ export class GridView extends BasicComponentView {
 export class BasicGridRowView extends BasicContainerView {
     constructor(container: BasicComponentView, createElementView: IHtmlElementView) {
         super(container, createElementView);
-        this.addCssName('d-contents');
-        this.addCssName('grid-row');
+        this.addCssName("d-contents");
+        this.addCssName("grid-row");
     }
 
     calculateTotalWidth() {
@@ -167,15 +167,15 @@ export class BasicGridRowView extends BasicContainerView {
     }
 
     stickyAtTop() {
-        this.addCssName('position-sticky-top');
+        this.addCssName("position-sticky-top");
     }
 
     stickyAtBottom() {
-        this.addCssName('position-sticky-bottom');
+        this.addCssName("position-sticky-bottom");
     }
 
     setContext(context: ContextualClass) {
-        this.setCss('grid-row-context', context.append('grid-row'));
+        this.setCss("grid-row-context", context.append("grid-row"));
     }
 
     clearContents() {
@@ -200,8 +200,8 @@ export class GridRowView extends BasicGridRowView {
     private clickConfig: IClickConfig;
 
     constructor(container: BasicComponentView) {
-        super(container, 'div');
-        this.configureClick(b => b.select('grid-cell'));
+        super(container, "div");
+        this.clickConfig = (b => b.select("grid-cell"));
     }
 
     configureClick(clickConfig: (builder: ViewEventActionBuilder) => ViewEventActionBuilder) {
@@ -209,7 +209,7 @@ export class GridRowView extends BasicGridRowView {
     }
 
     handleClick(action: (element: HTMLElement) => void) {
-        this.clickConfig(this.on('click').execute(action)).subscribe();
+        this.clickConfig(this.on("click").execute(action)).subscribe();
     }
 }
 
@@ -217,11 +217,11 @@ export class LinkGridRowView extends BasicGridRowView implements ILinkView {
     private clickConfig: IClickConfig;
 
     constructor(container: BasicComponentView) {
-        super(container, 'a');
-        this.configureClick(b => b.select('grid-cell'));
+        super(container, "a");
+        this.clickConfig = (b => b.select("grid-cell"));
     }
 
-    protected setAttr: (config: (attr: ILinkAttributes) => void) => void;
+    declare protected setAttr: (config: (attr: ILinkAttributes) => void) => void;
 
     setHref(href: string) {
         this.setAttr(attr => attr.href = href);
@@ -236,38 +236,38 @@ export class LinkGridRowView extends BasicGridRowView implements ILinkView {
     }
 
     handleClick(action: (element: HTMLElement) => void) {
-        this.clickConfig(this.on('click').execute(action)).subscribe();
+        this.clickConfig(this.on("click").execute(action)).subscribe();
     }
 }
 
 export class GridCellView extends BasicContainerView {
     constructor(container: BasicComponentView) {
-        super(container, 'div');
-        this.addCssName('grid-cell');
+        super(container, "div");
+        this.addCssName("grid-cell");
     }
 
     positionRelative() {
-        this.addCssName('position-relative');
+        this.addCssName("position-relative");
     }
 
-    protected setStyle: (config: (style: IGridCellStyle) => void) => void;
+    declare protected setStyle: (config: (style: IGridCellStyle) => void) => void;
 
-    scrollable() { this.addCssName('scrollable'); }
+    scrollable() { this.addCssName("scrollable"); }
 
     stickyAtTop() {
-        this.addCssName('position-sticky-top');
+        this.addCssName("position-sticky-top");
     }
 
     stickyAtBottom() {
-        this.addCssName('position-sticky-bottom');
+        this.addCssName("position-sticky-bottom");
     }
 
     stickyAtLeft() {
-        this.addCssName('position-sticky-left');
+        this.addCssName("position-sticky-left");
     }
 
     stickyAtRight() {
-        this.addCssName('positiion-sticky-right');
+        this.addCssName("positiion-sticky-right");
     }
 
     setGridColumn(start: number | GridSpan, end?: number | GridSpan) {

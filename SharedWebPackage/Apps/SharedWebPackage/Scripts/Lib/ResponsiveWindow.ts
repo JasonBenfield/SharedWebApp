@@ -75,7 +75,7 @@ export class ResponsiveWindow {
     static readonly instance = new ResponsiveWindow();
 
     private currentSize: ResponsiveWindowSize;
-    private readonly eventSource = new EventSource<Events>(this, { sizeChanged: null });
+    private readonly eventSource = new EventSource<Events>(this, { sizeChanged: new ResponsiveWindowSize() });
     readonly when = this.eventSource.when;
 
     private constructor() {

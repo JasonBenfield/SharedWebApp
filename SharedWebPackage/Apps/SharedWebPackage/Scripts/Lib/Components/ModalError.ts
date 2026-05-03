@@ -14,7 +14,7 @@ export class ModalError extends BasicComponent {
     declare protected readonly view: ModalErrorView;
     private readonly title: TextComponent;
     private readonly errorGroupComponentContainer: SingleComponentTypeContainer<ModalErrorGroupComponent, ModalErrorGroupView>;
-    private readonly events = { errorSelected: null as ErrorModel };
+    private readonly events = { errorSelected: new ErrorModel("") };
     private readonly eventSource = new EventSource<typeof this.events>(this, this.events);
     readonly when = this.eventSource.when;
 
@@ -80,7 +80,7 @@ export class ModalErrorGroupComponent extends BasicComponent {
     private readonly caption: TextComponent;
     private readonly errors: ListGroup<ModalErrorListItem, ModalErrorListItemView>;
 
-    private readonly events = { errorSelected: null as ErrorModel };
+    private readonly events = { errorSelected: new ErrorModel("") };
     private readonly eventSource = new EventSource<typeof this.events>(this, this.events);
     readonly when = this.eventSource.when;
 

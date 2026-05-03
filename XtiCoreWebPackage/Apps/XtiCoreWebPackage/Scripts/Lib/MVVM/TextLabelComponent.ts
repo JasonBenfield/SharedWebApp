@@ -3,7 +3,7 @@ import { ComponentView, ComponentViewLayout } from "./ComponentView";
 import { ComponentViewModel } from "./ComponentViewModel";
 import { BaseCompositeComponentView } from "./CompositeComponent";
 import { ILabelView, ILabelViewModel, LabelComponentChangeHandler, LabelComponentMixin, LabelViewMixin, LabelViewModelMixin } from "./LabelComponent";
-import { StyleableComponentViewMixin } from "./StyleableComponentView";
+import { StyleableComponentView } from "./StyleableComponentView";
 import { BaseTextComponentView, ISynchedTitleViewModel, ITextView, ITextViewModel, SynchedTitleChangeHandler, SynchedTitleComponentMixin, SynchedTitleViewModelMixin, TextChangeHandler, TextComponentMixin, TextViewMixin, TextViewModelMixin, TitleChangeHandler, TitleComponentMixin, TitleViewMixin, TitleViewModelMixin } from "./TextComponent";
 import { ITitleView, ITitleViewModel } from "./Types";
 
@@ -61,7 +61,7 @@ export class ContainerOfTextLabelView<TLayout extends ComponentViewLayout<TLayou
 }
 
 export class TextLabelComponentView
-    extends TitleViewMixin(TextViewMixin(LabelViewMixin(StyleableComponentViewMixin(ComponentView))))
+    extends TitleViewMixin(TextViewMixin(LabelViewMixin(StyleableComponentView)))
     implements ITitleView, ITextView, ILabelView {
 
     constructor() {

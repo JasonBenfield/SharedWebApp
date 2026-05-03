@@ -7,13 +7,13 @@ import { ComponentID } from "./ComponentID";
 import { DateInputControl } from "./DateInputControl";
 import { TimeInputControl } from "./TimeInputControl";
 
-type Events = { valueChanged: DateTimeOffset };
+type Events = { valueChanged: DateTimeOffset | null };
 
 export class DateTimeInputControl extends BasicComponent {
     private readonly dateInputControl: DateInputControl;
     private readonly timeInputControl: TimeInputControl;
 
-    private readonly eventSource = new EventSource<Events>(this, { valueChanged: null as DateTimeOffset });
+    private readonly eventSource = new EventSource<Events>(this, { valueChanged: null });
     readonly when = this.eventSource.when;
 
     constructor(protected readonly view: DateTimeInputView) {
@@ -40,7 +40,7 @@ export class DateTimeInputControl extends BasicComponent {
         this.eventSource.events.valueChanged.invoke(value);
     }
     
-    setValue(date: DateTimeOffset) {
+    setValue(date: DateTimeOffset | null) {
         if (date) {
             this.dateInputControl.setValue(date.toDateOnly());
             this.timeInputControl.setValue(date.toTimeOnly());

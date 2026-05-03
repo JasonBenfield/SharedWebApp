@@ -7,7 +7,7 @@ import { GridListGroupItemView, GridListGroupView } from "./ListGroup";
 import { ViewConstructor } from "./Types";
 
 export class FormGroupGridListGroupView<TItemView extends GridListGroupItemView> extends FormGroupView {
-    private listView: GridListGroupView<TItemView>;
+    private listView: GridListGroupView<TItemView> | null = null;
 
     static addTo<T extends GridListGroupItemView>(container: FormGroupContainerView, itemCtor: ViewConstructor<T>) {
         const formGroup = container.addFormGroup(FormGroupGridListGroupView<T>);
@@ -27,14 +27,16 @@ export class FormGroupGridListGroupView<TItemView extends GridListGroupItemView>
     }
 
     setTemplateColumns(...columns: GridTemplateCss[]) {
-        this.listView.setTemplateColumns(...columns);
+        if (this.listView) {
+            this.listView.setTemplateColumns(...columns);
+        }
     }
 
     addListGroupItem() {
-        return this.listView.addListGroupItem();
+        return this.listView ? this.listView.addListGroupItem() : null;
     }
 
     addListGroupItems(howMany: number) {
-        return this.listView.addListGroupItems(howMany);
+        return this.listView ? this.listView.addListGroupItems(howMany) : null;
     }
 }

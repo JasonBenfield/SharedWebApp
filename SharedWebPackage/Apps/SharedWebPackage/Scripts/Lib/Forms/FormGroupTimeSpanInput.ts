@@ -5,7 +5,7 @@ import { TimeSpan } from "../TimeSpan";
 import { FormGroupTimeSpanInputView } from "../Views/FormGroup";
 import { FormGroup } from "./FormGroup";
 
-type Events = { valueChanged: TimeSpan };
+type Events = { valueChanged: TimeSpan | null };
 
 export class FormGroupTimeSpanInput extends FormGroup {
     private readonly inputControl: TimeSpanInputControl;
@@ -21,14 +21,14 @@ export class FormGroupTimeSpanInput extends FormGroup {
         this.valueTextComponent = this.addComponent(new TextComponent(view.valueTextView));
     }
     
-    makeReadOnly(format: (time: TimeSpan) => string = FormGroupTimeSpanInput.defaultReadOnlyFormat) {
+    makeReadOnly(format: (time: TimeSpan | null) => string = FormGroupTimeSpanInput.defaultReadOnlyFormat) {
         const value = this.inputControl.getValue();
         this.inputControl.hide();
         this.valueTextComponent.show();
         this.valueTextComponent.setText(format(value));
     }
 
-    private static readonly defaultReadOnlyFormat = (value: TimeSpan) => value ? value.format() : '';
+    private static readonly defaultReadOnlyFormat = (value: TimeSpan | null) => value ? value.format() : "";
 
     makeEditable() {
         this.inputControl.show();

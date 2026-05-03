@@ -13,13 +13,13 @@ export type appClientCtor<T extends AppClient> = {
     new(events: AppClientEvents): T;
 };
 
-type AppClientMethod =
+export type AppClientMethod =
     AppClientAction<any, any> |
     AppClientView<any> |
     AppClientContent<any, any> |
     AppClientQuery<any, any>;
 
-class UserAccessRequest<T extends AppClient> {
+export class UserAccessRequest<T extends AppClient> {
     constructor(
         readonly getAction: (api: T) => AppClientMethod,
         readonly modKey = XtiUrl.current().path.modifier
@@ -27,11 +27,11 @@ class UserAccessRequest<T extends AppClient> {
     }
 }
 
-interface IGetUserAccessRequest<T extends AppClient> {
+export interface IGetUserAccessRequest<T extends AppClient> {
     [name: string]: UserAccessRequest<T>;
 }
 
-type GetUserAccessResult<T extends IGetUserAccessRequest<any>> = {
+export type GetUserAccessResult<T extends IGetUserAccessRequest<any>> = {
     [k in keyof T]: boolean;
 }
 
@@ -83,20 +83,20 @@ export class AppClient {
         return group;
     }
 
-    getAccessRequest(
-        getAction: (api: this) => AppClientMethod,
+    protected _getAccessRequest<T extends AppClient>(
+        getAction: (api: T) => AppClientMethod,
         modKey?: string
     ) {
         return new UserAccessRequest(getAction, modKey);
     }
 
-    async getUserAccess<T extends IGetUserAccessRequest<this>>(resources: T) {
+    protected async _getUserAccess<T extends AppClient>(resources: IGetUserAccessRequest<T>) {
         const result: any = {};
         const paths: IResourcePath[] = [];
         const keyPaths: IKeyPath[] = [];
         for (const key in resources) {
             const request = resources[key];
-            const action = request.getAction(this);
+            const action = request.getAction(this as any as T);
             const path: IResourcePath = {
                 Group: action.path.group,
                 Action: action.path.action,
@@ -113,9 +113,11 @@ export class AppClient {
                     kp.path.Action === resourceAuthorization.Path.Action &&
                     kp.path.ModKey === resourceAuthorization.Path.ModKey
             );
-            result[keyPath.key] = resourceAuthorization.HasAccess;
+            if (keyPath) {
+                result[keyPath.key] = resourceAuthorization.HasAccess;
+            }
         }
-        return result as GetUserAccessResult<T>;
+        return result as GetUserAccessResult<IGetUserAccessRequest<T>>;
     }
 
     toString() {

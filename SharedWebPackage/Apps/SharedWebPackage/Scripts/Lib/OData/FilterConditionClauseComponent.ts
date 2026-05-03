@@ -10,11 +10,11 @@ export type Events = { deleteClicked: FilterConditionClause }
 export class FilterConditionClauseComponent extends BasicComponent {
     declare protected readonly view: FilterConditionClauseView;
     private readonly condition: TextComponent;
-    private conditionClause: FilterConditionClause;
+    private conditionClause: FilterConditionClause | null = null;
     private readonly deleteCommand: Command;
     private readonly conjunction: TextComponent;
 
-    private readonly eventSource = new EventSource<Events>(this, { deleteClicked: null as FilterConditionClause });
+    private readonly eventSource = new EventSource<Events>(this, { deleteClicked: {} as FilterConditionClause });
     readonly when = this.eventSource.when;
 
     constructor(view: FilterConditionClauseView) {
@@ -32,7 +32,9 @@ export class FilterConditionClauseComponent extends BasicComponent {
     }
 
     private deleteCondition() {
-        this.eventSource.events.deleteClicked.invoke(this.conditionClause);
+        if (this.conditionClause) {
+            this.eventSource.events.deleteClicked.invoke(this.conditionClause);
+        }
     }
 
     protected onDispose() {

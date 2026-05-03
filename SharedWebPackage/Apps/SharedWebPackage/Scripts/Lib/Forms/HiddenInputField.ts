@@ -16,18 +16,18 @@ export class HiddenInputField<TValue> implements IField {
     }
 
     getCaption() {
-        return '';
+        return "";
     }
 
     getValue() {
         return this.input.getValue();
     }
 
-    setValue(value: TValue) {
+    setValue(value: TValue | null) {
         this.input.setValue(value);
     }
 
-    getField(name: string): IField {
+    getField(name: string): IField | null {
         return this.getName() === name ? this : null;
     }
 

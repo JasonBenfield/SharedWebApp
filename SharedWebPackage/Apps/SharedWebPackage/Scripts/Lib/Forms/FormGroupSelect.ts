@@ -5,7 +5,7 @@ import { EventBuilders } from "../Events";
 import { FormGroupSelectGroupView, FormGroupSelectView } from "../Views/FormGroup";
 import { FormGroup } from "./FormGroup";
 
-type Events<TValue> = { valueChanged: TValue };
+type Events<TValue> = { valueChanged: TValue | null };
 
 export class FormGroupSelect<TValue> extends FormGroup {
     private readonly selectControl: SelectControl<TValue>;
@@ -20,7 +20,7 @@ export class FormGroupSelect<TValue> extends FormGroup {
         this.valueTextComponent = this.addComponent(new TextComponent(view.valueTextView));
     }
 
-    makeReadOnly(format?: (option: SelectOption<TValue>) => string) {
+    makeReadOnly(format?: (option: SelectOption<TValue> | null) => string) {
         const selectedOption = this.selectControl.getSelectedOption();
         if (!format) {
             format = this.defaultFormat;
@@ -31,8 +31,8 @@ export class FormGroupSelect<TValue> extends FormGroup {
         this.valueTextComponent.setText(displayText);
     }
 
-    private defaultFormat: (option: SelectOption<TValue>) => string = (option) => {
-        return option && option.value ? option.displayText : '';
+    private defaultFormat: (option: SelectOption<TValue> | null) => string = (option) => {
+        return option && option.value ? option.displayText : "";
     }
 
     makeEditable() {
@@ -61,8 +61,8 @@ export class FormGroupSelect<TValue> extends FormGroup {
     setItems(items: SelectOption<TValue>[]);
     setItems(caption: string, items: SelectOption<TValue>[]);
     setItems(captionOrOptions: string | SelectOption<TValue>[], items?: SelectOption<TValue>[]) {
-        if (typeof captionOrOptions === 'string') {
-            this.selectControl.setItems(captionOrOptions, items);
+        if (typeof captionOrOptions === "string") {
+            this.selectControl.setItems(captionOrOptions, items || []);
         }
         else {
             this.selectControl.setItems(captionOrOptions);

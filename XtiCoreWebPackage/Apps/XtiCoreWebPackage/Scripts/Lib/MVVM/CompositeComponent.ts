@@ -1,7 +1,7 @@
 import { Component } from "./Component";
 import { ComponentView, ComponentViewLayout } from "./ComponentView";
 import { ComponentViewModel, ExcludedViewModelProperties } from "./ComponentViewModel";
-import { IStyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
+import { IStyleableComponentView, StyleableComponentView, StyleableComponentViewMixin } from "./StyleableComponentView";
 
 export type CompositeComponentViewModelProperties<TViewModel> = {
     [K in keyof TViewModel]: TViewModel[K] extends ExcludedViewModelProperties ? never :
@@ -36,7 +36,7 @@ export interface IPublicLayoutView<TPublicLayout extends ComponentView | Compone
 }
 
 export class BaseCompositeComponentView<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends ComponentView | ComponentViewLayout<TPublicLayout>>
-    extends StyleableComponentViewMixin(ComponentView)
+    extends StyleableComponentView
     implements IPublicLayoutView<TPublicLayout> {
 
     constructor(

@@ -7,7 +7,7 @@ import { ConstraintCollection } from "./ConstraintCollection";
 import { ErrorList } from "./ErrorList";
 import { SimpleFieldFormGroup } from "./SimpleFieldFormGroup";
 
-type Events<TValue> = { valueChanged: TValue };
+type Events<TValue> = { valueChanged: TValue | null };
 
 export class DropDownFormGroup<TValue> extends SimpleFieldFormGroup<TValue> {
     readonly constraints = new ConstraintCollection();
@@ -23,7 +23,7 @@ export class DropDownFormGroup<TValue> extends SimpleFieldFormGroup<TValue> {
 
     makeReadOnly() {
         const selectedOption = this.selectControl.getSelectedOption();
-        const displayText = selectedOption ? selectedOption.displayText : '';
+        const displayText = selectedOption ? selectedOption.displayText : "";
         this.selectControl.hide();
         this.valueTextComponent.show();
         this.valueTextComponent.setText(displayText);
@@ -64,8 +64,8 @@ export class DropDownFormGroup<TValue> extends SimpleFieldFormGroup<TValue> {
     setItems(items: SelectOption<TValue>[]);
     setItems(caption: string, items: SelectOption<TValue>[]);
     setItems(captionOrOptions: string | SelectOption<TValue>[], items?: SelectOption<TValue>[]) {
-        if (typeof captionOrOptions === 'string') {
-            this.selectControl.setItems(captionOrOptions, items);
+        if (typeof captionOrOptions === "string") {
+            this.selectControl.setItems(captionOrOptions, items || []);
         }
         else {
             this.selectControl.setItems(captionOrOptions);

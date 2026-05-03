@@ -1,6 +1,6 @@
 ﻿export class FormSaveResult<T> {
     constructor(
-        readonly value: T,
+        readonly value: T | null,
         readonly errors: IErrorModel[]
     ) {
     }

@@ -1,7 +1,7 @@
 import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentView, ComponentViewLayout } from "./ComponentView";
 import { ComponentViewModel } from "./ComponentViewModel";
-import { StyleableComponentViewMixin } from "./StyleableComponentView";
+import { StyleableComponentView } from "./StyleableComponentView";
 import { Constructor } from "./Types";
 
 export class ContainerComponent extends Component {
@@ -26,8 +26,8 @@ export interface IContainerComponentView {
     removeChildView(view: ComponentView): void;
 }
 
-export function ContainerComponentViewMixin<T extends Constructor<ComponentView>>(Base: T) {
-    return class extends Base implements IContainerComponentView {
+export function ContainerComponentViewMixin<T extends Constructor<ComponentView>>(Base: T): T & Constructor<IContainerComponentView> {
+    return class extends Base {
         declare public addLayout: <TLayout extends ComponentViewLayout<TLayout>>(layout: TLayout) => this & TLayout;
         declare public addChildView: <T extends ComponentView>(view: T) => T;
         declare public insertChildView: <T extends ComponentView>(view: T, index: number) => T;
@@ -36,7 +36,10 @@ export function ContainerComponentViewMixin<T extends Constructor<ComponentView>
     };
 }
 
-export class ContainerComponentView extends ContainerComponentViewMixin(StyleableComponentViewMixin(ComponentView)) implements IContainerComponentView {
+export class ContainerComponentView
+    extends ContainerComponentViewMixin(StyleableComponentView)
+    implements IContainerComponentView {
+
     static block() {
         return new ContainerComponentView(() => document.createElement("div"));
     }

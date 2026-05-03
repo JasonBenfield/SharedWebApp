@@ -27,7 +27,7 @@ export class DateTimeOffset implements IFormattable {
     }
 
     static today() {
-        return DateTimeOffset.create(DateOnly.today(), new TimeOnly(0, 0));
+        return DateTimeOffset.create(DateOnly.today(), new TimeOnly(0, 0))!;
     }
 
     static now() { return DateTimeOffset.fromDate(new Date())!; }
@@ -105,7 +105,7 @@ export class DateTimeOffset implements IFormattable {
 
     get date() { return this._date; }
 
-    private _dayOfWeek: DayOfWeek;
+    private _dayOfWeek?: DayOfWeek;
 
     get dayOfWeek() {
         if (!this._dayOfWeek) {

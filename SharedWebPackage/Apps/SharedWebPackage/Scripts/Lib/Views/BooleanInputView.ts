@@ -11,7 +11,7 @@ export class BooleanInputView extends BasicComponentView {
         this.setType('checkbox');
     }
 
-    protected setAttr: (config: (attr: IInputAttributes) => void) => void;
+    declare protected setAttr: (config: (attr: IInputAttributes) => void) => void;
 
     enable() { this.setAttr(a => a.disabled = false); }
 

@@ -1,4 +1,3 @@
-import { CssLengthUnit } from "../CssLengthUnit";
 import { BasicComponentView } from "./BasicComponentView";
 import { FormGroupAlertView, FormGroupBooleanInputView, FormGroupDateTimeInputView, FormGroupFormCheckView, FormGroupInputGroupView, FormGroupInputView, FormGroupLinkView, FormGroupPreformattedView, FormGroupSelectView, FormGroupTextAreaView, FormGroupTextStackView, FormGroupTextView, FormGroupTimeSpanInputView, FormGroupView } from "./FormGroup";
 import { FormGroupGridListGroupView } from "./FormGroupGridListGroupView";
@@ -13,7 +12,6 @@ export class FormGroupContainerView extends BasicComponentView {
         this.addCssName('grid-borderless');
         this.addCssName('grid-layout');
         this.addCssName('form-group-grid');
-        //this.setTemplateColumns(CssLengthUnit.auto(), CssLengthUnit.flex(1));
     }
 
     setTemplateColumns(...columns: GridTemplateCss[]) {

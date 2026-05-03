@@ -3,7 +3,7 @@ import { ICssStyle } from "../CssStyle";
 import { ComponentView } from "./ComponentView";
 import { Constructor, IHtmlAttributes } from "./Types";
 
-export function StyleableComponentViewMixin<T extends Constructor<ComponentView>>(Base: T) {
+export function StyleableComponentViewMixin<T extends Constructor<ComponentView>>(Base: T): new (...args: any[]) => ComponentView & IStyleableComponentView {
     return class extends Base implements IStyleableComponentView {
         private readonly attributes: { [name: string]: string } = {};
         private readonly styles: { [name: string]: string } = {};
@@ -115,4 +115,7 @@ export interface IStyleableComponentView {
 }
 
 export class StyleableComponentView extends StyleableComponentViewMixin(ComponentView) {
+    declare protected setAttribute: (name: string, value: string) => this;
+    declare protected removeAttribute: (name: string) => this;
+    declare protected setAttributes: (updatedAttributes: IHtmlAttributes & { [name: string]: string | null }) => this;
 }

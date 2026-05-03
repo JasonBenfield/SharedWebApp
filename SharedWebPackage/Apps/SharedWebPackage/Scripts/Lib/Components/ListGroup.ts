@@ -17,16 +17,20 @@ export interface IListGroupFactory<TItem extends BasicComponent, TItemView exten
 
 export class ListGroup<TItem extends BasicComponent, TItemView extends BasicListGroupItemView> extends BasicComponent {
     declare protected readonly view: BasicListGroupView<TItemView>;
-    private _header: BasicComponent;
-    private _footer: BasicComponent;
-    private readonly eventSource = new EventSource<Events<TItem>>(this, { itemClicked: null as TItem, headerClicked: null, footerClicked: null });
-    private readonly _factory: IListGroupFactory<TItem, TItemView>;
+    private _header: BasicComponent | null = null;
+    private _footer: BasicComponent | null = null;
+    private readonly _factory: IListGroupFactory<TItem, TItemView> | null = null;
+    private readonly eventSource = new EventSource<Events<TItem>>(this, {
+        itemClicked: {} as any as TItem,
+        headerClicked: {} as any as BasicComponent,
+        footerClicked: {} as any as BasicComponent
+    });
     readonly when = this.eventSource.when;
 
     constructor(view: BasicListGroupView<TItemView>, factory?: IListGroupFactory<TItem, TItemView>) {
         super(view);
         view.handleClick(this.onItemClick.bind(this));
-        this._factory = factory;
+        this._factory = factory ? factory : null;
     }
 
     private onItemClick(el: HTMLElement) {

@@ -174,7 +174,7 @@ export interface ILabelView {
 
 export interface ILinkView {
     setHref(href: string);
-    setTarget(target: TargetValue);
+    setTarget(target: TargetValue | null);
 }
 
 export interface IImgAttributes extends IHtmlAttributes {

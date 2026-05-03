@@ -1,7 +1,7 @@
 ﻿import { CssClass } from "./CssClass";
 
-type AlignType = 'auto' | 'start' | 'end' | 'center' | 'baseline' | 'stretch';
-type AlignContentType = 'start' | 'end' | 'center' | 'between' | 'around' | 'stretch';
+type AlignType = "auto" | "start" | "end" | "center" | "baseline" | "stretch";
+type AlignContentType = "start" | "end" | "center" | "between" | "around" | "stretch";
 
 export class AlignCssType implements ICssBuilder {
     private readonly breakpoints: {
@@ -42,24 +42,24 @@ export class AlignCssType implements ICssBuilder {
 
     cssClass() {
         let css = new CssClass();
-        css.addName(this.breakpoints.xs && this.getCssName('xs', this.breakpoints.xs));
-        css.addName(this.breakpoints.sm && this.getCssName('sm', this.breakpoints.sm));
-        css.addName(this.breakpoints.md && this.getCssName('md', this.breakpoints.md));
-        css.addName(this.breakpoints.lg && this.getCssName('lg', this.breakpoints.lg));
-        css.addName(this.breakpoints.xl && this.getCssName('xl', this.breakpoints.xl));
-        css.addName(this.breakpoints.xxl && this.getCssName('xxl', this.breakpoints.xxl));
+        css.addName(this.breakpoints.xs ? this.getCssName("xs", this.breakpoints.xs) : "");
+        css.addName(this.breakpoints.sm ? this.getCssName("sm", this.breakpoints.sm) : "");
+        css.addName(this.breakpoints.md ? this.getCssName("md", this.breakpoints.md) : "");
+        css.addName(this.breakpoints.lg ? this.getCssName("lg", this.breakpoints.lg) : "");
+        css.addName(this.breakpoints.xl ? this.getCssName("xl", this.breakpoints.xl) : "");
+        css.addName(this.breakpoints.xxl ? this.getCssName("xxl", this.breakpoints.xxl) : "");
         return css;
     }
 
     private getCssName(size?: string, alignType?: AlignType) {
-        let cssName = '';
+        let cssName = "";
         if (size || alignType) {
-            cssName = 'align';
+            cssName = "align";
         }
         if (this.type) {
             cssName += `-${this.type}`;
         }
-        if (size && size !== 'xs') {
+        if (size && size !== "xs") {
             cssName += `-${size}`;
         }
         if (alignType) {
@@ -112,22 +112,22 @@ export class AlignContentCssType implements ICssBuilder {
 
     cssClass() {
         let css = new CssClass();
-        css.addName(this.breakpoints.xs && this.getCssName('xs', this.breakpoints.xs));
-        css.addName(this.breakpoints.sm && this.getCssName('sm', this.breakpoints.sm));
-        css.addName(this.breakpoints.md && this.getCssName('md', this.breakpoints.md));
-        css.addName(this.breakpoints.lg && this.getCssName('lg', this.breakpoints.lg));
-        css.addName(this.breakpoints.xl && this.getCssName('xl', this.breakpoints.xl));
-        css.addName(this.breakpoints.xxl && this.getCssName('xxl', this.breakpoints.xxl));
+        css.addName(this.breakpoints.xs ? this.getCssName("xs", this.breakpoints.xs) : "");
+        css.addName(this.breakpoints.sm ? this.getCssName("sm", this.breakpoints.sm) : "");
+        css.addName(this.breakpoints.md ? this.getCssName("md", this.breakpoints.md) : "");
+        css.addName(this.breakpoints.lg ? this.getCssName("lg", this.breakpoints.lg) : "");
+        css.addName(this.breakpoints.xl ? this.getCssName("xl", this.breakpoints.xl) : "");
+        css.addName(this.breakpoints.xxl ? this.getCssName("xxl", this.breakpoints.xxl) : "");
         return css;
     }
 
     private getCssName(size?: string, alignType?: AlignContentType) {
-        let cssName = '';
+        let cssName = "";
         if (size || alignType) {
-            cssName = 'align';
+            cssName = "align";
         }
         cssName += `-content`;
-        if (size && size !== 'xs') {
+        if (size && size !== "xs") {
             cssName += `-${size}`;
         }
         if (alignType) {
@@ -149,7 +149,7 @@ export class AlignCss implements ICssBuilder {
     } = {};
 
     items(config: (item: AlignCssType) => void) {
-        this.types.items = new AlignCssType('items');
+        this.types.items = new AlignCssType("items");
         config(this.types.items);
         return this;
     }
@@ -161,16 +161,16 @@ export class AlignCss implements ICssBuilder {
     }
 
     self(config: (item: AlignCssType) => void) {
-        this.types.self = new AlignCssType('self');
+        this.types.self = new AlignCssType("self");
         config(this.types.self);
         return this;
     }
 
     cssClass() {
         let css = new CssClass();
-        css.addFrom(this.types.items && this.types.items.cssClass());
-        css.addFrom(this.types.content && this.types.content.cssClass());
-        css.addFrom(this.types.self && this.types.self.cssClass());
+        css.addFrom(this.types.items ? this.types.items.cssClass() : null);
+        css.addFrom(this.types.content ? this.types.content.cssClass() : null);
+        css.addFrom(this.types.self ? this.types.self.cssClass() : null);
         return css;
     }
 

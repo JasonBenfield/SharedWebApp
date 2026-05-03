@@ -33,14 +33,14 @@ export class ODataQueryBuilder {
     readonly select: ODataQuerySelectBuilder;
     readonly filter: ODataQueryFilterBuilder;
     readonly orderBy: ODataQueryOrderByBuilder;
-    private _skip: number;
-    private _top: number;
+    private _skip = 0;
+    private _top = 0;
 
     constructor(serialized?: ISerializableQuery, columns?: ODataColumn[]) {
         this.apply = new ODataQueryApplyBuilder();
-        this.select = new ODataQuerySelectBuilder(serialized && serialized.select, columns || []);
-        this.filter = new ODataQueryFilterBuilder(serialized && serialized.filter, columns || []);
-        this.orderBy = new ODataQueryOrderByBuilder(serialized && serialized.orderBy, columns || []);
+        this.select = new ODataQuerySelectBuilder(serialized ? serialized.select : null, columns || []);
+        this.filter = new ODataQueryFilterBuilder(serialized ? serialized.filter : null, columns || []);
+        this.orderBy = new ODataQueryOrderByBuilder(serialized ? serialized.orderBy : null, columns || []);
     }
 
     skip(skip: number) {
@@ -120,7 +120,7 @@ export class ODataQuerySelectBuilder {
     private readonly requiredFields: string[] = [];
     private readonly fields: ISelectField[] = [];
 
-    constructor(serialized: ISerializableSelect, columns: ODataColumn[]) {
+    constructor(serialized: ISerializableSelect | null, columns: ODataColumn[]) {
         if (serialized) {
             this.fromSerialized(serialized, columns);
         }
@@ -246,7 +246,7 @@ export class ODataQuerySelectBuilder {
 export class ODataQueryOrderByBuilder {
     private readonly fields: IOrderByField[] = [];
 
-    constructor(serialized: ISerializableOrderBy, columns: ODataColumn[]) {
+    constructor(serialized: ISerializableOrderBy | null, columns: ODataColumn[]) {
         if (serialized) {
             this.fromSerialized(serialized, columns);
         }

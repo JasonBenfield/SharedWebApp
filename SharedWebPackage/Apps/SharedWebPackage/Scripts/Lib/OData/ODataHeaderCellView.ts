@@ -1,10 +1,11 @@
 ﻿import { ColumnCss } from "../ColumnCss";
 import { PaddingCss } from "../PaddingCss";
 import { TextCss } from "../TextCss";
+import { BasicComponentView } from "../Views/BasicComponentView";
 import { BasicTextComponentView } from "../Views/BasicTextComponentView";
 import { ColumnView } from "../Views/ColumnView";
 import { ButtonCommandView } from "../Views/Command";
-import { BasicGridRowView, GridCellView } from "../Views/Grid";
+import { GridCellView } from "../Views/Grid";
 import { RowView } from "../Views/RowView";
 import { TextBlockView } from "../Views/TextBlockView";
 
@@ -13,8 +14,8 @@ export class ODataHeaderCellView extends GridCellView {
     private readonly sortCol: ColumnView;
     readonly sortButton: ButtonCommandView;
 
-    constructor(rowView: BasicGridRowView) {
-        super(rowView);
+    constructor(container: BasicComponentView) {
+        super(container);
         this.stickyAtTop();
         this.addCssName('z-4');
         this.addCssName('grid-header');

@@ -13,10 +13,10 @@ import { ODataRow } from "./ODataRow";
 import { Queryable } from "./Types";
 
 type Events = {
-    headerCellClicked: ODataColumn;
-    sortClicked: ODataColumn;
-    dataCellClicked: ODataCellClickedEventArgs;
-    headerCellDropped: HeaderCellDroppedEventArgs;
+    headerCellClicked: ODataColumn | null;
+    sortClicked: ODataColumn | null;
+    dataCellClicked: ODataCellClickedEventArgs | null;
+    headerCellDropped: HeaderCellDroppedEventArgs | null;
 };
 
 export class HeaderCellDroppedEventArgs {
@@ -29,53 +29,56 @@ export class ODataGrid<TEntity> extends BasicComponent {
     private readonly eventSource = new EventSource<Events>(
         this,
         {
-            headerCellClicked: null as ODataColumn,
-            sortClicked: null as ODataColumn,
-            dataCellClicked: null as ODataCellClickedEventArgs,
-            headerCellDropped: null as HeaderCellDroppedEventArgs
+            headerCellClicked: null,
+            sortClicked: null,
+            dataCellClicked: null,
+            headerCellDropped: null
         }
     );
     readonly when = this.eventSource.when;
-    private dragStartCell: ODataHeaderCell;
-    private dragEnterCell: ODataHeaderCell;
+    private dragStartCell: ODataHeaderCell | null = null;
+    private dragEnterCell: ODataHeaderCell | null = null;
 
     constructor(
         view: ODataGridView,
         private readonly createDataRow: (rowIndex: number, columns: ODataColumn[], record: any, view: BasicGridRowView) => ODataRow
     ) {
         super(view);
-        view.on('dragstart')
-            .select('.grid-header')
+        view.on("dragstart")
+            .select(".grid-header")
             .execute(this.onDragStart.bind(this))
             .subscribe();
-        view.on('dragend')
-            .select('.grid-header')
+        view.on("dragend")
+            .select(".grid-header")
             .execute(this.onDragEnd.bind(this))
             .subscribe();
-        view.on('dragenter')
-            .select('.grid-header')
+        view.on("dragenter")
+            .select(".grid-header")
             .execute(this.onDragEnter.bind(this))
             .subscribe();
-        view.on('dragover')
-            .select('.grid-header')
+        view.on("dragover")
+            .select(".grid-header")
             .execute(this.onDragOver.bind(this))
             .subscribe();
-        view.on('dragleave')
-            .select('.grid-header')
+        view.on("dragleave")
+            .select(".grid-header")
             .execute(this.onDragLeave.bind(this))
             .subscribe();
-        view.on('drop')
-            .select('.grid-header')
+        view.on("drop")
+            .select(".grid-header")
             .execute(this.onDrop.bind(this))
             .subscribe();
         view.handleClick(this.onClick.bind(this));
     }
 
-    private onDragStart(sourceElement: HTMLElement, evt: JQuery.DragStartEvent) {
+    private onDragStart(sourceElement: HTMLElement, evt: JQuery.Event) {
         const cell = this.getCellByElement(sourceElement);
         if (cell && cell instanceof ODataHeaderCell && cell.column.canMove) {
-            const dragEvent = evt.originalEvent as DragEvent;
-            dragEvent.dataTransfer.effectAllowed = 'move';
+            const dragStartEvent = evt as JQuery.DragStartEvent;
+            const dragEvent = dragStartEvent.originalEvent as DragEvent;
+            if (dragEvent.dataTransfer) {
+                dragEvent.dataTransfer.effectAllowed = "move";
+            }
             cell.styleAsDragStart();
             this.dragStartCell = cell;
             return true;
@@ -83,7 +86,7 @@ export class ODataGrid<TEntity> extends BasicComponent {
         return false;
     }
 
-    private onDragEnd(sourceElement: HTMLElement, evt: JQuery.Event) {
+    private onDragEnd() {
         if (this.dragStartCell) {
             this.dragStartCell.styleAsDragEnd();
             this.dragStartCell = null;
@@ -95,13 +98,16 @@ export class ODataGrid<TEntity> extends BasicComponent {
         return true;
     }
 
-    private onDragEnter(sourceElement: HTMLElement, evt: JQuery.DragEnterEvent) {
+    private onDragEnter(sourceElement: HTMLElement, evt: JQuery.Event) {
         const cell = this.getCellByElement(sourceElement);
         if (cell && cell instanceof ODataHeaderCell && cell.column.canMove) {
             this.dragEnterCell = cell;
             cell.styleAsDragOver();
-            const dragEvt = evt.originalEvent as DragEvent;
-            dragEvt.dataTransfer.dropEffect = 'move';
+            const dragEnterEvent = evt as JQuery.DragEnterEvent;
+            const dragEvt = dragEnterEvent.originalEvent as DragEvent;
+            if (dragEvt.dataTransfer) {
+                dragEvt.dataTransfer.dropEffect = "move";
+            }
         }
         return false;
     }
@@ -153,7 +159,7 @@ export class ODataGrid<TEntity> extends BasicComponent {
                         )
                     );
                 }
-                else if (sourceElement.classList.contains('odata-sort-button')) {
+                else if (sourceElement.classList.contains("odata-sort-button")) {
                     this.eventSource.events.sortClicked.invoke(cell.column);
                 }
                 else {
@@ -202,7 +208,7 @@ export class ODataGrid<TEntity> extends BasicComponent {
         }
         else {
             const alert = this.addComponent(new MessageAlert(this.view.addAlertRow()));
-            alert.warning('No Records were found.');
+            alert.warning("No Records were found.");
         }
         this.view.resize();
     }

@@ -10,7 +10,7 @@ export class SelectView extends BasicComponentView {
         this.selectElement = this.elementView.element as HTMLSelectElement;
     }
 
-    protected setAttr: (config: (attr: ISelectAttributes) => void) => void;
+    declare protected setAttr: (config: (attr: ISelectAttributes) => void) => void;
 
     required() { this.setAttr(a => a.required = true); }
 
@@ -65,7 +65,7 @@ export class SelectOptionView extends BasicTextComponentView {
         super(container, "option");
     }
 
-    protected setAttr: (config: (attr: IOptionAttributes) => void) => void;
+    declare protected setAttr: (config: (attr: IOptionAttributes) => void) => void;
 
     setValue(value: string) {
         this.setAttr(a => a.value = value);

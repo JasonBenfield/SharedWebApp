@@ -6,7 +6,7 @@ import { ErrorList } from "./ErrorList";
 import { SimpleFieldFormGroup } from "./SimpleFieldFormGroup";
 import { TypedFieldViewValue } from "./TypedFieldViewValue";
 
-type Events<TValue> = { valueChanged: TValue };
+type Events<TValue> = { valueChanged: TValue | null };
 
 export abstract class SimpleFieldInputFormGroup<TValue> extends SimpleFieldFormGroup<TValue> {
     private readonly inputControl: InputControl<TValue>;
@@ -29,15 +29,15 @@ export abstract class SimpleFieldInputFormGroup<TValue> extends SimpleFieldFormG
         this.inputControl.when.valueChanged.then(() => this.debouncedOnValueChanged.execute());
     }
 
-    makeReadOnly(format: (date: TValue) => string) {
+    makeReadOnly(format: (date: TValue | null) => string) {
         const value = this.getValue();
         this.inputControl.hide();
         this.valueTextComponent.show();
         this.valueTextComponent.setText(format ? format(value) : this.defaultReadOnlyFormat(value));
     }
 
-    private defaultReadOnlyFormat(value: TValue) {
-        return value ? value.toString() : '';
+    private defaultReadOnlyFormat(value: TValue | null) {
+        return value ? value.toString() : "";
     }
 
     makeEditable() {

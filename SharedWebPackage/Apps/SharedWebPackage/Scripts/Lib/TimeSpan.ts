@@ -10,21 +10,21 @@ export class TimeSpan implements IFormattable {
         if (TimeSpan.regex1.test(text)) {
             const match = TimeSpan.regex1.exec(text);
             return new TimeSpan(
-                Number(match?.groups?.days || '0'),
-                Number(match?.groups?.hours || '0'),
-                Number(match?.groups?.minutes || '0'),
-                Number(match?.groups?.seconds || '0'),
-                Number(match?.groups?.ticks || '0')
+                Number(match?.groups?.days || "0"),
+                Number(match?.groups?.hours || "0"),
+                Number(match?.groups?.minutes || "0"),
+                Number(match?.groups?.seconds || "0"),
+                Number(match?.groups?.ticks || "0")
             );
         }
         else if (TimeSpan.regex2.test(text)) {
             const match = TimeSpan.regex2.exec(text);
             return new TimeSpan(
-                Number(match?.groups?.days || '0'),
-                Number(match?.groups?.hours || '0'),
-                Number(match?.groups?.minutes || '0'),
-                Number(match?.groups?.seconds || '0'),
-                Number(match?.groups?.ticks || '0')
+                Number(match?.groups?.days || "0"),
+                Number(match?.groups?.hours || "0"),
+                Number(match?.groups?.minutes || "0"),
+                Number(match?.groups?.seconds || "0"),
+                Number(match?.groups?.ticks || "0")
             );
         }
         return null;
@@ -176,10 +176,10 @@ export class TimeSpan implements IFormattable {
     }
 
     toISOString() {
-        const hours = this.hours.toString().padStart(2, '0');
-        const minutes = this.minutes.toString().padStart(2, '0');
-        const seconds = this.seconds.toString().padStart(2, '0');
-        const ticks = this.ticks.toString().padStart(7, '0');
+        const hours = this.hours.toString().padStart(2, "0");
+        const minutes = this.minutes.toString().padStart(2, "0");
+        const seconds = this.seconds.toString().padStart(2, "0");
+        const ticks = this.ticks.toString().padStart(7, "0");
         return `${this.days}.${hours}:${minutes}:${seconds}.${ticks}`;
     }
 
@@ -189,25 +189,25 @@ export class TimeSpan implements IFormattable {
             if (this.days && !this.hours && !this.minutes && !this.seconds && !this.milliseconds) {
                 formatted = `${this.days} day`;
                 if (this.days > 1) {
-                    formatted += 's';
+                    formatted += "s";
                 }
             }
             else if (!this.days && this.hours && !this.minutes && !this.seconds && !this.milliseconds) {
                 formatted = `${this.hours} hr`;
                 if (this.hours > 1) {
-                    formatted += 's';
+                    formatted += "s";
                 }
             }
             else if (!this.days && !this.hours && this.minutes && !this.seconds && !this.milliseconds) {
                 formatted = `${this.minutes} min`;
                 if (this.minutes > 1) {
-                    formatted += 's';
+                    formatted += "s";
                 }
             }
             else if (!this.days && !this.hours && !this.minutes && this.seconds && !this.milliseconds) {
                 formatted = `${this.seconds} sec`;
                 if (this.seconds > 1) {
-                    formatted += 's';
+                    formatted += "s";
                 }
             }
             else if (!this.days && !this.hours && !this.minutes && !this.seconds && this.milliseconds) {
@@ -218,25 +218,25 @@ export class TimeSpan implements IFormattable {
                     formatted = `${this.days}.`;
                 }
                 else {
-                    formatted = '';
+                    formatted = "";
                 }
-                formatted += `${this.hours.toString().padStart(2, '0')}:${this.minutes.toString().padStart(2, '0')}`;
+                formatted += `${this.hours.toString().padStart(2, "0")}:${this.minutes.toString().padStart(2, "0")}`;
                 if (this.seconds || this.ticks) {
-                    formatted += `:${this.seconds.toString().padStart(2, '0')}`;
+                    formatted += `:${this.seconds.toString().padStart(2, "0")}`;
                     if (this.ticks) {
                         const remainder = this.ticks % 10000;
                         if (remainder) {
-                            formatted += `.${this.ticks.toString().padStart(7, '0')}`;
+                            formatted += `.${this.ticks.toString().padStart(7, "0")}`;
                         }
                         else {
-                            formatted += `.${this.milliseconds.toString().padStart(3, '0')}`;
+                            formatted += `.${this.milliseconds.toString().padStart(3, "0")}`;
                         }
                     }
                 }
             }
         }
         else {
-            formatted = '';
+            formatted = "";
         }
         return formatted;
     }

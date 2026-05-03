@@ -35,7 +35,7 @@ export class FormGroupGridListGroup<TItem extends BasicComponent, TItemView exte
         sourceItem: TSourceItem,
         createItem: (sourceItem: TSourceItem, itemView: TItemView) => TItem
     ) {
-        const itemView = this.view.addListGroupItem();
+        const itemView = this.view.addListGroupItem()!;
         const item = createItem(sourceItem, itemView);
         this.addComponent(item);
         this.listItems.push(item);

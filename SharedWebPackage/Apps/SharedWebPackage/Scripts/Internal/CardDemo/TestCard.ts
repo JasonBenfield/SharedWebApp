@@ -5,6 +5,7 @@ import { TextComponent } from '../../Lib/Components/TextComponent';
 import { IMessageAlert } from "../../Lib/Components/Types";
 import { DelayedAction } from '../../Lib/DelayedAction';
 import { EnumerableRange } from '../../Lib/EnumerableRange';
+import { BasicListGroupItemView } from "../../Lib/Views/ListGroup";
 import { TestCardView } from "./TestCardView";
 import { TestClickableListFactory, TestClickableListItem } from "./TestClickableItem";
 import { TestClickableListItemView } from "./TestClickableItemView";
@@ -46,8 +47,8 @@ export class TestCard {
             view.gridItems,
             {
                 createItem: (i, itemView) => new TestGridListItem(i, itemView),
-                createHeader: (headerView: TestGridListItemView) => TestGridListItem.header(headerView),
-                createFooter: (footerView: TestGridListItemView) => TestGridListItem.footer(footerView)
+                createHeader: (headerView: BasicListGroupItemView) => TestGridListItem.header(headerView as TestGridListItemView),
+                createFooter: (footerView: BasicListGroupItemView) => TestGridListItem.footer(footerView as TestGridListItemView)
             }
         );
         this.gridItems.setItems(new EnumerableRange(1, 5).value());

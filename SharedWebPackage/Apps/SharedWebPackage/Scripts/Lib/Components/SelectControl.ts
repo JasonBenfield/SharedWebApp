@@ -1,16 +1,16 @@
-﻿import { SelectView } from "../Views/SelectView";
+﻿import { EventSource } from "../Events";
+import { SelectView } from "../Views/SelectView";
 import { BasicComponent } from "./BasicComponent";
 import { SelectOption } from "./SelectOption";
-import { EventSource } from '../Events';
 import { SelectOptionComponent } from "./SelectOptionComponent";
 
-type Events<TValue> = { valueChanged: TValue };
+type Events<TValue> = { valueChanged: TValue | null };
 
 export class SelectControl<TValue> extends BasicComponent {
     declare protected readonly view: SelectView;
-    private itemCaption: string;
+    private itemCaption?: string;
 
-    private readonly eventSource = new EventSource<Events<TValue>>(this, { valueChanged: null as TValue });
+    private readonly eventSource = new EventSource<Events<TValue>>(this, { valueChanged: null });
     readonly when = this.eventSource.when;
 
     constructor(view: SelectView) {
@@ -44,18 +44,18 @@ export class SelectControl<TValue> extends BasicComponent {
 
     get options() { return this.getComponents().map(c => c.option); }
 
-    protected getComponents: () => SelectOptionComponent<TValue>[];
+    declare protected getComponents: () => SelectOptionComponent<TValue>[];
 
     getSelectedIndex() {
         return this.view.getSelectedIndex();
     }
 
-    setValue(value: TValue, comparer: (x: TValue, y: TValue) => boolean = SelectControl.defaultComparer<TValue>) {
+    setValue(value: TValue | null, comparer: (x: TValue | null, y: TValue | null) => boolean = SelectControl.defaultComparer<TValue>) {
         const selectedIndex = this.options.findIndex(o => comparer(o.value, value));
         this.view.setSelectedIndex(selectedIndex);
     }
 
-    private static defaultComparer<TValue>(x: TValue, y: TValue) {
+    private static defaultComparer<TValue>(x: TValue | null, y: TValue | null) {
         return x === y;
     }
 
@@ -63,19 +63,19 @@ export class SelectControl<TValue> extends BasicComponent {
     setItems(caption: string, items: SelectOption<TValue>[]);
     setItems(captionOrOptions: string | SelectOption<TValue>[], items?: SelectOption<TValue>[]) {
         const originalValue = this.getValue();
-        if (typeof captionOrOptions === 'string') {
-            this.prependCaption(captionOrOptions, items);
-            this.updateOptions(items);
-            this.resetValue(originalValue, items);
+        if (typeof captionOrOptions === "string") {
+            this.prependCaption(captionOrOptions, items || []);
+            this.updateOptions(items || []);
+            this.resetValue(originalValue, items || []);
             this.itemCaption = captionOrOptions;
         }
         else {
-            this.prependCaption(this.itemCaption, captionOrOptions);
+            this.prependCaption(this.itemCaption || "", captionOrOptions);
             this.updateOptions(captionOrOptions);
             this.resetValue(originalValue, captionOrOptions);
         }
     }
-    
+
     setItemCaption(itemCaption: string) {
         const originalValue = this.getValue();
         const options = this.itemCaption ? this.options.slice(1) : this.options;
@@ -85,12 +85,12 @@ export class SelectControl<TValue> extends BasicComponent {
         this.itemCaption = itemCaption;
     }
 
-    private resetValue(originalValue: TValue, options: SelectOption<TValue>[]) {
+    private resetValue(originalValue: TValue | null, options: SelectOption<TValue>[]) {
         if (options.find(item => item.value === originalValue)) {
             this.setValue(originalValue);
         }
         else {
-            let defaultValue: TValue = null;
+            let defaultValue: TValue | null = null;
             if (!this.itemCaption && options.length > 0) {
                 defaultValue = options[0].value;
             }

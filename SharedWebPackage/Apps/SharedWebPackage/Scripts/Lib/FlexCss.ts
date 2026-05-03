@@ -10,12 +10,12 @@ export class FlexCss implements ICssBuilder {
     }
 
     row() {
-        this._direction.xs('row');
+        this._direction.xs("row");
         return this;
     }
 
     column() {
-        this._direction.xs('column');
+        this._direction.xs("column");
         return this;
     }
 
@@ -34,18 +34,18 @@ export class FlexCss implements ICssBuilder {
             configure(this._wrap);
         }
         else {
-            this._wrap.xs('wrap');
+            this._wrap.xs("wrap");
         }
         return this;
     }
 
     wrapReverse() {
-        this._wrap.xs('wrap-reverse');
+        this._wrap.xs("wrap-reverse");
         return this;
     }
 
     nowrap() {
-        this._wrap.xs('nowrap');
+        this._wrap.xs("nowrap");
         return this;
     }
 
@@ -100,22 +100,22 @@ export class FlexFill {
 
     getCssClass() {
         const cssClass = new CssClass();
-        cssClass.addName(this.cssClassName('xs'));
-        cssClass.addName(this.cssClassName('sm'));
-        cssClass.addName(this.cssClassName('md'));
-        cssClass.addName(this.cssClassName('lg'));
-        cssClass.addName(this.cssClassName('xl'));
-        cssClass.addName(this.cssClassName('xxl'));
+        cssClass.addName(this.cssClassName("xs"));
+        cssClass.addName(this.cssClassName("sm"));
+        cssClass.addName(this.cssClassName("md"));
+        cssClass.addName(this.cssClassName("lg"));
+        cssClass.addName(this.cssClassName("xl"));
+        cssClass.addName(this.cssClassName("xxl"));
         return cssClass;
     }
 
     private cssClassName(breakpoint: LayoutBreakpoint) {
         let value = this.fill[breakpoint];
         if (value) {
-            let breakpointPart = breakpoint === 'xs' ? '' : `-${breakpoint}`;
+            let breakpointPart = breakpoint === "xs" ? "" : `-${breakpoint}`;
             return `flex${breakpointPart}-fill`;
         }
-        return '';
+        return "";
     }
 }
 
@@ -128,10 +128,12 @@ export class FlexDirection {
         xl?: FlexDirections;
         xxl?: FlexDirections;
     } = {};
-    private isReversed: boolean;
+    private isReversed = false;
 
     constructor(xs?: FlexDirections) {
-        this.xs(xs);
+        if (xs) {
+            this.xs(xs);
+        }
     }
 
     xs(value: FlexDirections) {
@@ -171,23 +173,23 @@ export class FlexDirection {
 
     getCssClass() {
         let cssClass = new CssClass();
-        cssClass.addName(this.cssClassName('xs'));
-        cssClass.addName(this.cssClassName('sm'));
-        cssClass.addName(this.cssClassName('md'));
-        cssClass.addName(this.cssClassName('lg'));
-        cssClass.addName(this.cssClassName('xl'));
-        cssClass.addName(this.cssClassName('xxl'));
+        cssClass.addName(this.cssClassName("xs"));
+        cssClass.addName(this.cssClassName("sm"));
+        cssClass.addName(this.cssClassName("md"));
+        cssClass.addName(this.cssClassName("lg"));
+        cssClass.addName(this.cssClassName("xl"));
+        cssClass.addName(this.cssClassName("xxl"));
         return cssClass;
     }
 
     private cssClassName(breakpoint: LayoutBreakpoint) {
         let value = this.dir[breakpoint];
         if (value) {
-            let breakpointPart = breakpoint === 'xs' ? '' : `-${breakpoint}`;
-            let reversePart = this.isReversed ? '-reverse' : '';
+            let breakpointPart = breakpoint === "xs" ? "" : `-${breakpoint}`;
+            let reversePart = this.isReversed ? "-reverse" : "";
             return `flex${breakpointPart}-${value}${reversePart}`;
         }
-        return '';
+        return "";
     }
 }
 
@@ -202,7 +204,9 @@ export class FlexWrap {
     } = {};
 
     constructor(xs?: FlexWraps) {
-        this.xs(xs);
+        if (xs) {
+            this.xs(xs);
+        }
     }
 
     xs(value: FlexWraps) {
@@ -237,21 +241,21 @@ export class FlexWrap {
 
     getCssClass() {
         let cssClass = new CssClass();
-        cssClass.addName(this.cssClassName('xs'));
-        cssClass.addName(this.cssClassName('sm'));
-        cssClass.addName(this.cssClassName('md'));
-        cssClass.addName(this.cssClassName('lg'));
-        cssClass.addName(this.cssClassName('xl'));
-        cssClass.addName(this.cssClassName('xxl'));
+        cssClass.addName(this.cssClassName("xs"));
+        cssClass.addName(this.cssClassName("sm"));
+        cssClass.addName(this.cssClassName("md"));
+        cssClass.addName(this.cssClassName("lg"));
+        cssClass.addName(this.cssClassName("xl"));
+        cssClass.addName(this.cssClassName("xxl"));
         return cssClass;
     }
 
     private cssClassName(breakpoint: LayoutBreakpoint) {
         let value = this.wrap[breakpoint];
         if (value) {
-            let breakpointPart = breakpoint === 'xs' ? '' : `-${breakpoint}`;
+            let breakpointPart = breakpoint === "xs" ? "" : `-${breakpoint}`;
             return `flex${breakpointPart}-${value}`;
         }
-        return '';
+        return "";
     }
 }

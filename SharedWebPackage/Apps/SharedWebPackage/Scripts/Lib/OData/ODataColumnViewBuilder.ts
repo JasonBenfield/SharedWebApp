@@ -24,7 +24,7 @@ export class ODataColumnViewBuilder {
     ) {
         this.headerCellCtor = headerCellCtor;
         if (configureHeaderCell) {
-            this.configureHeaderCell = configureHeaderCell;
+            this.configureHeaderCell = configureHeaderCell as (cell: GridCellView) => void;
         }
         return this;
     }
@@ -35,7 +35,7 @@ export class ODataColumnViewBuilder {
     ) {
         this.dataCellCtor = dataCellCtor;
         if (configureDataCell) {
-            this.configureDataCell = configureDataCell;
+            this.configureDataCell = configureDataCell as (cell: GridCellView) => void;
         }
         return this;
     }

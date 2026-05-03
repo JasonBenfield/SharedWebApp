@@ -13,7 +13,7 @@ export class DataListComponent<TValue> extends BasicComponent {
 
     get options() { return this.getComponents().map(c => c.option); }
 
-    protected getComponents: () => DataListOptionComponent<TValue>[];
+    declare protected getComponents: () => DataListOptionComponent<TValue>[];
 
     setOptions(...values: TValue[]) {
         const options = values.map(v => new DataListOption(v, this.viewValue.toView(v)));

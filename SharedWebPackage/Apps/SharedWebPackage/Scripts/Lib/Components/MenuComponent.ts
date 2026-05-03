@@ -7,7 +7,7 @@ import { MenuItemComponent } from "./MenuItemComponent";
 
 export class MenuComponent extends BasicComponent {
     constructor(
-        private readonly appClient: AppClient,
+        private readonly appClient: AppClient | null,
         private readonly menuName: string,
         protected readonly view: (BasicComponentView & IMenuView)
     ) {
@@ -15,8 +15,8 @@ export class MenuComponent extends BasicComponent {
     }
 
     handleClick(action: (item: MenuItemComponent, evt: JQuery.Event) => void) {
-        this.view.on('click')
-            .select('a.menu-item')
+        this.view.on("click")
+            .select("a.menu-item")
             .execute(this._handleClick.bind(this, action))
             .subscribe();
     }
@@ -32,7 +32,7 @@ export class MenuComponent extends BasicComponent {
         }
     }
 
-    protected getComponents: () => MenuItemComponent[];
+    declare protected getComponents: () => MenuItemComponent[];
 
     async refresh() {
         let links: ILinkModel[];

@@ -12,7 +12,7 @@ export class ODataGridView extends GridView {
     static addLinkDataRow = (grid: GridView) => grid.addRow(LinkGridRowView);
 
     private _addDataRow: (grid: GridView) => BasicGridRowView = ODataGridView.defaultAddDataRow;
-    private clickSelection: string;
+    private clickSelection = "";
     
     constructor(container: BasicComponentView) {
         super(container);
@@ -32,12 +32,12 @@ export class ODataGridView extends GridView {
         this.clickSelection = clickSelection;
     }
 
-    handleClick(action: (element: HTMLElement) => void) {
-        let clickSelection = '.grid-cell,.odata-sort-button';
+    handleClick(action: (element: HTMLElement, evt: JQuery.Event) => void) {
+        let clickSelection = ".grid-cell,.odata-sort-button";
         if (this.clickSelection) {
             clickSelection += `,${this.clickSelection}`
         }
-        this.on('click')
+        this.on("click")
             .select(clickSelection)
             .execute(action)
             .subscribe();

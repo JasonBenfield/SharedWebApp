@@ -1,6 +1,6 @@
 ﻿import { AsyncCommand, Command } from "../Components/Command";
 import { MessageAlert } from "../Components/MessageAlert";
-import { EventSource } from '../Events';
+import { EventSource } from "../Events";
 import { ODataResult } from "../Http/ODataResult";
 import { ParsedJsonText } from "../Http/ParsedJsonText";
 import { ButtonCommandView } from "../Views/Command";
@@ -24,8 +24,8 @@ import { SourceType } from "./SourceType";
 import { IODataClient, SaveChangesOptions } from "./Types";
 
 type Events = {
-    dataCellClicked: ODataCellClickedEventArgs;
-    refreshed: ODataRefreshedEventArgs;
+    dataCellClicked: ODataCellClickedEventArgs | null;
+    refreshed: ODataRefreshedEventArgs | null;
 };
 
 export class ODataComponent<TEntity> {
@@ -43,14 +43,14 @@ export class ODataComponent<TEntity> {
     private readonly id: string;
     private readonly saveChangesOptions: SaveChangesOptions;
 
-    private static readonly columnStartName = 'ColumnStart';
-    private static readonly columnEndName = 'ColumnEnd';
+    private static readonly columnStartName = "ColumnStart";
+    private static readonly columnEndName = "ColumnEnd";
 
     private readonly eventSource = new EventSource<Events>(
         this,
         {
-            dataCellClicked: null as ODataCellClickedEventArgs,
-            refreshed: null as ODataRefreshedEventArgs
+            dataCellClicked: null,
+            refreshed: null
         }
     );
     readonly when = this.eventSource.when;
@@ -75,7 +75,7 @@ export class ODataComponent<TEntity> {
             SourceType.none,
             view.columnEnd()
         )
-            .setCreateHeaderCell((column, view: ODataHeaderCellView) => new ODataHeaderCell(column, view))
+            .setCreateHeaderCell((column, view) => new ODataHeaderCell(column, view as ODataHeaderCellView))
             .disableSelect()
             .disableMove()
             .build();
@@ -130,8 +130,8 @@ export class ODataComponent<TEntity> {
         this.odataClient.toExcel(this.query.buildToExcel());
     }
 
-    private onSortClick(column: ODataColumn) {
-        if (column.canSort) {
+    private onSortClick(column: ODataColumn | null) {
+        if (column && column.canSort) {
             const field = this.query.orderBy.getField(column.columnName);
             this.query.orderBy.clear();
             if (field && field.isAscending) {
@@ -145,26 +145,32 @@ export class ODataComponent<TEntity> {
         }
     }
 
-    private async onHeaderCellClick(column: ODataColumn) {
-        if (column.columnName === ODataComponent.columnStartName) {
-            if (this.options.canSelectColumns) {
-                await this.modalODataComponent.showSelect();
+    private async onHeaderCellClick(column: ODataColumn | null) {
+        if (column) {
+            if (column.columnName === ODataComponent.columnStartName) {
+                if (this.options.canSelectColumns) {
+                    await this.modalODataComponent.showSelect();
+                    await this.refresh();
+                }
+            }
+            else if (column.canFilter) {
+                await this.modalODataComponent.showFilter(column);
                 await this.refresh();
             }
         }
-        else if (column.canFilter) {
-            await this.modalODataComponent.showFilter(column);
-            await this.refresh();
+    }
+
+    private onHeaderCellDropped(eventArgs: HeaderCellDroppedEventArgs | null) {
+        if (eventArgs) {
+            this.query.select.moveField(eventArgs.source, eventArgs.destination);
+            return this.refresh();
         }
     }
 
-    private onHeaderCellDropped(eventArgs: HeaderCellDroppedEventArgs) {
-        this.query.select.moveField(eventArgs.source, eventArgs.destination);
-        return this.refresh();
-    }
-
-    private onDataCellClicked(eventArgs: ODataCellClickedEventArgs) {
-        this.eventSource.events.dataCellClicked.invoke(eventArgs);
+    private onDataCellClicked(eventArgs: ODataCellClickedEventArgs | null) {
+        if (eventArgs) {
+            this.eventSource.events.dataCellClicked.invoke(eventArgs);
+        }
     }
 
     private onPageRequested(page: number) {
@@ -202,15 +208,13 @@ export class ODataComponent<TEntity> {
         const query = this.query.build();
         let result: ODataResult<TEntity>;
         try {
-            await this.alert.infoAction(
-                'Loading...',
-                async () => {
-                    result = await this.odataClient.execute(query);
-                }
+            result = await this.alert.infoAction(
+                "Loading...",
+                () => this.odataClient.execute(query)
             );
         }
         catch (err) {
-            this.alert.danger(err ? err.toString() : 'An Error Occurred');
+            this.alert.danger(err ? err.toString() : "An Error Occurred");
             return;
         }
         this._currentPage.countChanged(result.count);
@@ -255,15 +259,15 @@ export class ODataComponent<TEntity> {
     }
 
     private getStorageSelectKey() {
-        return this.getStorageKey('select');
+        return this.getStorageKey("select");
     }
 
     private getStorageFilterKey() {
-        return this.getStorageKey('filter');
+        return this.getStorageKey("filter");
     }
 
     private getStorageOrderByKey() {
-        return this.getStorageKey('orderby');
+        return this.getStorageKey("orderby");
     }
 
     private getStorageKey(type: string) {

@@ -144,7 +144,19 @@ class GridCss extends CssClass {
     }
 }
 
-export function GridViewMixin<T extends Constructor<StyleableComponentView>>(Base: T) {
+export interface IGridView {
+    setTemplateColumns(...columns: GridTemplateCss[]): this;
+    setTemplateRows(...rows: GridTemplateCss[]): this;
+    setColumnGap(length: CssLengthUnit): this;
+    setRowGap(length: CssLengthUnit): this;
+    setAutoColumns(columns: GridTemplateCss): this;
+    setAutoRows(rows: GridTemplateCss): this;
+    styleAsBordered(): this;
+    styleAsBorderless(): this;
+    styleAsLayout(): this;
+}
+
+export function GridViewMixin<T extends Constructor<StyleableComponentView>>(Base: T): T & Constructor<IGridView> {
     return class extends Base {
         constructor(...args: any[]) {
             super(...args);
@@ -251,8 +263,17 @@ export type GridRowViewLayout<T> = {
     [K in keyof T]: BaseGridCellView;
 }
 
-export function GridRowViewMixin<T extends Constructor<StyleableComponentView>>(Base: T) {
-    return class extends Base implements IGridRowView {
+export interface IGridRowViewMixin {
+    calculateTotalWidth(): number;
+    setContext(context: ContextualClass): this;
+    addCellLayout<T extends GridRowViewLayout<T>>(layout: T): T;
+    addCell<T extends BaseGridCellView>(cell: T): T;
+    addCells<T extends BaseGridCellView>(...cells: T[]): T[];
+    getCells(): BaseGridCellView[];
+}
+
+export function GridRowViewMixin<T extends Constructor<StyleableComponentView>>(Base: T): T & Constructor<IGridRowView> & Constructor<IGridRowViewMixin> {
+    return class extends Base {
         constructor(...args: any[]) {
             super(...args);
             this.setCss(DisplayCss.contents());
@@ -337,8 +358,8 @@ export interface IGridCellView {
     setGridRow(start: number | GridSpan, end?: number | GridSpan): void;
 }
 
-export function GridCellViewMixin<T extends Constructor<StyleableComponentView>>(Base: T) {
-    return class extends Base implements IGridCellView {
+export function GridCellViewMixin<T extends Constructor<StyleableComponentView>>(Base: T): T & Constructor<IGridCellView> {
+    return class extends Base {
         constructor(...args: any[]) {
             super(...args);
             this.setCss(new GridCellCss());
@@ -696,7 +717,7 @@ class BaseGridCellCompositeView<TLayout extends ComponentViewLayout<TLayout>, TP
 class BaseGridCellTitleView<TLayout extends ComponentViewLayout<TLayout>, TPublicLayout extends ComponentView | ComponentViewLayout<TPublicLayout>> extends TitleViewMixin(BaseGridCellCompositeView)<TLayout, TPublicLayout> {
 }
 
-export class GridCellTextView extends GridCellViewMixin(TitleViewMixin(TextViewMixin(StyleableComponentViewMixin(ComponentView))))
+export class GridCellTextView extends GridCellViewMixin(TitleViewMixin(TextViewMixin(StyleableComponentView)))
     implements ITitleView, ITextView {
 
     static block() {
@@ -761,7 +782,7 @@ export class GridCellTextView extends GridCellViewMixin(TitleViewMixin(TextViewM
 }
 
 export class GridCellTextLinkView
-    extends GridCellViewMixin(LinkViewMixin(TitleViewMixin(TextViewMixin(StyleableComponentViewMixin(ComponentView)))))
+    extends GridCellViewMixin(LinkViewMixin(TitleViewMixin(TextViewMixin(StyleableComponentView))))
     implements ITextView, ITitleView, ILinkView {
 
     static create() {
@@ -774,7 +795,7 @@ export class GridCellTextLinkView
 }
 
 export class GridCellTextLabelView
-    extends GridCellViewMixin(LabelViewMixin(TitleViewMixin(TextViewMixin(StyleableComponentViewMixin(ComponentView)))))
+    extends GridCellViewMixin(LabelViewMixin(TitleViewMixin(TextViewMixin(StyleableComponentView))))
     implements ITextView, ITitleView, ILabelView {
 
     static create() {

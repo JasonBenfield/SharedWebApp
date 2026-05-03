@@ -7,7 +7,7 @@ export class DelView extends BasicContainerView {
         super(container, 'del');
     }
 
-    protected setAttr: (config: (attr: ICitableAttributes) => void) => void;
+    declare protected setAttr: (config: (attr: ICitableAttributes) => void) => void;
 
     setCite(cite: string) {
         this.setAttr(attr => attr.cite = cite);

@@ -9,7 +9,7 @@ export class BooleanInputControl extends BasicComponent {
     declare protected readonly view: BooleanInputView;
     private readonly eventSource = new EventSource<BooleanInputControlEvents>(
         this,
-        { valueChanged: null as boolean }
+        { valueChanged: false }
     );
     readonly when = this.eventSource.when;
 

@@ -1,4 +1,3 @@
-import { ConsoleLogger } from "../ConsoleLogger";
 import { DebouncedAction } from "../DebouncedAction";
 import { Component, ComponentChangeHandler } from "./Component";
 import { ComponentView } from "./ComponentView";
@@ -8,7 +7,7 @@ import { CustomEventRegistrations } from "./EventManager";
 import { MvvmOptions } from "./MvvmOptions";
 import { ChangedObservableArray, ObservableArray } from "./ObservableArray";
 import { BaseOptionComponentView, BaseOptionComponentViewModel, IOptionComponentUpdater, OptionComponent, OptionComponentView, OptionComponentViewModel } from "./OptionComponent";
-import { StyleableComponentViewMixin } from "./StyleableComponentView";
+import { StyleableComponentView } from "./StyleableComponentView";
 import { Constructor } from "./Types";
 import { IUniqueView, IUniqueViewModel, UniqueComponentChangeHandler, UniqueComponentMixin, UniqueViewMixin, UniqueViewModelMixin } from "./UniqueComponent";
 
@@ -94,8 +93,8 @@ export interface ISelectView {
     clearSelection(): void;
 }
 
-export function SelectViewMixin<T extends Constructor<ComponentView>>(Base: T) {
-    return class extends Base implements ISelectView {
+export function SelectViewMixin<T extends Constructor<ComponentView>>(Base: T): T & Constructor<ISelectView> {
+    return class extends Base {
 
         private readonly selectEvents = this.eventManager.addEvents<SelectViewEventLayout>({
             changed: null
@@ -194,7 +193,7 @@ export function SelectViewMixin<T extends Constructor<ComponentView>>(Base: T) {
 }
 
 export class SelectComponentView
-    extends SelectViewMixin(UniqueViewMixin(StyleableComponentViewMixin(ComponentView)))
+    extends SelectViewMixin(UniqueViewMixin(StyleableComponentView))
     implements ISelectView, IUniqueView {
 
     constructor() {

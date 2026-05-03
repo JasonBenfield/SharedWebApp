@@ -4,11 +4,11 @@ import { LinkComponentView } from "../Views/Types";
 import { BasicComponent } from "./BasicComponent";
 
 export class LinkComponent extends BasicComponent {
-    static readonly doNothing = 'javascript:;';
+    static readonly doNothing = "javascript:;";
 
     declare protected readonly view: LinkComponentView;
     private _data: any;
-    private href: string;
+    private href = "";
 
     constructor(view: LinkComponentView) {
         super(view);
@@ -37,7 +37,7 @@ export class LinkComponent extends BasicComponent {
     }
 
     setTargetToBlank() {
-        this.view.setTarget('_blank');
+        this.view.setTarget("_blank");
     }
 
     setTargetToDefault() {

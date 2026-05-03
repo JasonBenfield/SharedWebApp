@@ -9,10 +9,10 @@ export class TextStackView extends BasicComponentView {
     private defaultAddTextView: () => TextStackItemView = this.addTextBlock.bind(this);
 
     constructor(container: BasicComponentView) {
-        super(container, 'div');
+        super(container, "div");
     }
 
-    getViews: () => TextStackItemView[];
+    declare getViews: () => TextStackItemView[];
 
     setDefaultAddTextView(defaultAddTextView: () => TextStackItemView) {
         this.defaultAddTextView = defaultAddTextView || this.addTextBlock.bind(this);

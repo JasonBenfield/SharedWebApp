@@ -13,8 +13,8 @@ export interface ILabelViewModel {
 
 export type BaseLabelComponentViewModel = ComponentViewModel & ILabelViewModel & ITitleViewModel;
 
-export function LabelViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T) {
-    return class extends Base implements ILabelViewModel {
+export function LabelViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T): T & Constructor<ILabelViewModel> {
+    return class extends Base {
         private _forID = "";
         get forID() { return this._forID; }
         set forID(forID: string) { this._forID = forID; }
@@ -28,8 +28,8 @@ export interface ILabelView {
     setFor(forID: string): void;
 }
 
-export function LabelViewMixin<T extends Constructor<StyleableComponentView>>(Base: T) {
-    return class extends Base implements ILabelView {
+export function LabelViewMixin<T extends Constructor<StyleableComponentView>>(Base: T): T & Constructor<ILabelView> {
+    return class extends Base  {
         setFor(forID: string) {
             this.setAttributes({ "for": forID });
         }
@@ -52,8 +52,8 @@ export interface ILabelComponent {
     forComponent(forComponent: BaseUniqueComponent | null): void;
 }
 
-export function LabelComponentMixin<T extends Constructor<Component>>(Base: T) {
-    return class extends Base implements ILabelComponent {
+export function LabelComponentMixin<T extends Constructor<Component>>(Base: T): T & Constructor<ILabelComponent> {
+    return class extends Base {
         declare protected readonly viewModel: BaseLabelComponentViewModel;
 
         private _forComponent: BaseUniqueComponent | null = null;

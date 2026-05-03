@@ -3,7 +3,7 @@ import { FormCheck } from "../Components/FormCheck";
 import { RelativeDateRange, RelativeDayOffset } from "../RelativeDateRange";
 import { RelativeDateRangePickerView } from "./RelativeDateRangePickerView";
 import { RelativeOffsetPicker } from "./RelativeOffsetPicker";
-import { EventSource } from '../Events';
+import { EventSource } from "../Events";
 import { DebouncedAction } from "../DebouncedAction";
 
 type Events = { valueChanged: RelativeDateRange };
@@ -16,7 +16,7 @@ export class RelativeDateRangePicker extends BasicComponent {
     private readonly toRelativeToFromCheck: FormCheck;
     private readonly to: RelativeOffsetPicker;
 
-    private readonly eventSource = new EventSource<Events>(this, { valueChanged: null as RelativeDateRange });
+    private readonly eventSource = new EventSource<Events>(this, { valueChanged: new RelativeDateRange(null, null) });
     readonly when = this.eventSource.when;
 
     constructor(view: RelativeDateRangePickerView) {

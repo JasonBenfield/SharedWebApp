@@ -10,15 +10,15 @@ export class TextToDateOnlyViewValue extends TypedFieldViewValue<string, DateOnl
         this.format = TextToDateOnlyViewValue.defaultFormat;
     }
 
-    static defaultFormat(value: DateOnly) { return value ? value.toISOString() : ''; }
+    static defaultFormat(value: DateOnly) { return value && !value.isMaxYear ? value.toISOString() : ""; }
 
     protected _fromView(value: string) {
         if (value) {
             const match = /^(?<Year>\d{4})-(?<Month>\d{2})-(?<Day>\d{2})$/.exec(value);
             return new DateOnly(
-                Number(match.groups.Year),
-                Month.fromValue(Number(match.groups.Month)),
-                Number(match.groups.Day)
+                Number(match?.groups?.Year),
+                Month.fromValue(Number(match?.groups?.Month)),
+                Number(match?.groups?.Day)
             );
         }
         return null;

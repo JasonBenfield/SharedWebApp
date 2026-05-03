@@ -17,8 +17,8 @@ export interface ILinkViewModel {
 
 export type BaseLinkComponentViewModel = ComponentViewModel & ILinkViewModel & ITitleViewModel;
 
-export function LinkViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T) {
-    return class extends Base implements ILinkViewModel {
+export function LinkViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T): T & Constructor<ILinkViewModel> {
+    return class extends Base {
         private _href = "";
         get href() { return this._href; }
         set href(href: string) { this._href = href; }
@@ -37,8 +37,8 @@ export interface ILinkView {
     setTarget(target: string): void;
 }
 
-export function LinkViewMixin<T extends Constructor<StyleableComponentView>>(Base: T) {
-    return class extends Base implements ILinkView {
+export function LinkViewMixin<T extends Constructor<StyleableComponentView>>(Base: T): T & Constructor<ILinkView> {
+    return class extends Base {
         setHref(href: string) {
             this.setAttributes({ "href": href });
         }
@@ -76,8 +76,8 @@ export interface ILinkComponent {
     setTargetToDefault(): void;
 }
 
-export function LinkComponentMixin<T extends Constructor<Component>>(Base: T) {
-    return class extends Base implements ILinkComponent {
+export function LinkComponentMixin<T extends Constructor<Component>>(Base: T): T & Constructor<ILinkComponent> {
+    return class extends Base {
         declare protected readonly viewModel: BaseLinkComponentViewModel;
 
         get href() { return this.viewModel.href; }

@@ -7,19 +7,19 @@ export class BasicComponentWrapper extends BasicComponentView {
         super(container, () => elementView);
     }
 
-    setAttr: (config: (attr: IHtmlAttributes) => void) => void;
+    declare setAttr: (config: (attr: IHtmlAttributes) => void) => void;
 
-    setStyle: (config: (style: IHtmlStyle) => void) => void;
+    declare setStyle: (config: (style: IHtmlStyle) => void) => void;
 
-    setCss: (name: string, value: ICssBuilder | string) => void;
+    declare setCss: (name: string, value: ICssBuilder | string) => void;
 
-    getViews: () => BasicComponentView[];
+    declare getViews: () => BasicComponentView[];
 
-    disposeAllViews: () => void;
+    declare disposeAllViews: () => void;
 
-    addView: <T extends BasicComponentView>(ctor: ViewConstructor<T>) => T;
+    declare addView: <T extends BasicComponentView>(ctor: ViewConstructor<T>) => T;
 
-    addViews: <T extends BasicComponentView>(howMany: number, ctor: ViewConstructor<T>) => T[];
+    declare addViews: <T extends BasicComponentView>(howMany: number, ctor: ViewConstructor<T>) => T[];
 
-    insertView: <T extends BasicComponentView>(index: number, ctor: ViewConstructor<T>) => T;
+    declare insertView: <T extends BasicComponentView>(index: number, ctor: ViewConstructor<T>) => T;
 }

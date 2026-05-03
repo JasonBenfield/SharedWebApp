@@ -9,11 +9,11 @@ export class DateInputControl extends InputControl<DateOnly> {
     constructor(view: InputView) {
         super(view, new TextToDateOnlyViewValue());
         view.setViewID(ComponentID.nextID());
-        view.setType('date');
+        view.setType("date");
         view.setMaxWidth(CssLengthUnit.em(10));
     }
 
-    setType: (type: 'date') => void;
+    declare setType: (type: "date") => void;
 
     required() {
         this.view.required();

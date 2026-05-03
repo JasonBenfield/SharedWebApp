@@ -7,7 +7,7 @@ export class TextLinkView extends BasicTextComponentView implements ILinkView {
         super(container, 'a');
     }
 
-    protected setAttr: (config: (attr: ILinkAttributes) => void) => void;
+    declare protected setAttr: (config: (attr: ILinkAttributes) => void) => void;
 
     setHref(href: string) {
         this.setAttr(attr => attr.href = href);

@@ -1,6 +1,7 @@
 ﻿import { BasicComponent } from "../../Lib/Components/BasicComponent";
 import { IListGroupFactory } from "../../Lib/Components/ListGroup";
 import { TextComponent } from "../../Lib/Components/TextComponent";
+import { BasicListGroupItemView } from "../../Lib/Views/ListGroup";
 import { TestClickableListFooterView, TestClickableListHeaderView, TestClickableListItemView } from "./TestClickableItemView";
 
 export class TestClickableListFactory implements IListGroupFactory<TestClickableListItem, TestClickableListItemView> {
@@ -8,12 +9,12 @@ export class TestClickableListFactory implements IListGroupFactory<TestClickable
         return new TestClickableListItem(i, itemView);
     }
 
-    createHeader(headerView: TestClickableListHeaderView) {
-        return new TestClickableListHeader(headerView);
+    createHeader(headerView: BasicListGroupItemView) {
+        return new TestClickableListHeader(headerView as TestClickableListHeaderView);
     }
 
-    createFooter(footerView: TestClickableListFooterView) {
-        return new TestClickableListFooter(footerView);
+    createFooter(footerView: BasicListGroupItemView) {
+        return new TestClickableListFooter(footerView as TestClickableListFooterView);
     }
 }
 

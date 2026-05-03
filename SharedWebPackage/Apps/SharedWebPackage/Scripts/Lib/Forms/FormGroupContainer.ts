@@ -37,8 +37,8 @@ export class FormGroupContainer extends BasicComponent {
         return this.addFormGroup(new FormGroupSelect<TValue>(view));
     }
 
-    addFormGroupTextInput(view: FormGroupInputView, transform?: (v: string) => string) {
-        return this.addFormGroup(new FormGroupTextInput(view, new TextToTextViewValue(transform)));
+    addFormGroupTextInput(view: FormGroupInputView, transform?: (v: string | null) => string) {
+        return this.addFormGroup(new FormGroupTextInput(view, new TextToTextViewValue(transform || ((v) => v || ""))));
     }
 
     addFormGroupNumberInput(view: FormGroupInputView, format?: string) {

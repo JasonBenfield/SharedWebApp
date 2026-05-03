@@ -5,7 +5,7 @@ import { SelectControl } from "../Components/SelectControl";
 import { SelectOption } from "../Components/SelectOption";
 import { TextComponent } from "../Components/TextComponent";
 import { DebouncedAction } from "../DebouncedAction";
-import { EventSource } from '../Events';
+import { EventSource } from "../Events";
 import { TextToNumberViewValue } from "../Forms/TextToNumberViewValue";
 import { Month } from "../Month";
 import { DayOfMonth, DaysOfMonth, RelativeDayOffset, RelativeMonthOffset, RelativeOffset, RelativeYearOffset } from "../RelativeDateRange";
@@ -18,7 +18,7 @@ enum UnitSelection {
     Years = 3
 }
 
-type Events = { valueChanged: RelativeOffset };
+type Events = { valueChanged: RelativeOffset | null };
 
 export class RelativeOffsetPicker extends BasicComponent {
     declare protected readonly view: RelativeOffsetPickerView;
@@ -33,16 +33,16 @@ export class RelativeOffsetPicker extends BasicComponent {
     private readonly daysOfMonth: DaysOfMonth;
     private readonly dayOfMonthSelect: SelectControl<DayOfMonth>;
 
-    private readonly eventSource = new EventSource<Events>(this, { valueChanged: null as RelativeOffset });
+    private readonly eventSource = new EventSource<Events>(this, { valueChanged: null });
     readonly when = this.eventSource.when;
 
     constructor(view: RelativeOffsetPickerView) {
         super(view);
         this.offsetUnitSelect = this.addComponent(new SelectControl(view.offsetUnitSelect));
         this.offsetUnitSelect.setItems([
-            new SelectOption(UnitSelection.Days, 'Days'),
-            new SelectOption(UnitSelection.Months, 'Months'),
-            new SelectOption(UnitSelection.Years, 'Years')
+            new SelectOption(UnitSelection.Days, "Days"),
+            new SelectOption(UnitSelection.Months, "Months"),
+            new SelectOption(UnitSelection.Years, "Years")
         ]);
         this.offsetUnitSelect.when.valueChanged.then(this.onUnitSelectionChanged.bind(this));
         this.noOffsetCheck = this.addComponent(new FormCheck(view.noOffsetCheck));
@@ -66,9 +66,9 @@ export class RelativeOffsetPicker extends BasicComponent {
         this.dayOfMonthSelect.when.valueChanged.then(this.onDayOfMonthChanged.bind(this));
     }
 
-    private onOffsetInputChanged(value: number) {
-        const unitSelection = this.offsetUnitSelect.getValue();
-        this.updateOffsetUnit(unitSelection, value);
+    private onOffsetInputChanged(value: number | null) {
+        const unitSelection = this.offsetUnitSelect.getValue() || UnitSelection.NotSet;
+        this.updateOffsetUnit(unitSelection, value || 0);
         this.debouncedValueChanged.execute();
     }
 
@@ -102,9 +102,12 @@ export class RelativeOffsetPicker extends BasicComponent {
         }
     }
 
-    private onUnitSelectionChanged(unitSelection: UnitSelection) {
+    private onUnitSelectionChanged(unitSelection: UnitSelection | null) {
+        if (!unitSelection) {
+            unitSelection = UnitSelection.NotSet;
+        }
         this.updateNoOffsetLabel(unitSelection);
-        const offsetValue = this.offsetInput.getValue();
+        const offsetValue = this.offsetInput.getValue() || 0;
         this.updateOffsetUnit(unitSelection, offsetValue);
         this.updateMonthVisibility(unitSelection);
         if (unitSelection === UnitSelection.Years) {
@@ -145,7 +148,7 @@ export class RelativeOffsetPicker extends BasicComponent {
 
     private updateNoOffsetLabel(unitSelection: UnitSelection) {
         if (unitSelection === UnitSelection.NotSet) {
-            this.noOffsetCheck.setText('');
+            this.noOffsetCheck.setText("");
         }
         else {
             const formattedOffsetUnit = this.formatOffsetUnit(unitSelection, 1);
@@ -159,33 +162,33 @@ export class RelativeOffsetPicker extends BasicComponent {
     }
 
     private formatOffsetUnit(selection: UnitSelection, value: number) {
-        let formatted = '';
+        let formatted = "";
         if (selection === UnitSelection.Days) {
-            formatted = 'day';
+            formatted = "day";
         }
         else if (selection === UnitSelection.Months) {
-            formatted = 'month';
+            formatted = "month";
         }
         else if (selection === UnitSelection.Years) {
-            formatted = 'year';
+            formatted = "year";
         }
         if (value !== 1) {
-            formatted += 's';
+            formatted += "s";
         }
         return formatted;
     }
 
     offsetIsNegative() {
         this.isOffsetNegative = true;
-        this.offsetType.setText('ago');
+        this.offsetType.setText("ago");
     }
 
     offsetIsPositive() {
         this.isOffsetNegative = false;
-        this.offsetType.setText('later');
+        this.offsetType.setText("later");
     }
 
-    setValue(relativeOffset: RelativeOffset) {
+    setValue(relativeOffset: RelativeOffset | null) {
         let isNoOffset: boolean = false;
         if (relativeOffset) {
             if (relativeOffset instanceof RelativeDayOffset) {
@@ -216,8 +219,8 @@ export class RelativeOffsetPicker extends BasicComponent {
             this.offsetUnitSelect.setValue(UnitSelection.NotSet);
             this.offsetInput.setValue(0);
         }
-        const offsetValue = this.offsetInput.getValue();
-        const unitSelection = this.offsetUnitSelect.getValue();
+        const offsetValue = this.offsetInput.getValue() || 0;
+        const unitSelection = this.offsetUnitSelect.getValue() || UnitSelection.NotSet;
         this.updateOffsetUnit(unitSelection, offsetValue);
         this.updateNoOffsetLabel(unitSelection);
         this.updateOffsetVisibility(isNoOffset);
@@ -239,27 +242,33 @@ export class RelativeOffsetPicker extends BasicComponent {
             relativeOffset = null;
         }
         else {
-            const offsetValue = this.getOffsetValue();
+            const offsetValue = this.getOffsetValue() || 0;
             if (unitSelection === UnitSelection.Days) {
                 relativeOffset = new RelativeDayOffset(offsetValue);
             }
             else if (unitSelection === UnitSelection.Months) {
-                const dayOfMonth = this.dayOfMonthSelect.getValue();
+                const dayOfMonth = this.dayOfMonthSelect.getValue() || new DayOfMonth(1);
                 relativeOffset = new RelativeMonthOffset(offsetValue, dayOfMonth);
             }
             else if (unitSelection === UnitSelection.Years) {
                 const month = this.monthSelect.getValue();
-                const dayOfMonth = this.dayOfMonthSelect.getValue();
-                relativeOffset = new RelativeYearOffset(offsetValue, month, dayOfMonth);
+                const dayOfMonth = this.dayOfMonthSelect.getValue() || new DayOfMonth(1);
+                if (month && dayOfMonth) {
+                    relativeOffset = new RelativeYearOffset(offsetValue, month, dayOfMonth);
+                }
+                else {
+                    relativeOffset = null;
+                }
+            }
+            else {
+                relativeOffset = null;
             }
         }
         return relativeOffset;
     }
 
     private getOffsetValue() {
-        let offsetValue = this.noOffsetCheck.getValue()
-            ? 0
-            : this.offsetInput.getValue();
+        let offsetValue = this.noOffsetCheck.getValue() ? 0 : this.offsetInput.getValue();
         if (this.isOffsetNegative && offsetValue) {
             offsetValue = -offsetValue;
         }

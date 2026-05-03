@@ -16,8 +16,11 @@ import { BaseTextLabelComponentView } from "./TextLabelComponent";
 import { BaseTextLinkComponentView, BaseTextLinkComponentViewModel } from "./TextLinkComponent";
 import { Constructor } from "./Types";
 
+export interface IListGroupView {
+    styleAsFlush(): this;
+}
 
-export function ListGroupViewMixin<T extends Constructor<StyleableComponentView>>(Base: T) {
+export function ListGroupViewMixin<T extends Constructor<StyleableComponentView>>(Base: T): T & Constructor<IListGroupView> {
     return class extends Base {
         private readonly listGroupCss = new ListGroupCss();
         constructor(...args: any[]) {
@@ -27,7 +30,7 @@ export function ListGroupViewMixin<T extends Constructor<StyleableComponentView>
 
         styleAsFlush() {
             this.listGroupCss.flush();
-            this.setCss(this.listGroupCss);
+            return this.setCss(this.listGroupCss);
         }
     }
 }
@@ -54,8 +57,8 @@ export interface IListGroupItemView {
     setContext(context: ContextualClass): this;
 }
 
-export function ListGroupItemViewMixin<T extends Constructor<StyleableComponentView>>(Base: T) {
-    return class extends Base implements IListGroupItemView {
+export function ListGroupItemViewMixin<T extends Constructor<StyleableComponentView>>(Base: T): T & Constructor<IListGroupItemView> {
+    return class extends Base {
         constructor(...args: any[]) {
             super(...args);
             this.setCss(this.listGroupItemCss);
@@ -91,7 +94,7 @@ export function ListGroupItemViewMixin<T extends Constructor<StyleableComponentV
     }
 }
 
-export class GridListGroupView extends GridViewMixin(ListGroupViewMixin(ListViewMixin(StyleableComponentViewMixin(ComponentView)))) {
+export class GridListGroupView extends GridViewMixin(ListGroupViewMixin(ListViewMixin(StyleableComponentView))) {
     static unorderedList() {
         return new GridListGroupView("ul");
     }
@@ -156,7 +159,7 @@ export class ListGroupItemContainerOfTextView<TLayout extends ComponentViewLayou
     declare asLayout: () => ListGroupItemContainerOfTextView<TLayout, TPublicLayout> & TLayout;
 }
 
-export class TextListGroupItemView extends ListGroupItemViewMixin(TitleViewMixin(TextViewMixin(StyleableComponentViewMixin(ComponentView)))) {
+export class TextListGroupItemView extends ListGroupItemViewMixin(TitleViewMixin(TextViewMixin(StyleableComponentView))) {
     static block() {
         return new TextListGroupItemView("div");
     }
@@ -166,7 +169,7 @@ export class TextListGroupItemView extends ListGroupItemViewMixin(TitleViewMixin
     }
 }
 
-export class ListGroupItemTextLinkView extends ListGroupItemViewMixin(LinkViewMixin(TitleViewMixin(TextViewMixin(StyleableComponentViewMixin(ComponentView))))) {
+export class ListGroupItemTextLinkView extends ListGroupItemViewMixin(LinkViewMixin(TitleViewMixin(TextViewMixin(StyleableComponentView)))) {
     static create() {
         return new ListGroupItemTextLinkView();
     }
@@ -176,7 +179,7 @@ export class ListGroupItemTextLinkView extends ListGroupItemViewMixin(LinkViewMi
     }
 }
 
-export class ListGroupItemTextButtonView extends ListGroupItemViewMixin(ButtonViewMixin(TitleViewMixin(TextViewMixin(StyleableComponentViewMixin(ComponentView))))) {
+export class ListGroupItemTextButtonView extends ListGroupItemViewMixin(ButtonViewMixin(TitleViewMixin(TextViewMixin(StyleableComponentView)))) {
     static create() {
         return new ListGroupItemTextButtonView();
     }
@@ -186,7 +189,7 @@ export class ListGroupItemTextButtonView extends ListGroupItemViewMixin(ButtonVi
     }
 }
 
-export class ListGroupItemTextLabelView extends ListGroupItemViewMixin(LabelViewMixin(TitleViewMixin(TextViewMixin(StyleableComponentViewMixin(ComponentView))))) {
+export class ListGroupItemTextLabelView extends ListGroupItemViewMixin(LabelViewMixin(TitleViewMixin(TextViewMixin(StyleableComponentView)))) {
     static create() {
         return new ListGroupItemTextLabelView();
     }
@@ -370,8 +373,8 @@ export interface IListGroupItemViewModel {
     set isActiveSelection(isActiveSelection: boolean);
 }
 
-export function ListGroupItemViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T) {
-    return class extends Base implements IListGroupItemViewModel {
+export function ListGroupItemViewModelMixin<T extends Constructor<ComponentViewModel>>(Base: T): T & Constructor<IListGroupItemViewModel> {
+    return class extends Base {
         private _context = ContextualClass.default;
         get context() { return this._context; }
         set context(context: ContextualClass) { this._context = context; }
@@ -393,8 +396,8 @@ export interface IListGroupItem {
     set isActiveSelection(isActiveSelection: boolean);
 }
 
-export function ListGroupItemMixin<T extends Constructor<Component>>(Base: T) {
-    return class extends Base implements IListGroupItem {
+export function ListGroupItemMixin<T extends Constructor<Component>>(Base: T): T & Constructor<IListGroupItem> {
+    return class extends Base {
         declare protected readonly viewModel: ComponentViewModel & IListGroupItemViewModel;
 
         get context() { return this.viewModel.context; }
