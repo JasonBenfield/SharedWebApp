@@ -90,13 +90,13 @@ export class AppClient {
         return new UserAccessRequest(getAction, modKey);
     }
 
-    protected async _getUserAccess<T extends AppClient>(resources: IGetUserAccessRequest<T>) {
+    protected async _getUserAccess<T extends IGetUserAccessRequest<this>>(resources: T) {
         const result: any = {};
         const paths: IResourcePath[] = [];
         const keyPaths: IKeyPath[] = [];
         for (const key in resources) {
             const request = resources[key];
-            const action = request.getAction(this as any as T);
+            const action = request.getAction(this);
             const path: IResourcePath = {
                 Group: action.path.group,
                 Action: action.path.action,
@@ -117,7 +117,7 @@ export class AppClient {
                 result[keyPath.key] = resourceAuthorization.HasAccess;
             }
         }
-        return result as GetUserAccessResult<IGetUserAccessRequest<T>>;
+        return result as GetUserAccessResult<T>;
     }
 
     toString() {

@@ -25,6 +25,11 @@ export class FaIconView extends IconView {
         this.setIconName(name);
     }
 
+    brands(name: string) {
+        this.setPrefix("fa-brands");
+        this.setIconName(name);
+    }
+
     private setPrefix(prefix: string) {
         this.setCss("prefix", prefix);
     }
